@@ -43,14 +43,18 @@ class AndroidTermuxGateway(private val context: Context) {
         return PlatformFacts(true, trusted, permission, info.flags and ApplicationInfo.FLAG_STOPPED != 0, info.uid)
     }
 
-    fun dispatch(request: ProbeRequest): PendingIntent {
+    fun prepareCallback(request: ProbeRequest): PendingIntent {
         require(request.nonce.matches(Regex("[a-zA-Z0-9-]+")))
         val callbackIntent = Intent(context, ProbeReceiver::class.java)
             .setAction("dev.durableagent.termuxprobe.RESULT")
             .setData(Uri.parse("durableagent-probe://result/${request.nonce}"))
         // Only Termux receives this explicit capability; fill-in cannot replace set data/component.
-        val callback = PendingIntent.getBroadcast(context, 0, callbackIntent,
+        return PendingIntent.getBroadcast(context, 0, callbackIntent,
             PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_CANCEL_CURRENT)
+    }
+
+    fun dispatch(request: ProbeRequest, callback: PendingIntent): Boolean {
+        require(request.nonce.matches(Regex("[a-zA-Z0-9-]+")))
         val bridge = "/data/data/com.termux/files/home/.local/share/durableagent-probe/probe-v1.sh"
         val command = "if [ ! -f '$bridge' ]; then printf 'status=setup-required\\n'; exit 78; fi; exec /data/data/com.termux/files/usr/bin/timeout -k 2s 12s /data/data/com.termux/files/usr/bin/bash '$bridge' '${request.nonce}'"
         val intent = Intent("com.termux.RUN_COMMAND").apply {
@@ -62,9 +66,7 @@ class AndroidTermuxGateway(private val context: Context) {
             putExtra("com.termux.RUN_COMMAND_PENDING_INTENT", callback)
             putExtra("com.termux.RUN_COMMAND_COMMAND_LABEL", "DurableAgent environment probe")
         }
-        try { checkNotNull(context.startForegroundService(intent)) { "Termux service unavailable" } }
-        catch (error: RuntimeException) { callback.cancel(); throw error }
-        return callback
+        return context.startForegroundService(intent) != null
     }
 
     private fun sha256(bytes: ByteArray) = hex(MessageDigest.getInstance("SHA-256").digest(bytes))
