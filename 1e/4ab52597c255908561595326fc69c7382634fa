@@ -1,0 +1,113 @@
+runtime/src/capabilities.ts
+  s_467dcb949b5b60::t_a52f8b9d42972c 1-12,14
+  s_467dcb949b5b60::t_e3edf3649cc414 13
+runtime/README.md
+  s_467dcb949b5b60::t_4d292f8d23a38f 26,31-35
+  s_467dcb949b5b60::t_f4b8e4f4f1af88 36
+  s_467dcb949b5b60::t_e6a2b9269fb2d4 1-25,27-30
+docs/evidence/t01/README.md
+  s_467dcb949b5b60::t_4d292f8d23a38f 1-41
+android/build.gradle.kts
+  s_467dcb949b5b60::t_e00517f53b3be3 1-4
+android/.gitattributes
+  s_467dcb949b5b60::t_d99e6acad48d4f 1-2
+runtime/src/transport.ts
+  s_467dcb949b5b60::t_87b036ff3ff959 1-2,9,15,18,24,26,28,30-32,34,37,40-42
+  s_467dcb949b5b60::t_dd923fc515412f 6,8,16-17,19-23,25,27,35-36,38-39
+  s_467dcb949b5b60::t_421fb036fa5652 3-5,7,10-14,29,33
+runtime/src/bridge.ts
+  s_467dcb949b5b60::t_c9e469b9caea66 1-2,7-9,13-15
+  s_467dcb949b5b60::t_8b7e29132a4998 3,5
+  s_467dcb949b5b60::t_ecb15404b47772 4,6,10-12
+android/app/src/main/assets/probe.html
+  s_467dcb949b5b60::t_c9e469b9caea66 1-5
+android/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_e00517f53b3be3 1,3-7
+  s_467dcb949b5b60::t_ecb15404b47772 2
+runtime/package.json
+  s_467dcb949b5b60::t_451eff097d6755 1-24
+android/app/src/main/java/dev/durableagent/probe/ValidationCredential.kt
+  s_467dcb949b5b60::t_8b7e29132a4998 1-11,13-37
+  s_467dcb949b5b60::t_e3edf3649cc414 12
+runtime/src/live-model.ts
+  s_467dcb949b5b60::t_ecb15404b47772 2-15,20-21,23-28,30-31,33-34,36,38-45,47-53,55-56,59-61
+  s_467dcb949b5b60::t_e3edf3649cc414 16-19,22,29,32,35,37,46
+  s_467dcb949b5b60::t_8b7e29132a4998 1,54,57-58
+android/settings.gradle.kts
+  s_467dcb949b5b60::t_e00517f53b3be3 1-4
+android/app/src/main/java/dev/durableagent/probe/RuntimeClient.kt
+  s_467dcb949b5b60::t_dca94c7ecf5115 12-15,23-37,42
+  s_467dcb949b5b60::t_c9e469b9caea66 1-11,16-22,38-41,43
+android/app/build.gradle.kts
+  s_467dcb949b5b60::t_06dce861de7966 19
+  s_467dcb949b5b60::t_a4036147ad7f32 33
+  s_467dcb949b5b60::t_e00517f53b3be3 1-18,20-32,34-37
+android/gradle.properties
+  s_467dcb949b5b60::t_e00517f53b3be3 1-3
+android/app/src/main/java/dev/durableagent/probe/ProbeActivity.kt
+  s_467dcb949b5b60::t_c9e469b9caea66 1-28
+android/app/src/androidTest/java/dev/durableagent/probe/RuntimeProbeTest.kt
+  s_467dcb949b5b60::t_e00517f53b3be3 1-11,48-54,57-59,66-68,70-71,73-78,119-120,122-125,131-136
+  s_467dcb949b5b60::t_86d2819b4a5d7d 44-47,55-56,60-65,69,72,79-118,121,126-130
+  s_467dcb949b5b60::t_5d501e59b3900d 12-27,32-33,36,39-43
+  s_467dcb949b5b60::t_e3edf3649cc414 28-31,34-35,37-38
+runtime/tsconfig.json
+  s_467dcb949b5b60::t_87b036ff3ff959 1
+android/.gitignore
+  s_467dcb949b5b60::t_e6a2b9269fb2d4 1
+runtime/test/probe.test.mjs
+  s_467dcb949b5b60::t_db010902b802e3 5-38
+  s_467dcb949b5b60::t_0127572850560e 39,70-83
+  s_467dcb949b5b60::t_ccb0775c85a5e2 51-59
+  s_467dcb949b5b60::t_7ef66475ba6e8a 40-50
+  s_467dcb949b5b60::t_acb4c48b633d62 60-69
+  s_467dcb949b5b60::t_401c0b74e6f5d6 1-4
+android/app/src/main/res/xml/data_extraction_rules.xml
+  s_467dcb949b5b60::t_e00517f53b3be3 1
+android/app/src/main/java/dev/durableagent/probe/RuntimeService.kt
+  s_467dcb949b5b60::t_ecb15404b47772 42,44
+  s_467dcb949b5b60::t_5eff91f5c0a613 47
+  s_467dcb949b5b60::t_631ae018a68bf9 26-27,31-32
+  s_467dcb949b5b60::t_d2841bd4f3b580 28-30,60,79,91
+  s_467dcb949b5b60::t_30d7cd21552f4f 22-23,41,43,45-46,48-50,54,80-81,87-90,92-93,96-97
+  s_467dcb949b5b60::t_c9e469b9caea66 1-21,24-25,33-35,37-40,51-53,55-59,61,66,68-78,82-86,94-95,98-121
+  s_467dcb949b5b60::t_8b7e29132a4998 36,62-65,67
+runtime/src/probe.ts
+  s_467dcb949b5b60::t_ecb15404b47772 8,20-21,37,39-44,47-55
+  s_467dcb949b5b60::t_e3edf3649cc414 10
+  s_467dcb949b5b60::t_448ecbdc6a31f7 19,26,29,74-75,77-79
+  s_467dcb949b5b60::t_87b036ff3ff959 1-3,9,11-16,22-23,35,38,56,59-63,66-73,81
+  s_467dcb949b5b60::t_a52f8b9d42972c 7,34
+  s_467dcb949b5b60::t_dd923fc515412f 18,25,27-28,30-32,36,57
+  s_467dcb949b5b60::t_421fb036fa5652 4-6,45-46
+  s_467dcb949b5b60::t_db010902b802e3 17,24,33,58,76,80
+  s_467dcb949b5b60::t_9d551f06504784 64-65
+android/gradle/wrapper/gradle-wrapper.properties
+  s_467dcb949b5b60::t_19dff69c9211b6 1-8
+android/gradlew
+  s_467dcb949b5b60::t_b3005f849e7e26 1-251
+android/gradlew.bat
+  s_467dcb949b5b60::t_05fbc5c49906eb 1-94
+docs/evidence/t01/javet-i18n-artifact.md
+  s_467dcb949b5b60::t_eb162174bc420c 1-51
+docs/evidence/t01/javet-standard-artifact.md
+  s_467dcb949b5b60::t_91ea74a1c33f5b 1-59
+runtime/package-lock.json
+  s_467dcb949b5b60::t_c06ab671031b3b 1-1251
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "1e4ab52597c255908561595326fc69c7382634fa",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
