@@ -1,6 +1,6 @@
 # 首版 spec 与纵向工单
 
-设计基线：2026-11-03；整理：2026-11-04。1 份总 spec、17 张纵向工单。用户已调用 `implement-spec`；T01、T02 已在记录的 S23 与 16 KB 模拟器环境通过并合入集成分支；T04 开始实现持久会话。T03 冷启动及故障矩阵已大部分通过，锁屏恢复与重启首次解锁仍待验证。完整产品尚未验收。
+设计基线：2026-11-03；整理：2026-11-04。1 份总 spec、17 张纵向工单。用户已调用 `implement-spec`；T01、T02、T04 已在各自记录的范围内验收并合入集成分支；T05 开始实现模型配置与凭据。T03 冷启动及故障矩阵已大部分通过，锁屏恢复与重启首次解锁仍待验证。S23 解锁后的可见界面与 Activity 重建也仍待补齐。完整产品尚未验收。
 
 [总 spec](spec.md) 已发布为 [GitHub #1](https://github.com/mikyan/durableagent/issues/1)。[公开仓库](https://github.com/mikyan/durableagent) 保存设计、原型和后续代码；GitHub Issues 是执行状态与原生阻塞关系的权威。`ready-for-agent` 表示说明完备，不能代替前置票的实测通过证据。
 
@@ -28,7 +28,7 @@
 
 T01 与 T03 是独立验证起点；T02 验证选定宿主的实际存储契约。后续按阻塞已解除的前沿推进，不能把 SDK 或参考项目的成功记录当作本项目通过。
 
-执行代码汇入[草稿 PR #19](https://github.com/mikyan/durableagent/pull/19)。[T01 实测](../../evidence/t01/README.md)与 [T02 存储实测](../../evidence/t02/README.md)已经提供 T04 所需前提；相关 issue 等完整交付 PR 合并后关闭。T03 及其下游继续遵守尚未通过的设备门槛。
+执行代码汇入[草稿 PR #19](https://github.com/mikyan/durableagent/pull/19)。[T01 实测](../../evidence/t01/README.md)、[T02 存储实测](../../evidence/t02/README.md)与 [T04 会话实测](../../evidence/t04/README.md)已经提供 T05 所需前提；相关 issue 等完整交付 PR 合并后关闭。T04 包含模拟器完整套件与两台环境实际 UI 进程重连，S23 锁屏下 ActivityScenario 的未通过记录保持可见。T03 及其下游继续遵守尚未通过的设备门槛。
 
 ## 用户能力覆盖
 
