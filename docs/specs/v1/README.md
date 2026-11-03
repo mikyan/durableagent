@@ -2,29 +2,29 @@
 
 设计基线：2026-11-03；整理：2026-11-04。1 份总 spec、17 张纵向工单，当前仅准备实施，没有产品或设备验收结果。
 
-[总 spec](spec.md) 是收敛后的行为契约；GitHub Issues 是执行状态与阻塞关系的权威。`ready-for-agent` 表示说明完备，执行仍须后续明确授权。
+[总 spec](spec.md) 已发布为 [GitHub #1](https://github.com/mikyan/durableagent/issues/1)。[公开仓库](https://github.com/mikyan/durableagent) 保存设计、原型和后续代码；GitHub Issues 是执行状态与原生阻塞关系的权威。全部 18 个 issue 标记 `ready-for-agent`，表示说明完备，执行仍须后续明确授权。
 
 ## 交付与依赖
 
-| 工单 | 独立可验证的交付 | Blocked by |
-|---|---|---|
-| T01 | [验证应用内运行宿主能够运行 Pi SDK 1.5.0](tickets/01-runtime-compatibility.md) | 无 |
-| T02 | [验证会话提交在 Android SQLite 上可确认与恢复](tickets/02-sqlite-contract.md) | T01 |
-| T03 | [验证首次配置后的官方 Termux 受管启动](tickets/03-termux-managed-startup.md) | 无 |
-| T04 | [创建会话、接收文字回复并在重连后查看持久历史](tickets/04-durable-conversation.md) | T01、T02 |
-| T05 | [配置模型凭据并按会话独立选择模型](tickets/05-models-and-credentials.md) | T04 |
-| T06 | [保存草稿并准备稳定的附件输入](tickets/06-drafts-and-attachments.md) | T04、T05 |
-| T07 | [让一次发送在中断后可靠接纳且不误重发](tickets/07-reliable-submission.md) | T04、T06 |
-| T08 | [让会话使用稳定项目位置并拒绝忙时改绑](tickets/08-projects-and-bindings.md) | T07 |
-| T09 | [从会话执行命令并在失联后核验同一次执行](tickets/09-managed-execution.md) | T03、T04 |
-| T10 | [真实原文件操作与同工作区写入协调](tickets/10-files-and-workspaces.md) | T08、T09 |
-| T11 | [用户停止后旧工作不再复活](tickets/11-stop-fencing.md) | T07、T09 |
-| T12 | [在条件恢复后继续未完成会话](tickets/12-automatic-resume.md) | T05、T10、T11 |
-| T13 | [省流模式约束受控工具且保留本地工作](tickets/13-data-saver.md) | T09、T11 |
-| T14 | [随包扩展提供真实界面能力与明确的跨会话转交](tickets/14-extensions-and-routing.md) | T05、T07、T08 |
-| T15 | [完成 Console 基线的手机与横屏平板体验](tickets/15-console-experience.md) | T05、T06、T08、T10、T11、T14 |
-| T16 | [在容量、迁移及恢复故障下保住必要工作数据](tickets/16-retention-and-migration.md) | T05、T07、T09 |
-| T17 | [在目标设备验收真实文件工作、恢复与停止闭环](tickets/17-device-acceptance.md) | T12、T13、T14、T15、T16 |
+| 工单 | GitHub | 独立可验证的交付 | Blocked by |
+|---|---|---|---|
+| T01 | [#2](https://github.com/mikyan/durableagent/issues/2) | [验证应用内运行宿主能够运行 Pi SDK 1.5.0](tickets/01-runtime-compatibility.md) | 无 |
+| T02 | [#3](https://github.com/mikyan/durableagent/issues/3) | [验证会话提交在 Android SQLite 上可确认与恢复](tickets/02-sqlite-contract.md) | [#2](https://github.com/mikyan/durableagent/issues/2) |
+| T03 | [#4](https://github.com/mikyan/durableagent/issues/4) | [验证首次配置后的官方 Termux 受管启动](tickets/03-termux-managed-startup.md) | 无 |
+| T04 | [#5](https://github.com/mikyan/durableagent/issues/5) | [创建会话、接收文字回复并在重连后查看持久历史](tickets/04-durable-conversation.md) | [#2](https://github.com/mikyan/durableagent/issues/2)、[#3](https://github.com/mikyan/durableagent/issues/3) |
+| T05 | [#6](https://github.com/mikyan/durableagent/issues/6) | [配置模型凭据并按会话独立选择模型](tickets/05-models-and-credentials.md) | [#5](https://github.com/mikyan/durableagent/issues/5) |
+| T06 | [#7](https://github.com/mikyan/durableagent/issues/7) | [保存草稿并准备稳定的附件输入](tickets/06-drafts-and-attachments.md) | [#5](https://github.com/mikyan/durableagent/issues/5)、[#6](https://github.com/mikyan/durableagent/issues/6) |
+| T07 | [#8](https://github.com/mikyan/durableagent/issues/8) | [让一次发送在中断后可靠接纳且不误重发](tickets/07-reliable-submission.md) | [#5](https://github.com/mikyan/durableagent/issues/5)、[#7](https://github.com/mikyan/durableagent/issues/7) |
+| T08 | [#9](https://github.com/mikyan/durableagent/issues/9) | [让会话使用稳定项目位置并拒绝忙时改绑](tickets/08-projects-and-bindings.md) | [#8](https://github.com/mikyan/durableagent/issues/8) |
+| T09 | [#10](https://github.com/mikyan/durableagent/issues/10) | [从会话执行命令并在失联后核验同一次执行](tickets/09-managed-execution.md) | [#4](https://github.com/mikyan/durableagent/issues/4)、[#5](https://github.com/mikyan/durableagent/issues/5) |
+| T10 | [#11](https://github.com/mikyan/durableagent/issues/11) | [真实原文件操作与同工作区写入协调](tickets/10-files-and-workspaces.md) | [#9](https://github.com/mikyan/durableagent/issues/9)、[#10](https://github.com/mikyan/durableagent/issues/10) |
+| T11 | [#12](https://github.com/mikyan/durableagent/issues/12) | [用户停止后旧工作不再复活](tickets/11-stop-fencing.md) | [#8](https://github.com/mikyan/durableagent/issues/8)、[#10](https://github.com/mikyan/durableagent/issues/10) |
+| T12 | [#13](https://github.com/mikyan/durableagent/issues/13) | [在条件恢复后继续未完成会话](tickets/12-automatic-resume.md) | [#6](https://github.com/mikyan/durableagent/issues/6)、[#11](https://github.com/mikyan/durableagent/issues/11)、[#12](https://github.com/mikyan/durableagent/issues/12) |
+| T13 | [#14](https://github.com/mikyan/durableagent/issues/14) | [省流模式约束受控工具且保留本地工作](tickets/13-data-saver.md) | [#10](https://github.com/mikyan/durableagent/issues/10)、[#12](https://github.com/mikyan/durableagent/issues/12) |
+| T14 | [#15](https://github.com/mikyan/durableagent/issues/15) | [随包扩展提供真实界面能力与明确的跨会话转交](tickets/14-extensions-and-routing.md) | [#6](https://github.com/mikyan/durableagent/issues/6)、[#8](https://github.com/mikyan/durableagent/issues/8)、[#9](https://github.com/mikyan/durableagent/issues/9) |
+| T15 | [#16](https://github.com/mikyan/durableagent/issues/16) | [完成 Console 基线的手机与横屏平板体验](tickets/15-console-experience.md) | [#6](https://github.com/mikyan/durableagent/issues/6)、[#7](https://github.com/mikyan/durableagent/issues/7)、[#9](https://github.com/mikyan/durableagent/issues/9)、[#11](https://github.com/mikyan/durableagent/issues/11)、[#12](https://github.com/mikyan/durableagent/issues/12)、[#15](https://github.com/mikyan/durableagent/issues/15) |
+| T16 | [#17](https://github.com/mikyan/durableagent/issues/17) | [在容量、迁移及恢复故障下保住必要工作数据](tickets/16-retention-and-migration.md) | [#6](https://github.com/mikyan/durableagent/issues/6)、[#8](https://github.com/mikyan/durableagent/issues/8)、[#10](https://github.com/mikyan/durableagent/issues/10) |
+| T17 | [#18](https://github.com/mikyan/durableagent/issues/18) | [在目标设备验收真实文件工作、恢复与停止闭环](tickets/17-device-acceptance.md) | [#13](https://github.com/mikyan/durableagent/issues/13)、[#14](https://github.com/mikyan/durableagent/issues/14)、[#15](https://github.com/mikyan/durableagent/issues/15)、[#16](https://github.com/mikyan/durableagent/issues/16)、[#17](https://github.com/mikyan/durableagent/issues/17) |
 
 T01 与 T03 是独立验证起点；T02 验证选定宿主的实际存储契约。后续按阻塞已解除的前沿推进，不能把 SDK 或参考项目的成功记录当作本项目通过。
 
