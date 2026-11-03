@@ -1,0 +1,23 @@
+Observed: 2026-11-04T00:53:48.5188325+08:00
+Fixture source: 1f7781f plus bounded startup retry (before final strict deadline guard)
+Fixture APK SHA256: a7e6f285651561f2dfed845a4ffa8b5658465aeb6e639f1fddd1b90ba3157c5e
+Action: Restored exact probe script; fixture-only recheck; launch=Starting: Intent { cmp=dev.durableagent.termuxprobe/.MainActivity } Warning: Activity not started, its current task has been brought to the front Status: ok LaunchState: UNKNOWN (0) Activity: dev.durableagent.termuxprobe/.MainActivity WaitTime: 25 Complete
+
+time=1793724828703
+Termux 0.118.3 / 1002; target=28; uid=10187
+APK SHA256=72fdb596045116bf5ba1b5bdf5b26fddb9acc0bd074ad9f2da9eb0ae85e83a4e
+cert=b6da01480eefd5fbf2cd3771b8d1021ec791304bdd6c4bf41d3faabad48ee5e1
+固定发行物校验=true; RUN_COMMAND 系统授权=true
+Inspection(phase=READY, request=null, bootstrap=VERIFIED, externalCalls=VERIFIED, protocol=VERIFIED, evidence=protocol=1
+nonce=063d12de-0d26-4d48-b4d6-0e1eeaf7fe06
+uid=10187
+instance=5393
+prefix=/data/data/com.termux/files/usr
+shell=5.3.20(1)-release
+tools=ok
+workspace=/data/data/com.termux/files/home/.local/share/durableagent-probe/workspace
+writable=yes
+repo_begin=1
+deb https://packages-cf.termux.dev/apt/termux-main stable main
+repo_end=1
+, retryAfterMillis=null)

@@ -91,4 +91,22 @@ class EnvironmentInspectorTest {
         assertEquals(Fact.UNKNOWN, result.bootstrap)
         assertNull(result.request)
     }
+
+    @Test fun temporarilyUnavailableServiceRetriesTheSameInspectionWithinThreeSeconds() {
+        val inspector = EnvironmentInspector()
+        inspector.inspect(installed, "challenge", 100)
+        for ((now, delay) in listOf(100L to 250L, 350L to 500L, 850L to 1000L, 1850L to 1250L)) {
+            val retry = inspector.dispatchUnavailable("challenge", now)
+            assertEquals(Phase.CHECKING, retry.phase)
+            assertEquals("challenge", retry.request?.nonce)
+            assertEquals(100L, retry.request?.startedAt)
+            assertEquals(delay, retry.retryAfterMillis)
+        }
+        assertEquals(Phase.DISPATCH_FAILED, inspector.dispatchUnavailable("challenge", 3100).phase)
+        inspector.inspect(installed, "challenge", 4000)
+        inspector.dispatchUnavailable("challenge", 4000)
+        val ready = inspector.complete("challenge", ProbeResult(goodOutput), installed, 4100)
+        assertEquals(Phase.READY, ready.phase)
+        assertEquals(ready, inspector.dispatchUnavailable("challenge", 4250))
+    }
 }
