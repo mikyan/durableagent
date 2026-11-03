@@ -21,6 +21,7 @@ class ApplicationService:Service() {
     private var instance=""
     private var phase="{\"phase\":\"opening\"}"
     private var closing=false
+    private var credentials:NativeCredentialAccess?=null
     private val peers=mutableMapOf<String,Messenger>()
     private val pending=mutableListOf<String>()
     private data class Outgoing(val what:Int,val json:String,val eventKey:String?,val id:String=UUID.randomUUID().toString(),var index:Int=0,var timeout:Runnable?=null) {val count=(json.length+47999)/48000}
@@ -40,6 +41,9 @@ class ApplicationService:Service() {
                 14->reply?.let {acknowledge(it,text)}
                 15->reply?.let {receiveInput(it,transfer,index,count,text)}
                 20->if(debug&&text=="close"){closing=true;if(node==null){phase="{\"phase\":\"closed\"}";release()}else node?.getExecutor("globalThis.__appClose?.()")?.executeVoid()}
+                30->reply?.let {writeCredential(text,it)}
+                31->if(debug)reply?.let {importValidationCredential(text,it)}
+                32->if(debug)node?.getExecutor("globalThis.__appRunModelPolicy?.()")?.executeVoid()
             }
         };true
     })
@@ -53,7 +57,7 @@ class ApplicationService:Service() {
     }
     private fun open(mode:String,run:String?) {
         try {
-            check(mode in setOf("product","fixture","hang","real"))
+            check(mode in setOf("product","fixture","hang","real","models","models-fixture"))
             check(mode=="product"||run?.matches(Regex("[a-zA-Z0-9-]{1,80}"))==true)
             val domain=File(filesDir,if(mode=="product")"application" else "application-validation/$run")
             lease=StorageDomainLease.acquire(domain)?:error("Application storage already owned")
@@ -61,6 +65,8 @@ class ApplicationService:Service() {
             val root=RuntimeBundle.unpack(this)
             val runtime=V8Host.getNodeI18nInstance().createV8Runtime<NodeRuntime>();node=runtime
             runtime.globalObject.set("__applicationRoot",domain.absolutePath)
+            credentials=NativeCredentialAccess(CredentialVault(this,if(mode=="product")"credentials-v1" else "cv-$run"))
+            runtime.createV8ValueObject().use {access->access.bind(credentials!!);runtime.globalObject.set("__nativeCredentials",access)}
             if(mode=="real"){
                 val clear=ValidationCredential.consume(this)
                 try{runtime.globalObject.set("__validationKey",String(clear,Charsets.UTF_8).trim())}finally{clear.fill(0)}
@@ -87,6 +93,29 @@ class ApplicationService:Service() {
             }
             pending.add(text)
         }catch(_:Throwable){/* Invalid wire messages cannot reach the SDK. */}
+    }
+    private fun credentialTarget(target:String):Boolean=node?.getExecutor("globalThis.__appCredentialTarget?.(${JSONObject.quote(target)})===true")?.executeBoolean()==true
+    private fun writeCredential(text:String,peer:Messenger){
+        var request:JSONObject?=null
+        val result=try{
+            check(text.length<=120000);request=JSONObject(text)
+            check(request.getInt("protocol")==1&&request.getString("connectionId").length in 1..128&&request.getString("requestId").length in 1..128)
+            val allowed=setOf("protocol","connectionId","requestId","operation","target","expectedGeneration","key")
+            check(request.keys().asSequence().all{it in allowed})
+            val target=request.getString("target");check(credentialTarget(target))
+            val generation=request.getLong("expectedGeneration");check(generation>=0)
+            JSONObject(when(request.getString("operation")){"save"->credentials!!.saveJson(target,request.getString("key"),generation);"remove"->{check(!request.has("key"));credentials!!.removeJson(target,generation)};else->error("Invalid credential operation")})
+        }catch(_:Exception){JSONObject().put("ok",false).put("error",JSONObject().put("code","CREDENTIAL_WRITE_REJECTED").put("message","凭据操作未完成，请刷新连接状态后重试。"))}
+        // Never place the supplied request, key or platform cause in an error or generic Node queue.
+        send(peer,10,result.put("type","response").put("protocol",1).put("connectionId",request?.optString("connectionId")?:"").put("requestId",request?.optString("requestId")?:"").toString())
+    }
+    private fun importValidationCredential(text:String,peer:Messenger){
+        val result=try{
+            val request=JSONObject(text);val target=request.getString("target");check(credentialTarget(target))
+            val clear=ValidationCredential.consume(this)
+            try{JSONObject(credentials!!.saveJson(target,String(clear,Charsets.UTF_8).trim(),request.getLong("expectedGeneration")))}finally{clear.fill(0)}
+        }catch(_:Exception){JSONObject().put("ok",false).put("error",JSONObject().put("code","VALIDATION_IMPORT_FAILED").put("message","Encrypted validation import unavailable"))}
+        send(peer,31,result.toString())
     }
     private val pump=object:Runnable {override fun run(){
         val runtime=node?:return
@@ -151,6 +180,6 @@ class ApplicationService:Service() {
     }
     private fun status()=JSONObject(phase).put("instance",instance).put("pid",Process.myPid()).put("domainOwned",lease!=null).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).toString()
     private fun fail(error:Throwable){phase=JSONObject().put("phase","failed").put("reason",error.message?:error.javaClass.simpleName).toString();release()}
-    private fun release(){node?.close();node=null;lease?.close();lease=null;closing=false;pending.clear()}
+    private fun release(){node?.close();node=null;credentials=null;lease?.close();lease=null;closing=false;pending.clear()}
     override fun onDestroy(){owner.post {release();thread.quitSafely()};super.onDestroy()}
 }

@@ -21,7 +21,7 @@ val packageRuntime by tasks.registering(Zip::class) {
     archiveFileName.set("runtime.zip")
     destinationDirectory.set(layout.buildDirectory.dir("generated/runtimeAssets"))
     from("../../runtime") {
-        include("dist/**", "package.json", "package-lock.json", "node_modules/**")
+        include("dist/**", "validation/**", "package.json", "package-lock.json", "node_modules/**")
         exclude("node_modules/typescript/**", "node_modules/@types/**", "node_modules/.bin/**", "node_modules/.package-lock.json")
     }
     isReproducibleFileOrder = true

@@ -1,0 +1,82 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ModelSettingsTest:
+INSTRUMENTATION_STATUS: test=modelPolicyMatrixUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalStateException: {"modelPolicyState":"failed","modelPolicyCases":[],"modelPolicyError":"Model policy check failed: public configuration is durable; defaults and current models are separate; queries never decrypt"}
+	at dev.durableagent.probe.ModelSettingsTest.modelPolicyMatrixUsesActualAndroidNodeAndSqlite$lambda$0(ModelSettingsTest.kt:68)
+	at dev.durableagent.probe.ModelSettingsTest.$r8$lambda$7OY1wOhG3vEbOsqqlEGLGAv8R64(Unknown Source:0)
+	at dev.durableagent.probe.ModelSettingsTest$$ExternalSyntheticLambda6.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.ModelSettingsTest.until(ModelSettingsTest.kt:35)
+	at dev.durableagent.probe.ModelSettingsTest.until$default(ModelSettingsTest.kt:35)
+	at dev.durableagent.probe.ModelSettingsTest.modelPolicyMatrixUsesActualAndroidNodeAndSqlite(ModelSettingsTest.kt:68)
+
+INSTRUMENTATION_STATUS: stream=
+Error in modelPolicyMatrixUsesActualAndroidNodeAndSqlite(dev.durableagent.probe.ModelSettingsTest):
+java.lang.IllegalStateException: {"modelPolicyState":"failed","modelPolicyCases":[],"modelPolicyError":"Model policy check failed: public configuration is durable; defaults and current models are separate; queries never decrypt"}
+	at dev.durableagent.probe.ModelSettingsTest.modelPolicyMatrixUsesActualAndroidNodeAndSqlite$lambda$0(ModelSettingsTest.kt:68)
+	at dev.durableagent.probe.ModelSettingsTest.$r8$lambda$7OY1wOhG3vEbOsqqlEGLGAv8R64(Unknown Source:0)
+	at dev.durableagent.probe.ModelSettingsTest$$ExternalSyntheticLambda6.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.ModelSettingsTest.until(ModelSettingsTest.kt:35)
+	at dev.durableagent.probe.ModelSettingsTest.until$default(ModelSettingsTest.kt:35)
+	at dev.durableagent.probe.ModelSettingsTest.modelPolicyMatrixUsesActualAndroidNodeAndSqlite(ModelSettingsTest.kt:68)
+
+INSTRUMENTATION_STATUS: test=modelPolicyMatrixUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realMimoUsesSavedVaultCredentialAndReopensWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: modelEvidence={"case":"real-mimo-vault","result":{"before":{"phase":"ready","extensions":["conversation","models"],"metrics":{"modelRequests":1,"lastCredentialGeneration":1,"lastConnectionId":"1eab17be-8ab4-4f26-a3ba-7e36950f23f8"},"instance":"7c5769ef-85de-444b-8857-fc7994efd784","pid":7872,"domainOwned":true,"nativeOwners":1},"reopened":{"phase":"ready","extensions":["conversation","models"],"metrics":{},"instance":"13376825-8393-4e01-a204-a09bf1beab1f","pid":7872,"domainOwned":true,"nativeOwners":1},"configuration":{"version":2,"defaultModel":{"provider":"1eab17be-8ab4-4f26-a3ba-7e36950f23f8","modelId":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash"},"connections":[{"id":"1eab17be-8ab4-4f26-a3ba-7e36950f23f8","name":"设备验证连接","protocol":"mimo-cn","endpoint":"https:\/\/token-plan-cn.xiaomimimo.com\/v1","models":[{"id":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash","contextWindow":1048576,"maxTokens":131072},{"id":"mimo-v2.6-pro","name":"MiMo-V2.6-Pro","contextWindow":1048576,"maxTokens":131072}],"enabled":true,"createdAt":1793729625085,"credential":{"connectionId":"1eab17be-8ab4-4f26-a3ba-7e36950f23f8","state":"configured","generation":1,"configured":true}}]},"history":{"items":[{"id":"11","role":"user","text":"请只回复一句简短中文问候，包含模型设置验证。","persisted":true},{"id":"14","role":"assistant","text":"你好，模型设置验证通过！","persisted":true}]}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoUsesSavedVaultCredentialAndReopensWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=settingsSaveRotateReopenThroughRealReactAndNativeVault
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: modelEvidence={"case":"settings-rotate-reopen","result":{"configuration":{"version":2,"defaultModel":{"provider":"26ea8f49-cf2c-4ace-afa0-b02daba591fe","modelId":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash"},"connections":[{"id":"26ea8f49-cf2c-4ace-afa0-b02daba591fe","name":"设备验证连接","protocol":"mimo-cn","endpoint":"https:\/\/token-plan-cn.xiaomimimo.com\/v1","models":[{"id":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash","contextWindow":1048576,"maxTokens":131072},{"id":"mimo-v2.6-pro","name":"MiMo-V2.6-Pro","contextWindow":1048576,"maxTokens":131072}],"enabled":true,"createdAt":1793729629130,"credential":{"connectionId":"26ea8f49-cf2c-4ace-afa0-b02daba591fe","state":"configured","generation":2,"configured":true}}]},"state":{"phase":"ready","extensions":["conversation","models"],"metrics":{"modelRequests":1,"lastCredentialGeneration":2,"lastConnectionId":"26ea8f49-cf2c-4ace-afa0-b02daba591fe"},"instance":"a32ee4c5-3bf7-4563-8fad-b7cc12df2f66","pid":7872,"domainOwned":true,"nativeOwners":1},"history":{"items":[{"id":"11","role":"user","text":"实际设置入口中文🌍","persisted":true},{"id":"14","role":"assistant","text":"你好🌍","persisted":true},{"id":"15","role":"user","text":"轮转后的下一次请求","persisted":true},{"id":"18","role":"assistant","text":"你好🌍","persisted":true}]}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=settingsSaveRotateReopenThroughRealReactAndNativeVault
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 11.984
+There was 1 failure:
+1) modelPolicyMatrixUsesActualAndroidNodeAndSqlite(dev.durableagent.probe.ModelSettingsTest)
+java.lang.IllegalStateException: {"modelPolicyState":"failed","modelPolicyCases":[],"modelPolicyError":"Model policy check failed: public configuration is durable; defaults and current models are separate; queries never decrypt"}
+	at dev.durableagent.probe.ModelSettingsTest.modelPolicyMatrixUsesActualAndroidNodeAndSqlite$lambda$0(ModelSettingsTest.kt:68)
+	at dev.durableagent.probe.ModelSettingsTest.$r8$lambda$7OY1wOhG3vEbOsqqlEGLGAv8R64(Unknown Source:0)
+	at dev.durableagent.probe.ModelSettingsTest$$ExternalSyntheticLambda6.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.ModelSettingsTest.until(ModelSettingsTest.kt:35)
+	at dev.durableagent.probe.ModelSettingsTest.until$default(ModelSettingsTest.kt:35)
+	at dev.durableagent.probe.ModelSettingsTest.modelPolicyMatrixUsesActualAndroidNodeAndSqlite(ModelSettingsTest.kt:68)
+
+FAILURES!!!
+Tests run: 3,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

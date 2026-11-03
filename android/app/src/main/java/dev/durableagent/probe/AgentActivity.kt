@@ -45,6 +45,7 @@ class AgentActivity:Activity() {
         }
         view.addJavascriptInterface(object {
             @JavascriptInterface fun postMessage(json:String){runOnUiThread {if(webView===view&&!destroyed){if(json.length>650000)showRecovery("输入超过传输上限，尚未提交。") else client?.post(json)}}}
+            @JavascriptInterface fun writeCredential(json:String){runOnUiThread {if(webView===view&&!destroyed&&json.length<=120000)client?.writeCredential(json)}}
         },"DurableNative")
         setContentView(view);view.loadUrl("https://appassets.androidplatform.net/assets/ui/index.html")
     }

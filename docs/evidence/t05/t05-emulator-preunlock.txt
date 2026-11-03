@@ -1,0 +1,8 @@
+RUNNING_LOCKED
+
+        mIsShowing=true
+        mInputRestricted=true
+
+
+Broadcasting: Intent { flg=0x400020 cmp=dev.durableagent.probe/.CredentialBootProbeReceiver }
+Broadcast completed: result=0, data="{"userUnlocked":false,"metadata":{"connectionId":"boot-probe","state":"waiting-first-unlock","generation":0,"configured":false},"ceNamespaceExistedBeforeQuery":null,"resolvedSecret":false}"

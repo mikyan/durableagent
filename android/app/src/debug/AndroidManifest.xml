@@ -1,0 +1,6 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <receiver android:name=".CredentialBootProbeReceiver" android:exported="true" android:directBootAware="true" android:process=":credential_probe"/>
+        <service android:name=".CredentialLeaseProbeService" android:exported="false" android:process=":credential_lease_probe"/>
+    </application>
+</manifest>
