@@ -1,6 +1,6 @@
 # 首版 spec 与纵向工单
 
-设计基线：2026-11-03；整理：2026-11-04。1 份总 spec、17 张纵向工单。用户已调用 `implement-spec`，当前正在实现与验证 T01、T03，尚无通过的工单或产品验收结果。
+设计基线：2026-11-03；整理：2026-11-04。1 份总 spec、17 张纵向工单。用户已调用 `implement-spec`；T01 已在记录的 S23 与 16 KB 模拟器环境通过并合入集成分支，T02 开始承接存储验证，T03 正在补全受管启动矩阵。完整产品尚未验收。
 
 [总 spec](spec.md) 已发布为 [GitHub #1](https://github.com/mikyan/durableagent/issues/1)。[公开仓库](https://github.com/mikyan/durableagent) 保存设计、原型和后续代码；GitHub Issues 是执行状态与原生阻塞关系的权威。`ready-for-agent` 表示说明完备，不能代替前置票的实测通过证据。
 
@@ -27,6 +27,8 @@
 | T17 | [#18](https://github.com/mikyan/durableagent/issues/18) | [在目标设备验收真实文件工作、恢复与停止闭环](tickets/17-device-acceptance.md) | [#13](https://github.com/mikyan/durableagent/issues/13)、[#14](https://github.com/mikyan/durableagent/issues/14)、[#15](https://github.com/mikyan/durableagent/issues/15)、[#16](https://github.com/mikyan/durableagent/issues/16)、[#17](https://github.com/mikyan/durableagent/issues/17) |
 
 T01 与 T03 是独立验证起点；T02 验证选定宿主的实际存储契约。后续按阻塞已解除的前沿推进，不能把 SDK 或参考项目的成功记录当作本项目通过。
+
+执行代码汇入[草稿 PR #19](https://github.com/mikyan/durableagent/pull/19)。[T01 实测](../../evidence/t01/README.md)已经提供 T02 所需的运行时前提；相关 issue 等完整交付 PR 合并后关闭。T03 及其下游继续遵守尚未通过的设备门槛。
 
 ## 用户能力覆盖
 
