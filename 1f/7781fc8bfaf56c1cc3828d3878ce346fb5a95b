@@ -1,0 +1,28 @@
+termux-probe/app/src/main/java/dev/durableagent/termuxprobe/ProbeApplication.kt
+  s_467dcb949b5b60::t_0cd6bf8f59b56b 46-50,82-83
+termux-probe/app/src/test/java/dev/durableagent/termuxprobe/EnvironmentInspectorTest.kt
+  s_467dcb949b5b60::t_3cbce588835ae6 84-93
+termux-probe/app/src/main/java/dev/durableagent/termuxprobe/EnvironmentInspector.kt
+  s_467dcb949b5b60::t_0cd6bf8f59b56b 4,72-74
+  s_467dcb949b5b60::t_28db443caa935a 75-76
+termux-probe/validation.md
+  s_467dcb949b5b60::t_e80f4c571af036 21,29-30,40-41
+termux-probe/evidence/s23-first-cross-uid.txt
+  s_467dcb949b5b60::t_602b2c2de21416 1-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "1f7781fc8bfaf56c1cc3828d3878ce346fb5a95b",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
