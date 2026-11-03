@@ -1,0 +1,20 @@
+Storage-contract tests started after initial user unlock, while keyguard remained locked. These instrumentation runs are not T03 normal cold-start evidence. Observed: 2026-11-04T01:09:04.5227239+08:00
+>     KeyguardServiceDelegate
+        showing=true
+        inputRestricted=false
+        occluded=false
+        secure=true
+        dreaming=true
+        systemIsReady=true
+        deviceHasKeyguard=true
+        enabled=true
+        offReason=OFF_BECAUSE_OF_USER
+        currentUser=0
+        bootCompleted=true
+        screenState=SCREEN_STATE_ON
+        interactiveState=INTERACTIVE_STATE_SLEEP
+        KeyguardStateMonitor
+          mIsShowing=true
+          mSimSecure=false
+          mInputRestricted=true
+          mTrusted=false

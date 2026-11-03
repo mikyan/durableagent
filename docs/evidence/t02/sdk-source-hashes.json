@@ -1,0 +1,5 @@
+{
+  "@earendil-works/pi-durable@1.5.0/dist/storage/sqlite/storage.js": "046a92909ccc0a9d1e5916a906bd1af005ab4745f42e3bd6894654ac7816bf1d",
+  "@earendil-works/chord@1.5.0/dist/sqlite/node.js": "74add1d0965e8508fe61aa4258c900238dfa8632db3d36cd2b417dd9d7346803",
+  "@earendil-works/pi-durable@1.5.0/dist/testing/storage-conformance.js": "57662991ea0aa1db0a754fd20a3083d8a7b1df2a62c854a6d137f9c3ef2911bf"
+}
