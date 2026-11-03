@@ -1,0 +1,21 @@
+docs/specs/v1/README.md
+  s_467dcb949b5b60::t_89e15f1ed375ee 3,31,60
+docs/specs/v1/tickets/02-sqlite-contract.md
+  s_467dcb949b5b60::t_b5d5ace3dcfdf2 3-6,13-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "ba369ab84b562112374eb4d32e25e5e34b4886c8",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
