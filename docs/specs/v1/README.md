@@ -1,8 +1,8 @@
 # 首版 spec 与纵向工单
 
-设计基线：2026-11-03；整理：2026-11-04。1 份总 spec、17 张纵向工单，当前仅准备实施，没有产品或设备验收结果。
+设计基线：2026-11-03；整理：2026-11-04。1 份总 spec、17 张纵向工单。用户已调用 `implement-spec`，当前正在实现与验证 T01、T03，尚无通过的工单或产品验收结果。
 
-[总 spec](spec.md) 已发布为 [GitHub #1](https://github.com/mikyan/durableagent/issues/1)。[公开仓库](https://github.com/mikyan/durableagent) 保存设计、原型和后续代码；GitHub Issues 是执行状态与原生阻塞关系的权威。全部 18 个 issue 标记 `ready-for-agent`，表示说明完备，执行仍须后续明确授权。
+[总 spec](spec.md) 已发布为 [GitHub #1](https://github.com/mikyan/durableagent/issues/1)。[公开仓库](https://github.com/mikyan/durableagent) 保存设计、原型和后续代码；GitHub Issues 是执行状态与原生阻塞关系的权威。`ready-for-agent` 表示说明完备，不能代替前置票的实测通过证据。
 
 ## 交付与依赖
 
@@ -55,6 +55,6 @@ T01 与 T03 是独立验证起点；T02 验证选定宿主的实际存储契约�
 
 ## 状态与授权
 
-Q27—Q35 已接受，常规工程细节由代理收敛。运行时、驱动、受管启动及设备兼容仍为待验证事实。当前授权是文档、spec、GitHub 仓库和 issue 发布；生产实现、验证工程、安装 SDK／APK／运行时、真实模型调用和设备操作在后续指令中启动。
+Q27—Q35 已接受，常规工程细节由代理收敛。用户于 2026-11-04 调用 `implement-spec`，并提供 Galaxy S23，开始首版实现及设备验证；代码与工单沿用已授权的公开 GitHub 仓库。当前先使用受控模型传输完成运行时验证，运行时、驱动、受管启动及设备兼容仍为待验证事实。
 
 不把安排验证视为已经通过，不把 ready-for-agent 视为绕过依赖或设备许可。重要路线失败先保留证据，复审其影响；不静默改变已接受的产品承诺。
