@@ -1,11 +1,12 @@
 // Only the model HTTP boundary is replaced. Pi AI still loads its lazy provider,
 // parses SSE, decodes UTF-8 and assembles deltas using the published packages.
-export type FixtureOptions={hang?:boolean;tool?:boolean;invalidTool?:boolean};
+export type FixtureOptions={hang?:boolean;tool?:boolean;invalidTool?:boolean;failFirst?:number};
 export function fixtureTransport(options:FixtureOptions & {requested:()=>void; aborted:()=>void}): typeof fetch {
   let requests=0;
   return async (_input, init) => {
-    const tool=options.tool && requests++===0;
+    const tool=options.tool && requests===0;requests++;
     options.requested();
+    if(requests<=(options.failFirst??0))return new Response('Injected provider unavailable',{status:503});
     const encoder = new TextEncoder();
     const deltas = tool ? [
       {tool_calls:[{index:0,id:'tool-1',type:'function',function:{name:'echo',arguments:'{"city":"北'}}]},

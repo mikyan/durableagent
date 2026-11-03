@@ -1,0 +1,165 @@
+import {BACKGROUND_CONTEXT as context} from '@earendil-works/chord/context';
+import type {Models} from '@earendil-works/pi-ai/models';
+import {Harness,createRegistry,defineDoc,type ConversationId,type ConversationView,type HarnessSettings,type Storage,type EntryRecord,type ConversationWatch} from '@earendil-works/pi-durable';
+import {openOwnedStorage,auditStorageSecret} from './storage.js';
+import type {ApplicationRequest,ApplicationResponse,ApplicationEnvelope,ApplicationStatus,ConversationSummary,ConversationSnapshot,HistoryMessage,ModelSelection} from './application-protocol.js';
+import {installConversationAgent} from './extensions/conversation-agent.js';
+
+type ProductRecord={id:string;sdkId:number;title:string;workspaceId:string;createdAt:number};
+const Configuration=defineDoc({kind:'app.configuration',version:1,scope:'session',initial:()=>({initialized:false as boolean,defaultModel:null as ModelSelection|null,workspace:{id:'default',path:''}}),checkpointWhen:()=>false});
+const Products=defineDoc({kind:'app.product-conversations',version:1,scope:'session',initial:()=>({items:{} as Record<string,ProductRecord>}),checkpointWhen:()=>false});
+class DuplicateCreation extends Error {constructor(readonly productId:string){super('Creation already committed');}}
+class ActionError extends Error {constructor(readonly code:string,message:string){super(message);}}
+const settings:HarnessSettings={progress:{partialIntervalMs:1,outputIntervalMs:1,persistWithinMs:1000},retry:{enabled:false,maxRetries:0,baseDelayMs:1}};
+export type ApplicationOptions={path:string;models:Models;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;storageFactory?:()=>Promise<Storage>};
+export class Application {
+  private harness?:Harness;
+  private starting?:Promise<void>;
+  private closing?:Promise<void>;
+  private state:ApplicationStatus={phase:'opening',extensions:[]};
+  private actions=new Set<string>();
+  private storedSeq:number|null=null;
+  private revision=0;
+  private subscriptions=new Map<string,{connectionId:string;watch:ConversationWatch}>();
+  private attachments=new Map<string,object>();
+  private connectionEpochs=new Map<string,number>();
+  private defaultModel:ModelSelection|null=null;
+  constructor(private readonly options:ApplicationOptions) {installConversationAgent(extension=>{this.state.extensions.push(extension.id);for(const action of extension.actions)this.actions.add(action);});}
+  status(){return {...this.state};}
+  start():Promise<void> {
+    if(this.closing)return this.closing.then(()=>this.start());
+    if(this.starting)return this.starting;
+    if(this.harness)return Promise.resolve();
+    this.state={...this.state,phase:'opening',reason:undefined};
+    this.starting=this.open().catch(async error=>{this.state={...this.state,phase:'failed',reason:this.safeError(error)};await this.harness?.close(context);this.harness=undefined;throw error;}).finally(()=>{this.starting=undefined;});
+    return this.starting;
+  }
+  private async open() {
+    const storage=this.options.storageFactory?await this.options.storageFactory():(await openOwnedStorage(this.options.path,this.options.secret)).storage;
+    try {
+      this.harness=await Harness.open(storage,{models:()=>this.options.models,settings:()=>this.options.bootstrapSettings?.()??settings,registry:createRegistry()},context);
+    }catch(error){await storage.close(context);throw error;}
+    void this.harness.closed.then(result=>{if(result.kind==='failed')this.state={...this.state,phase:'failed',reason:this.safeError(result.error)};});
+    this.harness.observeCommits({advance:publication=>{this.storedSeq=publication.seq;},end:()=>{}});
+    this.state={...this.state,phase:'configuring'};
+    await this.options.loadConfiguration?.();
+    this.defaultModel=await this.harness.commit(async tx=>{
+      const configuration=await tx.doc(Configuration);
+      if(!configuration.initialized){configuration.defaultModel=this.options.initialModel??null;configuration.workspace={id:'default',path:this.options.workspacePath};configuration.initialized=true;}
+      return configuration.defaultModel?{...configuration.defaultModel}:null;
+    },context);
+    this.state={...this.state,phase:'ready'};
+    this.harness.resume();
+  }
+  private ready() {
+    if(this.state.phase!=='ready'||!this.harness)throw new ActionError(this.state.phase==='configuring'?'CONFIG_LOADING':this.state.phase==='failed'?'STORAGE_UNAVAILABLE':'HOST_NOT_READY',this.state.reason??(this.state.phase==='configuring'?'正在装载配置':'运行宿主尚未就绪'));
+    return this.harness;
+  }
+  private safeError(error:unknown) {const message=error instanceof Error?error.message:String(error);return this.options.secret?message.replaceAll(this.options.secret,'[REDACTED]'):message;}
+  private text(payload:Record<string,unknown>,key:string,max=100000) {const value=payload[key];if(typeof value!=='string'||!value.trim()||value.length>max)throw new ActionError('INVALID_ARGUMENT',`${key} 无效`);return value;}
+  async request(request:ApplicationRequest,emit:(event:ApplicationEnvelope)=>void=()=>{}):Promise<ApplicationResponse> {
+    const base={type:'response' as const,protocol:1 as const,connectionId:request.connectionId,requestId:request.requestId};
+    try {
+      if(request.protocol!==1)throw new ActionError('PROTOCOL_MISMATCH','界面与运行宿主版本不兼容');
+      if(request.method==='status')return {...base,ok:true,value:this.status()};
+      const harness=this.ready(),payload=request.payload??{};
+      if(request.method!=='stop'&&!this.actions.has(request.method))throw new ActionError('UNKNOWN_ACTION','未登记的应用操作');
+      let value:unknown;
+      switch(request.method) {
+        case 'list': {
+          const products=await harness.snapshot(Products,context);
+          value={conversations:await Promise.all(Object.values(products?.items??{}).map(product=>this.summary(product)))};break;
+        }
+        case 'create':value=await this.create(this.text(payload,'creationId',128),typeof payload.title==='string'?payload.title.slice(0,120):'新会话');break;
+        case 'open':value=await this.snapshot(this.text(payload,'id',128));break;
+        case 'history':value=await this.history(this.text(payload,'id',128),payload.cursor,payload.limit);break;
+        case 'send': {
+          const product=await this.product(this.text(payload,'id',128));
+          const conversation=(await harness.conversation(product.sdkId as ConversationId,context))!;
+          const model=(await conversation.agent(context)).model;
+          if(!model||!this.options.models.getModel(model.provider,model.modelId))throw new ActionError('MODEL_UNAVAILABLE','请先配置可用模型');
+          const actionId=this.text(payload,'actionId',128);
+          const submission=await conversation.submit({type:'input',content:this.text(payload,'text'),requestId:actionId},context);
+          value={actionId,submissionId:String(submission.id),storedSeq:this.storedSeq,status:'accepted'};break;
+        }
+        case 'stop': {
+          const actionId=this.text(payload,'actionId',128);
+          const product=await this.product(this.text(payload,'id',128));
+          await (await harness.conversation(product.sdkId as ConversationId,context))!.abort(context);
+          value={actionId,storedSeq:this.storedSeq,status:'stopped'};break;
+        }
+        case 'subscribe': {
+          const id=this.text(payload,'id',128),subscriptionId=this.text(payload,'subscriptionId',128);
+          const key=JSON.stringify([request.connectionId,subscriptionId]),token={},epoch=this.connectionEpochs.get(request.connectionId)??0;
+          this.attachments.set(key,token);
+          const current=()=>this.attachments.get(key)===token&&(this.connectionEpochs.get(request.connectionId)??0)===epoch;
+          const product=await this.product(id);
+          await this.subscriptions.get(key)?.watch.stop();
+          const conversation=(await harness.conversation(product.sdkId as ConversationId,context))!;
+          const watch=await conversation.watch(context);const subscription={connectionId:request.connectionId,watch};
+          if(!current()){await watch.stop();throw new ActionError('CONNECTION_CLOSED','订阅连接已更换');}
+          this.subscriptions.set(key,subscription);
+          value=this.project(product,watch.value);
+          const publish=(snapshot:ConversationSnapshot)=>{if(current()&&this.subscriptions.get(key)===subscription)emit({type:'conversation',protocol:1,connectionId:request.connectionId,subscriptionId,snapshot});};
+          const failed=(error:unknown)=>{const snapshot=this.project(product,watch.value);publish({...snapshot,phase:'failed',progress:undefined,conversation:{...snapshot.conversation,phase:'failed'},reason:this.safeError(error)});};
+          watch.start(async call=>{if(call.kind==='value')publish(this.project(product,call.value));else failed(call.error);});
+          void watch.closed.then(end=>{if(end.kind==='failed')failed(end.error);});break;
+        }
+        case 'unsubscribe': {
+          const key=JSON.stringify([request.connectionId,this.text(payload,'subscriptionId',128)]),subscription=this.subscriptions.get(key);
+          this.attachments.delete(key);
+          this.subscriptions.delete(key);await subscription?.watch.stop();value={};break;
+        }
+        default:throw new ActionError('UNKNOWN_ACTION','不支持的应用操作');
+      }
+      return {...base,ok:true,value};
+    }catch(error){return {...base,ok:false,error:{code:error instanceof ActionError?error.code:'ACTION_FAILED',message:this.safeError(error)}};}
+  }
+  private async product(id:string) {const items=(await this.ready().snapshot(Products,context))?.items??{};if(!Object.hasOwn(items,id))throw new ActionError('NOT_FOUND','会话不存在');return items[id];}
+  private async create(id:string,title:string) {
+    const harness=this.ready();const model=this.defaultModel;
+    if(!model)throw new ActionError('MODEL_UNAVAILABLE','请先配置新会话默认模型');
+    try {
+      await harness.createConversation({ownership:{kind:'ownerless'},agent:{model:{provider:model.provider,modelId:model.modelId},maxTurns:3},init:async(tx,sdkId)=>{
+        const products=await tx.doc(Products);if(Object.hasOwn(products.items,id))throw new DuplicateCreation(id);
+        products.items[id]={id,sdkId,title:title.trim()||'新会话',workspaceId:'default',createdAt:Date.now()};
+      }},context);
+    }catch(error){if(!(error instanceof DuplicateCreation))throw error;}
+    return {conversation:await this.summary(await this.product(id)),storedSeq:this.storedSeq};
+  }
+  private async summary(product:ProductRecord):Promise<ConversationSummary> {return (await this.snapshot(product.id,product)).conversation;}
+  private async snapshot(id:string,known?:ProductRecord) {
+    const product=known??await this.product(id),harness=this.ready();
+    const watch=await (await harness.conversation(product.sdkId as ConversationId,context))!.watch(context);
+    try{return this.project(product,watch.value);}finally{await watch.stop();}
+  }
+  private project(product:ProductRecord,view:ConversationView):ConversationSnapshot {
+    const live=view.docs['pi.live'] as any,agent=view.docs['pi.agent'] as any;
+    const ref=agent?.model??{},model=this.options.models.getModel(ref.provider,ref.modelId);
+    const entries=view.entries.flatMap(entry=>this.message(entry));
+    const phase=live?.run?(live.generation?.retry||live.generation?.deferred?'waiting':'running'):live?.runFailure?(live.runFailure.reason==='aborted'?'stopped':'failed'):entries.some(entry=>entry.role==='assistant')?'done':'idle';
+    const text=live?.run?this.content(live.generation?.message?.content):'';
+    return {id:product.id,revision:++this.revision,conversation:{id:product.id,title:product.title,model:{provider:ref.provider??'',modelId:ref.modelId??'',name:model?.name??ref.modelId??'未配置模型'},workspaceId:product.workspaceId,projectId:null,createdAt:product.createdAt,phase},entries,progress:text?{text,persisted:false}:undefined,phase,storedSeq:this.storedSeq,reason:live?.runFailure?.detail??live?.generation?.retry?.error};
+  }
+  private content(value:any):string {return typeof value==='string'?value:Array.isArray(value)?value.filter(x=>x.type==='text').map(x=>x.text).join(''):'';}
+  private message(entry:EntryRecord):HistoryMessage[] {return (entry.model??[]).flatMap((message:any,index:number)=>{const text=this.content(message.content);return text?[{id:String(entry.id)+(index?':'+index:''),role:message.role==='toolResult'?'tool':message.role,text,persisted:true as const}]:[];});}
+  private async history(id:string,cursor:unknown,limit:unknown) {
+    const product=await this.product(id),conversation=(await this.ready().conversation(product.sdkId as ConversationId,context))!;
+    let sdkCursor:any;
+    if(cursor!==undefined){try{const decoded=JSON.parse(Buffer.from(String(cursor),'base64url').toString());if(decoded.id!==id||decoded.version!==1)throw Error();sdkCursor=decoded.cursor;}catch{throw new ActionError('INVALID_CURSOR','历史位置不属于此会话');}}
+    const size=typeof limit==='number'?Math.max(1,Math.min(50,Math.floor(limit))):25;
+    const page=await conversation.entries({order:'descending'},size,sdkCursor,context);
+    return {items:[...page.items].reverse().flatMap(entry=>this.message(entry)),next:page.next?Buffer.from(JSON.stringify({version:1,id,cursor:page.next})).toString('base64url'):undefined};
+  }
+  async disconnect(connectionId:string) {this.connectionEpochs.set(connectionId,(this.connectionEpochs.get(connectionId)??0)+1);const matches=[...this.subscriptions].filter(([,s])=>s.connectionId===connectionId);for(const [key,s]of matches){this.attachments.delete(key);this.subscriptions.delete(key);await s.watch.stop();}}
+  close():Promise<void> {
+    return this.closing??=(async()=>{
+      await this.starting?.catch(()=>{});this.state={...this.state,phase:'closed'};
+      this.attachments.clear();
+      const watches=[...this.subscriptions.values()];this.subscriptions.clear();for(const entry of watches)await entry.watch.stop();
+      let auditError:unknown;try{if(this.options.secret)await auditStorageSecret(this.options.path,this.options.secret);}catch(error){auditError=error;}
+      await this.harness?.close(context);this.harness=undefined;
+      if(this.options.secret)await auditStorageSecret(this.options.path,this.options.secret);if(auditError)throw auditError;
+    })().finally(()=>{this.closing=undefined;});
+  }
+}

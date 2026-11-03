@@ -1,0 +1,73 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ApplicationTest:
+INSTRUMENTATION_STATUS: test=realReactTwoConversationsReconnectAndNativeReopen
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: applicationEvidence={"case":"react-two-conversations","result":{"before":{"phase":"ready","extensions":["conversation"],"metrics":{},"instance":"ed509190-f420-4470-9069-e9ad148a77ca","pid":13199,"domainOwned":true,"nativeOwners":1},"reopened":{"phase":"ready","extensions":["conversation"],"metrics":{},"instance":"68845602-5eb4-4dce-9c68-49e0383bd8af","pid":13199,"domainOwned":true,"nativeOwners":1},"first":{"items":[{"id":"10","role":"user","text":"第一段独立输入","persisted":true},{"id":"13","role":"assistant","text":"你好🌍","persisted":true}]},"second":{"items":[{"id":"20","role":"user","text":"第二段独立输入","persisted":true},{"id":"23","role":"assistant","text":"你好🌍","persisted":true}]}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realReactTwoConversationsReconnectAndNativeReopen
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=largeTextCrossesBinderFragmentsAndReactWithoutTruncation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: applicationEvidence={"case":"large-react-ipc","result":{"charactersPerInput":90000,"historyUtf16Bytes":1981410,"historyCount":12,"exactText":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=largeTextCrossesBinderFragmentsAndReactWithoutTruncation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=explicitStopAndDetachedUiPreserveInput
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: applicationEvidence={"case":"stop-detached-ui","result":{"id":"hang","revision":7,"conversation":{"id":"hang","title":"新会话","model":{"provider":"fixture","modelId":"conversation","name":"验证模型"},"workspaceId":"default","projectId":null,"createdAt":1793727883096,"phase":"stopped"},"entries":[{"id":"10","role":"user","text":"保留输入并停止","persisted":true}],"phase":"stopped","storedSeq":7}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=explicitStopAndDetachedUiPreserveInput
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realMimoProductConversationsPersistWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: applicationEvidence={"case":"real-mimo-two-conversations","result":{"before":{"phase":"ready","extensions":["conversation"],"metrics":{"transportRequests":2,"currentRequest":2,"transportAborted":true,"requestAbortCount":1,"bodyReadPending":false,"bodyReadError":"","bodyReadCancelled":true,"providerFinished":true,"textDeltaEvents":10,"toolDeltaEvents":0},"instance":"2b7702e2-26be-4e46-8e2a-2925e3922688","pid":13199,"domainOwned":true,"nativeOwners":1},"reopened":{"phase":"ready","extensions":["conversation"],"metrics":{},"instance":"4e539e45-661c-4814-b7ea-9b5a933aafba","pid":13199,"domainOwned":true,"nativeOwners":1},"histories":{"real-a":"{\"items\":[{\"id\":\"10\",\"role\":\"user\",\"text\":\"请只回复一句简短中文问候，包含编号 real-a。\",\"persisted\":true},{\"id\":\"13\",\"role\":\"assistant\",\"text\":\"你好 real-a，今天也辛苦了。\",\"persisted\":true}]}","real-b":"{\"items\":[{\"id\":\"20\",\"role\":\"user\",\"text\":\"请只回复一句简短中文问候，包含编号 real-b。\",\"persisted\":true},{\"id\":\"23\",\"role\":\"assistant\",\"text\":\"你好 real-b！\",\"persisted\":true}]}"}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoProductConversationsPersistWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 44.409
+
+OK (4 tests)
+
+
+INSTRUMENTATION_CODE: -1
