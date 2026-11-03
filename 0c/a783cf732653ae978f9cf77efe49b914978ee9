@@ -1,0 +1,84 @@
+termux-probe/app/src/test/java/dev/durableagent/termuxprobe/EnvironmentInspectorTest.kt
+  s_467dcb949b5b60::t_c9d1153c338f42 73-83
+  s_467dcb949b5b60::t_06921700287f82 8,37,43-56
+  s_467dcb949b5b60::t_9ff30aed764829 58-72
+  s_467dcb949b5b60::t_db461101723789 33-36,38-42,57
+  s_467dcb949b5b60::t_38b3b21eee9c4b 7,15-31
+  s_467dcb949b5b60::t_39fff1609b420d 1-6,9-14,32,84
+termux-probe/gradlew.bat
+  s_467dcb949b5b60::t_d488d7e4503a14 1-94
+termux-probe/app/src/main/java/dev/durableagent/termuxprobe/ProbeApplication.kt
+  s_467dcb949b5b60::t_5c6a7db085d6d6 4,55-56
+  s_467dcb949b5b60::t_a00b0cb32a4078 1-3,5-54,57-94
+termux-probe/gradle/wrapper/gradle-wrapper.properties
+  s_467dcb949b5b60::t_3d1b19e3eb0215 1-8
+termux-probe/gradle.properties
+  s_467dcb949b5b60::t_39fff1609b420d 1-3
+termux-probe/app/build.gradle.kts
+  s_467dcb949b5b60::t_39fff1609b420d 1-17
+termux-probe/app/src/main/assets/setup.sh
+  s_467dcb949b5b60::t_3d1b19e3eb0215 1-6,9-44
+  s_467dcb949b5b60::t_00cb65301f1c32 7-8
+termux-probe/app/src/main/java/dev/durableagent/termuxprobe/MainActivity.kt
+  s_467dcb949b5b60::t_a00b0cb32a4078 1-62
+termux-probe/app/src/main/java/dev/durableagent/termuxprobe/TermuxResultDecoder.kt
+  s_467dcb949b5b60::t_3875928f0f3859 1-13
+termux-probe/app/src/main/java/dev/durableagent/termuxprobe/AndroidTermuxGateway.kt
+  s_467dcb949b5b60::t_a00b0cb32a4078 1-72
+termux-probe/scripts/test-setup.sh
+  s_467dcb949b5b60::t_8dd97afcabd03d 1-21
+termux-probe/README.md
+  s_467dcb949b5b60::t_5c6a7db085d6d6 1-52
+termux-probe/gradlew
+  s_467dcb949b5b60::t_be669a9cfa47a2 1-251
+termux-probe/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_39fff1609b420d 1-3,5-10
+  s_467dcb949b5b60::t_89b8aee0ee6d54 4
+termux-probe/app/src/main/res/xml/data_extraction_rules.xml
+  s_467dcb949b5b60::t_89b8aee0ee6d54 1-4
+termux-probe/settings.gradle.kts
+  s_467dcb949b5b60::t_39fff1609b420d 1-4
+termux-probe/build.gradle.kts
+  s_467dcb949b5b60::t_39fff1609b420d 1-4
+termux-probe/validation.md
+  s_467dcb949b5b60::t_89b8aee0ee6d54 21
+  s_467dcb949b5b60::t_5c6a7db085d6d6 1-20,22-43
+termux-probe/app/src/main/java/dev/durableagent/termuxprobe/EnvironmentInspector.kt
+  s_467dcb949b5b60::t_17c28c0972d2ab 5,12-32,70-71
+  s_467dcb949b5b60::t_7f9c0cc329422f 4,43,45-53,64-69
+  s_467dcb949b5b60::t_3875928f0f3859 7,44,55
+  s_467dcb949b5b60::t_c8e0683cbebba8 1-3,6,9-11,72
+  s_467dcb949b5b60::t_c2c48053857569 40-42,54
+  s_467dcb949b5b60::t_71c722a8df5e7b 8,33-39,56-63
+termux-probe/app/src/main/java/dev/durableagent/termuxprobe/ProbeReceiver.kt
+  s_467dcb949b5b60::t_3875928f0f3859 12-14
+  s_467dcb949b5b60::t_a00b0cb32a4078 1-11,15-18
+termux-probe/.gitattributes
+  s_5129325b14b61e::t_aed877118f79f8 1-3
+termux-probe/.gitignore
+  s_5129325b14b61e::t_7744ac811f0469 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "0ca783cf732653ae978f9cf77efe49b914978ee9",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_5129325b14b61e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a22d-1840-7c71-bed8-8835e76ad192",
+        "model": "unknown"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
