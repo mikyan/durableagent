@@ -1,0 +1,42 @@
+// Only the model HTTP boundary is replaced. Pi AI still loads its lazy provider,
+// parses SSE, decodes UTF-8 and assembles deltas using the published packages.
+export type FixtureOptions={hang?:boolean;tool?:boolean;invalidTool?:boolean};
+export function fixtureTransport(options:FixtureOptions & {requested:()=>void; aborted:()=>void}): typeof fetch {
+  let requests=0;
+  return async (_input, init) => {
+    const tool=options.tool && requests++===0;
+    options.requested();
+    const encoder = new TextEncoder();
+    const deltas = tool ? [
+      {tool_calls:[{index:0,id:'tool-1',type:'function',function:{name:'echo',arguments:'{"city":"北'}}]},
+      {tool_calls:[{index:0,function:{arguments:'京🌍","count":'}}]},
+      {tool_calls:[{index:0,function:{arguments:options.invalidTool?'"many"}':'"2"}'}}]}
+    ] : ['你', '好', '🌍'].map(content=>({content}));
+    let index = 0;
+    let done=false;
+    let abort:()=>void;
+    return new Response(new ReadableStream<Uint8Array>({
+      start(controller) {
+        abort=()=>{if(!done){done=true;options.aborted();controller.error(new DOMException('Fixture aborted','AbortError'));}};
+        init?.signal?.addEventListener('abort',abort,{once:true});
+        if(init?.signal?.aborted)abort();
+      },
+      async pull(controller) {
+        if(options.hang) return new Promise<void>(resolve=>{init?.signal?.addEventListener('abort',()=>resolve(),{once:true});});
+        await new Promise(resolve => setTimeout(resolve, 35));
+        if(done)return;
+        if (index < deltas.length) {
+          const bytes = encoder.encode(`data: ${JSON.stringify({id:'probe',object:'chat.completion.chunk',choices:[{index:0,delta:deltas[index++],finish_reason:null}]})}\n\n`);
+          // Every byte boundary includes splits inside UTF-8 and SSE syntax.
+          for (const byte of bytes) controller.enqueue(Uint8Array.of(byte));
+        } else {
+          controller.enqueue(encoder.encode(`data: {"id":"probe","choices":[{"index":0,"delta":{},"finish_reason":"${tool?'tool_calls':'stop'}"}]}\n\ndata: [DONE]\n\n`));
+          controller.close();
+          done=true;
+          init?.signal?.removeEventListener('abort',abort);
+        }
+      },
+      cancel() { done=true;init?.signal?.removeEventListener('abort',abort); }
+    }), {headers:{'content-type':'text/event-stream'}});
+  };
+}
