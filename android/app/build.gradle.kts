@@ -28,7 +28,12 @@ val packageRuntime by tasks.registering(Zip::class) {
     isPreserveFileTimestamps = false
     doFirst { check(file("../../runtime/dist/bridge.js").exists()) { "Run npm ci and npm run build in runtime/ first" } }
 }
-tasks.named("preBuild").configure { dependsOn(packageRuntime) }
+val packageUi by tasks.registering(Sync::class) {
+    from("../../ui/dist")
+    into(layout.buildDirectory.dir("generated/runtimeAssets/ui"))
+    doFirst {check(file("../../ui/dist/index.html").exists()) {"Run npm ci and npm run build in ui/ first"}}
+}
+tasks.named("preBuild").configure { dependsOn(packageRuntime,packageUi) }
 dependencies {
     implementation("com.caoccao.javet:javet-node-android-i18n:6.0.3")
     androidTestImplementation("androidx.test:runner:1.6.2")

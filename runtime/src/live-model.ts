@@ -4,7 +4,7 @@ import type { ProbeState } from './probe.js';
 
 // Explicit opt-in validation path. The key is applied only after validating the
 // final HTTPS destination; no real credential enters serializable SDK options.
-export function liveModels(secret:string, publish:(patch:Partial<ProbeState>)=>void) {
+export function liveModels(secret:string, publish:(patch:Partial<ProbeState>)=>void,configuration:{forceEcho?:boolean}={}) {
   if(secret.length<12)throw new Error('Live validation credential unavailable');
   const provider=xiaomiTokenPlanCnProvider();
   const model='mimo-v2.6-flash';
@@ -40,7 +40,7 @@ export function liveModels(secret:string, publish:(patch:Partial<ProbeState>)=>v
   let calls=0;
   const options=(original:any)=>({
     ...original,fetch:checkedFetch,maxRetries:0,maxRetryDelayMs:0,timeoutMs:45000,maxTokens:1024,reasoning:'off',samplingParams:{thinking:{type:'disabled'}},
-    toolChoice:++calls===1?{type:'function',function:{name:'echo'}}:'none',
+    toolChoice:++calls===1&&configuration.forceEcho!==false?{type:'function',function:{name:'echo'}}:'none',
     onProviderStreamEvent(event:any) {
       for(const choice of event?.choices??[]) {
         if(choice.finish_reason)publish({providerFinished:true});
