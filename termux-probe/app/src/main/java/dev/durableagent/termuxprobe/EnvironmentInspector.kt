@@ -1,7 +1,7 @@
 package dev.durableagent.termuxprobe
 
 enum class Fact { UNKNOWN, VERIFIED, FAILED }
-enum class Phase { UNCHECKED, INSTALL_REQUIRED, UNTRUSTED_INSTALL, PERMISSION_REQUIRED, FORCE_STOPPED, CHECKING, UNKNOWN_TIMEOUT, READY, INVALID_RESPONSE, EXTERNAL_CALLS_DISABLED, SETUP_REQUIRED, PROTOCOL_MISMATCH, BUSY, START_RESTRICTED, DISPATCH_FAILED }
+enum class Phase { UNCHECKED, INSTALL_REQUIRED, UNTRUSTED_INSTALL, PERMISSION_REQUIRED, FORCE_STOPPED, CHECKING, UNKNOWN_TIMEOUT, READY, INVALID_RESPONSE, EXTERNAL_CALLS_DISABLED, SETUP_REQUIRED, PROTOCOL_MISMATCH, BUSY, START_RESTRICTED, DISPATCH_FAILED, PLATFORM_CHECK_FAILED }
 data class PlatformFacts(val installed: Boolean, val trusted: Boolean = false, val permission: Boolean = false, val stopped: Boolean = false, val uid: Int = -1)
 data class ProbeRequest(val nonce: String, val startedAt: Long)
 data class ProbeResult(val stdout: String, val stderr: String = "", val exitCode: Int = 0, val error: Int = -1, val errorMessage: String = "", val truncated: Boolean = false)
@@ -67,6 +67,11 @@ class EnvironmentInspector {
     @Synchronized fun dispatchFailed(nonce: String, phase: Phase, detail: String): Inspection {
         require(phase in setOf(Phase.START_RESTRICTED, Phase.PERMISSION_REQUIRED, Phase.DISPATCH_FAILED))
         if (state.request?.nonce == nonce) state = Inspection(phase, evidence = detail)
+        return state
+    }
+
+    @Synchronized fun platformCheckFailed(detail: String): Inspection {
+        state = Inspection(Phase.PLATFORM_CHECK_FAILED, evidence = detail)
         return state
     }
 }

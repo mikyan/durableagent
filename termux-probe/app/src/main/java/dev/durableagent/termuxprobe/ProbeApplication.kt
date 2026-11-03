@@ -43,7 +43,11 @@ class ProbeApplication : Application() {
             main.post {
                 checkingFacts = false
                 platformDescription = facts.fold({ gateway.description }, { "平台核验失败：${it.javaClass.simpleName}: ${it.message}" })
-                if (facts.isFailure) { publish(); return@post }
+                if (facts.isFailure) {
+                    inspector.platformCheckFailed(platformDescription)
+                    callback?.cancel(); callback = null
+                    publish(); return@post
+                }
                 val state = inspector.inspect(facts.getOrThrow(), UUID.randomUUID().toString(), SystemClock.elapsedRealtime())
                 val request = state.request
                 if (request != null && request.nonce != dispatched) {
@@ -75,6 +79,8 @@ class ProbeApplication : Application() {
             main.post {
                 try {
                     facts.onSuccess { inspector.complete(nonce, result, it, SystemClock.elapsedRealtime()) }
+                    if (facts.isFailure && inspector.state.request?.nonce == nonce)
+                        inspector.platformCheckFailed("回调后无法重新读取平台事实：${facts.exceptionOrNull()?.javaClass?.simpleName}")
                     if (inspector.state.request == null) { callback?.cancel(); callback = null }
                     publish()
                 } finally { finished() }

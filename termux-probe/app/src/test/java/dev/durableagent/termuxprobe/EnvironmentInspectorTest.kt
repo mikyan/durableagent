@@ -81,4 +81,14 @@ class EnvironmentInspectorTest {
         inspector.inspect(installed, "challenge", 500)
         assertEquals(Phase.INVALID_RESPONSE, inspector.complete("challenge", decodeTermuxResult(wire - "err"), installed, 600).phase)
     }
+
+    @Test fun failureToReadFreshPlatformFactsCannotRetainEarlierReadiness() {
+        val inspector = EnvironmentInspector()
+        inspector.inspect(installed, "challenge", 100)
+        assertEquals(Phase.READY, inspector.complete("challenge", ProbeResult(goodOutput), installed, 200).phase)
+        val result = inspector.platformCheckFailed("package changed during verification")
+        assertEquals(Phase.PLATFORM_CHECK_FAILED, result.phase)
+        assertEquals(Fact.UNKNOWN, result.bootstrap)
+        assertNull(result.request)
+    }
 }
