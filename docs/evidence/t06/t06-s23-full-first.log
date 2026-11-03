@@ -1,0 +1,57 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.InputApplicationTest:
+INSTRUMENTATION_STATUS: test=inputPolicyUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputEvidence={"case":"actual-sdk-input-policy","result":{"phase":"ready","extensions":["conversation","models","input"],"metrics":{"inputPolicyState":"passed","inputPolicyCases":[{"name":"capabilities derive from the fixed SDK catalog, use byte-specific budgets, and never resolve credentials","passed":true},{"name":"fixed input verifies ownership, every object and digest before SDK content; changed capabilities never alter a token","passed":true},{"name":"explicit fixed-image send reaches real SDK encoding, persists image-only history, and reopening never sends","passed":true},{"name":"actual serialized SDK requests enforce escaped JSON, history image counts and selected-model limits before decrypt or transport","passed":true}]},"instance":"fc80f17b-63da-4cb8-8e8d-0cd64243eb52","pid":18620,"domainOwned":true,"nativeOwners":1}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inputPolicyUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=nativeDraftsSaveThroughRealUiWhileNodeBusyAndNotStarted
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputEvidence={"case":"independent-native-save","result":{"busyBarrierAtReceipt":{"pid":18620,"started":714048835,"ended":0,"observedAt":714050142},"first":{"id":"busy-draft","revision":1,"text":"Node 忙循环期间，原生仍确认保存 🌍","selections":[],"committed":true,"stateVersion":1,"capability":{"provider":"fixture","modelId":"conversation","input":["text"],"source":"validation","limits":{},"applicationPolicy":{"draftCharacters":100000,"attachments":4,"sourceImageBytes":16777216,"sourcePixels":25165824,"textBytes":262144,"imageWidth":1024,"imageHeight":1024,"imageBytes":1572864,"totalBase64Bytes":8388608,"requestBytes":10485760},"version":"d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"}},"second":{"id":"offline-draft","revision":1,"text":"Agent 从未启动的页面仍保存第二份草稿","selections":[],"committed":true,"stateVersion":1,"capability":{"provider":"fixture","modelId":"conversation","input":["text"],"source":"validation","limits":{},"applicationPolicy":{"draftCharacters":100000,"attachments":4,"sourceImageBytes":16777216,"sourcePixels":25165824,"textBytes":262144,"imageWidth":1024,"imageHeight":1024,"imageBytes":1572864,"totalBase64Bytes":8388608,"requestBytes":10485760},"version":"d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"}},"nativeOwnersWithoutAgent":0,"modelRequests":0}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=nativeDraftsSaveThroughRealUiWhileNodeBusyAndNotStarted
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realMimoReadsFrozenImageChallengeAfterOriginalChanges
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputEvidence={"case":"real-fixed-image","result":{"challenge":"23AP","answer":"23AP","frozen":{"token":"be4c4421-bbd1-42d2-b765-f48b31d4ff03","id":"image-challenge","revision":2,"text":"请读取图片中央的四位英文大写或数字代码，仅输出该代码，不要附加其他内容。","representations":[{"range":"full","capabilityVersion":"48914d15184261b2ae26768590dfd9e83534f29ad2347116d94142ca10fcead2","kind":"image","mimeType":"image\/png","width":560,"height":220,"sourceWidth":560,"sourceHeight":220,"transformation":"完整画面，按方向解码并缩放，保留透明度","objectId":"e11a0158-1990-49a6-a58e-70e6fecbac75","sha256":"16568ad8570aaa533039bde50578baa39b4a60dede0310740c59b9c4d029d518","byteLength":8902}],"digest":"7d6c26b76476cdbfea8b357e106072fcf8acfda86d692ea76858e9fc67546b54"},"requestInput":{"serializedBytes":12268,"images":[{"sha256":"16568ad8570aaa533039bde50578baa39b4a60dede0310740c59b9c4d029d518","byteLength":8902,"mimeType":"image\/png"}]},"originalChangedAfterFreeze":true,"requestsBeforeSend":0,"explicitRequests":1,"reopenRequests":0}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoReadsFrozenImageChallengeAfterOriginalChanges
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 20.53
+
+OK (3 tests)
+
+
+INSTRUMENTATION_CODE: -1

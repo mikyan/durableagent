@@ -1,0 +1,55 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeInputStoreTest:
+INSTRUMENTATION_STATUS: test=failedFinalPublicationCanRecoverInTheSameProcessAfterStorageReturns
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=org.junit.ComparisonFailure: expected:<[failed]> but was:<[preparing]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.NativeInputStoreTest.failedFinalPublicationCanRecoverInTheSameProcessAfterStorageReturns(NativeInputStoreTest.kt:225)
+
+INSTRUMENTATION_STATUS: stream=
+Error in failedFinalPublicationCanRecoverInTheSameProcessAfterStorageReturns(dev.durableagent.probe.NativeInputStoreTest):
+org.junit.ComparisonFailure: expected:<[failed]> but was:<[preparing]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.NativeInputStoreTest.failedFinalPublicationCanRecoverInTheSameProcessAfterStorageReturns(NativeInputStoreTest.kt:225)
+
+INSTRUMENTATION_STATUS: test=failedFinalPublicationCanRecoverInTheSameProcessAfterStorageReturns
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=lostSelectionReceiptReplaysBeforeReopeningAnUnavailableSource
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=lostSelectionReceiptReplaysBeforeReopeningAnUnavailableSource
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.465
+There was 1 failure:
+1) failedFinalPublicationCanRecoverInTheSameProcessAfterStorageReturns(dev.durableagent.probe.NativeInputStoreTest)
+org.junit.ComparisonFailure: expected:<[failed]> but was:<[preparing]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.NativeInputStoreTest.failedFinalPublicationCanRecoverInTheSameProcessAfterStorageReturns(NativeInputStoreTest.kt:225)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

@@ -12,12 +12,12 @@ export class ApplicationClient {
   private disposed=false;
   private subscriptions=new Map<string,{id:string;revision:number;listener:(snapshot:ConversationSnapshot)=>void}>();
   constructor(private readonly port:NativePort|undefined,private readonly timeoutMs=20000) {}
-  request<T=unknown>(method:ApplicationMethod,payload?:Record<string,unknown>):Promise<T> {
+  request<T=unknown>(method:ApplicationMethod,payload?:Record<string,unknown>,timeoutMs=this.timeoutMs):Promise<T> {
     if(this.disposed)return Promise.reject(new ApplicationFailure('CONNECTION_CLOSED','连接已关闭，请重新连接。'));
     if(!this.port)return Promise.reject(new ApplicationFailure('HOST_UNAVAILABLE','无法连接运行宿主，请在应用中打开此页面。'));
     const request:ApplicationRequest={protocol:APPLICATION_PROTOCOL,connectionId:this.connectionId,requestId:crypto.randomUUID(),method,payload};
     return new Promise<T>((resolve,reject)=>{
-      const timer=setTimeout(()=>{this.pending.delete(request.requestId);reject(new ApplicationFailure('RESPONSE_TIMEOUT','尚未收到确认，请重新连接查看当前状态。'));},this.timeoutMs);
+      const timer=setTimeout(()=>{this.pending.delete(request.requestId);reject(new ApplicationFailure('RESPONSE_TIMEOUT','尚未收到确认，请重新连接查看当前状态。'));},timeoutMs);
       this.pending.set(request.requestId,{resolve:value=>resolve(value as T),reject,timer});
       try {this.port!.postMessage(JSON.stringify(request));}
       catch {clearTimeout(timer);this.pending.delete(request.requestId);reject(new ApplicationFailure('HOST_UNAVAILABLE','运行宿主连接已断开。'));}

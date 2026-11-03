@@ -1,23 +1,27 @@
 import type {ApplicationStatus,ConversationSnapshot,ConversationSummary,HistoryMessage,HistoryPage} from '../../runtime/src/application-protocol';
 import {ApplicationClient,ApplicationFailure} from './client';
 import {MODELS_EXTENSION,type ConnectionProtocol,type CredentialInfo,type ModelConfiguration} from '../../runtime/src/model-protocol';
+import type {InputConversation} from '../../runtime/src/input-protocol';
+import {DraftCoordinator,type DraftView} from './drafts';
 
 export interface SelectionPreferences {get(key:string):string|null;set(key:string,value:string):void}
-export type UiState={status:ApplicationStatus;conversations:ConversationSummary[];activeId?:string;conversation?:ConversationSnapshot;history:HistoryMessage[];next?:string;loading:boolean;pending:boolean;error?:string;page:'conversation'|'models';models?:ModelConfiguration;modelsLoading:boolean;modelsPending:boolean;modelsError?:string;modelsNotice?:string};
+export type UiState={status:ApplicationStatus;conversations:ConversationSummary[];inputConversations:InputConversation[];inputReady:boolean;inputError?:string;draft?:DraftView;activeId?:string;conversation?:ConversationSnapshot;history:HistoryMessage[];next?:string;loading:boolean;pending:boolean;error?:string;page:'conversation'|'models';models?:ModelConfiguration;modelsLoading:boolean;modelsPending:boolean;modelsError?:string;modelsNotice?:string};
 export type ConnectionInput={name:string;protocol:ConnectionProtocol;endpoint:string;modelId?:string};
 export type ModelReference={provider:string;modelId:string};
 const mergeMessages=(older:HistoryMessage[],current:HistoryMessage[])=>[...new Map([...older,...current].map(message=>[message.id,message])).values()].sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true}));
 
 export class ConversationController {
-  private state:UiState={status:{phase:'opening',extensions:[]},conversations:[],history:[],loading:false,pending:false,page:'conversation',modelsLoading:false,modelsPending:false};
+  private state:UiState={status:{phase:'opening',extensions:[]},conversations:[],inputConversations:[],inputReady:false,history:[],loading:false,pending:false,page:'conversation',modelsLoading:false,modelsPending:false};
   private listeners=new Set<()=>void>();
   private client?:ApplicationClient;
   private subscription?:{unsubscribe:()=>void};
   private epoch=0;
   private opening=0;
+  private navigation=0;
   private creationId?:string;
   private checking?:Promise<void>;
   private connectionCreation?:{fingerprint:string;id:string};
+  private readonly drafts=new DraftCoordinator(()=>this.client,()=>this.publish({draft:this.state.activeId?this.drafts.view(this.state.activeId):undefined}));
   constructor(private readonly connectClient:()=>ApplicationClient,private readonly preferences?:SelectionPreferences) {}
   snapshot=()=>this.state;
   observe=(listener:()=>void)=>{this.listeners.add(listener);return()=>{this.listeners.delete(listener);};};
@@ -26,7 +30,18 @@ export class ConversationController {
     ++this.epoch;this.subscription?.unsubscribe();this.subscription=undefined;this.client?.dispose();this.checking=undefined;
     const client=this.connectClient();this.client=client;
     this.publish({status:{phase:'opening',extensions:[]},pending:false,modelsPending:false,modelsLoading:false,error:undefined});
-    await this.refresh();
+    await Promise.all([this.refresh(),this.refreshInputs()]);
+  }
+  private async refreshInputs(){
+    const client=this.client,epoch=this.epoch;if(!client)return;
+    try{
+      const result=await client.request<{conversations:InputConversation[]}>('input.list');
+      if(epoch!==this.epoch)return;
+      if(!Array.isArray(result?.conversations))throw Error('原生草稿目录不可用。');
+      this.publish({inputConversations:result.conversations,inputReady:true,inputError:undefined});
+      const selected=this.state.activeId??this.preferences?.get('selectedConversation');
+      if(selected&&result.conversations.some(item=>item.id===selected)&&this.state.status.phase!=='ready')await this.open(selected);
+    }catch(error){if(epoch===this.epoch)this.publish({inputReady:false,inputError:this.reason(error)});}
   }
   async refresh() {
     if(this.checking)return this.checking;
@@ -51,6 +66,7 @@ export class ConversationController {
   }
   async create() {
     if(this.state.pending||this.state.status.phase!=='ready'||!this.client)return;
+    if(!await this.flushCurrent())return;
     const epoch=this.epoch;
     this.creationId??=this.preferences?.get('pendingCreation')||crypto.randomUUID();
     this.preferences?.set('pendingCreation',this.creationId);
@@ -65,13 +81,18 @@ export class ConversationController {
     finally{if(epoch===this.epoch)this.publish({pending:false});}
   }
   async open(id:string) {
-    if(!this.client||this.state.status.phase!=='ready')return;
+    if(!this.client||!this.state.conversations.some(item=>item.id===id)&&!this.state.inputConversations.some(item=>item.id===id))return;
+    const navigation=++this.navigation;
+    if(this.state.activeId!==id&&!await this.flushCurrent())return;
+    if(navigation!==this.navigation)return;
     const epoch=this.epoch,opening=++this.opening;const client=this.client;
     this.subscription?.unsubscribe();this.subscription=undefined;
     this.preferences?.set('selectedConversation',id);
-    this.publish({page:'conversation',activeId:id,conversation:undefined,history:[],next:undefined,loading:true,error:undefined});
+    this.publish({page:'conversation',activeId:id,draft:this.drafts.view(id),conversation:undefined,history:[],next:undefined,loading:true,error:undefined,inputError:undefined});
     const current=()=>epoch===this.epoch&&opening===this.opening;
+    const draftRead=this.drafts.read(id).catch(error=>{if(current())this.publish({inputError:this.reason(error)});});
     try {
+      if(this.state.status.phase!=='ready'){await draftRead;return;}
       const [conversation,page]=await Promise.all([client.request<ConversationSnapshot>('open',{id}),client.request<HistoryPage>('history',{id,limit:30})]);
       if(!current())return;
       this.publish({conversation,history:mergeMessages(page.items,conversation.entries),next:page.next});
@@ -81,17 +102,37 @@ export class ConversationController {
       });
       if(current())this.subscription=subscription;else subscription.unsubscribe();
     }catch(error){if(current())this.publish({error:this.reason(error)});}
-    finally{if(current())this.publish({loading:false});}
+    finally{await draftRead;if(current())this.publish({loading:false});}
   }
-  home() {
+  async home() {
+    const navigation=++this.navigation;
+    if(!await this.flushCurrent())return;
+    if(navigation!==this.navigation)return;
     this.opening++;this.subscription?.unsubscribe();this.subscription=undefined;
     this.preferences?.set('selectedConversation','');
-    this.publish({page:'conversation',activeId:undefined,conversation:undefined,history:[],next:undefined,loading:false,error:undefined});
+    this.publish({page:'conversation',activeId:undefined,draft:undefined,conversation:undefined,history:[],next:undefined,loading:false,error:undefined});
   }
-  async send(text:string) {
-    if(!text.trim()||!this.client||!this.state.activeId||this.state.status.phase!=='ready'||this.state.pending)return false;
+  editDraft(text:string){if(this.state.activeId)this.drafts.edit(this.state.activeId,text);}
+  removeAttachment(selectionId:string){if(this.state.activeId)this.drafts.remove(this.state.activeId,selectionId);}
+  async selectAttachment(kind:'image'|'file'){const id=this.state.activeId,epoch=this.epoch;if(!id)return;try{await this.drafts.select(id,kind);}catch(error){if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:this.reason(error)});}}
+  async prepareAttachment(selectionId:string){if(this.state.activeId)await this.drafts.prepare(this.state.activeId,selectionId);}
+  async refreshDraft(){const id=this.state.activeId,epoch=this.epoch;if(!id)return;try{await this.drafts.read(id);if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:undefined});}catch(error){if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:this.reason(error)});}}
+  async flushDraft(){if(this.state.activeId)return this.drafts.flush(this.state.activeId);}
+  async retryDraft(){try{await this.flushDraft();this.publish({inputError:undefined});}catch(error){this.publish({inputError:this.reason(error)});}}
+  async recoverDraft(keepLocal:boolean){const id=this.state.activeId,epoch=this.epoch;if(!id)return;try{await this.drafts.recover(id,keepLocal);if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:undefined});}catch(error){if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:this.reason(error)});}}
+  private async flushCurrent(){try{if(this.state.activeId&&this.drafts.view(this.state.activeId))await this.drafts.flush(this.state.activeId);return true;}catch(error){this.publish({inputError:this.reason(error)});return false;}}
+  async send(text?:string) {
+    if(!this.client||!this.state.activeId||this.state.status.phase!=='ready'||this.state.pending)return false;
+    if(text!==undefined)this.editDraft(text);
+    const draft=this.state.draft;if(!draft||!draft.text.trim()&&!draft.selections.length)return false;
     const epoch=this.epoch,id=this.state.activeId;this.publish({pending:true,error:undefined});
-    try {await this.client.request('send',{id,text,actionId:crypto.randomUUID()});return epoch===this.epoch;}
+    try {
+      const {frozen,editEpoch}=await this.drafts.freeze(id);
+      if(epoch!==this.epoch)return false;
+      await this.client.request('send',{id,inputToken:frozen.token,actionId:crypto.randomUUID()});
+      if(epoch!==this.epoch)return false;
+      await this.drafts.accepted(id,frozen.revision,editEpoch);return true;
+    }
     catch(error){if(epoch===this.epoch)this.publish({error:this.reason(error)});return false;}
     finally{if(epoch===this.epoch)this.publish({pending:false});}
   }
@@ -174,6 +215,6 @@ export class ConversationController {
     finally{if(epoch===this.epoch)this.publish({modelsPending:false});}
   }
   private reason(error:unknown){return error instanceof ApplicationFailure||error instanceof Error?error.message:'操作未完成，请重新连接查看当前状态。';}
-  disconnect(){this.epoch++;this.opening++;this.subscription?.unsubscribe();this.client?.dispose();this.subscription=undefined;}
-  dispose(){this.disconnect();this.listeners.clear();}
+  disconnect(){this.epoch++;this.opening++;this.navigation++;this.subscription?.unsubscribe();this.client?.dispose();this.subscription=undefined;}
+  dispose(){this.drafts.dispose();this.disconnect();this.listeners.clear();}
 }

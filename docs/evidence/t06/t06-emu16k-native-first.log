@@ -1,0 +1,74 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeInputStoreTest:
+INSTRUMENTATION_STATUS: test=committedDraftsReopenIndependentlyAndClearNeverResetsRevision
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=dev.durableagent.probe.NativeInputException: 草稿数据库未能启用所需的耐久参数。
+
+INSTRUMENTATION_STATUS: stream=
+Error in committedDraftsReopenIndependentlyAndClearNeverResetsRevision(dev.durableagent.probe.NativeInputStoreTest):
+dev.durableagent.probe.NativeInputException: 草稿数据库未能启用所需的耐久参数。
+
+INSTRUMENTATION_STATUS: test=committedDraftsReopenIndependentlyAndClearNeverResetsRevision
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=preparedTextFreezePinsExactBytesAfterSourceChangesAndDraftIsCleared
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=dev.durableagent.probe.NativeInputException: 草稿数据库未能启用所需的耐久参数。
+
+INSTRUMENTATION_STATUS: stream=
+Error in preparedTextFreezePinsExactBytesAfterSourceChangesAndDraftIsCleared(dev.durableagent.probe.NativeInputStoreTest):
+dev.durableagent.probe.NativeInputException: 草稿数据库未能启用所需的耐久参数。
+
+INSTRUMENTATION_STATUS: test=preparedTextFreezePinsExactBytesAfterSourceChangesAndDraftIsCleared
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=duplicateOperationReplaysItsReceiptAndStaleCallbacksCannotReplaceNewerDrafts
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=dev.durableagent.probe.NativeInputException: 草稿数据库未能启用所需的耐久参数。
+
+INSTRUMENTATION_STATUS: stream=
+Error in duplicateOperationReplaysItsReceiptAndStaleCallbacksCannotReplaceNewerDrafts(dev.durableagent.probe.NativeInputStoreTest):
+dev.durableagent.probe.NativeInputException: 草稿数据库未能启用所需的耐久参数。
+
+INSTRUMENTATION_STATUS: test=duplicateOperationReplaysItsReceiptAndStaleCallbacksCannotReplaceNewerDrafts
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.194
+There were 3 failures:
+1) committedDraftsReopenIndependentlyAndClearNeverResetsRevision(dev.durableagent.probe.NativeInputStoreTest)
+dev.durableagent.probe.NativeInputException: 草稿数据库未能启用所需的耐久参数。
+2) preparedTextFreezePinsExactBytesAfterSourceChangesAndDraftIsCleared(dev.durableagent.probe.NativeInputStoreTest)
+dev.durableagent.probe.NativeInputException: 草稿数据库未能启用所需的耐久参数。
+3) duplicateOperationReplaysItsReceiptAndStaleCallbacksCannotReplaceNewerDrafts(dev.durableagent.probe.NativeInputStoreTest)
+dev.durableagent.probe.NativeInputException: 草稿数据库未能启用所需的耐久参数。
+
+FAILURES!!!
+Tests run: 3,  Failures: 3
+
+
+INSTRUMENTATION_CODE: -1

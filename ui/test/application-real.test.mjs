@@ -9,19 +9,21 @@ import {cleanup,fireEvent,render,screen,waitFor} from '@testing-library/react';
 import {Application} from '../../runtime/dist/application.js';
 import {validationConfiguration} from '../../runtime/dist/application-validation.js';
 import {App} from '../src/App';
+import {InputPlatform} from './input-platform';
 import {ApplicationClient} from '../src/client';
 import {ConversationController} from '../src/controller';
 
 it('the registered real application enables React create/send and reopens the same SQLite history without another model request',async()=>{
   const temporaryRoot=resolve(tmpdir());
   const directory=await mkdtemp(join(temporaryRoot,'durable-ui-contract-'));
-  let modelRequests=0;
-  const options={path:join(directory,'application.sqlite'),...validationConfiguration({requested:()=>modelRequests++})};
+  let modelRequests=0;const native=new InputPlatform();
+  const options={inputs:native,path:join(directory,'application.sqlite'),...validationConfiguration({requested:()=>modelRequests++})};
   let app=new Application(options);
   const preferences=new Map();
   const connect=()=>new ConversationController(()=>{
     const client=new ApplicationClient({postMessage:json=>{
-      void app.request(JSON.parse(json),event=>client.receive(event)).then(response=>client.receive(response));
+      const request=JSON.parse(json);if(request.method.startsWith('input.')){void native.handle(request).then(response=>client.receive(response));return;}
+      void app.request(request,event=>client.receive(event)).then(response=>client.receive(response));
     }});return client;
   },{get:key=>preferences.get(key)??null,set:(key,value)=>preferences.set(key,value)});
   let controller;

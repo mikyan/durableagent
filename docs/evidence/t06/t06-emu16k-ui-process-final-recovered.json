@@ -1,0 +1,25 @@
+{
+  "run": "615e9ca9-651e-4676-8307-ffe88b52610d",
+  "verifiedExistingFailedRun": true,
+  "originalFailure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '66458556-d020-4694-92f8-c57aa0983562'\n- '65916c88-bec9-49ef-8eae-f82c5abb0c20'\n",
+  "restoredSelected": "66458556-d020-4694-92f8-c57aa0983562",
+  "expectedLastSelected": "65916c88-bec9-49ef-8eae-f82c5abb0c20",
+  "drafts": [
+    {
+      "id": "66458556-d020-4694-92f8-c57aa0983562",
+      "text": "第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n",
+      "state": "saved",
+      "historyItems": 0
+    },
+    {
+      "id": "65916c88-bec9-49ef-8eae-f82c5abb0c20",
+      "text": "第二份独立草稿：引号\"、反斜线\\、换行\n和中文🌍",
+      "state": "saved",
+      "historyItems": 0
+    }
+  ],
+  "passed": true,
+  "uiPid": "11440",
+  "hostPid": "11390",
+  "scope": "Follow-up reads of the exact original SIGKILL run; no new conversation, edit or send. Prior failure only concerned which conversation was initially selected."
+}

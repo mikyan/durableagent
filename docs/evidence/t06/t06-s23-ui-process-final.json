@@ -1,0 +1,40 @@
+{
+  "run": "c7f2c9a2-c2be-4fe4-b939-023114ba46d2",
+  "mode": "fixture",
+  "started": "2026-11-03T19:09:23.584Z",
+  "observed": [
+    {
+      "id": "2d61513b-a45f-42ae-a405-94223752e192",
+      "text": "第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n",
+      "state": "saved",
+      "historyItems": 0
+    },
+    {
+      "id": "a8d1569d-c08c-40f0-bf52-b1d801c3486d",
+      "text": "第二份独立草稿：引号\"、反斜线\\、换行\n和中文🌍",
+      "state": "saved",
+      "historyItems": 0
+    }
+  ],
+  "scope": "Actual UI process SIGKILL/reopen of two confirmed text drafts, no observer binding; same native process, empty submitted histories. Exact model request counts are covered by separate instrumentation.",
+  "beforeViewport": {
+    "width": 0,
+    "height": 0
+  },
+  "beforeScreenshot": "Not captured: no visible viewport under system keyguard. DOM assertions only.",
+  "afterViewport": {
+    "width": 360,
+    "height": 780
+  },
+  "afterScreenshot": "Screenshot unavailable: Error: CDP timeout Page.captureScreenshot. No visual acceptance claimed.",
+  "before": {
+    "uiPid": "29149",
+    "hostPid": "29263"
+  },
+  "after": {
+    "uiPid": "29330",
+    "hostPid": "29263"
+  },
+  "passed": true,
+  "completed": "2026-11-03T19:09:45.614Z"
+}

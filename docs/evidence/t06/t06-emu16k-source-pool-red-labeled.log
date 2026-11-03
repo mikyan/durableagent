@@ -1,0 +1,44 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.InputApplicationTest:
+INSTRUMENTATION_STATUS: test=saturatedSourceWorkersDoNotDelayThirdSelectionCommitOrTextSave
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Native commit receipt timed out for select-0 while source workers are held
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.InputApplicationTest.saturatedSourceWorkersDoNotDelayThirdSelectionCommitOrTextSave$request(InputApplicationTest.kt:153)
+	at dev.durableagent.probe.InputApplicationTest.saturatedSourceWorkersDoNotDelayThirdSelectionCommitOrTextSave(InputApplicationTest.kt:160)
+
+INSTRUMENTATION_STATUS: stream=
+Error in saturatedSourceWorkersDoNotDelayThirdSelectionCommitOrTextSave(dev.durableagent.probe.InputApplicationTest):
+java.lang.AssertionError: Native commit receipt timed out for select-0 while source workers are held
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.InputApplicationTest.saturatedSourceWorkersDoNotDelayThirdSelectionCommitOrTextSave$request(InputApplicationTest.kt:153)
+	at dev.durableagent.probe.InputApplicationTest.saturatedSourceWorkersDoNotDelayThirdSelectionCommitOrTextSave(InputApplicationTest.kt:160)
+
+INSTRUMENTATION_STATUS: test=saturatedSourceWorkersDoNotDelayThirdSelectionCommitOrTextSave
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 5.508
+There was 1 failure:
+1) saturatedSourceWorkersDoNotDelayThirdSelectionCommitOrTextSave(dev.durableagent.probe.InputApplicationTest)
+java.lang.AssertionError: Native commit receipt timed out for select-0 while source workers are held
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.InputApplicationTest.saturatedSourceWorkersDoNotDelayThirdSelectionCommitOrTextSave$request(InputApplicationTest.kt:153)
+	at dev.durableagent.probe.InputApplicationTest.saturatedSourceWorkersDoNotDelayThirdSelectionCommitOrTextSave(InputApplicationTest.kt:160)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

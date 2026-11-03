@@ -7,12 +7,17 @@ import type {ApplicationEnvelope,ApplicationRequest,ModelSelection} from './appl
 import {ModelConnections,ModelConfigurationError} from './model-connections.js';
 import {fixtureTransport} from './transport.js';
 import {mkdir} from 'node:fs/promises';
+import {InputError} from './input.js';
+import type {ApplicationInputs} from './application.js';
 const host=globalThis as any;
 // The native owner chooses this mode before loading JS. It is not a UI action.
 export async function install(mode:string) {
   let secret:string|undefined;
   let connections:ModelConnections|undefined;
   const metrics:Record<string,unknown>={};
+  const nativeInputs=host.__nativeInputs;delete host.__nativeInputs;
+  const inputInvoke=(method:string,...args:string[])=>{const response=JSON.parse(nativeInputs[method](...args));if(!response.ok)throw new InputError(response.error.code,response.error.message);return response.value;};
+  const inputs:ApplicationInputs|undefined=nativeInputs?{rememberConversation:(conversation,capability)=>{inputInvoke('rememberConversationJson',JSON.stringify(conversation),JSON.stringify(capability??null));},readFrozen:async token=>inputInvoke('readFrozenJson',token),readObject:async(token,objectId)=>Buffer.from(inputInvoke('readObjectBase64',token,objectId),'base64')}:undefined;
   let configuration:{models:Models;workspacePath:string;initialModel?:ModelSelection}={models:createModels(),workspacePath:join(host.__applicationRoot,'workspace')};
   if(mode==='fixture'||mode==='hang')configuration=validationConfiguration({hang:mode==='hang',requested:()=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;}});
   else if(mode==='real'){
@@ -23,12 +28,21 @@ export async function install(mode:string) {
   }else if(mode==='product'||mode==='models'||mode==='models-fixture'){
     const native=host.__nativeCredentials;delete host.__nativeCredentials;
     const invoke=(name:string,id:string)=>{const result=JSON.parse(native[name](id));if(!result.ok)throw new ModelConfigurationError(result.error.code,result.error.message);return result.value;};
-    connections=new ModelConnections({credentials:{metadata:async id=>invoke('metadataJson',id),resolve:async id=>invoke('resolveJson',id)},onRequest:receipt=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;metrics.lastCredentialGeneration=receipt.generation;metrics.lastConnectionId=receipt.connectionId;},...(mode==='models-fixture'?{fetch:fixtureTransport({requested:()=>{},aborted:()=>{}})}:{})});
+    connections=new ModelConnections({credentials:{metadata:async id=>invoke('metadataJson',id),resolve:async id=>invoke('resolveJson',id)},onRequest:receipt=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;metrics.lastCredentialGeneration=receipt.generation;metrics.lastConnectionId=receipt.connectionId;metrics.lastInput=receipt.input;},...(mode==='models-fixture'?{fetch:fixtureTransport({requested:()=>{},aborted:()=>{}})}:{})});
     configuration={models:connections.models,workspacePath:configuration.workspacePath};
   }else throw new Error('Unsupported native application mode');
   // Fixture workspace defaults are replaced by the same stable private domain.
   configuration.workspacePath=join(host.__applicationRoot,'workspace');
-  const app=new Application({path:join(host.__applicationRoot,'application.sqlite'),...configuration,secret,connections});
+  const app=new Application({path:join(host.__applicationRoot,'application.sqlite'),...configuration,secret,connections,inputs});
+  if(mode==='models-fixture')host.__appRunInputPolicy=()=>{
+    if(metrics.inputPolicyState==='running')return;
+    metrics.inputPolicyState='running';metrics.inputPolicyCases=[];
+    void(async()=>{
+      const directory=join(host.__applicationRoot,'input-policy-temp');await mkdir(directory,{recursive:true});
+      const policy=await import(new URL('../validation/input-policy.mjs',import.meta.url).href);
+      await policy.runInputPolicyChecks((result:unknown)=>(metrics.inputPolicyCases as unknown[]).push(result),{tempRoot:directory});metrics.inputPolicyState='passed';
+    })().catch(error=>{metrics.inputPolicyState='failed';metrics.inputPolicyError=String(error.message??error);metrics.inputPolicyDiagnostic=error.diagnostic;});
+  };
   if(mode==='models-fixture')host.__appRunModelPolicy=()=>{
     if(metrics.modelPolicyState==='running')return;
     metrics.modelPolicyState='running';metrics.modelPolicyCases=[];

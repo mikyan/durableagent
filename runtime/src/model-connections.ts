@@ -6,12 +6,13 @@ import type {DeferredHandle,Model,Api} from '@earendil-works/pi-ai';
 import {AssistantMessageEventStream} from '@earendil-works/pi-ai/utils/event-stream';
 import type {ConnectionDefinition,CredentialInfo,ModelConfiguration} from './model-protocol.js';
 import type {ModelSelection} from './application-protocol.js';
+import {InputError,inputCapability,validateContextBudget,validateProviderInput,type ProviderInputEvidence} from './input.js';
 export type CredentialAccess={metadata(id:string):Promise<CredentialInfo>;resolve(id:string):Promise<{key:string;generation:number}>};
 export type StoredModels={version:number;defaultModel:ModelSelection|null;connections:ConnectionDefinition[]};
 export class ModelConfigurationError extends Error {constructor(readonly code:string,message:string){super(message);}}
 const failure=(code:string,message:string):never=>{throw new ModelConfigurationError(code,message);};
 const marker='application-request-auth';
-type Options={credentials:CredentialAccess;fetch?:typeof fetch;allowLoopbackHttp?:boolean;beforePublish?:(configuration:StoredModels)=>void;providerFactory?:(definition:ConnectionDefinition)=>Provider;onRequest?:(receipt:{connectionId:string;generation:number;endpoint:string})=>void};
+type Options={credentials:CredentialAccess;fetch?:typeof fetch;allowLoopbackHttp?:boolean;beforePublish?:(configuration:StoredModels)=>void;providerFactory?:(definition:ConnectionDefinition)=>Provider;onRequest?:(receipt:{connectionId:string;generation:number;endpoint:string;input:ProviderInputEvidence})=>void};
 /** Immutable connection definitions and one synchronous publication. Secrets only cross final fetch. */
 export class ModelConnections {
   readonly models;
@@ -24,6 +25,7 @@ export class ModelConnections {
   block(){this.usable=false;}
   version(){return this.stored.version;}
   contains(id:string){return this.usable&&this.stored.connections.some(item=>item.id===id);}
+  capability(provider:string,modelId:string){const definition=this.stored.connections.find(item=>item.id===provider);const model=this.models.getModel(provider,modelId);return this.usable&&definition?.enabled&&model?inputCapability(model,definition.protocol==='mimo-cn'?'sdk-catalog':'connection-text-only'):undefined;}
   endpoint(value:unknown) {
     if(typeof value!=='string'||value.length>2000)return failure('INVALID_ENDPOINT','请输入有效的 HTTPS 服务地址');
     let url:URL;try{url=new URL(value);}catch{return failure('INVALID_ENDPOINT','请输入有效的 HTTPS 服务地址');}
@@ -60,11 +62,13 @@ export class ModelConnections {
     this.endpoint(definition.endpoint);
     const api=openAICompletionsApi();
     const builtin=xiaomiTokenPlanCnProvider().getModels();
-    const models=definition.models.map(item=>({...builtin.find(model=>definition.protocol==='mimo-cn'&&model.id===item.id),...item,api:'openai-completions' as const,provider:definition.id,baseUrl:definition.endpoint,reasoning:false,input:['text' as const],cost:{input:0,output:0,cacheRead:0,cacheWrite:0}}));
+    const models=definition.models.map(item=>{const catalog=builtin.find(model=>definition.protocol==='mimo-cn'&&model.id===item.id);return {...catalog,...item,api:'openai-completions' as const,provider:definition.id,baseUrl:definition.endpoint,reasoning:false,input:catalog?.input??['text' as const],cost:{input:0,output:0,cacheRead:0,cacheWrite:0}};});
     const provider=this.options.providerFactory?.(definition)??createProvider({id:definition.id,name:definition.name,baseUrl:definition.endpoint,models,auth:{apiKey:{name:'应用凭据',resolve:async()=>({auth:{apiKey:marker}})}},api});
-    const checkedFetch=(admission:{generation:number;secrets:Set<string>;expectedGeneration?:number}):typeof fetch=>async(input,init)=>{
+    const checkedFetch=(admission:{generation:number;secrets:Set<string>;expectedGeneration?:number;inputFailure?:string},model:Model<Api>):typeof fetch=>async(input,init)=>{
       const request=new Request(input,init);this.enabled(definition.id);
       if(request.url!==`${definition.endpoint}/chat/completions`||request.method!=='POST')return failure('DESTINATION_REJECTED','模型请求地址不符合连接定义');
+      let inputEvidence:ProviderInputEvidence;
+      try{inputEvidence=await validateProviderInput(request,model);}catch(error){if(error instanceof InputError)admission.inputFailure=error.message;throw error;}
       const credential=await this.options.credentials.resolve(definition.id).catch(error=>{if(error instanceof ModelConfigurationError)throw error;return failure('CREDENTIAL_UNAVAILABLE','模型凭据不可用，请检查设置');});
       if(admission.expectedGeneration!==undefined&&credential.generation!==admission.expectedGeneration)return failure('DEFERRED_ACCOUNT_UNKNOWN','旧响应凭据兼容性未确认，请处理原响应。');
       // Recheck after asynchronous credential resolution. Already sent requests continue unchanged.
@@ -77,14 +81,18 @@ export class ModelConnections {
       const headers=new Headers(request.headers);headers.delete('authorization');headers.delete('api-key');
       headers.set(definition.protocol==='mimo-cn'?'api-key':'authorization',definition.protocol==='mimo-cn'?credential.key:`Bearer ${credential.key}`);
       let response:Response;
-      this.options.onRequest?.({connectionId:definition.id,generation:credential.generation,endpoint:definition.endpoint});
+      this.options.onRequest?.({connectionId:definition.id,generation:credential.generation,endpoint:definition.endpoint,input:inputEvidence});
       try{response=await (this.options.fetch??fetch)(new Request(request,{headers,redirect:'error'}));}catch{return failure('MODEL_NETWORK_ERROR','模型网络请求失败');}
       return redactResponse(response,credential.key);
     };
-    const invoke=(model:Model<Api>,options:any,run:(options:any,handle?:DeferredHandle)=>AssistantMessageEventStream,handle?:DeferredHandle)=>{
+    const invoke=(model:Model<Api>,options:any,run:(options:any,handle?:DeferredHandle)=>AssistantMessageEventStream,handle?:DeferredHandle,transcript?:{messages:readonly {content:unknown}[]})=>{
       const output=new AssistantMessageEventStream();
       void (async()=>{
         try {
+          if(transcript)validateContextBudget(transcript);
+          // The upstream adapter replaces unsupported images with a text placeholder.
+          // Refuse before that transformation, including images retained in prior history.
+          if(!model.input.includes('image')&&transcript?.messages.some(message=>Array.isArray(message.content)&&message.content.some((part:any)=>part.type==='image')))failure('IMAGE_UNSUPPORTED','当前模型未声明支持图片，请更换模型或开启不含图片的新会话');
           if(options?.apiKey!==marker||Object.keys(options?.headers??{}).length||Object.keys(options?.env??{}).length)failure('AUTH_OVERRIDE_REJECTED','模型请求不能覆盖应用凭据');
           if(model.baseUrl!==definition.endpoint)failure('DESTINATION_REJECTED','模型请求地址不符合连接定义');
           if(handle){
@@ -99,21 +107,22 @@ export class ModelConnections {
             if(!credential.configured||stamp.generation!==credential.generation)failure('DEFERRED_ACCOUNT_UNKNOWN','旧响应凭据兼容性未确认，请处理原响应。');
             original={...handle,data:data.providerData??undefined};
           }else if(!credential.configured)failure('CREDENTIAL_UNAVAILABLE','模型凭据不可用，请检查设置');
-          const admission={generation:credential.generation,secrets:new Set<string>(),expectedGeneration:handle?credential.generation:undefined};
-          const selected={...options,apiKey:marker,headers:undefined,fetch:checkedFetch(admission),onProviderStreamEvent:options?.onProviderStreamEvent?((event:unknown)=>options.onProviderStreamEvent(sanitizeEvent(event,admission.secrets))):undefined,maxRetries:0,timeoutMs:45000,maxTokens:Math.min(options?.maxTokens??1024,4096),...(definition.protocol==='mimo-cn'?{reasoning:'off',samplingParams:{thinking:{type:'disabled'}}}:{})};
+          const admission:{generation:number;secrets:Set<string>;expectedGeneration?:number;inputFailure?:string}={generation:credential.generation,secrets:new Set<string>(),expectedGeneration:handle?credential.generation:undefined};
+          const selected={...options,apiKey:marker,headers:undefined,fetch:checkedFetch(admission,model),onProviderStreamEvent:options?.onProviderStreamEvent?((event:unknown)=>options.onProviderStreamEvent(sanitizeEvent(event,admission.secrets))):undefined,maxRetries:0,timeoutMs:45000,maxTokens:Math.min(options?.maxTokens??1024,4096),...(definition.protocol==='mimo-cn'?{reasoning:'off',samplingParams:{thinking:{type:'disabled'}}}:{})};
           for await(const event of run(selected,original)){
+            if(admission.inputFailure&&event.type==='error')event.error.errorMessage=admission.inputFailure;
             if(event.type==='done'&&event.message.deferred){event.message.deferred={...event.message.deferred,data:{appCredential:{version:1,connectionId:definition.id,generation:admission.generation},providerData:event.message.deferred.data??null}};}
             // Provider JSON parsing can decode escaped credentials that byte filtering cannot see.
             // Each invocation retains its sent credential, even if the vault is rotated meanwhile.
             output.push(sanitizeEvent(event,admission.secrets));
           }
         }catch(error){
-          const message=error instanceof ModelConfigurationError?error.message:'模型请求无法完成，请检查连接设置';
+          const message=error instanceof ModelConfigurationError||error instanceof InputError?error.message:'模型请求无法完成，请检查连接设置';
           output.push({type:'error',reason:'error',error:{role:'assistant',content:[],api:model.api,provider:definition.id,model:model.id,stopReason:'error',errorMessage:message,timestamp:Date.now(),usage:{input:0,output:0,cacheRead:0,cacheWrite:0,totalTokens:0,cost:{input:0,output:0,cacheRead:0,cacheWrite:0,total:0}}}});
         }
       })();return output;
     };
-    return {...provider,id:definition.id,getModels:()=>models,auth:{apiKey:{name:'应用凭据',resolve:async()=>({auth:{apiKey:marker,baseUrl:definition.endpoint}})}},stream:(m,c,o)=>invoke(m,o,selected=>provider.stream(m,c,selected)),streamSimple:(m,c,o)=>invoke(m,o,selected=>provider.streamSimple(m,c,selected)),...(provider.fetchDeferred?{fetchDeferred:(m:Model<Api>,handle:DeferredHandle,o:any)=>invoke(m,o,(selected,original)=>provider.fetchDeferred!(m,original!,selected),handle)}:{})};
+    return {...provider,id:definition.id,getModels:()=>models,auth:{apiKey:{name:'应用凭据',resolve:async()=>({auth:{apiKey:marker,baseUrl:definition.endpoint}})}},stream:(m,c,o)=>invoke(m,o,selected=>provider.stream(m,c,selected),undefined,c),streamSimple:(m,c,o)=>invoke(m,o,selected=>provider.streamSimple(m,c,selected),undefined,c),...(provider.fetchDeferred?{fetchDeferred:(m:Model<Api>,handle:DeferredHandle,o:any)=>invoke(m,o,(selected,original)=>provider.fetchDeferred!(m,original!,selected),handle)}:{})};
   }
 }
 function sanitizeEvent<T>(event:T,secrets:ReadonlySet<string>):T {
