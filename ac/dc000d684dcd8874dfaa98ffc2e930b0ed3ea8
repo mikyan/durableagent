@@ -1,0 +1,31 @@
+termux-probe/app/src/test/java/dev/durableagent/termuxprobe/EnvironmentInspectorTest.kt
+  s_467dcb949b5b60::t_e781d66f05f97f 94-111
+termux-probe/app/src/main/java/dev/durableagent/termuxprobe/AndroidTermuxGateway.kt
+  s_467dcb949b5b60::t_b036883d83e5a1 46,52,54-57,69
+termux-probe/app/src/main/java/dev/durableagent/termuxprobe/ProbeApplication.kt
+  s_467dcb949b5b60::t_bb3ff1c37a7725 71-75
+  s_467dcb949b5b60::t_b036883d83e5a1 56-57,69-70,76-107
+  s_467dcb949b5b60::t_df2c07a1e55c26 108-109
+termux-probe/scripts/test-cold-start.ps1
+  s_467dcb949b5b60::t_bb3ff1c37a7725 9-14,29
+  s_467dcb949b5b60::t_3fb8fb84093912 1-8,15-28,30-49
+termux-probe/app/src/main/java/dev/durableagent/termuxprobe/EnvironmentInspector.kt
+  s_467dcb949b5b60::t_b036883d83e5a1 6,8,77-87
+  s_467dcb949b5b60::t_7c82c565508d1c 88-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "acdc000d684dcd8874dfaa98ffc2e930b0ed3ea8",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
