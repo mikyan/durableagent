@@ -17,6 +17,7 @@ class RuntimeService : Service() {
     private val thread=HandlerThread("PiNodeOwner")
     private lateinit var owner:Handler
     private var runtime:NodeRuntime?=null
+    private var storageLease:StorageDomainLease?=null
     private var instance=""
     private var startedAt=0L
     private var stopping=false
@@ -39,7 +40,8 @@ class RuntimeService : Service() {
     private fun command(command:String) {
         try {
             if(command.startsWith("start") && stopping) {restart=command;return}
-            if(command in setOf("start","start-tool","start-invalid","start-hang","start-real") && runtime==null) { open(command.removePrefix("start-"));return }
+            val storageStart=command.matches(Regex("start-storage-(suite|text|real|reopen|crash-(before|during|after|confirmed|deferred|migration)|recover-(before|during|after|confirmed|deferred|migration)):[a-zA-Z0-9-]+"))
+            if((command in setOf("start","start-tool","start-invalid","start-hang","start-real")||storageStart) && runtime==null) { open(command.removePrefix("start-"));return }
             if(command=="fault") {runtime?.getExecutor("throw new Error('Injected validation runtime fault')")?.executeVoid();return}
             if(command !in setOf("start","send","send-long","stop","close"))return
             if(command=="close") {
@@ -56,10 +58,13 @@ class RuntimeService : Service() {
         startedAt=SystemClock.elapsedRealtime()
         state=JSONObject().put("status","loading").put("instance",instance).toString()
         try {
+            val storageDirectory=File(filesDir,"storage-validation")
+            if(mode.startsWith("storage-"))storageLease=StorageDomainLease.acquire(storageDirectory)?:error("Storage domain already owned")
             val root=unpack()
             val node=V8Host.getNodeI18nInstance().createV8Runtime<NodeRuntime>()
             runtime=node
-            if(mode=="real") {
+            node.globalObject.set("__storageRoot",storageDirectory.absolutePath)
+            if(mode=="real"||mode.startsWith("storage-real:")) {
                 val clear=ValidationCredential.consume(this)
                 try {node.globalObject.set("__validationKey",String(clear,Charsets.UTF_8).trim())}finally {clear.fill(0)}
             }
@@ -76,7 +81,7 @@ class RuntimeService : Service() {
                 node.await(V8AwaitMode.RunNoWait)
                 val next=JSONObject(node.getExecutor("globalThis.__snapshot || '{}'").executeString())
                 if(next.has("status")) {
-                    next.put("instance",instance).put("pid",Process.myPid()).put("elapsedMs",SystemClock.elapsedRealtime()-startedAt).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount)
+                    next.put("instance",instance).put("pid",Process.myPid()).put("elapsedMs",SystemClock.elapsedRealtime()-startedAt).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).put("domainOwned",storageLease!=null)
                     if(next.optString("status")=="closed") {finishClose(next);return}
                     if(next.optString("status")=="failed") {finishClose(next);return}
                     state=next.toString()
@@ -88,7 +93,8 @@ class RuntimeService : Service() {
     private fun finishClose(next:JSONObject) {
         val start=SystemClock.elapsedRealtime()
         runtime?.close();runtime=null;stopping=false
-        next.put("nativeCloseMs",SystemClock.elapsedRealtime()-start).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount)
+        storageLease?.close();storageLease=null
+        next.put("nativeCloseMs",SystemClock.elapsedRealtime()-start).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).put("domainOwned",storageLease!=null)
         state=next.toString()
         restart?.let {restart=null;command(it)}
     }
@@ -117,5 +123,5 @@ class RuntimeService : Service() {
         File(root,".complete").writeText(digest)
         return root
     }
-    override fun onDestroy() { owner.post {try {runtime?.close()} finally {runtime=null;thread.quitSafely()}};super.onDestroy() }
+    override fun onDestroy() { owner.post {try {runtime?.close();storageLease?.close()} finally {runtime=null;storageLease=null;thread.quitSafely()}};super.onDestroy() }
 }

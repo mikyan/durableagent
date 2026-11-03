@@ -1,0 +1,5 @@
+Observed: 2026-11-04T01:10:20.3682417+08:00; storage suite did not progress after ready while user0 remained locked.
+ 8611 D     dev.durableagent.termuxprobe
+11253 D     dev.durableagent.probe
+11412 S     dev.durableagent.probe:runtime
+At 2026-11-04T01:11:03.5810512+08:00, root woke the display with KEYCODE_WAKEUP without dismissing keyguard. Both target UI and prior Termux probe changed ps STAT D to S; keyguard showing=true/interactiveState=AWAKE. First real request had timed out (unanswered). Aborting this failed run by force-stopping only the validation package; data retained. Rerun uses fresh IDs while display stays awake.
