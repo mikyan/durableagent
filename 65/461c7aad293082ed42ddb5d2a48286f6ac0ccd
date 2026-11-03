@@ -1,0 +1,40 @@
+docs/evidence/t01/desktop-tests.txt
+  s_467dcb949b5b60::t_9de3ad1f512140 18-28
+  s_467dcb949b5b60::t_07e4fa16e03844 9-17
+  s_467dcb949b5b60::t_b8b6d5e554ec0d 1-8
+docs/evidence/t01/javet-i18n-artifact.md
+  s_467dcb949b5b60::t_003ad5d4a91d77 51-57
+docs/evidence/t01/README.md
+  s_467dcb949b5b60::t_990f2f75f5a8b2 42-57
+  s_467dcb949b5b60::t_003ad5d4a91d77 3,15,58-76
+docs/evidence/t01/emulator16k-deterministic.txt
+  s_467dcb949b5b60::t_31e923898e9321 1-106
+docs/evidence/t01/emulator16k-final-live.txt
+  s_467dcb949b5b60::t_c4b4bb91cec3e3 1-101
+docs/evidence/t01/emulator16k-standard-failed.txt
+  s_467dcb949b5b60::t_0eedb1cd2b991d 1-77
+docs/evidence/t01/final-apk-inspection.json
+  s_467dcb949b5b60::t_1b936e14cedd7e 1-49
+docs/evidence/t01/s23-deterministic.txt
+  s_467dcb949b5b60::t_6e7c5d3ddf77d1 1-106
+docs/evidence/t01/s23-final-live.txt
+  s_467dcb949b5b60::t_bacbe18a45fa8f 1-101
+docs/evidence/t01/s23-standard-failed.txt
+  s_467dcb949b5b60::t_9019c29ab88129 1-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "65461c7aad293082ed42ddb5d2a48286f6ac0ccd",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
