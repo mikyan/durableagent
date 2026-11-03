@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ModelSettingsTest:
+INSTRUMENTATION_STATUS: test=modelPolicyMatrixUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: modelEvidence={"case":"android-model-policy","result":{"phase":"ready","extensions":["conversation","models"],"metrics":{"modelPolicyState":"passed","modelPolicyCases":[{"name":"public configuration is durable; defaults and current models are separate; queries never decrypt","passed":true},{"name":"configuration COMMIT failure preserves old durable version and blocks scheduling until reopen","passed":true},{"name":"rotation or disable before final admission sends nothing; disabling after send does not cancel it","passed":true},{"name":"an old deferred response never becomes a replacement request after credential rotation","passed":true},{"name":"actual HTTP redirects cannot forward credentials or prompt body to another destination","passed":true},{"name":"credential\/options overrides are rejected; revoke never uses ambient environment credentials","passed":true},{"name":"a post-commit publication failure gates dispatch and reopen loads the durable generation","passed":true},{"name":"an in-flight reflected old credential is sanitized even after rotation, including live WAL and events","passed":true},{"name":"serialized SDK stream settings reject credentials and arbitrary nested options before opening storage","passed":true},{"name":"JSON escaped credential reflection is removed after decoding, before SDK progress and persistence","passed":true},{"name":"a credential rotated after deferred compatibility check is rejected again at final fetch admission","passed":true},{"name":"escaped credential property names in parsed tool arguments never enter SDK results or SQLite","passed":true},{"name":"disable published during final metadata wait blocks dispatch at the final synchronous boundary","passed":true}]},"instance":"d5e48496-59ab-41fe-8029-ef8915b914eb","pid":6253,"domainOwned":true,"nativeOwners":1}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=modelPolicyMatrixUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 3.049
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

@@ -1,6 +1,10 @@
-import {memo,useEffect,useId,useRef,useState,type FormEvent} from 'react';
+import {lazy,memo,Suspense,useEffect,useId,useRef,useState,type FormEvent} from 'react';
 import {CONVERSATION_EXTENSION,type ConversationPhase} from '../../../runtime/src/application-protocol';
 import type {ConversationController,UiState} from '../controller';
+import {MODELS_EXTENSION} from '../../../runtime/src/model-protocol';
+import {builtInUiExtensions} from '../extensions';
+
+const ModelSettings=lazy(builtInUiExtensions[MODELS_EXTENSION.id].load);
 
 const phases:Record<ConversationPhase,string>={idle:'准备就绪',running:'正在处理',waiting:'等待中',failed:'处理失败',done:'已完成',stopped:'已停止'};
 const PersistedMessageText=memo(function PersistedMessageText({text}:{text:string}) {
@@ -35,6 +39,8 @@ export default function ConversationPage({controller,state}:{controller:Conversa
   const ready=state.status.phase==='ready'&&state.status.extensions.includes(CONVERSATION_EXTENSION.id);
   const phase=state.conversation?.phase??active?.phase??'idle';
   const running=phase==='running'||phase==='waiting';
+  const modelsPage=state.page==='models';
+  const hasModels=state.status.extensions.includes(MODELS_EXTENSION.id);
   const startupReason=state.status.reason??(state.status.phase==='opening'?'正在连接运行宿主…':state.status.phase==='configuring'?'正在装载配置，请稍候。':state.status.phase==='closed'?'运行宿主已关闭，请重新连接。':state.status.phase==='failed'?'连接未完成，请重新连接。':!ready?'当前运行宿主未提供会话功能。':undefined);
   const reason=state.error??startupReason;
   useEffect(()=>{follow.current=true;setDetails(false);},[state.activeId]);
@@ -50,6 +56,7 @@ export default function ConversationPage({controller,state}:{controller:Conversa
   const create=()=>{setNavigation(false);void controller.create();};
   const home=()=>{setNavigation(false);controller.home();};
   const reconnect=()=>{setDetails(false);void controller.connect();};
+  const models=()=>{setNavigation(false);setDetails(false);void controller.openModels();};
   async function send(event:FormEvent) {
     event.preventDefault();const id=state.activeId,text=draft;
     if(!id)return;
@@ -65,8 +72,9 @@ export default function ConversationPage({controller,state}:{controller:Conversa
     {navigation&&<button className="nav-scrim" aria-label="关闭会话列表" onClick={()=>setNavigation(false)}/>}
     <aside className={`navigation ${navigation?'is-open':''}`} aria-label="会话导航">
       <button className="brand" onClick={home} aria-label="返回首页"><span className="brand-mark">π</span><span>Durable Agent<small>你的本地会话空间</small></span></button>
-      <button className={`nav-item ${!state.activeId?'selected':''}`} onClick={home}><Icon name="home"/>首页</button>
+      <button className={`nav-item ${!state.activeId&&!modelsPage?'selected':''}`} onClick={home}><Icon name="home"/>首页</button>
       <button className="nav-item" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>新建</button>
+      {hasModels&&<button className={`nav-item ${modelsPage?'selected':''}`} data-testid="open-model-settings" onClick={models}><Icon name="grid"/>模型与连接</button>}
       <div className="section-caption">会话</div>
       <div className="conversation-list">
         {state.conversations.map(conversation=><button className={`nav-item ${state.activeId===conversation.id?'selected':''}`} key={conversation.id} onClick={()=>open(conversation.id)} disabled={!ready}><Icon name="chat"/><span>{conversation.title}</span></button>)}
@@ -74,15 +82,16 @@ export default function ConversationPage({controller,state}:{controller:Conversa
       </div>
       <div className="nav-foot"><span className={`dot ${ready?'ready':''}`}/>{ready?'运行宿主已连接':'等待运行宿主'}</div>
     </aside>
-    <main className={`main ${state.activeId?'chat-page':'home-page'}`}>
+    <main className={`main ${modelsPage?'models-page':state.activeId?'chat-page':'home-page'}`}>
       <header className="topbar">
         <button className="round-button menu-button" aria-label="打开会话列表" aria-expanded={navigation} onClick={()=>setNavigation(!navigation)}><Icon name="menu"/></button>
-        {state.activeId?<><div className="title-pill"><span className={`dot phase-${phase}`}/><h1>{active?.title??'正在打开会话'}</h1></div><button className="round-button" data-testid="create-conversation" aria-label="新建会话" disabled={!ready||state.pending} onClick={create}><Icon name="plus"/></button></>:<span className="topbar-label">本地 · 会话</span>}
+        {modelsPage?<><div className="title-pill"><h1>模型与连接</h1></div><button className="round-button" aria-label="返回会话" onClick={()=>controller.leaveModels()}><Icon name="close"/></button></>:state.activeId?<><div className="title-pill"><span className={`dot phase-${phase}`}/><h1>{active?.title??'正在打开会话'}</h1></div><button className="round-button" data-testid="create-conversation" aria-label="新建会话" disabled={!ready||state.pending} onClick={create}><Icon name="plus"/></button></>:<span className="topbar-label">本地 · 会话</span>}
       </header>
       {reason&&<div className="connection-notice" role={state.error?'alert':'status'}><span>{reason}</span><button onClick={reconnect}>重新连接</button></div>}
-      {!state.activeId?<div className="home-content">
+      {modelsPage?<Suspense fallback={<p className="empty-state">正在打开模型设置…</p>}><ModelSettings controller={controller} state={state}/></Suspense>:!state.activeId?<div className="home-content">
         <div className="home-brand">π</div><p className="eyebrow">DURABLE AGENT</p><h1>从一个问题开始</h1><p className="home-description">独立的会话，同一个工作空间。</p>
         <button className="primary-button" data-testid="create-conversation" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>{state.pending?'正在创建…':'新建会话'}</button>
+        {hasModels&&state.models&&!state.models.defaultModel&&<p className="setup-model-hint">尚未选择默认模型。<button className="text-button" onClick={models}>设置模型与连接</button></p>}
         <section className="recent"><div className="section-caption">最近会话 <span>{state.conversations.length}</span></div>
           {state.conversations.length?state.conversations.map(conversation=><button className="recent-row" data-testid="conversation-item" data-conversation-id={conversation.id} key={conversation.id} onClick={()=>open(conversation.id)} disabled={!ready}><span className="recent-icon"><Icon name="chat"/></span><span className="recent-copy"><strong>{conversation.title}</strong><small>{conversation.model.name} · {phases[conversation.phase]}</small></span><span className="chevron" aria-hidden="true">›</span></button>):<p className="empty-state">新建会话后，已保存的记录会出现在这里。</p>}
         </section>

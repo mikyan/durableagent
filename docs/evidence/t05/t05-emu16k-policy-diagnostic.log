@@ -1,0 +1,50 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ModelSettingsTest:
+INSTRUMENTATION_STATUS: test=modelPolicyMatrixUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalStateException: {"modelPolicyState":"failed","modelPolicyCases":[],"modelPolicyError":"Model policy check failed: public configuration is durable; defaults and current models are separate; queries never decrypt","modelPolicyDiagnostic":{"name":"Error","code":"EACCES","frames":["    at async mkdtemp (node:internal\/fs\/promises:2131:10)","    at async file:\/\/\/data\/data\/dev.durableagent.probe\/files\/application-bundles\/7aacce479e568e5321d08fa3403a06538b2390328831dff7c373a0aa32ba468a\/validation\/model-policy.mjs:49:12","    at async Module.runModelPolicyChecks (file:\/\/\/data\/data\/dev.durableagent.probe\/files\/application-bundles\/7aacce479e568e5321d08fa3403a06538b2390328831dff7c373a0aa32ba468a\/validation\/model-policy.mjs:17:9)","    at async file:\/\/\/data\/data\/dev.durableagent.probe\/files\/application-bundles\/7aacce479e568e5321d08fa3403a06538b2390328831dff7c373a0aa32ba468a\/dist\/application-bridge.js:51:17"]}}
+	at dev.durableagent.probe.ModelSettingsTest.modelPolicyMatrixUsesActualAndroidNodeAndSqlite$lambda$0(ModelSettingsTest.kt:68)
+	at dev.durableagent.probe.ModelSettingsTest.$r8$lambda$7OY1wOhG3vEbOsqqlEGLGAv8R64(Unknown Source:0)
+	at dev.durableagent.probe.ModelSettingsTest$$ExternalSyntheticLambda6.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.ModelSettingsTest.until(ModelSettingsTest.kt:35)
+	at dev.durableagent.probe.ModelSettingsTest.until$default(ModelSettingsTest.kt:35)
+	at dev.durableagent.probe.ModelSettingsTest.modelPolicyMatrixUsesActualAndroidNodeAndSqlite(ModelSettingsTest.kt:68)
+
+INSTRUMENTATION_STATUS: stream=
+Error in modelPolicyMatrixUsesActualAndroidNodeAndSqlite(dev.durableagent.probe.ModelSettingsTest):
+java.lang.IllegalStateException: {"modelPolicyState":"failed","modelPolicyCases":[],"modelPolicyError":"Model policy check failed: public configuration is durable; defaults and current models are separate; queries never decrypt","modelPolicyDiagnostic":{"name":"Error","code":"EACCES","frames":["    at async mkdtemp (node:internal\/fs\/promises:2131:10)","    at async file:\/\/\/data\/data\/dev.durableagent.probe\/files\/application-bundles\/7aacce479e568e5321d08fa3403a06538b2390328831dff7c373a0aa32ba468a\/validation\/model-policy.mjs:49:12","    at async Module.runModelPolicyChecks (file:\/\/\/data\/data\/dev.durableagent.probe\/files\/application-bundles\/7aacce479e568e5321d08fa3403a06538b2390328831dff7c373a0aa32ba468a\/validation\/model-policy.mjs:17:9)","    at async file:\/\/\/data\/data\/dev.durableagent.probe\/files\/application-bundles\/7aacce479e568e5321d08fa3403a06538b2390328831dff7c373a0aa32ba468a\/dist\/application-bridge.js:51:17"]}}
+	at dev.durableagent.probe.ModelSettingsTest.modelPolicyMatrixUsesActualAndroidNodeAndSqlite$lambda$0(ModelSettingsTest.kt:68)
+	at dev.durableagent.probe.ModelSettingsTest.$r8$lambda$7OY1wOhG3vEbOsqqlEGLGAv8R64(Unknown Source:0)
+	at dev.durableagent.probe.ModelSettingsTest$$ExternalSyntheticLambda6.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.ModelSettingsTest.until(ModelSettingsTest.kt:35)
+	at dev.durableagent.probe.ModelSettingsTest.until$default(ModelSettingsTest.kt:35)
+	at dev.durableagent.probe.ModelSettingsTest.modelPolicyMatrixUsesActualAndroidNodeAndSqlite(ModelSettingsTest.kt:68)
+
+INSTRUMENTATION_STATUS: test=modelPolicyMatrixUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.978
+There was 1 failure:
+1) modelPolicyMatrixUsesActualAndroidNodeAndSqlite(dev.durableagent.probe.ModelSettingsTest)
+java.lang.IllegalStateException: {"modelPolicyState":"failed","modelPolicyCases":[],"modelPolicyError":"Model policy check failed: public configuration is durable; defaults and current models are separate; queries never decrypt","modelPolicyDiagnostic":{"name":"Error","code":"EACCES","frames":["    at async mkdtemp (node:internal\/fs\/promises:2131:10)","    at async file:\/\/\/data\/data\/dev.durableagent.probe\/files\/application-bundles\/7aacce479e568e5321d08fa3403a06538b2390328831dff7c373a0aa32ba468a\/validation\/model-policy.mjs:49:12","    at async Module.runModelPolicyChecks (file:\/\/\/data\/data\/dev.durableagent.probe\/files\/application-bundles\/7aacce479e568e5321d08fa3403a06538b2390328831dff7c373a0aa32ba468a\/validation\/model-policy.mjs:17:9)","    at async file:\/\/\/data\/data\/dev.durableagent.probe\/files\/application-bundles\/7aacce479e568e5321d08fa3403a06538b2390328831dff7c373a0aa32ba468a\/dist\/application-bridge.js:51:17"]}}
+	at dev.durableagent.probe.ModelSettingsTest.modelPolicyMatrixUsesActualAndroidNodeAndSqlite$lambda$0(ModelSettingsTest.kt:68)
+	at dev.durableagent.probe.ModelSettingsTest.$r8$lambda$7OY1wOhG3vEbOsqqlEGLGAv8R64(Unknown Source:0)
+	at dev.durableagent.probe.ModelSettingsTest$$ExternalSyntheticLambda6.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.ModelSettingsTest.until(ModelSettingsTest.kt:35)
+	at dev.durableagent.probe.ModelSettingsTest.until$default(ModelSettingsTest.kt:35)
+	at dev.durableagent.probe.ModelSettingsTest.modelPolicyMatrixUsesActualAndroidNodeAndSqlite(ModelSettingsTest.kt:68)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

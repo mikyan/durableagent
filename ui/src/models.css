@@ -1,0 +1,44 @@
+.settings-scroll{min-height:0;flex:1;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#45454b transparent}
+.settings-content{max-width:760px;margin:0 auto;padding:9px 24px max(40px,env(safe-area-inset-bottom));font-size:13px;line-height:1.7}
+.cloud-disclosure{background:#323235;border:1px solid var(--line);border-radius:18px;padding:15px 17px;color:var(--muted);font-size:12px;line-height:1.8}
+.settings-status{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:42px;color:var(--quiet);font-size:11px}
+.settings-status .text-button{margin-left:auto}
+.text-button.danger{color:var(--red)}
+.settings-error,.settings-notice{padding:12px 15px;border-radius:14px;background:var(--surface);font-size:12px;line-height:1.8;margin:4px 0 14px;overflow-wrap:anywhere}
+.settings-error{color:var(--red)}.settings-notice{color:var(--green)}
+.settings-section{padding:19px 0 23px;border-bottom:1px solid var(--line)}
+.settings-section:last-child{border-bottom:0}
+.settings-section h2{font-size:17px;font-weight:550;margin-bottom:9px}
+.settings-hint{font-size:11px;color:var(--quiet);line-height:1.9;margin:8px 0 13px;overflow-wrap:anywhere}
+.settings-empty{font-size:12px;color:var(--muted);padding:17px 0}
+.settings-content input,.settings-content select{display:block;width:100%;min-width:0;max-width:100%;background:#343439;border:1px solid #ffffff0c;border-radius:13px;color:var(--text);padding:12px 13px;font:inherit;font-size:13px;min-height:45px;outline:none}
+.settings-content input::placeholder{color:var(--quiet)}
+.settings-content input:focus-visible,.settings-content select:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.settings-content input:disabled,.settings-content select:disabled{opacity:.5}
+.model-picker{margin-top:19px}
+.model-picker label,.connection-form label,.credential-form label{display:block;font-size:12px;color:var(--muted);margin-bottom:8px}
+.model-picker-row{display:flex;align-items:center;gap:12px}
+.model-picker-row select{flex:1;min-width:0}
+.model-picker-row .secondary-button{flex-shrink:0;font-size:11px;white-space:nowrap;min-height:43px}
+.connection-card{margin:17px 0;border:1px solid var(--line);border-radius:20px;padding:18px;background:#2c2c30}
+.connection-heading{display:flex;align-items:flex-start;gap:15px;justify-content:space-between}
+.connection-heading h3{font-size:15px;font-weight:550;margin:0;overflow-wrap:anywhere}
+.connection-state{flex-shrink:0;color:var(--green);background:#94ad9011;border-radius:20px;padding:3px 9px;font-size:10px}
+.connection-disabled .connection-state{color:var(--quiet);background:#ffffff06}
+.connection-protocol{font-size:11px;color:var(--quiet);margin-top:3px}
+.connection-endpoint{font-size:12px;color:var(--muted);overflow-wrap:anywhere;margin-top:12px;line-height:1.8}
+.credential-status{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted);margin:13px 0 17px}
+.credential-status[data-state="configured"]{color:var(--green)}
+.credential-status[data-state="corrupt"],.credential-status[data-state="key-missing"],.credential-status[data-state="permanently-invalidated"],.credential-status[data-state="incompatible"]{color:var(--red)}
+.credential-form input{margin-top:8px}
+.credential-actions{display:flex;align-items:center;gap:22px;margin-top:12px}
+.model-catalog{border-top:1px solid var(--line);padding-top:13px;margin-top:18px;color:var(--muted);font-size:12px}
+.model-catalog summary{cursor:pointer;padding:2px 0 8px}
+.model-catalog ul{padding:0;list-style:none;max-height:230px;overflow:auto;scrollbar-width:thin}
+.model-catalog li{padding:9px 0;border-bottom:1px solid var(--line)}
+.model-catalog li strong{display:block;font-weight:450;font-size:12px}
+.model-catalog code{display:block;color:var(--quiet);font-size:11px;overflow-wrap:anywhere;white-space:normal;margin-top:3px}
+.connection-form{display:grid;gap:16px;margin-top:18px}
+.connection-form input,.connection-form select{margin-top:8px}
+.connection-form .secondary-button{justify-self:start;min-height:43px;padding-left:22px;padding-right:22px}
+@media(max-width:600px){.model-picker-row{align-items:stretch;flex-direction:column;gap:9px}.model-picker-row .secondary-button{align-self:flex-end;min-height:39px}.settings-content{padding-left:20px;padding-right:20px}.connection-card{padding:16px}.settings-section{padding-top:17px}}

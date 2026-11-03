@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "run": "dcc6e42e-f0d0-4fa6-905f-29f204672b96",
+  "connectionId": "a51bab3e-94df-40c8-8634-2f1947b16d7d",
+  "endpoint": "https://token-plan-cn.xiaomimimo.com/v1",
+  "model": "mimo-v2.6-flash",
+  "scope": "Actual React/native vault/SDK request to real MiMo endpoint using deliberately invalid synthetic key; failure observed through public UI, no real private key used.",
+  "result": {
+    "phase": "failed",
+    "reason": "401: {\"message\":\"Invalid API Key\",\"param\":\"Please provide valid API Key\",\"code\":\"401\",\"type\":\"invalid_key\"}",
+    "messages": [
+      {
+        "id": "11",
+        "text": "验证真实服务在无效凭据下给出明确错误。",
+        "role": "message role-user"
+      }
+    ],
+    "width": 0,
+    "height": 0
+  }
+}

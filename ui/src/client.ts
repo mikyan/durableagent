@@ -1,6 +1,8 @@
 import {APPLICATION_PROTOCOL,type ApplicationEnvelope,type ApplicationMethod,type ApplicationRequest,type ConversationSnapshot} from '../../runtime/src/application-protocol';
+import type {CredentialInfo,CredentialWriteRequest} from '../../runtime/src/model-protocol';
 
-export interface NativePort {postMessage(message:string):void}
+export interface NativePort {postMessage(message:string):void;writeCredential?(message:string):void}
+export type CredentialMutation={operation:'save';target:string;expectedGeneration:number;key:string}|{operation:'remove';target:string;expectedGeneration:number};
 export class ApplicationFailure extends Error {
   constructor(readonly code:string,message:string){super(message);this.name='ApplicationFailure';}
 }
@@ -19,6 +21,18 @@ export class ApplicationClient {
       this.pending.set(request.requestId,{resolve:value=>resolve(value as T),reject,timer});
       try {this.port!.postMessage(JSON.stringify(request));}
       catch {clearTimeout(timer);this.pending.delete(request.requestId);reject(new ApplicationFailure('HOST_UNAVAILABLE','运行宿主连接已断开。'));}
+    });
+  }
+  writeCredential(input:CredentialMutation):Promise<CredentialInfo> {
+    if(this.disposed)return Promise.reject(new ApplicationFailure('CONNECTION_CLOSED','连接已关闭，请重新连接。'));
+    if(!this.port?.writeCredential)return Promise.reject(new ApplicationFailure('CREDENTIAL_WRITER_UNAVAILABLE','当前宿主无法安全保存凭据，请更新应用后重试。'));
+    const request:CredentialWriteRequest={protocol:APPLICATION_PROTOCOL,connectionId:this.connectionId,requestId:crypto.randomUUID(),operation:input.operation,target:input.target,expectedGeneration:input.expectedGeneration,...(input.operation==='save'?{key:input.key}:{})};
+    const requestId=request.requestId;
+    return new Promise<CredentialInfo>((resolve,reject)=>{
+      const timer=setTimeout(()=>{this.pending.delete(requestId);reject(new ApplicationFailure('RESPONSE_TIMEOUT','尚未收到凭据写入确认，请刷新状态后重试。'));},this.timeoutMs);
+      this.pending.set(requestId,{resolve:value=>resolve(value as CredentialInfo),reject,timer});
+      try{this.port!.writeCredential!(JSON.stringify(request));}
+      catch{clearTimeout(timer);this.pending.delete(requestId);reject(new ApplicationFailure('CREDENTIAL_WRITER_UNAVAILABLE','凭据写入连接已断开。'));}
     });
   }
   receive(envelope:ApplicationEnvelope) {

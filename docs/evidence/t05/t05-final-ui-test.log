@@ -1,0 +1,24 @@
+
+> @durableagent/ui@0.1.0 pretest
+> npm run build --prefix ../runtime
+
+
+> @durableagent/runtime-probe@0.1.0 build
+> tsc
+
+
+> @durableagent/ui@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 <worktree>/ui
+
+(node:41280) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:37044) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  9 passed (9)
+      Tests  16 passed (16)
+   Start at  02:11:29
+   Duration  2.89s (tests 43%, environment 43%, import 11%, transform 2%)

@@ -1,0 +1,41 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ModelSettingsTest:
+INSTRUMENTATION_STATUS: test=realMimoUsesSavedVaultCredentialAndReopensWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: modelEvidence={"case":"real-mimo-vault","result":{"before":{"phase":"ready","extensions":["conversation","models"],"metrics":{"modelRequests":1,"lastCredentialGeneration":1,"lastConnectionId":"8819384e-a459-4965-bf66-de8adb74a740"},"instance":"cc25ff8f-6c73-4cf8-bd19-a4e8034fe38a","pid":3699,"domainOwned":true,"nativeOwners":1},"reopened":{"phase":"ready","extensions":["conversation","models"],"metrics":{},"instance":"74b1c07c-339a-458a-a17e-8dde3a1f31bd","pid":3699,"domainOwned":true,"nativeOwners":1},"configuration":{"version":2,"defaultModel":{"provider":"8819384e-a459-4965-bf66-de8adb74a740","modelId":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash"},"connections":[{"id":"8819384e-a459-4965-bf66-de8adb74a740","name":"设备验证连接","protocol":"mimo-cn","endpoint":"https:\/\/token-plan-cn.xiaomimimo.com\/v1","models":[{"id":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash","contextWindow":1048576,"maxTokens":131072},{"id":"mimo-v2.6-pro","name":"MiMo-V2.6-Pro","contextWindow":1048576,"maxTokens":131072}],"enabled":true,"createdAt":1793729197648,"credential":{"connectionId":"8819384e-a459-4965-bf66-de8adb74a740","state":"configured","generation":1,"configured":true}}]},"history":{"items":[{"id":"11","role":"user","text":"请只回复一句简短中文问候，包含模型设置验证。","persisted":true},{"id":"14","role":"assistant","text":"你好！我是MiMo，模型设置验证完成～","persisted":true}]}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoUsesSavedVaultCredentialAndReopensWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=settingsSaveRotateReopenThroughRealReactAndNativeVault
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: modelEvidence={"case":"settings-rotate-reopen","result":{"configuration":{"version":2,"defaultModel":{"provider":"f9ecb1dd-2155-492d-8e2e-1aa59ce7a8b3","modelId":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash"},"connections":[{"id":"f9ecb1dd-2155-492d-8e2e-1aa59ce7a8b3","name":"设备验证连接","protocol":"mimo-cn","endpoint":"https:\/\/token-plan-cn.xiaomimimo.com\/v1","models":[{"id":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash","contextWindow":1048576,"maxTokens":131072},{"id":"mimo-v2.6-pro","name":"MiMo-V2.6-Pro","contextWindow":1048576,"maxTokens":131072}],"enabled":true,"createdAt":1793729205548,"credential":{"connectionId":"f9ecb1dd-2155-492d-8e2e-1aa59ce7a8b3","state":"configured","generation":2,"configured":true}}]},"state":{"phase":"ready","extensions":["conversation","models"],"metrics":{"modelRequests":1,"lastCredentialGeneration":2,"lastConnectionId":"f9ecb1dd-2155-492d-8e2e-1aa59ce7a8b3"},"instance":"e2a32b48-e4a2-48c8-883e-145304767722","pid":3699,"domainOwned":true,"nativeOwners":1},"history":{"items":[{"id":"11","role":"user","text":"实际设置入口中文🌍","persisted":true},{"id":"14","role":"assistant","text":"你好🌍","persisted":true},{"id":"15","role":"user","text":"轮转后的下一次请求","persisted":true},{"id":"18","role":"assistant","text":"你好🌍","persisted":true}]}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=settingsSaveRotateReopenThroughRealReactAndNativeVault
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 18.606
+
+OK (2 tests)
+
+
+INSTRUMENTATION_CODE: -1

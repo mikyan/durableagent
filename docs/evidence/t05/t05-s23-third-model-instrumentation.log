@@ -1,0 +1,57 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ModelSettingsTest:
+INSTRUMENTATION_STATUS: test=modelPolicyMatrixUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: modelEvidence={"case":"android-model-policy","result":{"phase":"ready","extensions":["conversation","models"],"metrics":{"modelPolicyState":"passed","modelPolicyCases":[{"name":"public configuration is durable; defaults and current models are separate; queries never decrypt","passed":true},{"name":"configuration COMMIT failure preserves old durable version and blocks scheduling until reopen","passed":true},{"name":"rotation or disable before final admission sends nothing; disabling after send does not cancel it","passed":true},{"name":"an old deferred response never becomes a replacement request after credential rotation","passed":true},{"name":"actual HTTP redirects cannot forward credentials or prompt body to another destination","passed":true},{"name":"credential\/options overrides are rejected; revoke never uses ambient environment credentials","passed":true},{"name":"a post-commit publication failure gates dispatch and reopen loads the durable generation","passed":true},{"name":"an in-flight reflected old credential is sanitized even after rotation, including live WAL and events","passed":true},{"name":"serialized SDK stream settings reject credentials and arbitrary nested options before opening storage","passed":true},{"name":"JSON escaped credential reflection is removed after decoding, before SDK progress and persistence","passed":true},{"name":"a credential rotated after deferred compatibility check is rejected again at final fetch admission","passed":true},{"name":"escaped credential property names in parsed tool arguments never enter SDK results or SQLite","passed":true},{"name":"disable published during final metadata wait blocks dispatch at the final synchronous boundary","passed":true}]},"instance":"b6d7b884-db12-4b68-aad0-f8e57570de24","pid":9497,"domainOwned":true,"nativeOwners":1}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=modelPolicyMatrixUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realMimoUsesSavedVaultCredentialAndReopensWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: modelEvidence={"case":"real-mimo-vault","result":{"before":{"phase":"ready","extensions":["conversation","models"],"metrics":{"modelRequests":1,"lastCredentialGeneration":1,"lastConnectionId":"ec0e0de4-067b-4b9e-9e46-2fbdfae86a85"},"instance":"a7155b48-2ca1-4ca9-a8bc-3a9908e2965e","pid":9497,"domainOwned":true,"nativeOwners":1},"reopened":{"phase":"ready","extensions":["conversation","models"],"metrics":{},"instance":"1c0b6095-3ea1-461b-afe0-5a63236aec1f","pid":9497,"domainOwned":true,"nativeOwners":1},"configuration":{"version":2,"defaultModel":{"provider":"ec0e0de4-067b-4b9e-9e46-2fbdfae86a85","modelId":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash"},"connections":[{"id":"ec0e0de4-067b-4b9e-9e46-2fbdfae86a85","name":"设备验证连接","protocol":"mimo-cn","endpoint":"https:\/\/token-plan-cn.xiaomimimo.com\/v1","models":[{"id":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash","contextWindow":1048576,"maxTokens":131072},{"id":"mimo-v2.6-pro","name":"MiMo-V2.6-Pro","contextWindow":1048576,"maxTokens":131072}],"enabled":true,"createdAt":1793729851119,"credential":{"connectionId":"ec0e0de4-067b-4b9e-9e46-2fbdfae86a85","state":"configured","generation":1,"configured":true}}]},"history":{"items":[{"id":"11","role":"user","text":"请只回复一句简短中文问候，包含模型设置验证。","persisted":true},{"id":"14","role":"assistant","text":"你好，我是MiMo，模型设置验证通过！","persisted":true}]}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoUsesSavedVaultCredentialAndReopensWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=settingsSaveRotateReopenThroughRealReactAndNativeVault
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: modelEvidence={"case":"settings-rotate-reopen","result":{"configuration":{"version":2,"defaultModel":{"provider":"60a0f04d-be42-4dc4-ba70-4943234b1654","modelId":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash"},"connections":[{"id":"60a0f04d-be42-4dc4-ba70-4943234b1654","name":"设备验证连接","protocol":"mimo-cn","endpoint":"https:\/\/token-plan-cn.xiaomimimo.com\/v1","models":[{"id":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash","contextWindow":1048576,"maxTokens":131072},{"id":"mimo-v2.6-pro","name":"MiMo-V2.6-Pro","contextWindow":1048576,"maxTokens":131072}],"enabled":true,"createdAt":1793729855128,"credential":{"connectionId":"60a0f04d-be42-4dc4-ba70-4943234b1654","state":"configured","generation":2,"configured":true}}]},"state":{"phase":"ready","extensions":["conversation","models"],"metrics":{"modelRequests":1,"lastCredentialGeneration":2,"lastConnectionId":"60a0f04d-be42-4dc4-ba70-4943234b1654"},"instance":"caedbb53-2f21-4fa5-89da-8beb3ae915d1","pid":9497,"domainOwned":true,"nativeOwners":1},"history":{"items":[{"id":"11","role":"user","text":"实际设置入口中文🌍","persisted":true},{"id":"14","role":"assistant","text":"你好🌍","persisted":true},{"id":"15","role":"user","text":"轮转后的下一次请求","persisted":true},{"id":"18","role":"assistant","text":"你好🌍","persisted":true}]}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ModelSettingsTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=settingsSaveRotateReopenThroughRealReactAndNativeVault
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 15.083
+
+OK (3 tests)
+
+
+INSTRUMENTATION_CODE: -1
