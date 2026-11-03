@@ -1,0 +1,63 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeInputStoreTest:
+INSTRUMENTATION_STATUS: test=realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: expected:<0> but was:<-1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.NativeInputStoreTest.realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(NativeInputStoreTest.kt:251)
+
+INSTRUMENTATION_STATUS: stream=
+Error in realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(dev.durableagent.probe.NativeInputStoreTest):
+java.lang.AssertionError: expected:<0> but was:<-1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.NativeInputStoreTest.realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(NativeInputStoreTest.kt:251)
+
+INSTRUMENTATION_STATUS: test=realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realSqliteQuotaFailureNeverAcknowledgesOrErasesTheLastCommittedDraft
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputQuotaEvidence={"journalMode":"wal","synchronous":2,"foreignKeys":1,"pageSize":4096,"maxPages":32,"sqliteVersion":"3.44.3","writer":{"journalMode":"wal","synchronous":2,"foreignKeys":1,"pageSize":4096,"maxPages":32}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realSqliteQuotaFailureNeverAcknowledgesOrErasesTheLastCommittedDraft
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.511
+There was 1 failure:
+1) realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(dev.durableagent.probe.NativeInputStoreTest)
+java.lang.AssertionError: expected:<0> but was:<-1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.NativeInputStoreTest.realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(NativeInputStoreTest.kt:251)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

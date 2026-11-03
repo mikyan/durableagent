@@ -11,6 +11,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicLong
 
 /** One native owner for the product Storage/Session; UI bindings never own its lifetime. */
 class ApplicationService:Service() {
@@ -22,6 +23,9 @@ class ApplicationService:Service() {
     private var phase="{\"phase\":\"opening\"}"
     private var closing=false
     private var credentials:NativeCredentialAccess?=null
+    private var inputs:NativeInputAccess?=null
+    private val busyStarted=AtomicLong(0)
+    private val busyEnded=AtomicLong(0)
     private val peers=mutableMapOf<String,Messenger>()
     private val pending=mutableListOf<String>()
     private data class Outgoing(val what:Int,val json:String,val eventKey:String?,val id:String=UUID.randomUUID().toString(),var index:Int=0,var timeout:Runnable?=null) {val count=(json.length+47999)/48000}
@@ -33,6 +37,11 @@ class ApplicationService:Service() {
         // Android recycles Message after this callback: capture values now.
         val what=message.what;val text=message.data.getString("json")?:"";val reply=message.replyTo
         val transfer=message.data.getString("transfer")?:"";val index=message.data.getInt("index");val count=message.data.getInt("count")
+        if(debug&&what==35){
+            val value=JSONObject().put("pid",Process.myPid()).put("started",busyStarted.get()).put("ended",busyEnded.get()).put("observedAt",SystemClock.elapsedRealtime())
+            try{reply?.send(Message.obtain(null,35).apply{data=Bundle().apply{putString("json",value.toString())}})}catch(_:RemoteException){}
+            return@Handler true
+        }
         owner.post {
             when(what){
                 10->if(reply!=null)accept(text,reply)
@@ -44,6 +53,13 @@ class ApplicationService:Service() {
                 30->reply?.let {writeCredential(text,it)}
                 31->if(debug)reply?.let {importValidationCredential(text,it)}
                 32->if(debug)node?.getExecutor("globalThis.__appRunModelPolicy?.()")?.executeVoid()
+                33->if(debug)node?.getExecutor("globalThis.__appRunInputPolicy?.()")?.executeVoid()
+                34->if(debug&&node!=null){
+                    val duration=(text.toLongOrNull()?:10000).coerceIn(2500,15000)
+                    busyEnded.set(0);busyStarted.set(SystemClock.elapsedRealtime())
+                    try{node?.getExecutor("{const until=Date.now()+$duration;while(Date.now()<until){Math.sqrt(Math.random());}}")?.executeVoid()}
+                    finally{busyEnded.set(SystemClock.elapsedRealtime())}
+                }
             }
         };true
     })
@@ -67,6 +83,8 @@ class ApplicationService:Service() {
             runtime.globalObject.set("__applicationRoot",domain.absolutePath)
             credentials=NativeCredentialAccess(CredentialVault(this,if(mode=="product")"credentials-v1" else "cv-$run"))
             runtime.createV8ValueObject().use {access->access.bind(credentials!!);runtime.globalObject.set("__nativeCredentials",access)}
+            inputs=NativeInputAccess(NativeInputStore(this,NativeInputBridge.namespace(mode,run)))
+            runtime.createV8ValueObject().use {access->access.bind(inputs!!);runtime.globalObject.set("__nativeInputs",access)}
             if(mode=="real"){
                 val clear=ValidationCredential.consume(this)
                 try{runtime.globalObject.set("__validationKey",String(clear,Charsets.UTF_8).trim())}finally{clear.fill(0)}
@@ -180,6 +198,6 @@ class ApplicationService:Service() {
     }
     private fun status()=JSONObject(phase).put("instance",instance).put("pid",Process.myPid()).put("domainOwned",lease!=null).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).toString()
     private fun fail(error:Throwable){phase=JSONObject().put("phase","failed").put("reason",error.message?:error.javaClass.simpleName).toString();release()}
-    private fun release(){node?.close();node=null;credentials=null;lease?.close();lease=null;closing=false;pending.clear()}
+    private fun release(){node?.close();node=null;credentials=null;inputs?.close();inputs=null;lease?.close();lease=null;closing=false;pending.clear()}
     override fun onDestroy(){owner.post {release();thread.quitSafely()};super.onDestroy()}
 }

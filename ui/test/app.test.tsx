@@ -2,6 +2,7 @@
 import {afterEach,expect,it} from 'vitest';
 import {cleanup,fireEvent,render,screen,waitFor,within} from '@testing-library/react';
 import type {ApplicationRequest,ConversationSnapshot,ConversationSummary} from '../../runtime/src/application-protocol';
+import {InputPlatform} from './input-platform';
 import {ApplicationClient} from '../src/client';
 import {ConversationController} from '../src/controller';
 import {App} from '../src/App';
@@ -9,6 +10,7 @@ import {App} from '../src/App';
 afterEach(cleanup);
 
 it('creates a real wire conversation and distinguishes progress from committed messages across reconnect',async()=>{
+  const native=new InputPlatform();
   const requests:ApplicationRequest[]=[];
   let summary:ConversationSummary|undefined;
   let snapshot:ConversationSnapshot|undefined;
@@ -17,6 +19,7 @@ it('creates a real wire conversation and distinguishes progress from committed m
   const controller=new ConversationController(()=>{
     client=new ApplicationClient({postMessage:json=>{
       const request:ApplicationRequest=JSON.parse(json);requests.push(request);
+      if(request.method.startsWith('input.')){void native.handle(request).then(response=>client.receive(response));return;}
       let value:unknown={};
       switch(request.method){
         case 'status':value={phase:'ready',extensions:['conversation']};break;
@@ -24,12 +27,12 @@ it('creates a real wire conversation and distinguishes progress from committed m
         case 'create':
           summary={id:'101',title:'新会话',model:{provider:'fixture',modelId:'fixture-1',name:'验证模型'},workspaceId:'default',projectId:null,createdAt:1,phase:'idle'};
           snapshot={id:'101',revision:1,conversation:summary,entries:[],phase:'idle',storedSeq:1};
-          value={conversation:summary,storedSeq:1};break;
+          native.rememberConversation(summary);value={conversation:summary,storedSeq:1};break;
         case 'open':value=snapshot;break;
         case 'history':value={items:snapshot?.entries??[]};break;
         case 'subscribe':subscription=request;value=snapshot;break;
         case 'send':
-          snapshot={...snapshot!,revision:2,phase:'running',entries:[{id:'102',role:'user',text:String(request.payload?.text),persisted:true}],progress:{text:'这是一段进度',persisted:false},storedSeq:2};
+          snapshot={...snapshot!,revision:2,phase:'running',entries:[{id:'102',role:'user',text:native.frozen.get(String(request.payload?.inputToken))!.text,persisted:true}],progress:{text:'这是一段进度',persisted:false},storedSeq:2};
           value={submissionId:'103',storedSeq:2,status:'accepted'};break;
       }
       queueMicrotask(()=>{
@@ -63,6 +66,7 @@ it('creates a real wire conversation and distinguishes progress from committed m
 });
 
 it('shows the missing native host without invented conversations or enabled send controls',async()=>{
+  const native=new InputPlatform();
   const controller=new ConversationController(()=>new ApplicationClient(undefined));
   render(<App controller={controller}/>);
   expect(await screen.findByText('无法连接运行宿主，请在应用中打开此页面。')).toBeTruthy();
@@ -72,13 +76,16 @@ it('shows the missing native host without invented conversations or enabled send
 });
 
 it('folds long persisted messages explicitly and expands the exact original without changing short messages',async()=>{
+  const native=new InputPlatform();
   const longUser='开头🌍'+ '\u0001'.repeat(90000)+'原文末尾';
   const longAssistant='完整回答'.repeat(22000)+'回答末尾';
   const summary:ConversationSummary={id:'long-history',title:'长历史',model:{provider:'fixture',modelId:'one',name:'验证模型'},workspaceId:'default',projectId:null,createdAt:1,phase:'done'};
+  native.rememberConversation(summary);
   const snapshot:ConversationSnapshot={id:summary.id,conversation:summary,revision:1,phase:'done',storedSeq:1,entries:[{id:'1',role:'user',text:longUser,persisted:true},{id:'2',role:'assistant',text:longAssistant,persisted:true},{id:'3',role:'user',text:'短消息保持完整',persisted:true}]};
   const controller=new ConversationController(()=>{
     const client=new ApplicationClient({postMessage:json=>{
       const request:ApplicationRequest=JSON.parse(json);
+      if(request.method.startsWith('input.')){void native.handle(request).then(response=>client.receive(response));return;}
       const value=request.method==='status'?{phase:'ready',extensions:['conversation']}:request.method==='list'?{conversations:[summary]}:request.method==='history'?{items:snapshot.entries}:snapshot;
       queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value}));
     }});return client;

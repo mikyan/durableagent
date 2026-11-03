@@ -9,19 +9,22 @@ import {Application} from '../../runtime/dist/application.js';
 import {ModelConnections} from '../../runtime/dist/model-connections.js';
 import {fixtureTransport} from '../../runtime/dist/transport.js';
 import {App} from '../src/App';
+import {InputPlatform} from './input-platform';
 import {ApplicationClient} from '../src/client';
 import {ConversationController} from '../src/controller';
 
 it('real model settings start empty, configure by DOM, resolve credentials only at send and retain defaults on SQLite reopen',async()=>{
   const temporaryRoot=resolve(tmpdir()),directory=await mkdtemp(join(temporaryRoot,'durable-ui-models-'));
+  const native=new InputPlatform();
   const vault=new Map(),preferences=new Map(),ordinary=[];let reads=0,requests=0;
   const metadata=async id=>({connectionId:id,state:vault.has(id)?'configured':'absent',generation:vault.get(id)?.generation??0,configured:vault.has(id)});
   const credentials={metadata,resolve:async id=>{reads++;const value=vault.get(id);if(!value)throw Error('No credential');return value;}};
-  const create=()=>{const connections=new ModelConnections({credentials,fetch:fixtureTransport({requested:()=>requests++,aborted:()=>{}})});return new Application({path:join(directory,'application.sqlite'),models:connections.models,connections,workspacePath:directory});};
+  const create=()=>{const connections=new ModelConnections({credentials,fetch:fixtureTransport({requested:()=>requests++,aborted:()=>{}})});return new Application({inputs:native,path:join(directory,'application.sqlite'),models:connections.models,connections,workspacePath:directory});};
   let app=create(),controller;
   const connect=()=>new ConversationController(()=>{
     const client=new ApplicationClient({postMessage:json=>{
-      ordinary.push(json);void app.request(JSON.parse(json),event=>client.receive(event)).then(response=>client.receive(response));
+      ordinary.push(json);const request=JSON.parse(json);if(request.method.startsWith('input.')){void native.handle(request).then(response=>client.receive(response));return;}
+      void app.request(request,event=>client.receive(event)).then(response=>client.receive(response));
     },writeCredential:json=>{
       const request=JSON.parse(json),prior=vault.get(request.target);
       if((prior?.generation??0)!==request.expectedGeneration)throw Error('Synthetic generation conflict');

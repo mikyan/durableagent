@@ -1,0 +1,102 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.InputApplicationTest:
+INSTRUMENTATION_STATUS: test=actualSystemPickerImportsSyntheticText
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stack=org.junit.AssumptionViolatedException: got: <false>, expected: is <true>
+	at org.junit.Assume.assumeThat(Assume.java:106)
+	at org.junit.Assume.assumeTrue(Assume.java:50)
+	at dev.durableagent.probe.InputApplicationTest.actualSystemPickerImportsSyntheticText(InputApplicationTest.kt:141)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:299)
+	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:293)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.lang.Thread.run(Thread.java:1119)
+
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.InputApplicationTest:
+INSTRUMENTATION_STATUS: test=actualSystemPickerImportsSyntheticText
+INSTRUMENTATION_STATUS_CODE: -4
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=inputPolicyUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputEvidence={"case":"actual-sdk-input-policy","result":{"phase":"ready","extensions":["conversation","models","input"],"metrics":{"inputPolicyState":"passed","inputPolicyCases":[{"name":"capabilities derive from the fixed SDK catalog, use byte-specific budgets, and never resolve credentials","passed":true},{"name":"fixed input verifies ownership, every object and digest before SDK content; changed capabilities never alter a token","passed":true},{"name":"explicit fixed-image send reaches real SDK encoding, persists image-only history, and reopening never sends","passed":true},{"name":"actual serialized SDK requests enforce escaped JSON, history image counts and selected-model limits before decrypt or transport","passed":true}]},"instance":"509240c9-39a2-46e6-8c40-9735c883c657","pid":7388,"domainOwned":true,"nativeOwners":1}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inputPolicyUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=twoDraftsRestoreAfterActivityRecreationAndFreshHostWithoutSend
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputEvidence={"case":"two-drafts-recreated","result":{"firstRevision":1,"secondRevision":1,"modelRequests":0}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=twoDraftsRestoreAfterActivityRecreationAndFreshHostWithoutSend
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=nativeDraftsSaveThroughRealUiWhileNodeBusyAndNotStarted
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputEvidence={"case":"independent-native-save","result":{"busyBarrierAtReceipt":{"pid":7388,"started":2410106,"ended":0,"observedAt":2410645},"first":{"id":"busy-draft","revision":1,"text":"Node 忙循环期间，原生仍确认保存 🌍","selections":[],"committed":true,"stateVersion":1,"capability":{"provider":"fixture","modelId":"conversation","input":["text"],"source":"validation","limits":{},"applicationPolicy":{"draftCharacters":100000,"attachments":4,"sourceImageBytes":16777216,"sourcePixels":25165824,"textBytes":262144,"imageWidth":1024,"imageHeight":1024,"imageBytes":1572864,"totalBase64Bytes":8388608,"requestBytes":10485760},"version":"d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"}},"second":{"id":"offline-draft","revision":1,"text":"Agent 从未启动的页面仍保存第二份草稿","selections":[],"committed":true,"stateVersion":1,"capability":{"provider":"fixture","modelId":"conversation","input":["text"],"source":"validation","limits":{},"applicationPolicy":{"draftCharacters":100000,"attachments":4,"sourceImageBytes":16777216,"sourcePixels":25165824,"textBytes":262144,"imageWidth":1024,"imageHeight":1024,"imageBytes":1572864,"totalBase64Bytes":8388608,"requestBytes":10485760},"version":"d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"}},"nativeOwnersWithoutAgent":0,"modelRequests":0}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=nativeDraftsSaveThroughRealUiWhileNodeBusyAndNotStarted
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realMimoReadsFrozenImageChallengeAfterOriginalChanges
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputEvidence={"case":"real-fixed-image","result":{"challenge":"TWML","answer":"TWML","frozen":{"token":"cf8651a5-95c7-4f73-bded-03aa4439f742","id":"image-challenge","revision":2,"text":"请读取图片中央的四位英文大写或数字代码，仅输出该代码，不要附加其他内容。","representations":[{"range":"full","capabilityVersion":"48914d15184261b2ae26768590dfd9e83534f29ad2347116d94142ca10fcead2","kind":"image","mimeType":"image\/png","width":560,"height":220,"sourceWidth":560,"sourceHeight":220,"transformation":"完整画面，按方向解码并缩放，保留透明度","objectId":"2bf68c77-ea32-4b3a-9465-f28656b948c2","sha256":"e691782d70d861d608ab37973b742c4153672226978c6cfc21a24e883c6196f9","byteLength":6066}],"digest":"137372afc3c3ff78e7d32998c183f8ccb58032493cf85b5e114d1e05cb27f949"},"requestInput":{"serializedBytes":8484,"images":[{"sha256":"e691782d70d861d608ab37973b742c4153672226978c6cfc21a24e883c6196f9","byteLength":6066,"mimeType":"image\/png"}]},"originalChangedAfterFreeze":true,"requestsBeforeSend":0,"explicitRequests":1,"reopenRequests":0}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=5
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoReadsFrozenImageChallengeAfterOriginalChanges
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 30.445
+
+OK (5 tests)
+
+
+INSTRUMENTATION_CODE: -1

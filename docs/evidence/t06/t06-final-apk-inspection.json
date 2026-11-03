@@ -1,0 +1,160 @@
+{
+  "appSha256": "7bcc427860b851fbbc80c9d671fad207d58e06940884a727902bb848f7328af2",
+  "testSha256": "d0e5f1d86138d7f5a6d948807f32fd0142ae7051687c9e0559fa71fddb93c93d",
+  "native": [
+    {
+      "entry": "lib/arm64-v8a/libjavet-node-android-i18n.v.6.0.3.so",
+      "sha256": "266e732b71daed5897d430e99d20b46a1f87968f935c89795832d411f17f9414",
+      "matchesPreviouslyInspectedPinnedI18nAar": true,
+      "zipStored": true,
+      "zipOffsetMod16K": 0,
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "offsetVirtualCongruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "offsetVirtualCongruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "offsetVirtualCongruent16K": true
+        }
+      ]
+    },
+    {
+      "entry": "lib/x86_64/libjavet-node-android-i18n.v.6.0.3.so",
+      "sha256": "2a46d00797e2339353a4146d27df641b1f6679df771d95e1959812097e0e3e69",
+      "matchesPreviouslyInspectedPinnedI18nAar": true,
+      "zipStored": true,
+      "zipOffsetMod16K": 0,
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "offsetVirtualCongruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "offsetVirtualCongruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "offsetVirtualCongruent16K": true
+        }
+      ]
+    }
+  ],
+  "runtimeZipSha256": "b7f959b93919122460e3f0c0bb0d424d4b303ca2a9c2a486547a61dd0e86c187",
+  "runtimeMatches": {
+    "dist/application-bridge.js": true,
+    "dist/application-protocol.js": true,
+    "dist/application-validation.js": true,
+    "dist/application.js": true,
+    "dist/bridge.js": true,
+    "dist/capabilities.js": true,
+    "dist/input-protocol.js": true,
+    "dist/input.js": true,
+    "dist/live-model.js": true,
+    "dist/model-connections.js": true,
+    "dist/model-protocol.js": true,
+    "dist/probe.js": true,
+    "dist/sqlite-checks.js": true,
+    "dist/storage-bridge.js": true,
+    "dist/storage-checks.js": true,
+    "dist/storage-crash.js": true,
+    "dist/storage.js": true,
+    "dist/transport.js": true,
+    "dist/extensions/conversation-agent.js": true,
+    "validation/input-policy.mjs": true,
+    "validation/model-policy.mjs": true,
+    "package.json": true,
+    "package-lock.json": true
+  },
+  "sdkVersions": {
+    "pi-ai": "1.5.0",
+    "pi-durable": "1.5.0",
+    "pi-schema": "1.5.0",
+    "chord": "1.5.0"
+  },
+  "policyTempRootExplicit": true,
+  "policyCaseCount": 13,
+  "inputPolicyCaseCount": 5,
+  "inputPolicyPrivateRoot": true,
+  "uiMatches": {
+    "assets/ui/assets/index-BPOCLXYW.css": true,
+    "assets/ui/assets/models-Bl7ZLxqt.css": true,
+    "assets/ui/assets/conversation-h4ySIqt7.js": true,
+    "assets/ui/assets/index-CPQoQ1uL.js": true,
+    "assets/ui/assets/models-BswDpcy7.js": true,
+    "assets/ui/index.html": true
+  },
+  "localUiFilesAllPackaged": true,
+  "reviewedSourceSha256": {
+    "android/app/src/androidTest/java/dev/durableagent/probe/ApplicationTest.kt": "ed2183b44f50d767776a5a97f2c97b9ef337a0826c5e579e03988ce253d9c854",
+    "android/app/src/androidTest/java/dev/durableagent/probe/CredentialVaultTest.kt": "0e5bb76431ee4bd33e62cc97c3973292cd833b4ba5cc7eaed5fef39f4a113d15",
+    "android/app/src/androidTest/java/dev/durableagent/probe/ExternalInputFixture.kt": "bf965a19e09e02b13223c60c4195c3eb1339d935f0d0dac58b2383e92b47297b",
+    "android/app/src/androidTest/java/dev/durableagent/probe/InputApplicationTest.kt": "2250bef9d62ee55fc432e8f1af2c2286ac6863123833bcc4e09fc25848682733",
+    "android/app/src/androidTest/java/dev/durableagent/probe/ModelSettingsTest.kt": "c49222c19b94d9e5a39fc58d842d091959839b848d157e61da5c98b555ae6802",
+    "android/app/src/androidTest/java/dev/durableagent/probe/NativeInputCrashTest.kt": "5a9f6eff589a9d378b0cf4e58361587e6ef25280a42adedbfafa4f154e8b5a3c",
+    "android/app/src/androidTest/java/dev/durableagent/probe/NativeInputStoreTest.kt": "b33b834d4c63bfc7c7d3549a9cc2f6ee04f401e13467b2510a26f1d2ca1de107",
+    "android/app/src/androidTest/java/dev/durableagent/probe/RuntimeProbeTest.kt": "935067f693f6ca824a78aa0ba94612f1e3023cd739e169649e4883643df47dcc",
+    "android/app/src/androidTest/java/dev/durableagent/probe/StorageProbeTest.kt": "d2c3b35938f443f438aaf7c7121ebabf65930ef189e2cb1b5331f8d4c9509e79",
+    "android/app/src/debug/AndroidManifest.xml": "62f32ce7e7c0f8ef1a89723ca56d548edefff1d43825c128de3af55426cefc64",
+    "android/app/src/debug/java/dev/durableagent/probe/CredentialBootProbeReceiver.kt": "a5ede68e6525616dc201a5b95995643b49d6af7487e7b772af9b180bf7bed0de",
+    "android/app/src/debug/java/dev/durableagent/probe/CredentialLeaseProbeService.kt": "eb72eeb2684c0cab82740625617fbe50e84b9a8262d24639314b1d51329da20a",
+    "android/app/src/debug/java/dev/durableagent/probe/InputFaultProbeService.kt": "f85af147c2bf8bb9f629566c7283542c7cf0281ede41a02976422221a5c73f61",
+    "android/app/src/debug/java/dev/durableagent/probe/InputTestDocumentsProvider.kt": "2e5d5ad17ce9333fbdef85f51f060e2d67b8e71d7d27a7a13a81c71db0d6d28a",
+    "android/app/src/main/AndroidManifest.xml": "638819646e44eebc92fead9a78ac5180e8a871afab5a2fafd6192bdea4216752",
+    "android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt": "cc4272ccf6f47be9a86bcf6724acddbb8bcd2e4a1dff30c8e2dd0a98f3c2f171",
+    "android/app/src/main/java/dev/durableagent/probe/ApplicationClient.kt": "78ded573320501faa67534b93490cacd2cefc1abccca4d75994506d0d6fe83b3",
+    "android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt": "632101de2d25ea6222881c7c28a016497b8a7a2424bbbeae1d740dc9f843f11e",
+    "android/app/src/main/java/dev/durableagent/probe/CredentialVault.kt": "0e59aa2dd4f9da1e7ee337959232d982c0c29fb5692c8e59dac40e5aa798e0dd",
+    "android/app/src/main/java/dev/durableagent/probe/NativeAttachmentPreparation.kt": "cb48cc0e679108551e5c774eb0116acb91009b792d4a52684c2af11e12ab880c",
+    "android/app/src/main/java/dev/durableagent/probe/NativeAttachmentSource.kt": "f1daed285e568483f5337f3368deb562f0b30a9b32b7c6bbe8a5be4a423d6c96",
+    "android/app/src/main/java/dev/durableagent/probe/NativeCredentialAccess.kt": "85a5817dd78bce34c803f76280bfff0becde127968cc5aaeaa7394534ea922a8",
+    "android/app/src/main/java/dev/durableagent/probe/NativeInputAccess.kt": "ffe1e473a4fd396ecd4b53f517cb3f9addfdc46b8658aab34477604b8d7178e4",
+    "android/app/src/main/java/dev/durableagent/probe/NativeInputBridge.kt": "99513a0c78e428de9abf915f61c94d9ef8d20f620de3e6d2491ad533efa9ff9f",
+    "android/app/src/main/java/dev/durableagent/probe/NativeInputStore.kt": "bbb97ad6a29f9f23b6f00520dc4e0ccdc93f052c65beb53d3dcac6180b16af1b",
+    "android/app/src/main/java/dev/durableagent/probe/ProbeActivity.kt": "34568fe94b60c5b94b170fb172889730925ef69d4e237b90c27eed47df3efe84",
+    "android/app/src/main/java/dev/durableagent/probe/RuntimeBundle.kt": "8549d32ad255d0bb7218f0aefdda77aae30bab5566b0e2edf4ed96ec7be61650",
+    "android/app/src/main/java/dev/durableagent/probe/RuntimeClient.kt": "4336b502e49fe8c24b3ceb229d516f11c976838936a8cfacd9df8a5e5eaabc0d",
+    "android/app/src/main/java/dev/durableagent/probe/RuntimeService.kt": "10c67c882a860b04b285928d185195274f9ebd2229b224de18aae25776253170",
+    "android/app/src/main/java/dev/durableagent/probe/StorageDomainLease.kt": "648057b5ad7881103a04cb1648048ac84d2f1a5ebe0180f4b4cbe1f4f3bce57c",
+    "android/app/src/main/java/dev/durableagent/probe/ValidationCredential.kt": "f794fd7f273f022d27f07c28b8ab8803dc2e802f42dc7d3630c972ece433fc0b",
+    "android/app/src/main/res/xml/data_extraction_rules.xml": "65922aac9b446fad2e16839fd3fd94c5702f7a29a389fa32eb421aedd6bfa6a4",
+    "runtime/src/application-bridge.ts": "d672b109a485746601bc23f057bf9f1644a612923aa9379aff00c71be9b881d9",
+    "runtime/src/application-protocol.ts": "6d99ae3599b49432b7ad23f89f55c31e85c885e69714f2167c25f8c27329abaf",
+    "runtime/src/application-validation.ts": "dc446972498b0952182ed2b3296c2d564dc3dbb000d66b61f186dad587190550",
+    "runtime/src/application.ts": "4f9c31cca61b8f391e555d5e529d71c28fe78d94d16b26b358aaf4ef0a60ddda",
+    "runtime/src/bridge.ts": "a387a7498024ef71929c15b39ee5eb47d285c637cebfebbfd64d4ccd588e1caf",
+    "runtime/src/capabilities.ts": "677b57b5fe40fd319ce5cd1ce837505d7197ace290f8118ec7a164e525bf4af5",
+    "runtime/src/extensions/conversation-agent.ts": "f88bb86f457d892d44287c6845994fccf17be25f3931a8c931d4e3d6ed89e2e1",
+    "runtime/src/input-protocol.ts": "b27ecbebdbf80ffc427d1c8fcb0058f125eea7d356fc319d44e56d4070bf694e",
+    "runtime/src/input.ts": "e190f38a1d14637c70a99545ed1b56ae1940b05aa0d82ea54dad48ff89d769ff",
+    "runtime/src/live-model.ts": "a4673fb9ed4e42f7a5c1a32f496eb97345238b00cf1bd66115d8e83b83f0e798",
+    "runtime/src/model-connections.ts": "27c80071183d5ff71a5643d230abde15ed116bdfcd1f813c5809bae7e65709b3",
+    "runtime/src/model-protocol.ts": "bc3ce90e1755e34c15f39dcf59742eb315b66120c4764928d4fe639920b40b4d",
+    "runtime/src/probe.ts": "b3a22161ccba510873efc360672fb4dc7e29b6ea553c7f4b9fa8d1fe21fd3b23",
+    "runtime/src/sqlite-checks.ts": "434e26d91b589deb50b452d36be49d87c08c4e5abc4cb288d0d5cf394867d04d",
+    "runtime/src/storage-bridge.ts": "db6c902a3134ee12176b4d88353d0e8b5bfe9ae97ba0ec91df7eedd896e61ce0",
+    "runtime/src/storage-checks.ts": "83369cd25de5035bfaa066e46ca85851364ff82e1dfce896702886963295e3ce",
+    "runtime/src/storage-crash.ts": "ea276360c7d408b0dd5ee8c697032cb8328e07c0584e54bf84665d1fa6e82dee",
+    "runtime/src/storage.ts": "a65bedc92727ab5b670ac3c095e9ca342c2112d57b4e97c6147d522d68bf99e5",
+    "runtime/src/transport.ts": "a64fb1a4e6fa05633fdc155611e66100a6fa5ec3cf2da1202b6a251b1e0da101",
+    "runtime/validation/input-policy.mjs": "203fd475af4f8bb1cae25aa09d58c61a153323a6f59f0ddb29e51bd85b4813bd",
+    "runtime/validation/model-policy.mjs": "c59ed044abca150d8830659b846e19830251213146010ed6be621820c824cedc",
+    "ui/src/App.tsx": "2af3de959f0a1d0c8af1a4ef240ab4afc1f72f142f8b16fe4bf28993d8a8545f",
+    "ui/src/browser.ts": "4b7dfd5ef9dfff4d25888889c7fa84c52a684778c11ebfa6ba432b74ff8f6659",
+    "ui/src/client.ts": "1623f03e774f8db37fd750ad4a306cd87079812e5a50e899c32775e49c50a494",
+    "ui/src/controller.ts": "d7759fadf882d1063c72182e3918177c683fea53fdc64d9a24d3002b7af83c0d",
+    "ui/src/drafts.ts": "3b2b304cca27413cb17bc699a67f4f1de290490f2339d4a6b2c5ba4484bf4666",
+    "ui/src/extensions/attachments.tsx": "38f478710c2666d10772113a7482aec681b30d7a0a41705d3239a4eac07d0b2b",
+    "ui/src/extensions/conversation.tsx": "7a4c60b9fea52294c681db762492d6c1566d19e8499f8a04698cb79cc87c549c",
+    "ui/src/extensions/models.tsx": "298766099363ef27acdb980ccdd962fc67fe035f9206361d898530533b5258e8",
+    "ui/src/extensions.ts": "dbbcb4106ea9d3ef0207af895ed1b9cd0f79d051c60f93bbf8c94a6f5f2e37f4",
+    "ui/src/main.tsx": "a04656019c2adef7720c20ae706d65dc1c7965fbbc13d3b0283bcb59862adbef",
+    "ui/src/models.css": "0110c6602f336e094596ea925da179155b89c82b65c003177dfebf042f6c7680",
+    "ui/src/style.css": "17d432d2830037b5d04d5c73d47408f3bef5982581162f4c7cd939038f3e16bc"
+  }
+}
