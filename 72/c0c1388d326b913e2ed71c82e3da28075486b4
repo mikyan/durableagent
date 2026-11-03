@@ -1,0 +1,218 @@
+docs/evidence/t06/t06-s23-final-byte-audit.json
+  s_467dcb949b5b60::t_bcb9498dd858bd 1-19
+android/README.md
+  s_467dcb949b5b60::t_041d60a6cfd7d7 88-89
+  s_467dcb949b5b60::t_78a8db86e72fe4 1-87
+runtime/INPUTS.md
+  s_467dcb949b5b60::t_78a8db86e72fe4 1-31
+docs/evidence/t06/t06-emu16k-ui-process-final-recovered.json
+  s_467dcb949b5b60::t_bcb9498dd858bd 1-25
+README.md
+  s_467dcb949b5b60::t_d7750465ae705e 5,11,13
+docs/specs/v1/tickets/06-drafts-and-attachments.md
+  s_467dcb949b5b60::t_b5e4507cbf410c 3,11-22,48
+  s_467dcb949b5b60::t_8e31bf813af84d 24
+  s_467dcb949b5b60::t_02606189731a79 23
+ui/test/input-platform.ts
+  s_467dcb949b5b60::t_ccbb1f77a23c79 1-46
+android/scripts/input-ui-process.mjs
+  s_467dcb949b5b60::t_bcb9498dd858bd 1-82
+docs/evidence/t06/README.md
+  s_467dcb949b5b60::t_43096ac8c75031 27-28,48-50,53-54
+  s_467dcb949b5b60::t_6baf04cab81e2b 1-24,56-91
+  s_467dcb949b5b60::t_cbba66f4f86079 25-26,30-47
+  s_467dcb949b5b60::t_bc11dc06e44947 29,55
+  s_467dcb949b5b60::t_150a648cc1b4c4 51-52
+android/app/src/androidTest/java/dev/durableagent/probe/ExternalInputFixture.kt
+  s_467dcb949b5b60::t_7b63bb1d1b40f9 1-33
+android/app/src/debug/AndroidManifest.xml
+  s_467dcb949b5b60::t_1556d576610f3f 2,6-9
+android/app/src/debug/java/dev/durableagent/probe/InputTestDocumentsProvider.kt
+  s_467dcb949b5b60::t_85d041707acdd4 1-87
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_5855719c7ef225 14,26-28,40-44,56-62,86-87,201
+android/app/src/main/java/dev/durableagent/probe/NativeInputAccess.kt
+  s_467dcb949b5b60::t_47942a596b6e0a 1-52
+android/app/src/main/java/dev/durableagent/probe/NativeInputBridge.kt
+  s_467dcb949b5b60::t_83f95e0245d944 1-101
+android/app/src/main/java/dev/durableagent/probe/NativeInputStore.kt
+  s_467dcb949b5b60::t_e02c9d1322c19b 1-615
+android/fixtures/input-source/README.md
+  s_467dcb949b5b60::t_f1abaa18e01bdd 1-61
+android/fixtures/input-source/app/build.gradle.kts
+  s_467dcb949b5b60::t_7b28565e77d9b9 1-8
+android/fixtures/input-source/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_ea7a262dd03383 1-12
+android/fixtures/input-source/app/src/main/java/dev/durableagent/inputsource/ControlReceiver.java
+  s_467dcb949b5b60::t_3ffc44c2f572bd 1-34
+android/fixtures/input-source/app/src/main/java/dev/durableagent/inputsource/FixtureFiles.java
+  s_467dcb949b5b60::t_6493e19c071b5e 1-45
+android/fixtures/input-source/app/src/main/java/dev/durableagent/inputsource/SourceActivity.java
+  s_467dcb949b5b60::t_340876f97367df 1-12
+android/fixtures/input-source/app/src/main/java/dev/durableagent/inputsource/SourceProvider.java
+  s_467dcb949b5b60::t_9365b6255bb31e 1-57
+android/fixtures/input-source/build.gradle.kts
+  s_467dcb949b5b60::t_00dfdaef3662bb 1
+android/fixtures/input-source/settings.gradle.kts
+  s_467dcb949b5b60::t_b945830d037657 1-4
+docs/evidence/t06/t06-emu16k-final-byte-audit.json
+  s_467dcb949b5b60::t_1c9742dc75baa7 1-19
+docs/evidence/t06/t06-emu16k-full-final.log
+  s_467dcb949b5b60::t_a0baf074526499 1-442
+docs/evidence/t06/t06-emu16k-full-first.log
+  s_467dcb949b5b60::t_b2afb1fcdf1728 1-102
+docs/evidence/t06/t06-emu16k-native-first.log
+  s_467dcb949b5b60::t_4f6279a83768e7 1-74
+docs/evidence/t06/t06-emu16k-native-fourth-external-fixed.log
+  s_467dcb949b5b60::t_39cedb967eddd8 1-25
+docs/evidence/t06/t06-emu16k-native-fourth-targeted.log
+  s_467dcb949b5b60::t_2a5c94c4d9a3fc 1-63
+docs/evidence/t06/t06-emu16k-native-recovery-red.log
+  s_467dcb949b5b60::t_db2c605da13b9b 1-55
+docs/evidence/t06/t06-emu16k-native-second.log
+  s_467dcb949b5b60::t_bc633ecace923e 1-123
+docs/evidence/t06/t06-emu16k-native-selection-green.log
+  s_467dcb949b5b60::t_bec0c52b45db5a 1-23
+docs/evidence/t06/t06-emu16k-native-selection-red.log
+  s_467dcb949b5b60::t_d60e33df89882b 1-41
+docs/evidence/t06/t06-emu16k-native-third.log
+  s_467dcb949b5b60::t_8d3fff209b42ea 1-301
+docs/evidence/t06/t06-emu16k-source-pool-red-labeled.log
+  s_467dcb949b5b60::t_a39f45298b4cad 1-44
+docs/evidence/t06/t06-emu16k-source-pool-red-matched.log
+  s_467dcb949b5b60::t_d0d86a68b8d62c 1-48
+docs/evidence/t06/t06-emu16k-system-picker-final.log
+  s_467dcb949b5b60::t_f40ab0fae9bca5 1-27
+docs/evidence/t06/t06-emu16k-system-picker-first.log
+  s_467dcb949b5b60::t_185517e7d71250 1-27
+docs/evidence/t06/t06-emu16k-ui-process-final-failed.json
+  s_467dcb949b5b60::t_404b12d48f8d66 1-25
+docs/evidence/t06/t06-emu16k-ui-process-final-scoped-failed.json
+  s_467dcb949b5b60::t_6f0beda6ad1930 1-8
+docs/evidence/t06/t06-emu16k-ui-process-final-scoped-v2.json
+  s_467dcb949b5b60::t_f0bb097d019913 1-41
+docs/evidence/t06/t06-final-apk-inspection.json
+  s_467dcb949b5b60::t_dada4338eaf020 1-160
+docs/evidence/t06/t06-runtime-frozen-tests.log
+  s_467dcb949b5b60::t_854b6f32f951e8 1-135
+docs/evidence/t06/t06-s23-full-final.log
+  s_467dcb949b5b60::t_654fb3e688492f 1-397
+docs/evidence/t06/t06-s23-full-first.log
+  s_467dcb949b5b60::t_8b49a9a86327ff 1-57
+docs/evidence/t06/t06-s23-native-first.log
+  s_467dcb949b5b60::t_ab68fcfe3e17e4 1-51
+docs/evidence/t06/t06-s23-native-fourth-external-fixed.log
+  s_467dcb949b5b60::t_dd0a9fd6fa7c35 1-25
+docs/evidence/t06/t06-s23-native-fourth-targeted.log
+  s_467dcb949b5b60::t_f891ba00d1285d 1-63
+docs/evidence/t06/t06-s23-native-recovery-red.log
+  s_467dcb949b5b60::t_b12f8e40ffe063 1-55
+docs/evidence/t06/t06-s23-native-second.log
+  s_467dcb949b5b60::t_c5124aee3d45f9 1-123
+docs/evidence/t06/t06-s23-native-selection-green.log
+  s_467dcb949b5b60::t_90f79ade993650 1-23
+docs/evidence/t06/t06-s23-native-selection-red.log
+  s_467dcb949b5b60::t_5280ff084213ed 1-41
+docs/evidence/t06/t06-s23-native-third.log
+  s_467dcb949b5b60::t_b5c6339833222c 1-300
+docs/evidence/t06/t06-s23-ui-process-final.json
+  s_467dcb949b5b60::t_7fc9db9f109fc7 1-40
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_70e8e9df0f74ed 10-11,18-20,31,36-45
+runtime/src/application.ts
+  s_467dcb949b5b60::t_31549a5efc003c 9-11,20-21,35-36,63,113-115,117-122,156,174,203-210,213-217
+runtime/src/input-protocol.ts
+  s_467dcb949b5b60::t_58d087f16244c3 1-26
+runtime/test/input.test.mjs
+  s_467dcb949b5b60::t_549932782d8d2e 1-3
+runtime/validation/input-policy.mjs
+  s_467dcb949b5b60::t_93d4487b0dbb32 1-122
+ui/README.md
+  s_467dcb949b5b60::t_6e386845905af8 1,3,28,30,32-38,49-55,76,79-81
+ui/src/extensions/attachments.tsx
+  s_467dcb949b5b60::t_733a5cc3d7f7f3 1-20
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_3cfdfb1cf91b13 6-7,37,39-42,45,51,57,62,66,73,83-84,98-99,104,107,110-111,114,118-121,124-126,128-129
+ui/test/app.test.tsx
+  s_467dcb949b5b60::t_02cce1e5babafb 5,13,22,30,35,69,79,83,88
+ui/test/application-real.test.mjs
+  s_467dcb949b5b60::t_052eb79d514d1a 12,19-20,25-26
+ui/test/controller.test.ts
+  s_467dcb949b5b60::t_3a17106e3208df 2,8,14,20,24,38,41,46,52,62,68,75
+ui/test/input-page.test.tsx
+  s_467dcb949b5b60::t_bc788a219dcd60 1-67
+ui/test/models-real.test.mjs
+  s_467dcb949b5b60::t_237b2d6edc0116 12,18,22,26-27
+android/app/src/androidTest/java/dev/durableagent/probe/InputApplicationTest.kt
+  s_966fc21fefbb66::t_33f61e38d6c40f 1-239
+android/app/src/androidTest/java/dev/durableagent/probe/NativeInputCrashTest.kt
+  s_966fc21fefbb66::t_83645ec4f4a9b8 1-86
+android/app/src/androidTest/java/dev/durableagent/probe/NativeInputStoreTest.kt
+  s_5996300bc1a7a2::t_fb194cd2af64d0 1-464
+android/app/src/debug/java/dev/durableagent/probe/InputFaultProbeService.kt
+  s_966fc21fefbb66::t_4b03b3bdb92308 1-42
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_966fc21fefbb66::t_68ff8e503a0f2b 4,17,24,28-31,34,46,52-60,74-75
+android/app/src/main/java/dev/durableagent/probe/NativeAttachmentPreparation.kt
+  s_966fc21fefbb66::t_28f5518fbece94 1-91
+android/app/src/main/java/dev/durableagent/probe/NativeAttachmentSource.kt
+  s_5996300bc1a7a2::t_945453dc642d35 1-59
+runtime/src/application-protocol.ts
+  s_4656f38e701a3b::t_507e1eac3bc94d 9-10,14
+runtime/src/input.ts
+  s_966fc21fefbb66::t_c3bc5f3a17fc08 1-123
+runtime/src/model-connections.ts
+  s_966fc21fefbb66::t_b3d4f9ca6177da 9,15,28,65,67,70-71,84,88,92-95,110-111,113,120,125
+ui/src/client.ts
+  s_4656f38e701a3b::t_9c418dfee55b2c 15,20
+ui/src/controller.ts
+  s_4656f38e701a3b::t_dcbc24bc0ceb6c 4-5,8,14,20,24,33-44,69,84-87,91,93,95,105,107-110,113,115-127,129-135,218-219
+ui/src/drafts.ts
+  s_966fc21fefbb66::t_f570e151680fda 1-190
+ui/src/style.css
+  s_4656f38e701a3b::t_b4a67003c6bd57 9
+ui/test/drafts.test.ts
+  s_5996300bc1a7a2::t_687a8ebdc794c1 1-263
+ui/test/input-controller.test.ts
+  s_467dcb949b5b60::t_63746a1c62ad18 1-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "72c0c1388d326b913e2ed71c82e3da28075486b4",
+  "prompts": {},
+  "sessions": {
+    "s_4656f38e701a3b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a269-9015-7c23-97f8-527284353fa1",
+        "model": "unknown"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_5996300bc1a7a2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a289-5acd-7910-a35f-55f1a378be00",
+        "model": "unknown"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_966fc21fefbb66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a22c-f827-7782-9003-b1107f40ca51",
+        "model": "unknown"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
