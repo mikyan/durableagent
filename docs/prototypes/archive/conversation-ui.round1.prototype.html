@@ -1,0 +1,361 @@
+<!doctype html>
+<!-- THROWAWAY UI PROTOTYPE. Three structurally different conversation layouts on one route, selected by ?variant=A|B|C. No production app or existing route exists yet. All data and actions are simulated in memory. -->
+<html lang="zh-CN" data-build="prototype">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>本地 Agent · 页面布局原型</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23356b54'/%3E%3Ctext x='8' y='23' font-size='25' fill='white'%3E%CF%80%3C/text%3E%3C/svg%3E">
+<style>
+:root{font-family:Inter,"Segoe UI","PingFang SC","Microsoft YaHei UI",sans-serif;color-scheme:light;--bg:#f8f7f4;--surface:#fff;--surface-soft:#f0f1ed;--text:#242d28;--muted:#747e76;--line:#e2e6df;--accent:#356b54;--accent-soft:#e7f0e8;--on-accent:#fff;--danger:#b54840;--warning:#9a6b24;--shadow:0 12px 38px #25372b14;--notice-height:28px;--prototype-space:84px}
+*{box-sizing:border-box}[hidden]{display:none!important}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{height:100dvh;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;display:grid;grid-template-rows:var(--notice-height) minmax(0,1fr) var(--prototype-space)}button,input,textarea,select{font:inherit}button{cursor:pointer;color:inherit}button,select,a{-webkit-tap-highlight-color:transparent}button{border:0;background:none}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}button:disabled{cursor:default;opacity:.45}svg{display:inline-block;flex:none;vertical-align:middle}button svg{pointer-events:none}h1,h2,h3,p{margin:0}button{touch-action:manipulation}.icon-button{width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;border-radius:12px;flex:none}.icon-button:hover{background:var(--surface-soft)}.text-button{min-height:42px;padding:7px 12px;border-radius:10px;color:var(--muted)}.text-button:hover{background:var(--surface-soft);color:var(--text)}.solid-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:9px 16px;background:var(--accent);color:var(--on-accent);border-radius:13px;font-weight:600}.muted{color:var(--muted)}.ellipsis{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.small-label{font-size:11px;letter-spacing:.08em;font-weight:650}.project-pill{display:inline-flex;align-items:center;gap:6px;min-height:32px;max-width:100%;font-size:11px;color:var(--muted);border-radius:8px;padding:3px 7px}.project-pill:hover{background:var(--surface-soft)}.brand-mark{width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;color:var(--accent);background:var(--accent-soft);font-size:22px;font-family:Georgia,serif;font-style:italic;line-height:1}.prototype-notice{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 15px;background:#eceeea;color:#647067;font-size:10px;letter-spacing:.035em;white-space:nowrap;overflow:hidden;z-index:5}.prototype-notice strong{font-weight:650}.prototype-app{min-width:0;min-height:0;position:relative;overflow:hidden}.prototype-spacer{pointer-events:none;background:var(--bg)}.chat-scroll{overflow:auto;overscroll-behavior:contain;min-height:0;scrollbar-width:thin;scrollbar-color:var(--line) transparent}.conversation-flow{max-width:690px;margin:0 auto;padding:10px 0 24px}.conversation-date{text-align:center;font-size:11px;color:var(--muted);margin:5px 0 23px}.message{margin:0 0 24px}.message.user{display:flex;justify-content:flex-end}.user-bubble{background:var(--surface-soft);border-radius:18px 18px 5px 18px;padding:13px 17px;max-width:87%;line-height:1.75;font-size:14px}.speaker{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:650;margin-bottom:10px}.speaker .brand-mark{width:23px;height:23px;border-radius:7px;font-size:17px}.speaker .speaker-meta{font-size:10px;font-weight:400;color:var(--muted);margin-left:2px}.assistant-copy{font-size:14px;line-height:1.85;padding-left:31px}.assistant-copy p+p{margin-top:10px}.assistant-copy strong{font-weight:650}.activity{margin:15px 0 4px 31px;border:1px solid var(--line);border-radius:13px;background:var(--surface);overflow:hidden}.activity summary{list-style:none;display:flex;align-items:center;gap:9px;min-height:47px;padding:10px 13px;cursor:pointer;font-size:12px;color:var(--muted)}.activity summary::-webkit-details-marker{display:none}.activity summary .activity-title{flex:1}.activity summary .chevron{transition:transform .15s}.activity[open] summary .chevron{transform:rotate(90deg)}.activity-step{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--muted);padding:10px 14px;border-top:1px solid var(--line)}.activity-step svg{margin-top:2px}.activity-step strong{display:block;font-size:12px;color:var(--text);font-weight:500}.activity-step code{font:10px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}.activity-step .step-end{margin-left:auto;white-space:nowrap;font-size:10px}.inline-note{display:flex;gap:9px;color:var(--muted);font-size:12px;padding:4px 0 0 31px;line-height:1.8}.inline-note svg{margin-top:3px}.inline-note.waiting,.inline-note.offline{color:var(--warning)}.inline-note.done{color:var(--accent)}.sample-note{font-size:11px;color:var(--muted);margin-top:10px}.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--muted);flex:none}.status-dot.running{background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}.status-dot.waiting,.status-dot.offline{background:var(--warning)}.status-dot.done{background:var(--accent)}.status-dot.stopped,.status-dot.idle{background:var(--muted);opacity:.65}.execution-status{display:flex;align-items:center;gap:9px;min-height:35px;padding:4px 3px 8px;font-size:11px;color:var(--muted)}.execution-status .status-copy{flex:1;min-width:0}.execution-status .status-main{color:var(--text);font-weight:500}.execution-status .status-sub{color:var(--muted);margin-left:7px}.execution-status.waiting .status-main,.execution-status.offline .status-main{color:var(--warning)}.stop-button{min-width:38px;min-height:32px;display:inline-flex;gap:5px;align-items:center;justify-content:center;padding:3px 9px;border:1px solid var(--line);border-radius:8px;font-size:10px;white-space:nowrap}.stop-button:hover{background:var(--surface-soft)}.composer{background:var(--surface);border:1px solid var(--line);border-radius:19px;padding:12px 12px 9px;box-shadow:0 4px 18px #1f302604}.composer textarea{display:block;width:100%;min-height:29px;max-height:116px;resize:none;padding:2px 3px 8px;border:0;outline:none!important;background:transparent;color:var(--text);font-size:14px;line-height:1.6}.composer textarea::placeholder{color:var(--muted);opacity:.85}.composer-bottom{display:flex;align-items:center;gap:8px;min-height:33px}.composer-model{display:inline-flex;align-items:center;gap:5px;color:var(--muted);font-size:11px;min-height:32px;padding:3px 7px;border-radius:8px}.composer-model:hover{background:var(--surface-soft)}.composer .composer-hint{font-size:10px;color:var(--muted);margin-left:auto}.send-button{height:34px;width:34px;display:inline-flex;align-items:center;justify-content:center;flex:none;border-radius:11px;background:var(--accent);color:var(--on-accent)}.send-button:hover{filter:brightness(1.06)}.composer-caption{font-size:10px;color:var(--muted);text-align:center;letter-spacing:.02em;margin-top:9px}.welcome{min-height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 12px 20px}.welcome .brand-mark{width:47px;height:47px;font-size:34px;border-radius:15px;margin-bottom:23px}.welcome h1{font-weight:580;font-size:27px;letter-spacing:-.7px;line-height:1.5}.welcome p{font-size:12px;color:var(--muted);margin-top:10px;max-width:320px;line-height:1.9}.welcome-prompts{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:25px}.welcome-prompts button{border:1px solid var(--line);border-radius:100px;padding:8px 13px;font-size:11px;min-height:38px;background:var(--surface)}.welcome-prompts button:hover{border-color:var(--accent);color:var(--accent)}.session-list{display:flex;flex-direction:column;gap:4px}.session-row{display:flex;align-items:flex-start;text-align:left;gap:10px;min-height:78px;width:100%;border-radius:13px;padding:13px 11px}.session-row:hover{background:var(--surface-soft)}.session-row.selected{background:var(--accent-soft)}.session-row>.status-dot{margin-top:7px}.session-copy{min-width:0;flex:1}.session-title{display:block;font-size:13px;font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.session-snippet{display:block;margin-top:3px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.session-meta{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none;font-size:10px;color:var(--muted)}.session-time{white-space:nowrap}.session-phase{font-size:9px;color:var(--muted);white-space:nowrap}.session-phase.waiting,.session-phase.offline{color:var(--warning)}.session-phase.running{color:var(--accent)}.empty-list{padding:30px 12px;text-align:center;font-size:12px;color:var(--muted)}
+/* A: a deliberately quiet, chat-first canvas. History is a drawer on every width. */
+.variant-a{height:100%;display:flex;flex-direction:column;background:var(--bg)}.a-header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;padding:16px 25px 13px;border-bottom:1px solid transparent;flex:none}.a-brand{display:flex;align-items:center;gap:10px;min-width:0}.a-brand-name{font-size:13px;font-weight:650;letter-spacing:.02em}.a-conversation-heading{text-align:center;min-width:0;max-width:300px}.a-conversation-heading h2{font-size:14px;font-weight:600;line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.a-conversation-heading .project-pill{margin-top:2px}.a-header-actions{display:flex;justify-content:flex-end;gap:3px}.a-main{width:min(100%,790px);min-height:0;flex:1;display:flex;flex-direction:column;margin:0 auto;padding:0 28px 16px}.a-local-note{display:flex;align-items:center;justify-content:space-between;font-size:10px;color:var(--muted);padding:7px 1px 12px;letter-spacing:.02em;flex:none}.a-local-note span{display:flex;align-items:center;gap:6px}.a-chat-scroll{flex:1;min-height:0}.a-compose-area{flex:none;padding-top:13px;background:var(--bg)}.a-yolo{font-size:9px;letter-spacing:.07em;border:1px solid var(--line);padding:2px 6px;border-radius:5px;opacity:.8}.variant-a .welcome{min-height:min(420px,100%)}
+/* Throwaway variant B: cool paper, list-first mobile, persistent tablet split. */
+body[data-variant='B'] {
+  --bg: #eef2f6;
+  --surface: #fbfcfe;
+  --surface-soft: #f0f4f8;
+  --text: #243347;
+  --muted: #64748a;
+  --line: #dce3ed;
+  --accent: #315f9e;
+  --accent-soft: #e6eef9;
+  --on-accent: #ffffff;
+  --danger: #b54b52;
+  --warning: #956c2b;
+  --shadow: 0 6px 24px #203c6010;
+}
+.variant-b, .variant-b * { box-sizing: border-box; }
+.variant-b {
+  height: 100%; min-height: 0; min-width: 0; overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 1fr);
+  background: var(--surface); color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+.variant-b button, .variant-b textarea { font: inherit; }
+.variant-b button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.variant-b button:focus-visible, .variant-b textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.variant-b button { min-height: 44px; }
+.variant-b .b-inbox, .variant-b .b-detail { height: 100%; min-height: 0; min-width: 0; overflow: hidden; }
+.variant-b .b-inbox { display: flex; flex-direction: column; background: var(--surface-soft); }
+.variant-b .b-detail { display: none; flex-direction: column; background: var(--surface); }
+.variant-b[data-view='chat'] .b-inbox { display: none; }
+.variant-b[data-view='chat'] .b-detail { display: flex; }
+.variant-b .b-inbox-header { display: flex; align-items: center; gap: 6px; padding: 17px 16px 10px; flex-shrink: 0; }
+.variant-b .b-heading { flex: 1; min-width: 0; }
+.variant-b .b-eyebrow { display: block; font-size: 11px; color: var(--muted); letter-spacing: .04em; margin-bottom: 4px; }
+.variant-b h1 { font-size: 23px; font-weight: 650; letter-spacing: -.04em; margin: 0; }
+.variant-b .b-icon-button { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; border-radius: 12px; color: var(--muted); background: transparent; }
+.variant-b .b-primary-icon { background: var(--accent); color: var(--on-accent); }
+.variant-b .b-icon-button:hover { background: var(--accent-soft); color: var(--accent); }
+.variant-b .b-filters { display: flex; margin: 8px 16px 0; border-bottom: 1px solid var(--line); flex-shrink: 0; }
+.variant-b .b-filters button { flex: 1; padding: 8px; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: transparent; color: var(--muted); font-size: 14px; }
+.variant-b .b-filters button[aria-pressed='true'] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 650; }
+.variant-b .b-list-caption { min-height: 48px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; font-size: 12px; color: var(--muted); flex-shrink: 0; }
+.variant-b .b-list-caption button { display: inline-flex; align-items: center; gap: 5px; color: var(--muted); background: transparent; border: 0; padding: 0 2px 0 10px; font-size: 12px; }
+.variant-b .b-session-scroll { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 0 8px 12px; scrollbar-width: thin; }
+.variant-b .session-row { width: 100%; min-height: 80px; display: flex; align-items: center; gap: 10px; text-align: left; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; padding: 14px 12px; color: var(--text); }
+.variant-b .session-row.selected { background: var(--accent-soft); border-radius: 10px; border-bottom-color: transparent; box-shadow: inset 3px 0 var(--accent); }
+.variant-b .session-row:hover { background: var(--accent-soft); }
+.variant-b .session-copy { flex: 1; min-width: 0; }
+.variant-b .session-title { display: block; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.variant-b .session-snippet { display: block; font-size: 12px; color: var(--muted); margin-top: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.variant-b .session-meta { flex-shrink: 0; font-size: 11px; color: var(--muted); }
+.variant-b .session-time { font-variant-numeric: tabular-nums; }
+.variant-b .b-empty { text-align: center; padding: 36px 12px; font-size: 14px; line-height: 2; }
+.variant-b .b-empty span { font-size: 12px; color: var(--muted); }
+.variant-b .b-quick-compose { border-top: 1px solid var(--line); padding: 12px 16px 16px; background: var(--surface); flex-shrink: 0; }
+.variant-b .b-compose-caption { display: flex; align-items: center; gap: 5px; margin-bottom: 9px; font-size: 12px; color: var(--text); }
+.variant-b .b-compose-caption span { margin-left: auto; color: var(--muted); font-size: 11px; }
+.variant-b .b-quick-compose form, .variant-b .b-detail-compose form { margin: 0; max-width: none; }
+.variant-b textarea { min-width: 0; max-height: 120px; }
+.variant-b .b-quick-compose textarea { min-height: 44px; }
+.variant-b .b-detail-header { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--line); min-height: 73px; flex-shrink: 0; }
+.variant-b .b-detail-heading { min-width: 0; flex: 1; }
+.variant-b h2 { margin: 0 0 5px; font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.variant-b .b-detail-heading > span { font-size: 11px; color: var(--muted); }
+.variant-b .b-thread { flex: 1; min-height: 0; min-width: 0; overflow: auto; overscroll-behavior: contain; padding: 20px 16px; scrollbar-width: thin; overflow-wrap: anywhere; }
+.variant-b .b-detail-compose { padding: 8px 16px 16px; flex-shrink: 0; background: var(--surface); border-top: 1px solid var(--line); }
+.variant-b .b-status { margin-bottom: 8px; font-size: 12px; color: var(--muted); }
+@media (min-width: 820px) {
+  .variant-b { grid-template-columns: minmax(290px, 35%) minmax(0, 1fr); }
+  .variant-b .b-inbox, .variant-b[data-view='chat'] .b-inbox { display: flex; border-right: 1px solid var(--line); }
+  .variant-b .b-detail, .variant-b[data-view='inbox'] .b-detail { display: flex; }
+  .variant-b .b-back { display: none; }
+  .variant-b .b-detail-header { padding: 16px 24px; min-height: 85px; }
+  .variant-b .b-thread { padding: 28px clamp(20px, 3vw, 56px); }
+  .variant-b .b-detail-compose { padding: 12px 24px 20px; }
+}
+@media (max-height: 560px) {
+  .variant-b .b-inbox-header { padding-top: 8px; padding-bottom: 2px; }
+  .variant-b .b-eyebrow { display: none; }
+  .variant-b .b-list-caption { min-height: 44px; }
+  .variant-b .b-quick-compose { padding: 8px 12px; }
+  .variant-b .b-compose-caption { margin-bottom: 5px; }
+  .variant-b .b-detail-header { padding-top: 6px; padding-bottom: 6px; min-height: 58px; }
+}
+
+/* Throwaway C: quiet, bottom-first chat. The host owns viewport space and its switcher. */
+body[data-variant='C'] {
+  color-scheme: dark;
+  --bg: #151c1b;
+  --surface: #1b2422;
+  --surface-soft: #232f2b;
+  --text: #e4ede8;
+  --muted: #9aafa5;
+  --line: #34443d;
+  --accent: #b2dbc6;
+  --accent-soft: #2c4639;
+  --on-accent: #16271e;
+  --danger: #eaa89f;
+  --warning: #d9c18d;
+  --shadow: 0 14px 48px #0005;
+}
+.variant-c, .variant-c * { box-sizing: border-box; }
+.variant-c {
+  height: 100%; min-height: 0; min-width: 0;
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--bg); color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+.variant-c button { font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.variant-c button:focus-visible, .variant-c textarea:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: -2px;
+}
+.variant-c button svg { flex-shrink: 0; }
+.variant-c .c-heading { flex: 0 0 auto; }
+.variant-c .c-heading-inner {
+  max-width: 980px; margin: 0 auto; padding: 17px 20px 13px;
+  display: flex; align-items: center; gap: 16px;
+}
+.variant-c .c-heading-copy { min-width: 0; flex: 1; }
+.variant-c .c-eyebrow { color: var(--muted); font-size: 11px; letter-spacing: .1em; }
+.variant-c h1 { margin: 4px 0 0; font-size: 17px; font-weight: 550; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.variant-c .c-context { display: flex; align-items: center; gap: 6px; max-width: 28%; font-size: 11px; color: var(--muted); }
+.variant-c .c-context span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.variant-c .c-chat-scroll { min-height: 0; min-width: 0; flex: 1; overflow: auto; overscroll-behavior: contain; scrollbar-color: var(--line) transparent; }
+.variant-c .c-chat-content { max-width: 860px; min-height: 100%; margin: 0 auto; padding: 16px 20px 28px; overflow-wrap: anywhere; }
+.variant-c .c-bottom { flex: 0 0 auto; min-width: 0; border-top: 1px solid var(--line); background: var(--surface); }
+.variant-c .c-bottom-inner { max-width: 980px; margin: 0 auto; }
+.variant-c .c-switch-row { display: flex; align-items: center; min-width: 0; padding: 4px 10px 0; gap: 4px; }
+.variant-c .c-switch-track { min-width: 0; flex: 1; display: flex; align-items: center; gap: 6px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.variant-c .c-conversation { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; max-width: 220px; flex-shrink: 0; padding: 8px 11px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); }
+.variant-c .c-conversation.is-active { border-bottom-color: var(--accent); color: var(--accent); }
+.variant-c .c-chip-title { max-width: 135px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.variant-c .c-chip-phase { font-size: 10px; white-space: nowrap; opacity: .85; }
+.variant-c .c-conversation .status-dot { flex: 0 0 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--muted); }
+.variant-c .c-conversation .status-dot.running { background: var(--accent); }
+.variant-c .c-conversation .status-dot.waiting { background: var(--warning); }
+.variant-c .c-conversation .status-dot.offline, .variant-c .c-conversation .status-dot.stopped { background: var(--danger); }
+.variant-c .c-history-shortcut { width: 44px; height: 44px; flex: 0 0 44px; display: grid; place-items: center; border: 0; background: transparent; color: var(--muted); }
+.variant-c .c-no-conversations { padding: 12px; font-size: 12px; color: var(--muted); }
+.variant-c .c-compose-area { padding: 5px 16px 9px; }
+.variant-c .c-status { min-width: 0; font-size: 11px; color: var(--muted); padding: 0 3px 6px; }
+.variant-c .c-status > * { margin-top: 0; margin-bottom: 0; }
+.variant-c .c-status button { min-width: 44px; min-height: 44px; }
+.variant-c .c-composer { min-width: 0; }
+.variant-c .c-composer form { margin: 0; width: 100%; background: var(--surface-soft); border-radius: 18px; border: 1px solid var(--line); }
+.variant-c .c-composer textarea { min-width: 0; min-height: 44px; max-height: 120px; color: var(--text); background: transparent; font: inherit; font-size: 15px; resize: none; }
+.variant-c .c-composer textarea::placeholder { color: var(--muted); }
+.variant-c .c-composer button { min-width: 44px; min-height: 44px; }
+.variant-c .c-navigation { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; max-width: 540px; padding: 7px 12px 9px; margin: 0 auto; }
+.variant-c .c-nav-button { min-width: 0; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 5px 2px; color: var(--muted); border: 0; border-radius: 14px; background: transparent; }
+.variant-c .c-nav-button span { font-size: 10px; white-space: nowrap; }
+.variant-c .c-nav-button.is-active { color: var(--accent); background: var(--accent-soft); }
+.variant-c .c-nav-button.c-new-chat { background: var(--accent); color: var(--on-accent); }
+.variant-c .c-inbox { display: flex; flex-direction: column; flex: 1; min-height: 0; width: 100%; max-width: 860px; margin: 0 auto; }
+.variant-c .c-filters { display: flex; gap: 6px; padding: 0 18px 8px; flex-shrink: 0; }
+.variant-c .c-filter { min-height: 44px; padding: 8px 14px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); font-size: 13px; }
+.variant-c .c-filter.is-active { color: var(--accent); border-bottom-color: var(--accent); }
+.variant-c .c-session-scroll { overflow-y: auto; overscroll-behavior: contain; min-height: 0; flex: 1; padding: 0 16px 20px; }
+.variant-c .session-row { min-height: 64px; }
+@media (min-width: 700px) {
+  .variant-c .c-heading-inner { padding: 24px 40px 17px; }
+  .variant-c h1 { font-size: 21px; }
+  .variant-c .c-context { max-width: 40%; font-size: 12px; }
+  .variant-c .c-chat-content { padding: 28px 40px 48px; }
+  .variant-c .c-switch-row { padding: 7px 30px 0; }
+  .variant-c .c-conversation { max-width: 260px; }
+  .variant-c .c-chip-title { max-width: 180px; }
+  .variant-c .c-compose-area { padding: 7px 40px 10px; }
+  .variant-c .c-navigation { gap: 12px; padding-top: 0; padding-bottom: 12px; }
+  .variant-c .c-nav-button { flex-direction: row; gap: 8px; min-height: 48px; }
+  .variant-c .c-nav-button span { font-size: 12px; }
+}
+@media (max-height: 560px) {
+  .variant-c .c-heading-inner { padding-top: 8px; padding-bottom: 8px; }
+  .variant-c .c-eyebrow { display: none; }
+  .variant-c .c-navigation { padding-top: 2px; padding-bottom: 2px; }
+  .variant-c .c-nav-button { flex-direction: row; min-height: 44px; }
+  .variant-c .c-compose-area { padding-top: 2px; padding-bottom: 4px; }
+}
+
+/* Host-owned drawers and demo settings; these are shared primitives, not shared layouts. */
+.modal-layer{position:fixed;inset:var(--notice-height) 0 var(--prototype-space);z-index:50;display:flex;background:#10201555;backdrop-filter:blur(3px)}.modal-layer[hidden]{display:none}.modal-scrim{position:absolute;inset:0}.modal-panel{position:relative;z-index:1;background:var(--surface);color:var(--text);box-shadow:var(--shadow);display:flex;flex-direction:column;min-height:0;border:1px solid var(--line)}.modal-panel.drawer{width:min(350px,88vw);height:100%;border-left:0;border-top:0;border-bottom:0;border-radius:0 20px 20px 0}.modal-panel.sheet{width:min(460px,calc(100% - 32px));max-height:calc(100% - 36px);margin:auto;border-radius:22px}.modal-heading{display:flex;align-items:center;gap:9px;justify-content:space-between;padding:17px 18px 12px;flex:none}.modal-heading h2{font-size:17px;font-weight:650}.modal-content{padding:0 20px 22px;overflow:auto;min-height:0}.drawer .modal-content{padding:0 12px 20px}.drawer-new{margin:1px 6px 19px;width:calc(100% - 12px)}.drawer-label{padding:7px 12px;color:var(--muted);font-size:10px;letter-spacing:.05em}.drawer-footer{border-top:1px solid var(--line);margin-top:18px;padding-top:12px;display:flex;gap:5px}.drawer-footer button{flex:1;font-size:12px;min-height:42px;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:10px}.drawer-footer button:hover{background:var(--surface-soft)}.modal-intro{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.9}.project-row{display:flex;align-items:center;gap:13px;width:100%;padding:15px 6px;text-align:left;min-height:72px;border-bottom:1px solid var(--line)}.project-row .project-folder{background:var(--accent-soft);color:var(--accent);width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center}.project-row .project-copy{flex:1;min-width:0}.project-row strong{display:block;font-size:13px;font-weight:550}.project-row small{display:block;font-size:10px;color:var(--muted)}.project-create{display:flex;gap:8px;margin-top:21px}.project-create input{min-width:0;flex:1;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px;color:var(--text);font-size:12px}.project-create button{font-size:12px;padding:7px 12px;min-height:42px;border-radius:10px;background:var(--accent);color:var(--on-accent)}.settings-group+.settings-group{margin-top:24px}.settings-group h3{font-size:10px;letter-spacing:.07em;color:var(--muted);margin-bottom:11px;font-weight:600}.setting-row{display:flex;align-items:center;justify-content:space-between;gap:15px;min-height:58px;border-bottom:1px solid var(--line);font-size:12px}.setting-row small{display:block;font-size:10px;color:var(--muted);margin:2px 0 10px;line-height:1.7}.setting-row .setting-value{color:var(--muted);font-size:11px;text-align:right;max-width:55%}.setting-field{display:block;margin:12px 0}.setting-field span{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}.setting-field input,.setting-field select{width:100%;height:42px;border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:var(--bg);color:var(--text);font-size:12px}.toggle{border-radius:100px;width:43px;height:26px;background:var(--line);padding:3px;position:relative;flex:none}.toggle::after{content:"";display:block;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 4px #0002}.toggle.on{background:var(--accent)}.toggle.on::after{transform:translateX(17px)}.settings-footnote{margin-top:20px;font-size:10px;line-height:1.9;color:var(--muted)}
+/* The switcher belongs to the prototype, never to the proposed product. */
+.prototype-switcher{position:fixed;bottom:max(15px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:2px;background:#202822;color:#f7faf7;border:1px solid #ffffff25;border-radius:100px;padding:5px;box-shadow:0 8px 30px #0c19172b;white-space:nowrap;max-width:calc(100% - 22px)}.prototype-switcher .switch-arrow{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:inherit;flex:none}.prototype-switcher button:hover{background:#ffffff13}.variant-label{min-width:137px;max-width:190px;padding:1px 7px;text-align:center;line-height:1.45}.variant-label strong{display:block;font-size:12px;font-weight:600;letter-spacing:.03em}.variant-label small{display:block;font-size:9px;color:#bac8be;letter-spacing:.08em}.prototype-switcher .inspect-button{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-left:1px solid #ffffff26;margin-left:3px;border-radius:0 20px 20px 0;font-size:12px;color:#d6e0d9}.prototype-panel{color-scheme:light;position:fixed;z-index:99;bottom:78px;left:50%;transform:translateX(-50%);width:min(405px,calc(100% - 24px));max-height:calc(100dvh - 125px);overflow:auto;background:#fff;color:#26322b;border:1px solid #dfe5df;border-radius:19px;box-shadow:0 18px 65px #091e2e35;padding:18px;line-height:1.6}.prototype-panel[hidden]{display:none}.prototype-panel h2{font-size:14px;display:flex;justify-content:space-between;align-items:center}.prototype-panel h2 button{width:30px;height:30px;display:flex;align-items:center;justify-content:center}.prototype-panel p{font-size:11px;color:#68736c;line-height:1.8;margin:5px 0 15px}.prototype-options{display:flex;gap:6px}.prototype-options button{border:1px solid #e0e6df;flex:1;border-radius:9px;padding:7px 4px;min-height:39px;font-size:11px}.prototype-options button.selected{background:#eaf2eb;border-color:#93b69e;color:#28533c}.prototype-panel label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;margin-top:14px}.prototype-panel select{background:#f5f7f3;border:1px solid #dce3db;color:#26322b;border-radius:8px;padding:7px;max-width:65%;font-size:11px}.prototype-panel details{margin-top:14px;font-size:11px}.prototype-panel summary{cursor:pointer;min-height:30px;color:#607168}.prototype-panel pre{font:10px/1.65 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f5f1;border:1px solid #e5e9e2;border-radius:8px;padding:10px;max-height:190px;overflow:auto}.prototype-feedback{margin-top:14px;display:flex;gap:7px}.prototype-feedback button{font-size:11px;border:1px solid #dce3db;border-radius:9px;min-height:37px;flex:1;padding:7px}.prototype-feedback button:first-child{background:#2e5b41;color:white;border-color:#2e5b41}.toast{position:fixed;z-index:120;left:50%;bottom:89px;transform:translateX(-50%);max-width:min(460px,calc(100% - 40px));background:#26332d;color:white;padding:10px 16px;border-radius:12px;box-shadow:0 6px 24px #0003;font-size:12px;line-height:1.7;text-align:center;pointer-events:none;opacity:0;transition:opacity .15s}.toast.visible{opacity:1}.fatal-error{position:fixed;inset:70px 18px auto;z-index:150;border:1px solid #e5ad9f;background:#fff1ed;color:#7c3024;padding:18px;border-radius:14px;white-space:pre-wrap;font:13px/1.6 monospace}.boot-message{padding:50px 25px;text-align:center;color:var(--muted);font-size:13px}.production-note{display:none}
+@media(max-width:600px){.a-header{grid-template-columns:42px minmax(0,1fr) 86px;padding:9px 11px 6px;gap:4px}.a-brand>.brand-mark,.a-brand-name{display:none}.a-conversation-heading{max-width:none;text-align:left;padding-left:5px}.a-conversation-heading h2{font-size:13px}.a-conversation-heading .project-pill{padding-left:0;font-size:10px}.a-header-actions{gap:0}.a-main{padding:0 19px 10px}.a-local-note{font-size:9px;padding:7px 1px 9px}.conversation-flow{padding:9px 0 15px}.conversation-date{margin-bottom:18px}.message{margin-bottom:21px}.user-bubble{max-width:91%;font-size:13px;padding:11px 14px}.assistant-copy{font-size:13px;line-height:1.9}.activity summary{font-size:11px}.a-compose-area{padding-top:9px}.composer{padding:10px 10px 8px;border-radius:17px}.composer textarea{font-size:14px}.execution-status .status-sub{display:none}.welcome h1{font-size:25px}.variant-a .welcome{min-height:310px}.modal-panel.sheet{width:100%;max-height:94%;margin:auto 0 0;border-radius:22px 22px 0 0;border-bottom:0}.prototype-notice{font-size:9px;padding:0 11px}.prototype-notice .notice-tail{max-width:42%;overflow:hidden;text-overflow:ellipsis}}
+@media(max-height:650px){:root{--prototype-space:70px}.prototype-switcher{bottom:9px}.a-header{padding-top:5px;padding-bottom:3px}.a-local-note{display:none}.a-compose-area{padding-top:5px}.composer-caption{display:none}.welcome{min-height:200px!important;padding-top:12px}.welcome .brand-mark{margin-bottom:10px}.prototype-panel{bottom:69px}.prototype-switcher .switch-arrow{height:35px;width:35px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body data-variant="A">
+<div id="prototypeNotice" class="prototype-notice"><strong>页面原型 · 模拟数据，不执行真实操作</strong><span id="noticeState" class="notice-tail">正在准备布局…</span></div>
+<main id="app" class="prototype-app"><p class="boot-message">正在加载三个页面方案…</p></main>
+<div class="prototype-spacer" aria-hidden="true"></div>
+<div id="modalRoot" class="modal-layer" hidden></div>
+<aside id="prototypePanel" class="prototype-panel" hidden></aside>
+<nav id="prototypeSwitcher" class="prototype-switcher" aria-label="原型布局切换" hidden></nav>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="fatalError" class="fatal-error" role="alert" hidden></div>
+<script>
+window.addEventListener('error',function(event){var box=document.getElementById('fatalError');box.hidden=false;box.textContent='原型没有正常加载。\n'+event.message+'\n请刷新页面，或把这个错误告诉 Pi。';});
+window.addEventListener('unhandledrejection',function(event){var box=document.getElementById('fatalError');box.hidden=false;box.textContent='原型交互发生错误。\n'+String(event.reason);});
+const iconPaths={menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',plus:'<path d="M12 5v14M5 12h14"/>',chevronRight:'<path d="m9 5 7 7-7 7"/>',chevronDown:'<path d="m6 9 6 6 6-6"/>',arrowUp:'<path d="M12 19V5m-6 6 6-6 6 6"/>',arrowLeft:'<path d="M19 12H5m6-6-6 6 6 6"/>',close:'<path d="m6 6 12 12M18 6 6 18"/>',settings:'<path d="m9 3-.6 2.1-1.9 1.1-2.1-.5-2 3.4 1.5 1.6v2.2L2.4 14.5l2 3.4 2.1-.5 1.9 1.1L9 21h4l.6-2.5 1.9-1.1 2.1.5 2-3.4-1.5-1.6v-2.2l1.5-1.6-2-3.4-2.1.5-1.9-1.1L13 3Z"/><circle cx="11" cy="12" r="3"/>',chat:'<path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H8l-5 3V7.5A4.5 4.5 0 0 1 7.5 3h8A4.5 4.5 0 0 1 20 7.5Z"/><path d="M7 8h9M7 12h6"/>',folder:'<path d="M3 7V5a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v11H3Z"/>',more:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',stop:'<rect x="7" y="7" width="10" height="10" rx="1.5" fill="currentColor" stroke="none"/>',check:'<path d="m5 12 4 4L19 6"/>',clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/>',leaf:'<path d="M20 4c-8-2-16 2-16 9a6 6 0 0 0 6 6c7 0 11-7 10-15Z"/><path d="M4 21 15 10"/>',refresh:'<path d="M20 6v5h-5M4 18v-5h5"/><path d="M6 7a7 7 0 0 1 12-1l2 5M4 13l2 5a7 7 0 0 0 12-1"/>',spark:'<path d="m12 3 2.7 6.3L21 12l-6.3 2.7L12 21l-2.7-6.3L3 12l6.3-2.7Z"/>'};
+function Icon(name,size=20){return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(iconPaths[name]||iconPaths.chat)+'</svg>';}
+function esc(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+const conversations=[
+ {id:'downloads',title:'整理下载目录',project:null,phase:'running',time:'刚刚',prompt:'把下载目录里的文件按类型整理一下，重复文件先保留。',reply:'我会先核对文件类型和重复项，再完成归类。重复文件会保留在原处，不删除。',snippet:'正在核对文件 · 26 / 42',requiresNetwork:false,messages:[]},
+ {id:'travel',title:'修改行程表',project:'旅行资料',phase:'waiting',time:'12 分钟前',prompt:'把行程表里的酒店和交通信息分成两张表，保留原文件。',reply:'已读取表格信息。接下来需要下载表格处理依赖，再继续生成两张表。',snippet:'等待 Wi-Fi 下载处理依赖',requiresNetwork:true,messages:[]},
+ {id:'notes',title:'复盘本周笔记',project:'个人笔记',phase:'done',time:'昨天',prompt:'帮我检查本周笔记的命名，把相同主题的放到一起。',reply:'已经完成整理。同主题笔记已归在一起，原有内容没有改动，文件仍保存在你的笔记目录。',snippet:'整理完成 · 原文件内容保留',requiresNetwork:false,messages:[]},
+ {id:'photos',title:'检查重复文件',project:null,phase:'stopped',time:'昨天',prompt:'检查目录里有没有重复文件，先别删除。',reply:'已检查部分文件。你停止了本次执行，我不会自动重新开始。',snippet:'你已停止执行',requiresNetwork:false,messages:[]}
+];
+const projects=[{name:'旅行资料',location:'手机 / Documents / 旅行资料'},{name:'个人笔记',location:'手机 / Documents / 个人笔记'}];
+const initialVariant=new URLSearchParams(location.search).get('variant')?.toUpperCase();
+const state={variant:['A','B','C'].includes(initialVariant)?initialVariant:'A',view:initialVariant==='B'?'inbox':'chat',activeId:'downloads',filter:'all',network:'cellular',saver:true,modal:null,inspector:false,draft:'',newDraft:'',recovered:false};
+let newConversationIndex=0,toastTimer;
+function currentConversation(){return conversations.find(c=>c.id===state.activeId)||conversations[0];}
+function phaseLabel(phase){return({running:'执行中',waiting:'等待 Wi-Fi',offline:'等待网络',done:'已完成',stopped:'已停止',idle:'新会话'})[phase]||phase;}
+function networkLabel(){return({wifi:'Wi-Fi',cellular:'移动网络',offline:'无网络'})[state.network];}
+function phaseDetail(c){if(c.phase==='running')return c.id==='downloads'?'正在核对文件 · 26 / 42':state.recovered?'正在继续之前的执行':'正在处理你的请求';if(c.phase==='waiting')return'等待 Wi-Fi · 进度已保存';if(c.phase==='offline')return'等待连接模型 · 进度已保存';if(c.phase==='done')return'处理完成 · 文件保留在原目录';if(c.phase==='stopped')return'已停止 · 不会自动续跑';return'直接开始，无需选择项目';}
+function composerMarkup(options={}){const isNew=!!options.newChat;return '<form class="composer" data-compose data-new-chat="'+isNew+'"><textarea aria-label="'+(isNew?'在默认工作区开启新会话':'给当前会话发消息')+'" rows="1" enterkeyhint="send" placeholder="'+(isNew?'直接说，开启一个新会话…':currentConversation().phase==='idle'?'说说你想做什么…':'继续这个会话…')+'">'+esc(isNew?state.newDraft:state.draft)+'</textarea><div class="composer-bottom"><button class="composer-model" type="button" data-action="open-settings" aria-label="查看模型设置">'+Icon('spark',14)+'默认模型'+Icon('chevronDown',12)+'</button><span class="composer-hint">'+(isNew?'默认工作区':'YOLO · 本机执行')+'</span><button class="send-button" type="submit" aria-label="发送模拟消息">'+Icon('arrowUp',18)+'</button></div></form>';}
+function statusMarkup(){const c=currentConversation();const active=['running','waiting','offline'].includes(c.phase);return '<div class="execution-status '+c.phase+'" role="status"><span class="status-dot '+c.phase+'"></span><div class="status-copy"><span class="status-main">'+esc(phaseDetail(c))+'</span>'+(c.phase==='running'?'<span class="status-sub">'+(state.recovered?'已恢复':'12 秒')+'</span>':'')+'</div>'+(active?'<button class="stop-button" data-action="stop" aria-label="停止当前会话的模拟执行">'+Icon('stop',12)+'停止</button>':'')+'</div>';}
+function sessionListMarkup(){const items=conversations.filter(c=>state.filter==='all'||(state.filter==='default'?!c.project:!!c.project));return '<div class="session-list">'+(items.length?items.map(c=>'<button class="session-row '+(c.id===state.activeId?'selected':'')+'" data-action="open-conversation" data-id="'+esc(c.id)+'"><span class="status-dot '+c.phase+'"></span><span class="session-copy"><span class="session-title">'+esc(c.title)+'</span><span class="session-snippet">'+esc(c.project||'默认工作区')+' · '+esc(c.snippet||phaseDetail(c))+'</span></span><span class="session-meta"><span class="session-time">'+esc(c.time)+'</span><span class="session-phase '+c.phase+'">'+phaseLabel(c.phase)+'</span></span></button>').join(''):'<p class="empty-list">这里还没有会话。</p>')+'</div>';}
+function welcomeMarkup(){const c=currentConversation();return '<div class="welcome"><span class="brand-mark" aria-hidden="true">π</span><h1>从这里，直接开始。</h1><p>'+(c.project?'这个会话属于「'+esc(c.project)+'」。':'不必先建项目。直接开聊，文件操作发生在手机上。')+'</p><div class="welcome-prompts"><button data-action="prompt" data-text="帮我整理下载目录里的文件">整理下载目录</button><button data-action="prompt" data-text="帮我检查一段脚本">检查一段脚本</button></div></div>';}
+function conversationMarkup(){const c=currentConversation();if(c.phase==='idle'&&!c.prompt)return welcomeMarkup();const finished=c.phase==='done';const copy=c.reply||'这是一段示例回复，用于比较会话页面的阅读与布局。';let html='<div class="conversation-flow"><div class="conversation-date">今天 · 示例会话</div><div class="message user"><div class="user-bubble">'+esc(c.prompt)+'</div></div><div class="message assistant"><div class="speaker"><span class="brand-mark">π</span>Agent<span class="speaker-meta">本机执行</span></div><div class="assistant-copy"><p>'+esc(copy)+'</p></div>';
+if(c.id==='downloads'||c.id==='travel'){html+='<details class="activity"><summary>'+Icon(finished?'check':c.phase==='running'?'refresh':'clock',15)+'<span class="activity-title">'+(finished?'已完成文件处理':c.id==='downloads'?'读取目录，核对文件':'已读取表格，等待处理依赖')+'</span><span style="font-size:10px">'+(finished?'完成':c.id==='downloads'?'26 / 42':'已保存')+'</span><span class="chevron">'+Icon('chevronRight',13)+'</span></summary><div class="activity-step">'+Icon('check',14)+'<span><strong>读取已授权目录</strong><code>'+esc(c.id==='downloads'?'手机 / Download':'手机 / Documents / 旅行资料')+'</code></span><span class="step-end">完成</span></div><div class="activity-step">'+Icon(finished?'check':'clock',14)+'<span><strong>'+esc(c.id==='downloads'?'核对类型与重复项':'准备表格处理依赖')+'</strong><code>仅为界面示例，没有读取真实文件</code></span><span class="step-end">'+esc(phaseLabel(c.phase))+'</span></div></details>';}
+html+='</div>';if(['waiting','offline','stopped'].includes(c.phase)){html+='<div class="inline-note '+c.phase+'">'+Icon(c.phase==='stopped'?'stop':'clock',15)+'<span>'+(c.phase==='waiting'?'省流模式已暂停依赖下载。连接 Wi-Fi 后将继续，无需重新发送请求。':c.phase==='offline'?'当前需要连接模型。会话进度已保存，网络恢复后继续。':'你已停止本次执行，它不会在网络恢复后自动重启。')+'</span></div>';}
+if(c.phase==='done'&&c.id!=='notes'){html+='<div class="message assistant"><div class="assistant-copy"><p>处理完成。文件仍在原目录，你可以继续在这个会话里提出修改要求。</p><p class="sample-note">以上为原型示例，没有实际修改文件。</p></div></div>';}
+for(const message of c.messages){html+=message.role==='user'?'<div class="message user"><div class="user-bubble">'+esc(message.text)+'</div></div>':'<div class="message assistant"><div class="speaker"><span class="brand-mark">π</span>Agent<span class="speaker-meta">界面模拟</span></div><div class="assistant-copy"><p>'+esc(message.text)+'</p></div></div>';}
+return html+'</div>';}
+function VariantA(){const c=currentConversation();return '<section class="variant-a"><header class="a-header"><div class="a-brand"><button class="icon-button" data-action="open-history" aria-label="打开会话抽屉">'+Icon('menu')+'</button><span class="brand-mark">π</span><span class="a-brand-name">本地 Agent</span></div><div class="a-conversation-heading"><h2>'+esc(c.title)+'</h2><button class="project-pill" data-action="open-projects" aria-label="选择项目或默认工作区">'+Icon('folder',12)+'<span class="ellipsis">'+esc(c.project||'默认工作区')+'</span>'+Icon('chevronDown',11)+'</button></div><div class="a-header-actions"><button class="icon-button" data-action="new-chat" aria-label="新建默认会话">'+Icon('plus')+'</button><button class="icon-button" data-action="open-settings" aria-label="打开设置">'+Icon('settings',19)+'</button></div></header><div class="a-main"><div class="a-local-note"><span>'+Icon('leaf',12)+esc(networkLabel())+(state.saver?' · 省流已开启':'')+'</span><span class="a-yolo">YOLO</span></div><div class="a-chat-scroll chat-scroll">'+conversationMarkup()+'</div><footer class="a-compose-area">'+statusMarkup()+composerMarkup()+'<div class="composer-caption">'+(c.project?esc(c.project):'默认工作区')+' · 每个会话保留独立上下文</div></footer></div></section>';}
+// Throwaway prototype B: does a list-first conversation inbox work better than a chat-only screen?
+// Host supplies shared markup, in-memory state, actions, and the variant switcher.
+function VariantB() {
+  const active = currentConversation();
+  const view = state.view === 'chat' ? 'chat' : 'inbox';
+  const filter = state.filter || 'all';
+  const filters = [['all', '全部'], ['default', '默认'], ['projects', '项目']];
+  const count = conversations.filter(c => filter === 'all' || (filter === 'default' ? !c.project : !!c.project)).length;
+  return `<div class="variant-b" data-view="${view}">
+    <aside class="b-inbox" aria-label="会话列表">
+      <header class="b-inbox-header">
+        <div class="b-heading"><span class="b-eyebrow">本地 Agent</span><h1>会话列表</h1></div>
+        <button type="button" class="b-icon-button" data-action="open-settings" aria-label="设置">${Icon('settings')}</button>
+        <button type="button" class="b-icon-button b-primary-icon" data-action="new-chat" aria-label="新对话">${Icon('plus')}</button>
+      </header>
+      <nav class="b-filters" aria-label="筛选会话">
+        ${filters.map(([value, label]) => `<button type="button" data-action="filter-sessions" data-filter="${value}" aria-pressed="${filter === value}">${label}</button>`).join('')}
+      </nav>
+      <div class="b-list-caption"><span>${count} 个会话</span><button type="button" data-action="open-projects">${Icon('folder', 16)} 项目 ${Icon('chevronRight', 16)}</button></div>
+      <div class="b-session-scroll">${count ? sessionListMarkup() : '<div class="b-empty">还没有会话<br><span>直接在下方开始新对话</span></div>'}</div>
+      <section class="b-quick-compose" aria-label="直接开始新对话">
+        <div class="b-compose-caption">${Icon('plus', 16)} 新对话<span>无需选择项目</span></div>
+        ${composerMarkup({newChat: true})}
+      </section>
+    </aside>
+    <section class="b-detail" aria-label="当前对话">
+      <header class="b-detail-header">
+        <button type="button" class="b-icon-button b-back" data-action="show-inbox" aria-label="返回会话列表">${Icon('arrowLeft')}</button>
+        <div class="b-detail-heading"><h2>${esc(active ? active.title : '新对话')}</h2><span>${esc(active && active.project ? active.project : '默认工作区')}</span></div>
+        <button type="button" class="b-icon-button" data-action="new-chat" aria-label="新对话">${Icon('plus')}</button>
+      </header>
+      <div class="b-thread chat-scroll">${conversationMarkup()}</div>
+      <footer class="b-detail-compose">
+        <div class="b-status">${statusMarkup()}</div>
+        ${composerMarkup({newChat: false})}
+      </footer>
+    </section>
+  </div>`;
+}
+
+// Throwaway variant C: test thumb-first conversation navigation in the host's three-variant prototype.
+function VariantC() {
+  const active = currentConversation();
+  const inbox = state.view === 'inbox';
+  const ordered = active
+    ? [active, ...conversations.filter(c => c.id !== active.id)]
+    : conversations;
+  const chips = ordered.map(c => `
+    <button type="button" class="c-conversation${c.id === state.activeId ? ' is-active' : ''}"
+      data-action="open-conversation" data-id="${esc(c.id)}"
+      aria-current="${c.id === state.activeId ? 'true' : 'false'}"
+      title="${esc(c.title)} · ${esc(phaseLabel(c.phase))}">
+      <span class="status-dot ${esc(c.phase)}" aria-hidden="true"></span>
+      <span class="c-chip-title">${esc(c.title)}</span>
+      <span class="c-chip-phase">${esc(phaseLabel(c.phase))}</span>
+    </button>`).join('');
+  const filters = [['all', '全部'], ['default', '默认'], ['projects', '项目']]
+    .map(([key, label]) => `<button type="button" data-action="filter-sessions" data-filter="${key}"
+      class="c-filter${state.filter === key ? ' is-active' : ''}" aria-pressed="${state.filter === key}">${label}</button>`).join('');
+  return `<div class="variant-c">
+    <header class="c-heading">
+      <div class="c-heading-inner">
+        <div class="c-heading-copy"><span class="c-eyebrow">${inbox ? '对话记录' : '当前对话'}</span>
+          <h1>${inbox ? '继续聊下去' : esc(active ? active.title : '从一句话开始')}</h1></div>
+        <span class="c-context">${Icon(active && active.project ? 'folder' : 'chat', 16)}
+          <span>${esc(active && active.project ? active.project : '默认工作区')}</span></span>
+      </div>
+    </header>
+    ${inbox ? `<section class="c-inbox" aria-label="全部对话">
+      <div class="c-filters" aria-label="筛选对话">${filters}</div>
+      <div class="c-session-scroll">${sessionListMarkup()}</div>
+    </section>` : `<section class="c-chat-scroll chat-scroll" aria-label="对话内容"><div class="c-chat-content">${conversationMarkup()}</div></section>`}
+    <footer class="c-bottom">
+      <div class="c-bottom-inner">
+        ${!inbox ? `<div class="c-switch-row">
+          <div class="c-switch-track" aria-label="切换对话">${chips || '<span class="c-no-conversations">新对话，从这里开始</span>'}</div>
+          <button type="button" class="c-history-shortcut" data-action="open-history" aria-label="打开全部对话" title="全部对话">${Icon('more')}</button>
+        </div>
+        <div class="c-compose-area"><div class="c-status">${statusMarkup()}</div>
+          <div class="c-composer">${composerMarkup({newChat: !active})}</div>
+        </div>` : ''}
+        <nav class="c-navigation" aria-label="主要导航">
+          <button type="button" data-action="show-chat" class="c-nav-button${!inbox ? ' is-active' : ''}" ${!inbox ? 'aria-current="page"' : ''}>${Icon('chat')}<span>对话</span></button>
+          <button type="button" data-action="show-inbox" class="c-nav-button${inbox ? ' is-active' : ''}">${Icon('clock')}<span>会话</span></button>
+          <button type="button" data-action="new-chat" class="c-nav-button c-new-chat">${Icon('plus', 22)}<span>新对话</span></button>
+          <button type="button" data-action="open-projects" class="c-nav-button">${Icon('folder')}<span>项目</span></button>
+          <button type="button" data-action="open-settings" class="c-nav-button">${Icon('settings')}<span>设置</span></button>
+        </nav>
+      </div>
+    </footer>
+  </div>`;
+}
+
+const variants={A:{name:'专注对话',description:'聊天占据主画面。会话与项目放进抽屉；手机和平板都先保证阅读与输入。',render:VariantA},B:{name:'会话列表',description:'手机从最近会话进入，底部可以直接开聊。平板同时保留会话列表与当前对话。',render:()=>typeof VariantB==='function'?VariantB():VariantA()},C:{name:'底部优先',description:'把常用操作与快速切换放到下方，比较单手操作是否比顶部导航更顺手。',render:()=>typeof VariantC==='function'?VariantC():VariantA()}};
+function snapshotState(){return {prototype:true,variant:state.variant,layout:variants[state.variant].name,mobileView:state.view,viewport:{width:innerWidth,height:innerHeight},activeConversation:{id:currentConversation().id,title:currentConversation().title,project:currentConversation().project,phase:currentConversation().phase},filter:state.filter,network:state.network,dataSaver:state.saver,authorization:'YOLO',modal:state.modal,drafts:{current:state.draft,newConversation:state.newDraft},recovered:state.recovered,conversations:conversations.map(c=>({id:c.id,title:c.title,project:c.project,phase:c.phase,messageCount:c.messages.length+(c.prompt?2:0)}))};}
+function renderSwitcher(){const enabled=document.documentElement.dataset.build==='prototype';const bar=document.getElementById('prototypeSwitcher');bar.hidden=!enabled;if(!enabled){document.getElementById('prototypeNotice').hidden=true;document.documentElement.style.setProperty('--notice-height','0px');document.documentElement.style.setProperty('--prototype-space','0px');return;}bar.innerHTML='<button class="switch-arrow" data-action="previous-variant" aria-label="上一个布局方案">'+Icon('arrowLeft',18)+'</button><div class="variant-label"><strong>'+state.variant+' · '+variants[state.variant].name+'</strong><small>原型切换 · '+(['A','B','C'].indexOf(state.variant)+1)+' / 3</small></div><button class="switch-arrow" data-action="next-variant" aria-label="下一个布局方案"><span style="display:flex;transform:rotate(180deg)">'+Icon('arrowLeft',18)+'</span></button><button class="inspect-button" data-action="toggle-inspector" aria-label="查看原型说明与模拟状态" aria-expanded="'+state.inspector+'">'+Icon('more',18)+'</button>';}
+function renderInspector(){const panel=document.getElementById('prototypePanel');panel.hidden=!state.inspector;if(!state.inspector)return;const c=currentConversation();panel.innerHTML='<h2>布局比较 · 原型控制<button data-action="toggle-inspector" aria-label="关闭原型控制">'+Icon('close',16)+'</button></h2><p>'+variants[state.variant].description+' 所有交互仅修改本页内存，不连接模型，不操作文件。</p><div class="prototype-options">'+['A','B','C'].map(v=>'<button class="'+(v===state.variant?'selected':'')+'" data-action="set-variant" data-variant="'+v+'">'+v+' · '+variants[v].name+'</button>').join('')+'</div><label>示例网络<select data-control="network" aria-label="模拟网络状态">'+[['cellular','移动网络'],['wifi','Wi-Fi'],['offline','离线']].map(([v,l])=>'<option value="'+v+'" '+(state.network===v?'selected':'')+'>'+l+'</option>').join('')+'</select></label><label>当前会话状态<select data-control="phase" aria-label="模拟会话状态">'+['running','waiting','offline','done','stopped'].map(v=>'<option value="'+v+'" '+(c.phase===v?'selected':'')+'>'+phaseLabel(v)+'</option>').join('')+'</select></label><details><summary>完整界面状态（只读）</summary><pre>'+esc(JSON.stringify(snapshotState(),null,2))+'</pre></details><div class="prototype-feedback"><button data-action="feedback">向 Pi 反馈这个方向</button><button data-action="reset-demo">重置示例</button></div><p style="margin:10px 0 0;font-size:10px">独立页面支持 ?variant=A / B / C。左右方向键切换布局，输入框内不拦截。</p>';}
+function renderModal(){const root=document.getElementById('modalRoot');root.hidden=!state.modal;if(!state.modal){root.innerHTML='';return;}let title='',body='',kind='sheet';if(state.modal==='history'){kind='drawer';title='会话';body='<button class="solid-button drawer-new" data-action="new-chat">'+Icon('plus',17)+'新建会话</button><div class="drawer-label">最近 · 默认与项目会话</div>'+sessionListMarkup()+'<div class="drawer-footer"><button data-action="open-projects">'+Icon('folder',17)+'项目</button><button data-action="open-settings">'+Icon('settings',17)+'设置</button></div>';}else if(state.modal==='projects'){title='选择工作上下文';body='<p class="modal-intro">无需项目也能直接开聊。选择下面的位置，会开启一个新的示例会话，不移动任何文件。</p><button class="project-row" data-action="choose-project" data-project=""><span class="project-folder">'+Icon('chat',18)+'</span><span class="project-copy"><strong>默认工作区</strong><small>不关联项目，直接开始</small></span>'+Icon('chevronRight',15)+'</button>'+projects.map(p=>'<button class="project-row" data-action="choose-project" data-project="'+esc(p.name)+'"><span class="project-folder">'+Icon('folder',18)+'</span><span class="project-copy"><strong>'+esc(p.name)+'</strong><small>'+esc(p.location)+'</small></span>'+Icon('chevronRight',15)+'</button>').join('')+'<form class="project-create" data-create-project><input aria-label="新的示例项目名称" placeholder="新项目名称" maxlength="30" required><button type="submit">创建示例</button></form><p class="settings-footnote">目录仅为示意。本原型不会申请系统权限或创建真实目录。</p>';}else{title='设置';body='<p class="modal-intro">示例设置，仅用于检查页面布局。</p><section class="settings-group"><h3>模型接入</h3><div class="setting-row"><span>接入方式</span><span class="setting-value">API Key</span></div><label class="setting-field"><span>Provider / 模型</span><select aria-label="示例模型"><option>默认模型（界面示例）</option></select></label><label class="setting-field"><span>API Key</span><input type="password" disabled placeholder="原型不收集或保存密钥"></label><small class="muted" style="font-size:10px">聊天与工具结果可能发送给你配置的模型服务。</small></section><section class="settings-group"><h3>移动端运行</h3><div class="setting-row"><span>省流模式<small>限制非模型联网；受控本地操作可继续。</small></span><button class="toggle '+(state.saver?'on':'')+'" role="switch" aria-checked="'+state.saver+'" aria-label="切换示例省流模式" data-action="toggle-saver"></button></div><div class="setting-row"><span>操作模式</span><span class="setting-value">YOLO · 首版不提供审批</span></div><div class="setting-row"><span>执行位置</span><span class="setting-value">Android 本机</span></div></section><p class="settings-footnote">执行后端尚未选定。这里不把 Termux、某个 UI 框架或其他候选方案写成产品设置。</p>';}
+root.innerHTML='<div class="modal-scrim" data-action="close-modal"></div><section class="modal-panel '+kind+'" role="dialog" aria-modal="true" aria-label="'+title+'"><header class="modal-heading"><h2>'+title+'</h2><button class="icon-button" data-action="close-modal" aria-label="关闭'+title+'">'+Icon('close',19)+'</button></header><div class="modal-content">'+body+'</div></section>';}
+function render(){document.body.dataset.variant=state.variant;document.getElementById('app').innerHTML=variants[state.variant].render();document.getElementById('noticeState').textContent=state.variant+' · '+phaseLabel(currentConversation().phase)+' · '+innerWidth+'px';renderSwitcher();renderModal();renderInspector();console.info('[UI prototype state]',snapshotState());}
+function toast(message){const box=document.getElementById('toast');box.textContent=message;box.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>box.classList.remove('visible'),2800);}
+function switchVariant(key){state.variant=key;state.view=key==='B'?'inbox':'chat';state.modal=null;try{const url=new URL(location.href);url.searchParams.set('variant',key);history.replaceState(null,'',url);}catch(error){console.info('This embedded viewer does not allow URL updates; the layout still changed.');}render();}
+function cycleVariant(direction){const keys=['A','B','C'];switchVariant(keys[(keys.indexOf(state.variant)+direction+3)%3]);}
+function createConversation(project=null){const id='new-'+(++newConversationIndex);conversations.unshift({id,title:project?'新会话 · '+project:'新会话',project,phase:'idle',time:'刚刚',prompt:'',reply:'',snippet:'还没有消息',requiresNetwork:false,messages:[]});state.activeId=id;state.view='chat';state.modal=null;state.filter='all';state.draft='';state.recovered=false;}
+function submitMessage(text,makeNew){text=text.trim();if(!text)return;if(makeNew)createConversation();const c=currentConversation();if(!c.prompt){c.prompt=text;c.title=text.length>15?text.slice(0,15)+'…':text;c.reply='我会在这个会话中处理你的请求。当前是布局原型，这条回复没有调用模型，也没有访问文件。';}else{c.messages.push({role:'user',text},{role:'assistant',text:'已收到。这里仅模拟消息进入当前会话后的排版，不执行真实操作。'});}c.phase=state.network==='offline'?'offline':'running';c.time='刚刚';c.snippet='新消息 · 界面模拟';state.draft='';if(makeNew)state.newDraft='';state.view='chat';render();requestAnimationFrame(()=>document.querySelectorAll('.chat-scroll').forEach(el=>el.scrollTop=el.scrollHeight));}
+function changeNetwork(value){state.network=value;state.recovered=false;for(const c of conversations){if(value==='offline'&&['running','waiting'].includes(c.phase))c.phase='offline';else if(value!=='offline'&&c.phase==='offline'){c.phase=value==='cellular'&&state.saver&&c.requiresNetwork?'waiting':'running';state.recovered=true;}else if(value==='wifi'&&c.phase==='waiting'){c.phase='running';state.recovered=true;}else if(value==='cellular'&&state.saver&&c.requiresNetwork&&c.phase==='running')c.phase='waiting';}render();toast('已模拟'+networkLabel()+'，没有改变设备的真实网络。');}
+document.addEventListener('click',event=>{const button=event.target.closest('[data-action]');if(!button)return;const action=button.dataset.action;if(action==='previous-variant')return cycleVariant(-1);if(action==='next-variant')return cycleVariant(1);if(action==='set-variant')return switchVariant(button.dataset.variant);if(action==='toggle-inspector'){state.inspector=!state.inspector;renderSwitcher();renderInspector();return;}if(action==='new-chat'){createConversation();render();return;}if(action==='open-conversation'){state.activeId=button.dataset.id;state.view='chat';state.modal=null;state.draft='';state.recovered=false;render();return;}if(action==='open-history'){state.modal='history';state.filter='all';renderModal();return;}if(action==='open-projects'){state.modal='projects';renderModal();return;}if(action==='open-settings'){state.modal='settings';renderModal();return;}if(action==='close-modal'){state.modal=null;renderModal();return;}if(action==='show-inbox'){state.view='inbox';render();return;}if(action==='show-chat'){state.view='chat';render();return;}if(action==='filter-sessions'){state.filter=button.dataset.filter;render();return;}if(action==='choose-project'){createConversation(button.dataset.project||null);render();toast('已打开新的示例会话，没有修改任何文件。');return;}if(action==='prompt'){submitMessage(button.dataset.text,false);return;}if(action==='stop'){currentConversation().phase='stopped';currentConversation().snippet='你已停止执行';render();toast('已模拟停止；网络恢复不会重新启动这个会话的执行。');return;}if(action==='toggle-saver'){state.saver=!state.saver;if(!state.saver&&state.network!=='offline')conversations.forEach(c=>{if(c.phase==='waiting')c.phase='running';});else if(state.saver&&state.network==='cellular')conversations.forEach(c=>{if(c.requiresNetwork&&c.phase==='running')c.phase='waiting';});render();return;}if(action==='feedback'){if(window.parent!==window){parent.postMessage({type:'pocket-follow-up',text:'页面原型中，我更倾向 '+state.variant+'「'+variants[state.variant].name+'」这个方向。我的具体反馈是：',selection:{variant:state.variant,view:state.view,conversation:currentConversation().title}},'*');toast('已请求打开反馈草稿；如果查看器不支持，请直接在会话中告诉 Pi。');}else{toast('请在 Pi 会话中反馈：'+state.variant+'「'+variants[state.variant].name+'」。');}return;}if(action==='reset-demo'){location.reload();}});
+document.addEventListener('submit',event=>{if(event.target.matches('[data-compose]')){event.preventDefault();submitMessage(event.target.querySelector('textarea').value,event.target.dataset.newChat==='true');}if(event.target.matches('[data-create-project]')){event.preventDefault();const name=event.target.querySelector('input').value.trim();if(!name)return;if(!projects.some(p=>p.name===name))projects.push({name,location:'示例工作区 / '+name});createConversation(name);render();toast('已创建内存中的示例项目，刷新后清除。');}});
+document.addEventListener('input',event=>{if(event.target.matches('[data-compose] textarea')){if(event.target.closest('form').dataset.newChat==='true')state.newDraft=event.target.value;else state.draft=event.target.value;event.target.style.height='auto';event.target.style.height=Math.min(event.target.scrollHeight,116)+'px';}});
+document.addEventListener('change',event=>{if(event.target.dataset.control==='network')changeNetwork(event.target.value);if(event.target.dataset.control==='phase'){const phase=event.target.value;if(phase==='waiting'){state.network='cellular';state.saver=true;}if(phase==='offline')state.network='offline';if(phase==='running'&&state.network==='offline')state.network='wifi';currentConversation().phase=phase;render();}});
+document.addEventListener('keydown',event=>{const editable=event.target.closest('input,textarea,select,[contenteditable]');if(event.key==='Escape'){if(state.inspector){state.inspector=false;renderSwitcher();renderInspector();}else if(state.modal){state.modal=null;renderModal();}return;}if(editable){if(event.target.matches('[data-compose] textarea')&&event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();event.target.closest('form').requestSubmit();}return;}if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();cycleVariant(event.key==='ArrowLeft'?-1:1);}});
+window.addEventListener('message',event=>{if(event.source!==parent||event.data?.type!=='pocket-follow-up')return;if(!event.data.ok)toast('反馈草稿未打开：'+(event.data.error||'请直接在会话里回复。'));});
+window.addEventListener('popstate',()=>{const v=new URLSearchParams(location.search).get('variant')?.toUpperCase();if(variants[v]){state.variant=v;state.view=v==='B'?'inbox':'chat';render();}});
+window.addEventListener('resize',()=>{document.getElementById('noticeState').textContent=state.variant+' · '+phaseLabel(currentConversation().phase)+' · '+innerWidth+'px';if(state.inspector)renderInspector();});
+render();
+</script>
+</body>
+</html>

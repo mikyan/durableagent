@@ -1,0 +1,13 @@
+.scratch/
+.env
+.env.*
+!.env.example
+local.properties
+*.jks
+*.keystore
+node_modules/
+.gradle/
+build/
+dist/
+.DS_Store
+Thumbs.db
