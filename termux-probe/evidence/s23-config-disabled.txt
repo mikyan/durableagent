@@ -1,0 +1,16 @@
+Observed: 2026-11-04T00:47:10.6232365+08:00
+Fixture commit: 1f7781f
+Fixture APK SHA256: 54ca5b2b713336c58f37e080db823190ace06ed1266ef7d6694511123254e39a
+Action: Saved original properties, successfully appended and read back allow-external-apps=false; then real RUN_COMMAND; launch=Starting: Intent { cmp=dev.durableagent.termuxprobe/.MainActivity } Warning: Activity not started, its current task has been brought to the front Status: ok LaunchState: UNKNOWN (0) Activity: dev.durableagent.termuxprobe/.MainActivity WaitTime: 32 Complete
+
+time=1793724430681
+Termux 0.118.3 / 1002; target=28; uid=10187
+APK SHA256=72fdb596045116bf5ba1b5bdf5b26fddb9acc0bd074ad9f2da9eb0ae85e83a4e
+cert=b6da01480eefd5fbf2cd3771b8d1021ec791304bdd6c4bf41d3faabad48ee5e1
+固定发行物校验=true; RUN_COMMAND 系统授权=true
+Inspection(phase=EXTERNAL_CALLS_DISABLED, request=null, bootstrap=UNKNOWN, externalCalls=FAILED, protocol=UNKNOWN, evidence=ProbeResult(stdout=, stderr=, exitCode=-2147483648, error=2, errorMessage=Error Code: `2`
+Error Message:
+```
+RunCommandService requires `allow-external-apps` property to be set to `true` in `~/.termux/termux.properties` file.
+```
+, truncated=false))

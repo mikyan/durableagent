@@ -1,0 +1,23 @@
+Observed: 2026-11-04T00:58:26.0079321+08:00
+Fixture commit: acdc000
+Fixture APK SHA256: 197a869eb00af13d643e859342bc26ddd45341b5e7f7778b79c9c23b5be93bb6
+Action: Final acdc000 fixture; installed APK hash independently matched host197a869e; fresh post-matrix foreground cross-UID check; launch=Starting: Intent { cmp=dev.durableagent.termuxprobe/.MainActivity } Warning: Activity not started, its current task has been brought to the front Status: ok LaunchState: UNKNOWN (0) Activity: dev.durableagent.termuxprobe/.MainActivity WaitTime: 18 Complete
+
+time=1793725106078
+Termux 0.118.3 / 1002; target=28; uid=10187
+APK SHA256=72fdb596045116bf5ba1b5bdf5b26fddb9acc0bd074ad9f2da9eb0ae85e83a4e
+cert=b6da01480eefd5fbf2cd3771b8d1021ec791304bdd6c4bf41d3faabad48ee5e1
+固定发行物校验=true; RUN_COMMAND 系统授权=true
+Inspection(phase=READY, request=null, bootstrap=VERIFIED, externalCalls=VERIFIED, protocol=VERIFIED, evidence=protocol=1
+nonce=5c156b9d-45bd-48e7-95a5-72382f87318a
+uid=10187
+instance=8900
+prefix=/data/data/com.termux/files/usr
+shell=5.3.20(1)-release
+tools=ok
+workspace=/data/data/com.termux/files/home/.local/share/durableagent-probe/workspace
+writable=yes
+repo_begin=1
+deb https://packages-cf.termux.dev/apt/termux-main stable main
+repo_end=1
+, retryAfterMillis=null)

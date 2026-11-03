@@ -1,0 +1,2 @@
+ 6060 10187 timeout -k 2s 12s /data/data/com.termux/files/usr/bin/bash /data/data/com.termux/files/home/.local/share/durableagent-probe/probe-v1.sh 48be74f2-bad1-4a83-a78f-b9c04ca450d0
+ 6064 10187 bash /data/data/com.termux/files/home/.local/share/durableagent-probe/probe-v1.sh 48be74f2-bad1-4a83-a78f-b9c04ca450d0
