@@ -1,0 +1,23 @@
+docs/specs/v1/tickets/01-runtime-compatibility.md
+  s_467dcb949b5b60::t_f1e929466d1560 3-4
+  s_467dcb949b5b60::t_dd6dfed6f0c18d 11-20
+docs/specs/v1/README.md
+  s_467dcb949b5b60::t_f1e929466d1560 3,31
+  s_467dcb949b5b60::t_a7d63543558e09 32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "5edc2681e58827838004d8696f631f6d640704fb",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
