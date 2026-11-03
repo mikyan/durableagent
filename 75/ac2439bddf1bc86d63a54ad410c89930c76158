@@ -1,0 +1,93 @@
+termux-probe/evidence/s23-cold-start-retry-1.txt
+  s_467dcb949b5b60::t_093ecd93e15793 1-23
+termux-probe/evidence/s23-notification-facts.txt
+  s_467dcb949b5b60::t_75fe6660e5d883 1-9
+termux-probe/validation.md
+  s_467dcb949b5b60::t_75fe6660e5d883 3,5,9-13,15-16,18,20,22,24,26,28-32,34-58
+termux-probe/evidence/s23-final-artifact.txt
+  s_467dcb949b5b60::t_b50884a9fcac79 1-3
+termux-probe/evidence/s23-delayed-probe-retry.txt
+  s_467dcb949b5b60::t_0204162637787c 1-16
+termux-probe/evidence/s23-cold-loop-final/iteration-1-host-cold-start.txt
+  s_467dcb949b5b60::t_b50884a9fcac79 1-28
+termux-probe/evidence/s23-final-ready.txt
+  s_467dcb949b5b60::t_bd26d488e266a7 1-23
+termux-probe/evidence/s23-cold-loop-final/iteration-3-host-cold-start.txt
+  s_467dcb949b5b60::t_b50884a9fcac79 1-28
+termux-probe/evidence/s23-cold-start-platform-log.txt
+  s_467dcb949b5b60::t_8d6cc73126aaf2 1-17
+termux-probe/evidence/s23-protocol-restored.txt
+  s_467dcb949b5b60::t_0204162637787c 1-23
+termux-probe/evidence/s23-repeat-live-processes.txt
+  s_467dcb949b5b60::t_580a9c52f88671 1-2
+termux-probe/evidence/s23-repeat-complete.txt
+  s_467dcb949b5b60::t_580a9c52f88671 1,6,11
+  s_467dcb949b5b60::t_0204162637787c 2-4
+  s_467dcb949b5b60::t_85a619270b8d60 5,7-10
+termux-probe/evidence/s23-cold-loop-final/iteration-2-host-cold-start.txt
+  s_467dcb949b5b60::t_b50884a9fcac79 1-28
+termux-probe/evidence/s23-delayed-probe-recovered.txt
+  s_467dcb949b5b60::t_0204162637787c 1-23
+termux-probe/evidence/s23-bridge-death-recovered.txt
+  s_467dcb949b5b60::t_c2fb3bf4998000 5-23
+  s_467dcb949b5b60::t_0204162637787c 2-3
+  s_467dcb949b5b60::t_d2ec1c8dde7c89 1,4
+termux-probe/evidence/s23-cold-loop-final/iteration-1-termux-process-death.txt
+  s_467dcb949b5b60::t_b50884a9fcac79 1-27
+termux-probe/evidence/s23-cold-loop-final/iteration-3-termux-process-death.txt
+  s_467dcb949b5b60::t_b50884a9fcac79 1-27
+termux-probe/evidence/s23-permission-restored.txt
+  s_467dcb949b5b60::t_85a619270b8d60 1,4-23
+  s_467dcb949b5b60::t_0204162637787c 2-3
+termux-probe/evidence/s23-final-retry-log.txt
+  s_467dcb949b5b60::t_bd26d488e266a7 1-22
+termux-probe/evidence/s23-cold-loop-final/iteration-2-termux-process-death.txt
+  s_467dcb949b5b60::t_b50884a9fcac79 1-27
+termux-probe/evidence/s23-protocol-mismatch.txt
+  s_467dcb949b5b60::t_0204162637787c 1-23
+termux-probe/evidence/s23-cold-start-retry-2.txt
+  s_467dcb949b5b60::t_093ecd93e15793 1-23
+termux-probe/evidence/s23-permission-revoked.txt
+  s_467dcb949b5b60::t_0204162637787c 1-11
+termux-probe/README.md
+  s_467dcb949b5b60::t_903b1b9431a938 25-27,35-36,56
+termux-probe/scripts/test-cold-start.ps1
+  s_467dcb949b5b60::t_5be53738bb4f57 16-19,22,30-33,37-41,48-52,56-59
+termux-probe/evidence/s23-repeat-checking.txt
+  s_467dcb949b5b60::t_85a619270b8d60 1,4-11
+  s_467dcb949b5b60::t_0204162637787c 2-3
+termux-probe/evidence/s23-bridge-killed-result.txt
+  s_467dcb949b5b60::t_7ccb531f4f6661 1-11
+termux-probe/evidence/s23-config-disabled.txt
+  s_467dcb949b5b60::t_990cc44734b6ce 1-16
+termux-probe/evidence/s23-config-restored.txt
+  s_467dcb949b5b60::t_7833e2e00f6bb8 1-23
+termux-probe/evidence/s23-copy-setup.txt
+  s_467dcb949b5b60::t_8415e1c115254e 1-23
+termux-probe/evidence/s23-force-stop-restored.txt
+  s_467dcb949b5b60::t_ad15cfb02713c0 1-23
+termux-probe/evidence/s23-host-process-recycle.txt
+  s_467dcb949b5b60::t_3bf190f362e890 1-23
+termux-probe/evidence/s23-ordinary-cold-start.txt
+  s_467dcb949b5b60::t_89719059d7714f 1-11
+termux-probe/evidence/s23-termux-force-stop.txt
+  s_467dcb949b5b60::t_397a4fb72d98b8 1-11
+termux-probe/evidence/s23-termux-process-death.txt
+  s_467dcb949b5b60::t_d00e143ff9bcd1 1-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "75ac2439bddf1bc86d63a54ad410c89930c76158",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
