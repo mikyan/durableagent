@@ -48,4 +48,10 @@ $reader = 'C:\Users\AI_BA\AppData\Local\Android\Sdk\ndk\28.2.13676358\toolchains
 & $reader --symbols '.\jni\x86_64\libjavet-node-android-i18n.v.6.0.3.so' | Select-String 'icudt78_dat|InitializeICUDirectory|udata_setCommonData_78'
 ```
 
-The i18n APK ZIP alignment/native-byte comparison is pending a stable completed APK. Actual Android startup, `process.versions.icu`, Intl, Unicode regex, SDK flow, lifecycle, and physical 16 KB page-size execution remain separate runtime/device evidence. The earlier standard-variant APK inspection cannot be reused as the i18n APK result.
+## Final APK inspection update
+
+The completed APK SHA256 is `4d60020c8f15dbc2d4f45bc97295605225ffa1a51791b5e8c91b07376ab587a4` (432,019,602 bytes, debug artifact containing both validation ABIs). SDK 36 `zipalign -c -P 16 4` exited 0. Both uncompressed native libraries start at 16 KB ZIP boundaries and match the AAR SHA256 values above exactly; ARM64 data offset is 3,276,800 and x86_64 is 268,894,208. Thus the inspected ELF conditions apply directly to the APK's native files.
+
+All five compiled probe modules and the complete npm lockfile inside `assets/runtime.zip` match the worktree; Pi Durable/AI/schema/Chord are 1.5.0. The packaged package.json differs only by absence of the later-added host-only `scripts.pretest` command; dependencies and runtime fields match. This metadata difference does not change executed Android code and is recorded rather than hidden. Raw machine-readable inspection is [final-apk-inspection.json](final-apk-inspection.json).
+
+Actual startup/ICU/SDK/lifecycle results are separate evidence in the [gate report](README.md). The earlier standard-variant APK result was not reused for this i18n check.

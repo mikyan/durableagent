@@ -1,0 +1,49 @@
+{
+  "apk": "C:\\Users\\AI_BA\\.codex\\worktrees\\t01-runtime\\durableagent\\android\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+  "bytes": 432019602,
+  "sha256": "4d60020c8f15dbc2d4f45bc97295605225ffa1a51791b5e8c91b07376ab587a4",
+  "native": [
+    {
+      "entry": "lib/arm64-v8a/libjavet-node-android-i18n.v.6.0.3.so",
+      "bytes": 163785752,
+      "sha256": "266e732b71daed5897d430e99d20b46a1f87968f935c89795832d411f17f9414",
+      "zipCompression": 0,
+      "dataOffset": 3276800,
+      "offsetMod16K": 0,
+      "matchesPinnedI18nAar": true
+    },
+    {
+      "entry": "lib/x86_64/libjavet-node-android-i18n.v.6.0.3.so",
+      "bytes": 163119784,
+      "sha256": "2a46d00797e2339353a4146d27df641b1f6679df771d95e1959812097e0e3e69",
+      "zipCompression": 0,
+      "dataOffset": 268894208,
+      "offsetMod16K": 0,
+      "matchesPinnedI18nAar": true
+    }
+  ],
+  "runtimeZipBytes": 22269075,
+  "runtimeZipSha256": "62c68564c656ca65ff79c645c851e71894e2fb51efb2c9fa31f7d76ac8c68536",
+  "moduleMatches": {
+    "dist/bridge.js": true,
+    "dist/capabilities.js": true,
+    "dist/live-model.js": true,
+    "dist/probe.js": true,
+    "dist/transport.js": true,
+    "package.json": false,
+    "package-lock.json": true
+  },
+  "sdkVersions": {
+    "pi-durable": "1.5.0",
+    "pi-ai": "1.5.0",
+    "pi-schema": "1.5.0",
+    "chord": "1.5.0"
+  },
+  "standardNativeModulesInsideRuntimeZip": [
+    "node_modules/quickjs-wasi/extensions/crypto/crypto.so",
+    "node_modules/quickjs-wasi/extensions/encoding/encoding.so",
+    "node_modules/quickjs-wasi/extensions/headers/headers.so",
+    "node_modules/quickjs-wasi/extensions/structured-clone/structured-clone.so",
+    "node_modules/quickjs-wasi/extensions/url/url.so"
+  ]
+}
