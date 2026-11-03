@@ -1,0 +1,23 @@
+docs/evidence/t05/t05-emu16k-third-byte-audit.json
+  s_467dcb949b5b60::t_c07688589eddab 1-19
+docs/evidence/t05/t05-s23-third-byte-audit.json
+  s_467dcb949b5b60::t_c07688589eddab 1-19
+docs/evidence/t05/README.md
+  s_467dcb949b5b60::t_38326fc97b7d06 32-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "0b0e07a881bc6c44f00f0f349634d74c102a2ed5",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
