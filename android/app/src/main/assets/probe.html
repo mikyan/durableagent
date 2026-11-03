@@ -1,0 +1,5 @@
+<!doctype html><meta name="viewport" content="width=device-width, initial-scale=1"><meta charset="utf-8">
+<title>运行时验证</title><style>body{font:16px system-ui;margin:24px}button{padding:12px;margin:4px}pre{white-space:pre-wrap;overflow-wrap:anywhere}</style>
+<h1>Pi SDK 运行时验证</h1><p>受控模型传输 · 非持久验证存储</p>
+<button onclick="Probe.action('start')">启动</button><button onclick="Probe.action('send')">发送测试</button><button onclick="Probe.action('stop')">停止</button><button onclick="Probe.action('close')">关闭</button><pre id="state">连接中</pre>
+<script>setInterval(()=>{document.getElementById('state').textContent=JSON.stringify(JSON.parse(Probe.snapshot()),null,2)},50)</script>

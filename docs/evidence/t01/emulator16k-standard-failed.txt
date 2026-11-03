@@ -1,0 +1,77 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RuntimeProbeTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RuntimeProbeTest:
+INSTRUMENTATION_STATUS: test=realSdkStreamsAcrossActivityRecreationAndRuntimeReopens
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RuntimeProbeTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: {"status":"failed","phase":"loader","error":"SyntaxError: Invalid regular expression: \/^\\p{ASCII}*$\/u: Invalid property name\n    at compileSourceTextModule (node:internal\/modules\/esm\/utils:355:16)\n    at ModuleLoader.moduleStrategy (node:internal\/modules\/esm\/translators:94:18)\n    at #translate (node:internal\/modules\/esm\/loader:441:20)\n    at afterLoad (node:internal\/modules\/esm\/loader:509:29)\n    at ModuleLoader.loadAndTranslate (node:internal\/modules\/esm\/loader:514:12)\n    at #getOrCreateModuleJobAfterResolve (node:internal\/modules\/esm\/loader:567:36)\n    at afterResolve (node:internal\/modules\/esm\/loader:614:52)\n    at ModuleLoader.getOrCreateModuleJob (node:internal\/modules\/esm\/loader:620:12)\n    at ModuleJob.syncLink (node:internal\/modules\/esm\/module_job:277:33)\n    at ModuleJob.link (node:internal\/modules\/esm\/module_job:389:17)","instance":"7e5e4783-f883-40c2-98ba-39470c2fcc07","pid":6283,"elapsedMs":2242,"nativeOwners":0,"nativeCloseMs":4}
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.RuntimeProbeTest.awaitState(RuntimeProbeTest.kt:94)
+	at dev.durableagent.probe.RuntimeProbeTest.awaitState$default(RuntimeProbeTest.kt:89)
+	at dev.durableagent.probe.RuntimeProbeTest.realSdkStreamsAcrossActivityRecreationAndRuntimeReopens(RuntimeProbeTest.kt:19)
+
+INSTRUMENTATION_STATUS: stream=
+Error in realSdkStreamsAcrossActivityRecreationAndRuntimeReopens(dev.durableagent.probe.RuntimeProbeTest):
+java.lang.AssertionError: {"status":"failed","phase":"loader","error":"SyntaxError: Invalid regular expression: \/^\\p{ASCII}*$\/u: Invalid property name\n    at compileSourceTextModule (node:internal\/modules\/esm\/utils:355:16)\n    at ModuleLoader.moduleStrategy (node:internal\/modules\/esm\/translators:94:18)\n    at #translate (node:internal\/modules\/esm\/loader:441:20)\n    at afterLoad (node:internal\/modules\/esm\/loader:509:29)\n    at ModuleLoader.loadAndTranslate (node:internal\/modules\/esm\/loader:514:12)\n    at #getOrCreateModuleJobAfterResolve (node:internal\/modules\/esm\/loader:567:36)\n    at afterResolve (node:internal\/modules\/esm\/loader:614:52)\n    at ModuleLoader.getOrCreateModuleJob (node:internal\/modules\/esm\/loader:620:12)\n    at ModuleJob.syncLink (node:internal\/modules\/esm\/module_job:277:33)\n    at ModuleJob.link (node:internal\/modules\/esm\/module_job:389:17)","instance":"7e5e4783-f883-40c2-98ba-39470c2fcc07","pid":6283,"elapsedMs":2242,"nativeOwners":0,"nativeCloseMs":4}
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.RuntimeProbeTest.awaitState(RuntimeProbeTest.kt:94)
+	at dev.durableagent.probe.RuntimeProbeTest.awaitState$default(RuntimeProbeTest.kt:89)
+	at dev.durableagent.probe.RuntimeProbeTest.realSdkStreamsAcrossActivityRecreationAndRuntimeReopens(RuntimeProbeTest.kt:19)
+
+INSTRUMENTATION_STATUS: test=realSdkStreamsAcrossActivityRecreationAndRuntimeReopens
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RuntimeProbeTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=toolSchemaCancellationAndFaultRecreation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RuntimeProbeTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: {"status":"failed","phase":"loader","error":"SyntaxError: Invalid regular expression: \/^\\p{ASCII}*$\/u: Invalid property name\n    at compileSourceTextModule (node:internal\/modules\/esm\/utils:355:16)\n    at ModuleLoader.moduleStrategy (node:internal\/modules\/esm\/translators:94:18)\n    at #translate (node:internal\/modules\/esm\/loader:441:20)\n    at afterLoad (node:internal\/modules\/esm\/loader:509:29)\n    at ModuleLoader.loadAndTranslate (node:internal\/modules\/esm\/loader:514:12)\n    at #getOrCreateModuleJobAfterResolve (node:internal\/modules\/esm\/loader:567:36)\n    at afterResolve (node:internal\/modules\/esm\/loader:614:52)\n    at ModuleLoader.getOrCreateModuleJob (node:internal\/modules\/esm\/loader:620:12)\n    at ModuleJob.syncLink (node:internal\/modules\/esm\/module_job:277:33)\n    at ModuleJob.link (node:internal\/modules\/esm\/module_job:389:17)","instance":"7e5e4783-f883-40c2-98ba-39470c2fcc07","pid":6283,"elapsedMs":2242,"nativeOwners":0,"nativeCloseMs":4}
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.RuntimeProbeTest.awaitState(RuntimeProbeTest.kt:94)
+	at dev.durableagent.probe.RuntimeProbeTest.awaitState$default(RuntimeProbeTest.kt:89)
+	at dev.durableagent.probe.RuntimeProbeTest.toolSchemaCancellationAndFaultRecreation(RuntimeProbeTest.kt:56)
+
+INSTRUMENTATION_STATUS: stream=
+Error in toolSchemaCancellationAndFaultRecreation(dev.durableagent.probe.RuntimeProbeTest):
+java.lang.AssertionError: {"status":"failed","phase":"loader","error":"SyntaxError: Invalid regular expression: \/^\\p{ASCII}*$\/u: Invalid property name\n    at compileSourceTextModule (node:internal\/modules\/esm\/utils:355:16)\n    at ModuleLoader.moduleStrategy (node:internal\/modules\/esm\/translators:94:18)\n    at #translate (node:internal\/modules\/esm\/loader:441:20)\n    at afterLoad (node:internal\/modules\/esm\/loader:509:29)\n    at ModuleLoader.loadAndTranslate (node:internal\/modules\/esm\/loader:514:12)\n    at #getOrCreateModuleJobAfterResolve (node:internal\/modules\/esm\/loader:567:36)\n    at afterResolve (node:internal\/modules\/esm\/loader:614:52)\n    at ModuleLoader.getOrCreateModuleJob (node:internal\/modules\/esm\/loader:620:12)\n    at ModuleJob.syncLink (node:internal\/modules\/esm\/module_job:277:33)\n    at ModuleJob.link (node:internal\/modules\/esm\/module_job:389:17)","instance":"7e5e4783-f883-40c2-98ba-39470c2fcc07","pid":6283,"elapsedMs":2242,"nativeOwners":0,"nativeCloseMs":4}
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.RuntimeProbeTest.awaitState(RuntimeProbeTest.kt:94)
+	at dev.durableagent.probe.RuntimeProbeTest.awaitState$default(RuntimeProbeTest.kt:89)
+	at dev.durableagent.probe.RuntimeProbeTest.toolSchemaCancellationAndFaultRecreation(RuntimeProbeTest.kt:56)
+
+INSTRUMENTATION_STATUS: test=toolSchemaCancellationAndFaultRecreation
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 5.233
+There were 2 failures:
+1) realSdkStreamsAcrossActivityRecreationAndRuntimeReopens(dev.durableagent.probe.RuntimeProbeTest)
+java.lang.AssertionError: {"status":"failed","phase":"loader","error":"SyntaxError: Invalid regular expression: \/^\\p{ASCII}*$\/u: Invalid property name\n    at compileSourceTextModule (node:internal\/modules\/esm\/utils:355:16)\n    at ModuleLoader.moduleStrategy (node:internal\/modules\/esm\/translators:94:18)\n    at #translate (node:internal\/modules\/esm\/loader:441:20)\n    at afterLoad (node:internal\/modules\/esm\/loader:509:29)\n    at ModuleLoader.loadAndTranslate (node:internal\/modules\/esm\/loader:514:12)\n    at #getOrCreateModuleJobAfterResolve (node:internal\/modules\/esm\/loader:567:36)\n    at afterResolve (node:internal\/modules\/esm\/loader:614:52)\n    at ModuleLoader.getOrCreateModuleJob (node:internal\/modules\/esm\/loader:620:12)\n    at ModuleJob.syncLink (node:internal\/modules\/esm\/module_job:277:33)\n    at ModuleJob.link (node:internal\/modules\/esm\/module_job:389:17)","instance":"7e5e4783-f883-40c2-98ba-39470c2fcc07","pid":6283,"elapsedMs":2242,"nativeOwners":0,"nativeCloseMs":4}
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.RuntimeProbeTest.awaitState(RuntimeProbeTest.kt:94)
+	at dev.durableagent.probe.RuntimeProbeTest.awaitState$default(RuntimeProbeTest.kt:89)
+	at dev.durableagent.probe.RuntimeProbeTest.realSdkStreamsAcrossActivityRecreationAndRuntimeReopens(RuntimeProbeTest.kt:19)
+2) toolSchemaCancellationAndFaultRecreation(dev.durableagent.probe.RuntimeProbeTest)
+java.lang.AssertionError: {"status":"failed","phase":"loader","error":"SyntaxError: Invalid regular expression: \/^\\p{ASCII}*$\/u: Invalid property name\n    at compileSourceTextModule (node:internal\/modules\/esm\/utils:355:16)\n    at ModuleLoader.moduleStrategy (node:internal\/modules\/esm\/translators:94:18)\n    at #translate (node:internal\/modules\/esm\/loader:441:20)\n    at afterLoad (node:internal\/modules\/esm\/loader:509:29)\n    at ModuleLoader.loadAndTranslate (node:internal\/modules\/esm\/loader:514:12)\n    at #getOrCreateModuleJobAfterResolve (node:internal\/modules\/esm\/loader:567:36)\n    at afterResolve (node:internal\/modules\/esm\/loader:614:52)\n    at ModuleLoader.getOrCreateModuleJob (node:internal\/modules\/esm\/loader:620:12)\n    at ModuleJob.syncLink (node:internal\/modules\/esm\/module_job:277:33)\n    at ModuleJob.link (node:internal\/modules\/esm\/module_job:389:17)","instance":"7e5e4783-f883-40c2-98ba-39470c2fcc07","pid":6283,"elapsedMs":2242,"nativeOwners":0,"nativeCloseMs":4}
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.RuntimeProbeTest.awaitState(RuntimeProbeTest.kt:94)
+	at dev.durableagent.probe.RuntimeProbeTest.awaitState$default(RuntimeProbeTest.kt:89)
+	at dev.durableagent.probe.RuntimeProbeTest.toolSchemaCancellationAndFaultRecreation(RuntimeProbeTest.kt:56)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1
