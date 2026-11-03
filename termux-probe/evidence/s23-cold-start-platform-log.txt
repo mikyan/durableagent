@@ -1,0 +1,17 @@
+11-04 00:46:32.372  2880  7201 I ActivityManager: Killing 30026:dev.durableagent.termuxprobe/u0a288 (adj 700): kill background
+11-04 00:46:32.381  2880  5262 D FreecessController: UFZ : dev.durableagent.termuxprobe(10288) [30026] reason: Signal
+11-04 00:46:32.385  2880  7201 D ActivityManager: proc ProcessRecord{816131a 30026:dev.durableagent.termuxprobe/u0a288} already removed. so we skip next process.
+11-04 00:46:32.392  2880  7201 W ActivityManager: Invalid packageName: dev.durableagent.termuxprobe
+11-04 00:46:32.440  2880  7196 V ActivityManager: Got obituary of 30026:dev.durableagent.termuxprobe
+11-04 00:46:33.181  2880  3211 I ActivityManager: Start proc 30609:dev.durableagent.termuxprobe/u0a288 for next-top-activity {dev.durableagent.termuxprobe/dev.durableagent.termuxprobe.MainActivity}
+11-04 00:46:33.393  2880  7216 I ActivityManager: Background started FGS: Allowed [callingPackage: dev.durableagent.termuxprobe; callingUid: 10288; uidState: TOP ; uidBFSL: [BFSL]; intent: Intent { act=com.termux.RUN_COMMAND xflg=0x4 cmp=com.termux/.app.RunCommandService (has extras) }; code:PROC_STATE_TOP; tempAllowListReason:<null>; allowWiu:12; targetSdkVersion:28; callerTargetSdkVersion:36; startForegroundCount:1; bindFromPackage:null: isBindService:false]
+11-04 00:46:33.395 30609 30609 I DurableAgentProbe: time=1793724393394
+11-04 00:46:33.395 30609 30609 I DurableAgentProbe: Termux 0.118.3 / 1002; target=28; uid=10187
+11-04 00:46:33.395 30609 30609 I DurableAgentProbe: APK SHA256=72fdb596045116bf5ba1b5bdf5b26fddb9acc0bd074ad9f2da9eb0ae85e83a4e
+11-04 00:46:33.395 30609 30609 I DurableAgentProbe: cert=b6da01480eefd5fbf2cd3771b8d1021ec791304bdd6c4bf41d3faabad48ee5e1
+11-04 00:46:33.395 30609 30609 I DurableAgentProbe: 固定发行物校验=true; RUN_COMMAND 系统授权=true
+11-04 00:46:33.395 30609 30609 I DurableAgentProbe: Inspection(phase=DISPATCH_FAILED, request=null, bootstrap=UNKNOWN, externalCalls=UNKNOWN, protocol=UNKNOWN, evidence=java.lang.IllegalStateException: Termux service unavailable)
+11-04 00:46:33.428  2880  5269 D FreecessController: Try to make pkg idle: <com.termux, 10187>.
+11-04 00:46:33.428  2880  5269 W ActivityManager: Idling uid u0a187 from package com.termux user 0
+11-04 00:46:33.429  2880  5269 W ActivityManager: Stopping service due to app idle: u0a187 -47s466ms com.termux/.app.RunCommandService
+11-04 00:46:33.429  2880  5269 D FreecessHandler: freeze com.termux(10187) result : 37

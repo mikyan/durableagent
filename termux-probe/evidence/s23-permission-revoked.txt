@@ -1,0 +1,11 @@
+Observed: 2026-11-04T00:54:13.9150560+08:00
+Fixture source: 1f7781f plus bounded startup retry (before final strict deadline guard)
+Fixture APK SHA256: a7e6f285651561f2dfed845a4ffa8b5658465aeb6e639f1fddd1b90ba3157c5e
+Action: Revoked only fixture RUN_COMMAND runtime permission through Android pm; launched fixture; launch=Starting: Intent { cmp=dev.durableagent.termuxprobe/.MainActivity } Status: ok LaunchState: COLD Activity: dev.durableagent.termuxprobe/.MainActivity TotalTime: 260 WaitTime: 263 Complete
+
+time=1793724853805
+Termux 0.118.3 / 1002; target=28; uid=10187
+APK SHA256=72fdb596045116bf5ba1b5bdf5b26fddb9acc0bd074ad9f2da9eb0ae85e83a4e
+cert=b6da01480eefd5fbf2cd3771b8d1021ec791304bdd6c4bf41d3faabad48ee5e1
+固定发行物校验=true; RUN_COMMAND 系统授权=false
+Inspection(phase=PERMISSION_REQUIRED, request=null, bootstrap=UNKNOWN, externalCalls=UNKNOWN, protocol=UNKNOWN, evidence=, retryAfterMillis=null)

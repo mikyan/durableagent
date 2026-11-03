@@ -1,0 +1,11 @@
+Observed: 2026-11-04T00:46:33.4325808+08:00
+Fixture commit: 1f7781f
+Fixture APK SHA256: 54ca5b2b713336c58f37e080db823190ace06ed1266ef7d6694511123254e39a
+Action: Backgrounded fixture and Android am kill reclaimed only its process; no force-stop; process absent; opened only fixture; launch=Starting: Intent { cmp=dev.durableagent.termuxprobe/.MainActivity } Warning: Activity not started, its current task has been brought to the front Status: ok LaunchState: COLD Activity: dev.durableagent.termuxprobe/.MainActivity TotalTime: 243 WaitTime: 245 Complete
+
+time=1793724393394
+Termux 0.118.3 / 1002; target=28; uid=10187
+APK SHA256=72fdb596045116bf5ba1b5bdf5b26fddb9acc0bd074ad9f2da9eb0ae85e83a4e
+cert=b6da01480eefd5fbf2cd3771b8d1021ec791304bdd6c4bf41d3faabad48ee5e1
+固定发行物校验=true; RUN_COMMAND 系统授权=true
+Inspection(phase=DISPATCH_FAILED, request=null, bootstrap=UNKNOWN, externalCalls=UNKNOWN, protocol=UNKNOWN, evidence=java.lang.IllegalStateException: Termux service unavailable)

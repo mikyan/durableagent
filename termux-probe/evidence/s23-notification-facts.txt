@@ -1,0 +1,9 @@
+Observed on S23 during T03 campaign 2026-11-04; user0 Termux UID10187 only.
+Source: scoped extraction of Android dumpsys notification after actual notification prompt was denied.
+AppSettings: com.termux (10187) importance=NONE userSet=true
+termux_notification_channel: importance=2, deleted=false
+termux_run_command_notification_channel: importance=2, deleted=false
+termux_plugin_command_errors_notification_channel: importance=4, deleted=false
+Source: dumpsys activity services com.termux after the short probe returned.
+RunCommandService: startRequested=true, delayedStop=false, stopIfKilled=true
+No sustained-foreground/lock-screen guarantee is inferred from this post-completion snapshot.

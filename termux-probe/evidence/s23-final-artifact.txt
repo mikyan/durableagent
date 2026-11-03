@@ -1,0 +1,3 @@
+Fixture revision: acdc000
+Host and installed APK SHA256: 197a869eb00af13d643e859342bc26ddd45341b5e7f7778b79c9c23b5be93bb6
+Observed: 2026-11-04T00:57:29.0977038+08:00

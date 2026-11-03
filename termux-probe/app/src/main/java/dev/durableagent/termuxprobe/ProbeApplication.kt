@@ -53,15 +53,8 @@ class ProbeApplication : Application() {
                 if (request != null && request.nonce != dispatched) {
                     callback?.cancel()
                     dispatched = request.nonce
-                    try { callback = gateway.dispatch(request) }
-                    catch (error: RuntimeException) {
-                        val phase = when (error) {
-                            is SecurityException -> if (checkSelfPermission(TERMUX_PERMISSION) != android.content.pm.PackageManager.PERMISSION_GRANTED) Phase.PERMISSION_REQUIRED else Phase.DISPATCH_FAILED
-                            is ForegroundServiceStartNotAllowedException, is BackgroundServiceStartNotAllowedException -> Phase.START_RESTRICTED
-                            else -> Phase.DISPATCH_FAILED
-                        }
-                        inspector.dispatchFailed(request.nonce, phase, "${error.javaClass.name}: ${error.message}")
-                    }
+                    callback = gateway.prepareCallback(request)
+                    attemptStart(request)
                     main.postDelayed({
                         inspector.expire(SystemClock.elapsedRealtime())
                         if (inspector.state.request == null) { callback?.cancel(); callback = null }
@@ -71,6 +64,47 @@ class ProbeApplication : Application() {
                 publish()
             }
         }
+    }
+
+    private fun attemptStart(request: ProbeRequest) {
+        if (inspector.state.request?.nonce != request.nonce) return
+        if (request.unavailableStarts > 0 && SystemClock.elapsedRealtime() - request.startedAt >= 3000L) {
+            inspector.dispatchUnavailable(request.nonce, SystemClock.elapsedRealtime())
+            callback?.cancel(); callback = null
+            return
+        }
+        try {
+            if (!gateway.dispatch(request, callback ?: return)) {
+                val retry = inspector.dispatchUnavailable(request.nonce, SystemClock.elapsedRealtime())
+                retry.retryAfterMillis?.let { delay ->
+                    main.postDelayed({
+                        // Revalidate package identity, stopped flag and permission before each retry.
+                        if (inspector.state.request?.nonce != request.nonce) return@postDelayed
+                        worker.execute {
+                            val facts = runCatching { gateway.facts() }
+                            main.post {
+                                if (inspector.state.request?.nonce != request.nonce) return@post
+                                facts.fold({
+                                    platformDescription = gateway.description
+                                    val verified = inspector.inspect(it, request.nonce, SystemClock.elapsedRealtime())
+                                    if (verified.phase == Phase.CHECKING) attemptStart(verified.request!!)
+                                }, { inspector.platformCheckFailed("重试前平台核验失败：${it.javaClass.simpleName}") })
+                                if (inspector.state.request == null) { callback?.cancel(); callback = null }
+                                publish()
+                            }
+                        }
+                    }, delay)
+                }
+            }
+        } catch (error: RuntimeException) {
+            val phase = when (error) {
+                is SecurityException -> if (checkSelfPermission(TERMUX_PERMISSION) != android.content.pm.PackageManager.PERMISSION_GRANTED) Phase.PERMISSION_REQUIRED else Phase.DISPATCH_FAILED
+                is ForegroundServiceStartNotAllowedException, is BackgroundServiceStartNotAllowedException -> Phase.START_RESTRICTED
+                else -> Phase.DISPATCH_FAILED
+            }
+            inspector.dispatchFailed(request.nonce, phase, "${error.javaClass.name}: ${error.message}")
+        }
+        if (inspector.state.request == null) { callback?.cancel(); callback = null }
     }
 
     fun receive(nonce: String, result: ProbeResult, finished: () -> Unit) {

@@ -3,9 +3,9 @@ package dev.durableagent.termuxprobe
 enum class Fact { UNKNOWN, VERIFIED, FAILED }
 enum class Phase { UNCHECKED, INSTALL_REQUIRED, UNTRUSTED_INSTALL, PERMISSION_REQUIRED, FORCE_STOPPED, CHECKING, UNKNOWN_TIMEOUT, READY, INVALID_RESPONSE, EXTERNAL_CALLS_DISABLED, SETUP_REQUIRED, PROTOCOL_MISMATCH, BUSY, START_RESTRICTED, DISPATCH_FAILED, PLATFORM_CHECK_FAILED }
 data class PlatformFacts(val installed: Boolean, val trusted: Boolean = false, val permission: Boolean = false, val stopped: Boolean = false, val uid: Int = -1)
-data class ProbeRequest(val nonce: String, val startedAt: Long)
+data class ProbeRequest(val nonce: String, val startedAt: Long, val unavailableStarts: Int = 0)
 data class ProbeResult(val stdout: String, val stderr: String = "", val exitCode: Int = 0, val error: Int = -1, val errorMessage: String = "", val truncated: Boolean = false)
-data class Inspection(val phase: Phase, val request: ProbeRequest? = null, val bootstrap: Fact = Fact.UNKNOWN, val externalCalls: Fact = Fact.UNKNOWN, val protocol: Fact = Fact.UNKNOWN, val evidence: String = "")
+data class Inspection(val phase: Phase, val request: ProbeRequest? = null, val bootstrap: Fact = Fact.UNKNOWN, val externalCalls: Fact = Fact.UNKNOWN, val protocol: Fact = Fact.UNKNOWN, val evidence: String = "", val retryAfterMillis: Long? = null)
 
 /** High-level inspection seam. Platform observations are facts, never saved ready flags. */
 class EnvironmentInspector {
@@ -72,6 +72,19 @@ class EnvironmentInspector {
 
     @Synchronized fun platformCheckFailed(detail: String): Inspection {
         state = Inspection(Phase.PLATFORM_CHECK_FAILED, evidence = detail)
+        return state
+    }
+
+    @Synchronized fun dispatchUnavailable(nonce: String, now: Long): Inspection {
+        val request = state.request ?: return state
+        if (request.nonce != nonce) return state
+        val delays = listOf(250L, 500L, 1000L, 1250L)
+        val remaining = 3000L - (now - request.startedAt)
+        if (remaining <= 0 || request.unavailableStarts >= delays.size)
+            return dispatchFailed(nonce, Phase.DISPATCH_FAILED, "Android returned no service after bounded startup retries; cause unknown")
+        state = state.copy(request = request.copy(unavailableStarts = request.unavailableStarts + 1),
+            evidence = "Android returned no service; retrying the same inspection and callback capability",
+            retryAfterMillis = minOf(delays[request.unavailableStarts], remaining))
         return state
     }
 }
