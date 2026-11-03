@@ -1,0 +1,199 @@
+docs/evidence/t05/t05-vault-emu16k-green-instrumentation.log
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-169
+android/app/src/debug/java/dev/durableagent/probe/CredentialBootProbeReceiver.kt
+  s_467dcb949b5b60::t_608bb55fb7f456 1-24
+docs/evidence/t05/t05-vault-s23-green-instrumentation.log
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-169
+docs/evidence/t05/t05-recovery-test-results.md
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-32
+docs/evidence/t05/t05-s23-third-model-instrumentation.log
+  s_467dcb949b5b60::t_c92552ce98dc17 1-57
+docs/evidence/t05/t05-emu16k-policy-explicit-temp.log
+  s_467dcb949b5b60::t_ea609243ef2e04 1-25
+android/app/src/main/java/dev/durableagent/probe/NativeCredentialAccess.kt
+  s_467dcb949b5b60::t_e443d7cb720107 1-11,16,25-26,28-29,45-47,49,53-54,56,60-71
+  s_467dcb949b5b60::t_f57906cd75f119 12-15,17-24,27,30-44,48,50-52,55,57-59
+android/app/src/debug/java/dev/durableagent/probe/CredentialLeaseProbeService.kt
+  s_467dcb949b5b60::t_797c03867fd7b2 1-37
+android/app/src/androidTest/java/dev/durableagent/probe/ModelSettingsTest.kt
+  s_467dcb949b5b60::t_c9d0b700aa8758 66-69
+  s_467dcb949b5b60::t_10d513fb032677 39,43
+  s_467dcb949b5b60::t_227ee34b5d440d 1-38,40-42,44-65,70
+docs/evidence/t05/t05-vault-s23-red-instrumentation.log
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-41
+docs/evidence/t05/t05-emulator-preunlock.txt
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-8
+android/app/src/main/java/dev/durableagent/probe/CredentialVault.kt
+  s_467dcb949b5b60::t_aa94f470ea1ae1 1-42,45-61,69-90,103-109,111-163,165-180,185,191-200,202-203,205-231,233-240,246-276
+  s_467dcb949b5b60::t_500b35d0a1419c 181-184
+  s_467dcb949b5b60::t_e443d7cb720107 43-44,110,186-190,201,204,232,241-245
+  s_467dcb949b5b60::t_f57906cd75f119 91-102
+  s_467dcb949b5b60::t_2d08eed9844ff3 62-68,164
+ui/test/models-real.test.mjs
+  s_467dcb949b5b60::t_135b3d2b119ed8 47
+  s_467dcb949b5b60::t_2301fbdf911e67 1-46,48-58
+runtime/MODELS.md
+  s_467dcb949b5b60::t_ae3dda38f1a107 1-39,41-53,55-56
+  s_467dcb949b5b60::t_4e29608589dae5 40,54
+docs/evidence/t05/t05-emu16k-first-model-instrumentation.log
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-41
+docs/evidence/t05/t05-emu16k-second-model-instrumentation.log
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-82
+ui/src/controller.ts
+  s_467dcb949b5b60::t_ef2d8675539553 3,6-8,12,20,28,47,72,89,118-121,123-138,140-146,148-164,166-175
+  s_467dcb949b5b60::t_e101ae5e12adda 122,139,147,165
+android/scripts/model-invalid-credential.mjs
+  s_467dcb949b5b60::t_c92552ce98dc17 1-62
+docs/evidence/t05/t05-emu16k-policy-diagnostic.log
+  s_467dcb949b5b60::t_ea609243ef2e04 1-50
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_c69d62c46387bb 36,39
+  s_467dcb949b5b60::t_b511fb542bcbfe 40
+  s_467dcb949b5b60::t_ce867842c78489 2,6,16
+  s_467dcb949b5b60::t_c9d0b700aa8758 9,32-35,37-38,41
+  s_467dcb949b5b60::t_914c07154eed88 26
+  s_467dcb949b5b60::t_932ada54b73280 7-8,14,23-25,27-28,31,42
+runtime/src/application.ts
+  s_467dcb949b5b60::t_dfec2aae3a8c97 42,45,64-71,76-77
+  s_467dcb949b5b60::t_f0334fdebac38d 56,153,158
+  s_467dcb949b5b60::t_bf40239d12c12a 7-8,13,17,30-31,78,90-96,144-152,154-157,159-164
+  s_467dcb949b5b60::t_ec99c631264e41 72-75
+runtime/src/model-connections.ts
+  s_467dcb949b5b60::t_568a7a1b862105 4,22
+  s_467dcb949b5b60::t_2b778ea87908c5 123
+  s_467dcb949b5b60::t_3bb4bc4241f758 136
+  s_467dcb949b5b60::t_4f874e147e3872 65,69,102
+  s_467dcb949b5b60::t_795d3129a59ea1 74
+  s_467dcb949b5b60::t_103e7845194bc3 121,126-127
+  s_467dcb949b5b60::t_00b3662087498d 1-3,7-13,15-20,23-64,66-67,70-73,77-79,81-83,117,130-135,137
+  s_467dcb949b5b60::t_914c07154eed88 14,21,68,80,103
+  s_467dcb949b5b60::t_2d80a7a14f92e2 5-6
+  s_467dcb949b5b60::t_17e6e6f6251d1d 76,106-108,118-120,122,124-125,128-129
+  s_467dcb949b5b60::t_9758627fe4eb9e 75,84-101,104-105,109-116
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_932ada54b73280 24,44-45,60,68-69,97-119,183
+  s_467dcb949b5b60::t_c9d0b700aa8758 46
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_467dcb949b5b60::t_932ada54b73280 48
+ui/src/style.css
+  s_467dcb949b5b60::t_d6d561bfe861a2 8
+docs/evidence/t05/t05-emulator-postunlock.txt
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-4
+docs/evidence/t05/t05-emu16k-third-model-instrumentation.log
+  s_467dcb949b5b60::t_c92552ce98dc17 1-57
+android/app/src/main/java/dev/durableagent/probe/ApplicationClient.kt
+  s_467dcb949b5b60::t_932ada54b73280 45
+android/app/src/androidTest/java/dev/durableagent/probe/CredentialVaultTest.kt
+  s_467dcb949b5b60::t_dd0abe026c6478 1-4,21-25,35-40,58-77,195,314
+  s_467dcb949b5b60::t_1c2b541ba3e04b 196-214
+  s_467dcb949b5b60::t_608bb55fb7f456 215-235,313
+  s_467dcb949b5b60::t_d6e9ed46845483 291-292,298-299,309-312
+  s_467dcb949b5b60::t_013f9850d716d7 6-9,11-15,31-32,236-273
+  s_467dcb949b5b60::t_a5c4bd8c378e86 5,10,16-17,19-20,26,28-30,33-34,41-57,78-194
+  s_467dcb949b5b60::t_176d36a9cf2955 18,27,274-290,293-297,300-308
+docs/evidence/t05/t05-policy-cases.json
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-15
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_dc24cc8c125e3e 13
+ui/README.md
+  s_467dcb949b5b60::t_88fd90d8db4031 1,3,22-24,50-58,62-66
+  s_467dcb949b5b60::t_ca2113cbf86273 20
+  s_467dcb949b5b60::t_825a602435ce7d 21
+runtime/test/model-recovery.test.mjs
+  s_467dcb949b5b60::t_b2224f464f96da 67-88
+  s_467dcb949b5b60::t_41490da18d7c7b 89-119
+  s_467dcb949b5b60::t_5aa18d51aec942 120-126,128-136,138-144,169
+  s_467dcb949b5b60::t_7949036158ef99 137
+  s_467dcb949b5b60::t_577014f52baec8 154
+  s_467dcb949b5b60::t_38b3e1e1ab7e04 47,127,145-153,155-168
+  s_467dcb949b5b60::t_af68eca4eee484 1-46,48-66
+runtime/validation/model-policy.mjs
+  s_467dcb949b5b60::t_4ef88c0ba5ec45 51,71,88,114,121,129,135,156
+  s_467dcb949b5b60::t_5c13a48c8f94f1 152,155
+  s_467dcb949b5b60::t_b511fb542bcbfe 23,26
+  s_467dcb949b5b60::t_c69d62c46387bb 5,11,14,30
+  s_467dcb949b5b60::t_26b3c472298587 1-4,6-10,12-13,15-22,24-25,27-29,31-50,52-70,72-87,89-113,115-120,122-128,130-134,136-151,153-154,157-162
+docs/evidence/t05/t05-s23-third-bounded-credential-audit.json
+  s_467dcb949b5b60::t_c92552ce98dc17 1-14
+runtime/test/fixtures/model-recovery-worker.mjs
+  s_467dcb949b5b60::t_577014f52baec8 11,51-52,60-61
+  s_467dcb949b5b60::t_f317d80fdc6688 7-9,42-50,62-68
+  s_467dcb949b5b60::t_5f4db299c3e82d 1-6,10,12-41,53-59,69-72
+docs/evidence/t05/t05-vault-emu16k-red-instrumentation.log
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-41
+ui/src/extensions/models.tsx
+  s_467dcb949b5b60::t_845d9ebd344fe7 1-3,5-14,16-27,29-57,61-67,69-75
+  s_467dcb949b5b60::t_21bb864e4c30af 58-60,68
+  s_467dcb949b5b60::t_c68f34ad2067f2 15,28
+  s_467dcb949b5b60::t_747feaf336f1ad 4
+docs/evidence/t05/t05-final-runtime-test.log
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-128
+docs/specs/v1/tickets/05-models-and-credentials.md
+  s_467dcb949b5b60::t_a8ae6b41762622 9-23
+ui/src/client.ts
+  s_467dcb949b5b60::t_e101ae5e12adda 30,32-33,35
+  s_467dcb949b5b60::t_3a361a310d741b 2,4-5,26-29,31,34,36-37
+docs/evidence/t05/t05-emu16k-third-real-auth-failure.json
+  s_467dcb949b5b60::t_c92552ce98dc17 1-21
+runtime/test/models.test.mjs
+  s_467dcb949b5b60::t_26b3c472298587 2-4
+  s_467dcb949b5b60::t_7bd2f751b031b4 1
+docs/evidence/t05/README.md
+  s_467dcb949b5b60::t_d315fd581c79ae 17-18,21-22,32,45,47-64,66-67
+  s_467dcb949b5b60::t_d0baccbf764d07 41
+  s_467dcb949b5b60::t_11e028d60202d4 65
+  s_467dcb949b5b60::t_75fcbc2d451d8a 1-16,19-20,23-31,33-40,42-44,46
+docs/evidence/t05/t05-s23-first-model-instrumentation.log
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-41
+docs/evidence/t05/t05-s23-third-real-auth-failure.json
+  s_467dcb949b5b60::t_c92552ce98dc17 1-21
+ui/test/models-page.test.tsx
+  s_467dcb949b5b60::t_586648786c812f 1-26,28-57,62-63
+  s_467dcb949b5b60::t_e3caf04861276e 64-79,81-88
+  s_467dcb949b5b60::t_97fe5890cd9297 27,58-61
+  s_467dcb949b5b60::t_35484c56e4aa7b 80
+ui/src/extensions.ts
+  s_467dcb949b5b60::t_845d9ebd344fe7 2,4-7
+ui/src/models.css
+  s_467dcb949b5b60::t_747feaf336f1ad 1-44
+android/app/build.gradle.kts
+  s_467dcb949b5b60::t_c9d0b700aa8758 24
+ui/test/credentials.test.ts
+  s_467dcb949b5b60::t_21e598973fd6c4 1-24
+docs/evidence/t05/t05-emu16k-third-bounded-credential-audit.json
+  s_467dcb949b5b60::t_c92552ce98dc17 1-14
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_655a47e682b504 1,4-7,42-43,59,75,77,85,88,91,94
+docs/evidence/t05/t05-s23-second-model-instrumentation.log
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-82
+ui/test/models-controller.test.ts
+  s_467dcb949b5b60::t_df980d8a30b9a3 1-50
+android/app/src/debug/AndroidManifest.xml
+  s_467dcb949b5b60::t_e5bdda6bec4bc9 1-6
+runtime/src/model-protocol.ts
+  s_467dcb949b5b60::t_dc24cc8c125e3e 1-23
+docs/evidence/t05/t05-final-build-lint.log
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-99
+docs/evidence/t05/t05-final-ui-test.log
+  s_467dcb949b5b60::t_e80384a5aa9fbb 1-24
+docs/evidence/t05/t05-third-build.log
+  s_467dcb949b5b60::t_c92552ce98dc17 1-86
+docs/evidence/t05/t05-third-apk-inspection.json
+  s_467dcb949b5b60::t_0bbe7af6798347 1-87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "32d60db4311709a92764857aa66bfc530669221a",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
