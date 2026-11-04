@@ -1,0 +1,10 @@
+{
+  "applicationServiceAbsent": true,
+  "wifi": 1,
+  "mobileData": 1,
+  "androidWifiOverrides": [
+    "none",
+    "none"
+  ],
+  "observation": "read-only after final native tests and before returning emulator lease to root"
+}

@@ -1,0 +1,30 @@
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/ui
+
+ ❯ test/execution-controller.test.ts (7 tests | 1 failed | 6 skipped) 11ms
+   × explains manual Termux reopening after an asynchronous force-stop error without changing or replaying the execution 10ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/execution-controller.test.ts > explains manual Termux reopening after an asynchronous force-stop error without changing or replaying the execution
+AssertionError: expected '执行通道未完成请求（TERMUX_FORCE_STOPPED）' to be 'Termux 已被系统强行停止。请手动打开 Termux 一次，再返回本应…' // Object.is equality
+
+Expected: "Termux 已被系统强行停止。请手动打开 Termux 一次，再返回本应用；无需重新初始化。"
+Received: "执行通道未完成请求（TERMUX_FORCE_STOPPED）"
+
+ ❯ test/execution-controller.test.ts:15:34
+     13|  try{
+     14|   await execution.refresh('conversation');await execution.query('retai…
+     15|   expect(execution.view().error).toBe('Termux 已被系统强行停止。请手动打开 Termux 一次…
+       |                                  ^
+     16|   expect(execution.view().rows).toEqual([row]);
+     17|   expect(requests.map(request=>request.method)).toEqual(['execution.li…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 skipped (7)
+   Start at  23:25:04
+   Duration  499ms (transform 57%, import 23%, tests 11%, worker 9%)
+

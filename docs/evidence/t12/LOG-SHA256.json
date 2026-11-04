@@ -27,6 +27,16 @@
       "gitBlobSha256": "a03e582adcb300a4fb2a2ee62bfde8af888f35c7228f81f1b3e97ebbe82f0be8"
     },
     {
+      "file": "t12-autostart-final02-install.log",
+      "retainedLocalSha256": "7ed8077e18ea1232bc80f6cf16f0e955db5bfc14dab4220ae2251853311aa9fb",
+      "gitBlobSha256": "50daa2ba76a5c9784728abf9461823bc72d3c4835986fc7ba7cdd96abebea397"
+    },
+    {
+      "file": "t12-autostart-green01-device.log",
+      "retainedLocalSha256": "a5bb637b55e28545daee6ad6055cb7b4ab69b1ff2b299bd37f25f6644d879d7e",
+      "gitBlobSha256": "fdf48ac7550c7465fd3009afc064a7f4b12507c7d693e59584a01e724afeace3"
+    },
+    {
       "file": "t12-autostart-red01-artifacts.json",
       "retainedLocalSha256": "84dbb900791281754d7402e93e0bc4a9c469ea2c29e772072f12ac07dc1297e5",
       "gitBlobSha256": "cc3119699a3285490c5a7a7d003a46629de3ed1b4d1a70f3a14eae376a5ef7af"
@@ -107,9 +117,19 @@
       "gitBlobSha256": "8060eab24996361b9d04eeafac7f8b8f9eec90fff7a921b53f8e2241692b8abd"
     },
     {
+      "file": "t12-final-baseline01.json",
+      "retainedLocalSha256": "4539f58171566c0f3206e796f24b6dd1c4dd6933b37cc04e244c5bed5a0c52b6",
+      "gitBlobSha256": "e00d5bcceba3766b64b8a461e18c73466b5c232b8a2d33d5be31f92d274b7e68"
+    },
+    {
       "file": "t12-final-helper-lf-normalization.json",
       "retainedLocalSha256": "06a16609b3eea233544e70fa8ca394af08abc43c301220f37272124dbf6cd4f0",
       "gitBlobSha256": "7c8265998ca71a2e28dcf0b86b41b094901204488bcde0451c305c1b15bc84c0"
+    },
+    {
+      "file": "t12-final-job01-device.log",
+      "retainedLocalSha256": "7a95c77ffb82f13db52a05cd28378f03d7010f40143c064576aa615405b81493",
+      "gitBlobSha256": "43ff4e77c71a8fc7ffc4965b5b3b1c8da35b263cfb158534d22c46aa41210d6c"
     },
     {
       "file": "t12-final-joint-build01.log",
@@ -130,6 +150,66 @@
       "file": "t12-final-joint01-root-inspection.json",
       "retainedLocalSha256": "9f40497d7f4a960de5d609563c444846439846fa958609b301ee19871858dccb",
       "gitBlobSha256": "3a19b83f4afc99fea48d69dd3a35e94c165cd4e7c573095eb231f3755276667b"
+    },
+    {
+      "file": "t12-final-native-credential-audit.json",
+      "retainedLocalSha256": "304024d9766102a57d402f15b6d53498cc7f869e64870cfd86043c8ef5475332",
+      "gitBlobSha256": "304024d9766102a57d402f15b6d53498cc7f869e64870cfd86043c8ef5475332"
+    },
+    {
+      "file": "t12-final-original01-device.log",
+      "retainedLocalSha256": "cc5e8555ea624ea39071dcac336786c6723b0d15105b750e8484302262ff472b",
+      "gitBlobSha256": "6bff19511c39dbe7714a08c083f49061757fdda5c133420dce8984d3c5ce9c02"
+    },
+    {
+      "file": "t12-final-ui-build01.log",
+      "retainedLocalSha256": "9a6554e846c180f09aed21da94c3218b6eb811100f0d4bf297dd2e74a68c9c4a",
+      "gitBlobSha256": "b52eb71c171bd47df5328f1ebe750ace023ecb325c3bcccd925dd970215aa729"
+    },
+    {
+      "file": "t12-final-ui01-apk-inspection.json",
+      "retainedLocalSha256": "84cf48807bd1900ec6e31642d5f11486eee2ebb7c064ff0ada1bd9590ce044da",
+      "gitBlobSha256": "72f820984c7b02d8a1035e54ccfe978b94a426c66f3f4c8a60f20b0fa1780911"
+    },
+    {
+      "file": "t12-final-ui01-artifacts.json",
+      "retainedLocalSha256": "50eaf818ffcd9a848c7e92b583cdc9f6c9b66b3f6ed0fcf7b3252f876f4eb302",
+      "gitBlobSha256": "58aff1053c2c619cc6025c2c4ced2284ab17365e34c079e68ebf3430f0e3963c"
+    },
+    {
+      "file": "t12-final-ui01-root-artifact-delta.json",
+      "retainedLocalSha256": "9fffc0ec470187b6206b67b4b2277b0b9798ab5daff16f76fbaf7775dd699e70",
+      "gitBlobSha256": "69ccdb65c11d305d0c3ea08f1be62a6d1d30c317ca59d23de0a297783721e44b"
+    },
+    {
+      "file": "t12-final-ui01-root-inspection.json",
+      "retainedLocalSha256": "84cf48807bd1900ec6e31642d5f11486eee2ebb7c064ff0ada1bd9590ce044da",
+      "gitBlobSha256": "72f820984c7b02d8a1035e54ccfe978b94a426c66f3f4c8a60f20b0fa1780911"
+    },
+    {
+      "file": "t12-final-ui01-ui-only-comparison.json",
+      "retainedLocalSha256": "6070732dac6c9efcdc62344211fca789f9448ce41787090fc0e84c53f6d25c77",
+      "gitBlobSha256": "f687a41e82e9c72c8a2e7580c127a8ed644a9172cae04b989745ae4bf4c38e9b"
+    },
+    {
+      "file": "t12-final-wakes01-device.log",
+      "retainedLocalSha256": "7da9a7b1027509642fc8d00841f955cd54cd94207ebcd7e4f426f9cc02908a21",
+      "gitBlobSha256": "061c6896f103c53ea7dc2dee6adb573792494ce86a390a646eaa36896dd81f3d"
+    },
+    {
+      "file": "t12-force-stop-message-green01.log",
+      "retainedLocalSha256": "e4b7dbee769ea2bb2da22f25d4cae8b3b48c7d331f6fcaec99c4f1e7543cb2bf",
+      "gitBlobSha256": "a33bea906a409b3f9b5837834fd94dfdcb7a0dc3c11501fd56b709360e270b7b"
+    },
+    {
+      "file": "t12-force-stop-message-red01.log",
+      "retainedLocalSha256": "b60b4cc39b4d58a65358b5d0d7208892a839040c3002829dcbf2e8e9910fec6a",
+      "gitBlobSha256": "f47ab0d5e7ab3397e05168af3e3680b935a0c0cf910f30abfbe35074c36af4f9"
+    },
+    {
+      "file": "t12-force-stop-message-ui-build01.log",
+      "retainedLocalSha256": "39e6d0a9a4d9248983eb3524108c658c25229e12c2109030f3f0faa14b8597e1",
+      "gitBlobSha256": "efeaf4fd4ebdf7ba9062cd662bf709ae89a8afd4b74eadf518fbdcbdad92137b"
     },
     {
       "file": "t12-forcestop01-external-completion.json",
@@ -160,6 +240,16 @@
       "file": "t12-helper-upgrade01-manifest.json",
       "retainedLocalSha256": "ba6aceef6cdf832849c64dfa96819d7eb4693c1f79777209829adacd8923dcda",
       "gitBlobSha256": "18ff60b414bdea843c17c00d2191e7707596669ac5da8d974fa65cfb2be98e6b"
+    },
+    {
+      "file": "t12-helper-upgrade02-manifest.json",
+      "retainedLocalSha256": "6ed9aa4ff492cc2a192bf09f7f7576b32cf341cace4def720e1884349bb073aa",
+      "gitBlobSha256": "0e1d7f087ca1c3fc2009f35b665f78faa56f39acc2b40f183949e655c91a8782"
+    },
+    {
+      "file": "t12-helper-upgrade02-root-review.json",
+      "retainedLocalSha256": "cf786f6112882ce2eccd3dcae2581e439c0ea07ffb5bd7a6b35ab5a88628fca9",
+      "gitBlobSha256": "89c05985364414421b600ff529f75bf074e97d7946393af73319b1118079b2f4"
     },
     {
       "file": "t12-job-greenaed-device.log",
@@ -312,6 +402,11 @@
       "gitBlobSha256": "d3231408c4ee480e6c762870ac55b0c997a644d5c2b298aa70b293c611535afd"
     },
     {
+      "file": "t12-observe-helper-upgrade02-result.log",
+      "retainedLocalSha256": "8ce102e9dbb6a8fd708b81b0137e92389ffc5475c74f939939e9f95f62675a5a",
+      "gitBlobSha256": "4f135d8582d744aa4133dc9bbc828fc1f246fbff404e9ffc522f1ddf27c4cc5e"
+    },
+    {
       "file": "t12-observe-old-listener01-result.log",
       "retainedLocalSha256": "02babd731d11791b44cf252a6e382656ba1c824dba197133d763bae395bc3a7f",
       "gitBlobSha256": "32538d210251c22b3d758b563f6750e5ce9612fc72f7d0f65917faf8b35a6519"
@@ -335,6 +430,16 @@
       "file": "t12-observe-transport-red01-result.log",
       "retainedLocalSha256": "23cc21894d2b2aa2f74e70150036364d2ff838ce89e176d19dffaeb06c45b7a7",
       "gitBlobSha256": "ae163730e7351b8bb81765035b28451f9aa08f4f5e3d3c860a46cef7f7af2a0b"
+    },
+    {
+      "file": "t12-observe-upgrade-inventory01-result.log",
+      "retainedLocalSha256": "4287c4b2b00bedd3dd40533ec41f2444cb53b52d350407db6ddc0fc6a39b4e38",
+      "gitBlobSha256": "5c11304280ceecdd1b93b415fba44d3503091d1db3e7b2dd0b2072d2be772b2a"
+    },
+    {
+      "file": "t12-observe-upgrade-inventory02-result.log",
+      "retainedLocalSha256": "9780f25b16b3a7f51b52c75b0368f3049ae703e98607d10d1150c881856b61f8",
+      "gitBlobSha256": "f4e413830f7b643b6c9d7208ba9ef73698020148e9a2f244e4461e547d668e2a"
     },
     {
       "file": "t12-offline-green01.log",
@@ -667,6 +772,16 @@
       "gitBlobSha256": "1579f0bc61ce7072c1629c0e64d10916a0d1f7adc9c7f04e8e217ed516d49865"
     },
     {
+      "file": "v1-autostart-fix-review.md",
+      "retainedLocalSha256": "cba484d129d73ddc4721af6a585c7443c3b964443671f31563a3aab4625767c8",
+      "gitBlobSha256": "a1e9819bc65cc5d47387b73f4e009bea63fdb9322b6e309699e48fa79b4fcd14"
+    },
+    {
+      "file": "v1-code-review-aggregate.md",
+      "retainedLocalSha256": "b01fb63fab71ade68b135ed5a287b849fb99d3e0837a3753bc67ee2e1cb5fe81",
+      "gitBlobSha256": "b01fb63fab71ade68b135ed5a287b849fb99d3e0837a3753bc67ee2e1cb5fe81"
+    },
+    {
       "file": "v1-review-pending-order-regression-green.log",
       "retainedLocalSha256": "da9060a38b20f4bb936a6ec554bccb5c929be3cffb422255c84542ab08d61788",
       "gitBlobSha256": "33f397c28f038206a7aa1a90d703c601e1482b4d6c03002a9136e0e65852cf6e"
@@ -680,6 +795,11 @@
       "file": "v1-review-retry-after-fixed6s-green.log",
       "retainedLocalSha256": "4e765f2204cddccb2b5c598d5f4610f23236fcd6b56657e488d3fb1f9cbc058a",
       "gitBlobSha256": "3e12fcb921c46bd31d8c44e6d22bc4d56a7b7faaf4224955293b78668379dabb"
+    },
+    {
+      "file": "v1-review-spec-final-addendum.md",
+      "retainedLocalSha256": "7126406c4cae6ba74078b0f5d599fd6d6373ff1b1df86c8f42aa47ff7a3dfb26",
+      "gitBlobSha256": "7126406c4cae6ba74078b0f5d599fd6d6373ff1b1df86c8f42aa47ff7a3dfb26"
     }
   ]
 }

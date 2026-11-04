@@ -1,0 +1,12 @@
+
+dev.durableagent.probe.RecoveryJobApplicationTest:INSTRUMENTATION_STATUS: wakeRepublished={"run":"79ae3626-4fc3-4b0d-b0d2-7475e5ab7924","product":"wake-79ae3626-4fc3-4b0d-b0d2-7475e5ab7924","sameAdmission":true,"ownerReopened":false,"actualJobId":1516466020,"modelRequests":0}
+INSTRUMENTATION_STATUS_CODE: 0
+.INSTRUMENTATION_STATUS: wakeRepublished={"run":"e7328899-9dac-4fa6-93c7-0f70a729f5e5","product":"wake-e7328899-9dac-4fa6-93c7-0f70a729f5e5","sameAdmission":true,"ownerReopened":true,"actualJobId":1454510571,"modelRequests":0}
+INSTRUMENTATION_STATUS_CODE: 0
+.
+
+Time: 15.889
+
+OK (2 tests)
+
+

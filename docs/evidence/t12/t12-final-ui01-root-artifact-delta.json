@@ -1,0 +1,19 @@
+{
+  "oldSha256": "1623ac04a17e3934173c16d527c611733b52e82251a2bc7bd1895df7c19ad526",
+  "newSha256": "e7cf5a6ddff4bc435f513fc727e2ac1f12b93801aefb6570fb8e4457b650bfc0",
+  "unchangedNonUiNonSigningEntryCount": 20,
+  "changedEntries": [
+    "assets/ui/assets/conversation-4K9nRc82.js",
+    "assets/ui/assets/conversation-5ZiJc0FA.js",
+    "assets/ui/assets/index-BZE9x6U-.js",
+    "assets/ui/assets/index-sj-ZbB1W.js",
+    "assets/ui/assets/models-D1wL0hym.js",
+    "assets/ui/assets/models-whGGMKnA.js",
+    "assets/ui/assets/projects-C06qBOGD.js",
+    "assets/ui/assets/projects-HZ14rSIb.js",
+    "assets/ui/assets/timeline-BpQm46fg.js",
+    "assets/ui/assets/timeline-CTdZSPkn.js",
+    "assets/ui/index.html"
+  ],
+  "sameTestApk": true
+}

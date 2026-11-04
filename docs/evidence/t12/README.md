@@ -1,6 +1,6 @@
 # T12 自动恢复开发证据
 
-2026-11-04。开发仍在进行，不能据此关闭 [T12](../../specs/v1/tickets/12-automatic-resume.md)。范围为 Android 16／4 KB x86_64 模拟器、真实 SDK 1.5.0、Android SQLite／Service／JobScheduler／NotificationManager，以及明确标注的真实 MiMo 请求。首次解锁／重启与 force-stop 已完成实际验证，通知目标界面尚待 T15 联合验证；S23／Xiaomi 厂商行为保留到 T17。分批、不同候选的结果不拼成一次完整全绿。
+2026-11-04。开发证据已收敛，最终独立集成验收另记，不能仅据本文关闭 [T12](../../specs/v1/tickets/12-automatic-resume.md)。范围为 Android 16／4 KB x86_64 模拟器、真实 SDK 1.5.0、Android SQLite／Service／JobScheduler／NotificationManager，以及明确标注的真实 MiMo 请求。首次解锁／重启、force-stop 与联合 T15 的实际通知目标均已完成所述范围验证；S23／Xiaomi 厂商行为保留到 T17。分批、不同候选的结果不拼成一次完整全绿。
 
 ## 已观察到的行为
 
@@ -92,7 +92,7 @@ T15 `75ab2ae` 已合入生产源码 `a8ee9c0`，fixture-only `342c1b7` 增加观
 
 普通 UI 切到旧会话 `a1d19357-41ed-487b-a90c-da77950e8482`，保存未发送测试草稿后 Back，见 [另一会话基线](t12-notification01-background.json)。实际展开系统通知栏，确认「会话 1ccb7b54 · 点击查看已保存结果」，[一次真实控件 tap](t12-notification01-physical-tap.json) 为 (587,810)，无合成 intent／PendingIntent 反射。[整段只读目标验证](t12-notification01-target.json) 通过：实际 selectedConversation 正确，原历史、唯一 intent／admission 相同，零执行，另一会话草稿／历史／意图完全相同；正常 Back 退出。根代理独立目视通知及目标截图。最终 Activity／Service 不存在，网络 1/1，AndroidWifi overrides none。命令入口为 [运行说明](../../../tools/recovery-lifecycle-RUN.md) 和驱动 prepare／verify／background／notification；系统原始转储只本地保存。
 
-[凭据精确审计](t12-notification01-credential-audit.json) 14:04:49 UTC 对 app 55,791,104 字节、log 148,150 字节 UTF-8／UTF-16LE／UTF-16BE 零实际 key 命中且阳性对照通过。此为 C233 通知目标的成功范围；新增全量审查问题仍待修复，不代表整票完成。
+[凭据精确审计](t12-notification01-credential-audit.json) 14:04:49 UTC 对 app 55,791,104 字节、log 148,150 字节 UTF-8／UTF-16LE／UTF-16BE 零实际 key 命中且阳性对照通过。此为 C233 通知目标的成功范围；新增全量审查问题的后续修复、固定回归及最终候选另见下文；该次审计不代表整票完成。
 
 ## 候选对应关系
 
@@ -110,15 +110,15 @@ T15 `75ab2ae` 已合入生产源码 `a8ee9c0`，fixture-only `342c1b7` 增加观
 
 ## 未完成的门槛
 
-- 联合 T15 的真实通知目标已通过；新增全量审查问题待修复及独立复核。
-- T13 已验收并合入；T12 自身最终联合构建、正确 LF helper 字节／源码／打包对应核验和独立合并审查仍待完成。
+- 联合 T13／T15、通知目标及全量审查发现项已完成下述开发修复与验证；最终独立合并审查仍为 T12 的关闭门槛。
+- 最终联合构建、8 份 LF helper 字节、源码／打包对应与实际 native 最小回归集均已完成；后续 UI 提示候选保留组件完全一致证明，实际 force-stop 提示产品门槛由 T17 执行。
 - T17 OEM 矩阵；本文模拟器与分批验证不替代 Galaxy S23／Xiaomi 厂商行为。
 
 ## 宿主重开后重新发布同一唤醒
 
 全量审查提出的 restoreRunning 缺口已由实际 Android JobScheduler／公开 Application 验证：[同一固定测试 RED](t12-wake-reopen-red01-device.log) 15.590 秒。先用自有 jobId 冲突让一次实际离线发送的 wake 持久但发布失败，正常关闭旧宿主并确认 Service 消失；移除冲突后建立不同 instance 的新宿主，仍无法重新发布相同 wake。没有第二次发送或模型请求。根因是 restoreRunning 把持久计划预置为 lastWake，而持久化不等于系统发布成功。最小修复只取消此预置，缓存仍仅在 schedule 成功后更新。
 
-[同一测试 APK GREEN](t12-wake-reopen-green01-device.log) 7.332 秒，run `c0c6d0f0-118d-40f9-99e5-0f757e0967ed`，原 admission 保持、new owner、实际 jobId 1999245591、modelRequests 0，finally 停止自己的输入并恢复网络。RED [冻结值](t12-wake-reopen-red01-artifacts.json) main C233；GREEN [冻结值](t12-wake-reopen-green01-artifacts.json) main `02bb43d457f41baeda26eba3c569caa140b6f2f108d5a071ac4adc4630e78a6d`；两者 test 均 `add94483522761419b900b300c3fdac6008f9f809e9357106498a46ed2e69f5a`，断言未改。命令为实际网络关闭后 `am instrument -w -e class dev.durableagent.probe.RecoveryJobApplicationTest#aReopenedOwnerRepublishesItsPersistedWakeWithoutAnotherInput -e actualNetworkOffline true dev.durableagent.probe.test/androidx.test.runner.AndroidJUnitRunner`，结束恢复 Wi-Fi／移动数据。该显式宿主重开测试不冒称进程自然死亡；先前无 instrumentation 的产品生命周期证据仍按原候选限定。最终 native 修改之后还需跑已有 Job lifetime 回归。
+[同一测试 APK GREEN](t12-wake-reopen-green01-device.log) 7.332 秒，run `c0c6d0f0-118d-40f9-99e5-0f757e0967ed`，原 admission 保持、new owner、实际 jobId 1999245591、modelRequests 0，finally 停止自己的输入并恢复网络。RED [冻结值](t12-wake-reopen-red01-artifacts.json) main C233；GREEN [冻结值](t12-wake-reopen-green01-artifacts.json) main `02bb43d457f41baeda26eba3c569caa140b6f2f108d5a071ac4adc4630e78a6d`；两者 test 均 `add94483522761419b900b300c3fdac6008f9f809e9357106498a46ed2e69f5a`，断言未改。命令为实际网络关闭后 `am instrument -w -e class dev.durableagent.probe.RecoveryJobApplicationTest#aReopenedOwnerRepublishesItsPersistedWakeWithoutAnotherInput -e actualNetworkOffline true dev.durableagent.probe.test/androidx.test.runner.AndroidJUnitRunner`，结束恢复 Wi-Fi／移动数据。该显式宿主重开测试不冒称进程自然死亡；先前无 instrumentation 的产品生命周期证据仍按原候选限定。最终 native 修改后的既有 Job lifetime 回归已在 1623 候选通过，见文末。
 
 ## 多条待发送意图的原顺序
 
@@ -153,8 +153,31 @@ SDK 1.5.0 没有支持的 built-in retry deadline override，因此该门禁等�
 
 `374d74df91a4c6ae6e8acb8e8bd5f0598cc9c93c` 的 [最终构建与 lint](t12-autostart-final-build02.log) 通过，八份 Python 与 HEAD blob 完全一致且为 LF，[安装资源合同](t12-autostart-assets01.log) 通过。冻结目录 `D:/durableagent-validation/t12-autostart-final02`，[包清单](t12-autostart-final02-artifacts.json) main `1623ac04a17e3934173c16d527c611733b52e82251a2bc7bd1895df7c19ad526`，test 仍为同一 `3d99bb4c…`。[包检查](t12-autostart-final02-apk-inspection.json) 74 runtime 模块、11 UI、238 源码对应项及原生 pin／16 KiB alignment／setup 均通过；416 是冻结器较广的源码清单，不与包检查计数混同。
 
-受控升级只替换我们部署的 runner `be8b68ec…` → `a65ecba8be5119b414ecfdc4b1d514b02515e95b89daac8a197f37983eb15111`，transport `c20f4ef5…` → `16f7ece1f961ad3920343c19b19e63658f9590ef0c594a2fb03cbb0fb243d9cc`；file helper `13467b5d…` 不变。新 capability 摘要 `91821135…` 与 setup `1bb16dab…` 是该有意源码升级结果，不能继续沿用旧 pin。具体原件备份与账本／配对／原文件树前后核对见 [升级清单](t12-helper-upgrade01-manifest.json)。实际升级及最终原生 GREEN 在清单审查后单独记录，此处构建不代表已经在设备运行。
+受控升级只替换我们部署的 runner `be8b68ec…` → `a65ecba8be5119b414ecfdc4b1d514b02515e95b89daac8a197f37983eb15111`，transport `c20f4ef5…` → `16f7ece1f961ad3920343c19b19e63658f9590ef0c594a2fb03cbb0fb243d9cc`；file helper `13467b5d…` 不变。新 capability 摘要 `91821135…` 与 setup `1bb16dab…` 是该有意源码升级结果，不能继续沿用旧 pin。具体原件备份与账本／配对／原文件树前后核对见 [升级清单](t12-helper-upgrade01-manifest.json)。实际受锁升级及最终原生 GREEN 在下节单独记录；构建本身不代替设备结果。
 
-可复查命令：在新的自有 probe 中通过实际 Termux terminal 运行 `python -m unittest test_executor test_transport test_production_wire test_file_service test_local_capabilities -v`；包安装后运行 `am instrument -w -e class dev.durableagent.probe.ExecutionTransportTest#actualOrdinaryOperationRestartsPairedExecutorWithoutExplicitConnect -e executionProduction true dev.durableagent.probe.test/androidx.test.runner.AndroidJUnitRunner`。实际 native GREEN、原件一次效果及三项 wake/Job 回归仍待记录。
+可复查命令：在新的自有 probe 中通过实际 Termux terminal 运行 `python -m unittest test_executor test_transport test_production_wire test_file_service test_local_capabilities -v`；包安装后运行 `am instrument -w -e class dev.durableagent.probe.ExecutionTransportTest#actualOrdinaryOperationRestartsPairedExecutorWithoutExplicitConnect -e executionProduction true dev.durableagent.probe.test/androidx.test.runner.AndroidJUnitRunner`。实际 native GREEN、原件一次效果及三项 wake/Job 回归见下节。
 
-升级首次 [preflight](t12-observe-helper-upgrade01-result.log) 被已有非终态 receipt 的保护条件拦下，发生在 before.json、原件备份和任何 staging／替换之前；原 helper／账本／配对未改。根代理继续只读盘点具体身份和状态，再决定是否按原控制收敛；不通过改表、忽略未知效果或重复启动旧批次绕过该保护。
+升级首次 [preflight](t12-observe-helper-upgrade01-result.log) 被已有非终态 receipt 的保护条件拦下，发生在 before.json、原件备份和任何 staging／替换之前；原 helper／账本／配对未改。当时根代理继续只读盘点具体身份和状态；随后按下述精确身份保留方案处理，没有改表、忽略未知效果或重复启动旧批次。
+
+
+## 最终受锁升级与原生回归
+
+只读 [inventory01](t12-observe-upgrade-inventory01-result.log) 定位两个 `accepted_not_started`，其余 136 条已终态；[inventory02](t12-observe-upgrade-inventory02-result.log) 固定了两条 request／receipt／prepared 的原字符串 SHA，sequence1、输出0、无启动／取消事实。它们分别来自 T13 的原失败 local-product 与 React08，未重开旧 validation 域、未发送、未授予、未取消。升级02只允许这两个精确记录，其他记录只准 completed／stopped／not_started，不允许 unknown 或其他非终态。
+
+[受锁升级02](t12-observe-helper-upgrade02-result.log) 实际 Termux exit0。132 个既有 installation／server／writes／owner lock 使用非阻塞独占和 O_NOFOLLOW，不创建锁；原 runner、transport 和 installation.json 三份原件均另存到唯一 probe 的 originals 并 fsync。安装清单严格符合原四字段／三份旧 pin，仅替换其中两个文件 SHA；未改 Termux properties。安装前、安装后、释放锁并启动 `serve-existing` 后的三份 schema／全表 logical／pairing／保留文件树快照完全相等，138 条 execution 与两条未启动记录仍原样保留。原安装清单 SHA `9c07032d…`，新清单 `3ad49b70…`；完整值及备份路径见日志。该次只启动 baseline PID15251，不作为自动重开通过证据。独立脚本检查见 [root review](t12-helper-upgrade02-root-review.json) 和 [精确升级清单](t12-helper-upgrade02-manifest.json)。
+
+在冻结 main1623／同一 test3D99 上，固定实际 [自动重开 GREEN](t12-autostart-green01-device.log) 1/1、1.230 秒。测试精确终止 PID15251并独立确认 socket absent，再发普通 ExecutionAccess.ping；无需 Connect 即重新启动固定 listener。processEpoch 从 `2a545e31-f2d4-4689-bf9b-0fb73baf3f09` 变为 `577167c2-94c9-4879-bdb0-69ce4d4add70`，executorId `a0578db8-1bd2-4158-8e78-b27216f25c6a`、ledgerEpoch `c156417c-ec2d-4528-99d1-78d257676c18` 和配对完全保持。该项证明实际 listener 死亡后的普通请求自动恢复；不冒称新的 OEM 重启或 Android force-stop 测试。
+
+同候选的 [两个实际离线 wake 回归](t12-final-wakes01-device.log) 2/2、15.889 秒，覆盖原 owner 与重开 owner 的同一未发布计划恢复；均保持原 admission，零模型请求。网络 finally 恢复。[Job lifetime](t12-final-job01-device.log) 1/1、56.318 秒，run `6c4e7ded-93b1-457e-882c-e4e979b5b32f`，系统 job 的 50 秒绑定自然释放后 PID15922仍为前台宿主；原生 Stop 后 Service 退出。日志 requests1是新 owner 的受控模型请求，另有初始 owner1，不能当作完整请求总数1。
+
+[实际原件 append 恢复](t12-final-original01-device.log) 1/1、10.448 秒。run `bb01b7b1-53af-4a0b-854b-ae87ce2a516a` 在结果提交前强杀 SDK owner，PID16130→16221，仍沿用 execution `5c6c03ff-13da-4c02-8473-b7280f6e491c` 与 operation `eb7492f2-2415-4eb4-ac35-dbde2e5a7b66`。原件回执 completed／scopeConfirmed，同环境独立 read 恰好 `local\n`，SHA `efb83f2a277e9f49b38efd505f5cbb93885e721b6bd16b788937c9396174c006`；重交同一 intent 新增执行为0。这是受控模型传输下的真实 SDK、Termux worker 和原文件效果，非新增真实 MiMo 调用。
+
+结束 [基线](t12-final-baseline01.json) 为 ApplicationService 不存在、Wi-Fi／移动数据1、两个 AndroidWifi override 均 none，设备租约已返根代理。[根代理精确凭据审计](t12-final-native-credential-audit.json) 15:24:46 UTC，对 app57,926,656字节、日志159,117字节的 UTF-8／UTF-16LE／UTF-16BE 全 offset 零实际 key 命中，阳性对照与 tar 完成校验通过；范围不包括 heap／flash forensics。
+
+## 最终 UI 提示候选的组件对应
+
+聚焦审查最后指出，异步 `TERMUX_FORCE_STOPPED` 原样传递到 ExecutionCoordinator 时只显示通道错误，没有说明恢复操作。`4c52692` 仅按原 ApplicationFailure.code 显示“Termux 已被系统强行停止。请手动打开 Termux 一次，再返回本应用；无需重新初始化。”，不改原 code、receipt 或自动 dispatch。一个真实 ApplicationClient 异步 response 的 UI 合同先 [RED](t12-force-stop-message-red01.log)，再 [整个 coordinator 文件 GREEN](t12-force-stop-message-green01.log) 7/7；它还断言原 receipt 不变、只有 list／query，没有 Connect 或重发。[UI typecheck／build](t12-force-stop-message-ui-build01.log) 与 [APK build／lint](t12-final-ui-build01.log) 均通过。该模拟原生 response 的 UI 合同不冒称 Android force-stop 实测。
+
+最终冻结 `D:/durableagent-validation/t12-final-ui01`，源码 `4c526920af7b7208b220f2b4805d9f8f577164e2`，[main](t12-final-ui01-artifacts.json) `e7cf5a6ddff4bc435f513fc727e2ac1f12b93801aefb6570fb8e4457b650bfc0`，test 仍为同一3D99，capability91821135／setup1bb16dab不变。[root 独立检查](t12-final-ui01-root-inspection.json) 的74runtime、11UI、238源码对应以及 native pin／16 KiB打包通过；16 KiB打包不等于16 KiB运行验证。[root APK delta](t12-final-ui01-root-artifact-delta.json) 证明20个非UI非签名项与已实际验证的1623逐字节相同，test APK相同，仅UI生成项改变。[owner 对照](t12-final-ui01-ui-only-comparison.json) 同时保留源码组件比较及首次只读脚本打印差异后多余PY token导致的 NameError；其后完整断言通过，没有改变任何候选产物。根代理已安装 E7CF 作为后续产品验证准备，未重复上述 native 回归；实际中文 force-stop 提示的产品门槛留给 T17。
+
+最终聚焦 [Standards 复核](v1-autostart-fix-review.md) 与 [Spec addendum](v1-review-spec-final-addendum.md) 已关闭各自发现项，包括源码、固定 RED/GREEN、最终实际 native／原件范围及中文提示合同。[两轴汇总](v1-code-review-aggregate.md) 保留初始发现与修复后的范围。它们是独立源码／证据复核，T12 最终集成验收与 T17 的实际产品组合结果由根代理另行记录。
