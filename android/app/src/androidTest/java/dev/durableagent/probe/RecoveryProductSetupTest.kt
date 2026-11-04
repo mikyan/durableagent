@@ -12,6 +12,7 @@ import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.UUID
+import java.io.File
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.LinkedBlockingQueue
@@ -25,6 +26,9 @@ class RecoveryProductSetupTest {
     private fun until(label:String,condition:()->Boolean){val end=SystemClock.elapsedRealtime()+60000;while(!condition()){assertTrue(label,SystemClock.elapsedRealtime()<end);Thread.sleep(30)}}
     @Test(timeout=120000) fun initializeOnlyAnEmptyProductConfigurationWithoutSendingWork(){
         assumeTrue(InstrumentationRegistry.getArguments().getString("initializeEmptyProduct")=="true")
+        // This fixture is specifically for the root-observed absent product DB.
+        // Never open an existing domain just to decide whether setup is safe.
+        if(File(context.filesDir,"application/application.sqlite").exists()){instrumentation.sendStatus(0,Bundle().apply{putString("productRecoverySetup",JSONObject().put("initialized",false).put("preservedExistingState",true).put("ownerNotOpened",true).put("reason","existing-product-database").toString())});return}
         val responses=ConcurrentHashMap<String,CompletableFuture<JSONObject>>();val states=LinkedBlockingQueue<JSONObject>();val imports=LinkedBlockingQueue<JSONObject>();val connection=UUID.randomUUID().toString()
         val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode","product"))
         val client=ApplicationClient(context,"product",null){what,text->val value=JSONObject(text);when(what){10->responses.remove(value.optString("requestId"))?.complete(value);12->states.offer(value);31->imports.offer(value)}}.apply{connect()}
