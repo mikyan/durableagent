@@ -1,0 +1,19 @@
+android/app/src/androidTest/java/dev/durableagent/probe/NativeDocumentTest.kt
+  s_467dcb949b5b60::t_3708a550d47217 37-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "fc7b052428a707f0cac152d4006936e062e538cf",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
