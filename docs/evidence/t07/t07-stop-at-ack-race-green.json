@@ -1,0 +1,20 @@
+[
+  {
+    "stage": "before-native-ack",
+    "nativeStopCommitted": true,
+    "accepted": true,
+    "submissionStatus": "unanswered",
+    "pendingAbort": false,
+    "modelRequestsAfterStop": 0,
+    "expectedModelRequests": 0
+  },
+  {
+    "stage": "after-native-ack",
+    "nativeStopCommitted": true,
+    "accepted": true,
+    "submissionStatus": "unanswered",
+    "pendingAbort": false,
+    "modelRequestsAfterStop": 0,
+    "expectedModelRequests": 0
+  }
+]

@@ -50,7 +50,7 @@ it('blocks send on a failed flush and retains the pinned input and editable draf
     expect(controller.snapshot().draft).toMatchObject({text:'保留这份内容',status:'failed'});
     failSave=false;await controller.retryDraft();expect(await controller.send()).toBe(false);
     expect(requests.filter(request=>request.method==='send')).toHaveLength(1);
-    const send=requests.find(request=>request.method==='send')!;expect(send.payload).not.toHaveProperty('text');expect(native.frozen.has(String(send.payload?.inputToken))).toBe(true);
+    const send=requests.find(request=>request.method==='send')!,intent=await native.readSend(String(send.payload?.intentId));expect(send.payload).toEqual({intentId:intent.intentId});expect(native.frozen.has(intent.inputToken)).toBe(true);
     expect(native.read('one').text).toBe('保留这份内容');expect(requests.some(request=>request.method==='input.clear'||request.method==='input.discard')).toBe(false);
     await controller.connect();expect(controller.snapshot().draft?.text).toBe('保留这份内容');expect(requests.filter(request=>request.method==='send')).toHaveLength(1);
   }finally{controller.dispose();}

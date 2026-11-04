@@ -1,0 +1,7 @@
+{
+  "case": "two-model-dispatches",
+  "checks": 1,
+  "calls": 2,
+  "expectedCalls": 2,
+  "guardReached": false
+}

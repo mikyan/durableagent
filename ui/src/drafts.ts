@@ -1,10 +1,11 @@
 import {INPUT_BUDGETS,type FrozenInput,type InputSelection,type NativeDraft} from '../../runtime/src/input-protocol';
 import {ApplicationClient,ApplicationFailure} from './client';
+import type {NativeAdmissionAck} from '../../runtime/src/submission-protocol';
 
-export type DraftView={id:string;text:string;selections:InputSelection[];revision:number;stateVersion:number;status:'saved'|'pending'|'failed'|'conflict';error?:string;busy:boolean;preparingIds:string[];observingIds:string[];preparationErrors:Record<string,string>};
+export type DraftView={id:string;text:string;selections:InputSelection[];revision:number;stateVersion:number;status:'saved'|'pending'|'failed'|'conflict';error?:string;busy:boolean;preparingIds:string[];observingIds:string[];preparationErrors:Record<string,string>;submissionContext?:NativeDraft['submissionContext']};
 type Save={operationId:string;expectedRevision:number;text:string;selectionIds:string[];editEpoch:number};
 type Edit=Pick<Save,'text'|'selectionIds'|'editEpoch'>;
-type RecordState={saved:NativeDraft;text:string;selections:InputSelection[];editEpoch:number;savedEpoch:number;status:DraftView['status'];error?:string;preparationErrors:Record<string,string>;writer?:Promise<void>;freezeBarrier?:Promise<void>;retry?:Save;selectionRetry?:{operationId:string;expectedRevision:number;kind:'image'|'file';editEpoch:number};debounce?:ReturnType<typeof setTimeout>;maximum?:ReturnType<typeof setTimeout>;busy:boolean};
+type RecordState={saved:NativeDraft;text:string;selections:InputSelection[];editEpoch:number;savedEpoch:number;status:DraftView['status'];error?:string;preparationErrors:Record<string,string>;writer?:Promise<void>;freezeBarrier?:Promise<void>;retry?:Save;admissionClear?:{fromRevision:number;toRevision:number;throughEpoch:number};selectionRetry?:{operationId:string;expectedRevision:number;kind:'image'|'file';editEpoch:number};debounce?:ReturnType<typeof setTimeout>;maximum?:ReturnType<typeof setTimeout>;busy:boolean};
 type Observation={timer?:ReturnType<typeof setTimeout>;attempts:number;failures:number;deadline:number;selectionIds:Set<string>};
 
 /** Owns only UI edits and commit barriers. The native store owns durable input and bytes. */
@@ -15,7 +16,7 @@ export class DraftCoordinator {
   private preparations=new Set<string>();
   private automaticPreparations=new Set<string>();
   constructor(private readonly client:()=>ApplicationClient|undefined,private readonly changed:()=>void){}
-  view(id:string):DraftView|undefined {const r=this.records.get(id);return r?{id,text:r.text,selections:r.selections,revision:r.saved.revision,stateVersion:r.saved.stateVersion,status:r.status,error:r.error,busy:r.busy,preparingIds:r.selections.filter(item=>this.preparations.has(`${id}:${item.id}`)).map(item=>item.id),observingIds:r.selections.filter(item=>this.polls.get(id)?.selectionIds.has(item.id)).map(item=>item.id),preparationErrors:{...r.preparationErrors}}:undefined;}
+  view(id:string):DraftView|undefined {const r=this.records.get(id);return r?{id,text:r.text,selections:r.selections,revision:r.saved.revision,stateVersion:r.saved.stateVersion,status:r.status,error:r.error,busy:r.busy,preparingIds:r.selections.filter(item=>this.preparations.has(`${id}:${item.id}`)).map(item=>item.id),observingIds:r.selections.filter(item=>this.polls.get(id)?.selectionIds.has(item.id)).map(item=>item.id),preparationErrors:{...r.preparationErrors},submissionContext:r.saved.submissionContext}:undefined;}
   private notify(){if(this.alive)this.changed();}
   private request<T>(method:Parameters<ApplicationClient['request']>[0],payload:Record<string,unknown>,timeout?:number){const client=this.client();if(!client)throw new ApplicationFailure('HOST_UNAVAILABLE','草稿宿主不可用，请重新连接。');return client.request<T>(method,payload,timeout);}
   async read(id:string,timeout?:number){
@@ -80,7 +81,12 @@ export class DraftCoordinator {
           const value=await this.request<NativeDraft>('input.save',{id,expectedRevision:save.expectedRevision,operationId:save.operationId,text:save.text,selectionIds:save.selectionIds});
           this.metadata(r,value);r.savedEpoch=save.editEpoch;r.retry=undefined;
           if(r.editEpoch===save.editEpoch){r.text=value.text;r.selections=value.selections;r.status='saved';}else r.status='pending';
-        }catch(error){this.fail(r,error);throw error;}
+        }catch(error){
+          const clear=r.admissionClear;
+          if(error instanceof ApplicationFailure&&error.code==='INPUT_CONFLICT'&&clear?.fromRevision===save.expectedRevision&&clear.toRevision===r.saved.revision&&save.editEpoch>clear.throughEpoch){
+            r.retry=undefined;r.admissionClear=undefined;r.status='pending';r.error=undefined;
+          }else{this.fail(r,error);throw error;}
+        }
       })();r.writer=writer;
       try{await writer;}finally{if(r.writer===writer)r.writer=undefined;this.notify();}
     }
@@ -172,6 +178,19 @@ export class DraftCoordinator {
       const frozen=await this.request<FrozenInput>('input.freeze',{id,expectedRevision:captured.draft.revision,operationId:crypto.randomUUID()});
       return {frozen,editEpoch:target.editEpoch};
     }finally{r.freezeBarrier=undefined;release();if(r.status==='pending')void this.flush(id).catch(()=>{});}
+  }
+  async confirmAdmission(ack:NativeAdmissionAck,editEpoch?:number){
+    const id=ack.intent.id,r=this.records.get(id);
+    if(ack.draft.id!==id||ack.intent.delivery!=='acknowledged'||ack.intent.receipt?.intentId!==ack.intent.intentId)throw Error('发送确认与草稿关联不匹配。');
+    if(!r){this.adoptRead(id,ack.draft);return;}
+    if(ack.draft.stateVersion<r.saved.stateVersion)return;
+    if(!ack.draftCleared||ack.draft.revision!==ack.intent.inputRevision+1||r.saved.revision!==ack.intent.inputRevision){this.adoptRead(id,ack.draft);return;}
+    this.clearTimers(r);const throughEpoch=editEpoch??r.savedEpoch,sameEdit=r.editEpoch===throughEpoch;r.saved=ack.draft;
+    if(!sameEdit)r.admissionClear={fromRevision:ack.intent.inputRevision,toRevision:ack.draft.revision,throughEpoch};
+    if(sameEdit&&!r.writer){r.text=ack.draft.text;r.selections=ack.draft.selections;r.savedEpoch=r.editEpoch;r.status='saved';r.error=undefined;}
+    else if(!r.writer){r.retry=undefined;r.status='pending';r.error=undefined;}
+    this.notify();
+    if(r.status==='pending'&&!r.writer)await this.flush(id);
   }
   async accepted(id:string,revision:number,editEpoch:number){
     const r=this.records.get(id);if(!r||r.editEpoch!==editEpoch||r.saved.revision!==revision||r.writer)return;

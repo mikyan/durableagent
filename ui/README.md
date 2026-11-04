@@ -1,6 +1,6 @@
-# 会话、模型设置与原生草稿 UI（T04／T05／T06）
+# 会话、模型设置、原生草稿与可靠发送 UI（T04—T07）
 
-React 页面只使用 `runtime/src/application-protocol.ts`、`model-protocol.ts`、`input-protocol.ts` 中的数据协议及共享扩展描述符，登记 ID 不由 UI 与核心分别硬编码。独立 UI 扩展入口为 `src/extensions/conversation.tsx` 和 `src/extensions/models.tsx`；运行宿主的 Agent 入口不进入此构建。页面不持有 SDK、数据库或通用原生调用能力，也没有示例会话或模型传输。API Key 仅经下述原生窄写入接口提交，公开查询不返回 Key。
+React 页面只使用 `runtime/src/application-protocol.ts`、`model-protocol.ts`、`input-protocol.ts`、`submission-protocol.ts` 中的数据协议及共享扩展描述符，登记 ID 不由 UI 与核心分别硬编码。独立 UI 扩展入口为 `src/extensions/conversation.tsx` 和 `src/extensions/models.tsx`；运行宿主的 Agent 入口不进入此构建。页面不持有 SDK、数据库或通用原生调用能力，也没有示例会话或模型传输。API Key 仅经下述原生窄写入接口提交，公开查询不返回 Key。
 
 ## 构建与检查
 
@@ -25,13 +25,19 @@ Node 24.14.1 验证通过。React 19.3.1、Vite 8.3.5 等依赖均固定精确�
 
 每次重新连接生成新的 `connectionId`，只接受当前代次的回执和订阅。快照按订阅身份、会话身份、单调 revision 校验；较旧的回执／事件不能覆盖当前状态。初次订阅回执晚于推送时也不会回退。断开只取消 UI 订阅，不请求停止 Agent。页面重建恢复选中的会话并读取当前快照，不重发输入。
 
-启动时并行查询 Agent 状态与独立的原生 `input.list`；处于 `opening`／`configuring` 时每秒检查一次，最多 30 次，并合并尚未返回的查询。`ready` 之后列表和聊天使用显式动作及推送。用户可重新连接；配置未就绪时不能创建或发送。
+启动时并行查询 Agent 状态与独立的原生 `input.list`；处于 `opening`／`configuring` 时每秒检查一次，最多 30 次，并合并尚未返回的查询。`ready` 之后列表和聊天使用显式动作及推送。配置未就绪时不能新建会话；已有原生登记及可信 submissionContext 的会话仍可明确保存发送意图，SDK 接纳等待运行宿主就绪。
 
 本地 UI preferences 只存选中会话 ID 与未收到确认的创建 ID。创建重试沿用后者，收到成功回执才清除。草稿正文与附件只经原生 `input.*` 保存，不写 localStorage。原生目录中的已知会话在 Agent JS 未启动、失败或无响应时仍可打开、编辑与保存；没有已登记身份时不能虚构会话。历史与执行状态等待 Agent 连接，不把恢复的草稿显示为已发送内容。
 
 `DraftCoordinator` 维护每会话的本地 editEpoch、已确认 revision 与单调 stateVersion。最后一次编辑后 250 ms 发起保存，连续编辑最长 1 s；一次最多一个写入，后续编辑合并。界面显示“待保存”直到收到 native COMMIT 回执，空间不足或版本冲突保留本地内容。普通失败可沿用相同 operationId 重试保存；冲突提供保留本地内容并重试或恢复已保存版本的明确选项。恢复读取期间发生的新编辑也不会被旧读回执覆盖。超出 100000 字符的粘贴仍完整保留在当前界面，显示预算错误并要求主动缩短；没有 maxlength 静默截断。未收到保存回执的编辑不承诺进程被终止后仍能恢复。
 
-切换会话先 flush，再按最新导航意图切换；晚到的旧导航不会抢回页面。发送设置一个短暂的保存屏障，flush 点击发送时的 editEpoch 后调用 `input.freeze`；后续键入是独立草稿，不能混入这次固定输入。普通 `send` 只传 `{id,inputToken,actionId}`，不传正文、base64、URI 或路径。SDK 接纳回执后才按 frozen revision + editEpoch 条件清空；清空等待期间仍可编辑，新输入不会被旧 clear 回执抹掉。发送未知时保留草稿和固定内容持有，不自动重发或释放 pin；可靠发送意图与恢复由 T07 承接。
+切换会话先 flush，再按最新导航意图切换；晚到的旧导航不会抢回页面。发送设置短暂保存屏障，flush 点击发送时的 editEpoch 后调用 `input.freeze`；后续键入是独立草稿。随后读取原生控制版本并以新 actionId 提交 `input.createSend`，只有原生意图 COMMIT 确认之后才调用 `send {intentId}`。后者不传正文、token、base64、URI 或路径。同正文再次明确发送使用新身份；重试则保留原 action、固定内容、会话关联、位置与控制代次，不读取当前草稿代替旧输入。
+
+原生意图提交结果未知时保留完整创建参数，仅显式重试同操作；SDK 接纳未知时先调用只读 `sendStatus`，再由明确的重试动作沿用相同 intent。SDK 已接纳但原生 ACK 未落盘时提供“补齐本机发送确认”，仍调用相同 intent 的 send 查回既有 receipt，不重新提交 SDK 输入。只有 accepted 且 native delivery acknowledged 才不再调用 send；状态查询本身不伪装成 ACK 写入。发送状态展示待投递、未确认、已接纳、排队、已放入消息记录与输入结算，明确区分模型是否读取、会话仍运行和外部操作完成。
+
+原生 ACK 事务按 frozen revision 与内容身份清理对应旧草稿；UI 不再单独发 input.clear。UI 以 editEpoch 保留后续编辑，只有已核实的原生清理引起正在保存的新编辑 CAS 冲突时才安全改用该新基线保存。初始草稿读取晚于 ACK 时依 stateVersion 丢弃旧快照。UNKNOWN 不自动重发，不释放固定内容 pin。打开／重连只查原生意图目录、控制屏障和 SDK 状态；发送／重试／停止后的自动状态检查每秒一次、最长 60 s，已发出的查询仍受单请求超时限制，到期可手动刷新。
+
+停止先通过独立原生 `input.stop` 提交屏障和 pendingAbort，不等待 Agent JS；界面区分停止已保存与运行宿主中断已确认。随后只针对该 stopId 请求 SDK 中断，未确认时保留原生事实。后来的停止能拦下仍等控制读取的旧 UI 发送；新一轮工作必须明确新发送。已有接纳 receipt 的迟到 ACK 可补记，但不能解除停止屏障。忙时仍可明确发送 follow-up，停止按钮不受发送请求等待或 JS 不可用锁住。
 
 附件菜单仅提供系统图片／文件选择。选择器请求允许 180 s，未知结果保留操作身份，不自动打开第二选择器。选择之后可自动发起本地准备，UI 明示此时不向云端发送。附件分别展示原件访问状态与本地准备状态，以及实际采用的完整范围、尺寸和转换说明；原件不可用不等于已准备材料丢失。未完成、不支持或预算不足的附件不能作为完整正文发送。发起准备请求时立即显示“正在请求本地准备”，不乐观改写原生准备状态；同时启动每 500 ms 一次的 `input.inspect`，只读已提交的本地状态，不重新读取来源。检查最多 180 次／90 s（已发出的单次检查最多再等 1.5 s），连续 3 次检查失败则停止。准备请求回执的 20 s 超时不会取消独立状态检查，晚到的 ready 仍可显示；到期或检查失败后明确提示手动刷新。原件访问状态标为最近核验结果，显式“刷新附件状态”使用 `input.read` 重新核验来源。准备请求未确认时禁用同一附件的重复准备按钮，文字编辑和移除附件仍可用。作者 revision 不因准备状态变化而增加，UI 依 stateVersion 拒绝过期 read/prepare 回执。所有材料字节都留在原生／运行宿主边界。
 
@@ -55,6 +61,10 @@ Node 24.14.1 验证通过。React 19.3.1、Vite 8.3.5 等依赖均固定精确�
 | `[data-testid="history-attachment"]` | 持久历史中的图片元数据，不含 base64 |
 | `[data-testid="send-message"]` | 发送按钮 |
 | `[data-testid="stop-generation"]` | 处理中或等待中的停止按钮 |
+| `[data-testid="submission-item"]` / `data-intent-id` / `data-stage` | 独立发送身份与真实接纳／排队／放置／结算状态 |
+| `[data-testid="retry-submission"]` | 核验同一次发送，或为既有 SDK receipt 补齐原生确认 |
+| `[data-testid="refresh-submissions"]` | 只读刷新原生及 SDK 发送状态 |
+| `[data-testid="stop-status"]` | 原生停止保存与运行宿主中断确认的独立提示 |
 | `[data-testid="history-message"]` / `data-message-id` | 已持久的历史消息 |
 | `[data-testid="conversation-status"]` / `data-phase` | 当前会话状态 |
 | `[data-testid="toggle-long-message"]` / `aria-expanded` | 展开／收起长消息；所属 article 的 `data-message-id` 标识消息 |
@@ -73,7 +83,7 @@ Node 24.14.1 验证通过。React 19.3.1、Vite 8.3.5 等依赖均固定精确�
 
 模型下拉项的 DOM value 为 `JSON.stringify([connectionId, modelId])`。设备测试应按连接卡片的真实 ID 定位；凭据正文不能写入测试日志或 DOM 快照。
 
-38 个公共边界测试使用真实 UI client、controller 和 React。`application-real.test.mjs` 将 React DOM 经公开消息协议接到真实 Application、SDK 与 SQLite，覆盖实际扩展登记后按钮可用、新建／发送、关闭核心后重开同一历史，且模型请求不增加。`models-real.test.mjs` 进一步从空配置经 DOM 添加真实模型定义、窄接口保存合成 Key、设置默认值、完成受控模型聊天，再重开 SQLite；设置查询解密次数为零，发送时才解析凭据，保存的中文／emoji 原文完整。原生草稿／凭据边界和模型传输受控，不把桌面 InputPlatform 或内存凭据 fixture 当成 Android SQLite／SAF／加密验收；两条真实核心测试都通过 frozen token 接入真实 SDK。
+48 个公共边界测试使用真实 UI client、controller 和 React。`application-real.test.mjs` 将 React DOM 经公开消息协议接到真实 Application、SDK 与 SQLite，覆盖实际扩展登记后按钮可用、新建／发送、关闭核心后重开同一历史，且模型请求不增加；另一个真实核心用例在 SDK 接纳后丢失原生 ACK，继续编辑新草稿，再显式补确认，验证 2 次同 intent send 只有 1 次模型请求，新草稿保留，而同正文新动作产生第 2 次输入。`models-real.test.mjs` 进一步从空配置经 DOM 添加真实模型定义、窄接口保存合成 Key、设置默认值、完成受控模型聊天，再重开 SQLite；设置查询解密次数为零，发送时才解析凭据，保存的中文／emoji 原文完整。原生草稿／发送／凭据边界和模型传输受控，不把桌面 InputPlatform 或内存凭据 fixture 当成 Android SQLite／SAF／加密验收；真实核心测试均通过原生 intent 接入真实 SDK。
 
 `npm test` 会先构建运行核心，避免拿旧 dist 进行接线验证。其余测试只模拟外部原生消息传输，覆盖回执关联、旧代次／旧 revision 丢弃、取消订阅不停止、页面重建不重发、配置等待、分页与停止、创建回执丢失后重试、浏览器无宿主、进度与已保存消息区别、长消息折叠与原文展开，以及凭据窄写入／移除、版本回执、拒绝后清空密码且不反射秘密。这些桌面测试不替代 Android IPC、Keystore、CE 或设备验收；对应证据由各票集成验收记录。
 

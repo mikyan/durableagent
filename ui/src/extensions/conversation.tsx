@@ -5,6 +5,7 @@ import {MODELS_EXTENSION} from '../../../runtime/src/model-protocol';
 import {builtInUiExtensions} from '../extensions';
 import {INPUT_BUDGETS} from '../../../runtime/src/input-protocol';
 import {DraftAttachments,bytes} from './attachments';
+import {SendStates} from './submissions';
 
 const ModelSettings=lazy(builtInUiExtensions[MODELS_EXTENSION.id].load);
 
@@ -44,6 +45,8 @@ export default function ConversationPage({controller,state}:{controller:Conversa
   const phase=state.conversation?.phase??active?.phase??'idle';
   const workspace=active?.workspaceId?(active.workspaceId==='default'?'默认工作区':active.workspaceId):'工作区待读取';
   const running=phase==='running'||phase==='waiting';
+  const stoppable=running||state.pending||state.submissions?.items.some(item=>!item.intent?.cancelled&&item.status?.submission?.status!=='done'&&item.status?.submission?.status!=='unanswered')||!!state.submissions?.control?.pendingAbort;
+  const sendContext=state.draft?.submissionContext??active?.submissionContext;
   const modelsPage=state.page==='models';
   const hasModels=state.status.extensions.includes(MODELS_EXTENSION.id);
   const startupReason=state.status.reason??(state.status.phase==='opening'?'正在连接运行宿主…':state.status.phase==='configuring'?'正在装载配置，请稍候。':state.status.phase==='closed'?'运行宿主已关闭，请重新连接。':state.status.phase==='failed'?'连接未完成，请重新连接。':!ready?'当前运行宿主未提供会话功能。':undefined);
@@ -115,15 +118,17 @@ export default function ConversationPage({controller,state}:{controller:Conversa
           </div>
         </div>
         <div className="composer-area">
-          {details&&<section className="details-panel" role="dialog" aria-label="会话详情"><div className="panel-heading"><h2>会话详情</h2><button className="plain-icon" aria-label="关闭详情" onClick={()=>setDetails(false)}><Icon name="close"/></button></div><dl><div><dt>模型</dt><dd>{active?.model.name??'正在读取'}</dd></div><div><dt>工作区</dt><dd>{workspace}</dd></div><div><dt>状态</dt><dd>{state.conversation?phases[phase]:'运行状态待连接'}</dd></div><div><dt>历史</dt><dd>标记为“已保存”的消息已提交到存储。</dd></div></dl><button className="secondary-button" onClick={reconnect}>重新连接</button></section>}
+          <SendStates controller={controller} state={state}/>
+          {details&&<section className="details-panel" role="dialog" aria-label="会话详情"><div className="panel-heading"><h2>会话详情</h2><button className="plain-icon" aria-label="关闭详情" onClick={()=>setDetails(false)}><Icon name="close"/></button></div><dl><div><dt>模型</dt><dd>{active?.model.name??'正在读取'}</dd></div><div><dt>工作区</dt><dd>{workspace}</dd></div><div><dt>状态</dt><dd>{state.conversation?phases[phase]:'运行状态待连接'}</dd></div><div><dt>历史</dt><dd>标记为“已保存”的消息已提交到存储。</dd></div></dl><div className="detail-actions"><button className="secondary-button" onClick={reconnect}>重新连接</button><button className="secondary-button" onClick={()=>void controller.stop()} disabled={!draftReady||state.submissions?.stopping}>停止此会话</button></div></section>}
           <DraftAttachments controller={controller} state={state}/>
           {(state.inputError||state.draft?.error)&&<div className="draft-error" role="alert"><span>{state.draft?.error??state.inputError}</span>{state.draft&&<div className="draft-recovery">{state.draft.status==='conflict'?<button type="button" onClick={()=>void controller.recoverDraft(true)}>保留本地内容并重试</button>:<button type="button" onClick={()=>void controller.retryDraft()}>重试保存</button>}<button type="button" onClick={()=>void controller.recoverDraft(false)}>恢复已保存版本</button></div>}</div>}
           {attachments&&<div className="attachment-menu" role="menu" aria-label="添加附件"><button type="button" role="menuitem" onClick={()=>choose('image')}>选择图片</button><button type="button" role="menuitem" onClick={()=>choose('file')}>选择文件</button><p>仅选择与本地准备，不会自动发送。</p></div>}
           <form className="composer" onSubmit={event=>void send(event)}>
             <button type="button" className="plain-icon detail-button" aria-label="会话详情" aria-expanded={details} onClick={()=>setDetails(!details)}><Icon name="grid"/></button>
             <button type="button" className="plain-icon attachment-button" data-testid="add-attachment" aria-label="添加附件" aria-expanded={attachments} onClick={()=>setAttachments(!attachments)} disabled={!draftReady||state.draft?.busy}><Icon name="plus"/></button>
-            <textarea ref={input} data-testid="message-input" aria-label="消息" value={draft} placeholder="发送消息…" rows={1} onChange={event=>controller.editDraft(event.target.value)} disabled={!draftReady} onKeyDown={event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.nativeEvent.isComposing){event.preventDefault();if(!running)void send(event);}}}/>
-            {running?<button type="button" className="send-button" data-testid="stop-generation" aria-label="停止生成" onClick={()=>void controller.stop()} disabled={!ready||state.pending}><Icon name="stop"/></button>:<button type="submit" className="send-button" data-testid="send-message" aria-label="发送消息" disabled={!ready||!state.conversation||state.pending||!draftReady||state.draft?.busy||state.draft?.status==='conflict'||state.draft?.status==='failed'||(!draft.trim()&&!state.draft?.selections.length)||state.draft?.selections.some(item=>item.preparation.state!=='ready')}><Icon name="send"/></button>}
+            <textarea ref={input} data-testid="message-input" aria-label="消息" value={draft} placeholder="发送消息…" rows={1} onChange={event=>controller.editDraft(event.target.value)} disabled={!draftReady} onKeyDown={event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.nativeEvent.isComposing){event.preventDefault();void send(event);}}}/>
+            {stoppable&&<button type="button" className="plain-icon stop-button" data-testid="stop-generation" aria-label="停止生成" onClick={()=>void controller.stop()} disabled={!draftReady||state.submissions?.stopping}><Icon name="stop"/></button>}
+            <button type="submit" className="send-button" data-testid="send-message" aria-label="发送消息" disabled={!sendContext||state.pending||!draftReady||state.draft?.busy||state.submissions?.stopping||state.draft?.status==='conflict'||state.draft?.status==='failed'||(!draft.trim()&&!state.draft?.selections.length)||state.draft?.selections.some(item=>item.preparation.state!=='ready')}><Icon name="send"/></button>
           </form>
           <div className="draft-status" data-testid="draft-status" data-state={state.draft?.status??'loading'} role="status">{state.draft?(state.draft.status==='saved'?'草稿已保存':state.draft.status==='pending'?'草稿待保存…':state.draft.status==='conflict'?'草稿存在版本冲突':'草稿保存未确认'):'正在读取原生草稿…'}{state.pending?' · 正在确认操作':''}{draft.length>INPUT_BUDGETS.draftCharacters*.8?` · ${draft.length} / ${INPUT_BUDGETS.draftCharacters} 字符`:''}</div>
           <div className="context-pill"><span>{active?.model.name??'正在读取模型'}</span><i/><span className={`phase-${phase}`}>{state.conversation?phases[phase]:'历史待连接'}</span><i/><span>{workspace}</span></div>

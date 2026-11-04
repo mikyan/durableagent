@@ -34,7 +34,7 @@ import assert from 'node:assert/strict';
 import {mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {Application} from '../dist/application.js';
+import {Application} from './application-fixture.mjs';
 import {ModelConnections} from '../dist/model-connections.js';
 import {fixtureTransport} from '../dist/transport.js';
 import {auditStorageSecret} from '../dist/storage.js';

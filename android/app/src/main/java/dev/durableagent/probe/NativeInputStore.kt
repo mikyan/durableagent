@@ -46,6 +46,9 @@ class NativeInputStore(
             val previous = db.rawQuery("SELECT data,capability FROM conversations WHERE id=?", arrayOf(id)).use {
                 if (it.moveToFirst()) Pair(it.getString(0), if (it.isNull(1)) null else it.getString(1)) else null
             }
+            val submissionContext = conversation.optJSONObject("submissionContext")
+                ?: previous?.first?.let(::JSONObject)?.optJSONObject("submissionContext")
+            if (submissionContext != null) safe.put("submissionContext", NativeSubmissionRecords.context(submissionContext))
             db.execSQL("INSERT INTO conversations(id,data,capability) VALUES(?,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data,capability=excluded.capability",
                 arrayOf(id, safe.toString(), capability?.toString()))
             db.execSQL("INSERT OR IGNORE INTO drafts(id,revision,state_version,text,selection_ids) VALUES(?,0,0,'','[]')", arrayOf(id))
@@ -361,6 +364,25 @@ class NativeInputStore(
     }
 
     fun readFrozen(token: String): JSONObject { validateId(token); return locked { db, _ -> frozen(db, token) } }
+    fun createSend(request: JSONObject): JSONObject = locked { db, _ -> transaction(db) {
+        NativeSubmissionRecords.create(db, request) { frozen(db, it) }.also { boundary("send.intent.beforeCommit") }
+    } }.also { boundary("send.intent.afterCommit") }
+    fun readSend(intentId: String): JSONObject = locked { db, _ -> NativeSubmissionRecords.read(db, intentId) }
+    fun listSends(options: JSONObject = JSONObject()): JSONObject = locked { db, _ -> NativeSubmissionRecords.list(db, options) }
+    fun readControl(id: String): JSONObject { validateId(id); return locked { db, _ -> NativeSubmissionRecords.control(db, id) } }
+    fun requestStop(request: JSONObject): JSONObject = locked { db, _ -> transaction(db) {
+        NativeSubmissionRecords.stop(db, request).also { boundary("send.stop.beforeCommit") }
+    } }.also { boundary("send.stop.afterCommit") }
+    fun pendingStops(): JSONArray = locked { db, _ -> NativeSubmissionRecords.pendingStops(db) }
+    fun confirmAbort(id: String, barrier: JSONObject): JSONObject = locked { db, _ -> transaction(db) { NativeSubmissionRecords.confirmAbort(db, id, barrier) } }
+    fun markDeliveryUnknown(intentId: String): JSONObject = locked { db, _ -> transaction(db) { NativeSubmissionRecords.markUnknown(db, intentId) } }
+    fun confirmAdmission(intentId: String, receipt: JSONObject): JSONObject = locked { db, _ -> transaction(db) {
+        NativeSubmissionRecords.acknowledge(db, intentId, receipt, { frozen(db, it) }, { draft(db, it) }, { id ->
+            val current = draft(db, id); checkRevision(current, current.getLong("revision"))
+            db.execSQL("UPDATE drafts SET revision=revision+1,state_version=state_version+1,text='',selection_ids='[]' WHERE id=?", arrayOf(id))
+            draft(db, id)
+        }).also { boundary("send.ack.beforeCommit") }
+    } }.also { boundary("send.ack.afterCommit") }
     fun readObjectBytes(token: String, objectId: String): ByteArray {
         validateId(token); validateId(objectId)
         return locked { db, directory ->
@@ -373,6 +395,7 @@ class NativeInputStore(
     fun discard(token: String, operationId: String): JSONObject {
         validateId(token); validateId(operationId)
         return locked { db, _ -> operation(db, operationId, JSONObject().put("method", "discard").put("token", token)) {
+            if (NativeSubmissionRecords.holds(db, token)) fail("INPUT_IN_USE", "发送意图仍持有此固定输入，尚未释放恢复材料。")
             db.execSQL("DELETE FROM frozen_objects WHERE token=?", arrayOf(token)); db.execSQL("DELETE FROM frozen WHERE token=?", arrayOf(token)); JSONObject()
         } }
     }
@@ -475,7 +498,7 @@ class NativeInputStore(
         .put("writer", transaction(db) { JSONObject().put("journalMode", pragma(db, "journal_mode")).put("synchronous", pragma(db, "synchronous").toInt()).put("foreignKeys", pragma(db, "foreign_keys").toInt()).put("pageSize", pragma(db, "page_size").toLong()).put("maxPages", pragma(db, "max_page_count").toLong()) }) }
 
     private fun draft(db: SQLiteDatabase, id: String): JSONObject {
-        db.rawQuery("SELECT d.revision,d.text,d.selection_ids,c.capability,d.state_version FROM drafts d JOIN conversations c ON c.id=d.id WHERE d.id=?", arrayOf(id)).use { cursor ->
+        db.rawQuery("SELECT d.revision,d.text,d.selection_ids,c.capability,d.state_version,c.data FROM drafts d JOIN conversations c ON c.id=d.id WHERE d.id=?", arrayOf(id)).use { cursor ->
             if (!cursor.moveToFirst()) fail("INPUT_NOT_FOUND", "尚未登记此会话，无法恢复草稿。")
             val selected = JSONArray(cursor.getString(2)); val selections = JSONArray()
             for (index in 0 until selected.length()) {
@@ -485,7 +508,10 @@ class NativeInputStore(
                 }
             }
             return JSONObject().put("id", id).put("revision", cursor.getLong(0)).put("text", cursor.getString(1))
-                .put("selections", selections).put("committed", true).put("stateVersion", cursor.getLong(4)).apply { if (!cursor.isNull(3)) put("capability", JSONObject(cursor.getString(3))) }
+                .put("selections", selections).put("committed", true).put("stateVersion", cursor.getLong(4)).apply {
+                    if (!cursor.isNull(3)) put("capability", JSONObject(cursor.getString(3)))
+                    JSONObject(cursor.getString(5)).optJSONObject("submissionContext")?.let { put("submissionContext", it) }
+                }
         }
     }
 
@@ -540,7 +566,7 @@ class NativeInputStore(
 
     override fun close() = synchronized(monitor) { sourceAdmissions.values.toList().forEach { it.close() }; helper?.close(); helper = null; closed = true }
 
-    private class InputDatabase(context: Context, path: String, private val maximumBytes: Long?) : SQLiteOpenHelper(context, path, null, 2,
+    private class InputDatabase(context: Context, path: String, private val maximumBytes: Long?) : SQLiteOpenHelper(context, path, null, 3,
         DatabaseErrorHandler { throw NativeInputException("INPUT_STORAGE_CORRUPT", "草稿数据库损坏，已保留原库和材料。") }) {
         init { setWriteAheadLoggingEnabled(true) }
         override fun onConfigure(db: SQLiteDatabase) {
@@ -557,6 +583,7 @@ class NativeInputStore(
             db.execSQL("CREATE TABLE frozen_objects(token TEXT NOT NULL REFERENCES frozen(token),object_id TEXT NOT NULL REFERENCES objects(id),PRIMARY KEY(token,object_id))")
             db.execSQL("CREATE TABLE operations(id TEXT PRIMARY KEY,payload_hash TEXT NOT NULL,reply TEXT NOT NULL)")
             createSelectionIndex(db)
+            NativeSubmissionRecords.createSchema(db)
         }
         override fun onOpen(db: SQLiteDatabase) {
             if (maximumBytes != null) {
@@ -571,8 +598,9 @@ class NativeInputStore(
             db.execSQL("CREATE TABLE selection_operations(operation_id TEXT PRIMARY KEY,draft_id TEXT NOT NULL,revision INTEGER NOT NULL,kind TEXT NOT NULL,uri TEXT NOT NULL)")
         }
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            if (oldVersion == 1 && newVersion == 2) createSelectionIndex(db)
-            else fail("INPUT_INCOMPATIBLE", "草稿数据库版本不兼容，已保留现有数据。")
+            if (oldVersion !in 1..2 || newVersion != 3) fail("INPUT_INCOMPATIBLE", "草稿数据库版本不兼容，已保留现有数据。")
+            if (oldVersion == 1) createSelectionIndex(db)
+            NativeSubmissionRecords.createSchema(db)
         }
         override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) { fail("INPUT_INCOMPATIBLE", "草稿数据库来自更新版本，已保留现有数据。") }
     }

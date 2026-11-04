@@ -21,7 +21,7 @@ class ApplicationTest {
     private val context=instrumentation.targetContext
     private fun intent(mode:String,run:String)=Intent(context,AgentActivity::class.java).putExtra("validationMode",mode).putExtra("validationRun",run)
     private fun evidence(name:String,value:JSONObject){instrumentation.sendStatus(0,android.os.Bundle().apply{putString("applicationEvidence",JSONObject().put("case",name).put("result",value).toString())})}
-    private inner class Wire(mode:String,val run:String):AutoCloseable {
+    private inner class Wire(val mode:String,val run:String):AutoCloseable {
         var disposed=false
         val connection=UUID.randomUUID().toString()
         val pending=ConcurrentHashMap<String,CompletableFuture<JSONObject>>()
@@ -33,7 +33,7 @@ class ApplicationTest {
         }.apply{connect()}
         fun raw(method:String,payload:JSONObject=JSONObject(),protocol:Int=1):JSONObject {
             val id=UUID.randomUUID().toString();val result=CompletableFuture<JSONObject>();pending[id]=result
-            client.post(JSONObject().put("protocol",protocol).put("connectionId",connection).put("requestId",id).put("method",method).put("payload",payload).toString())
+            client.post(JSONObject().put("protocol",protocol).put("connectionId",connection).put("requestId",id).put("method",method).put("payload",if(protocol==1)SubmissionTestDriver.payload(context,mode,run,method,payload) else payload).toString())
             return result.get(30,TimeUnit.SECONDS)
         }
         fun call(method:String,payload:JSONObject=JSONObject()):JSONObject {

@@ -17,7 +17,7 @@ it('the registered real application enables React create/send and reopens the sa
   const temporaryRoot=resolve(tmpdir());
   const directory=await mkdtemp(join(temporaryRoot,'durable-ui-contract-'));
   let modelRequests=0;const native=new InputPlatform();
-  const options={inputs:native,path:join(directory,'application.sqlite'),...validationConfiguration({requested:()=>modelRequests++})};
+  const options={inputs:native,sends:native,path:join(directory,'application.sqlite'),...validationConfiguration({requested:()=>modelRequests++})};
   let app=new Application(options);
   const preferences=new Map();
   const connect=()=>new ConversationController(()=>{
@@ -51,6 +51,40 @@ it('the registered real application enables React create/send and reopens the sa
   }finally{
     cleanup();controller?.dispose();await app.close();
     if(!resolve(directory).startsWith(temporaryRoot+sep)||!directory.includes('durable-ui-contract-'))throw new Error('Unsafe temporary cleanup target');
+    await rm(directory,{recursive:true,force:true});
+  }
+},20000);
+
+it('repairs a lost native ACK through the real SDK receipt without resubmission or clearing a newer draft',async()=>{
+  const temporaryRoot=resolve(tmpdir()),directory=await mkdtemp(join(temporaryRoot,'durable-ui-ack-'));
+  const native=new InputPlatform(),wire=[];let modelRequests=0,loseAck=true;
+  const confirm=native.confirmAdmission;native.confirmAdmission=async(...args)=>{if(loseAck){loseAck=false;throw Error('Synthetic lost native ACK');}return confirm(...args);};
+  const app=new Application({inputs:native,sends:native,path:join(directory,'application.sqlite'),...validationConfiguration({requested:()=>modelRequests++})});
+  const controller=new ConversationController(()=>{
+    const client=new ApplicationClient({postMessage:json=>{
+      const request=JSON.parse(json);wire.push(request);
+      if(request.method.startsWith('input.')){void native.handle(request).then(response=>client.receive(response));return;}
+      void app.request(request,event=>client.receive(event)).then(response=>client.receive(response));
+    }});return client;
+  });
+  try{
+    await app.start();render(createElement(App,{controller}));fireEvent.click(await screen.findByRole('button',{name:'新建会话'}));
+    const input=await screen.findByRole('textbox',{name:'消息'});await waitFor(()=>expect(input.disabled).toBe(false));
+    fireEvent.change(input,{target:{value:'相同正文也必须分次'}});fireEvent.click(screen.getByRole('button',{name:'发送消息'}));
+    expect(await screen.findByText('回复已保存',{}, {timeout:10000})).toBeTruthy();
+    const repair=await screen.findByRole('button',{name:'补齐本机发送确认'}),first=[...native.intents.values()][0];
+    expect(first.delivery).toBe('uncertain');expect(first.receipt).toBeUndefined();expect(modelRequests).toBe(1);
+    fireEvent.change(input,{target:{value:'确认晚到之前的新草稿'}});await waitFor(()=>expect(native.read(first.id).text).toBe('确认晚到之前的新草稿'));
+    fireEvent.click(repair);await waitFor(()=>expect(native.intents.get(first.intentId).delivery).toBe('acknowledged'));
+    expect(input.value).toBe('确认晚到之前的新草稿');expect(native.read(first.id).text).toBe('确认晚到之前的新草稿');expect(modelRequests).toBe(1);
+    expect(wire.filter(request=>request.method==='send').map(request=>request.payload)).toEqual([{intentId:first.intentId},{intentId:first.intentId}]);
+    expect(wire.some(request=>request.method==='sendStatus')).toBe(true);expect(controller.snapshot().history.filter(message=>message.role==='user')).toHaveLength(1);
+    fireEvent.change(input,{target:{value:'相同正文也必须分次'}});fireEvent.click(screen.getByRole('button',{name:'发送消息'}));
+    await waitFor(()=>expect(controller.snapshot().history.filter(message=>message.role==='assistant')).toHaveLength(2),{timeout:10000});
+    expect(modelRequests).toBe(2);expect(native.intents.size).toBe(2);expect(new Set([...native.intents.keys()]).size).toBe(2);
+  }finally{
+    cleanup();controller.dispose();await app.close();
+    if(!resolve(directory).startsWith(temporaryRoot+sep)||!directory.includes('durable-ui-ack-'))throw Error('Unsafe temporary cleanup target');
     await rm(directory,{recursive:true,force:true});
   }
 },20000);

@@ -14,7 +14,7 @@ import {createHash} from 'node:crypto';
 import {mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {Application} from '../dist/application.js';
+import {Application} from './application-fixture.mjs';
 import {ModelConnections} from '../dist/model-connections.js';
 import {frozenInputDigest,materializeFrozenInput} from '../dist/input.js';
 import {INPUT_BUDGETS} from '../dist/input-protocol.js';

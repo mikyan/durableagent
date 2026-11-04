@@ -9,6 +9,9 @@ import {ModelConnections,ModelConfigurationError,type StoredModels} from './mode
 import {createHash} from 'node:crypto';
 import {InputError,inputCapability,materializeFrozenInput} from './input.js';
 import {INPUT_EXTENSION,type FrozenInputAccess,type InputCapability,type InputConversation} from './input-protocol.js';
+import {SUBMISSION_EXTENSION,type SendAuthority,type SubmissionContext} from './submission-protocol.js';
+import {Submissions,SubmissionError,type SubmissionBoundary} from './submission.js';
+import {DispatchGate} from './dispatch-gate.js';
 
 type ProductRecord={id:string;sdkId:number;title:string;workspaceId:string;createdAt:number};
 const Configuration=defineDoc({kind:'app.configuration',version:1,scope:'session',initial:()=>({initialized:false as boolean,defaultModel:null as ModelSelection|null,workspace:{id:'default',path:''}}),checkpointWhen:()=>false});
@@ -18,7 +21,7 @@ class DuplicateCreation extends Error {constructor(readonly productId:string){su
 class ActionError extends Error {constructor(readonly code:string,message:string){super(message);}}
 const settings:HarnessSettings={progress:{partialIntervalMs:1,outputIntervalMs:1,persistWithinMs:1000},retry:{enabled:false,maxRetries:0,baseDelayMs:1}};
 export type ApplicationInputs=FrozenInputAccess&{rememberConversation(conversation:InputConversation,capability?:InputCapability):void};
-export type ApplicationOptions={path:string;models:Models;connections?:ModelConnections;inputs?:ApplicationInputs;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;storageFactory?:()=>Promise<Storage>};
+export type ApplicationOptions={path:string;models:Models;connections?:ModelConnections;inputs?:ApplicationInputs;sends?:SendAuthority;submissionBoundary?:(stage:SubmissionBoundary,intent:import('./submission-protocol.js').NativeSendIntent)=>void|Promise<void>;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;storageFactory?:()=>Promise<Storage>};
 export class Application {
   private harness?:Harness;
   private starting?:Promise<void>;
@@ -33,7 +36,10 @@ export class Application {
   private defaultModel:ModelSelection|null=null;
   private configurationTail:Promise<unknown>=Promise.resolve();
   private rememberedInputs=new Map<string,string>();
-  constructor(private readonly options:ApplicationOptions) {installConversationAgent(extension=>{this.state.extensions.push(extension.id);for(const action of extension.actions)this.actions.add(action);});if(options.connections){this.state.extensions.push(MODELS_EXTENSION.id);for(const action of MODELS_EXTENSION.actions)this.actions.add(action);}if(options.inputs)this.state.extensions.push(INPUT_EXTENSION.id);}
+  private submissions?:Submissions;
+  private dispatch=new DispatchGate();
+  private workspace={id:'default',path:''};
+  constructor(private readonly options:ApplicationOptions) {installConversationAgent(extension=>{this.state.extensions.push(extension.id);for(const action of extension.actions)this.actions.add(action);});if(options.connections){this.state.extensions.push(MODELS_EXTENSION.id);for(const action of MODELS_EXTENSION.actions)this.actions.add(action);}if(options.inputs)this.state.extensions.push(INPUT_EXTENSION.id);if(options.sends){this.state.extensions.push(SUBMISSION_EXTENSION.id);for(const action of SUBMISSION_EXTENSION.actions)this.actions.add(action);}}
   status(){return {...this.state};}
   start():Promise<void> {
     if(this.closing)return this.closing.then(()=>this.start());
@@ -44,10 +50,12 @@ export class Application {
     return this.starting;
   }
   private async open() {
+    this.dispatch=new DispatchGate();
     this.runtimeSettings(); // Fail before open: SDK catches some settings getter errors during reconciliation.
+    if(!this.options.inputs||!this.options.sends)throw new ActionError('INPUT_UNAVAILABLE','原生输入与停止存储尚不可用，运行保持关闭');
     const storage=this.options.storageFactory?await this.options.storageFactory():(await openOwnedStorage(this.options.path,this.options.secret)).storage;
     try {
-      this.harness=await Harness.open(storage,{models:()=>this.options.models,settings:()=>this.runtimeSettings(),registry:createRegistry()},context);
+      this.harness=await Harness.open(storage,{models:()=>this.dispatch.models(this.options.models),settings:()=>this.runtimeSettings(),registry:createRegistry()},context);
     }catch(error){await storage.close(context);throw error;}
     void this.harness.closed.then(result=>{if(result.kind==='failed')this.state={...this.state,phase:'failed',reason:this.safeError(result.error)};});
     this.harness.observeCommits({advance:publication=>{this.storedSeq=publication.seq;},end:()=>{}});
@@ -56,11 +64,17 @@ export class Application {
     this.defaultModel=await this.harness.commit(async tx=>{
       const configuration=await tx.doc(Configuration);
       if(!configuration.initialized){configuration.defaultModel=this.options.initialModel??null;configuration.workspace={id:'default',path:this.options.workspacePath};configuration.initialized=true;}
+      this.workspace={...configuration.workspace};
       return configuration.defaultModel?{...configuration.defaultModel}:null;
     },context);
     if(this.options.connections){const configuration=await this.harness.commit(async tx=>JSON.parse(JSON.stringify(await tx.doc(ModelConfiguration))) as StoredModels,context);this.options.connections.publish(configuration);this.defaultModel=configuration.defaultModel;}
+    if(this.options.sends&&this.options.inputs)this.submissions=new Submissions({harness:this.harness,authority:this.options.sends,inputs:this.options.inputs,models:this.options.models,available:this.options.connections?async(provider,modelId)=>{const connections=this.options.connections!;return !!connections.capability(provider,modelId)&&(await connections.publicConfiguration()).connections.some(item=>item.id===provider&&item.credential.configured);}:undefined,ready:()=>{this.ready();},pause:()=>this.dispatch.pause(),boundary:this.options.submissionBoundary,resolve:async(tx,id)=>{const products=await tx.doc(Products),configuration=await tx.doc(Configuration);if(!Object.hasOwn(products.items,id))throw new SubmissionError('NOT_FOUND','会话不存在');return this.submissionContext(products.items[id],configuration.workspace);}});
+    await this.submissions?.prepare();
+    if(this.submissions)this.dispatch.check=()=>this.submissions!.checkDispatch();
     this.state={...this.state,phase:'ready'};
     if(this.options.inputs)for(const product of Object.values((await this.harness.snapshot(Products,context))?.items??{}))await this.snapshot(product.id,product);
+    await this.submissions?.recover();
+    this.dispatch.release();
     this.harness.resume();
   }
   private ready() {
@@ -108,25 +122,16 @@ export class Application {
         case 'open':value=await this.snapshot(this.text(payload,'id',128));break;
         case 'history':value=await this.history(this.text(payload,'id',128),payload.cursor,payload.limit);break;
         case 'send': {
-          const product=await this.product(this.text(payload,'id',128));
-          const conversation=(await harness.conversation(product.sdkId as ConversationId,context))!;
-          const selection=(await conversation.agent(context)).model;
-          const model=selection&&this.options.models.getModel(selection.provider,selection.modelId);
-          if(!model||this.options.connections&&!this.options.connections.capability(model.provider,model.id))throw new ActionError('MODEL_UNAVAILABLE','请先配置可用模型');
-          const actionId=this.text(payload,'actionId',128);
-          let content;
-          if(payload.inputToken!==undefined){
-            if(!this.options.inputs||payload.text!==undefined)throw new ActionError('INPUT_UNAVAILABLE','固定输入入口不可用或参数冲突');
-            content=await materializeFrozenInput(this.options.inputs,this.text(payload,'inputToken',128),product.id,model);
-          }else content=this.text(payload,'text');
-          const submission=await conversation.submit({type:'input',content,requestId:actionId},context);
-          value={actionId,submissionId:String(submission.id),storedSeq:this.storedSeq,status:'accepted'};break;
+          if(!this.submissions)throw new ActionError('INPUT_UNAVAILABLE','原生发送意图存储尚不可用');
+          if(Object.keys(payload).some(key=>key!=='intentId'))throw new ActionError('INVALID_ARGUMENT','发送仅接受已保存的意图身份');
+          value=await this.submissions.send(this.text(payload,'intentId',128));break;
         }
+        case 'sendStatus':value=await this.submissions!.status(this.text(payload,'intentId',128));break;
+        case 'sendList':value=await this.submissions!.list({id:this.text(payload,'id',128),cursor:typeof payload.cursor==='string'?payload.cursor:undefined,limit:typeof payload.limit==='number'?payload.limit:undefined});break;
         case 'stop': {
-          const actionId=this.text(payload,'actionId',128);
-          const product=await this.product(this.text(payload,'id',128));
-          await (await harness.conversation(product.sdkId as ConversationId,context))!.abort(context);
-          value={actionId,storedSeq:this.storedSeq,status:'stopped'};break;
+          const stopId=this.text(payload,'stopId',128),id=this.text(payload,'id',128);
+          if(!this.submissions)throw new ActionError('INPUT_UNAVAILABLE','原生停止存储尚不可用');
+          value=await this.submissions.stop(id,stopId);break;
         }
         case 'subscribe': {
           const id=this.text(payload,'id',128),subscriptionId=this.text(payload,'subscriptionId',128);
@@ -153,7 +158,7 @@ export class Application {
         default:throw new ActionError('UNKNOWN_ACTION','不支持的应用操作');
       }
       return {...base,ok:true,value};
-    }catch(error){return {...base,ok:false,error:{code:error instanceof ActionError||error instanceof ModelConfigurationError||error instanceof InputError?error.code:'ACTION_FAILED',message:this.safeError(error)}};}
+    }catch(error){return {...base,ok:false,error:{code:error instanceof ActionError||error instanceof ModelConfigurationError||error instanceof InputError||error instanceof SubmissionError?error.code:'ACTION_FAILED',message:this.safeError(error)}};}
   }
   credentialTarget(id:string){return this.state.phase==='ready'&&!!this.options.connections?.contains(id);}
   private changeModels(method:string,payload:Record<string,unknown>) {
@@ -189,6 +194,7 @@ export class Application {
     return {conversation:await this.summary(await this.product(id)),storedSeq:this.storedSeq};
   }
   private async summary(product:ProductRecord):Promise<ConversationSummary> {return (await this.snapshot(product.id,product)).conversation;}
+  private submissionContext(product:ProductRecord,workspace=this.workspace):SubmissionContext{return {sdkConversationId:product.sdkId,associationVersion:1,location:{workspaceId:product.workspaceId,version:1,identity:createHash('sha256').update(JSON.stringify({id:workspace.id,path:workspace.path})).digest('hex')}};}
   private async snapshot(id:string,known?:ProductRecord) {
     const product=known??await this.product(id),harness=this.ready();
     const watch=await (await harness.conversation(product.sdkId as ConversationId,context))!.watch(context);
@@ -202,12 +208,12 @@ export class Application {
     const text=live?.run?this.content(live.generation?.message?.content):'';
     const selected={provider:ref.provider??'',modelId:ref.modelId??'',name:model?.name??ref.modelId??'未配置模型'};
     if(this.options.inputs){
-      const conversation={id:product.id,title:product.title,model:selected};
+      const conversation={id:product.id,title:product.title,model:selected,submissionContext:this.submissionContext(product)};
       const capability=this.options.connections?this.options.connections.capability(ref.provider,ref.modelId):model?inputCapability(model,'validation'):undefined;
       const key=JSON.stringify({conversation,capability});
       if(this.rememberedInputs.get(product.id)!==key){this.options.inputs.rememberConversation(conversation,capability);this.rememberedInputs.set(product.id,key);}
     }
-    return {id:product.id,revision:++this.revision,conversation:{id:product.id,title:product.title,model:selected,workspaceId:product.workspaceId,projectId:null,createdAt:product.createdAt,phase},entries,progress:text?{text,persisted:false}:undefined,phase,storedSeq:this.storedSeq,reason:live?.runFailure?.detail??live?.generation?.retry?.error};
+    return {id:product.id,revision:++this.revision,conversation:{id:product.id,title:product.title,model:selected,workspaceId:product.workspaceId,projectId:null,createdAt:product.createdAt,phase,submissionContext:this.submissionContext(product)},entries,progress:text?{text,persisted:false}:undefined,phase,storedSeq:this.storedSeq,reason:live?.runFailure?.detail??live?.generation?.retry?.error};
   }
   private content(value:any):string {return typeof value==='string'?value:Array.isArray(value)?value.filter(x=>x.type==='text').map(x=>x.text).join(''):'';}
   private message(entry:EntryRecord):HistoryMessage[] {return (entry.model??[]).flatMap((message:any,index:number)=>{

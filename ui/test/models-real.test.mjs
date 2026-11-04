@@ -19,7 +19,7 @@ it('real model settings start empty, configure by DOM, resolve credentials only 
   const vault=new Map(),preferences=new Map(),ordinary=[];let reads=0,requests=0;
   const metadata=async id=>({connectionId:id,state:vault.has(id)?'configured':'absent',generation:vault.get(id)?.generation??0,configured:vault.has(id)});
   const credentials={metadata,resolve:async id=>{reads++;const value=vault.get(id);if(!value)throw Error('No credential');return value;}};
-  const create=()=>{const connections=new ModelConnections({credentials,fetch:fixtureTransport({requested:()=>requests++,aborted:()=>{}})});return new Application({inputs:native,path:join(directory,'application.sqlite'),models:connections.models,connections,workspacePath:directory});};
+  const create=()=>{const connections=new ModelConnections({credentials,fetch:fixtureTransport({requested:()=>requests++,aborted:()=>{}})});return new Application({inputs:native,sends:native,path:join(directory,'application.sqlite'),models:connections.models,connections,workspacePath:directory});};
   let app=create(),controller;
   const connect=()=>new ConversationController(()=>{
     const client=new ApplicationClient({postMessage:json=>{

@@ -27,6 +27,11 @@ class NativeInputAccess(private val store: NativeInputStore) : AutoCloseable {
             "input.prepare" -> store.prepare(id(), payload.getString("selectionId"), operation())
             "input.freeze" -> store.freeze(id(), revision(), operation())
             "input.discard" -> store.discard(payload.getString("token"), operation())
+            "input.createSend" -> store.createSend(payload)
+            "input.readSend" -> store.readSend(payload.getString("intentId"))
+            "input.listSends" -> store.listSends(payload)
+            "input.readControl" -> store.readControl(id())
+            "input.stop" -> store.requestStop(payload)
             else -> throw NativeInputException("INPUT_UNKNOWN_ACTION", "未登记的原生输入操作。")
         }
     }
@@ -38,6 +43,27 @@ class NativeInputAccess(private val store: NativeInputStore) : AutoCloseable {
 
     @V8Function
     fun readFrozenJson(token: String): String = result { store.readFrozen(token) }
+
+    @V8Function
+    fun readSendJson(intentId: String): String = result { store.readSend(intentId) }
+
+    @V8Function
+    fun listSendsJson(optionsJson: String): String = result { store.listSends(JSONObject(optionsJson)) }
+
+    @V8Function
+    fun readControlJson(id: String): String = result { store.readControl(id) }
+
+    @V8Function
+    fun markDeliveryUnknownJson(intentId: String): String = result { store.markDeliveryUnknown(intentId) }
+
+    @V8Function
+    fun confirmAdmissionJson(intentId: String, receiptJson: String): String = result { store.confirmAdmission(intentId, JSONObject(receiptJson)) }
+
+    @V8Function
+    fun pendingStopsJson(): String = result { store.pendingStops() }
+
+    @V8Function
+    fun confirmAbortJson(id: String, barrierJson: String): String = result { store.confirmAbort(id, JSONObject(barrierJson)) }
 
     /** Never bind to WebView. The actual SDK inline image is constructed only on explicit send. */
     @V8Function

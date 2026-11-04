@@ -1,0 +1,43 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.InputApplicationTest:
+INSTRUMENTATION_STATUS: test=inputPolicyUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputEvidence={"case":"actual-sdk-input-policy","result":{"phase":"ready","extensions":["conversation","models","input","submission"],"metrics":{"inputPolicyState":"passed","inputPolicyCases":[{"name":"capabilities derive from the fixed SDK catalog, use byte-specific budgets, and never resolve credentials","passed":true},{"name":"fixed input verifies ownership, every object and digest before SDK content; changed capabilities never alter a token","passed":true},{"name":"explicit fixed-image send reaches real SDK encoding, persists image-only history, and reopening never sends","passed":true},{"name":"actual serialized SDK requests enforce escaped JSON, history image counts and selected-model limits before decrypt or transport","passed":true},{"name":"oversized accumulated context is refused before entering the real SDK provider encoder","passed":true}]},"instance":"ed20d6f9-0529-4740-bc7c-02ae32cda08f","pid":22989,"domainOwned":true,"nativeOwners":1}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inputPolicyUsesActualAndroidNodeAndSqlite
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realMimoReadsFrozenImageAndUtf8ChallengesAfterOriginalChanges
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputEvidence={"case":"real-fixed-image","result":{"challenge":"628X","answer":"628X","frozen":{"token":"bb1b8fa9-64df-42a3-b16a-0592113751a4","id":"image-challenge","revision":2,"text":"请读取图片中央的四位英文大写或数字代码，仅输出该代码，不要附加其他内容。","representations":[{"range":"full","capabilityVersion":"48914d15184261b2ae26768590dfd9e83534f29ad2347116d94142ca10fcead2","kind":"image","mimeType":"image\/png","width":560,"height":220,"sourceWidth":560,"sourceHeight":220,"transformation":"完整画面，按方向解码并缩放，保留透明度","objectId":"0edce216-ca1d-4903-8d65-1bcbe8644d4f","sha256":"e184456f994902d7226046bc29f6f7d0975c2c493d996db22513b6299df7e885","byteLength":10840}],"digest":"0e7f3b02a68acc23cffb02eca7662d4407d2f46f557a64e3a6182931c7ac55a0"},"requestInput":{"serializedBytes":14852,"images":[{"sha256":"e184456f994902d7226046bc29f6f7d0975c2c493d996db22513b6299df7e885","byteLength":10840,"mimeType":"image\/png"}],"textParts":[{"sha256":"fd1e63f829b2fd39e5164d610042f16b1fcd472b9a5b38218358982da8be49d7","byteLength":108}]},"originalChangedAfterFreeze":true,"requestsBeforeSend":0,"explicitRequests":1,"reopenRequests":0}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: inputEvidence={"case":"real-fixed-text","result":{"challenge":"HW93GB5V","answer":"HW93GB5V","frozen":{"token":"bbcef944-7391-49d1-8448-95bf7db2a947","id":"text-challenge","revision":2,"text":"请读取随附资料中唯一校验码，仅输出校验码，不要附加其他内容。","representations":[{"range":"full","capabilityVersion":"48914d15184261b2ae26768590dfd9e83534f29ad2347116d94142ca10fcead2","kind":"text","mimeType":"text\/plain","transformation":"UTF-8 全文，未截断","objectId":"c1b8fba7-cc4d-4827-b001-fa69d2e9e854","sha256":"2f1e56f853e20e4ccccf49e8b698a2b33b94986b3cdf10b2e6c9249953c48815","byteLength":77}],"digest":"eaab0d9051c4faa8fb273fc0965c1e67cee09086613ead468b4ad73787b17efa"},"requestInput":{"serializedBytes":418,"images":[],"textParts":[{"sha256":"24313e00e79c540a6e722b7d9eb35358e049730433c6d1e44c4f1ca9bd841cb2","byteLength":90},{"sha256":"2f1e56f853e20e4ccccf49e8b698a2b33b94986b3cdf10b2e6c9249953c48815","byteLength":77}]},"originalChangedAfterFreeze":true,"completeUtf8IncludingBom":true,"requestsBeforeSend":0,"explicitRequests":1,"reopenRequests":0}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoReadsFrozenImageAndUtf8ChallengesAfterOriginalChanges
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 10.032
+
+OK (2 tests)
+
+
+INSTRUMENTATION_CODE: -1

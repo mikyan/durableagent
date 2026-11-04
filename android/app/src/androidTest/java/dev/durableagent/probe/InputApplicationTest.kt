@@ -45,7 +45,7 @@ class InputApplicationTest {
         val client=ApplicationClient(context,mode,run){what,text->val value=JSONObject(text);when(what){10->responses.remove(value.optString("requestId"))?.complete(value);12->states.offer(value);31->imports.offer(value);35->busy.offer(value)}}.apply{connect()}
         fun call(method:String,payload:JSONObject=JSONObject()):JSONObject {
             val requestId=UUID.randomUUID().toString();val response=CompletableFuture<JSONObject>();responses[requestId]=response
-            client.post(JSONObject().put("protocol",1).put("connectionId",id).put("requestId",requestId).put("method",method).put("payload",payload).toString())
+            client.post(JSONObject().put("protocol",1).put("connectionId",id).put("requestId",requestId).put("method",method).put("payload",SubmissionTestDriver.payload(context,mode,run,method,payload)).toString())
             val result=response.get(30,TimeUnit.SECONDS);assertTrue(result.toString(),result.getBoolean("ok"));return result.getJSONObject("value")
         }
         fun state():JSONObject{states.clear();client.control(12);return states.poll(10,TimeUnit.SECONDS)?:error("Native host state timeout")}

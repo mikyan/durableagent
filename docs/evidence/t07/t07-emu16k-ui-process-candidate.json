@@ -1,0 +1,297 @@
+{
+  "run": "3000dc62-c7bf-4815-9eb8-839e28e616dc",
+  "mode": "fixture",
+  "started": "2026-11-04T00:44:02.052Z",
+  "observed": [],
+  "scope": "Actual UI process SIGKILL/reopen after durable SDK acceptance; same native process, same intent and receipt, exact newer unsent draft retained. Exact model request counts are covered by separate instrumentation.",
+  "observerBusyRetries": 2,
+  "id": "421f1232-d150-4744-90ba-25b7908f2232",
+  "sent": "原发送 590c12a9-5a46-4158-8b86-503c3de994b6 北京🌍",
+  "newDraft": "发送确认后的下一份草稿：保持原文\n不自动投递🌍",
+  "original": {
+    "intent": {
+      "protocol": 1,
+      "intentId": "e6a8af43-b6d4-428c-877a-8d1ce905a764",
+      "actionId": "e6a8af43-b6d4-428c-877a-8d1ce905a764",
+      "id": "421f1232-d150-4744-90ba-25b7908f2232",
+      "inputToken": "a68f6f06-dbbe-4643-b303-e2a9673f0b1e",
+      "inputRevision": 1,
+      "inputDigest": "dcba6393cad38ece955465322cea293170b11f8110b815b98ce801baa3511cea",
+      "context": {
+        "sdkConversationId": 3,
+        "associationVersion": 1,
+        "location": {
+          "workspaceId": "default",
+          "version": 1,
+          "identity": "4528d6fc097db75fc9633b92f51ddd03854d804486a6123c6f8cf42840fce219"
+        }
+      },
+      "queue": {
+        "whenBusy": "followUp",
+        "whenIdle": "start"
+      },
+      "controlGeneration": 1,
+      "createdAt": 1793753045442,
+      "preview": {
+        "text": "原发送 590c12a9-5a46-4158-8b86-503c3de994b6 北京🌍",
+        "attachmentCount": 0
+      },
+      "stateVersion": 3,
+      "delivery": "acknowledged",
+      "cancelled": false,
+      "receipt": {
+        "protocol": 1,
+        "intentId": "e6a8af43-b6d4-428c-877a-8d1ce905a764",
+        "id": "421f1232-d150-4744-90ba-25b7908f2232",
+        "inputToken": "a68f6f06-dbbe-4643-b303-e2a9673f0b1e",
+        "inputRevision": 1,
+        "inputDigest": "dcba6393cad38ece955465322cea293170b11f8110b815b98ce801baa3511cea",
+        "context": {
+          "sdkConversationId": 3,
+          "associationVersion": 1,
+          "location": {
+            "workspaceId": "default",
+            "version": 1,
+            "identity": "4528d6fc097db75fc9633b92f51ddd03854d804486a6123c6f8cf42840fce219"
+          }
+        },
+        "queue": {
+          "whenBusy": "followUp",
+          "whenIdle": "start"
+        },
+        "controlGeneration": 1,
+        "bindingId": "be33662b-e8d3-4bb2-8575-8887ba8f7d23",
+        "submissionId": 14
+      }
+    },
+    "accepted": true,
+    "receipt": {
+      "protocol": 1,
+      "intentId": "e6a8af43-b6d4-428c-877a-8d1ce905a764",
+      "id": "421f1232-d150-4744-90ba-25b7908f2232",
+      "inputToken": "a68f6f06-dbbe-4643-b303-e2a9673f0b1e",
+      "inputRevision": 1,
+      "inputDigest": "dcba6393cad38ece955465322cea293170b11f8110b815b98ce801baa3511cea",
+      "context": {
+        "sdkConversationId": 3,
+        "associationVersion": 1,
+        "location": {
+          "workspaceId": "default",
+          "version": 1,
+          "identity": "4528d6fc097db75fc9633b92f51ddd03854d804486a6123c6f8cf42840fce219"
+        }
+      },
+      "queue": {
+        "whenBusy": "followUp",
+        "whenIdle": "start"
+      },
+      "controlGeneration": 1,
+      "bindingId": "be33662b-e8d3-4bb2-8575-8887ba8f7d23",
+      "submissionId": 14
+    },
+    "submission": {
+      "status": "done",
+      "entryId": "13",
+      "answerEntryId": "16"
+    }
+  },
+  "beforeDraft": {
+    "id": "421f1232-d150-4744-90ba-25b7908f2232",
+    "revision": 3,
+    "text": "发送确认后的下一份草稿：保持原文\n不自动投递🌍",
+    "selections": [],
+    "committed": true,
+    "stateVersion": 3,
+    "capability": {
+      "provider": "fixture",
+      "modelId": "conversation",
+      "input": [
+        "text"
+      ],
+      "source": "validation",
+      "limits": {},
+      "applicationPolicy": {
+        "draftCharacters": 100000,
+        "attachments": 4,
+        "sourceImageBytes": 16777216,
+        "sourcePixels": 25165824,
+        "textBytes": 262144,
+        "imageWidth": 1024,
+        "imageHeight": 1024,
+        "imageBytes": 1572864,
+        "totalBase64Bytes": 8388608,
+        "requestBytes": 10485760
+      },
+      "version": "d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"
+    },
+    "submissionContext": {
+      "sdkConversationId": 3,
+      "associationVersion": 1,
+      "location": {
+        "workspaceId": "default",
+        "version": 1,
+        "identity": "4528d6fc097db75fc9633b92f51ddd03854d804486a6123c6f8cf42840fce219"
+      }
+    }
+  },
+  "priorHistory": {
+    "items": [
+      {
+        "id": "13",
+        "role": "user",
+        "text": "原发送 590c12a9-5a46-4158-8b86-503c3de994b6 北京🌍",
+        "persisted": true
+      },
+      {
+        "id": "16",
+        "role": "assistant",
+        "text": "你好🌍",
+        "persisted": true
+      }
+    ]
+  },
+  "before": {
+    "uiPid": "22669",
+    "hostPid": "22761"
+  },
+  "beforeViewport": {
+    "width": 412,
+    "height": 915
+  },
+  "afterViewport": {
+    "width": 412,
+    "height": 915
+  },
+  "after": {
+    "uiPid": "22805",
+    "hostPid": "22761"
+  },
+  "afterDraft": {
+    "id": "421f1232-d150-4744-90ba-25b7908f2232",
+    "revision": 3,
+    "text": "发送确认后的下一份草稿：保持原文\n不自动投递🌍",
+    "selections": [],
+    "committed": true,
+    "stateVersion": 3,
+    "capability": {
+      "provider": "fixture",
+      "modelId": "conversation",
+      "input": [
+        "text"
+      ],
+      "source": "validation",
+      "limits": {},
+      "applicationPolicy": {
+        "draftCharacters": 100000,
+        "attachments": 4,
+        "sourceImageBytes": 16777216,
+        "sourcePixels": 25165824,
+        "textBytes": 262144,
+        "imageWidth": 1024,
+        "imageHeight": 1024,
+        "imageBytes": 1572864,
+        "totalBase64Bytes": 8388608,
+        "requestBytes": 10485760
+      },
+      "version": "d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"
+    },
+    "submissionContext": {
+      "sdkConversationId": 3,
+      "associationVersion": 1,
+      "location": {
+        "workspaceId": "default",
+        "version": 1,
+        "identity": "4528d6fc097db75fc9633b92f51ddd03854d804486a6123c6f8cf42840fce219"
+      }
+    }
+  },
+  "status": {
+    "intent": {
+      "protocol": 1,
+      "intentId": "e6a8af43-b6d4-428c-877a-8d1ce905a764",
+      "actionId": "e6a8af43-b6d4-428c-877a-8d1ce905a764",
+      "id": "421f1232-d150-4744-90ba-25b7908f2232",
+      "inputToken": "a68f6f06-dbbe-4643-b303-e2a9673f0b1e",
+      "inputRevision": 1,
+      "inputDigest": "dcba6393cad38ece955465322cea293170b11f8110b815b98ce801baa3511cea",
+      "context": {
+        "sdkConversationId": 3,
+        "associationVersion": 1,
+        "location": {
+          "workspaceId": "default",
+          "version": 1,
+          "identity": "4528d6fc097db75fc9633b92f51ddd03854d804486a6123c6f8cf42840fce219"
+        }
+      },
+      "queue": {
+        "whenBusy": "followUp",
+        "whenIdle": "start"
+      },
+      "controlGeneration": 1,
+      "createdAt": 1793753045442,
+      "preview": {
+        "text": "原发送 590c12a9-5a46-4158-8b86-503c3de994b6 北京🌍",
+        "attachmentCount": 0
+      },
+      "stateVersion": 3,
+      "delivery": "acknowledged",
+      "cancelled": false,
+      "receipt": {
+        "protocol": 1,
+        "intentId": "e6a8af43-b6d4-428c-877a-8d1ce905a764",
+        "id": "421f1232-d150-4744-90ba-25b7908f2232",
+        "inputToken": "a68f6f06-dbbe-4643-b303-e2a9673f0b1e",
+        "inputRevision": 1,
+        "inputDigest": "dcba6393cad38ece955465322cea293170b11f8110b815b98ce801baa3511cea",
+        "context": {
+          "sdkConversationId": 3,
+          "associationVersion": 1,
+          "location": {
+            "workspaceId": "default",
+            "version": 1,
+            "identity": "4528d6fc097db75fc9633b92f51ddd03854d804486a6123c6f8cf42840fce219"
+          }
+        },
+        "queue": {
+          "whenBusy": "followUp",
+          "whenIdle": "start"
+        },
+        "controlGeneration": 1,
+        "bindingId": "be33662b-e8d3-4bb2-8575-8887ba8f7d23",
+        "submissionId": 14
+      }
+    },
+    "accepted": true,
+    "receipt": {
+      "protocol": 1,
+      "intentId": "e6a8af43-b6d4-428c-877a-8d1ce905a764",
+      "id": "421f1232-d150-4744-90ba-25b7908f2232",
+      "inputToken": "a68f6f06-dbbe-4643-b303-e2a9673f0b1e",
+      "inputRevision": 1,
+      "inputDigest": "dcba6393cad38ece955465322cea293170b11f8110b815b98ce801baa3511cea",
+      "context": {
+        "sdkConversationId": 3,
+        "associationVersion": 1,
+        "location": {
+          "workspaceId": "default",
+          "version": 1,
+          "identity": "4528d6fc097db75fc9633b92f51ddd03854d804486a6123c6f8cf42840fce219"
+        }
+      },
+      "queue": {
+        "whenBusy": "followUp",
+        "whenIdle": "start"
+      },
+      "controlGeneration": 1,
+      "bindingId": "be33662b-e8d3-4bb2-8575-8887ba8f7d23",
+      "submissionId": 14
+    },
+    "submission": {
+      "status": "done",
+      "entryId": "13",
+      "answerEntryId": "16"
+    }
+  },
+  "passed": true,
+  "completed": "2026-11-04T00:44:11.522Z"
+}

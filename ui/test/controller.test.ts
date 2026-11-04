@@ -21,7 +21,11 @@ it('rebuilding the page reacquires the selected conversation without accepting a
       }
       if(request.method==='open'||request.method==='subscribe')value=snapshot();
       if(request.method==='history')value={items:snapshot().entries};
-      if(request.method==='send'){inputs.push(native.frozen.get(String(request.payload!.inputToken))!.text);value={submissionId:'input-1',storedSeq:8,status:'accepted'};}
+      if(request.method==='send'){
+        const intent=native.intents.get(String(request.payload!.intentId))!;inputs.push(native.frozen.get(intent.inputToken)!.text);
+        void native.fixtureAdmission(intent.intentId).then(value=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value}));return;
+      }
+      if(request.method==='sendList'){void native.listSends(request.payload).then(async page=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value:{items:await Promise.all(page.intents.map(intent=>native.fixtureStatus(intent.intentId)))}}));return;}
       queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value}));
     }});current=client;return client;
   };
