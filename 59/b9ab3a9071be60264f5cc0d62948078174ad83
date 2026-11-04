@@ -1,0 +1,70 @@
+runtime/src/recovery.ts
+  s_467dcb949b5b60::t_82b6a9000b6ef3 8,21-22,26,28,41-56,60
+  s_467dcb949b5b60::t_e1647a4b662af7 1-7,9-20,23-25,27,29-40,57-59,61-64
+runtime/src/application.ts
+  s_467dcb949b5b60::t_e1647a4b662af7 29,36,61-64,73,77,81,88-89,93,114,116,119,123-148,154,314-316,325,345,350
+  s_467dcb949b5b60::t_82b6a9000b6ef3 82-83,97
+  s_467dcb949b5b60::t_f5ec2f1383c3eb 38
+android/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_e3737b815425b6 5-6,13-16,20
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_e1647a4b662af7 12
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_e3737b815425b6 32,74,100,104-108,154-155,164-167,176,180,185,236,305,307
+  s_467dcb949b5b60::t_578a64773ce347 33-35,73,101-102,252-256
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_578a64773ce347 129
+  s_467dcb949b5b60::t_e3737b815425b6 45-48,76-77
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryNotifications.kt
+  s_467dcb949b5b60::t_5c81a3f5d9f456 29,62
+  s_467dcb949b5b60::t_1ef3955931ea0a 1-28,30-61,63-73
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryStore.kt
+  s_467dcb949b5b60::t_f9e6c1d781fe4b 71
+  s_467dcb949b5b60::t_d47b24185fd78f 30-31
+  s_467dcb949b5b60::t_ab864b2d7e4983 40
+  s_467dcb949b5b60::t_23bf82fc2218ef 4-7,9-10,14-29,32-39,41-70,72-75
+  s_467dcb949b5b60::t_e1647a4b662af7 1-3,8,11-13,76
+android/app/src/androidTest/java/dev/durableagent/probe/RecoveryApplicationTest.kt
+  s_467dcb949b5b60::t_22b02deb24b8d7 1-81
+runtime/test/recovery.test.mjs
+  s_467dcb949b5b60::t_26abb926b00827 9,69-86
+  s_467dcb949b5b60::t_e1647a4b662af7 1-7,10-68,87-88
+  s_467dcb949b5b60::t_712d8b96f133e0 8
+android/app/src/main/java/dev/durableagent/probe/ApplicationClient.kt
+  s_467dcb949b5b60::t_e3737b815425b6 39,41
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_82b6a9000b6ef3 18-19,41-60,258,266-267,282-285
+android/app/src/androidTest/java/dev/durableagent/probe/NativeRecoveryStoreTest.kt
+  s_467dcb949b5b60::t_e1647a4b662af7 1-48
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryBridge.kt
+  s_467dcb949b5b60::t_d8fae74f8e618f 1-8,10-18,20-21,26-29
+  s_467dcb949b5b60::t_5c81a3f5d9f456 19,23-25
+  s_467dcb949b5b60::t_d47b24185fd78f 9,22
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryJobs.kt
+  s_467dcb949b5b60::t_d8fae74f8e618f 16-17
+  s_467dcb949b5b60::t_1ef3955931ea0a 1-15,18-54
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryAccess.kt
+  s_467dcb949b5b60::t_578a64773ce347 21-22,51-52
+  s_467dcb949b5b60::t_d47b24185fd78f 33,58
+  s_467dcb949b5b60::t_5c81a3f5d9f456 59,63
+  s_467dcb949b5b60::t_1ef3955931ea0a 1-20,23-32,34-50,53-57,60-62,64
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_8b13f9701656c4 18-26,28-35
+  s_467dcb949b5b60::t_d116a82e30eb65 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "59b9ab3a9071be60264f5cc0d62948078174ad83",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
