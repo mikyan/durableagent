@@ -56,9 +56,11 @@ val packageUi by tasks.registering(Sync::class) {
 }
 val generateExecutionSetup by tasks.registering(Exec::class) {
     val output=layout.buildDirectory.file("generated/runtimeAssets/execution-setup.txt")
+    val capabilities=layout.buildDirectory.file("generated/runtimeAssets/execution-capabilities.json")
     inputs.files("../../tools/build_execution_setup.py","../../tools/execution_setup_installer.py","../../managed-execution/durable_executor.py","../../managed-execution/execution_transport.py","../../managed-execution/file_service.py")
     outputs.file(output)
-    commandLine("python",file("../../tools/build_execution_setup.py").absolutePath,"--output",output.get().asFile.absolutePath)
+    outputs.file(capabilities)
+    commandLine("python",file("../../tools/build_execution_setup.py").absolutePath,"--output",output.get().asFile.absolutePath,"--capabilities-output",capabilities.get().asFile.absolutePath)
 }
 tasks.named("preBuild").configure { dependsOn(packageRuntime,packageUi,generateExecutionSetup) }
 dependencies {

@@ -26,22 +26,39 @@ class ExecutionContract(unittest.TestCase):
         self.requests = set()
 
     def tearDown(self):
-        deadline = time.monotonic() + 25
-        while True:
-            try:
-                active = [key for key in self.requests if self.endpoint.query(key)["state"] in ("starting", "running", "stop_requested")]
-                if not active:
+        safe = False
+        try:
+            # Only this fixture's dedicated ledger is in scope. Enumerate every accepted
+            # identity, including variants not constructed by request(), through its API.
+            identifiers = []
+            cursor = ""
+            while True:
+                page = self.endpoint.list_executions(cursor)
+                identifiers.extend(row["executionId"] for row in page["executions"])
+                cursor = page["nextCursor"]
+                if cursor is None:
                     break
-            except sqlite3.OperationalError:
-                pass
-            if time.monotonic() >= deadline:
-                # Keep evidence rather than remove a directory still owned by a live worker.
+            for identifier in identifiers:
+                receipt = self.endpoint.query(identifier)
+                if not (receipt.get("scopeConfirmed") and receipt["state"] in ("completed", "stopped", "not_started")):
+                    self.endpoint.cancel(identifier, "user")
+            deadline = time.monotonic() + 25
+            while True:
+                unresolved = [self.endpoint.query(identifier) for identifier in identifiers]
+                unresolved = [row for row in unresolved if not (row.get("scopeConfirmed") and row["state"] in ("completed", "stopped", "not_started"))]
+                if not unresolved:
+                    safe = True
+                    break
+                if any(row["state"] == "unknown" for row in unresolved) or time.monotonic() >= deadline:
+                    self.fail("fixture scopes unconfirmed; preserved " + str(self.root))
+                time.sleep(0.03)
+        finally:
+            self.endpoint.close()
+            if safe:
+                self.temp.cleanup()
+            else:
                 self.temp._finalizer.detach()
-                self.endpoint.close()
-                self.fail("fixture executions did not settle; preserved " + str(self.root))
-            time.sleep(0.03)
-        self.endpoint.close()
-        self.temp.cleanup()
+                print("Retained unconfirmed execution fixture: " + str(self.root), flush=True)
 
     def request(self, execution_id="execution-one", script="printf 'one'"):
         self.requests.add(execution_id)
@@ -68,6 +85,46 @@ class ExecutionContract(unittest.TestCase):
         with self.assertRaisesRegex(ExecutionFault, "IDENTITY_CONFLICT"):
             self.endpoint.prepare({**request, "command": {"kind": "shell", "script": "printf 'different'"}})
         self.assertEqual(self.endpoint.query("execution-one"), first)
+
+    def test_network_policy_cancellation_is_durable_and_never_starts_the_prepared_identity(self):
+        request = self.request("policy-wait")
+        prepared = self.endpoint.prepare(request)
+        stopped = self.endpoint.cancel("policy-wait", "network_policy")
+        self.assertEqual(stopped["cancelReason"], "network_policy")
+        self.assertTrue(stopped["scopeConfirmed"])
+        self.assertTrue(stopped["neverStarted"])
+        self.endpoint.close()
+        self.endpoint = Executor(self.root / "authority")
+        self.assertEqual(self.endpoint.start("policy-wait", prepared["finalDigest"]), stopped)
+        self.assertEqual(self.endpoint.prepare(request), stopped)
+        other = self.request("user-stop")
+        self.endpoint.prepare(other)
+        user_stopped = self.endpoint.cancel("user-stop", "user")
+        self.assertEqual(self.endpoint.cancel("user-stop", "network_policy"), user_stopped)
+
+    def test_only_exact_clean_fixed_local_capabilities_receive_a_final_source_bound_proof(self):
+        prefix = self.endpoint.dispatch("file.describe", {})["value"]["applyArgvPrefix"]
+        request = self.request("local-file")
+        request.update(command={"kind": "argv", "argv": [*prefix, "00000000-0000-4000-8000-000000000001"]}, inheritEnv=False)
+        receipt = self.endpoint.prepare(request)
+        proof = receipt.get("localCapability")
+        self.assertIsNotNone(proof, "Exact bounded local file helper needs a verified execution capability")
+        self.assertEqual(proof["kind"], "file-apply-v1")
+        self.assertEqual(proof["helperSha256"], hashlib.sha256(Path(prefix[1]).read_bytes()).hexdigest())
+        self.assertEqual(proof["runnerSha256"], hashlib.sha256(Path(__file__).with_name("durable_executor.py").read_bytes()).hexdigest())
+        self.assertTrue(proof["isolatedPython"])
+        self.endpoint.close()
+        self.endpoint = Executor(self.root / "authority")
+        self.assertEqual(self.endpoint.prepare(request), receipt)
+        for name, change in [("inherited", {"inheritEnv": True}), ("startup-env", {"env": {"PYTHONPATH": "/unknown"}}), ("loader-env", {"env": {"LD_PRELOAD": "/unknown"}}), ("extra-argument", {"command": {"kind": "argv", "argv": [*request["command"]["argv"], "--other"]}})]:
+            unsafe = {**request, **change, "executionId": name}
+            self.assertIsNone(self.endpoint.prepare(unsafe).get("localCapability"), name)
+        shell = self.request("bounded-shell", "builtin pwd -P")
+        shell["inheritEnv"] = False
+        self.assertEqual(self.endpoint.prepare(shell)["localCapability"]["kind"], "physical-cwd-v1")
+        for index, script in enumerate(["pwd", "builtin pwd -P; curl https://example.invalid", "builtin pwd -P\n"]):
+            unsafe = {**shell, "executionId": "shell-unknown-" + str(index), "command": {"kind": "shell", "script": script}}
+            self.assertIsNone(self.endpoint.prepare(unsafe).get("localCapability"))
 
     def test_command_starts_once_and_reconnect_reads_same_output(self):
         request = self.request()

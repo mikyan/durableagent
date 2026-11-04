@@ -3,11 +3,12 @@ import assert from 'node:assert/strict';
 import {mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {Harness,createRegistry} from '@earendil-works/pi-durable';
+import {Harness,createRegistry,defineDoc} from '@earendil-works/pi-durable';
 import {createModels} from '@earendil-works/pi-ai';
 import {BACKGROUND_CONTEXT as context} from '@earendil-works/chord/context';
 import {openOwnedStorage} from '../dist/storage.js';
 import {WorkspaceCoordinator} from '../dist/workspace-coordination.js';
+import {APPLICATION_RECORD_FORMATS} from '../dist/storage-format.js';
 const position=path=>({namespace:'termux:one',canonicalPath:path,objectId:'inode:'+path,ancestorObjectIds:['inode:/work']});
 const claim=(id,scope)=>({operationId:id,requestDigest:'a'.repeat(64),namespace:'termux:one',source:'termux',bindingId:'binding',productId:id,scope});
 const whole={domain:'device-files',kind:'environment'},local=path=>({domain:'device-files',kind:'paths',positions:[position(path)]});
@@ -64,5 +65,36 @@ test('cancelling a queued write never grants it later and cannot release a grant
   await writes.refresh();assert.notEqual((await writes.list()).find(x=>x.operationId==='active').state,'released');
   confirmed=true;await writes.refresh();assert.equal((await writes.reserve(claim('queued',local('/work/a.txt')))).state,'cancelled');
   assert.equal((await writes.reserve(claim('explicit-new',local('/work/a.txt')))).state,'granted');
+ }finally{await harness.close(context);await rm(dir,{recursive:true,force:true});}
+});
+
+
+test('only a matching never-dispatched prepared identity can wait outside writer fairness and later requeue',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'writer-eligibility-')),harness=await open(join(dir,'sdk.sqlite'));
+ const writes=new WorkspaceCoordinator(harness,async()=>{throw Error('No terminal evidence');}),shell=claim('shell',whole);
+ const proof={operationId:'shell',requestDigest:shell.requestDigest,namespace:shell.namespace,state:'accepted_not_started',scopeConfirmed:false,sequence:1,dispatched:false};
+ try{
+  await writes.reserve(shell);assert.equal((await writes.reserve(claim('local',local('/work/a')))).state,'queued');
+  await assert.rejects(writes.waitEligibility(shell,{...proof,dispatched:true}),/WRITE_ELIGIBILITY_UNPROVEN/);
+  await assert.rejects(writes.waitEligibility(shell,{...proof,state:'unknown'}),/WRITE_ELIGIBILITY_UNPROVEN/);
+  assert.equal((await writes.waitEligibility(shell,proof)).state,'eligibility-waiting');
+  assert.equal((await writes.reserve(claim('local',local('/work/a')))).state,'granted');
+  assert.equal((await writes.reserve(shell)).state,'queued');
+  assert.equal(await writes.cancelQueued('shell'),true);
+  await assert.rejects(writes.waitEligibility(shell,proof),/WRITE_ELIGIBILITY_UNPROVEN/);
+ }finally{await harness.close(context);await rm(dir,{recursive:true,force:true});}
+});
+
+
+test('the published writer v1 migrates losslessly and the eligibility state uses a newer guarded format',async()=>{
+ assert.equal(APPLICATION_RECORD_FORMATS['app.workspace-writes'].version,2);
+ const dir=await mkdtemp(join(tmpdir(),'writer-migrate-')),path=join(dir,'sdk.sqlite');let harness=await open(path);
+ const previous={...claim('retained',whole),state:'unknown',order:1,sequence:4};
+ const Legacy=defineDoc({kind:'app.workspace-writes',version:1,scope:'session',initial:()=>({nextOrder:2,items:{retained:previous}}),checkpointWhen:()=>false});
+ try{
+  await harness.commit(async tx=>{await tx.doc(Legacy);},context);await harness.close(context);harness=await open(path);
+  const writes=new WorkspaceCoordinator(harness,async()=>{throw Error('No proof');});
+  assert.deepEqual(await writes.list(),[previous]);assert.equal((await writes.reserve(claim('next',local('/work/a')))).state,'queued');
+  await assert.rejects(harness.snapshot(Legacy,context),/version|migrat/i);
  }finally{await harness.close(context);await rm(dir,{recursive:true,force:true});}
 });

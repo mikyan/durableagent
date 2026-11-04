@@ -6,9 +6,11 @@ import {DraftCoordinator,type DraftView} from './drafts';
 import {SubmissionCoordinator} from './submissions';
 import {PROJECTS_EXTENSION,type ProjectCatalog,type ProjectMethod} from '../../runtime/src/project-protocol';
 import {ExecutionCoordinator,type ExecutionView} from './execution';
+import {DataSaverCoordinator,type DataSaverView} from './data-saver';
+import {DATA_SAVER_EXTENSION} from '../../runtime/src/data-saver-protocol';
 
 export interface SelectionPreferences {get(key:string):string|null;set(key:string,value:string):void}
-export type UiState={execution?:ExecutionView;status:ApplicationStatus;conversations:ConversationSummary[];inputConversations:InputConversation[];inputReady:boolean;inputError?:string;draft?:DraftView;submissions?:ReturnType<SubmissionCoordinator['view']>;activeId?:string;conversation?:ConversationSnapshot;history:HistoryMessage[];next?:string;loading:boolean;pending:boolean;error?:string;page:'conversation'|'models'|'projects'|'extensions';models?:ModelConfiguration;modelsLoading:boolean;modelsPending:boolean;modelsError?:string;modelsNotice?:string;projects?:ProjectCatalog;projectsLoading?:boolean;projectsPending?:boolean;projectsUnconfirmed?:boolean;projectsError?:string;projectsNotice?:string};
+export type UiState={dataSaver?:DataSaverView;execution?:ExecutionView;status:ApplicationStatus;conversations:ConversationSummary[];inputConversations:InputConversation[];inputReady:boolean;inputError?:string;draft?:DraftView;submissions?:ReturnType<SubmissionCoordinator['view']>;activeId?:string;conversation?:ConversationSnapshot;history:HistoryMessage[];next?:string;loading:boolean;pending:boolean;error?:string;page:'conversation'|'models'|'projects'|'extensions';models?:ModelConfiguration;modelsLoading:boolean;modelsPending:boolean;modelsError?:string;modelsNotice?:string;projects?:ProjectCatalog;projectsLoading?:boolean;projectsPending?:boolean;projectsUnconfirmed?:boolean;projectsError?:string;projectsNotice?:string};
 export type ConnectionInput={name:string;protocol:ConnectionProtocol;endpoint:string;modelId?:string};
 export type ModelReference={provider:string;modelId:string};
 const mergeMessages=(older:HistoryMessage[],current:HistoryMessage[])=>[...new Map([...older,...current].map(message=>[message.id,message])).values()].sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true}));
@@ -28,6 +30,7 @@ export class ConversationController {
   private projectOperation?:{method:Exclude<ProjectMethod,'projects.get'>;payload:Record<string,unknown>};
   private readonly drafts=new DraftCoordinator(()=>this.client,()=>this.publish({draft:this.state.activeId?this.drafts.view(this.state.activeId):undefined}));
   private readonly submissions=new SubmissionCoordinator(()=>this.client,()=>this.state.status.phase==='ready',()=>this.publish({submissions:this.state.activeId?this.submissions.view(this.state.activeId):undefined}),(ack,editEpoch)=>this.drafts.confirmAdmission(ack,editEpoch));
+  readonly dataSaver=new DataSaverCoordinator(()=>this.client,()=>this.publish({dataSaver:this.dataSaver.view()}));
   readonly execution=new ExecutionCoordinator(()=>this.client,()=>this.publish({execution:this.execution.view()}));
   extensionClient?:import('./extensions/timeline').TimelineClient;
   openExtensions(){this.publish({page:'extensions'});}
@@ -38,7 +41,7 @@ export class ConversationController {
   observe=(listener:()=>void)=>{this.listeners.add(listener);return()=>{this.listeners.delete(listener);};};
   private publish(patch:Partial<UiState>){this.state={...this.state,...patch};for(const listener of this.listeners)listener();}
   async connect() {
-    this.execution.reset();++this.epoch;clearTimeout(this.sendPoll);this.submissions.disconnect();this.subscription?.unsubscribe();this.subscription=undefined;this.client?.dispose();this.checking=undefined;
+    this.dataSaver.reset();this.execution.reset();++this.epoch;clearTimeout(this.sendPoll);this.submissions.disconnect();this.subscription?.unsubscribe();this.subscription=undefined;this.client?.dispose();this.checking=undefined;
     const client=this.connectClient();this.client=client;this.extensionClient={request:client.request.bind(client),subscribe:client.subscribe.bind(client)};
     this.publish({status:{phase:'opening',extensions:[]},pending:false,modelsPending:false,modelsLoading:false,projectsPending:false,projectsLoading:false,projectsUnconfirmed:!!this.projectOperation,error:undefined});
     await Promise.all([this.refresh(),this.refreshInputs()]);
@@ -72,6 +75,7 @@ export class ConversationController {
       this.publish({conversations});
       if(status.phase==='ready'&&status.extensions.includes(MODELS_EXTENSION.id))await this.loadModels();
       if(status.phase==='ready'&&status.extensions.includes(PROJECTS_EXTENSION.id))await this.loadProjects();
+      if(status.phase==='ready'&&status.extensions.includes(DATA_SAVER_EXTENSION.id))await this.dataSaver.refresh(this.state.activeId);
       const selected=this.state.activeId??this.preferences?.get('selectedConversation');
       if(selected&&conversations.some(conversation=>conversation.id===selected))await this.open(selected);
     }catch(error){if(epoch===this.epoch)this.publish({status:{phase:'failed',reason:this.reason(error),extensions:[]},error:this.reason(error)});}
@@ -101,6 +105,7 @@ export class ConversationController {
     this.subscription?.unsubscribe();this.subscription=undefined;
     this.preferences?.set('selectedConversation',id);
     this.execution.select(id);
+    if(this.state.status.phase==='ready'&&this.state.status.extensions.includes(DATA_SAVER_EXTENSION.id))void this.dataSaver.refresh(id);
     this.publish({page:'conversation',activeId:id,draft:this.drafts.view(id),submissions:this.submissions.view(id),conversation:undefined,history:[],next:undefined,loading:true,error:undefined,inputError:undefined});
     const current=()=>epoch===this.epoch&&opening===this.opening;
     const draftRead=this.drafts.read(id).catch(error=>{if(current())this.publish({inputError:this.reason(error)});});
@@ -127,6 +132,7 @@ export class ConversationController {
     this.opening++;this.subscription?.unsubscribe();this.subscription=undefined;
     this.preferences?.set('selectedConversation','');
     this.execution.select();
+    if(this.state.status.phase==='ready'&&this.state.status.extensions.includes(DATA_SAVER_EXTENSION.id))void this.dataSaver.refresh();
     clearTimeout(this.sendPoll);this.publish({page:'conversation',activeId:undefined,draft:undefined,submissions:undefined,conversation:undefined,history:[],next:undefined,loading:false,error:undefined});void this.loadProjects();
   }
   editDraft(text:string){if(this.state.activeId)this.drafts.edit(this.state.activeId,text);}
@@ -299,6 +305,6 @@ export class ConversationController {
     finally{if(epoch===this.epoch)this.publish({modelsPending:false});}
   }
   private reason(error:unknown){return error instanceof ApplicationFailure||error instanceof Error?error.message:'操作未完成，请重新连接查看当前状态。';}
-  disconnect(){this.execution.reset();this.epoch++;this.opening++;this.navigation++;clearTimeout(this.sendPoll);this.submissions.disconnect();this.subscription?.unsubscribe();this.client?.dispose();this.subscription=undefined;}
+  disconnect(){this.dataSaver.reset();this.execution.reset();this.epoch++;this.opening++;this.navigation++;clearTimeout(this.sendPoll);this.submissions.disconnect();this.subscription?.unsubscribe();this.client?.dispose();this.subscription=undefined;}
   dispose(){this.drafts.dispose();this.submissions.dispose();this.disconnect();this.listeners.clear();}
 }

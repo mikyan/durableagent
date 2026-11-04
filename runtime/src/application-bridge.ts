@@ -16,6 +16,7 @@ import {mkdir} from 'node:fs/promises';
 import {InputError} from './input.js';
 import type {ApplicationInputs} from './application.js';
 import type {SendAuthority} from './submission-protocol.js';
+import type {DataSaverAuthority} from './data-saver-protocol.js';
 const host=globalThis as any;
 // The native owner chooses this mode before loading JS. It is not a UI action.
 export async function install(mode:string) {
@@ -33,6 +34,13 @@ export async function install(mode:string) {
   if(projectValidation)host.__appProjectWitness=(value:string)=>{if(value!=='witness')throw Error('Unknown project validation mode');projectValidation.enable();};
   const nativeInputs=host.__nativeInputs;delete host.__nativeInputs;
   const nativeExecution=host.__nativeExecution;delete host.__nativeExecution;
+  const nativeDataSaver=host.__nativeDataSaver;delete host.__nativeDataSaver;
+  const dataSaverInvoke=(method:string,payload:unknown={})=>{const response=JSON.parse(nativeDataSaver.requestJson(method,JSON.stringify(payload)));if(!response.ok)throw new InputError(response.error.code,response.error.message);return response.value;};
+  const dataSaver:DataSaverAuthority|undefined=nativeDataSaver?{
+    get:async()=>dataSaverInvoke('get'),configure:async(enabled,expectedVersion)=>dataSaverInvoke('configure',{enabled,expectedVersion}),
+    register:async request=>dataSaverInvoke('register',request),prepared:async(executionId,requestDigest,finalDigest)=>dataSaverInvoke('prepared',{executionId,requestDigest,finalDigest}),
+    decision:async executionId=>dataSaverInvoke('decision',{executionId}),grant:async value=>dataSaverInvoke('grant',value),operations:async(productId,cursor)=>dataSaverInvoke('operations',{productId,cursor}),
+  }:undefined;
   const nativeDocuments=host.__nativeDocuments;delete host.__nativeDocuments;
   const inputInvoke=(method:string,...args:string[])=>{const response=JSON.parse(nativeInputs[method](...args));if(!response.ok)throw new InputError(response.error.code,response.error.message);return response.value;};
   const inputs:ApplicationInputs|undefined=nativeInputs?{rememberConversation:(conversation,capability)=>{inputInvoke('rememberConversationJson',JSON.stringify(conversation),JSON.stringify(capability??null));},readFrozen:async token=>inputInvoke('readFrozenJson',token),readObject:async(token,objectId)=>Buffer.from(inputInvoke('readObjectBase64',token,objectId),'base64'),retainFrozen:async(ownerId,token)=>{inputInvoke('retainFrozenJson',ownerId,token);}}:undefined;
@@ -56,12 +64,12 @@ export async function install(mode:string) {
   const executionValidationFaults=mode==='execution'&&host.__submissionValidation?executionFaults(host.__submissionValidation,metrics):undefined;
   if(executionValidationFaults)host.__appExecutionFault=(stage:string)=>executionValidationFaults.set(stage);
   if(executionValidationFaults)host.__appFileGate=(action:string)=>executionValidationFaults.gate(action);
-  const execution=nativeExecution&&sends&&['product','execution','execution-real'].includes(mode)?new ManagedExecution({channel:new NativeExecutionChannel(nativeExecution),authority:sends,documents:nativeDocuments?new NativeExecutionChannel(nativeDocuments):undefined,fileEffects:{register:async value=>inputInvoke('registerEffectJson',JSON.stringify(value)),adopt:async value=>inputInvoke('adoptEffectJson',JSON.stringify(value)),require:async id=>inputInvoke('requireEffectJson',id),record:async(id,proof)=>inputInvoke('recordEffectEvidenceJson',id,JSON.stringify(proof))},...(executionValidationFaults?{boundary:executionValidationFaults.boundary}:{})}):undefined;
+  const execution=nativeExecution&&sends&&['product','execution','execution-real'].includes(mode)?new ManagedExecution({channel:new NativeExecutionChannel(nativeExecution),authority:sends,dataSaver,documents:nativeDocuments?new NativeExecutionChannel(nativeDocuments):undefined,fileEffects:{register:async value=>inputInvoke('registerEffectJson',JSON.stringify(value)),adopt:async value=>inputInvoke('adoptEffectJson',JSON.stringify(value)),require:async id=>inputInvoke('requireEffectJson',id),record:async(id,proof)=>inputInvoke('recordEffectEvidenceJson',id,JSON.stringify(proof))},...(executionValidationFaults?{boundary:executionValidationFaults.boundary}:{})}):undefined;
   configuration.workspacePath=execution?'/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace':join(host.__applicationRoot,'workspace');
   const path=join(host.__applicationRoot,'application.sqlite');
   let submissionValidation:any;
   if(host.__submissionValidation){const native=host.__submissionValidation;delete host.__submissionValidation;const module=await import(new URL('../validation/submission-control.mjs',import.meta.url).href);submissionValidation=module.submissionControl(path,native,metrics,mode==='fixture'||mode==='hang');host.__appSubmissionFault=(value:string)=>submissionValidation.set(value);}
-  const app=new Application({path,...configuration,secret,connections,inputs,sends,locationEdits,execution,routes:nativeInputs?{createRoute:async request=>inputInvoke('createRouteJson',JSON.stringify(request))}:undefined,...(mode==='execution'&&execution?{registry:executionConformanceRegistry(execution)}:{}),...(projectValidation?{registry:projectValidation.registry,locations:projectValidation.locations}:{}),...(submissionValidation?{submissionBoundary:submissionValidation.boundary,...(submissionValidation.storageFactory?{storageFactory:submissionValidation.storageFactory}:{})}:{})});
+  const app=new Application({path,...configuration,secret,connections,inputs,sends,locationEdits,execution,dataSaver,routes:nativeInputs?{createRoute:async request=>inputInvoke('createRouteJson',JSON.stringify(request))}:undefined,...(mode==='execution'&&execution?{registry:executionConformanceRegistry(execution)}:{}),...(projectValidation?{registry:projectValidation.registry,locations:projectValidation.locations}:{}),...(submissionValidation?{submissionBoundary:submissionValidation.boundary,...(submissionValidation.storageFactory?{storageFactory:submissionValidation.storageFactory}:{})}:{})});
   if(extensionMode&&mode==='fixture')host.__appRunExtensionPolicy=()=>{
     if(metrics.extensionPolicyState==='running')return;metrics.extensionPolicyState='running';metrics.extensionPolicyCases=[];
     void(async()=>{const directory=join(host.__applicationRoot,'extension-policy-temp');await mkdir(directory,{recursive:true});for(const entry of ['extension','registry']){const policy=await import(new URL(`../validation/${entry}-policy.mjs`,import.meta.url).href);await policy[entry==='extension'?'runExtensionPolicyChecks':'runRegistryPolicyChecks']((result:unknown)=>(metrics.extensionPolicyCases as unknown[]).push(result),{tempRoot:directory});}metrics.extensionPolicyState='passed';})().catch(error=>{metrics.extensionPolicyState='failed';metrics.extensionPolicyError=String(error.message??error);metrics.extensionPolicyDiagnostic=error.diagnostic;});
