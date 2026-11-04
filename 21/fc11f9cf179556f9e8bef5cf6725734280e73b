@@ -1,0 +1,179 @@
+android/app/src/main/java/dev/durableagent/probe/ExecutionBootstrapResult.kt
+  s_467dcb949b5b60::t_f947e6678db533 1-20
+tools/test_execution_setup.py
+  s_467dcb949b5b60::t_670efe4c51a48d 1-2,7-14,78-100
+  s_467dcb949b5b60::t_363c1ce4b808b2 3-6,15-77
+runtime/src/transport.ts
+  s_467dcb949b5b60::t_0d05252b6087e2 11
+  s_467dcb949b5b60::t_ced668214aaa38 3,7
+ui/test/execution-page.test.tsx
+  s_467dcb949b5b60::t_ecf062eb2929eb 1-21
+managed-execution/test_production_wire.py
+  s_467dcb949b5b60::t_478f801b4c8901 1-128
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_a518a546999af2 57,59
+  s_467dcb949b5b60::t_0ae36d90fd6857 140
+  s_467dcb949b5b60::t_25bb2acf1ae7c7 92-99,101-102,104-113
+  s_467dcb949b5b60::t_e248d50979cf5e 1-2,5-12,17-24,26,28-50,77-78
+  s_467dcb949b5b60::t_e987311c76f407 100,103
+  s_467dcb949b5b60::t_c599f19ff553e9 152-161
+  s_467dcb949b5b60::t_5752d8d1d21fa6 63-70
+  s_467dcb949b5b60::t_6ca57895d1121a 114-116,133-135
+  s_467dcb949b5b60::t_7de54e7832b269 74
+  s_467dcb949b5b60::t_2e327bea3c4c2f 117-120,129-132
+  s_467dcb949b5b60::t_5c9624815d3411 13,89-91,136-139,142
+  s_467dcb949b5b60::t_c1596b49b8c7f6 14-15,25,27,51-53,71-73,75-76
+  s_467dcb949b5b60::t_0e060e9756fed7 79-88,143,151
+  s_467dcb949b5b60::t_665ba9b788a3a0 3-4,16,144-145,147,149-150
+  s_467dcb949b5b60::t_fc839e9839321b 146,148
+  s_467dcb949b5b60::t_9e2359e4adc9d0 121-128
+  s_467dcb949b5b60::t_9ca3dee82d0520 54-56,58,60-62
+  s_467dcb949b5b60::t_532692c5689cb2 141
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_fce6ab199b0738 38
+  s_467dcb949b5b60::t_ff0eef88106278 189
+  s_467dcb949b5b60::t_427910b8ecd041 35,101,156-166,208
+  s_467dcb949b5b60::t_6a6b1af5e00d5c 33,40,46,128-129,133,139-141,143-145,176-188,195,202-204
+  s_467dcb949b5b60::t_522bb0f13b1c7c 114,119,137
+  s_467dcb949b5b60::t_26a5a208edf61c 17,19,100,103,108,123,127
+  s_467dcb949b5b60::t_5a68507adf7dee 78-90,109
+  s_467dcb949b5b60::t_4abff23df4e64a 66,71,73-77,96,111-113,146,150-152,154
+  s_467dcb949b5b60::t_2bbe88913c640c 93
+  s_467dcb949b5b60::t_b7615f65c4de85 95,110,149,153
+  s_467dcb949b5b60::t_c7b337140feecc 37,142
+  s_467dcb949b5b60::t_af08e5bc47b608 167-175
+  s_467dcb949b5b60::t_c3efcd285e9bf9 2-16,18,20-32,34,36,39,41-45,50,53,55-65,67-70,72,92,97-98,102,104-107,115-118,120-122,124-126,130-132,134-136,138,147-148,155,190-193,196-197,199-201,205-207,209
+  s_467dcb949b5b60::t_ff933a0b339efe 1,47-49,51-52,54,91,94,194,198
+  s_467dcb949b5b60::t_d57e027e61fc4d 99
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionUiTest.kt
+  s_467dcb949b5b60::t_71c643b3b09ec2 19-38
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionApplicationTest.kt
+  s_467dcb949b5b60::t_00295b0a05b52f 107
+  s_467dcb949b5b60::t_400955d3fcf898 47,86,104,130-132,136
+  s_467dcb949b5b60::t_29c37638fbaf42 10,32,34,37,50-85,87-89
+  s_467dcb949b5b60::t_2da61c33add1f0 1-9,11-31,33,35-36,38-46,48-49,90,125-129,133-135,137-141
+  s_467dcb949b5b60::t_882d2695a89173 91-103,105-106,108-124
+runtime/src/execution-faults.ts
+  s_467dcb949b5b60::t_fe6f51a593f20b 1-5
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionObservationTest.kt
+  s_467dcb949b5b60::t_59ad59bd845a93 1-35
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionRecoveryTest.kt
+  s_467dcb949b5b60::t_9412c68dd4acd4 1-28,30-38,45-58
+  s_467dcb949b5b60::t_836ef8e160834b 39-44
+  s_467dcb949b5b60::t_41e5d38b2da63b 29
+tools/execution_setup_installer.py
+  s_467dcb949b5b60::t_096fb9bf2edbdc 1-171
+tools/test_execution_asset.py
+  s_467dcb949b5b60::t_3651320dae3736 1-32
+runtime/src/project-bindings.ts
+  s_467dcb949b5b60::t_fce6ab199b0738 7,18-19
+ui/src/execution.css
+  s_467dcb949b5b60::t_5c32754b2c7f32 1-15
+managed-execution/durable_executor.py
+  s_467dcb949b5b60::t_a8b703cd88656b 3,145,171,179-239,623,626-641,643-657,659-664
+  s_467dcb949b5b60::t_771ccbe8880c6e 283-284,515,522-539,556-558,560,612-613
+  s_467dcb949b5b60::t_9deb63092d85fc 29,133,136-142,412,624-625
+  s_467dcb949b5b60::t_c99a584764a888 166,267-268,295,339-341,409,431-439,555,559,561-566
+  s_467dcb949b5b60::t_e37cce1726574b 275-276,285-286,381-383,490-491
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_fe6f51a593f20b 9,48-50
+  s_467dcb949b5b60::t_2ba3f73f4c0064 5-7,28,35-36,39,51
+  s_467dcb949b5b60::t_ced668214aaa38 8,55
+android/app/build.gradle.kts
+  s_467dcb949b5b60::t_7738d0979a5c05 36-42
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionRealProviderTest.kt
+  s_467dcb949b5b60::t_52f4e7d5086a88 1-45
+runtime/MANAGED_EXECUTION.md
+  s_467dcb949b5b60::t_f13b0074ce64a6 1-47
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_a90908cede23dd 14
+ui/src/controller.ts
+  s_467dcb949b5b60::t_c695cdc2ea68ec 8,11,31,38,100,125,293
+runtime/validation/execution-crash-child.mjs
+  s_467dcb949b5b60::t_605121d460799d 1-13
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_5c32754b2c7f32 11,108
+runtime/src/execution-conformance.ts
+  s_467dcb949b5b60::t_836ef8e160834b 6-7,20-24
+  s_467dcb949b5b60::t_ced668214aaa38 1-5,8-19,25-29
+android/app/src/main/java/dev/durableagent/probe/ExecutionAccess.kt
+  s_467dcb949b5b60::t_69869adf69df22 52-53,65-82,85-96
+  s_467dcb949b5b60::t_a4efda5968b3f0 83-84
+  s_467dcb949b5b60::t_3dd2bea36792b2 97-98
+ui/src/execution.ts
+  s_467dcb949b5b60::t_7ee0c341fd7eab 1-4,6-18,21-35,39-42,48-50,52-61,63-66
+  s_467dcb949b5b60::t_c32f243c158543 5,19-20,36,43-45
+  s_467dcb949b5b60::t_32e46641ca37b9 51
+  s_467dcb949b5b60::t_c695cdc2ea68ec 38
+  s_467dcb949b5b60::t_4b648f0a584bfd 37,46-47,62
+managed-execution/VALIDATION.md
+  s_467dcb949b5b60::t_fed35f8884fa99 5-6
+  s_467dcb949b5b60::t_4a35cc7ced79f6 1-4,7-16,18-20,23-30,33-34,36-46,48-49
+  s_467dcb949b5b60::t_6167c5d449d22a 17,21-22,35,47
+  s_467dcb949b5b60::t_3eadd6e2b10076 31-32
+managed-execution/README.md
+  s_467dcb949b5b60::t_6167c5d449d22a 42
+  s_467dcb949b5b60::t_ef6cd88504d579 27-30,32-34
+  s_467dcb949b5b60::t_d85fea8ea4f051 1-26,35-41
+  s_467dcb949b5b60::t_b8bc7f51650f1c 31
+runtime/src/execution-validation.ts
+  s_467dcb949b5b60::t_ced668214aaa38 2,17-18,20
+  s_467dcb949b5b60::t_0d05252b6087e2 1,3-9,11-13,15-16,19,22
+  s_467dcb949b5b60::t_ff933a0b339efe 14
+  s_467dcb949b5b60::t_836ef8e160834b 21
+  s_467dcb949b5b60::t_fe6f51a593f20b 10
+runtime/src/projects.ts
+  s_467dcb949b5b60::t_ff0eef88106278 11,50
+android/app/src/main/java/dev/durableagent/probe/SubmissionValidationProbe.kt
+  s_467dcb949b5b60::t_fe6f51a593f20b 13
+managed-execution/test_executor.py
+  s_467dcb949b5b60::t_5aefd932d0fda2 432
+  s_467dcb949b5b60::t_a04322643b5693 372-431,472-519
+  s_467dcb949b5b60::t_0ba324ff38f39a 433-471
+  s_467dcb949b5b60::t_8ba6e96b2c33a7 270-328
+  s_467dcb949b5b60::t_dc441757ea7afe 520-593
+runtime/src/application.ts
+  s_467dcb949b5b60::t_cf31671fef109a 18,173
+  s_467dcb949b5b60::t_e248d50979cf5e 26,46,64
+  s_467dcb949b5b60::t_af08e5bc47b608 119-120
+  s_467dcb949b5b60::t_5a68507adf7dee 80
+runtime/validation/execution-peer.mjs
+  s_467dcb949b5b60::t_605121d460799d 1-23,25-29,31-32
+  s_467dcb949b5b60::t_c599f19ff553e9 24,30
+tools/build_execution_setup.py
+  s_467dcb949b5b60::t_7738d0979a5c05 1-58
+android/app/src/main/java/dev/durableagent/probe/ExecutionBootstrapReceiver.kt
+  s_467dcb949b5b60::t_f947e6678db533 19-20
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_fe6f51a593f20b 64
+  s_467dcb949b5b60::t_2ba3f73f4c0064 85,100
+ui/test/execution-controller.test.ts
+  s_467dcb949b5b60::t_df014525769b3b 41-57
+  s_467dcb949b5b60::t_e1156d3638559f 1-18,20,39-40
+  s_467dcb949b5b60::t_3e5ff2f3e26053 19,21-38
+ui/src/extensions/execution.tsx
+  s_467dcb949b5b60::t_5c32754b2c7f32 1-30,33-35
+  s_467dcb949b5b60::t_c32f243c158543 31-32
+managed-execution/evidence/android-development.json
+  s_467dcb949b5b60::t_6e9316e477147e 1-687
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionTransportTest.kt
+  s_467dcb949b5b60::t_c491ef657dc6fb 79-106,110-116
+  s_467dcb949b5b60::t_037fef8230a91f 135-143
+  s_467dcb949b5b60::t_c4c33228c7cb83 107-109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "21fc11f9cf179556f9e8bef5cf6725734280e73b",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
