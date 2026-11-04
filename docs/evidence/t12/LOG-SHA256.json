@@ -1,126 +1,160 @@
-[
-  {
-    "file": "t12-channel62-restore.json",
-    "Hash": "117FF26A86D5C0D478B53419456DE3438A6C602A41AF6A3787D5E57A2F4F59F4"
-  },
-  {
-    "file": "t12-completion-red01.log",
-    "Hash": "88A14F71275C06B4B8CFF9910E5B77FEE2900666050AFDA13B8784BB9EBCDC68"
-  },
-  {
-    "file": "t12-deferred-crash-host01.log",
-    "Hash": "885802FCF977101C0AF4E0EFFC5036088DC54E1E7C8E47CAF46F8501C6373DF1"
-  },
-  {
-    "file": "t12-exhausted-stop-host01.log",
-    "Hash": "493430937D43CC5F4BE69B0F82EB0021025FBC1CC77DCC49C5554D01D7402E8E"
-  },
-  {
-    "file": "t12-job-greenaed-device.log",
-    "Hash": "3A88F03A175886CD344863F5345511B5B3CAA49D9C696B32A0055983CCF8C032"
-  },
-  {
-    "file": "t12-job-red401-device.log",
-    "Hash": "CB2699F2FF31857DD0C07AD7AC19C24B45FC4DC9ACBBD8D42CAD833CEE8A5CE3"
-  },
-  {
-    "file": "t12-native-green01-device.log",
-    "Hash": "2BACFAB50C47EAE5198BB46BB382F4510C92CE6C5F1A0A071A0E3E27109FFC57"
-  },
-  {
-    "file": "t12-native-red01-device.log",
-    "Hash": "EF51CAE2CE4F00F5B1B07790690E48EDA7EC50CC3273B5F15889F3ECF2B21D1A"
-  },
-  {
-    "file": "t12-native-stage59b9ab3-store-device.log",
-    "Hash": "3C11252991A8B553D90D285BB649C5AC6F43E3C0A14F1273C75AB7D67F12D629"
-  },
-  {
-    "file": "t12-notification-channel62-device.log",
-    "Hash": "54674DA36D2EC5801F9F7F1B25FC77E47F3F25BDD3881F4A1C04663EB7A13D93"
-  },
-  {
-    "file": "t12-notification-denied62-device.log",
-    "Hash": "94374DC7EF9B870E9F51F20FF24DE1F77CE50409A4AFA9E38E75993C3F8E0CA2"
-  },
-  {
-    "file": "t12-notification-green54a5f7e-application-device.log",
-    "Hash": "48AF2846CFAC1AF9DD0CDFC5FC84372F260246B20984BAE54850578D456210F3"
-  },
-  {
-    "file": "t12-notification-green54a5f7e-native-device.log",
-    "Hash": "0B46DCC7BE103B1BB3F29AEB18C4E59340CF2604D5ACAA7ABD09B57B63501178"
-  },
-  {
-    "file": "t12-notification-window-red704605a-device.log",
-    "Hash": "DA927C3AE6A6D370C8EC6CEA91D0603E3B963A73C2B7D66C29913F4C14361956"
-  },
-  {
-    "file": "t12-offline-green01.log",
-    "Hash": "B8BCC23E82C5DD03F1F1E6B6EA5B0E73483AF655D974459416579C1DB7E419C5"
-  },
-  {
-    "file": "t12-offline-red01.log",
-    "Hash": "EDCCD8D91CD4326F3097123F3541442C6ECB0A73A00E28F577C34F5D27EF8809"
-  },
-  {
-    "file": "t12-probe-authority-green01.log",
-    "Hash": "68D131251150026663EF77300B28474FBB174B01652ABD043B417E671EAEAF85"
-  },
-  {
-    "file": "t12-probe-authority-red02.log",
-    "Hash": "BB6060CD27945787720F299BC93D46F2E30AE7F044586D3F975B2DA0D6A3E621"
-  },
-  {
-    "file": "t12-product-preflight62-device.log",
-    "Hash": "9C7C109A86ADAEB8768B8F8C657BC483DEEEEDC7593F27714DF5BA557ABF126B"
-  },
-  {
-    "file": "t12-real-c73-device.log",
-    "Hash": "479D3EC96A1F7B5189F95E562792434E098A780709FB3A1B5D51A5198629CB0B"
-  },
-  {
-    "file": "t12-real-c73-retained.log",
-    "Hash": "9BC044FE6163B22DA2021D5A0FDF0692349D3F076E6D19CFAF0F479910842A4D"
-  },
-  {
-    "file": "t12-real62-device.log",
-    "Hash": "B117060BF6C31CA57C0595AFF605BD9427B95C09C76FBDD7B4B123EF30A9ABBC"
-  },
-  {
-    "file": "t12-real62-independent-file.log",
-    "Hash": "7114E17E7E531A573DE5C98712D5B522ACB4830EDD4B0D67EFFF877FFB883272"
-  },
-  {
-    "file": "t12-runtime-stage62-all.log",
-    "Hash": "FF53D0B9B1D0E78ACFEEF4698089A2B596A121F0FA104F109059A2BE4737AF62"
-  },
-  {
-    "file": "t12-stage59b9ab3-application-device.log",
-    "Hash": "2B431C215B2095A93E8B3387DFF1417FEE95C4A876413D392F2273CC995753BC"
-  },
-  {
-    "file": "t12-unlock-green01.log",
-    "Hash": "53F7AEC8C2F345C7C01F1587F49D60769A9FF7564CCB964D697BC619A6837E51"
-  },
-  {
-    "file": "t12-unlock-red01.log",
-    "Hash": "0AC6AE56B79990FAB05A9F0FA05C737F57F11DC3A1B632F3E378747ADCDCD6D9"
-  },
-  {
-    "file": "t12-wake-green01.log",
-    "Hash": "F256FC6938A778255F275B12FBAFDDA058F283C72C06D7396635262657708124"
-  },
-  {
-    "file": "t12-wake-red01.log",
-    "Hash": "0D71FD8E3512F061CAB85FDEE8122EBC32F952009BDF550935F01AD1A9A2106C"
-  },
-  {
-    "file": "t12-wake-republish-green01.log",
-    "Hash": "7D808C9EDAEB4774943F800E45FD5AB3672CE893CD8BA6E5FB4A48AD263E987E"
-  },
-  {
-    "file": "t12-wake-republish-red01.log",
-    "Hash": "C772BBEE9AF41E9E6BE556B1244CB5EDE9786298461339EFAB2517A658C9B18D"
-  }
-]
+{
+  "note": "Git text normalization may change CRLF to LF. retainedLocalSha256 covers the original local evidence copy; gitBlobSha256 covers the committed public content.",
+  "files": [
+    {
+      "file": "t12-channel62-restore.json",
+      "retainedLocalSha256": "117ff26a86d5c0d478b53419456de3438a6c602a41af6a3787d5e57a2f4f59f4",
+      "gitBlobSha256": "2847d29c3c0dd52ddf6c21086d7cd4755c5d586a0dfbe505b90703f147468680"
+    },
+    {
+      "file": "t12-completion-red01.log",
+      "retainedLocalSha256": "88a14f71275c06b4b8cff9910e5b77fee2900666050afda13b8784bb9ebcdc68",
+      "gitBlobSha256": "96de5666b9a1d1bad62bae95ba6df6b8a27c1183d14822adddf3f5512a2e1643"
+    },
+    {
+      "file": "t12-deferred-crash-host01.log",
+      "retainedLocalSha256": "885802fcf977101c0af4e0effc5036088dc54e1e7c8e47caf46f8501c6373df1",
+      "gitBlobSha256": "3f6450a65e54f178f82001bd886e468bdfab322d8d3c0d8719a6da6670106d97"
+    },
+    {
+      "file": "t12-exhausted-stop-host01.log",
+      "retainedLocalSha256": "493430937d43cc5f4be69b0f82eb0021025fbc1cc77dcc49c5554d01d7402e8e",
+      "gitBlobSha256": "f01dea39fd41c8f3f70b9fb3301391fd0bad1dae2aa6d37979065dd53766fb79"
+    },
+    {
+      "file": "t12-job-greenaed-device.log",
+      "retainedLocalSha256": "3a88f03a175886cd344863f5345511b5b3caa49d9c696b32a0055983ccf8c032",
+      "gitBlobSha256": "539efd34da5a9581ad343d41b72d8be740964b5dc9e76acf1e37afeb9b461c6e"
+    },
+    {
+      "file": "t12-job-red401-device.log",
+      "retainedLocalSha256": "cb2699f2ff31857dd0c07ad7ac19c24b45fc4dc9acbbd8d42cad833cee8a5ce3",
+      "gitBlobSha256": "816ef6910cfc07d8bab93a19d0270d554c7cd28f84660287c6ba7e6e5b925262"
+    },
+    {
+      "file": "t12-native-green01-device.log",
+      "retainedLocalSha256": "2bacfab50c47eae5198bb46bb382f4510c92ce6c5f1a0a071a0e3e27109ffc57",
+      "gitBlobSha256": "23a3e285bea65df50f60de24ac6f992f0b01b7ccb6d3e1b17b05d59bc6ae8afa"
+    },
+    {
+      "file": "t12-native-red01-device.log",
+      "retainedLocalSha256": "ef51cae2ce4f00f5b1b07790690e48eda7ec50cc3273b5f15889f3ecf2b21d1a",
+      "gitBlobSha256": "abd15b0abced5590dac97f6d2fe34911e450dd80c952bfea760c75c4a547161d"
+    },
+    {
+      "file": "t12-native-stage59b9ab3-store-device.log",
+      "retainedLocalSha256": "3c11252991a8b553d90d285bb649c5ac6f43e3c0a14f1273c75ab7d67f12d629",
+      "gitBlobSha256": "1dad0ba14c8a0130160826cdef7664f0aeead50ff43689ca9edee60ddbef0bb3"
+    },
+    {
+      "file": "t12-notification-channel62-device.log",
+      "retainedLocalSha256": "54674da36d2ec5801f9f7f1b25fc77e47f3f25bdd3881f4a1c04663eb7a13d93",
+      "gitBlobSha256": "5a21004cc15bdd621a5c7cdf4db33715b6c18a4522b9d7a5bbe54e96711b49db"
+    },
+    {
+      "file": "t12-notification-denied62-device.log",
+      "retainedLocalSha256": "94374dc7ef9b870e9f51f20ff24de1f77ce50409a4afa9e38e75993c3f8e0ca2",
+      "gitBlobSha256": "6ca39789cafebdfb4f788f01c75f08f5e502af655aa86eefb4dca73e7b5adfea"
+    },
+    {
+      "file": "t12-notification-green54a5f7e-application-device.log",
+      "retainedLocalSha256": "48af2846cfac1af9dd0cdfc5fc84372f260246b20984bae54850578d456210f3",
+      "gitBlobSha256": "32f31bafbf01887d1d1676dcb11f95561af4b5348cc0e9dcd150fee1aa7c8328"
+    },
+    {
+      "file": "t12-notification-green54a5f7e-native-device.log",
+      "retainedLocalSha256": "0b46dcc7be103b1bb3f29aeb18c4e59340cf2604d5acaa7abd09b57b63501178",
+      "gitBlobSha256": "c79ee8106f4e50cfbbe483c3ab69f900b8dad9a5ccd895e24bf26774d7896ea2"
+    },
+    {
+      "file": "t12-notification-window-red704605a-device.log",
+      "retainedLocalSha256": "da927c3ae6a6d370c8ec6cea91d0603e3b963a73c2b7d66c29913f4c14361956",
+      "gitBlobSha256": "d74cd5646489f0947223b6393683d0e86bcd3f88ad3c3cc02cedbd11d5b6a108"
+    },
+    {
+      "file": "t12-offline-green01.log",
+      "retainedLocalSha256": "b8bcc23e82c5dd03f1f1e6b6ea5b0e73483af655d974459416579c1db7e419c5",
+      "gitBlobSha256": "9c661a19c07848636c611452936cde27b0a2f16c82ac30e089bdb3fc2279d4cf"
+    },
+    {
+      "file": "t12-offline-red01.log",
+      "retainedLocalSha256": "edccd8d91cd4326f3097123f3541442c6ecb0a73a00e28f577c34f5d27ef8809",
+      "gitBlobSha256": "de33221ef68aba3816b3b72d905b74cb18123c0a3bc85b2802743e7039e57d78"
+    },
+    {
+      "file": "t12-probe-authority-green01.log",
+      "retainedLocalSha256": "68d131251150026663ef77300b28474fbb174b01652abd043b417e671eaeaf85",
+      "gitBlobSha256": "69b0789304754dc0b4fa0476acace2fad42b3a6b583c69f8289852f0d4539794"
+    },
+    {
+      "file": "t12-probe-authority-red02.log",
+      "retainedLocalSha256": "bb6060cd27945787720f299bc93d46f2e30ae7f044586d3f975b2da0d6a3e621",
+      "gitBlobSha256": "96356ee296eaedf89481cc3272127ba3e4025e698126e669536018ea8bcba3b8"
+    },
+    {
+      "file": "t12-product-preflight62-device.log",
+      "retainedLocalSha256": "9c7c109a86adaeb8768b8f8c657bc483deeeedc7593f27714df5ba557abf126b",
+      "gitBlobSha256": "5e448e4540652d741dd5325eb591eef91548641b7126146ca528b55c588a2c97"
+    },
+    {
+      "file": "t12-real-c73-device.log",
+      "retainedLocalSha256": "479d3ec96a1f7b5189f95e562792434e098a780709fb3a1b5d51a5198629cb0b",
+      "gitBlobSha256": "f8ae3d1099d5d9dc9b0fcff02031f72a5c2556593d295f2a2b1ab1f1a8a02ad1"
+    },
+    {
+      "file": "t12-real-c73-retained.log",
+      "retainedLocalSha256": "9bc044fe6163b22da2021d5a0fdf0692349d3f076e6d19cfaf0f479910842a4d",
+      "gitBlobSha256": "8f367e605124669385812a50eb7ef4301e55377bdd13bdc3f66d101ffd0c01f7"
+    },
+    {
+      "file": "t12-real62-device.log",
+      "retainedLocalSha256": "b117060bf6c31ca57c0595aff605bd9427b95c09c76fbdd7b4b123ef30a9abbc",
+      "gitBlobSha256": "20123d32295cb0b2f13322a9197593701737df18ed6ab277c19667e672ef4fa8"
+    },
+    {
+      "file": "t12-real62-independent-file.log",
+      "retainedLocalSha256": "7114e17e7e531a573de5c98712d5b522acb4830edd4b0d67efff877ffb883272",
+      "gitBlobSha256": "7552591f60a53b55afbf69865dfa3c4d84444b2ce9df1835bfd8aeb2637f26f9"
+    },
+    {
+      "file": "t12-runtime-stage62-all.log",
+      "retainedLocalSha256": "ff53d0b9b1d0e78acfeef4698089a2b596a121f0fa104f109059a2be4737af62",
+      "gitBlobSha256": "dd311e528de09c6fed517cbeae0a03676c71ef717b2d40a53feb78578016ccee"
+    },
+    {
+      "file": "t12-stage59b9ab3-application-device.log",
+      "retainedLocalSha256": "2b431c215b2095a93e8b3387dff1417fee95c4a876413d392f2273cc995753bc",
+      "gitBlobSha256": "a679d9a3be858f7b9e1f94b2cf67108ca92c7d2a90869e6a5e06632b67127926"
+    },
+    {
+      "file": "t12-unlock-green01.log",
+      "retainedLocalSha256": "53f7aec8c2f345c7c01f1587f49d60769a9ff7564ccb964d697bc619a6837e51",
+      "gitBlobSha256": "721b23b9e064d03a2fe3b67ac47a523721c66cc9ba87770dc429a174764c1c18"
+    },
+    {
+      "file": "t12-unlock-red01.log",
+      "retainedLocalSha256": "0ac6ae56b79990fab05a9f0fa05c737f57f11dc3a1b632f3e378747adcdcd6d9",
+      "gitBlobSha256": "521c5f2636affab7ef3d8ef567dd06569fd20a2ffac97f6937b99692e31c8e46"
+    },
+    {
+      "file": "t12-wake-green01.log",
+      "retainedLocalSha256": "f256fc6938a778255f275b12fbafdda058f283c72c06d7396635262657708124",
+      "gitBlobSha256": "e196af59399e42723c080aa349f27d488507145a77310cb67d9df548fab89850"
+    },
+    {
+      "file": "t12-wake-red01.log",
+      "retainedLocalSha256": "0d71fd8e3512f061cab85fdee8122ebc32f952009bdf550935f01ad1a9a2106c",
+      "gitBlobSha256": "b40b47437fc869aa5fa782b50940f1eb5393d774f720da41ebd56c1a5cd92d0f"
+    },
+    {
+      "file": "t12-wake-republish-green01.log",
+      "retainedLocalSha256": "7d808c9edaeb4774943f800e45fd5ab3672ce893cd8ba6e5fb4a48ad263e987e",
+      "gitBlobSha256": "8c1be2b6adaf1aebb1b64e2a4ad738c44ab9b6837cb77c4365f2eb15fb39d64a"
+    },
+    {
+      "file": "t12-wake-republish-red01.log",
+      "retainedLocalSha256": "c772bbee9af41e9e6be556b1244cb5ede9786298461339efab2517a658c9b18d",
+      "gitBlobSha256": "1579f0bc61ce7072c1629c0e64d10916a0d1f7adc9c7f04e8e217ed516d49865"
+    }
+  ]
+}
