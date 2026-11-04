@@ -1,0 +1,21 @@
+tools/recovery-lifecycle-RUN.md
+  s_467dcb949b5b60::t_4c9b41b93dff83 25,27
+tools/recovery-external-observer.py
+  s_467dcb949b5b60::t_4c9b41b93dff83 4-5,34-47,68-69,72-73,76-77,91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "26412802e8aec6f5984d0f0ccc83252b247dce07",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
