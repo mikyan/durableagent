@@ -27,11 +27,13 @@ class NativeDocumentStorageTest {
         fun retained(){NativeDocumentStore(context,namespace).use{store->val rows=store.list().getJSONArray("resources");assertEquals(1,rows.length());val resource=rows.getJSONObject(0);assertEquals(id,resource.getString("resourceId"));assertEquals(uri,resource.getString("uri"));assertTrue(resource.getBoolean("original"))}}
         retained()
         // Change only this fixed synthetic fixture's compatibility marker after all stores close.
-        SQLiteDatabase.openDatabase(path.absolutePath,null,SQLiteDatabase.OPEN_READWRITE).use{db->assertEquals(2,db.version);db.version=99}
+        // Keep the published WAL mode when changing the synthetic version marker.
+        // A plain Android OPEN_READWRITE would switch the fixture back to rollback mode.
+        SQLiteDatabase.openDatabase(path.absolutePath,null,SQLiteDatabase.OPEN_READWRITE or SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING).use{db->assertEquals(2,db.version);db.version=99}
         val before=NativeInputStore.sha256(path.readBytes())
         NativeDocumentStore(context,namespace).use{store->try{store.list();fail("Future native format must fail closed")}catch(error:NativeDocumentException){assertEquals("DOCUMENT_STORAGE_INCOMPATIBLE",error.code)}}
         assertEquals("Incompatible open must preserve the original database bytes",before,NativeInputStore.sha256(path.readBytes()))
-        SQLiteDatabase.openDatabase(path.absolutePath,null,SQLiteDatabase.OPEN_READWRITE).use{db->assertEquals(99,db.version);db.version=2}
+        SQLiteDatabase.openDatabase(path.absolutePath,null,SQLiteDatabase.OPEN_READWRITE or SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING).use{db->assertEquals(99,db.version);db.version=2}
         retained()
         val blockedNamespace="document-blocked-"+UUID.randomUUID();val blocked=File(context.noBackupFilesDir,blockedNamespace)
         val marker="existing synthetic evidence, not a directory".toByteArray();blocked.writeBytes(marker)
