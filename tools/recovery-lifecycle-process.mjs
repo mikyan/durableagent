@@ -66,7 +66,7 @@ try{
   Object.assign(evidence,{prepared:true,allUiAndCdpClosed:true,preparedAt:new Date().toISOString(),httpCountObserved:false});
  }else{
   const status=await request('sendStatus',{intentId:prepared.intentId});assert.equal(status.submission?.status,'done');assert.deepEqual(status.receipt,prepared.admission);
-  const history=await request('history',{id:prepared.product});assert.deepEqual(history.items.filter(row=>row.role==='user').map(row=>row.text),[prepared.text]);assert.ok(history.items.filter(row=>row.role==='assistant').at(-1)?.text.includes(`T12-LIFECYCLE-${prepared.run}`));assert.equal((await request('execution.list',{id:prepared.product})).executions.length,0);
+  const history=await request('history',{id:prepared.product});assert.deepEqual(history.items.filter(row=>row.role==='user').map(row=>row.text),[prepared.text]);const answer=history.items.filter(row=>row.role==='assistant').at(-1);assert.ok(answer?.text.includes(`T12-LIFECYCLE-${prepared.run}`));assert.equal(proof.nativeSnapshot.completion.identity,`answer:${prepared.admission.context.sdkConversationId}:${answer.id}`,'Reopened history retains the externally observed original completion');assert.equal(String(status.submission.answerEntryId),String(answer.id));assert.equal((await request('execution.list',{id:prepared.product})).executions.length,0);
   Object.assign(evidence,{passed:true,product:prepared.product,intentId:prepared.intentId,admission:status.receipt,history,externalCompletedAt:proof.observedAt,completeHttpCountObserved:false});
   page.close();page=null;adb('shell','input','keyevent','4');await until(()=>activityRecords().length===0,'Observer Activity finishes');
  }
