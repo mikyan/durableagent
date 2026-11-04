@@ -125,3 +125,15 @@ T15 `75ab2ae` 已合入生产源码 `a8ee9c0`，fixture-only `342c1b7` 增加观
 独立审查发现 native/UI 的 latest-first 分页被直接用于恢复，导致两个明确输入变成 SECOND、FIRST。公开真实 SDK／SQLite 回归先 [RED](t12-pending-order-red01.log)，覆盖两条及 52 条；初版修复后两条通过，但 52 条实际生成超过原 10 秒测试预算，见 [原失败](t12-pending-order-green01.log)。最终回归改为两个有效输入之间夹 50 条已停止的另一会话输入，既真实跨页又验证停止 fence；同一最终测试在原生产源码再次 [RED](t12-pending-order-red02.log)，两个用例均准确得到倒序。修复收集全部页的未接纳身份，再按原生 durable sequence 反向处理，逐项仍重新读取身份与停止事实；没有按可能相等／倒退的 createdAt 排序，UI 仍 latest-first。
 
 [整个 submission suite GREEN](t12-pending-order-green02.log) 15/15，7.480 秒；两条原输入顺序正确，跨页取消输入没有历史，完成再重开 receipt 不变。独立固定诊断也 [GREEN](v1-review-pending-order-regression-green.log)。首个脚本写入用了错误 cwd，因此根本没有注册新测试，[空选择器输出](t12-pending-order-fixture-path-error.log) 保留且不算 RED/GREEN。这些是受控模型传输下的真实 SDK／SQLite 公开接口结果，并非 Android 实际进程杀死。
+
+## Retry-After 与保留的 SDK 重试额度
+
+审查用生产 ModelConnections／真实 SDK 的合成 HTTP 429 复现 `Retry-After:120` 被 1 秒固定退避忽略。公开 Application／真实 SQLite 测试的初始 [三项 RED](t12-retry-after-red01.log) 同时显示等待截止时间过早和停止前已发第二个请求。修复使用 app session 中按不可变 connection ID 保存的 not-before：原始响应到达时立即建立当前宿主的保守门禁，await 持久 max deadline 后才把响应交给 Provider。只保存合法秒数／HTTP-date 转换的时间，不存任意 header／body／凭据。Provider 内部 maxRetries 保持 0，SDK 原输入、task、retry/restart 计数不改。
+
+SDK 1.5.0 没有支持的 built-in retry deadline override，因此该门禁等待位于已准备的请求阶段，普通等待在 HTTP 45 秒 timeout 之外，可被 Stop／close 取消。它不是新增重试循环；最终 credential await 期间若另一个响应延长 deadline，只重建一个尚未发送 HTTP 的 provider invocation，已发送请求绝不在此重试。宿主在门禁等待中崩溃仍可消耗 SDK 原有、更严格的 interrupted/restart 额度；不宣称无成本 sleeping task。Recovery 将当前门禁的期限与 SDK wake 取最早，并保留原 active 事实。
+
+[首批三项 GREEN](t12-retry-after-green01.log) 覆盖秒数／日期、owner close/reopen 后原绝对期限、原 admission／唯一用户、Stop 后到期不复活。[相关模型 suite](t12-retry-after-green02.log) 27/27，含原 deferred／compaction／凭据轮换及反射防护。审查随后指出两个边界，并补固定公开 [RED](t12-retry-after-review-red01.log)：真实 storage.commit 尚被阻塞时另一个 credential resolve 完成会过早请求；已准备的 A 等待时选择 B 会隐藏 A 的截止时间。修复分别将内存保守 fence 提前到 commit 前，以及通过公开 getTask 的原 checkpoint 读取实际 prepared model／poll／compaction。最终 [八项 GREEN](t12-retry-after-green03.log) 还覆盖并发延长、B 的独立后续 prepare，以及反复限流跨 reopen 最终仍只有初次加原 3 次重试、耗尽不补额度。
+
+实际 overflow 压缩路径还产生了 [显示 RED](t12-retry-after-compaction-red01.log)：SDK 已移除 live.generation，但 blocking child 仍在限流等待。使用公开 child checkpoint 的 attempt／until 后 [GREEN](t12-retry-after-compaction-green01.log) 1.558 秒；通过普通两次发送、真实 SDK context overflow 和 compaction HTTP 请求触发，未写入 SDK 内部状态。第二次已准备的压缩 attempt 为 2，外部 HTTP 仍只有 seed／overflow／首次 compaction 共 3 个。独立原固定 6 秒诊断也 [GREEN](v1-review-retry-after-fixed6s-green.log)：120 秒期限内请求保持 1、phase waiting。独立聚焦审查于 `da85f5f` 关闭该项。
+
+源码 `ebf9676` [完整 runtime](t12-review-fixes-runtime01.log) 271/271；其后补压缩用例、纯 canonical 提取 `0e207f2`、native channel 40 秒单次调用预算后 [完整 runtime](t12-review-fixes-runtime02.log) 272/272，28.620 秒。canonical 仅将四份同义递归对象键排序提为同一纯函数，现有 identity／receipt 回归验证行为不变。各项合成传输用于可控限流及并发边界；前文真实 MiMo 与 Android 证据按各自候选保留，不将这些 host 测试冒称新的真实 API 限流实测。

@@ -1,0 +1,18 @@
+(node:94372) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Retry-After seconds survives owner reopen and preserves the original SDK work (3270.7131ms)
+✔ Retry-After http-date survives owner reopen and preserves the original SDK work (3633.1956ms)
+✔ Stop cancels an active Retry-After wait and expiry never revives the original input (3219.9077ms)
+✔ a concurrent response extending the deadline during credential resolution cannot leak an early HTTP request (3245.2288ms)
+✔ a normal SDK retry can select an independent connection while the old connection remains limited (1163.901ms)
+✔ repeated rate limits keep the original durable SDK retry budget across owner reopen (8364.4792ms)
+✔ an observed deadline fences concurrent dispatch before its SQLite commit finishes (390.1409ms)
+✔ selection changes cannot hide the deadline of an already-prepared request on the original connection (1393.9996ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24941.818
