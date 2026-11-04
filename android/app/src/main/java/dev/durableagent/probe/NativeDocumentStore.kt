@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.os.Process
+import android.os.SystemClock
 import android.os.UserManager
 import android.provider.DocumentsContract
 import android.util.Base64
@@ -376,11 +377,21 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         if(closed)fail("DOCUMENT_STORE_CLOSED","原文件记录已关闭，请重新连接。")
         if(!context.getSystemService(UserManager::class.java).isUserUnlocked)fail("DOCUMENT_WAITING_UNLOCK","请在开机后先解锁设备。")
         val directory=File(context.noBackupFilesDir,namespace)
-        val lease=StorageDomainLease.acquire(directory)?:fail("DOCUMENT_STORAGE_BUSY","原文件记录正在提交，请稍后重试。")
-        try{lease.use{val database=helper?:DocumentDatabase(context,File(directory,"documents.sqlite").absolutePath).also{helper=it};action(database.writableDatabase)}}
+        try{metadataLease(directory).use{val database=helper?:DocumentDatabase(context,File(directory,"documents.sqlite").absolutePath).also{helper=it};action(database.writableDatabase)}}
         catch(error:NativeDocumentException){throw error}
         catch(_:SQLiteException){fail("DOCUMENT_STORAGE_FAILED","原文件记录无法保存或读取，原记录已保留。")}
         catch(_:IOException){fail("DOCUMENT_STORAGE_FAILED","原文件暂存内容无法保存或读取，原记录已保留。")}
+    }
+    private fun metadataLease(directory:File):StorageDomainLease {
+        // A UI observation and the agent can briefly contend on the same durable ledger.
+        // Wait only before admission: never replay a transaction, staging or Provider I/O.
+        val deadline=SystemClock.elapsedRealtime()+1500
+        while(true){
+            StorageDomainLease.acquire(directory)?.let{return it}
+            val remaining=deadline-SystemClock.elapsedRealtime()
+            if(remaining<=0)fail("DOCUMENT_STORAGE_BUSY","原文件记录正在提交，请稍后重试。")
+            try{Thread.sleep(minOf(10L,remaining))}catch(_:InterruptedException){Thread.currentThread().interrupt();fail("DOCUMENT_STORAGE_BUSY","原文件记录等待已中断，请查询原操作。")}
+        }
     }
     override fun close(){
         synchronized(monitor){closed=true;helper?.close();helper=null}
