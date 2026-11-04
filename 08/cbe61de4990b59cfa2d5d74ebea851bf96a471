@@ -1,0 +1,36 @@
+runtime/src/submission.ts
+  s_467dcb949b5b60::t_e3fd262f852fa6 112-119
+runtime/validation/submission-policy.mjs
+  s_467dcb949b5b60::t_efed2346b2478c 94-100,107,110-111
+  s_467dcb949b5b60::t_5df7a7eb254274 89-93,101-106,108-109,112-113
+docs/evidence/t12/README.md
+  s_467dcb949b5b60::t_b6dce4287459a4 122-127
+docs/evidence/t12/t12-pending-order-fixture-path-error.log
+  s_467dcb949b5b60::t_7d79b60270758a 1-11
+docs/evidence/t12/t12-pending-order-green01.log
+  s_467dcb949b5b60::t_1af1744e88845f 1-42
+docs/evidence/t12/t12-pending-order-green02.log
+  s_467dcb949b5b60::t_816c8f7253baeb 1-25
+docs/evidence/t12/t12-pending-order-red01.log
+  s_467dcb949b5b60::t_cc3b8d63379322 1-127
+docs/evidence/t12/t12-pending-order-red02.log
+  s_467dcb949b5b60::t_09ffdfcdf6b064 1-58
+docs/evidence/t12/v1-review-pending-order-regression-green.log
+  s_467dcb949b5b60::t_592460c9e81d9b 1-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "08cbe61de4990b59cfa2d5d74ebea851bf96a471",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
