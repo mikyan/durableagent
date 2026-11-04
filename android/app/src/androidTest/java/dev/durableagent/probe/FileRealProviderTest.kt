@@ -38,6 +38,8 @@ class FileRealProviderTest {
    fun send(tool:String,prompt:String,count:Int):JSONObject{
     observationPhase="$tool.control";control(57,tool) // This control acknowledges dispatch; status is refreshed by the next native pump.
     until(10000){control(12).getJSONObject("metrics").optString("executionValidationTool")==tool}
+    observationPhase="$tool.wait-composer";until(15000){js("document.querySelector('[data-testid=message-input]')?.disabled===false && document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'")=="true"}
+    instrumentation.sendStatus(0,Bundle().apply{putString("fileRealInputReady",JSONObject().put("run",run).put("tool",tool).put("composerEnabled",true).put("draftSaved",true).toString())})
     observationPhase="$tool.draft-input";js("(()=>{const e=document.querySelector('[data-testid=message-input]');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(e,${JSONObject.quote(prompt)});e.dispatchEvent(new Event('input',{bubbles:true}));})()");observationPhase="$tool.wait-saved";until{js("document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'")=="true"&&store.inspect(id).getString("text")==prompt};observationPhase="$tool.click-send";click("[data-testid=send-message]")
     observationPhase="$tool.wait-tool";var snapshot=JSONObject();until{snapshot=call("open",target);val rows=snapshot.getJSONArray("entries");val tools=(0 until rows.length()).count{rows.getJSONObject(it).optString("role")=="tool"};assertTrue("Unexpected additional model tool",tools<=count);snapshot.optString("phase")=="done"&&tools==count};return snapshot
    }
