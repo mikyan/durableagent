@@ -1,0 +1,31 @@
+runtime/src/file-conformance.ts
+  s_467dcb949b5b60::t_b3bdcea5846b67 23-26
+managed-execution/evidence/t10-android-shared-original.json
+  s_467dcb949b5b60::t_8dabd0c63b6389 1-151
+runtime/src/execution-validation.ts
+  s_467dcb949b5b60::t_b3bdcea5846b67 29
+android/app/src/androidTest/java/dev/durableagent/probe/FileQueueApplicationTest.kt
+  s_467dcb949b5b60::t_b3bdcea5846b67 50-51,55,57-60,79
+runtime/README.md
+  s_467dcb949b5b60::t_5917eb7d4a4782 34
+managed-execution/FILE-VALIDATION.md
+  s_467dcb949b5b60::t_5917eb7d4a4782 82-83
+android/app/src/androidTest/java/dev/durableagent/probe/FileNativeObservationTest.kt
+  s_467dcb949b5b60::t_46767bb80102a6 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "02d2b18d4c175ef6225b881efbba2ceebc4f1f21",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
