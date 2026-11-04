@@ -46,6 +46,21 @@ test('an unavailable native recovery budget keeps an unknown effect pending inst
  }finally{available=true;peer.confirmed=true;for(const listener of listeners)listener();await app.close();native.close();await rm(dir,{recursive:true,force:true});}
 });
 
+test('exhausted external probes keep the same input held across reopen and a durable stop cannot revive it',async()=>{
+ class UnknownPeer extends ExecutionPeer {async request(method,payload){if(method==='cancel'){const value=structuredClone(this.records.get(payload.executionId).receipt);return {...value,state:'unknown',scopeConfirmed:false,reason:'SCOPE_NOT_CONFIRMED'};}const value=await super.request(method,payload);return ['start','query'].includes(method)&&value.state==='completed'?{...value,state:'unknown',scopeConfirmed:false,reason:'OBSERVATION_LOST'}:value;}}
+ const dir=await mkdtemp(join(tmpdir(),'recovery-exhausted-stop-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new UnknownPeer(),listeners=new Set();let requests=0,used=0;
+ const recovery={conditions:async()=>({network:'available',userUnlocked:true}),subscribe:listener=>{listeners.add(listener);return()=>listeners.delete(listener);},publishWake:async()=>{},probe:async()=>{const allowed=used<5;if(allowed)used++;return {allowed,used,at:Date.now()+5,exhausted:used===5};}};
+ const options={...executionConfiguration(()=>requests++),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,recovery};let app=new Application({...options,execution:new ManagedExecution({channel:peer,authority:native})});
+ try{
+  await app.start();await call(app,'create',{creationId:'chat'});await native.create('chat','hold this one unresolved effect','original');await call(app,'send',{intentId:'original'});
+  await until(async()=>(await call(app,'open',{id:'chat'})).recovery?.used===5);assert.equal(requests,1);assert.equal(peer.starts,1);
+  await app.close();app=new Application({...options,execution:new ManagedExecution({channel:peer,authority:native})});await app.start();
+  await until(async()=>(await call(app,'open',{id:'chat'})).recovery?.used===5);await app.wake();await app.wake();assert.equal(used,5);assert.equal(requests,1);assert.equal(peer.starts,1);assert.equal(peer.records.size,1);
+  const stop=await native.stop('chat','stop-exhausted');await call(app,'stop',{id:'chat',stopId:stop.pendingAbort.stopId});await app.close();await app.start();for(const listener of listeners)listener();await app.wake();
+  assert.equal((await call(app,'open',{id:'chat'})).phase,'stopped');assert.equal(requests,1);assert.equal(peer.starts,1);assert.equal(peer.records.size,1);
+ }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
 test('a policy-waiting prepared shell leaves the writer domain available to a controlled local file operation',async()=>{
  class LocalPeer extends ExecutionPeer {
   plans=new Map();data=Buffer.from('before');
