@@ -28,6 +28,7 @@ class StopApplicationTest {
         val client=ApplicationClient(context,mode,run){what,text->if(what!=0){val value=JSONObject(text);if(what==10)replies.remove(value.optString("requestId"))?.complete(value)else controls.computeIfAbsent(what){LinkedBlockingQueue()}.offer(value)}}.apply{connect()}
         fun call(method:String,payload:JSONObject=JSONObject()):JSONObject{val request=id();val pending=CompletableFuture<JSONObject>();replies[request]=pending;client.post(JSONObject().put("protocol",1).put("connectionId","stop-test").put("requestId",request).put("method",method).put("payload",payload).toString());val result=pending.get(30,TimeUnit.SECONDS);assertTrue(result.toString(),result.getBoolean("ok"));return result.getJSONObject("value")}
         fun control(what:Int,timeout:Long=5):JSONObject{val queue=controls.computeIfAbsent(what){LinkedBlockingQueue()};queue.clear();client.control(what);return queue.poll(timeout,TimeUnit.SECONDS)?:error("Native control $what timed out")}
+        fun busyBeforeReady():JSONObject{val queue=controls.computeIfAbsent(12){LinkedBlockingQueue()};queue.clear();client.control(12);client.control(34,"15000");return queue.poll(90,TimeUnit.SECONDS)?:error("Opening observation before busy loop timed out")}
         var reconnectReadMisses=0
         fun hostIdentity():JSONObject?{val queue=controls.computeIfAbsent(35){LinkedBlockingQueue()};queue.clear();client.control(35);return queue.poll(250,TimeUnit.MILLISECONDS).also{if(it==null)reconnectReadMisses++}}
         fun ready():JSONObject{var state=JSONObject();until("Host ready"){state=control(12,90);if(state.optString("phase")=="failed")error(state.toString());state.optString("phase")=="ready"};return state}
@@ -46,14 +47,18 @@ class StopApplicationTest {
     }
     @Test(timeout=180000) fun nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(){busyOwner(false)}
     @Test(timeout=180000) fun pendingStopSurvivesTemporaryNativeWriterOccupancy(){busyOwner(true)}
-    private fun busyOwner(heldWriter:Boolean){
-        val run=id();val mode="hang";val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode",mode).putExtra("validationRun",run));val wire=Wire(mode,run);val store=NativeInputStore(context,NativeInputBridge.namespace(mode,run))
+    @Test(timeout=180000) fun nativeStopCanRebuildJavaScriptStuckBeforeApplicationReadiness(){busyOwner(false,true)}
+    private fun busyOwner(heldWriter:Boolean,bootstrap:Boolean=false){
+        val run=id();val mode="hang";val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode",mode).putExtra("validationRun",run));var wire=Wire(mode,run);val store=NativeInputStore(context,NativeInputBridge.namespace(mode,run))
         var primary:Throwable?=null;val writer=java.util.concurrent.Executors.newSingleThreadExecutor();val releaseWriter=java.util.concurrent.CountDownLatch(1)
         try{
             val before=wire.ready();val product="stop-chat";wire.call("create",JSONObject().put("creationId",product));val submission=wire.call("open",JSONObject().put("id",product)).getJSONObject("conversation").getJSONObject("submissionContext")
             val original=create(store,product,"old hanging request",submission);wire.call("send",JSONObject().put("intentId",original.getString("intentId")))
             until("Old model started"){wire.control(12).getJSONObject("metrics").optInt("modelRequests")==1}
-            wire.client.control(34,"15000");until("Real JS busy loop entered",3000){wire.control(35).getLong("started")>0}
+            if(bootstrap){page.close();wire.client.control(20,"close");until("Close before opening-loop fixture"){wire.control(12).optString("phase")=="closed"};wire.close();wire=Wire(mode,run)
+                val opening=wire.busyBeforeReady();assertEquals("The JS loop must start before application readiness","opening",opening.optString("phase"));instrumentation.sendStatus(0,Bundle().apply{putString("stopBootstrapEvidence",opening.toString())})
+            }else wire.client.control(34,"15000")
+            until("Real JS busy loop entered",3000){wire.control(35).getLong("started")>0}
             val started=SystemClock.elapsedRealtime();val request=JSONObject().put("id",product).put("actionId",id()).put("expectedControlVersion",store.readControl(product).getLong("version"))
             val control=if(heldWriter)store.requestStop(request)else NativeStopController.request(context,mode,run,request)
             val fresh=create(store,product,"new explicit generation",submission);assertTrue(control.has("pendingAbort"));assertTrue(fresh.getLong("controlGeneration")>control.getLong("stoppedThrough"));assertTrue("Native acknowledgement must precede old JS loop ending",SystemClock.elapsedRealtime()-started<3000)

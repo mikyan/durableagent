@@ -1,0 +1,56 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.StopApplicationTest:
+INSTRUMENTATION_STATUS: test=nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalStateException: Native control 12 timed out
+	at dev.durableagent.probe.StopApplicationTest$Wire.control(StopApplicationTest.kt:30)
+	at dev.durableagent.probe.StopApplicationTest$Wire.ready$lambda$0(StopApplicationTest.kt:31)
+	at dev.durableagent.probe.StopApplicationTest$Wire.$r8$lambda$bLfWdOQLxg0cE8VIPb2uPhGqYhU(Unknown Source:0)
+	at dev.durableagent.probe.StopApplicationTest$Wire$$ExternalSyntheticLambda5.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.until$default(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest$Wire.ready(StopApplicationTest.kt:31)
+	at dev.durableagent.probe.StopApplicationTest.nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(StopApplicationTest.kt:43)
+
+INSTRUMENTATION_STATUS: stream=
+Error in nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(dev.durableagent.probe.StopApplicationTest):
+java.lang.IllegalStateException: Native control 12 timed out
+	at dev.durableagent.probe.StopApplicationTest$Wire.control(StopApplicationTest.kt:30)
+	at dev.durableagent.probe.StopApplicationTest$Wire.ready$lambda$0(StopApplicationTest.kt:31)
+	at dev.durableagent.probe.StopApplicationTest$Wire.$r8$lambda$bLfWdOQLxg0cE8VIPb2uPhGqYhU(Unknown Source:0)
+	at dev.durableagent.probe.StopApplicationTest$Wire$$ExternalSyntheticLambda5.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.until$default(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest$Wire.ready(StopApplicationTest.kt:31)
+	at dev.durableagent.probe.StopApplicationTest.nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(StopApplicationTest.kt:43)
+
+INSTRUMENTATION_STATUS: test=nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 11.793
+There was 1 failure:
+1) nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(dev.durableagent.probe.StopApplicationTest)
+java.lang.IllegalStateException: Native control 12 timed out
+	at dev.durableagent.probe.StopApplicationTest$Wire.control(StopApplicationTest.kt:30)
+	at dev.durableagent.probe.StopApplicationTest$Wire.ready$lambda$0(StopApplicationTest.kt:31)
+	at dev.durableagent.probe.StopApplicationTest$Wire.$r8$lambda$bLfWdOQLxg0cE8VIPb2uPhGqYhU(Unknown Source:0)
+	at dev.durableagent.probe.StopApplicationTest$Wire$$ExternalSyntheticLambda5.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.until$default(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest$Wire.ready(StopApplicationTest.kt:31)
+	at dev.durableagent.probe.StopApplicationTest.nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(StopApplicationTest.kt:43)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

@@ -31,7 +31,12 @@ class StopExecutionTest {
         val client=ApplicationClient(context,mode,run){what,text->if(what!=0){val value=JSONObject(text);if(what==10)replies.remove(value.optString("requestId"))?.complete(value)else controls.computeIfAbsent(what){LinkedBlockingQueue()}.offer(value)}}.apply{connect()}
         fun call(method:String,payload:JSONObject=JSONObject()):JSONObject{val request=id();val future=CompletableFuture<JSONObject>();replies[request]=future;client.post(JSONObject().put("protocol",1).put("connectionId",connection).put("requestId",request).put("method",method).put("payload",payload).toString());val result=future.get(35,TimeUnit.SECONDS);assertTrue(result.toString(),result.getBoolean("ok"));return result.getJSONObject("value")}
         fun state(what:Int=12,seconds:Long=90):JSONObject{val queue=controls.computeIfAbsent(what){LinkedBlockingQueue()};queue.clear();client.control(what);return queue.poll(seconds,TimeUnit.SECONDS)?:error("Native observation $what timeout")}
-        fun ready():JSONObject{var value=JSONObject();until("Host readiness"){value=state();check(value.optString("phase")!="failed"){value.toString()};value.optString("phase")=="ready"};return value}
+        fun ready():JSONObject{var value=JSONObject();val queue=controls.computeIfAbsent(12){LinkedBlockingQueue()};until("Host readiness"){
+            // A read sent across the owner's death can lose its Binder response. Retry only
+            // this read within the existing total readiness deadline, never a stop or input.
+            queue.clear();client.control(12);val observed=queue.poll(2,TimeUnit.SECONDS)
+            if(observed==null)false else{value=observed;check(value.optString("phase")!="failed"){value.toString()};value.optString("phase")=="ready"}
+        };return value}
         fun execution(product:String,index:Int=0):JSONObject?{val rows=call("execution.list",JSONObject().put("id",product)).getJSONArray("executions");return if(rows.length()>index)rows.getJSONObject(index)else null}
         override fun close(){client.disconnect()}
     }

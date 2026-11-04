@@ -31,6 +31,7 @@ class ApplicationService:Service() {
     private val ownerProgress=AtomicLong(0)
     private val acceptedStops=java.util.concurrent.ConcurrentHashMap.newKeySet<String>()
     @Volatile private var ownerReady=false
+    @Volatile private var ownerRunsJavaScript=false
     @Volatile private var inputNamespace:String?=null
     private val emergency=java.util.concurrent.Executors.newSingleThreadExecutor()
     private val main=Handler(Looper.getMainLooper())
@@ -106,22 +107,26 @@ class ApplicationService:Service() {
             if(present==null){if(SystemClock.elapsedRealtime()<deadline)main.postDelayed({urgentStop(text,deadline)},50);return@execute}
             if(!present){NativeStopTrace.event(this,"host.stop.not-pending");return@execute}
             if(!acceptedStops.add(stopId))return@execute
-            val checkpoint=ownerProgress.get();val responsiveBefore=ownerReady
+            var checkpoint=ownerProgress.get();val responsiveBefore=ownerReady
             NativeStopTrace.event(this,"host.stop.validated",JSONObject().put("ownerReady",responsiveBefore).put("progress",checkpoint))
             owner.post{
                 if(namespace==inputNamespace)pending.add(JSONObject().put("protocol",1).put("connectionId","native-stop").put("requestId",stopId).put("method","stop").put("payload",JSONObject().put("id",product).put("stopId",stopId)).toString())
             }
-            if(responsiveBefore){
+            if(request.optBoolean("allowRebuild",true)){
                 lateinit var watchdog:Runnable
                 watchdog=Runnable{emergency.execute{
                     NativeStopTrace.event(this,"host.watchdog.check",JSONObject().put("ownerReady",ownerReady).put("before",checkpoint).put("now",ownerProgress.get()))
-                    if(namespace==inputNamespace&&ownerReady&&ownerProgress.get()==checkpoint){
-                        when(pending()){
-                            true->{// Only this application's own Node host; never a remote PID/PGID or a command name.
-                                NativeStopTrace.event(this,"host.watchdog.rebuild");Process.killProcess(Process.myPid())}
-                            null->if(SystemClock.elapsedRealtime()<deadline)main.postDelayed(watchdog,50)
-                            false->Unit
+                    if(namespace!=inputNamespace||SystemClock.elapsedRealtime()>=deadline)return@execute
+                    when(pending()){
+                        true->{val progress=ownerProgress.get()
+                            if(ownerRunsJavaScript&&progress==checkpoint){
+                                // Never interrupt native bundle unpack. Once JS runs, readiness is
+                                // not a prerequisite: bootstrap/abort code can itself block the owner.
+                                NativeStopTrace.event(this,"host.watchdog.rebuild");Process.killProcess(Process.myPid())
+                            }else{checkpoint=progress;main.postDelayed(watchdog,2500)}
                         }
+                        null->main.postDelayed(watchdog,50)
+                        false->Unit
                     }
                 }}
                 main.postDelayed(watchdog,2500)
@@ -152,6 +157,7 @@ class ApplicationService:Service() {
             }
             val entry=File(root,"dist/application-bridge.js").toURI().toString()
             val source="import(${JSONObject.quote(entry)}).then(m=>m.install(${JSONObject.quote(mode)})).catch(e=>{globalThis.__appFailure=String(e.message||e)})"
+            ownerRunsJavaScript=true
             runtime.getExecutor("const vm=require('node:vm');new vm.Script(${JSONObject.quote(source)},{importModuleDynamically:vm.constants.USE_MAIN_CONTEXT_DEFAULT_LOADER}).runInThisContext();").executeVoid()
             owner.post(pump)
         }catch(error:Throwable){fail(error)}
@@ -267,6 +273,6 @@ class ApplicationService:Service() {
     }
     private fun status()=JSONObject(phase).put("instance",instance).put("pid",Process.myPid()).put("domainOwned",lease!=null).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).toString()
     private fun fail(error:Throwable){phase=JSONObject().put("phase","failed").put("reason",error.message?:error.javaClass.simpleName).toString();release()}
-    private fun release(){acceptedStops.clear();ownerReady=false;inputNamespace=null;node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
+    private fun release(){acceptedStops.clear();ownerReady=false;ownerRunsJavaScript=false;inputNamespace=null;node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
     override fun onDestroy(){emergency.shutdownNow();main.removeCallbacksAndMessages(null);owner.post {release();thread.quitSafely()};super.onDestroy()}
 }
