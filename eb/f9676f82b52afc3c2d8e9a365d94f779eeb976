@@ -1,0 +1,34 @@
+runtime/src/application.ts
+  s_467dcb949b5b60::t_c0aa0f0a80e89c 1,63,98,328-329
+  s_467dcb949b5b60::t_ee38ac30e22e6d 251,254-255,313,315,321-327
+runtime/src/recovery.ts
+  s_467dcb949b5b60::t_c0aa0f0a80e89c 22-23,27
+runtime/src/storage-format.ts
+  s_467dcb949b5b60::t_c0aa0f0a80e89c 9
+runtime/test/retry-after.test.mjs
+  s_467dcb949b5b60::t_c15934accc8e25 1-7,9-11,13-14,18,20-44,46,56,61,98-99
+  s_467dcb949b5b60::t_f7f3a6fdedd801 8,19,52-53,63,79-97
+  s_467dcb949b5b60::t_32ee126f87a31c 17,69-78
+  s_467dcb949b5b60::t_dd81ed878c6570 12,15-16,45,47-51,54-55,57-60,62,64-68
+runtime/src/model-connections.ts
+  s_467dcb949b5b60::t_c0aa0f0a80e89c 1,22-23,70,85-87,95,112-135
+runtime/src/model-retry-after.ts
+  s_467dcb949b5b60::t_c0aa0f0a80e89c 1-10,12-19,25-33
+  s_467dcb949b5b60::t_351edf4254b0a4 11,20-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "ebf9676f82b52afc3c2d8e9a365d94f779eeb976",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
