@@ -1,0 +1,20 @@
+docs/specs/v1/README.md
+  s_467dcb949b5b60::t_8305de5812357f 3,37
+  s_467dcb949b5b60::t_b9dd162e7ccce8 38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "27a580cdee209948f2a87eb756b83c0c3cc797cf",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
