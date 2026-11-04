@@ -1,0 +1,131 @@
+android/app/src/main/java/dev/durableagent/probe/NativeStopService.kt
+  s_467dcb949b5b60::t_732ab1e48d3640 99
+  s_467dcb949b5b60::t_8e8e77e98bb0a5 14-22,29,33,38-40,43,45-53,55,59-60,73-80,83-87,100,104
+  s_467dcb949b5b60::t_c36723bb18bfda 24-26
+  s_467dcb949b5b60::t_873b4766c7e694 41-42
+docs/evidence/t11/retained-log-hashes.json
+  s_467dcb949b5b60::t_1c6b84ca04674f 3-4,7-8,11-12,15-16,19-20,23-24,27-28,31-32,35-36,39-40,43-44,47-48,51-52,55-56,59-60,63-64,67-68,71-72,75-76,79-80,83-84,87-88,91-92,95-96,99-100,103-104,107-108,111-112,115-116,119-120,123-124,127-140
+  s_467dcb949b5b60::t_f9f86c008a4b4f 1-2,5-6,9-10,13-14,17-18,21-22,25-26,29-30,33-34,37-38,41-42,45-46,49-50,53-54,57-58,61-62,65-66,69-70,73-74,77-78,81-82,85-86,89-90,93-94,97-98,101-102,105-106,109-110,113-114,117-118,121-122,141-142
+  s_467dcb949b5b60::t_f3b6421d1e3ada 125-126
+runtime/STOP.md
+  s_467dcb949b5b60::t_f47553fead5d6c 1-2,4-16,19-22,24-25
+  s_467dcb949b5b60::t_97a06e6f910027 3,17-18,23
+docs/evidence/t11/t11-full02-notification.log
+  s_467dcb949b5b60::t_c88a34e236e868 1-25
+docs/evidence/t11/t11-second-stop-green01-device.log
+  s_467dcb949b5b60::t_f9f86c008a4b4f 1-25
+docs/evidence/t11/source-hashes.json
+  s_467dcb949b5b60::t_f072e98f1445e3 1-158
+docs/specs/v1/tickets/11-stop-fencing.md
+  s_467dcb949b5b60::t_1c6b84ca04674f 9-21
+docs/evidence/t11/artifacts.json
+  s_467dcb949b5b60::t_f072e98f1445e3 1-11
+docs/evidence/t11/README.md
+  s_467dcb949b5b60::t_97a06e6f910027 17,31-33,76-78,85-87,108-116,160-163,165,176-191
+  s_467dcb949b5b60::t_5fc91aa918c1e5 1-16,18,25-30,34,43-75,79-84,88-107,117-159,164,166-175
+  s_467dcb949b5b60::t_d08f3f5e00197f 19-24
+  s_467dcb949b5b60::t_92c7760e48840d 35-42
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_732ab1e48d3640 34,110,115,119-126,128-129,160,276
+android/app/src/androidTest/java/dev/durableagent/probe/NativeStopServiceTest.kt
+  s_467dcb949b5b60::t_f9a2788917cc0e 24
+  s_467dcb949b5b60::t_67f47cec41eb37 1-23,25-41
+android/app/src/androidTest/java/dev/durableagent/probe/StopExecutionTest.kt
+  s_467dcb949b5b60::t_a7c777a97801e1 34-39
+android/app/src/androidTest/java/dev/durableagent/probe/NativeStopStoreTest.kt
+  s_467dcb949b5b60::t_67f47cec41eb37 15
+docs/evidence/t11/final-apk-inspection.json
+  s_467dcb949b5b60::t_b9c94323c9cc6c 1-306
+docs/evidence/t11/t11-bootstrap-red01.log
+  s_467dcb949b5b60::t_be135d139416b3 1-58
+docs/evidence/t11/t11-busy-diagnostic01.log
+  s_467dcb949b5b60::t_e7afcf709c8026 1-47
+docs/evidence/t11/t11-busy-green01.log
+  s_467dcb949b5b60::t_17798ff992dd24 1-53
+docs/evidence/t11/t11-busy-green02.log
+  s_467dcb949b5b60::t_cf07f5054406a8 1-53
+docs/evidence/t11/t11-busy-identity01.log
+  s_467dcb949b5b60::t_7f1021a628ba94 1-27
+docs/evidence/t11/t11-busy-lease-green01.log
+  s_467dcb949b5b60::t_0bee5cecf9c27c 1-45
+docs/evidence/t11/t11-busy-red01.log
+  s_467dcb949b5b60::t_e4e98bdc5db93c 1-56
+docs/evidence/t11/t11-busy-red02.log
+  s_467dcb949b5b60::t_8a2f78b0c7eabc 1-44
+docs/evidence/t11/t11-busy-writer-green01.log
+  s_467dcb949b5b60::t_a16e36bd7dad8c 1-97
+docs/evidence/t11/t11-busy-writer-red01.log
+  s_467dcb949b5b60::t_8c99d7bc158991 1-47
+docs/evidence/t11/t11-final-build-lint.log
+  s_467dcb949b5b60::t_24e36bb61723aa 1-104
+docs/evidence/t11/t11-full01-credential-audit.json
+  s_467dcb949b5b60::t_38caf3ee6c4d64 1-19
+docs/evidence/t11/t11-full01-native.log
+  s_467dcb949b5b60::t_34d9edad40a615 1-387
+docs/evidence/t11/t11-full01-notification.log
+  s_467dcb949b5b60::t_700c67ab6ca102 1-44
+docs/evidence/t11/t11-full01-real-mimo.log
+  s_467dcb949b5b60::t_62733597d18d7e 1-25
+docs/evidence/t11/t11-full02-credential-audit.json
+  s_467dcb949b5b60::t_23dd1ae684a94c 1-19
+docs/evidence/t11/t11-full02-real-mimo.log
+  s_467dcb949b5b60::t_7c2387a93a1463 1-25
+docs/evidence/t11/t11-host-runtime-full.log
+  s_467dcb949b5b60::t_ac93faa3bfd875 1-222
+docs/evidence/t11/t11-host-ui-full.log
+  s_467dcb949b5b60::t_e11f012479907b 1-20
+docs/evidence/t11/t11-native-green01.log
+  s_467dcb949b5b60::t_17f2e1d4182b1c 1-35
+docs/evidence/t11/t11-native-green02.log
+  s_467dcb949b5b60::t_e4be20dae356df 1-23
+docs/evidence/t11/t11-native-green03.log
+  s_467dcb949b5b60::t_b28e20631dfba3 1-37
+docs/evidence/t11/t11-native-green04.log
+  s_467dcb949b5b60::t_6f02f65c8b8d60 1-51
+docs/evidence/t11/t11-native-lease-green01.log
+  s_467dcb949b5b60::t_8d8694530c1c39 1-41
+docs/evidence/t11/t11-native-lease-green02.log
+  s_467dcb949b5b60::t_1651647c34a5f1 1-23
+docs/evidence/t11/t11-native-red01.log
+  s_467dcb949b5b60::t_0797f795d349b2 1-47
+docs/evidence/t11/t11-native-red02.log
+  s_467dcb949b5b60::t_d496fc82e58da2 1-32
+docs/evidence/t11/t11-native-red03.log
+  s_467dcb949b5b60::t_6ea7f8a507053f 1-41
+docs/evidence/t11/t11-native-red04.log
+  s_467dcb949b5b60::t_23ed5813bc3e98 1-47
+docs/evidence/t11/t11-native-upgrade-green01.log
+  s_467dcb949b5b60::t_bc4781b1b20a8e 1-23
+docs/evidence/t11/t11-native-upgrade-red01.log
+  s_467dcb949b5b60::t_5cddc88a8143c0 1-41
+docs/evidence/t11/t11-notification-diagnostic01.log
+  s_467dcb949b5b60::t_ea4604cf901e3f 1-59
+docs/evidence/t11/t11-second-stop-red02-device.log
+  s_467dcb949b5b60::t_94a2aaaef0e5f6 1-59
+android/app/src/androidTest/java/dev/durableagent/probe/StopApplicationTest.kt
+  s_966fc21fefbb66::t_dd80aa579b740e 31,50-52,58-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "7a511769920267128f2bb7fbf073a0447ec90317",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_966fc21fefbb66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a22c-f827-7782-9003-b1107f40ca51",
+        "model": "unknown"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
