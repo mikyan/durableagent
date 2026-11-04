@@ -1,0 +1,40 @@
+EEEE
+======================================================================
+ERROR: test_existing_only_damaged_identity_or_schema_fails_without_repair (test_executor.ExistingExecutorContract.test_existing_only_damaged_identity_or_schema_fails_without_repair) (fault="DELETE FROM identity WHERE key='ledgerEpoch'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\AI_BA\.codex\worktrees\t12-resume\durableagent\managed-execution\test_executor.py", line 62, in test_existing_only_damaged_identity_or_schema_fails_without_repair
+    Executor(root, existing=True)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+TypeError: Executor.__init__() got an unexpected keyword argument 'existing'
+
+======================================================================
+ERROR: test_existing_only_damaged_identity_or_schema_fails_without_repair (test_executor.ExistingExecutorContract.test_existing_only_damaged_identity_or_schema_fails_without_repair) (fault='DROP TABLE prepared')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\AI_BA\.codex\worktrees\t12-resume\durableagent\managed-execution\test_executor.py", line 62, in test_existing_only_damaged_identity_or_schema_fails_without_repair
+    Executor(root, existing=True)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+TypeError: Executor.__init__() got an unexpected keyword argument 'existing'
+
+======================================================================
+ERROR: test_existing_only_missing_ledger_never_creates_a_replacement (test_executor.ExistingExecutorContract.test_existing_only_missing_ledger_never_creates_a_replacement)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\AI_BA\.codex\worktrees\t12-resume\durableagent\managed-execution\test_executor.py", line 38, in test_existing_only_missing_ledger_never_creates_a_replacement
+    Executor(root, existing=True)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+TypeError: Executor.__init__() got an unexpected keyword argument 'existing'
+
+======================================================================
+ERROR: test_existing_only_open_retains_identity_and_original_receipt (test_executor.ExistingExecutorContract.test_existing_only_open_retains_identity_and_original_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\AI_BA\.codex\worktrees\t12-resume\durableagent\managed-execution\test_executor.py", line 27, in test_existing_only_open_retains_identity_and_original_receipt
+    existing = Executor(root, existing=True)
+TypeError: Executor.__init__() got an unexpected keyword argument 'existing'
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.151s
+
+FAILED (errors=4)

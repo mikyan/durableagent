@@ -1,0 +1,14 @@
+E
+======================================================================
+ERROR: test_authenticated_frames_reject_stale_session_and_reserve_cancellation (test_transport.TransportTests.test_authenticated_frames_reject_stale_session_and_reserve_cancellation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t12-observe-transport-red01/fixture/test_transport.py", line 97, in test_authenticated_frames_reject_stale_session_and_reserve_cancellation
+    self.assertEqual(IDENTITY["executorId"], operation("ping", {})["value"]["executorId"], "Authenticated readiness must not consume an ordinary task slot")
+                                             ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+KeyError: 'value'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.706s
+
+FAILED (errors=1)

@@ -1,0 +1,49 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryRealApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RecoveryRealApplicationTest:
+INSTRUMENTATION_STATUS: test=realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: realRecoveryFailure={"run":"248c5d2f-c67f-4f39-804b-cd279f3d8f7e","product":"real-recovery-248c5d2f-c67f-4f39-804b-cd279f3d8f7e","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t12-248c5d2f-c67f-4f39-804b-cd279f3d8f7e.txt","error":"AssertionError"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryRealApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Real MiMo starts the single managed execution
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.until(RecoveryRealApplicationTest.kt:28)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.until$default(RecoveryRealApplicationTest.kt:28)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential(RecoveryRealApplicationTest.kt:62)
+
+INSTRUMENTATION_STATUS: stream=
+Error in realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential(dev.durableagent.probe.RecoveryRealApplicationTest):
+java.lang.AssertionError: Real MiMo starts the single managed execution
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.until(RecoveryRealApplicationTest.kt:28)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.until$default(RecoveryRealApplicationTest.kt:28)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential(RecoveryRealApplicationTest.kt:62)
+
+INSTRUMENTATION_STATUS: test=realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 133.649
+There was 1 failure:
+1) realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential(dev.durableagent.probe.RecoveryRealApplicationTest)
+java.lang.AssertionError: Real MiMo starts the single managed execution
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.until(RecoveryRealApplicationTest.kt:28)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.until$default(RecoveryRealApplicationTest.kt:28)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential(RecoveryRealApplicationTest.kt:62)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

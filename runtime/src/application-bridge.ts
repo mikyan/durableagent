@@ -42,6 +42,10 @@ export async function install(mode:string) {
     decision:async executionId=>dataSaverInvoke('decision',{executionId}),grant:async value=>dataSaverInvoke('grant',value),operations:async(productId,cursor)=>dataSaverInvoke('operations',{productId,cursor}),
   }:undefined;
   const nativeDocuments=host.__nativeDocuments;delete host.__nativeDocuments;
+  const nativeRecovery=host.__nativeRecovery;delete host.__nativeRecovery;
+  const recoveryListeners=new Set<()=>void>();
+  const recoveryInvoke=(method:string,...args:string[])=>{const result=JSON.parse(nativeRecovery[method](...args));if(!result.ok)throw Object.assign(Error(result.error.message),{code:result.error.code});return result.value;};
+  const recovery:import('./recovery.js').RecoveryHost|undefined=nativeRecovery?{conditions:async()=>recoveryInvoke('conditionsJson'),subscribe:listener=>{recoveryListeners.add(listener);return()=>recoveryListeners.delete(listener);},publishWake:async wake=>{recoveryInvoke('wakeJson',JSON.stringify(wake));},publishProjection:async value=>{recoveryInvoke('projectionJson',JSON.stringify(value));},probe:async workId=>recoveryInvoke('probeJson',workId)}:undefined;
   const inputInvoke=(method:string,...args:string[])=>{const response=JSON.parse(nativeInputs[method](...args));if(!response.ok)throw new InputError(response.error.code,response.error.message);return response.value;};
   const inputs:ApplicationInputs|undefined=nativeInputs?{rememberConversation:(conversation,capability)=>{inputInvoke('rememberConversationJson',JSON.stringify(conversation),JSON.stringify(capability??null));},readFrozen:async token=>inputInvoke('readFrozenJson',token),readObject:async(token,objectId)=>Buffer.from(inputInvoke('readObjectBase64',token,objectId),'base64'),retainFrozen:async(ownerId,token)=>{inputInvoke('retainFrozenJson',ownerId,token);}}:undefined;
   const locationEdits=nativeInputs?{beginLocationEdit:async(operationId:string)=>inputInvoke('beginLocationEditJson',operationId),readLocationEdit:async()=>inputInvoke('readLocationEditJson'),finishLocationEdit:async(operationId:string,contexts:unknown[])=>{inputInvoke('finishLocationEditJson',operationId,JSON.stringify(contexts));}}:undefined;
@@ -57,7 +61,7 @@ export async function install(mode:string) {
   }else if(mode==='product'||mode==='models'||mode==='models-fixture'){
     const native=host.__nativeCredentials;delete host.__nativeCredentials;
     const invoke=(name:string,id:string)=>{const result=JSON.parse(native[name](id));if(!result.ok)throw new ModelConfigurationError(result.error.code,result.error.message);return result.value;};
-    connections=new ModelConnections({credentials:{metadata:async id=>invoke('metadataJson',id),resolve:async id=>invoke('resolveJson',id)},onRequest:receipt=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;metrics.lastCredentialGeneration=receipt.generation;metrics.lastConnectionId=receipt.connectionId;metrics.lastInput=receipt.input;},...(mode==='models-fixture'?{fetch:fixtureTransport({requested:()=>{},aborted:()=>{}})}:{})});
+    connections=new ModelConnections({credentials:{metadata:async id=>invoke('metadataJson',id),resolve:async id=>invoke('resolveJson',id)},onRequest:receipt=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;metrics.lastCredentialGeneration=receipt.generation;metrics.lastConnectionId=receipt.connectionId;metrics.lastInput=receipt.input;metrics.lastRequestTools=receipt.requestTools;},...(mode==='models-fixture'?{fetch:fixtureTransport({requested:()=>{},aborted:()=>{}})}:{})});
     configuration={models:connections.models,workspacePath:configuration.workspacePath};
   }else throw new Error('Unsupported native application mode');
   // Fixture workspace defaults are replaced by the same stable private domain.
@@ -69,7 +73,8 @@ export async function install(mode:string) {
   const path=join(host.__applicationRoot,'application.sqlite');
   let submissionValidation:any;
   if(host.__submissionValidation){const native=host.__submissionValidation;delete host.__submissionValidation;const module=await import(new URL('../validation/submission-control.mjs',import.meta.url).href);submissionValidation=module.submissionControl(path,native,metrics,mode==='fixture'||mode==='hang');host.__appSubmissionFault=(value:string)=>submissionValidation.set(value);}
-  const app=new Application({path,...configuration,secret,connections,inputs,sends,locationEdits,execution,dataSaver,routes:nativeInputs?{createRoute:async request=>inputInvoke('createRouteJson',JSON.stringify(request))}:undefined,...(mode==='execution'&&execution?{registry:executionConformanceRegistry(execution)}:{}),...(projectValidation?{registry:projectValidation.registry,locations:projectValidation.locations}:{}),...(submissionValidation?{submissionBoundary:submissionValidation.boundary,...(submissionValidation.storageFactory?{storageFactory:submissionValidation.storageFactory}:{})}:{})});
+  const app=new Application({path,...configuration,secret,connections,inputs,sends,locationEdits,execution,dataSaver,recovery,routes:nativeInputs?{createRoute:async request=>inputInvoke('createRouteJson',JSON.stringify(request))}:undefined,...(mode==='execution'&&execution?{registry:executionConformanceRegistry(execution)}:{}),...(projectValidation?{registry:projectValidation.registry,locations:projectValidation.locations}:{}),...(submissionValidation?{submissionBoundary:submissionValidation.boundary,...(submissionValidation.storageFactory?{storageFactory:submissionValidation.storageFactory}:{})}:{})});
+  if(recovery)host.__appRecoveryWake=()=>{for(const listener of [...recoveryListeners])listener();void app.wake().catch(error=>{metrics.recoveryFailure=String(error.code??'HOST_RECOVERY_UNAVAILABLE');});};
   if(extensionMode&&mode==='fixture')host.__appRunExtensionPolicy=()=>{
     if(metrics.extensionPolicyState==='running')return;metrics.extensionPolicyState='running';metrics.extensionPolicyCases=[];
     void(async()=>{const directory=join(host.__applicationRoot,'extension-policy-temp');await mkdir(directory,{recursive:true});for(const entry of ['extension','registry']){const policy=await import(new URL(`../validation/${entry}-policy.mjs`,import.meta.url).href);await policy[entry==='extension'?'runExtensionPolicyChecks':'runRegistryPolicyChecks']((result:unknown)=>(metrics.extensionPolicyCases as unknown[]).push(result),{tempRoot:directory});}metrics.extensionPolicyState='passed';})().catch(error=>{metrics.extensionPolicyState='failed';metrics.extensionPolicyError=String(error.message??error);metrics.extensionPolicyDiagnostic=error.diagnostic;});
@@ -121,6 +126,6 @@ export async function install(mode:string) {
   host.__takeAppEvents=()=>JSON.stringify(events.splice(0));
   host.__appStatus=()=>JSON.stringify({...app.status(),metrics});
   host.__appClose=()=>{void app.close().then(()=>{host.__appClosed=true;}).catch(error=>{host.__appFailure=String(error);});};
-  try {await app.start();}
+  try {await app.start();host.__appStarted=true;}
   catch(error){if(!app.status().readOnly)throw error;}
 }

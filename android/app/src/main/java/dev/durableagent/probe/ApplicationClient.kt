@@ -36,9 +36,9 @@ class ApplicationClient(private val context:Context,private val mode:String="pro
         override fun onServiceConnected(name:ComponentName,binder:IBinder){remote=Messenger(binder);val batch=pending.toList();pending.clear();for((what,json)in batch)send(what,json)}
         override fun onServiceDisconnected(name:ComponentName){remote=null;receive(0,"运行宿主连接已断开，请重新连接查看状态。")}
     }
-    fun connect(){main.post(object:Runnable{override fun run(){
+    fun connect(startService:Boolean=true){main.post(object:Runnable{override fun run(){
         if(disposed||bound)return
-        try{val intent=Intent(context,ApplicationService::class.java).putExtra("validationMode",mode).putExtra("validationRun",run);context.startService(intent);bound=context.bindService(intent,connection,Context.BIND_AUTO_CREATE);if(bound)return}catch(_:RuntimeException){}
+        try{val intent=Intent(context,ApplicationService::class.java).putExtra("validationMode",mode).putExtra("validationRun",run);if(startService)context.startService(intent);bound=context.bindService(intent,connection,Context.BIND_AUTO_CREATE);if(bound)return}catch(_:RuntimeException){}
         if(++attempts<30)main.postDelayed(this,100) else receive(0,"系统暂未允许连接运行宿主。")
     }})}
     fun post(json:String){main.post {if(disposed)return@post;runCatching{connections.add(JSONObject(json).getString("connectionId"));send(10,json)}}}

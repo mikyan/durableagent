@@ -1,0 +1,33 @@
+{
+  "followingExplicitNewGeneration": 2,
+  "priorGenerationStoppedThrough": 1,
+  "priorEffect": "completed",
+  "priorScopeConfirmed": true,
+  "newGenerationError": {
+    "code": "EXECUTION_STOPPED",
+    "message": "原控制代次已停止，不能启动命令"
+  }
+}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: An already stopped prior generation with a completed effect must not block an explicit new generation
++ actual - expected
+
++ {
++   code: 'EXECUTION_STOPPED',
++   message: '原控制代次已停止，不能启动命令'
++ }
+- undefined
+
+    at file:///C:/Users/AI_BA/AppData/Local/Temp/durableagent-implementation/t12-review-stopped-output-new-generation-regression.mjs:43:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: { code: 'EXECUTION_STOPPED', message: '原控制代次已停止，不能启动命令' },
+  expected: undefined,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.14.1

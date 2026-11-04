@@ -53,7 +53,8 @@ export class NativeExecutionChannel implements ExecutionChannel {
     try {
       if(!/^[a-zA-Z][a-zA-Z0-9.]{0,63}$/.test(method))throw new ExecutionChannelError('INVALID_EXECUTION_REQUEST');
       const payloadJson=encode(payload);
-      const deadline=performance.now()+(method==='connect'?35000:12000);
+      // Includes one bounded existing-listener readiness phase and one operation.
+      const deadline=performance.now()+40000;
       const begun=decode(this.native.beginJson(method,payloadJson));
       if(!keys(begun,['operationId'])||typeof begun.operationId!=='string'||!/^[A-Za-z0-9-]{1,128}$/.test(begun.operationId))return protocol();
       const operationId=begun.operationId;

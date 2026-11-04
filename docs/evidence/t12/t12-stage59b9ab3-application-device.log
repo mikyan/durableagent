@@ -1,0 +1,63 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RecoveryApplicationTest:
+INSTRUMENTATION_STATUS: test=completedInputNotificationKeepsOneStablePostAcrossOwnerReopen
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Durable completion creates Android notification
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RecoveryApplicationTest.until(RecoveryApplicationTest.kt:28)
+	at dev.durableagent.probe.RecoveryApplicationTest.until$default(RecoveryApplicationTest.kt:28)
+	at dev.durableagent.probe.RecoveryApplicationTest.completedInputNotificationKeepsOneStablePostAcrossOwnerReopen(RecoveryApplicationTest.kt:69)
+
+INSTRUMENTATION_STATUS: stream=
+Error in completedInputNotificationKeepsOneStablePostAcrossOwnerReopen(dev.durableagent.probe.RecoveryApplicationTest):
+java.lang.AssertionError: Durable completion creates Android notification
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RecoveryApplicationTest.until(RecoveryApplicationTest.kt:28)
+	at dev.durableagent.probe.RecoveryApplicationTest.until$default(RecoveryApplicationTest.kt:28)
+	at dev.durableagent.probe.RecoveryApplicationTest.completedInputNotificationKeepsOneStablePostAcrossOwnerReopen(RecoveryApplicationTest.kt:69)
+
+INSTRUMENTATION_STATUS: test=completedInputNotificationKeepsOneStablePostAcrossOwnerReopen
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=ongoingNotificationRetainsNativeStopAfterUiLeaves
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: recoveryEvidence={"phase":"ready","extensions":["data-saver","projects","conversation","input","submission"],"metrics":{"modelRequests":1},"instance":"13fa8b12-4ca2-4e46-b646-a39db708e15a","pid":16767,"domainOwned":true,"nativeOwners":1,"recovery":{"userUnlocked":true,"network":"available","notifications":"visible","background":"not-requested","foreground":false,"wake":{"active":false}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=ongoingNotificationRetainsNativeStopAfterUiLeaves
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 122.015
+There was 1 failure:
+1) completedInputNotificationKeepsOneStablePostAcrossOwnerReopen(dev.durableagent.probe.RecoveryApplicationTest)
+java.lang.AssertionError: Durable completion creates Android notification
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RecoveryApplicationTest.until(RecoveryApplicationTest.kt:28)
+	at dev.durableagent.probe.RecoveryApplicationTest.until$default(RecoveryApplicationTest.kt:28)
+	at dev.durableagent.probe.RecoveryApplicationTest.completedInputNotificationKeepsOneStablePostAcrossOwnerReopen(RecoveryApplicationTest.kt:69)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

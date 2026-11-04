@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryJobApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RecoveryJobApplicationTest:
+INSTRUMENTATION_STATUS: test=anUnavailablePlatformWakeCanBeRepublishedWithoutAnotherInput
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: wakeRepublished={"run":"1d1041d8-02b7-40b2-9805-1a510e880bf9","product":"wake-1d1041d8-02b7-40b2-9805-1a510e880bf9","sameAdmission":true,"actualJobId":1721478909,"modelRequests":0}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryJobApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=anUnavailablePlatformWakeCanBeRepublishedWithoutAnotherInput
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 7.106
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

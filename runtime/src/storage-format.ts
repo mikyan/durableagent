@@ -6,6 +6,7 @@ export const APPLICATION_RECORD_FORMATS:Readonly<Record<string,ApplicationRecord
  'app.configuration':{version:2,scope:'session'},
  'app.product-conversations':{version:1,scope:'session'},
  'app.model-configuration':{version:1,scope:'session'},
+ 'app.model-retry-after':{version:1,scope:'session'},
  'app.projects':{version:1,scope:'session'},
  'app.admission':{version:1,scope:'session'},
  'app.submission-binding':{version:1,scope:'session'},

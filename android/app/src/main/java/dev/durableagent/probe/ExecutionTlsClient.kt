@@ -24,7 +24,9 @@ data class ExecutionPairing(val port:Int,val serverSpkiSha256:String,val executo
 
 /** One bounded authenticated session per request; no automatic command mutation retry. */
 class ExecutionTlsClient(private val identity:ExecutionIdentity,private val pairing:ExecutionPairing,private val diagnostic:((String)->Unit)?=null) {
-    fun request(method:String,payload:JSONObject):JSONObject {
+    fun request(method:String,payload:JSONObject):JSONObject=request(method,payload,10000)
+    fun request(method:String,payload:JSONObject,timeoutMs:Long):JSONObject {
+        require(timeoutMs in 1..10000)
         if(!method.matches(Regex("[a-zA-Z][a-zA-Z0-9.]{0,63}")))throw ExecutionChannelException("INVALID_METHOD")
         val trust=object:X509TrustManager {
             override fun getAcceptedIssuers()=emptyArray<X509Certificate>()
@@ -39,13 +41,13 @@ class ExecutionTlsClient(private val identity:ExecutionIdentity,private val pair
         }
         val tls=SSLContext.getInstance("TLS").apply {init(arrayOf(identity.keyManager()),arrayOf(trust),null)}
         val socket=tls.socketFactory.createSocket() as SSLSocket
-        val deadline=deadlines.schedule({runCatching{socket.close()}},10,TimeUnit.SECONDS)
+        val deadline=deadlines.schedule({runCatching{socket.close()}},timeoutMs,TimeUnit.MILLISECONDS)
         var stage="connect"
         try {
             socket.use {
                 it.enabledProtocols=it.supportedProtocols.filter {protocol->protocol=="TLSv1.3"||protocol=="TLSv1.2"}.toTypedArray()
-                it.soTimeout=5000;it.tcpNoDelay=true
-                it.connect(InetSocketAddress(InetAddress.getByAddress(byteArrayOf(127,0,0,1)),pairing.port),3000)
+                it.soTimeout=minOf(5000L,timeoutMs).toInt();it.tcpNoDelay=true
+                it.connect(InetSocketAddress(InetAddress.getByAddress(byteArrayOf(127,0,0,1)),pairing.port),minOf(3000L,timeoutMs).toInt())
                 stage="tlsHandshake"
                 it.startHandshake()
                 stage="helloFrame"
@@ -68,7 +70,7 @@ class ExecutionTlsClient(private val identity:ExecutionIdentity,private val pair
             diagnostic?.invoke(JSONObject().put("stage",stage).put("classes",generateSequence(error as Throwable?){it.cause}.take(5).map {it.javaClass.simpleName}.joinToString(","))
                 .put("reasons",listOf("CERTIFICATE_VERIFY_FAILED","UNKNOWN_CA","BAD_CERTIFICATE","NO_SHARED_CIPHER","CERTIFICATE_REQUIRED","CONNECTION_REFUSED","SOCKET_CLOSED","INVALID_KEY","UNSUPPORTED_CERTIFICATE").filter {reason->generateSequence(error as Throwable?){it.cause}.take(5).any {it.message.orEmpty().uppercase().replace(' ','_').contains(reason)}}.joinToString(","))
                 .put("tlsReasonTokens",generateSequence(error as Throwable?){it.cause}.take(5).filter {it is javax.net.ssl.SSLException}.flatMap {Regex("(?<=OPENSSL_internal:)[A-Z0-9_]{1,100}").findAll(it.message.orEmpty()).map {match->match.value}}.distinct().joinToString(",")).toString())
-            throw ExecutionChannelException("CONNECTION_UNCONFIRMED")
+            throw ExecutionChannelException(if(stage=="connect"&&error is java.net.ConnectException)"CONNECTION_ABSENT" else "CONNECTION_UNCONFIRMED")
         }
         finally {deadline.cancel(false);runCatching{socket.close()}}
     }

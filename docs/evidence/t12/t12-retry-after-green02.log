@@ -1,0 +1,41 @@
+(node:95236) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ ordinary generation retry prepares the current model and request-time credential (1810.0299ms)
+✔ close: held generation resumes its fixed or newly prepared route with one durable input (687.0079ms)
+✔ kill: held generation resumes its fixed or newly prepared route with one durable input (1886.7923ms)
+✔ deferred poll process death: unchanged keeps the original handle or fails without a replacement start (2116.2124ms)
+✔ deferred poll process death: rotated keeps the original handle or fails without a replacement start (3361.7074ms)
+✔ deferred poll process death: disabled keeps the original handle or fails without a replacement start (3376.1633ms)
+✔ selected compaction retries and orderly resumes its selected model after current selection changes (1877.2155ms)
+✔ overdue work remains behind the configuration loading gate on reopen (2357.5014ms)
+✔ secret persistence detector has a positive control before relying on clean DB and WAL scans (4.4623ms)
+(node:96168) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ public configuration is durable; defaults and current models are separate; queries never decrypt (501.896ms)
+✔ configuration COMMIT failure preserves old durable version and blocks scheduling until reopen (94.2113ms)
+✔ rotation or disable before final admission sends nothing; disabling after send does not cancel it (233.7393ms)
+✔ an old deferred response never becomes a replacement request after credential rotation (206.6247ms)
+✔ actual HTTP redirects cannot forward credentials or prompt body to another destination (32.37ms)
+✔ credential/options overrides are rejected; revoke never uses ambient environment credentials (1.3858ms)
+✔ a post-commit publication failure gates dispatch and reopen loads the durable generation (90.7826ms)
+✔ an in-flight reflected old credential is sanitized even after rotation, including live WAL and events (134.114ms)
+✔ serialized SDK stream settings reject credentials and arbitrary nested options before opening storage (119.1112ms)
+✔ JSON escaped credential reflection is removed after decoding, before SDK progress and persistence (247.4464ms)
+✔ a credential rotated after deferred compatibility check is rejected again at final fetch admission (14.1616ms)
+✔ escaped credential property names in parsed tool arguments never enter SDK results or SQLite (341.7559ms)
+✔ disable published during final metadata wait blocks dispatch at the final synchronous boundary (8.622ms)
+(node:87400) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Retry-After seconds survives owner reopen and preserves the original SDK work (3319.4746ms)
+✔ Retry-After http-date survives owner reopen and preserves the original SDK work (3291.3565ms)
+✔ Stop cancels an active Retry-After wait and expiry never revives the original input (3253.2157ms)
+✔ a concurrent response extending the deadline during credential resolution cannot leak an early HTTP request (3248.9522ms)
+✔ a normal SDK retry can select an independent connection while the old connection remains limited (1161.9525ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17572.1822

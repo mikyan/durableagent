@@ -3,6 +3,21 @@ import type {ApplicationRequest} from '../../runtime/src/application-protocol';
 import {ApplicationClient} from '../src/client';
 import {ExecutionCoordinator} from '../src/execution';
 
+it('explains manual Termux reopening after an asynchronous force-stop error without changing or replaying the execution',async()=>{
+ const requests:ApplicationRequest[]=[],row={executionId:'retained',state:'accepted_not_started',sequence:1};
+ const client=new ApplicationClient({postMessage:json=>{
+  const request:ApplicationRequest=JSON.parse(json);requests.push(request);
+  queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,...(request.method==='execution.list'?{ok:true,value:{executions:[row]}}:{ok:false,error:{code:'TERMUX_FORCE_STOPPED',message:'执行通道未完成请求（TERMUX_FORCE_STOPPED）'}})}));
+ }});
+ const execution=new ExecutionCoordinator(()=>client,()=>{});
+ try{
+  await execution.refresh('conversation');await execution.query('retained');
+  expect(execution.view().error).toBe('Termux 已被系统强行停止。请手动打开 Termux 一次，再返回本应用；无需重新初始化。');
+  expect(execution.view().rows).toEqual([row]);
+  expect(requests.map(request=>request.method)).toEqual(['execution.list','execution.query']);
+ }finally{client.dispose();}
+});
+
 it('shows a durable writer queue before external acceptance and still allows native cancellation',async()=>{
  let cancelled=false;
  const client=new ApplicationClient({postMessage:json=>{const request:ApplicationRequest=JSON.parse(json);if(request.method==='execution.cancel')cancelled=true;

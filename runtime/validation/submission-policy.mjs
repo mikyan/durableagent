@@ -86,3 +86,28 @@ test('real SDK queued, placed and settled input remain distinct while afterRun k
 test('a missing native authority never opens a writable SDK runtime or dispatches legacy stored work',async()=>{
  const dir=await mkdtemp(join(policyTempRoot??tmpdir(),'submission-unavailable-'));let requests=0;const app=new Application({path:join(dir,'sdk.sqlite'),...validationConfiguration({requested:()=>requests++})});try{await assert.rejects(app.start(),{code:'INPUT_UNAVAILABLE'});assert.equal(app.status().phase,'failed');assert.equal(requests,0);}finally{await app.close();await rm(dir,{recursive:true,force:true});}
 });
+
+for(const count of [2,52])test(`startup preserves the original explicit send order across ${count} pending intents`,async()=>{
+ const f=await fixture();try{
+  await call(f.app,'create',{creationId:'ordered'});
+  const original=[];
+  original.push(await f.native.create('ordered','ordered input 0','ordered-0'));
+  if(count>2){
+   await call(f.app,'create',{creationId:'cancelled-padding'});
+   for(let index=0;index<count-2;index++)await f.native.create('cancelled-padding',`cancelled input ${index}`,`cancelled-${index}`);
+   await f.native.stop('cancelled-padding','cancel-padding');
+  }
+  original.push(await f.native.create('ordered','ordered input 1','ordered-1'));
+  // The UI listing remains latest-first; chronological recovery spans pages.
+  assert.equal((await f.native.listSends({limit:50})).intents[0].intentId,original.at(-1).intentId);
+  await f.reopen();
+  await until(async()=>(await call(f.app,'sendStatus',{intentId:original.at(-1).intentId})).submission?.status==='done');
+  assert.deepEqual((await call(f.app,'history',{id:'ordered'})).items.filter(item=>item.role==='user').map(item=>item.text),original.map(item=>item.preview.text));
+  const receipts=await Promise.all(original.map(item=>call(f.app,'sendStatus',{intentId:item.intentId})));
+  assert.equal(new Set(receipts.map(item=>item.receipt.submissionId)).size,2);
+  await f.reopen();
+  assert.deepEqual((await Promise.all(original.map(item=>call(f.app,'sendStatus',{intentId:item.intentId})))).map(item=>item.receipt),receipts.map(item=>item.receipt));
+  assert.equal((await call(f.app,'history',{id:'ordered'})).items.filter(item=>item.role==='user').length,2);
+  if(count>2)assert.equal((await call(f.app,'history',{id:'cancelled-padding'})).items.length,0);
+ }finally{await f.close();}
+});

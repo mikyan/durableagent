@@ -1,0 +1,41 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RecoveryApplicationTest:
+INSTRUMENTATION_STATUS: test=completedInputNotificationKeepsOneStablePostAcrossOwnerReopen
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: recoveryEvidence={"tag":"input-c789a31b-2459-4521-a872-fe6bcf9b16b3:answer:5:19","postTime":1793787601991,"state":{"phase":"ready","extensions":["data-saver","projects","conversation","input","submission"],"metrics":{},"instance":"8d1d42c6-cadf-42fd-a138-58fc528a13fb","pid":18606,"domainOwned":true,"nativeOwners":1,"recovery":{"userUnlocked":true,"network":"available","notifications":"visible","background":"not-requested","foreground":false,"wake":{"active":false}}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=completedInputNotificationKeepsOneStablePostAcrossOwnerReopen
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=ongoingNotificationRetainsNativeStopAfterUiLeaves
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: recoveryEvidence={"phase":"ready","extensions":["data-saver","projects","conversation","input","submission"],"metrics":{"modelRequests":1},"instance":"9de29c69-378d-4b4f-aa90-4c9d84eb960e","pid":18606,"domainOwned":true,"nativeOwners":1,"recovery":{"userUnlocked":true,"network":"available","notifications":"visible","background":"not-requested","foreground":false,"wake":{"active":false}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=ongoingNotificationRetainsNativeStopAfterUiLeaves
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 31.856
+
+OK (2 tests)
+
+
+INSTRUMENTATION_CODE: -1

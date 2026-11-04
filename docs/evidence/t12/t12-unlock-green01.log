@@ -1,0 +1,13 @@
+(node:71308) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ offline model work waits visibly and continues the same saved input when conditions return (515.4104ms)
+✔ a durable SDK retry uses the same epoch after close and repeated early host wake cannot duplicate it (337.4081ms)
+✔ first unlock is checked before SDK bootstrap and a saved stop stays stopped after network recovery (127.4773ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1245.9286

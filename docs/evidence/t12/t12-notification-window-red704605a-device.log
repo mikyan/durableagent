@@ -1,0 +1,113 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryNotificationWindowTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RecoveryNotificationWindowTest:
+INSTRUMENTATION_STATUS: test=aPostWhoseDurableAckFailsDoesNotUpdateTheExistingNotificationOnReopen
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryNotificationWindowTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: expected:<1793786612524> but was:<1793786612696>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at org.junit.Assert.assertEquals(Assert.java:633)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.ackFailure(RecoveryNotificationWindowTest.kt:50)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.aPostWhoseDurableAckFailsDoesNotUpdateTheExistingNotificationOnReopen(RecoveryNotificationWindowTest.kt:31)
+
+INSTRUMENTATION_STATUS: stream=
+Error in aPostWhoseDurableAckFailsDoesNotUpdateTheExistingNotificationOnReopen(dev.durableagent.probe.RecoveryNotificationWindowTest):
+java.lang.AssertionError: expected:<1793786612524> but was:<1793786612696>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at org.junit.Assert.assertEquals(Assert.java:633)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.ackFailure(RecoveryNotificationWindowTest.kt:50)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.aPostWhoseDurableAckFailsDoesNotUpdateTheExistingNotificationOnReopen(RecoveryNotificationWindowTest.kt:31)
+
+INSTRUMENTATION_STATUS: test=aPostWhoseDurableAckFailsDoesNotUpdateTheExistingNotificationOnReopen
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryNotificationWindowTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=aPostDismissedBeforeDurableAckRecoveryDoesNotReappear
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryNotificationWindowTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: A dismissed unconfirmed delivery must not reappear expected null, but was:<StatusBarNotification(pkg=dev.durableagent.probe user=UserHandle{0} id=18013 tag=input-a359822f-2a90-4f41-b1c5-43c39ce90167:answer:101:1 key=0|dev.durableagent.probe|18013|input-a359822f-2a90-4f41-b1c5-43c39ce90167:answer:101:1|10218: Notification(channel=agent-completion shortcut=null contentView=null vibrate=null sound=null defaults=0 flags=ONLY_ALERT_ONCE|AUTO_CANCEL color=0x00000000 vis=PRIVATE publicVersion=Notification(channel=agent-completion shortcut=null contentView=null vibrate=null sound=null defaults=0 flags=0 color=0x00000000 vis=PRIVATE)))>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotNull(Assert.java:756)
+	at org.junit.Assert.assertNull(Assert.java:738)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.ackFailure(RecoveryNotificationWindowTest.kt:49)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.aPostDismissedBeforeDurableAckRecoveryDoesNotReappear(RecoveryNotificationWindowTest.kt:32)
+
+INSTRUMENTATION_STATUS: stream=
+Error in aPostDismissedBeforeDurableAckRecoveryDoesNotReappear(dev.durableagent.probe.RecoveryNotificationWindowTest):
+java.lang.AssertionError: A dismissed unconfirmed delivery must not reappear expected null, but was:<StatusBarNotification(pkg=dev.durableagent.probe user=UserHandle{0} id=18013 tag=input-a359822f-2a90-4f41-b1c5-43c39ce90167:answer:101:1 key=0|dev.durableagent.probe|18013|input-a359822f-2a90-4f41-b1c5-43c39ce90167:answer:101:1|10218: Notification(channel=agent-completion shortcut=null contentView=null vibrate=null sound=null defaults=0 flags=ONLY_ALERT_ONCE|AUTO_CANCEL color=0x00000000 vis=PRIVATE publicVersion=Notification(channel=agent-completion shortcut=null contentView=null vibrate=null sound=null defaults=0 flags=0 color=0x00000000 vis=PRIVATE)))>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotNull(Assert.java:756)
+	at org.junit.Assert.assertNull(Assert.java:738)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.ackFailure(RecoveryNotificationWindowTest.kt:49)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.aPostDismissedBeforeDurableAckRecoveryDoesNotReappear(RecoveryNotificationWindowTest.kt:32)
+
+INSTRUMENTATION_STATUS: test=aPostDismissedBeforeDurableAckRecoveryDoesNotReappear
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryNotificationWindowTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=aClaimLostBeforeSystemPostNeverBecomesASecondAutomaticDeliveryAttempt
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryNotificationWindowTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalStateException: COMPLETION_ATTEMPT_NOT_IMPLEMENTED
+	at dev.durableagent.probe.NativeRecoveryStore.claimNotification(NativeRecoveryStore.kt:54)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.aClaimLostBeforeSystemPostNeverBecomesASecondAutomaticDeliveryAttempt(RecoveryNotificationWindowTest.kt:26)
+
+INSTRUMENTATION_STATUS: stream=
+Error in aClaimLostBeforeSystemPostNeverBecomesASecondAutomaticDeliveryAttempt(dev.durableagent.probe.RecoveryNotificationWindowTest):
+java.lang.IllegalStateException: COMPLETION_ATTEMPT_NOT_IMPLEMENTED
+	at dev.durableagent.probe.NativeRecoveryStore.claimNotification(NativeRecoveryStore.kt:54)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.aClaimLostBeforeSystemPostNeverBecomesASecondAutomaticDeliveryAttempt(RecoveryNotificationWindowTest.kt:26)
+
+INSTRUMENTATION_STATUS: test=aClaimLostBeforeSystemPostNeverBecomesASecondAutomaticDeliveryAttempt
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 1.878
+There were 3 failures:
+1) aPostWhoseDurableAckFailsDoesNotUpdateTheExistingNotificationOnReopen(dev.durableagent.probe.RecoveryNotificationWindowTest)
+java.lang.AssertionError: expected:<1793786612524> but was:<1793786612696>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:647)
+	at org.junit.Assert.assertEquals(Assert.java:633)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.ackFailure(RecoveryNotificationWindowTest.kt:50)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.aPostWhoseDurableAckFailsDoesNotUpdateTheExistingNotificationOnReopen(RecoveryNotificationWindowTest.kt:31)
+2) aPostDismissedBeforeDurableAckRecoveryDoesNotReappear(dev.durableagent.probe.RecoveryNotificationWindowTest)
+java.lang.AssertionError: A dismissed unconfirmed delivery must not reappear expected null, but was:<StatusBarNotification(pkg=dev.durableagent.probe user=UserHandle{0} id=18013 tag=input-a359822f-2a90-4f41-b1c5-43c39ce90167:answer:101:1 key=0|dev.durableagent.probe|18013|input-a359822f-2a90-4f41-b1c5-43c39ce90167:answer:101:1|10218: Notification(channel=agent-completion shortcut=null contentView=null vibrate=null sound=null defaults=0 flags=ONLY_ALERT_ONCE|AUTO_CANCEL color=0x00000000 vis=PRIVATE publicVersion=Notification(channel=agent-completion shortcut=null contentView=null vibrate=null sound=null defaults=0 flags=0 color=0x00000000 vis=PRIVATE)))>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotNull(Assert.java:756)
+	at org.junit.Assert.assertNull(Assert.java:738)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.ackFailure(RecoveryNotificationWindowTest.kt:49)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.aPostDismissedBeforeDurableAckRecoveryDoesNotReappear(RecoveryNotificationWindowTest.kt:32)
+3) aClaimLostBeforeSystemPostNeverBecomesASecondAutomaticDeliveryAttempt(dev.durableagent.probe.RecoveryNotificationWindowTest)
+java.lang.IllegalStateException: COMPLETION_ATTEMPT_NOT_IMPLEMENTED
+	at dev.durableagent.probe.NativeRecoveryStore.claimNotification(NativeRecoveryStore.kt:54)
+	at dev.durableagent.probe.RecoveryNotificationWindowTest.aClaimLostBeforeSystemPostNeverBecomesASecondAutomaticDeliveryAttempt(RecoveryNotificationWindowTest.kt:26)
+
+FAILURES!!!
+Tests run: 3,  Failures: 3
+
+
+INSTRUMENTATION_CODE: -1

@@ -1,0 +1,30 @@
+(node:63564) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ offline model work waits visibly and continues the same saved input when conditions return (369.3713ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 693.7635
+
+✖ failing tests:
+
+test at test\recovery.test.mjs:16:1
+✖ offline model work waits visibly and continues the same saved input when conditions return (369.3713ms)
+  AssertionError [ERR_ASSERTION]: No model transport while Android reports offline
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/recovery.test.mjs:22:10)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

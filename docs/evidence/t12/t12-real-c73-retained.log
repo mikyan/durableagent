@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.FileNativeObservationTest:
+INSTRUMENTATION_STATUS: test=inspectRetainedSdkHistoryWithoutOpeningHarness
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: retainedFileHistoryObservation={"files":[],"tasks":[{"id":18,"conversationId":6,"kind":"pi.generation","abortRequested":false,"background":false,"startedAt":1793789142824,"endedAt":1793789152899,"status":"terminal","outcome":{"status":"completed","result":{"entryId":20}},"input":"{}"}],"tasksLimited":false,"submissions":[{"conversationId":6,"requestId":"0365df8f-0c39-4f9b-a278-7a5ccbc51d2f","type":"input","status":"done","entry":16,"id":17,"answer":20}],"submissionsLimited":false,"documentOperationIds":[],"executionIds":[],"run":"248c5d2f-c67f-4f39-804b-cd279f3d8f7e","harnessNotOpened":true,"modelTransportNotInstalled":true,"conversations":[{"id":"real-recovery-248c5d2f-c67f-4f39-804b-cd279f3d8f7e","entries":[{"id":"16","role":"user","text":"This is an authorized recovery test on one new test file. Use bash exactly once. The complete command is between the command tags; do not add other commands.\n<command>\ntest ! -e '\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t12-248c5d2f-c67f-4f39-804b-cd279f3d8f7e.txt' || exit 71; printf 'part-one\\n' > '\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t12-248c5d2f-c67f-4f39-804b-cd279f3d8f7e.txt'; printf 'T12_PART_ONE\\n'; sleep 18; printf 'part-two\\n' >> '\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t12-248c5d2f-c67f-4f39-804b-cd279f3d8f7e.txt'; cat '\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t12-248c5d2f-c67f-4f39-804b-cd279f3d8f7e.txt'\n<\/command>\nAfter the tool completes, report the two resulting lines verbatim. Do not call read, write, any other tool, or repeat the command.","truncated":false},{"id":"20","role":"assistant","text":"part-one\npart-two","truncated":false}],"more":false}],"nativeDocumentQueries":[],"nativeExecutionQueries":[]}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inspectRetainedSdkHistoryWithoutOpeningHarness
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 1.033
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

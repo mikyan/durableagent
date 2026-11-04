@@ -15,6 +15,52 @@ import {createRegistry,defineTool} from '@earendil-works/pi-durable';
 import {obj} from '@earendil-works/pi-schema';
 import {PersistentExecutionPeer,executionConfiguration} from '../validation/execution-peer.mjs';
 
+test('recovery holds an unconfirmed original effect inside the same SDK invocation until matching proof returns',async()=>{
+ class UnconfirmedPeer extends ExecutionPeer {
+  confirmed=false;
+  async request(method,payload){const value=await super.request(method,payload);if(['start','query'].includes(method)&&value.state==='completed'&&!this.confirmed)return {...value,state:'unknown',scopeConfirmed:false,reason:'OBSERVATION_LOST'};return value;}
+ }
+ const dir=await mkdtemp(join(tmpdir(),'recovery-unknown-effect-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new UnconfirmedPeer(),listeners=new Set();let requests=0,used=0;
+ const recovery={conditions:async()=>({network:'available',userUnlocked:true}),subscribe:listener=>{listeners.add(listener);return()=>listeners.delete(listener);},publishWake:async()=>{},probe:async()=>({allowed:++used<=5,used:Math.min(used,5),at:Date.now()+100})};
+ const execution=new ManagedExecution({channel:peer,authority:native}),app=new Application({...executionConfiguration(()=>requests++),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution,recovery});
+ try{
+  await app.start();await call(app,'create',{creationId:'chat'});await native.create('chat','one original effect','original');await call(app,'send',{intentId:'original'});
+  await until(async()=>requests>1||(await call(app,'open',{id:'chat'})).recovery?.reason==='external-unconfirmed');
+  assert.equal(requests,1,'Unverified tool result must not be returned to the model');assert.equal(peer.starts,1);assert.equal(peer.records.size,1);
+  peer.confirmed=true;for(const listener of listeners)listener();
+  await until(async()=>(await call(app,'sendStatus',{intentId:'original'})).submission?.status==='done');
+  assert.equal(requests,2);assert.equal(peer.starts,1);assert.equal(peer.records.size,1);assert.equal((await call(app,'history',{id:'chat'})).items.filter(entry=>entry.role==='user').length,1);
+ }finally{peer.confirmed=true;for(const listener of listeners)listener();await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
+test('an unavailable native recovery budget keeps an unknown effect pending instead of ending the input',async()=>{
+ class UnconfirmedPeer extends ExecutionPeer {confirmed=false;async request(method,payload){const value=await super.request(method,payload);return ['start','query'].includes(method)&&value.state==='completed'&&!this.confirmed?{...value,state:'unknown',scopeConfirmed:false,reason:'OBSERVATION_LOST'}:value;}}
+ const dir=await mkdtemp(join(tmpdir(),'recovery-authority-unavailable-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new UnconfirmedPeer(),listeners=new Set();let requests=0,available=false,claims=0,attempts=0;
+ const recovery={conditions:async()=>({network:'available',userUnlocked:true}),subscribe:listener=>{listeners.add(listener);return()=>listeners.delete(listener);},publishWake:async()=>{},probe:async()=>{attempts++;if(!available)throw Object.assign(Error('Native recovery storage temporarily unavailable'),{code:'HOST_RECOVERY_UNAVAILABLE'});return {allowed:true,used:++claims,at:Date.now()+1000};}};
+ const execution=new ManagedExecution({channel:peer,authority:native}),app=new Application({...executionConfiguration(()=>requests++),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution,recovery,bootstrapSettings:()=>({retry:{enabled:false,maxRetries:0}})});
+ try{
+  await app.start();await call(app,'create',{creationId:'chat'});await native.create('chat','one effect across temporary native storage loss','original');await call(app,'send',{intentId:'original'});
+  await until(()=>attempts>0);await new Promise(resolve=>setTimeout(resolve,40));
+  const waiting=await call(app,'open',{id:'chat'});assert.equal(waiting.phase,'waiting','A missing observation budget is not a terminal model failure');assert.equal(waiting.recovery.reason,'external-unconfirmed');assert.equal(requests,1);assert.equal(claims,0);assert.equal(peer.starts,1);
+  available=true;peer.confirmed=true;for(const listener of listeners)listener();await until(async()=>(await call(app,'sendStatus',{intentId:'original'})).submission?.status==='done');assert.equal(requests,2);assert.equal(peer.starts,1);assert.equal(peer.records.size,1);
+ }finally{available=true;peer.confirmed=true;for(const listener of listeners)listener();await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
+test('exhausted external probes keep the same input held across reopen and a durable stop cannot revive it',async()=>{
+ class UnknownPeer extends ExecutionPeer {async request(method,payload){if(method==='cancel'){const value=structuredClone(this.records.get(payload.executionId).receipt);return {...value,state:'unknown',scopeConfirmed:false,reason:'SCOPE_NOT_CONFIRMED'};}const value=await super.request(method,payload);return ['start','query'].includes(method)&&value.state==='completed'?{...value,state:'unknown',scopeConfirmed:false,reason:'OBSERVATION_LOST'}:value;}}
+ const dir=await mkdtemp(join(tmpdir(),'recovery-exhausted-stop-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new UnknownPeer(),listeners=new Set();let requests=0,used=0;
+ const recovery={conditions:async()=>({network:'available',userUnlocked:true}),subscribe:listener=>{listeners.add(listener);return()=>listeners.delete(listener);},publishWake:async()=>{},probe:async()=>{const allowed=used<5;if(allowed)used++;return {allowed,used,at:Date.now()+5,exhausted:used===5};}};
+ const options={...executionConfiguration(()=>requests++),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,recovery};let app=new Application({...options,execution:new ManagedExecution({channel:peer,authority:native})});
+ try{
+  await app.start();await call(app,'create',{creationId:'chat'});await native.create('chat','hold this one unresolved effect','original');await call(app,'send',{intentId:'original'});
+  await until(async()=>(await call(app,'open',{id:'chat'})).recovery?.used===5);assert.equal(requests,1);assert.equal(peer.starts,1);
+  await app.close();app=new Application({...options,execution:new ManagedExecution({channel:peer,authority:native})});await app.start();
+  await until(async()=>(await call(app,'open',{id:'chat'})).recovery?.used===5);await app.wake();await app.wake();assert.equal(used,5);assert.equal(requests,1);assert.equal(peer.starts,1);assert.equal(peer.records.size,1);
+  const stop=await native.stop('chat','stop-exhausted');await call(app,'stop',{id:'chat',stopId:stop.pendingAbort.stopId});await app.close();await app.start();for(const listener of listeners)listener();await app.wake();
+  assert.equal((await call(app,'open',{id:'chat'})).phase,'stopped');assert.equal(requests,1);assert.equal(peer.starts,1);assert.equal(peer.records.size,1);
+ }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
 test('a policy-waiting prepared shell leaves the writer domain available to a controlled local file operation',async()=>{
  class LocalPeer extends ExecutionPeer {
   plans=new Map();data=Buffer.from('before');

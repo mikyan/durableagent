@@ -1,0 +1,17 @@
+
+dev.durableagent.probe.ExecutionTransportTest:
+Error in actualOrdinaryOperationRestartsPairedExecutorWithoutExplicitConnect(dev.durableagent.probe.ExecutionTransportTest):
+java.lang.NoSuchMethodError: No static method request$default(Ldev/durableagent/probe/ExecutionTlsClient;Ljava/lang/String;Lorg/json/JSONObject;JILjava/lang/Object;)Lorg/json/JSONObject; in class Ldev/durableagent/probe/ExecutionTlsClient; or its super classes (declaration of 'dev.durableagent.probe.ExecutionTlsClient' appears in /data/app/~~ikdlJ_LaCfR_JvrG8PAGmw==/dev.durableagent.probe-D5GLwoi_X__j5ackUZC9gQ==/base.apk!classes3.dex)
+	at dev.durableagent.probe.ExecutionTransportTest.actualOrdinaryOperationRestartsPairedExecutorWithoutExplicitConnect(ExecutionTransportTest.kt:72)
+
+
+Time: 0.068
+There was 1 failure:
+1) actualOrdinaryOperationRestartsPairedExecutorWithoutExplicitConnect(dev.durableagent.probe.ExecutionTransportTest)
+java.lang.NoSuchMethodError: No static method request$default(Ldev/durableagent/probe/ExecutionTlsClient;Ljava/lang/String;Lorg/json/JSONObject;JILjava/lang/Object;)Lorg/json/JSONObject; in class Ldev/durableagent/probe/ExecutionTlsClient; or its super classes (declaration of 'dev.durableagent.probe.ExecutionTlsClient' appears in /data/app/~~ikdlJ_LaCfR_JvrG8PAGmw==/dev.durableagent.probe-D5GLwoi_X__j5ackUZC9gQ==/base.apk!classes3.dex)
+	at dev.durableagent.probe.ExecutionTransportTest.actualOrdinaryOperationRestartsPairedExecutorWithoutExplicitConnect(ExecutionTransportTest.kt:72)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

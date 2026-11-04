@@ -1,3 +1,4 @@
+import {canonical} from './canonical.js';
 import {BACKGROUND_CONTEXT as context} from '@earendil-works/chord/context';
 import {defineDocFamily,type Harness,type ConversationId,type SubmissionId,type Tx} from '@earendil-works/pi-durable';
 import type {Models} from '@earendil-works/pi-ai/models';
@@ -12,7 +13,6 @@ export class SubmissionError extends Error {constructor(readonly code:string,mes
 export const Admission=defineDocFamily({kind:'app.admission',version:1,scope:'session',family:true,initial:(_:null)=>({receipt:null as AdmissionReceipt|null}),checkpointWhen:()=>false});
 export const Binding=defineDocFamily({kind:'app.submission-binding',version:1,scope:'session',family:true,initial:(_:null)=>({id:null as string|null,context:null as SubmissionContext|null,location:null as import('./project-protocol.js').WorkspaceRecord|null,projectId:null as string|null,sourceProductId:null as string|null,actualIdentity:null as string|null}),checkpointWhen:()=>false});
 export const CurrentBinding=defineDocFamily({kind:'app.current-submission-binding',version:1,scope:'session',family:true,initial:(_:null)=>({id:null as string|null}),checkpointWhen:()=>false});
-const canonical=(value:any):any=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
 const equal=(a:unknown,b:unknown)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));
 export function receiptMatchesIntent(intent:NativeSendIntent,receipt:AdmissionReceipt){
  const expected={protocol:1,intentId:intent.intentId,id:intent.id,inputToken:intent.inputToken,inputRevision:intent.inputRevision,inputDigest:intent.inputDigest,context:intent.context,queue:intent.queue,controlGeneration:intent.controlGeneration,...(intent.source?{source:intent.source}:{})};
@@ -109,5 +109,12 @@ export class Submissions {
   /** Reached by every actual model invocation, including SDK retry/deferred/compaction paths. */
   checkDispatch(){return this.coordinate(async()=>{this.options.ready();if(!(await this.options.authority.pendingStops()).length)return;const release=this.options.pause();try{await this.stops();}finally{release();}});}
   /** Startup: only persisted explicit intents, never draft text. Read-only projection does not call this. */
-  recover(){return this.coordinate(async()=>{const release=this.options.pause();try{await this.stops();}finally{release();}let cursor:string|undefined;do{const page=await this.options.authority.listSends({cursor,limit:50});for(const intent of page.intents){if(intent.delivery==='acknowledged'||intent.cancelled)continue;try{await this.admit(intent.intentId);}catch(error){if(!(error instanceof SubmissionError)&&!(error instanceof InputError))throw error;}}cursor=page.next;}while(cursor);});}
+  recover(){return this.coordinate(async()=>{
+    const release=this.options.pause();try{await this.stops();}finally{release();}
+    // Native/UI pages are latest-first by durable sequence, not wall-clock time.
+    // Read all pages before reversing so a page boundary cannot reorder sends.
+    const pending:string[]=[];let cursor:string|undefined;
+    do{const page=await this.options.authority.listSends({cursor,limit:50});for(const intent of page.intents)if(intent.delivery!=='acknowledged'&&!intent.cancelled)pending.push(intent.intentId);cursor=page.next;}while(cursor);
+    for(const intentId of pending.reverse())try{await this.admit(intentId);}catch(error){if(!(error instanceof SubmissionError)&&!(error instanceof InputError))throw error;}
+  });}
 }

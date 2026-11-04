@@ -1,3 +1,4 @@
+import {canonical} from './canonical.js';
 import {defineDoc,InboxDoc,LiveDoc,type Harness,type Tx,type ConversationId} from '@earendil-works/pi-durable';
 import {BACKGROUND_CONTEXT as context} from '@earendil-works/chord/context';
 import {createHash} from 'node:crypto';
@@ -14,7 +15,6 @@ export class ProjectError extends Error {constructor(readonly code:string,messag
 type Catalog={initialized:boolean;version:number;projects:Record<string,ProjectRecord>;workspaces:Record<string,WorkspaceRecord>;operations:Record<string,{fingerprint:string}>};
 export const ProjectConfiguration=defineDoc({kind:'app.projects',version:1,scope:'session',initial:():Catalog=>({initialized:false,version:0,projects:{},workspaces:{},operations:{}}),checkpointWhen:()=>false});
 const copy=<T>(value:T):T=>JSON.parse(JSON.stringify(value));
-const canonical=(v:any):any=>Array.isArray(v)?v.map(canonical):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])])):v;
 const text=(value:unknown,label:string,max=128)=>{if(typeof value!=='string'||!value.trim()||value.length>max)throw new ProjectError('INVALID_ARGUMENT',`${label} 无效`);return value;};
 /** Shared metadata and cross-store edit policy. No deferred edits or file operations. */
 export class Projects {

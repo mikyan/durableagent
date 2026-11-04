@@ -1,3 +1,4 @@
+import {canonical} from './canonical.js';
 import {defineDoc,defineDocFamily,type Harness,type Registry,type ToolExecutionApi,type ToolRegistration} from '@earendil-works/pi-durable';
 import {createBashTool,createReadTool,createWriteTool} from '@earendil-works/pi-durable/tools';
 import {ExecutionError,FileError,StreamDecoder,type ExecutionEnv,type FileSystem,type ShellExecOptions,type Result,type ShellExecResult,type FileWatcher,type WatchTarget,type FileChange} from '@earendil-works/pi-durable/env';
@@ -16,17 +17,18 @@ import {DocumentWrites,type DocumentWriteArguments} from './document-writes.js';
 import {FileWrites,type FileExecutionEffect,type FileMutationMode,type FileMutationOptions} from './file-writes.js';
 import type {FileEffectAuthority} from './file-effect-protocol.js';
 import {WorkspaceCoordinator,type WriteClaim,type WriteScope} from './workspace-coordination.js';
+import {continuationEligibility} from './execution-continuation.js';
+import type {Recovery} from './recovery.js';
 
 export const EXECUTION_EXTENSION={id:'managed-execution',actions:['execution.list','execution.readOutput','files.list']} as const;
 type Command={kind:'shell';script:string}|{kind:'argv';argv:string[]};
 type ExecutionContext={productId:string;sdkConversationId:number;taskId:number;callId:string;bindingId:string;locationVersion:number;controlGeneration:number;namespace:string};
 type Request={executionId:string;context:ExecutionContext;command:Command;cwd:string;env:Record<string,string>;inheritEnv:boolean;timeoutMs:number|null};
 type Receipt=Record<string,any>&{executionId:string;state:string};
-type StoredIntent={request:Request|null;receipt:Receipt|null;cursor:number;workspaceIdentity:string|null;writeScope?:WriteScope;fileOperationId?:string};
+type StoredIntent={request:Request|null;receipt:Receipt|null;cursor:number;workspaceIdentity:string|null;writeScope?:WriteScope;fileOperationId?:string;confirmationPending?:boolean};
 type IndexEntry={key:string;productId:string;bindingId:string;namespace:string;state:string};
 const Intent=defineDocFamily({kind:'app.managed-execution-intent',version:1,scope:'session',family:true,initial:(_:null):StoredIntent=>({request:null,receipt:null,cursor:0,workspaceIdentity:null}),checkpointWhen:()=>false});
 const Index=defineDoc({kind:'app.managed-execution-index',version:1,scope:'session',initial:()=>({items:{} as Record<string,IndexEntry>}),checkpointWhen:()=>false});
-const canonical=(value:any):any=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
 const same=(a:unknown,b:unknown)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));
 const hash=(value:unknown)=>createHash('sha256').update(JSON.stringify(canonical(value))).digest('hex');
 const copy=<T>(value:T):T=>JSON.parse(JSON.stringify(value));
@@ -37,6 +39,37 @@ const failure=(code:string,message:string):never=>{throw new ManagedExecutionErr
 
 /** Fixed core: app-owned invocation identity, final policy and external receipts; SDK owns scheduling. */
 export class ManagedExecution implements EffectAuthority {
+ private recovery?:Recovery;
+ setRecovery(recovery?:Recovery){this.recovery=recovery;}
+ async awaitContinuation(productId:string,context:Context){
+  if(!this.recovery)return;
+  const entries=Object.values((await this.owner().snapshot(Index,context))?.items??{}).filter(entry=>entry.productId===productId);
+  for(const entry of entries){
+   const value=await this.owner().snapshot(Intent,entry.key,context);if(!value?.request||!value.receipt)continue;
+   if(value.confirmationPending&&terminal.has(value.receipt.state)&&value.receipt.scopeConfirmed===true){
+    const control=await this.options.authority.readControl(productId);
+    // A confirmed old effect remains immutable, but its stopped input must not
+    // fence a later explicit send. Unknown external effects still block below.
+    if(value.request.context.controlGeneration<=control.stoppedThrough)continue;
+   }
+   if(value.confirmationPending||continuationEligibility(value.receipt)!=='proceed')await this.holdReceipt(entry.key,copy(value.request),context);
+  }
+ }
+ private async holdReceipt(key:string,request:Request,context:Context,forceProbe=false){
+  if(!this.recovery)return;
+  let observed=!forceProbe;
+  await this.recovery.external(request.executionId,request.context.productId,async()=>{
+   await this.policy(request,undefined,context);
+   const saved=await this.owner().snapshot(Intent,key,context);if(!saved?.receipt)return false;
+   const interrupted=(await this.options.dataSaver?.decision(request.executionId))?.policyInterrupted===true;
+   return observed&&(!saved.confirmationPending||forceProbe)&&continuationEligibility(saved.receipt,interrupted)==='proceed';
+  },async()=>{
+   await this.policy(request,undefined,context);
+   const receipt=this.receipt(await this.options.channel.request('query',{executionId:request.executionId}),request);
+   await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,key,null),index=await tx.doc(Index);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_INTENT_MISMATCH','核验执行身份已改变');if(receipt.source!=='application'&&Number(receipt.sequence??0)<Number(intent.receipt?.sequence??0))return;intent.receipt=copy(receipt);index.items[request.executionId].state=receipt.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});
+   observed=true;
+  },context.abortSignal);
+ }
  private harness?:Harness;
  private namespace='unverified:termux';
  private tail:Promise<unknown>=Promise.resolve();
@@ -203,6 +236,9 @@ export class ManagedExecution implements EffectAuthority {
    if(context.abortSignal?.aborted)onAbort();
    await this.options.boundary?.('intent-persisted',copy(request));
    await this.policy(request,api,context);
+   // A terminal effect receipt does not prove its result was retrieved. Keep
+   // failed confirmation durable so reopen cannot obtain a free retry.
+   if((await this.owner().snapshot(Intent,key,context))?.confirmationPending)await this.holdReceipt(key,request,context,true);
    if(this.options.dataSaver)await this.policyRead(request,api,context,()=>this.options.dataSaver!.register(request));
    const acquireWriter=async()=>{
     for(;;){const reservation=await this.writes!.reserve(this.writeClaim(request,writeScope));if(reservation.state==='cancelled')return failure('EXECUTION_STOPPED','排队的写入已取消');if(reservation.state!=='queued')break;await this.policy(request,api,context);await this.writes!.refresh();await new Promise(resolve=>setTimeout(resolve,20));}
@@ -235,6 +271,7 @@ export class ManagedExecution implements EffectAuthority {
    const decoders={stdout:new StreamDecoder(),stderr:new StreamDecoder()};let cursor=0,decodedBytes=0,newlines=0,endsWithNewline=true;
    const emit=(text:string,stream:'stdout'|'stderr')=>{if(!text)return;decodedBytes+=Buffer.byteLength(text);newlines+=text.split('\n').length-1;endsWithNewline=text.endsWith('\n');options?.onOutput?.(text,context,{stream});};
    while(true){
+    if(this.recovery&&continuationEligibility(receipt)!=='proceed'){await this.holdReceipt(key,request,context);receipt=copy((await this.owner().snapshot(Intent,key,context))!.receipt!);}
     const page=await this.options.channel.request('readOutput',{executionId:request.executionId,cursor});
     if(page.executionId!==request.executionId||page.namespace!==request.context.namespace||page.cursor!==cursor||!Array.isArray(page.chunks))return failure('OUTPUT_IDENTITY_MISMATCH','输出不属于当前执行或位置');
     for(const chunk of page.chunks){if(chunk.sequence!==cursor+1||!['stdout','stderr'].includes(chunk.stream)||typeof chunk.data!=='string')return failure('OUTPUT_GAP','执行输出位置不连续');const stream=chunk.stream as 'stdout'|'stderr';emit(decoders[stream].decode(Buffer.from(chunk.data,'base64')),stream);cursor=chunk.sequence;}
@@ -242,12 +279,14 @@ export class ManagedExecution implements EffectAuthority {
     receipt=this.receipt(await this.options.channel.request('query',{executionId:request.executionId}),request);
     await this.save(api,key,request,receipt,cursor);
     await this.options.boundary?.('output-checkpoint',copy(request));
-    if(receipt.cancelReason==='network_policy')await this.holdPolicyInterrupted(request,api,context);
-    if(receipt.state==='unknown')return {ok:false,error:new ExecutionError('unknown','执行结果不明，保留原执行身份；不能自动重跑')};
+    if(continuationEligibility(receipt)==='policy-interrupted')await this.holdPolicyInterrupted(request,api,context);
+    if(continuationEligibility(receipt)==='verify-external'){if(this.recovery)continue;return {ok:false,error:new ExecutionError('unknown','执行结果不明，保留原执行身份；不能自动重跑')};}
     if(terminal.has(receipt.state)&&cursor===receipt.outputCursor){
      for(const stream of ['stdout','stderr'] as const)emit(decoders[stream].decode(),stream);
      const spillPath=options?.spill&&!receipt.captureIncomplete&&(decodedBytes>options.spill.afterBytes||newlines+(endsWithNewline?0:1)>options.spill.afterLines)?receipt.outputRef as string:undefined;
      await this.options.boundary?.('before-result',copy(request));
+     await api.commit(async tx=>{const intent=await tx.doc(Intent,key,null);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_INTENT_MISMATCH','结果确认身份已改变');delete intent.confirmationPending;},context,{persistence:{kind:'immediate'}});
+     this.recovery?.changedConditions();
      if(receipt.state==='completed'&&!receipt.captureIncomplete)return {ok:true,value:{exitCode:receipt.exitCode,...(spillPath?{spillPath}:{})}};
      const error=new ExecutionError(receipt.captureIncomplete?'unknown':receipt.cancelReason==='timeout'?'timeout':receipt.state==='not_started'?'spawn_error':'aborted','命令未完成执行或输出不完整');error.spillPath=spillPath;return {ok:false,error};
     }
@@ -257,7 +296,10 @@ export class ManagedExecution implements EffectAuthority {
   }catch(error){
    if(error instanceof ManagedExecutionError&&['EXECUTION_STOPPED','EXECUTION_LOCATION_CHANGED'].includes(error.code))onAbort?.();
    if(cancelWait)try{await cancelWait;}catch{}
-   if(fixedRequest){const request=fixedRequest;try{await api.commit(async tx=>{const intent=await tx.doc(Intent,key,null),index=await tx.doc(Index);if(intent.request&&same(intent.request,request)&&!terminal.has(intent.receipt?.state??'')){intent.receipt={...intent.receipt,protocol:1,executionId:request.executionId,namespace:request.context.namespace,context:request.context,state:'unknown',reason:'CLIENT_CONFIRMATION_LOST',source:'application'};index.items[request.executionId].state='unknown';}},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});}catch{/* A killed invocation cannot commit. Its durable intent remains pending for startup reconciliation. */}}
+   if(fixedRequest){const request=fixedRequest;try{await api.commit(async tx=>{const intent=await tx.doc(Intent,key,null),index=await tx.doc(Index);if(intent.request&&same(intent.request,request)){if(!context.abortSignal?.aborted&&!(error instanceof ManagedExecutionError&&['EXECUTION_STOPPED','EXECUTION_LOCATION_CHANGED'].includes(error.code)))intent.confirmationPending=true;if(!terminal.has(intent.receipt?.state??'')){intent.receipt={...intent.receipt,protocol:1,executionId:request.executionId,namespace:request.context.namespace,context:request.context,state:'unknown',reason:'CLIENT_CONFIRMATION_LOST',source:'application'};index.items[request.executionId].state='unknown';}}},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});}catch{/* A killed invocation cannot commit. Its durable intent remains pending for startup reconciliation. */}}
+   if(this.recovery&&fixedRequest&&!context.abortSignal?.aborted&&!(error instanceof ManagedExecutionError&&['EXECUTION_STOPPED','EXECUTION_LOCATION_CHANGED'].includes(error.code))){
+    return await this.run(binding,api,command,options,context,ordinal,fileEffect);
+   }
    return {ok:false,error:new ExecutionError('unknown',error instanceof ManagedExecutionError?error.message:'执行连接未确认结果，保留原身份等待核验')};
   }finally{if(fixedRequest)this.dispatching.delete(fixedRequest.executionId);if(onAbort)context.abortSignal?.removeEventListener('abort',onAbort);}
  }

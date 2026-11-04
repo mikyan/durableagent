@@ -1,0 +1,21 @@
+{
+  "head": "1ad67253cc0fc018c8172b877f46f106405c9554",
+  "purpose": "T12 normal-product lifecycle with accepted T13 source and gate record",
+  "artifacts": {
+    "app.apk": "ac63ec62ed95e857cd3869e66113345af5ec7d22a30b9be5628315e0c742b9ef",
+    "execution-capabilities.json": "13af93860ed026cb5b28dd48b18b1769fdb9ed3fcd192e0bae42e86fd5700309",
+    "execution-setup.txt": "cfc666904dc03baf919bacc237d5a4da5f1f20ac070ee62d467b9037e3df500a",
+    "test.apk": "340534b2404988e554fbfee7d424a92eecc911a0fafadce382d02501e33d1328"
+  },
+  "sources": 394,
+  "packagingScope": {
+    "candidateUse": "marker-only normal-product lifecycle; zero tools or file operations",
+    "helperBytesDifferFromAcceptedDueToRetainedCrLf": true,
+    "candidateCapabilitiesSha256": "13af93860ed026cb5b28dd48b18b1769fdb9ed3fcd192e0bae42e86fd5700309",
+    "candidateSetupSha256": "cfc666904dc03baf919bacc237d5a4da5f1f20ac070ee62d467b9037e3df500a",
+    "acceptedCapabilitiesSha256": "10d7375d4565a83647d278efdea74cd71fe280896609987d12bb19a1e7302b1b",
+    "acceptedSetupSha256": "bccdfe9de7ff1179542aef37e7bc1bdf448ba7df6fcd6806368e84ee83e103b2",
+    "deviceTermuxHelperChanged": false,
+    "finalBuildMustRegenerateFromExactHeadLfBlobs": true
+  }
+}

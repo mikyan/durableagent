@@ -1,0 +1,12 @@
+
+dev.durableagent.probe.RecoveryJobApplicationTest:INSTRUMENTATION_STATUS: jobRecoveryStarted={"run":"6c4e7ded-93b1-457e-882c-e4e979b5b32f","product":"job-6c4e7ded-93b1-457e-882c-e4e979b5b32f","pid":15922,"clientBindings":"job only"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: jobRecoveryEvidence={"run":"6c4e7ded-93b1-457e-882c-e4e979b5b32f","product":"job-6c4e7ded-93b1-457e-882c-e4e979b5b32f","pid":15922,"sameAdmission":true,"requests":1,"stopped":true,"serviceExited":true}
+INSTRUMENTATION_STATUS_CODE: 0
+.
+
+Time: 56.318
+
+OK (1 test)
+
+

@@ -1,0 +1,53 @@
+{
+  "stage": "verify",
+  "startedAt": "2026-11-04T12:46:05.661Z",
+  "mode": "product",
+  "instrumentationUsed": false,
+  "publicVerificationPassed": true,
+  "product": "0d1cd678-787b-46b0-aba1-a20173cc6083",
+  "intentId": "77cbd7d5-cb3d-4292-ab9c-2d228950265d",
+  "admission": {
+    "protocol": 1,
+    "intentId": "77cbd7d5-cb3d-4292-ab9c-2d228950265d",
+    "id": "0d1cd678-787b-46b0-aba1-a20173cc6083",
+    "inputToken": "f7791cd8-5392-44e5-bd47-fd6f6400ebf4",
+    "inputRevision": 1,
+    "inputDigest": "6b0662b94bf596511cb5bbf963ba6663e0723d1f2abe4e95ec44af0c81fa6872",
+    "context": {
+      "sdkConversationId": 28,
+      "associationVersion": 1,
+      "location": {
+        "workspaceId": "default",
+        "version": 1,
+        "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+      }
+    },
+    "queue": {
+      "whenBusy": "followUp",
+      "whenIdle": "start"
+    },
+    "controlGeneration": 1,
+    "bindingId": "429acce2-f5fd-4c97-adc5-e0b76fd7ec2b",
+    "submissionId": 39
+  },
+  "history": {
+    "items": [
+      {
+        "id": "38",
+        "role": "user",
+        "text": "这是恢复验证。只回复 T12-LIFECYCLE-6daace13-cf22-42c6-9493-d43e63bbeb0a，不调用工具。",
+        "persisted": true
+      },
+      {
+        "id": "42",
+        "role": "assistant",
+        "text": "T12-LIFECYCLE-6daace13-cf22-42c6-9493-d43e63bbeb0a",
+        "persisted": true
+      }
+    ]
+  },
+  "externalCompletedAt": "2026-11-04T12:29:11.576780+00:00",
+  "completeHttpCountObserved": false,
+  "activityExit": [],
+  "error": "Error: Activity remains recorded without its own focused window; no further Back sent"
+}

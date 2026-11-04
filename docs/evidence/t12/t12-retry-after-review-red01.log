@@ -1,0 +1,50 @@
+(node:80588) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ an observed deadline fences concurrent dispatch before its SQLite commit finishes (493.5548ms)
+✖ selection changes cannot hide the deadline of an already-prepared request on the original connection (1354.8406ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2532.0803
+
+✖ failing tests:
+
+test at test\retry-after.test.mjs:82:1
+✖ an observed deadline fences concurrent dispatch before its SQLite commit finishes (493.5548ms)
+  AssertionError [ERR_ASSERTION]: Observed Retry-After must fence dispatch while its durable commit is in flight
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/retry-after.test.mjs:89:10)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\retry-after.test.mjs:92:1
+✖ selection changes cannot hide the deadline of an already-prepared request on the original connection (1354.8406ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'running'
+  - 'waiting'
+  
+      at TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/retry-after.test.mjs:96:57)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'running',
+    expected: 'waiting',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

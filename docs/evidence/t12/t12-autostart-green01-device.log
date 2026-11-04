@@ -1,0 +1,12 @@
+
+dev.durableagent.probe.ExecutionTransportTest:INSTRUMENTATION_STATUS: automaticExecutorBefore={"original":{"protocol":1,"executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","processEpoch":"2a545e31-f2d4-4689-bf9b-0fb73baf3f09","namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace"},"fault":{"killedOwnedListenerPid":15251,"listenerAbsentBeforeRequest":true},"explicitConnectCalled":false}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: automaticExecutorAfter={"after":{"protocol":1,"executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","processEpoch":"577167c2-94c9-4879-bdb0-69ce4d4add70","namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace"},"pairingUnchanged":true,"explicitConnectCalled":false}
+INSTRUMENTATION_STATUS_CODE: 0
+.
+
+Time: 1.23
+
+OK (1 test)
+
+

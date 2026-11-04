@@ -261,15 +261,15 @@ def serve(root, identity, dispatch):
                     session = {**owner, "processEpoch": process_epoch, "connectionNonce": str(uuid.uuid4())}
                     _reply(connection, hello, None, {"protocol": 1, **session, "clientNonce": nonce})
                     request = _request(connection, session)
+                    if request["method"] == "ping":
+                        _reply(connection, request, session, {"protocol": 1, **owner, "processEpoch": process_epoch, **workspace})
+                        return
                     admission = control if request["method"] in ("cancel", "query") else ordinary
                     if not admission.acquire(blocking=False):
                         _reply(connection, request, session, code="CHANNEL_BUSY")
                         return
                     try:
-                        if request["method"] == "ping":
-                            value = {"protocol": 1, **owner, "processEpoch": process_epoch, **workspace}
-                        else:
-                            value = dispatch(request["method"], request["payload"])
+                        value = dispatch(request["method"], request["payload"])
                         _reply(connection, request, session, value)
                     except Exception as error:
                         code = getattr(error, "code", "OPERATION_UNCONFIRMED")

@@ -1,3 +1,4 @@
+import {canonical} from './canonical.js';
 import {defineDoc,defineDocFamily,type Harness,type ToolExecutionApi} from '@earendil-works/pi-durable';
 import {FileError,type ExecutionError,type Result,type ShellExecResult} from '@earendil-works/pi-durable/env';
 import {BACKGROUND_CONTEXT,type Context} from '@earendil-works/chord/context';
@@ -16,7 +17,6 @@ type Stored={fixed:Fixed|null;plan:Record<string,any>|null;result:Record<string,
 const Intent=defineDocFamily({kind:'app.managed-file-intent',version:1,scope:'session',family:true,initial:(_:null):Stored=>({fixed:null,plan:null,result:null,executionId:null}),checkpointWhen:()=>false});
 const Index=defineDoc({kind:'app.managed-file-index',version:1,scope:'session',initial:()=>({items:{} as Record<string,{key:string;productId:string;bindingId:string}>}),checkpointWhen:()=>false});
 const copy=<T>(value:T):T=>JSON.parse(JSON.stringify(value));
-const canonical=(value:any):any=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
 const same=(left:unknown,right:unknown)=>JSON.stringify(canonical(left))===JSON.stringify(canonical(right));
 const unknown=(path:string)=>new FileError('unknown','原文件写入尚未取得匹配的完整回执；保留原身份等待核验',path);
 const sha=(data:Uint8Array)=>createHash('sha256').update(data).digest('hex');

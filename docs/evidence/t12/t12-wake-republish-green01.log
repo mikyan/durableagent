@@ -1,0 +1,16 @@
+(node:62624) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ offline model work waits visibly and continues the same saved input when conditions return (442.0992ms)
+✔ a durable SDK retry uses the same epoch after close and repeated early host wake cannot duplicate it (313.6459ms)
+✔ a temporarily unavailable native wake record is republished before the same due SDK retry resumes (292.9033ms)
+✔ first unlock is checked before SDK bootstrap and a saved stop stays stopped after network recovery (128.6814ms)
+✔ native completion projection comes from settled input and survives reopen without creating another run (524.7611ms)
+✔ a reopened deferred response waits for connectivity and polls the original handle without a replacement request (209.6392ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2134.6088

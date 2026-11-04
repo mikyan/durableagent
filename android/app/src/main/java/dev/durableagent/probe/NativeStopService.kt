@@ -54,7 +54,7 @@ class NativeStopService:Service(){
             val link=StopHostLink(mode,run,namespace)
             synchronized(jobs){if(closing)return;links.add(link)}
             try{NativeInputStore(this,namespace).use{store->
-                val deadline=SystemClock.elapsedRealtime()+20000;val products=linkedSetOf<String>()
+                val deadline=SystemClock.elapsedRealtime()+45000;val products=linkedSetOf<String>()
                 fun barriers(){val stops=read(deadline){store.pendingStops()};for(index in 0 until stops.length()){val item=stops.getJSONObject(index);products.add(item.getString("id"));link.offer(item.getJSONObject("control"))}}
                 ExecutionAccess(this).use{transport->
                 val sweep=NativeStopSweep(store){row->

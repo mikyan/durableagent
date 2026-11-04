@@ -16,6 +16,56 @@ from pathlib import Path
 from durable_executor import Executor, ExecutionFault
 
 
+class ExistingExecutorContract(unittest.TestCase):
+    def test_existing_only_open_retains_identity_and_original_receipt(self):
+        with tempfile.TemporaryDirectory(prefix="existing-executor-") as directory:
+            root = Path(directory) / "authority"
+            with_executor = Executor(root)
+            identity = with_executor.identity()
+            receipt = with_executor.cancel("never-started", "user")
+            with_executor.close()
+            existing = Executor(root, existing=True)
+            try:
+                self.assertEqual(identity, existing.identity())
+                self.assertEqual(receipt, existing.query("never-started"))
+            finally:
+                existing.close()
+
+    def test_existing_only_missing_ledger_never_creates_a_replacement(self):
+        with tempfile.TemporaryDirectory(prefix="existing-executor-") as directory:
+            root = Path(directory) / "absent"
+            with self.assertRaisesRegex(ExecutionFault, "LEDGER_REQUIRED"):
+                Executor(root, existing=True)
+            self.assertFalse(root.exists())
+            initialized = Executor(root)
+            initialized.close()
+            (root / "execution.sqlite").unlink()
+            before = {str(p.relative_to(root)): p.read_bytes() for p in root.rglob('*') if p.is_file()}
+            with self.assertRaisesRegex(ExecutionFault, "LEDGER_REQUIRED"):
+                Executor(root, existing=True)
+            self.assertEqual(before, {str(p.relative_to(root)): p.read_bytes() for p in root.rglob('*') if p.is_file()})
+            self.assertFalse((root / "execution.sqlite").exists())
+
+    def test_existing_only_damaged_identity_or_schema_fails_without_repair(self):
+        for fault in ["DELETE FROM identity WHERE key='ledgerEpoch'", "DROP TABLE prepared"]:
+            with self.subTest(fault=fault), tempfile.TemporaryDirectory(prefix="existing-executor-") as directory:
+                root = Path(directory)
+                initialized = Executor(root)
+                initialized.close()
+                db = sqlite3.connect(root / "execution.sqlite")
+                db.execute(fault)
+                db.commit()
+                original = db.execute("SELECT key,value FROM identity ORDER BY key").fetchall()
+                schema = db.execute("SELECT name,sql FROM sqlite_master ORDER BY name").fetchall()
+                db.close()
+                with self.assertRaisesRegex(ExecutionFault, "LEDGER_(IDENTITY|SCHEMA)_UNAVAILABLE"):
+                    Executor(root, existing=True)
+                db = sqlite3.connect(root / "execution.sqlite")
+                self.assertEqual(original, db.execute("SELECT key,value FROM identity ORDER BY key").fetchall())
+                self.assertEqual(schema, db.execute("SELECT name,sql FROM sqlite_master ORDER BY name").fetchall())
+                db.close()
+
+
 class ExecutionContract(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="durable-execution-test-")
@@ -24,6 +74,7 @@ class ExecutionContract(unittest.TestCase):
         self.workspace.mkdir()
         self.endpoint = Executor(self.root / "authority")
         self.requests = set()
+        self.expected_unknown = set()
 
     def tearDown(self):
         safe = False
@@ -49,6 +100,11 @@ class ExecutionContract(unittest.TestCase):
                 if not unresolved:
                     safe = True
                     break
+                if {row["executionId"] for row in unresolved} == self.expected_unknown and all(row["state"] == "unknown" for row in unresolved):
+                    # These crash contracts deliberately cannot confirm the effect scope.
+                    # Preserve their ledger and originals; do not manufacture cleanup proof.
+                    print("Expected unknown scopes retained: " + json.dumps(sorted(self.expected_unknown)), flush=True)
+                    return
                 if any(row["state"] == "unknown" for row in unresolved) or time.monotonic() >= deadline:
                     self.fail("fixture scopes unconfirmed; preserved " + str(self.root))
                 time.sleep(0.03)
@@ -262,6 +318,7 @@ class ExecutionContract(unittest.TestCase):
             # The surviving fixture command has a bounded natural lifetime, even in the failing implementation.
             time.sleep(1.2)
         self.assertEqual((self.workspace / "once-effect").read_text(), "once\n")
+        self.expected_unknown.add(request["executionId"])
 
     def test_large_output_reconnects_with_bounded_pages_and_complete_raw_reference(self):
         request = self.request("large-output")
@@ -560,6 +617,7 @@ endpoint.close()
         self.assertEqual(self.endpoint.start(request["executionId"], receipt["finalDigest"])["state"], "unknown")
         self.assertEqual(self.endpoint.prepare(request)["state"], "unknown")
         self.assertFalse((self.workspace / "crash-window-effect").exists())
+        self.expected_unknown.add(request["executionId"])
 
     def test_cancel_before_acceptance_survives_reopen_and_rejects_late_prepare(self):
         request = self.request("cancel-before-accept")
