@@ -1,0 +1,40 @@
+docs/evidence/t10-saf/README.md
+  s_467dcb949b5b60::t_a04a34718b34a2 1-18,20-36,38-48
+  s_467dcb949b5b60::t_984f0b3d8b9439 19,37
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/ControlReceiver.java
+  s_467dcb949b5b60::t_8b88b759ed19e0 19-20,22
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/DocumentProvider.java
+  s_467dcb949b5b60::t_8b88b759ed19e0 48-56
+android/app/src/androidTest/java/dev/durableagent/probe/NativeDocumentTest.kt
+  s_467dcb949b5b60::t_8b88b759ed19e0 37-79
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentStore.kt
+  s_467dcb949b5b60::t_8b88b759ed19e0 62
+docs/evidence/t10-saf/t10-saf-green01-device.log
+  s_467dcb949b5b60::t_84ff3e359f1326 1-27
+docs/evidence/t10-saf/t10-saf-green02-device.log
+  s_467dcb949b5b60::t_18a695ea8d0799 1-25
+docs/evidence/t10-saf/t10-saf-green03-device.log
+  s_467dcb949b5b60::t_072ff9a81723bb 1-25
+docs/evidence/t10-saf/t10-saf-red01-device.log
+  s_467dcb949b5b60::t_c847a52916b429 1-43
+docs/evidence/t10-saf/t10-saf-red02-device.log
+  s_467dcb949b5b60::t_682809ca83eb40 1-32
+docs/evidence/t10-saf/t10-saf-red03-device.log
+  s_467dcb949b5b60::t_7853a8648fb92e 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "b25a48e7c19f905eb2a014850d5598c61edd9a44",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
