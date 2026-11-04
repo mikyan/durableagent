@@ -1,0 +1,21 @@
+android/app/src/androidTest/java/dev/durableagent/probe/RecoveryJobApplicationTest.kt
+  s_467dcb949b5b60::t_e530f54a3ca9a4 5-6,9,16,42-45,47-48,50-55,57-63,65-66
+  s_467dcb949b5b60::t_555af565c58912 46,49,56,64
+  s_467dcb949b5b60::t_b9e3cfe3c97b7d 67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "31b2ed887f671ea0ad4dfc6fef13924095706b3a",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
