@@ -1,0 +1,44 @@
+android/settings.gradle.kts
+  s_467dcb949b5b60::t_83a302996e364d 6
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_467dcb949b5b60::t_04f2210c93b4dd 19,26,34,50,60,81,83
+android/app/src/debug/AndroidManifest.xml
+  s_467dcb949b5b60::t_83a302996e364d 3
+android/app/src/androidTest/java/dev/durableagent/probe/NativeDocumentTest.kt
+  s_467dcb949b5b60::t_04f2210c93b4dd 1-67
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/DocumentProvider.java
+  s_467dcb949b5b60::t_83a302996e364d 1-12,14,25-28,41-44,46-50
+  s_467dcb949b5b60::t_f189975d1f9157 13,15-24,29-40,45
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentBridge.kt
+  s_467dcb949b5b60::t_83a302996e364d 1-59
+android/document-fixture/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_83a302996e364d 1-8
+android/app/build.gradle.kts
+  s_467dcb949b5b60::t_a148ed357542d2 7
+android/document-fixture/README.md
+  s_467dcb949b5b60::t_fbd97f9a5f3499 1-7
+android/document-fixture/build.gradle.kts
+  s_467dcb949b5b60::t_83a302996e364d 1-8
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/ControlReceiver.java
+  s_467dcb949b5b60::t_83a302996e364d 1-25
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentStore.kt
+  s_467dcb949b5b60::t_83a302996e364d 1-21
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/Fixture.java
+  s_467dcb949b5b60::t_83a302996e364d 1-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "dcf7d0b0aa9fa56a336b4b0e95bee35e6da7cfb5",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
