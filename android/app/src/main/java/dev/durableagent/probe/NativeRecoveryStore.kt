@@ -51,6 +51,7 @@ class NativeRecoveryStore(context:Context,namespace:String):AutoCloseable {
         }}
     }
     fun completeNotification(identity:String):Unit {identity(identity);access{db->db.execSQL("UPDATE completions SET published=1 WHERE identity=?",arrayOf(identity))}}
+    fun claimNotification(identity:String):Boolean=error("COMPLETION_ATTEMPT_NOT_IMPLEMENTED")
     private fun identity(value:String){require(value.length in 1..256&&value.none{it.code<32})}
     private fun put(db:SQLiteDatabase,key:String,value:JSONObject){db.execSQL("INSERT INTO metadata(key,data) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET data=excluded.data",arrayOf(key,value.toString()))}
     private fun get(db:SQLiteDatabase,key:String):JSONObject?=db.rawQuery("SELECT data FROM metadata WHERE key=?",arrayOf(key)).use{if(it.moveToFirst())JSONObject(it.getString(0))else null}
