@@ -1,0 +1,26 @@
+{
+  "name": "portrait",
+  "steps": [
+    {
+      "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+    },
+    {
+      "click": "[data-testid=create-conversation]"
+    },
+    {
+      "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+    },
+    {
+      "fill": "原生边距回归草稿 🌍"
+    },
+    {
+      "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+    },
+    {
+      "shot": "portrait-ime"
+    },
+    {
+      "evaluate": "localStorage.getItem('durableagent.ui.selectedConversation')"
+    }
+  ]
+}

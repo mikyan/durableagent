@@ -1,0 +1,506 @@
+{
+  "run": "e1b84ee8-606a-4bee-b11d-c9b89fa6d247",
+  "draft": "原生边距回归草稿 🌍",
+  "scope": "Actual portrait/landscape IME bounds and rotation retain one unsent draft. Fixture mode, no model input.",
+  "started": "2026-11-04T13:04:52.354Z",
+  "baseline": {
+    "ime": "0",
+    "auto": "1",
+    "rotation": "0"
+  },
+  "portrait": {
+    "plan": {
+      "name": "portrait",
+      "steps": [
+        {
+          "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+        },
+        {
+          "click": "[data-testid=create-conversation]"
+        },
+        {
+          "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+        },
+        {
+          "fill": "原生边距回归草稿 🌍"
+        },
+        {
+          "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+        },
+        {
+          "shot": "portrait-ime"
+        },
+        {
+          "evaluate": "localStorage.getItem('durableagent.ui.selectedConversation')"
+        }
+      ]
+    },
+    "started": "2026-11-04T13:04:53.531Z",
+    "pid": "9051",
+    "steps": [
+      {
+        "step": {
+          "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+        },
+        "value": true
+      },
+      {
+        "step": {
+          "click": "[data-testid=create-conversation]"
+        }
+      },
+      {
+        "step": {
+          "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+        },
+        "value": true
+      },
+      {
+        "step": {
+          "fill": "原生边距回归草稿 🌍"
+        }
+      },
+      {
+        "step": {
+          "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+        },
+        "value": true
+      },
+      {
+        "step": {
+          "shot": "portrait-ime"
+        },
+        "value": {
+          "width": 412,
+          "height": 528,
+          "dpr": 2.625,
+          "title": "新会话",
+          "active": "fc9a1ea6-1dc5-418f-9d27-9cacaf611b57",
+          "draft": "saved",
+          "controls": [
+            {
+              "label": "打开会话列表",
+              "disabled": false,
+              "rect": {
+                "x": 14,
+                "y": 7,
+                "width": 46,
+                "height": 46,
+                "top": 7,
+                "right": 60,
+                "bottom": 53,
+                "left": 14
+              }
+            },
+            {
+              "label": "新建会话",
+              "disabled": false,
+              "rect": {
+                "x": 352.1845397949219,
+                "y": 7,
+                "width": 46,
+                "height": 46,
+                "top": 7,
+                "right": 398.1845397949219,
+                "bottom": 53,
+                "left": 352.1845397949219
+              }
+            },
+            {
+              "label": "会话详情",
+              "disabled": false,
+              "rect": {
+                "x": 25.761905670166016,
+                "y": 423.21429443359375,
+                "width": 38,
+                "height": 38,
+                "top": 423.21429443359375,
+                "right": 63.761905670166016,
+                "bottom": 461.21429443359375,
+                "left": 25.761905670166016
+              }
+            },
+            {
+              "label": "添加附件",
+              "disabled": false,
+              "rect": {
+                "x": 71.76190948486328,
+                "y": 426.21429443359375,
+                "width": 28,
+                "height": 38,
+                "top": 426.21429443359375,
+                "right": 99.76190948486328,
+                "bottom": 464.21429443359375,
+                "left": 71.76190948486328
+              }
+            },
+            {
+              "label": "发送消息",
+              "disabled": false,
+              "rect": {
+                "x": 342.4285888671875,
+                "y": 420.21429443359375,
+                "width": 44,
+                "height": 44,
+                "top": 420.21429443359375,
+                "right": 386.4285888671875,
+                "bottom": 464.21429443359375,
+                "left": 342.4285888671875
+              }
+            }
+          ],
+          "nativeView": {
+            "attached": true,
+            "empty": false,
+            "height": 1385,
+            "never_attached": false,
+            "screenX": 0,
+            "screenY": 132,
+            "visible": true,
+            "width": 1080
+          }
+        }
+      },
+      {
+        "step": {
+          "evaluate": "localStorage.getItem('durableagent.ui.selectedConversation')"
+        },
+        "value": "fc9a1ea6-1dc5-418f-9d27-9cacaf611b57"
+      }
+    ],
+    "passed": true,
+    "completed": "2026-11-04T13:04:59.146Z"
+  },
+  "portraitInsetSources": [
+    "        InsetsSource id=3 type=ime frame=[0,1517][1080,2400] visibleFrame=[0,1517][1080,2400] visible=true flags= sideHint=BOTTOM boundingRects=null\r",
+    "        InsetsSource id=74480000 type=statusBars frame=[0,0][1080,132] visible=true flags= sideHint=TOP boundingRects=null\r",
+    "        mSource=InsetsSource id=74480000 type=statusBars frame=[0,0][1080,132] visible=true flags= sideHint=TOP boundingRects=null\r",
+    "        mSource=InsetsSource id=3 type=ime frame=[0,1517][1080,2400] visibleFrame=[0,1517][1080,2400] visible=true flags= sideHint=BOTTOM boundingRects=null\r"
+  ],
+  "portraitBounds": {
+    "statusBottom": 132,
+    "imeTop": 1517,
+    "nativeView": {
+      "attached": true,
+      "empty": false,
+      "height": 1385,
+      "never_attached": false,
+      "screenX": 0,
+      "screenY": 132,
+      "visible": true,
+      "width": 1080
+    },
+    "controls": [
+      {
+        "label": "打开会话列表",
+        "disabled": false,
+        "rect": {
+          "x": 14,
+          "y": 7,
+          "width": 46,
+          "height": 46,
+          "top": 7,
+          "right": 60,
+          "bottom": 53,
+          "left": 14
+        }
+      },
+      {
+        "label": "新建会话",
+        "disabled": false,
+        "rect": {
+          "x": 352.1845397949219,
+          "y": 7,
+          "width": 46,
+          "height": 46,
+          "top": 7,
+          "right": 398.1845397949219,
+          "bottom": 53,
+          "left": 352.1845397949219
+        }
+      },
+      {
+        "label": "会话详情",
+        "disabled": false,
+        "rect": {
+          "x": 25.761905670166016,
+          "y": 423.21429443359375,
+          "width": 38,
+          "height": 38,
+          "top": 423.21429443359375,
+          "right": 63.761905670166016,
+          "bottom": 461.21429443359375,
+          "left": 25.761905670166016
+        }
+      },
+      {
+        "label": "添加附件",
+        "disabled": false,
+        "rect": {
+          "x": 71.76190948486328,
+          "y": 426.21429443359375,
+          "width": 28,
+          "height": 38,
+          "top": 426.21429443359375,
+          "right": 99.76190948486328,
+          "bottom": 464.21429443359375,
+          "left": 71.76190948486328
+        }
+      },
+      {
+        "label": "发送消息",
+        "disabled": false,
+        "rect": {
+          "x": 342.4285888671875,
+          "y": 420.21429443359375,
+          "width": 44,
+          "height": 44,
+          "top": 420.21429443359375,
+          "right": 386.4285888671875,
+          "bottom": 464.21429443359375,
+          "left": 342.4285888671875
+        }
+      }
+    ]
+  },
+  "conversationId": "fc9a1ea6-1dc5-418f-9d27-9cacaf611b57",
+  "landscape": {
+    "plan": {
+      "name": "landscape",
+      "steps": [
+        {
+          "wait": "innerWidth>innerHeight&&document.querySelector('[data-testid=message-input]')?.disabled===false"
+        },
+        {
+          "evaluate": "document.querySelector('[data-testid=message-input]').value",
+          "assert": "原生边距回归草稿 🌍"
+        },
+        {
+          "click": "[data-testid=message-input]"
+        },
+        {
+          "shot": "landscape-ime"
+        }
+      ]
+    },
+    "started": "2026-11-04T13:05:01.241Z",
+    "pid": "9051",
+    "steps": [
+      {
+        "step": {
+          "wait": "innerWidth>innerHeight&&document.querySelector('[data-testid=message-input]')?.disabled===false"
+        },
+        "value": true
+      },
+      {
+        "step": {
+          "evaluate": "document.querySelector('[data-testid=message-input]').value",
+          "assert": "原生边距回归草稿 🌍"
+        },
+        "value": "原生边距回归草稿 🌍"
+      },
+      {
+        "step": {
+          "click": "[data-testid=message-input]"
+        }
+      },
+      {
+        "step": {
+          "shot": "landscape-ime"
+        },
+        "value": {
+          "width": 864,
+          "height": 122,
+          "dpr": 2.625,
+          "title": "新会话",
+          "active": "fc9a1ea6-1dc5-418f-9d27-9cacaf611b57",
+          "draft": "saved",
+          "controls": [
+            {
+              "label": "打开会话列表",
+              "disabled": false,
+              "rect": {
+                "x": 14,
+                "y": 7,
+                "width": 46,
+                "height": 46,
+                "top": 7,
+                "right": 60,
+                "bottom": 53,
+                "left": 14
+              }
+            },
+            {
+              "label": "新建会话",
+              "disabled": false,
+              "rect": {
+                "x": 803.9940795898438,
+                "y": 7,
+                "width": 46,
+                "height": 46,
+                "top": 7,
+                "right": 849.9940795898438,
+                "bottom": 53,
+                "left": 803.9940795898438
+              }
+            },
+            {
+              "label": "会话详情",
+              "disabled": false,
+              "rect": {
+                "x": 61.761905670166016,
+                "y": 81.76190948486328,
+                "width": 38,
+                "height": 38,
+                "top": 81.76190948486328,
+                "right": 99.76190567016602,
+                "bottom": 119.76190948486328,
+                "left": 61.761905670166016
+              }
+            },
+            {
+              "label": "添加附件",
+              "disabled": false,
+              "rect": {
+                "x": 107.76190948486328,
+                "y": 84.76190948486328,
+                "width": 28,
+                "height": 38,
+                "top": 84.76190948486328,
+                "right": 135.76190948486328,
+                "bottom": 122.76190948486328,
+                "left": 107.76190948486328
+              }
+            },
+            {
+              "label": "发送消息",
+              "disabled": false,
+              "rect": {
+                "x": 758.2380981445312,
+                "y": 78.76190948486328,
+                "width": 44,
+                "height": 44,
+                "top": 78.76190948486328,
+                "right": 802.2380981445312,
+                "bottom": 122.76190948486328,
+                "left": 758.2380981445312
+              }
+            }
+          ],
+          "nativeView": {
+            "attached": true,
+            "empty": false,
+            "height": 320,
+            "never_attached": false,
+            "screenX": 132,
+            "screenY": 74,
+            "visible": true,
+            "width": 2268
+          }
+        }
+      }
+    ],
+    "passed": true,
+    "completed": "2026-11-04T13:05:05.129Z"
+  },
+  "landscapeInsetSources": [
+    "        InsetsSource id=3 type=ime frame=[132,394][2400,1080] visibleFrame=[132,394][2400,1080] visible=true flags= sideHint=BOTTOM boundingRects=null\r",
+    "        InsetsSource id=74480000 type=statusBars frame=[0,0][2400,74] visible=true flags= sideHint=TOP boundingRects=null\r",
+    "        mSource=InsetsSource id=74480000 type=statusBars frame=[0,0][2400,74] visible=true flags= sideHint=TOP boundingRects=null\r",
+    "        mSource=InsetsSource id=3 type=ime frame=[132,394][2400,1080] visibleFrame=[132,394][2400,1080] visible=true flags= sideHint=BOTTOM boundingRects=null\r"
+  ],
+  "landscapeBounds": {
+    "statusBottom": 74,
+    "imeTop": 394,
+    "nativeView": {
+      "attached": true,
+      "empty": false,
+      "height": 320,
+      "never_attached": false,
+      "screenX": 132,
+      "screenY": 74,
+      "visible": true,
+      "width": 2268
+    },
+    "controls": [
+      {
+        "label": "打开会话列表",
+        "disabled": false,
+        "rect": {
+          "x": 14,
+          "y": 7,
+          "width": 46,
+          "height": 46,
+          "top": 7,
+          "right": 60,
+          "bottom": 53,
+          "left": 14
+        }
+      },
+      {
+        "label": "新建会话",
+        "disabled": false,
+        "rect": {
+          "x": 803.9940795898438,
+          "y": 7,
+          "width": 46,
+          "height": 46,
+          "top": 7,
+          "right": 849.9940795898438,
+          "bottom": 53,
+          "left": 803.9940795898438
+        }
+      },
+      {
+        "label": "会话详情",
+        "disabled": false,
+        "rect": {
+          "x": 61.761905670166016,
+          "y": 81.76190948486328,
+          "width": 38,
+          "height": 38,
+          "top": 81.76190948486328,
+          "right": 99.76190567016602,
+          "bottom": 119.76190948486328,
+          "left": 61.761905670166016
+        }
+      },
+      {
+        "label": "添加附件",
+        "disabled": false,
+        "rect": {
+          "x": 107.76190948486328,
+          "y": 84.76190948486328,
+          "width": 28,
+          "height": 38,
+          "top": 84.76190948486328,
+          "right": 135.76190948486328,
+          "bottom": 122.76190948486328,
+          "left": 107.76190948486328
+        }
+      },
+      {
+        "label": "发送消息",
+        "disabled": false,
+        "rect": {
+          "x": 758.2380981445312,
+          "y": 78.76190948486328,
+          "width": 44,
+          "height": 44,
+          "top": 78.76190948486328,
+          "right": 802.2380981445312,
+          "bottom": 122.76190948486328,
+          "left": 758.2380981445312
+        }
+      }
+    ]
+  },
+  "error": "AssertionError [ERR_ASSERTION]: 发送消息 avoids system bars and IME",
+  "stopResult": {
+    "exitStatus": 255,
+    "stdout": "Stopping service: Intent { cmp=dev.durableagent.probe/.ApplicationService }\r\n",
+    "stderr": "Service stopped\r\n"
+  },
+  "finalService": "ACTIVITY MANAGER SERVICES (dumpsys activity services)\r\n  (nothing)",
+  "completed": "2026-11-04T13:05:09.042Z"
+}

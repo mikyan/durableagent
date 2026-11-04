@@ -1,0 +1,409 @@
+{
+  "plan": {
+    "name": "t15-auxiliary-live03",
+    "steps": [
+      {
+        "when": "(()=>{const e=document.querySelector('[data-testid=toggle-timeline]');if(!e)return true;const r=e.getBoundingClientRect();return r.top<180||r.bottom>innerHeight})()",
+        "swipe": [
+          1170,
+          690,
+          1170,
+          250,
+          450
+        ]
+      },
+      {
+        "when": "(()=>{const e=document.querySelector('[data-testid=toggle-timeline]');if(!e)return true;const r=e.getBoundingClientRect();return r.top<180||r.bottom>innerHeight})()",
+        "swipe": [
+          1170,
+          690,
+          1170,
+          250,
+          450
+        ]
+      },
+      {
+        "when": "(()=>{const e=document.querySelector('[data-testid=toggle-timeline]');if(!e)return true;const r=e.getBoundingClientRect();return r.top<180||r.bottom>innerHeight})()",
+        "swipe": [
+          1170,
+          690,
+          1170,
+          250,
+          450
+        ]
+      },
+      {
+        "when": "(()=>{const e=document.querySelector('[data-testid=toggle-timeline]');if(!e)return true;const r=e.getBoundingClientRect();return r.top<180||r.bottom>innerHeight})()",
+        "swipe": [
+          1170,
+          690,
+          1170,
+          250,
+          450
+        ]
+      },
+      {
+        "when": "(()=>{const e=document.querySelector('[data-testid=toggle-timeline]');if(!e)return true;const r=e.getBoundingClientRect();return r.top<180||r.bottom>innerHeight})()",
+        "swipe": [
+          1170,
+          690,
+          1170,
+          250,
+          450
+        ]
+      },
+      {
+        "click": "[data-testid=toggle-timeline]"
+      },
+      {
+        "wait": "!!document.querySelector('[data-testid=extension-timeline]')"
+      },
+      {
+        "shot": "auxiliary-timeline-running"
+      },
+      {
+        "click": "[aria-label=关闭辅助区域]"
+      },
+      {
+        "evaluate": "document.querySelector('[data-testid=conversation-status]').dataset.phase",
+        "assert": "running"
+      },
+      {
+        "evaluate": "document.querySelector('[data-testid=message-input]').value",
+        "assert": "辅助区域切换后保留的未发送草稿。"
+      },
+      {
+        "shot": "auxiliary-closed-still-running"
+      },
+      {
+        "click": "[data-testid=stop-generation]"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=conversation-status]')?.dataset.phase==='stopped'"
+      }
+    ]
+  },
+  "started": "2026-11-04T10:58:55.838Z",
+  "pid": "27242",
+  "steps": [
+    {
+      "step": {
+        "when": "(()=>{const e=document.querySelector('[data-testid=toggle-timeline]');if(!e)return true;const r=e.getBoundingClientRect();return r.top<180||r.bottom>innerHeight})()",
+        "swipe": [
+          1170,
+          690,
+          1170,
+          250,
+          450
+        ]
+      }
+    },
+    {
+      "step": {
+        "when": "(()=>{const e=document.querySelector('[data-testid=toggle-timeline]');if(!e)return true;const r=e.getBoundingClientRect();return r.top<180||r.bottom>innerHeight})()",
+        "swipe": [
+          1170,
+          690,
+          1170,
+          250,
+          450
+        ]
+      },
+      "skipped": true
+    },
+    {
+      "step": {
+        "when": "(()=>{const e=document.querySelector('[data-testid=toggle-timeline]');if(!e)return true;const r=e.getBoundingClientRect();return r.top<180||r.bottom>innerHeight})()",
+        "swipe": [
+          1170,
+          690,
+          1170,
+          250,
+          450
+        ]
+      },
+      "skipped": true
+    },
+    {
+      "step": {
+        "when": "(()=>{const e=document.querySelector('[data-testid=toggle-timeline]');if(!e)return true;const r=e.getBoundingClientRect();return r.top<180||r.bottom>innerHeight})()",
+        "swipe": [
+          1170,
+          690,
+          1170,
+          250,
+          450
+        ]
+      },
+      "skipped": true
+    },
+    {
+      "step": {
+        "when": "(()=>{const e=document.querySelector('[data-testid=toggle-timeline]');if(!e)return true;const r=e.getBoundingClientRect();return r.top<180||r.bottom>innerHeight})()",
+        "swipe": [
+          1170,
+          690,
+          1170,
+          250,
+          450
+        ]
+      },
+      "skipped": true
+    },
+    {
+      "step": {
+        "click": "[data-testid=toggle-timeline]"
+      }
+    },
+    {
+      "step": {
+        "wait": "!!document.querySelector('[data-testid=extension-timeline]')"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "shot": "auxiliary-timeline-running"
+      },
+      "value": {
+        "width": 1280,
+        "height": 800,
+        "dpr": 1.5,
+        "title": "新会话",
+        "active": "c679ca53-9f1e-452e-b958-6ed35cd81792",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 294,
+              "y": 63,
+              "width": 46,
+              "height": 46,
+              "top": 63,
+              "right": 340,
+              "bottom": 109,
+              "left": 294
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 868,
+              "y": 63,
+              "width": 46,
+              "height": 46,
+              "top": 63,
+              "right": 914,
+              "bottom": 109,
+              "left": 868
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 293.66668701171875,
+              "y": 667.5,
+              "width": 38,
+              "height": 38,
+              "top": 667.5,
+              "right": 331.66668701171875,
+              "bottom": 705.5,
+              "left": 293.66668701171875
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 339.66668701171875,
+              "y": 670.5,
+              "width": 28,
+              "height": 38,
+              "top": 670.5,
+              "right": 367.66668701171875,
+              "bottom": 708.5,
+              "left": 339.66668701171875
+            }
+          },
+          {
+            "label": "停止生成",
+            "disabled": false,
+            "rect": {
+              "x": 834.3333740234375,
+              "y": 670.5,
+              "width": 28,
+              "height": 38,
+              "top": 670.5,
+              "right": 862.3333740234375,
+              "bottom": 708.5,
+              "left": 834.3333740234375
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": false,
+            "rect": {
+              "x": 870.3333740234375,
+              "y": 664.5,
+              "width": 44,
+              "height": 44,
+              "top": 664.5,
+              "right": 914.3333740234375,
+              "bottom": 708.5,
+              "left": 870.3333740234375
+            }
+          },
+          {
+            "label": "关闭辅助区域",
+            "disabled": false,
+            "rect": {
+              "x": 1210,
+              "y": 64,
+              "width": 56,
+              "height": 39.333335876464844,
+              "top": 64,
+              "right": 1266,
+              "bottom": 103.33333587646484,
+              "left": 1210
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "click": "[aria-label=关闭辅助区域]"
+      }
+    },
+    {
+      "step": {
+        "evaluate": "document.querySelector('[data-testid=conversation-status]').dataset.phase",
+        "assert": "running"
+      },
+      "value": "running"
+    },
+    {
+      "step": {
+        "evaluate": "document.querySelector('[data-testid=message-input]').value",
+        "assert": "辅助区域切换后保留的未发送草稿。"
+      },
+      "value": "辅助区域切换后保留的未发送草稿。"
+    },
+    {
+      "step": {
+        "shot": "auxiliary-closed-still-running"
+      },
+      "value": {
+        "width": 1280,
+        "height": 800,
+        "dpr": 1.5,
+        "title": "新会话",
+        "active": "c679ca53-9f1e-452e-b958-6ed35cd81792",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 294,
+              "y": 63,
+              "width": 46,
+              "height": 46,
+              "top": 63,
+              "right": 340,
+              "bottom": 109,
+              "left": 294
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 1126,
+              "y": 63,
+              "width": 46,
+              "height": 46,
+              "top": 63,
+              "right": 1172,
+              "bottom": 109,
+              "left": 1126
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 362.66668701171875,
+              "y": 667.5,
+              "width": 38,
+              "height": 38,
+              "top": 667.5,
+              "right": 400.66668701171875,
+              "bottom": 705.5,
+              "left": 362.66668701171875
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 408.66668701171875,
+              "y": 670.5,
+              "width": 28,
+              "height": 38,
+              "top": 670.5,
+              "right": 436.66668701171875,
+              "bottom": 708.5,
+              "left": 408.66668701171875
+            }
+          },
+          {
+            "label": "停止生成",
+            "disabled": false,
+            "rect": {
+              "x": 1023.3333740234375,
+              "y": 670.5,
+              "width": 28,
+              "height": 38,
+              "top": 670.5,
+              "right": 1051.3333740234375,
+              "bottom": 708.5,
+              "left": 1023.3333740234375
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": false,
+            "rect": {
+              "x": 1059.3333740234375,
+              "y": 664.5,
+              "width": 44,
+              "height": 44,
+              "top": 664.5,
+              "right": 1103.3333740234375,
+              "bottom": 708.5,
+              "left": 1059.3333740234375
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "click": "[data-testid=stop-generation]"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=conversation-status]')?.dataset.phase==='stopped'"
+      },
+      "value": true
+    }
+  ],
+  "passed": true,
+  "completed": "2026-11-04T10:59:04.337Z"
+}

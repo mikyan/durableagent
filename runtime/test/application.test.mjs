@@ -181,3 +181,18 @@ test('a due persisted retry stays dormant until reopened configuration is ready'
     await assert.rejects(call(app,'send',{id:'sleeping',text:'不得提前唤醒',actionId:'sleep-input'}),{code:'CONFIG_LOADING'});release();await starting;await until(async()=>(await call(app,'open',{id:'sleeping'})).phase==='done');assert.equal(requests,1);assert.equal((await call(app,'history',{id:'sleeping'})).items.filter(x=>x.role==='user').length,1);
   }finally{release();await app.close();await rm(directory,{recursive:true,force:true});}
 });
+
+test('context presentation reads current SDK model context, never accumulated usage or another conversation',async()=>{
+  const directory=await mkdtemp(join(tmpdir(),'durable-context-'));const app=new Application({path:join(directory,'app.sqlite'),...validationConfiguration()});
+  try{
+    await app.start();const first=(await call(app,'create',{creationId:'context-first'})).conversation,second=(await call(app,'create',{creationId:'context-second'})).conversation;
+    const empty=await call(app,'context.get',{id:first.id});
+    assert.equal(empty.state,'estimated');assert.equal(empty.tokens,0);assert.equal(empty.modelLimit,1000000);assert.equal(empty.scope,'committed-messages');
+    await call(app,'send',{id:first.id,text:'核对当前上下文，不是累计用量。'.repeat(80),actionId:'context-input'});
+    await until(async()=>(await call(app,'open',{id:first.id})).phase==='done');
+    const used=await call(app,'context.get',{id:first.id});
+    assert.ok(used.tokens>empty.tokens);assert.equal(used.messages,3);assert.match(used.note,/不含/);
+    assert.equal((await call(app,'context.get',{id:second.id})).tokens,0);
+    assert.equal((await call(app,'history',{id:first.id})).items.length,2);
+  }finally{await app.close();await rm(directory,{recursive:true,force:true});}
+});

@@ -1,0 +1,32 @@
+
+> @durableagent/ui@0.1.0 pretest
+> npm run build --prefix ../runtime
+
+
+> @durableagent/runtime-probe@0.1.0 build
+> tsc
+
+
+> @durableagent/ui@0.1.0 test
+> vitest run --maxWorkers=2
+
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/ui
+
+(node:88668) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:90872) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:71572) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:85696) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  27 passed (27)
+      Tests  99 passed (99)
+   Start at  21:24:52
+   Duration  24.13s (environment 49%, tests 36%, import 12%, transform 2%)
+
+    Isolate  27 workers spawned · ~941ms startup each (spawn + environment, per file)
+             at least ~11.76s faster with isolate: false — reuses workers across files instead of one per file
+

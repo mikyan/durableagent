@@ -1,0 +1,139 @@
+{
+  "plan": {
+    "name": "landscape",
+    "steps": [
+      {
+        "wait": "innerWidth>innerHeight&&document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      {
+        "evaluate": "document.querySelector('[data-testid=message-input]').value",
+        "assert": "原生边距回归草稿 🌍"
+      },
+      {
+        "click": "[data-testid=message-input]"
+      },
+      {
+        "shot": "landscape-ime"
+      }
+    ]
+  },
+  "started": "2026-11-04T13:05:01.241Z",
+  "pid": "9051",
+  "steps": [
+    {
+      "step": {
+        "wait": "innerWidth>innerHeight&&document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "evaluate": "document.querySelector('[data-testid=message-input]').value",
+        "assert": "原生边距回归草稿 🌍"
+      },
+      "value": "原生边距回归草稿 🌍"
+    },
+    {
+      "step": {
+        "click": "[data-testid=message-input]"
+      }
+    },
+    {
+      "step": {
+        "shot": "landscape-ime"
+      },
+      "value": {
+        "width": 864,
+        "height": 122,
+        "dpr": 2.625,
+        "title": "新会话",
+        "active": "fc9a1ea6-1dc5-418f-9d27-9cacaf611b57",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 14,
+              "y": 7,
+              "width": 46,
+              "height": 46,
+              "top": 7,
+              "right": 60,
+              "bottom": 53,
+              "left": 14
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 803.9940795898438,
+              "y": 7,
+              "width": 46,
+              "height": 46,
+              "top": 7,
+              "right": 849.9940795898438,
+              "bottom": 53,
+              "left": 803.9940795898438
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 61.761905670166016,
+              "y": 81.76190948486328,
+              "width": 38,
+              "height": 38,
+              "top": 81.76190948486328,
+              "right": 99.76190567016602,
+              "bottom": 119.76190948486328,
+              "left": 61.761905670166016
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 107.76190948486328,
+              "y": 84.76190948486328,
+              "width": 28,
+              "height": 38,
+              "top": 84.76190948486328,
+              "right": 135.76190948486328,
+              "bottom": 122.76190948486328,
+              "left": 107.76190948486328
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": false,
+            "rect": {
+              "x": 758.2380981445312,
+              "y": 78.76190948486328,
+              "width": 44,
+              "height": 44,
+              "top": 78.76190948486328,
+              "right": 802.2380981445312,
+              "bottom": 122.76190948486328,
+              "left": 758.2380981445312
+            }
+          }
+        ],
+        "nativeView": {
+          "attached": true,
+          "empty": false,
+          "height": 320,
+          "never_attached": false,
+          "screenX": 132,
+          "screenY": 74,
+          "visible": true,
+          "width": 2268
+        }
+      }
+    }
+  ],
+  "passed": true,
+  "completed": "2026-11-04T13:05:05.129Z"
+}

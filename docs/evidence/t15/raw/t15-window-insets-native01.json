@@ -1,0 +1,126 @@
+{
+  "started": "2026-11-04T12:59:52.746Z",
+  "scope": "Fresh Activity then two retained-Activity input-only domain switches; real menu hit targets must avoid Android system bars and accept physical taps. No model input or host.",
+  "freshRun": "3db20144-4ab5-4e68-8301-cb0394d76b41",
+  "freshLaunch": "Starting: Intent { flg=0x10008000 cmp=dev.durableagent.probe/.AgentActivity (has extras) }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: dev.durableagent.probe/.AgentActivity\r\nTotalTime: 1625\r\nWaitTime: 1627\r\nComplete",
+  "fresh": {
+    "uiPid": "9051",
+    "webViewTarget": "E539F025B54D4ED0B5B1CC1059C20460",
+    "activity": "196542069",
+    "nativeStatusBottom": 132,
+    "nativeView": {
+      "attached": true,
+      "empty": false,
+      "height": 2205,
+      "never_attached": false,
+      "screenX": 0,
+      "screenY": 132,
+      "visible": true,
+      "width": 1080
+    },
+    "dom": {
+      "dpr": 2.625,
+      "width": 412,
+      "height": 840,
+      "topPadding": "0px",
+      "rect": {
+        "x": 20,
+        "y": 19,
+        "width": 46,
+        "height": 46,
+        "top": 19,
+        "right": 66,
+        "bottom": 65,
+        "left": 20
+      },
+      "expanded": "false",
+      "scrollY": 0,
+      "viewportY": 0
+    },
+    "physicalMenuTop": 181.875,
+    "unobscured": true,
+    "physicalMenuTapOpened": true
+  },
+  "reusedRun": "149a29e9-40bd-4bc8-9ccb-5f390ffab7bd",
+  "reusedLaunch": "Starting: Intent { cmp=dev.durableagent.probe/.AgentActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: dev.durableagent.probe/.AgentActivity\r\nTotalTime: 0\r\nWaitTime: 3\r\nComplete",
+  "reused": {
+    "uiPid": "9051",
+    "webViewTarget": "1B2C052E2448699B946B8D24FEC99BAD",
+    "activity": "196542069",
+    "nativeStatusBottom": 132,
+    "nativeView": {
+      "attached": true,
+      "empty": false,
+      "height": 2205,
+      "never_attached": false,
+      "screenX": 0,
+      "screenY": 132,
+      "visible": true,
+      "width": 1080
+    },
+    "dom": {
+      "dpr": 2.625,
+      "width": 412,
+      "height": 840,
+      "topPadding": "0px",
+      "rect": {
+        "x": 20,
+        "y": 19,
+        "width": 46,
+        "height": 46,
+        "top": 19,
+        "right": 66,
+        "bottom": 65,
+        "left": 20
+      },
+      "expanded": "false",
+      "scrollY": 0,
+      "viewportY": 0
+    },
+    "physicalMenuTop": 181.875,
+    "unobscured": true,
+    "physicalMenuTapOpened": true
+  },
+  "reusedAgainRun": "52b877ce-cd93-463f-b71b-44699f6a89ab",
+  "reusedAgainLaunch": "Starting: Intent { cmp=dev.durableagent.probe/.AgentActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: dev.durableagent.probe/.AgentActivity\r\nTotalTime: 0\r\nWaitTime: 5\r\nComplete",
+  "reusedAgain": {
+    "uiPid": "9051",
+    "webViewTarget": "316552D0FA87CEFDE35DD4ECD0F4DB5D",
+    "activity": "196542069",
+    "nativeStatusBottom": 132,
+    "nativeView": {
+      "attached": true,
+      "empty": false,
+      "height": 2205,
+      "never_attached": false,
+      "screenX": 0,
+      "screenY": 132,
+      "visible": true,
+      "width": 1080
+    },
+    "dom": {
+      "dpr": 2.625,
+      "width": 412,
+      "height": 840,
+      "topPadding": "0px",
+      "rect": {
+        "x": 20,
+        "y": 19,
+        "width": 46,
+        "height": 46,
+        "top": 19,
+        "right": 66,
+        "bottom": 65,
+        "left": 20
+      },
+      "expanded": "false",
+      "scrollY": 0,
+      "viewportY": 0
+    },
+    "physicalMenuTop": 181.875,
+    "unobscured": true,
+    "physicalMenuTapOpened": true
+  },
+  "passed": true,
+  "completed": "2026-11-04T13:00:03.296Z"
+}

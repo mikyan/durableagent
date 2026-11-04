@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ConsolePickerObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ConsolePickerObservationTest:
+INSTRUMENTATION_STATUS: test=savedCancelledPickerDraftRemainsUnsentWithoutOpeningOwner
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: consolePickerObservation={"run":"9efa51f1-918f-4a85-9d5a-7364e011de0e","conversationId":"5fb07d12-e6aa-43f3-a181-5dc81eb4e4c1","draft":{"id":"5fb07d12-e6aa-43f3-a181-5dc81eb4e4c1","revision":2,"text":"选择器打开期间继续编辑的草稿 🌍","selections":[],"committed":true,"stateVersion":2,"capability":{"provider":"fixture","modelId":"conversation","input":["text"],"source":"validation","limits":{},"applicationPolicy":{"draftCharacters":100000,"attachments":4,"sourceImageBytes":16777216,"sourcePixels":25165824,"textBytes":262144,"imageWidth":1024,"imageHeight":1024,"imageBytes":1572864,"totalBase64Bytes":8388608,"requestBytes":10485760},"version":"d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"},"submissionContext":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"295846e931042498d3ad0e71844c35a2f82cfb6eafa5d275482cc65406238a4a"}}},"sendIntents":0,"ownerNotOpened":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ConsolePickerObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=savedCancelledPickerDraftRemainsUnsentWithoutOpeningOwner
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.093
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

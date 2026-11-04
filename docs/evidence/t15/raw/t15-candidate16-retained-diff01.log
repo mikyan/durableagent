@@ -1,0 +1,28 @@
+file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-device.mjs:27
+ const evaluate=async(expression)=>{const value=await command('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});if(value.exceptionDetails)throw Error(JSON.stringify(value.exceptionDetails));return value.result.value;};
+                                                                                                                                                                    ^
+
+Error: {"exceptionId":1,"text":"Uncaught","lineNumber":0,"columnNumber":110,"scriptId":"50","exception":{"type":"object","subtype":"error","className":"Error","description":"Error: Visible detail action missing\n    at <anonymous>:1:117\n    at <anonymous>:1:213","objectId":"-4795567002433285809.1.2"}}
+    at evaluate (file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-device.mjs:27:165)
+    at async file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-device.mjs:48:26
+
+Node.js v24.14.1
+node:internal/errors:985
+  const err = new Error(message);
+              ^
+
+Error: Command failed: C:\Program Files\nodejs\node.exe C:\Users\AI_BA\.codex\worktrees\t15-console\durableagent\tools\console-device.mjs emulator-5582 C:\Users\AI_BA\AppData\Local\Temp\durableagent-implementation\t15-candidate16-retained-diff01-plan.json C:\Users\AI_BA\AppData\Local\Temp\durableagent-implementation\t15-candidate16-retained-diff01
+    at genericNodeError (node:internal/errors:985:15)
+    at wrappedFn (node:internal/errors:539:14)
+    at checkExecSyncError (node:child_process:925:11)
+    at execFileSync (node:child_process:961:15)
+    at file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-retained-file-diff.mjs:25:15 {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 82200,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v24.14.1

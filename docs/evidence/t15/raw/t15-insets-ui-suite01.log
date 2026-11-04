@@ -1,0 +1,75 @@
+
+> @durableagent/ui@0.1.0 pretest
+> npm run build --prefix ../runtime
+
+
+> @durableagent/runtime-probe@0.1.0 build
+> tsc
+
+
+> @durableagent/ui@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/ui
+
+(node:90680) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:87776) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ❯ test/models-page.test.tsx (2 tests | 1 failed) 2772ms
+   × keeps empty settings usable, adds a connection, saves a key narrowly and explicitly chooses a future default 1165ms
+(node:31716) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:89464) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/models-page.test.tsx > keeps empty settings usable, adds a connection, saves a key narrowly and explicitly chooses a future default
+TestingLibraryElementError: Unable to find role="button" and name "模型与连接"
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="startup"
+      role="status"
+    >
+      正在打开会话界面…
+    </div>
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="startup"
+      role="status"
+    >
+      正在打开会话界面…
+    </div>
+  </div>
+</body>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/models-page.test.tsx:33:32
+     31|   });
+     32|   render(<App controller={controller}/>);
+     33|   fireEvent.click(await screen.findByRole('button',{name:'模型与连接'}));
+       |                                ^
+     34|   expect(await screen.findByText(/聊天、附件及工具结果可能发送给所选云端模型/)).toBeTruthy(…
+     35|   fireEvent.change(screen.getByRole('textbox',{name:'连接名称'}),{target:{…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 23 passed (24)
+      Tests  1 failed | 90 passed (91)
+   Start at  20:47:29
+   Duration  18.13s (environment 36%, import 32%, tests 31%, transform 1%)
+
+    Isolate  24 workers spawned · ~2.70s startup each (spawn + environment, per file)
+             at least ~1.62s faster with isolate: false — reuses workers across files instead of one per file
+

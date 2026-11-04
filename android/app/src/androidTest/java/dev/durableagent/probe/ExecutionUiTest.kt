@@ -19,6 +19,9 @@ class ExecutionUiTest {
     @Test fun setupButtonCopiesTheCompletePackagedCommandWithoutNode() {
         val run=UUID.randomUUID().toString()
         ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode","input-only").putExtra("validationRun",run)).use {page->
+            until {js(page,"!!document.querySelector('.menu-button')")=="true"}
+            js(page,"document.querySelector('.menu-button').click()")
+            js(page,"Array.from(document.querySelectorAll('button')).find(x=>x.textContent==='工具').click()")
             until {js(page,"Array.from(document.querySelectorAll('button')).some(x=>x.textContent==='复制初始化命令')")=="true"}
             js(page,"Array.from(document.querySelectorAll('button')).find(x=>x.textContent==='复制初始化命令').click()")
             until {js(page,"document.body.textContent.includes('初始化命令已复制')")=="true"}

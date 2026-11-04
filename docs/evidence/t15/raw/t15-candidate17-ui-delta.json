@@ -1,0 +1,7 @@
+{
+  "scope": "Normalize only content-hashed bundled asset filenames; no program/source normalization",
+  "changedNormalizedUiEntries": [
+    "index-HASH.css"
+  ],
+  "normalizedJavaScriptAndHtmlIdentical": true
+}

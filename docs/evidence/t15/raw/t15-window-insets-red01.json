@@ -1,0 +1,33 @@
+{
+  "started": "2026-11-04T12:44:47.862Z",
+  "scope": "Fresh Activity then two retained-Activity input-only domain switches; real menu hit targets must avoid Android system bars and accept physical taps. No model input or host.",
+  "freshRun": "b797c1a9-f8fb-432a-b8ee-0c5688e990ac",
+  "freshLaunch": "Starting: Intent { flg=0x10008000 cmp=dev.durableagent.probe/.AgentActivity (has extras) }\r\nStatus: ok\r\nLaunchState: WARM\r\nActivity: dev.durableagent.probe/.AgentActivity\r\nTotalTime: 159\r\nWaitTime: 170\r\nComplete",
+  "fresh": {
+    "uiPid": "5919",
+    "webViewTarget": "A227AB91A7841B5060F56C0CEA32B1DE",
+    "activity": "224364763",
+    "nativeStatusBottom": 132,
+    "dom": {
+      "dpr": 2.625,
+      "width": 412,
+      "height": 915,
+      "topPadding": "0px",
+      "rect": {
+        "x": 20,
+        "y": 19,
+        "width": 46,
+        "height": 46,
+        "top": 19,
+        "right": 66,
+        "bottom": 65,
+        "left": 20
+      },
+      "expanded": "false",
+      "scrollY": 0,
+      "viewportY": 0
+    }
+  },
+  "error": "AssertionError [ERR_ASSERTION]: fresh: entire menu target overlaps Android status bar (49.875 < 132)",
+  "completed": "2026-11-04T12:44:49.881Z"
+}

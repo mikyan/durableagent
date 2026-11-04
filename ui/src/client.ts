@@ -1,7 +1,7 @@
 import {APPLICATION_PROTOCOL,type ApplicationEnvelope,type ApplicationMethod,type ApplicationRequest,type ConversationSnapshot} from '../../runtime/src/application-protocol';
 import type {CredentialInfo,CredentialWriteRequest} from '../../runtime/src/model-protocol';
 
-export interface NativePort {postMessage(message:string):void;writeCredential?(message:string):void}
+export interface NativePort {postMessage(message:string):void;writeCredential?(message:string):void;initialConversationId?():string|null}
 export type CredentialMutation={operation:'save';target:string;expectedGeneration:number;key:string}|{operation:'remove';target:string;expectedGeneration:number};
 export class ApplicationFailure extends Error {
   constructor(readonly code:string,message:string){super(message);this.name='ApplicationFailure';}

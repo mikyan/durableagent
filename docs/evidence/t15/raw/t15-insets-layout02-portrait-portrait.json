@@ -1,0 +1,163 @@
+{
+  "plan": {
+    "name": "portrait",
+    "steps": [
+      {
+        "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+      },
+      {
+        "click": "[data-testid=create-conversation]"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      {
+        "fill": "原生边距回归草稿 🌍"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+      },
+      {
+        "shot": "portrait-ime"
+      },
+      {
+        "evaluate": "localStorage.getItem('durableagent.ui.selectedConversation')"
+      }
+    ]
+  },
+  "started": "2026-11-04T13:03:37.716Z",
+  "pid": "9051",
+  "steps": [
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "click": "[data-testid=create-conversation]"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "fill": "原生边距回归草稿 🌍"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "shot": "portrait-ime"
+      },
+      "value": {
+        "width": 412,
+        "height": 528,
+        "dpr": 2.625,
+        "title": "新会话",
+        "active": "fcd6fa6c-68fe-4120-896c-0b64e4737771",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 14,
+              "y": 7,
+              "width": 46,
+              "height": 46,
+              "top": 7,
+              "right": 60,
+              "bottom": 53,
+              "left": 14
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 352.1845397949219,
+              "y": 7,
+              "width": 46,
+              "height": 46,
+              "top": 7,
+              "right": 398.1845397949219,
+              "bottom": 53,
+              "left": 352.1845397949219
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 25.761905670166016,
+              "y": 423.21429443359375,
+              "width": 38,
+              "height": 38,
+              "top": 423.21429443359375,
+              "right": 63.761905670166016,
+              "bottom": 461.21429443359375,
+              "left": 25.761905670166016
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 71.76190948486328,
+              "y": 426.21429443359375,
+              "width": 28,
+              "height": 38,
+              "top": 426.21429443359375,
+              "right": 99.76190948486328,
+              "bottom": 464.21429443359375,
+              "left": 71.76190948486328
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": false,
+            "rect": {
+              "x": 342.4285888671875,
+              "y": 420.21429443359375,
+              "width": 44,
+              "height": 44,
+              "top": 420.21429443359375,
+              "right": 386.4285888671875,
+              "bottom": 464.21429443359375,
+              "left": 342.4285888671875
+            }
+          }
+        ],
+        "nativeView": {
+          "attached": true,
+          "empty": false,
+          "height": 1385,
+          "never_attached": false,
+          "screenX": 0,
+          "screenY": 132,
+          "visible": true,
+          "width": 1080
+        }
+      }
+    },
+    {
+      "step": {
+        "evaluate": "localStorage.getItem('durableagent.ui.selectedConversation')"
+      },
+      "value": "fcd6fa6c-68fe-4120-896c-0b64e4737771"
+    }
+  ],
+  "passed": true,
+  "completed": "2026-11-04T13:03:43.766Z"
+}

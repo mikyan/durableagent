@@ -1,0 +1,75 @@
+{
+  "sourceCommit": "c868f0c60bd3336525ea5024d07181742ef87351",
+  "testApkSourceCommit": "c44d8ceeae3c2bf740891d09f1a4f95ee2dcc2d2",
+  "changeScope": "Three file diff foreground theme colors only; explicit summary selector wins lazy CSS loading; test APK unchanged",
+  "files": {
+    "app-debug.apk": {
+      "sha256": "ce24d14f10310f4f0323e19cc91118a804e01a03cd2d3f17be7e884f8b54ea45",
+      "bytes": 371040362
+    },
+    "source.zip": {
+      "sha256": "3cb9c10b1537bb8b87ce72b9b6e70b3764fe8fd13eec387f377bbf7223d23c78",
+      "bytes": 10682682
+    },
+    "test.apk": {
+      "sha256": "b9722ecd598de73d4a158a3b7d7c7c9506bd12b009c8328abef20c8d168f937e",
+      "bytes": 4174212
+    }
+  },
+  "apkEntryDeltaFromCandidate16": {
+    "assets/ui/assets/conversation-4K9nRc82.js": {
+      "before": null,
+      "after": "ef4407ebf351b282976ba873407f51c0485608f6978ccb0f8464568315bf1f2f"
+    },
+    "assets/ui/assets/conversation-CoWFtsT3.js": {
+      "before": "f357087b5bfdaa996d332dbb5185ddb118297c4676f5181191e5fdbadb330730",
+      "after": null
+    },
+    "assets/ui/assets/index-B8Agb4ty.css": {
+      "before": null,
+      "after": "7b68a682d6485ea83d1d8a5dfdc8464608a4a3a22f2d6fc379ff0fd7d48381ee"
+    },
+    "assets/ui/assets/index-BEIllqgs.js": {
+      "before": "f15143024a4d3ee9d01e267f9f59d28fa0588631ab78e84f844439a3f90954de",
+      "after": null
+    },
+    "assets/ui/assets/index-D4_vGizF.css": {
+      "before": "24fbc892c2e8ff93591d129330b8e5353cbb622f2dd97be68fc65d511fa474c9",
+      "after": null
+    },
+    "assets/ui/assets/index-sj-ZbB1W.js": {
+      "before": null,
+      "after": "10aa180ebd2a745baf0f89b28254f64749a2eb577d8143efbca7d2f9abcadcf2"
+    },
+    "assets/ui/assets/models-D0DvKqiy.js": {
+      "before": "dbeb9b250eefa7056cff4bd4b7c7608a38ffc5abfc26cf9d4e459481b3b0008a",
+      "after": null
+    },
+    "assets/ui/assets/models-whGGMKnA.js": {
+      "before": null,
+      "after": "e87bc73622fe668e2df8b2e041bfd01e69f12964880b223e8a5be8b16bb0d968"
+    },
+    "assets/ui/assets/projects-Dyn0HA3C.js": {
+      "before": "1b88533e46073c48e71d032598036a5026b2d3f417be3ec3afd3e3887e2de295",
+      "after": null
+    },
+    "assets/ui/assets/projects-HZ14rSIb.js": {
+      "before": null,
+      "after": "dbb35d17af770a018a06f42138dccf681a1a356aae0ecdb00fbaced08790bc9b"
+    },
+    "assets/ui/assets/timeline-BpQm46fg.js": {
+      "before": null,
+      "after": "3952148287c4e91bb16e3a98543f17ce28866646f2222e6355fad04aa89881f8"
+    },
+    "assets/ui/assets/timeline-DyfwN2yW.js": {
+      "before": "490085ed2be1e2b2d339ee556feea5440910629792148eeb61a6f3aa2c9de411",
+      "after": null
+    },
+    "assets/ui/index.html": {
+      "before": "1983cac07262eca0997470a15892a16a593f23c97b1edeb1ad729d5f888110f8",
+      "after": "2ce58d776500612072645eaaad2306583d208a9e59548878f04837719b3d70fd"
+    }
+  },
+  "identicalNativeRuntimeAndSetup": true,
+  "normalizedJavaScriptAndHtmlIdentical": true
+}

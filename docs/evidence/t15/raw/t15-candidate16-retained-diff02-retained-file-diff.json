@@ -1,0 +1,1704 @@
+{
+  "plan": {
+    "name": "retained-file-diff",
+    "launch": {
+      "mode": "execution",
+      "run": "ba1a5cb4-544e-4e3f-8a16-20558aa14ca1"
+    },
+    "steps": [
+      {
+        "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+      },
+      {
+        "evaluate": "localStorage.getItem('durableagent.ui.selectedConversation')",
+        "assert": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+      },
+      {
+        "request": {
+          "method": "open",
+          "payload": {
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "input.listSends",
+          "payload": {
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "history",
+          "payload": {
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "limit": 200
+          }
+        }
+      },
+      {
+        "when": "document.querySelector('button[aria-label=\"会话详情\"]')?.getAttribute('aria-expanded')==='false'",
+        "click": "button[aria-label=\"会话详情\"]"
+      },
+      {
+        "evaluate": "(()=>{const e=document.querySelector('.details-panel > .detail-actions > button:first-child');if(!e||e.textContent!=='文件变更与执行')throw Error('Visible detail action missing');e.scrollIntoView({block:'center'});return e.textContent})()",
+        "assert": "文件变更与执行"
+      },
+      {
+        "click": ".details-panel > .detail-actions > button:first-child"
+      },
+      {
+        "click": ".file-changes > .execution-actions > button"
+      },
+      {
+        "wait": "[...document.querySelectorAll('.file-diff')].some(e=>e.textContent.includes('+真实修改-after'))"
+      },
+      {
+        "evaluate": "(()=>{const e=[...document.querySelectorAll('.file-diff')].find(e=>e.textContent.includes('+真实修改-after'));e.scrollIntoView({block:'center'});return e.textContent})()"
+      },
+      {
+        "wait": "(()=>{const e=[...document.querySelectorAll('.file-diff')].find(e=>e.textContent.includes('+真实修改-after'));if(!e)return false;const r=e.getBoundingClientRect(),a=document.querySelector('.auxiliary-scroll').getBoundingClientRect();return r.top>=Math.max(a.top,0)&&r.bottom<=Math.min(a.bottom,innerHeight)})()"
+      },
+      {
+        "shot": "retained-original-diff"
+      },
+      {
+        "request": {
+          "method": "open",
+          "payload": {
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "input.listSends",
+          "payload": {
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "history",
+          "payload": {
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "limit": 200
+          }
+        }
+      }
+    ]
+  },
+  "started": "2026-11-04T13:36:23.603Z",
+  "pid": "7970",
+  "steps": [
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "evaluate": "localStorage.getItem('durableagent.ui.selectedConversation')",
+        "assert": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+      },
+      "value": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+    },
+    {
+      "step": {
+        "request": {
+          "method": "open",
+          "payload": {
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+          }
+        }
+      },
+      "value": {
+        "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+        "revision": 6,
+        "conversation": {
+          "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+          "title": "新会话",
+          "model": {
+            "provider": "fixture",
+            "modelId": "conversation",
+            "name": "验证模型"
+          },
+          "workspaceId": "file-workspace-3",
+          "projectId": "file-project-3",
+          "createdAt": 1793798914736,
+          "phase": "done",
+          "submissionContext": {
+            "sdkConversationId": 5,
+            "associationVersion": 5,
+            "location": {
+              "workspaceId": "file-workspace-3",
+              "version": 1,
+              "identity": "f7972ca1b212cfc8a0eb86a87815aff586c6c723bc37d61d5014b83f0dcaf1b1"
+            }
+          }
+        },
+        "entries": [
+          {
+            "id": "15",
+            "role": "user",
+            "text": "FILE_ROUNDTRIP",
+            "persisted": true
+          },
+          {
+            "id": "43",
+            "role": "tool",
+            "text": "FILE-ROUNDTRIP-PASS:{\"root\":\".durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1\",\"canonical\":\"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1/nested/original.bin\",\"renamed\":\"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1/nested/renamed.bin\",\"originalReadSha256\":\"21d2dd19a7be6710a6dddb879d382fcccf37bc896b7b76ca43018335f8f6d576\",\"bashWriteSha256\":\"b2adabd0a6befce9391a9877023b9a86b42f96c4b8d1f1f18054b0b2357a9138\",\"finalSha256\":\"17fa4ffb988114bcc457e3e4e1a00aaa168e0043cf0f9594135d6743b7449dd6\",\"finalBytes\":11,\"watchMode\":\"polling\",\"diffPath\":\".durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1/change.txt\",\"names\":[\"original.bin\",\"renamed.bin\"]}",
+            "persisted": true
+          },
+          {
+            "id": "45",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "47",
+            "role": "user",
+            "text": "FILE_DEPENDENCY",
+            "persisted": true
+          },
+          {
+            "id": "52",
+            "role": "tool",
+            "text": "FILE-DEPENDENCY-PASS:{\"path\":\"/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-uthash-install02/lookup\",\"bytes\":11656,\"sha256\":\"e9b291013974011a54775a99e1eb1f7178425c12fd6919f44128abea08b1906b\",\"sourceSha256\":\"d5bb1eb860e50a4819f0709062ff1d083627fba44e8f58812d78ba8b999685a4\"}",
+            "persisted": true
+          },
+          {
+            "id": "54",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "56",
+            "role": "user",
+            "text": "EXEC_CONFORMANCE_SETUP",
+            "persisted": true
+          },
+          {
+            "id": "62",
+            "role": "tool",
+            "text": "conformance-directories-ready\n",
+            "persisted": true
+          },
+          {
+            "id": "64",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "67",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_0",
+            "persisted": true
+          },
+          {
+            "id": "74",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: binary reader reads byte ranges of the opened file",
+            "persisted": true
+          },
+          {
+            "id": "76",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "79",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_1",
+            "persisted": true
+          },
+          {
+            "id": "86",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: binary reader scans lines like decoding the whole file",
+            "persisted": true
+          },
+          {
+            "id": "88",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "91",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_2",
+            "persisted": true
+          },
+          {
+            "id": "102",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: binary reader keeps reading the file it opened after a rename",
+            "persisted": true
+          },
+          {
+            "id": "104",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "107",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_3",
+            "persisted": true
+          },
+          {
+            "id": "114",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: directory reader refuses missing paths and files",
+            "persisted": true
+          },
+          {
+            "id": "116",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          }
+        ],
+        "phase": "done",
+        "storedSeq": null
+      }
+    },
+    {
+      "step": {
+        "request": {
+          "method": "input.listSends",
+          "payload": {
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+          }
+        }
+      },
+      "value": {
+        "intents": [
+          {
+            "protocol": 1,
+            "intentId": "c9d04c93-a147-4efa-80d0-62ba10c3daf8",
+            "actionId": "c9d04c93-a147-4efa-80d0-62ba10c3daf8",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "84a21c73-4c85-4069-9bd2-81bfcc0e81d9",
+            "inputRevision": 13,
+            "inputDigest": "ace2adb024685c2929cf0dbfdc406c37b30e56ecdd3d8fdf3f4d3cf7265048a8",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 5,
+              "location": {
+                "workspaceId": "file-workspace-3",
+                "version": 1,
+                "identity": "f7972ca1b212cfc8a0eb86a87815aff586c6c723bc37d61d5014b83f0dcaf1b1"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798972248,
+            "preview": {
+              "text": "FILE_CONFORMANCE_3",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "c9d04c93-a147-4efa-80d0-62ba10c3daf8",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "84a21c73-4c85-4069-9bd2-81bfcc0e81d9",
+              "inputRevision": 13,
+              "inputDigest": "ace2adb024685c2929cf0dbfdc406c37b30e56ecdd3d8fdf3f4d3cf7265048a8",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 5,
+                "location": {
+                  "workspaceId": "file-workspace-3",
+                  "version": 1,
+                  "identity": "f7972ca1b212cfc8a0eb86a87815aff586c6c723bc37d61d5014b83f0dcaf1b1"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "28d3aabc-34da-48ad-a376-cfadcfcc02ad",
+              "submissionId": 108
+            }
+          },
+          {
+            "protocol": 1,
+            "intentId": "87e42731-0df9-4625-8f16-569c37050e55",
+            "actionId": "87e42731-0df9-4625-8f16-569c37050e55",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "589498b2-48b3-45dd-ac35-a607c4a713e5",
+            "inputRevision": 11,
+            "inputDigest": "57149367754261145cdb5c9cc2a067337cafbee398e9f8616844063c3387332c",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 4,
+              "location": {
+                "workspaceId": "file-workspace-2",
+                "version": 1,
+                "identity": "364a0aa0905acb63ca404436fc38773d4cc85f9d3b52324c58f3d5213c682536"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798960712,
+            "preview": {
+              "text": "FILE_CONFORMANCE_2",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "87e42731-0df9-4625-8f16-569c37050e55",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "589498b2-48b3-45dd-ac35-a607c4a713e5",
+              "inputRevision": 11,
+              "inputDigest": "57149367754261145cdb5c9cc2a067337cafbee398e9f8616844063c3387332c",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 4,
+                "location": {
+                  "workspaceId": "file-workspace-2",
+                  "version": 1,
+                  "identity": "364a0aa0905acb63ca404436fc38773d4cc85f9d3b52324c58f3d5213c682536"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "fdc95fc3-8955-4c7a-a265-697f4da1b045",
+              "submissionId": 92
+            }
+          },
+          {
+            "protocol": 1,
+            "intentId": "cf6fdf53-3dbe-4c93-b708-6e6a3bc11e3a",
+            "actionId": "cf6fdf53-3dbe-4c93-b708-6e6a3bc11e3a",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "b40a7f96-395c-4637-bbe9-6afb7aaf3f34",
+            "inputRevision": 9,
+            "inputDigest": "72134b0d49c9d965590c9ce5e83a6c8e8b8c3b1efe5f5bb11b53529f8bc06d15",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 3,
+              "location": {
+                "workspaceId": "file-workspace-1",
+                "version": 1,
+                "identity": "97ab0c3d7eeda0ce165962dc4c3df0e3460a12fe94399286f0249abc4438a2ba"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798951743,
+            "preview": {
+              "text": "FILE_CONFORMANCE_1",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "cf6fdf53-3dbe-4c93-b708-6e6a3bc11e3a",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "b40a7f96-395c-4637-bbe9-6afb7aaf3f34",
+              "inputRevision": 9,
+              "inputDigest": "72134b0d49c9d965590c9ce5e83a6c8e8b8c3b1efe5f5bb11b53529f8bc06d15",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 3,
+                "location": {
+                  "workspaceId": "file-workspace-1",
+                  "version": 1,
+                  "identity": "97ab0c3d7eeda0ce165962dc4c3df0e3460a12fe94399286f0249abc4438a2ba"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "70054444-a53d-406f-8c07-8b0e79230b71",
+              "submissionId": 80
+            }
+          },
+          {
+            "protocol": 1,
+            "intentId": "1b0a4404-2baa-4a1f-b8eb-bbe838dde827",
+            "actionId": "1b0a4404-2baa-4a1f-b8eb-bbe838dde827",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "4dbc2612-e76c-4aeb-b528-2ed58dca6a0c",
+            "inputRevision": 7,
+            "inputDigest": "8e8fd0585e4a2b6b3a51988c312f0e4e65780a4e1846f6624f583e12a8819a41",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 2,
+              "location": {
+                "workspaceId": "file-workspace-0",
+                "version": 1,
+                "identity": "cb4745e1792ef6fcd9d72225ab3a02b67dbb56ef52b6ea4ba17ace5383860564"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798944614,
+            "preview": {
+              "text": "FILE_CONFORMANCE_0",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "1b0a4404-2baa-4a1f-b8eb-bbe838dde827",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "4dbc2612-e76c-4aeb-b528-2ed58dca6a0c",
+              "inputRevision": 7,
+              "inputDigest": "8e8fd0585e4a2b6b3a51988c312f0e4e65780a4e1846f6624f583e12a8819a41",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 2,
+                "location": {
+                  "workspaceId": "file-workspace-0",
+                  "version": 1,
+                  "identity": "cb4745e1792ef6fcd9d72225ab3a02b67dbb56ef52b6ea4ba17ace5383860564"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "f2ae0473-44ed-4d8e-9508-b85f6a1ad6a4",
+              "submissionId": 68
+            }
+          },
+          {
+            "protocol": 1,
+            "intentId": "d8b76dd2-582e-48a3-8b02-d4be447b0ed5",
+            "actionId": "d8b76dd2-582e-48a3-8b02-d4be447b0ed5",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "03c37b1e-c41b-4d65-95ea-eec7c2bcf6da",
+            "inputRevision": 5,
+            "inputDigest": "32d0b83cae8c92c41b4fe6f3e84f9d9319f2494e76e53e490d4be14027c981a1",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 1,
+              "location": {
+                "workspaceId": "default",
+                "version": 1,
+                "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798940964,
+            "preview": {
+              "text": "EXEC_CONFORMANCE_SETUP",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "d8b76dd2-582e-48a3-8b02-d4be447b0ed5",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "03c37b1e-c41b-4d65-95ea-eec7c2bcf6da",
+              "inputRevision": 5,
+              "inputDigest": "32d0b83cae8c92c41b4fe6f3e84f9d9319f2494e76e53e490d4be14027c981a1",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 1,
+                "location": {
+                  "workspaceId": "default",
+                  "version": 1,
+                  "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "5e5abd19-22c2-49f5-85c5-c65d8ee06436",
+              "submissionId": 57
+            }
+          },
+          {
+            "protocol": 1,
+            "intentId": "7c2239d2-3dfa-424d-b75f-0c833d3eec52",
+            "actionId": "7c2239d2-3dfa-424d-b75f-0c833d3eec52",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "780141af-b5ba-4a33-9b00-1b862a431f37",
+            "inputRevision": 3,
+            "inputDigest": "ad5d5b115ef7ac8d5b85b2672cf86f0e891ec725de066392bb07b641c56cc783",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 1,
+              "location": {
+                "workspaceId": "default",
+                "version": 1,
+                "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798939010,
+            "preview": {
+              "text": "FILE_DEPENDENCY",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "7c2239d2-3dfa-424d-b75f-0c833d3eec52",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "780141af-b5ba-4a33-9b00-1b862a431f37",
+              "inputRevision": 3,
+              "inputDigest": "ad5d5b115ef7ac8d5b85b2672cf86f0e891ec725de066392bb07b641c56cc783",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 1,
+                "location": {
+                  "workspaceId": "default",
+                  "version": 1,
+                  "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "5e5abd19-22c2-49f5-85c5-c65d8ee06436",
+              "submissionId": 48
+            }
+          },
+          {
+            "protocol": 1,
+            "intentId": "c34ec1f2-8001-4eee-b654-c501047a7406",
+            "actionId": "c34ec1f2-8001-4eee-b654-c501047a7406",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "b9b98c41-f26e-4079-b13e-e9dac8363660",
+            "inputRevision": 1,
+            "inputDigest": "568ee1a60c1a4e1f3f212a5a198e90fa82cc3e7033849de3fda65b7fa18fe986",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 1,
+              "location": {
+                "workspaceId": "default",
+                "version": 1,
+                "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798915595,
+            "preview": {
+              "text": "FILE_ROUNDTRIP",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "c34ec1f2-8001-4eee-b654-c501047a7406",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "b9b98c41-f26e-4079-b13e-e9dac8363660",
+              "inputRevision": 1,
+              "inputDigest": "568ee1a60c1a4e1f3f212a5a198e90fa82cc3e7033849de3fda65b7fa18fe986",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 1,
+                "location": {
+                  "workspaceId": "default",
+                  "version": 1,
+                  "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "5e5abd19-22c2-49f5-85c5-c65d8ee06436",
+              "submissionId": 16
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "request": {
+          "method": "history",
+          "payload": {
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "limit": 200
+          }
+        }
+      },
+      "value": {
+        "items": [
+          {
+            "id": "15",
+            "role": "user",
+            "text": "FILE_ROUNDTRIP",
+            "persisted": true
+          },
+          {
+            "id": "43",
+            "role": "tool",
+            "text": "FILE-ROUNDTRIP-PASS:{\"root\":\".durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1\",\"canonical\":\"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1/nested/original.bin\",\"renamed\":\"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1/nested/renamed.bin\",\"originalReadSha256\":\"21d2dd19a7be6710a6dddb879d382fcccf37bc896b7b76ca43018335f8f6d576\",\"bashWriteSha256\":\"b2adabd0a6befce9391a9877023b9a86b42f96c4b8d1f1f18054b0b2357a9138\",\"finalSha256\":\"17fa4ffb988114bcc457e3e4e1a00aaa168e0043cf0f9594135d6743b7449dd6\",\"finalBytes\":11,\"watchMode\":\"polling\",\"diffPath\":\".durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1/change.txt\",\"names\":[\"original.bin\",\"renamed.bin\"]}",
+            "persisted": true
+          },
+          {
+            "id": "45",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "47",
+            "role": "user",
+            "text": "FILE_DEPENDENCY",
+            "persisted": true
+          },
+          {
+            "id": "52",
+            "role": "tool",
+            "text": "FILE-DEPENDENCY-PASS:{\"path\":\"/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-uthash-install02/lookup\",\"bytes\":11656,\"sha256\":\"e9b291013974011a54775a99e1eb1f7178425c12fd6919f44128abea08b1906b\",\"sourceSha256\":\"d5bb1eb860e50a4819f0709062ff1d083627fba44e8f58812d78ba8b999685a4\"}",
+            "persisted": true
+          },
+          {
+            "id": "54",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "56",
+            "role": "user",
+            "text": "EXEC_CONFORMANCE_SETUP",
+            "persisted": true
+          },
+          {
+            "id": "62",
+            "role": "tool",
+            "text": "conformance-directories-ready\n",
+            "persisted": true
+          },
+          {
+            "id": "64",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "67",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_0",
+            "persisted": true
+          },
+          {
+            "id": "74",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: binary reader reads byte ranges of the opened file",
+            "persisted": true
+          },
+          {
+            "id": "76",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "79",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_1",
+            "persisted": true
+          },
+          {
+            "id": "86",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: binary reader scans lines like decoding the whole file",
+            "persisted": true
+          },
+          {
+            "id": "88",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "91",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_2",
+            "persisted": true
+          },
+          {
+            "id": "102",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: binary reader keeps reading the file it opened after a rename",
+            "persisted": true
+          },
+          {
+            "id": "104",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "107",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_3",
+            "persisted": true
+          },
+          {
+            "id": "114",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: directory reader refuses missing paths and files",
+            "persisted": true
+          },
+          {
+            "id": "116",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "when": "document.querySelector('button[aria-label=\"会话详情\"]')?.getAttribute('aria-expanded')==='false'",
+        "click": "button[aria-label=\"会话详情\"]"
+      },
+      "skipped": true
+    },
+    {
+      "step": {
+        "evaluate": "(()=>{const e=document.querySelector('.details-panel > .detail-actions > button:first-child');if(!e||e.textContent!=='文件变更与执行')throw Error('Visible detail action missing');e.scrollIntoView({block:'center'});return e.textContent})()",
+        "assert": "文件变更与执行"
+      },
+      "value": "文件变更与执行"
+    },
+    {
+      "step": {
+        "click": ".details-panel > .detail-actions > button:first-child"
+      }
+    },
+    {
+      "step": {
+        "click": ".file-changes > .execution-actions > button"
+      }
+    },
+    {
+      "step": {
+        "wait": "[...document.querySelectorAll('.file-diff')].some(e=>e.textContent.includes('+真实修改-after'))"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "evaluate": "(()=>{const e=[...document.querySelectorAll('.file-diff')].find(e=>e.textContent.includes('+真实修改-after'));e.scrollIntoView({block:'center'});return e.textContent})()"
+      },
+      "value": "--- before\n+++ after\n@@ -1 +1 @@\n-before\n+真实修改-after\n"
+    },
+    {
+      "step": {
+        "wait": "(()=>{const e=[...document.querySelectorAll('.file-diff')].find(e=>e.textContent.includes('+真实修改-after'));if(!e)return false;const r=e.getBoundingClientRect(),a=document.querySelector('.auxiliary-scroll').getBoundingClientRect();return r.top>=Math.max(a.top,0)&&r.bottom<=Math.min(a.bottom,innerHeight)})()"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "shot": "retained-original-diff"
+      },
+      "value": {
+        "width": 412,
+        "height": 840,
+        "dpr": 2.625,
+        "title": "新会话",
+        "active": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 20,
+              "y": 19,
+              "width": 46,
+              "height": 46,
+              "top": 19,
+              "right": 66,
+              "bottom": 65,
+              "left": 20
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 346.1845397949219,
+              "y": 19,
+              "width": 46,
+              "height": 46,
+              "top": 19,
+              "right": 392.1845397949219,
+              "bottom": 65,
+              "left": 346.1845397949219
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 25.761905670166016,
+              "y": 686.2142944335938,
+              "width": 38,
+              "height": 38,
+              "top": 686.2142944335938,
+              "right": 63.761905670166016,
+              "bottom": 724.2142944335938,
+              "left": 25.761905670166016
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 71.76190948486328,
+              "y": 689.2142944335938,
+              "width": 28,
+              "height": 38,
+              "top": 689.2142944335938,
+              "right": 99.76190948486328,
+              "bottom": 727.2142944335938,
+              "left": 71.76190948486328
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": true,
+            "rect": {
+              "x": 342.4285888671875,
+              "y": 683.2142944335938,
+              "width": 44,
+              "height": 44,
+              "top": 683.2142944335938,
+              "right": 386.4285888671875,
+              "bottom": 727.2142944335938,
+              "left": 342.4285888671875
+            }
+          },
+          {
+            "label": "关闭辅助区域",
+            "disabled": false,
+            "rect": {
+              "x": 329.4226379394531,
+              "y": 28.761905670166016,
+              "width": 56.00595474243164,
+              "height": 39.52381134033203,
+              "top": 28.761905670166016,
+              "right": 385.42859268188477,
+              "bottom": 68.28571701049805,
+              "left": 329.4226379394531
+            }
+          }
+        ],
+        "nativeView": {
+          "attached": true,
+          "empty": false,
+          "height": 2205,
+          "never_attached": false,
+          "screenX": 0,
+          "screenY": 132,
+          "visible": true,
+          "width": 1080
+        },
+        "metadata": [
+          {
+            "label": "草稿已保存",
+            "rect": {
+              "x": 16,
+              "y": 743.9761962890625,
+              "width": 380.19049072265625,
+              "height": 16.5,
+              "top": 743.9761962890625,
+              "right": 396.19049072265625,
+              "bottom": 760.4761962890625,
+              "left": 16
+            }
+          },
+          {
+            "label": "省流已关上下文约 813+ token验证模型YOLOFile case 3 · File case 3",
+            "rect": {
+              "x": 16,
+              "y": 770.4761962890625,
+              "width": 380.19049072265625,
+              "height": 54.52381134033203,
+              "top": 770.4761962890625,
+              "right": 396.19049072265625,
+              "bottom": 825.0000076293945,
+              "left": 16
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "request": {
+          "method": "open",
+          "payload": {
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+          }
+        }
+      },
+      "value": {
+        "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+        "revision": 7,
+        "conversation": {
+          "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+          "title": "新会话",
+          "model": {
+            "provider": "fixture",
+            "modelId": "conversation",
+            "name": "验证模型"
+          },
+          "workspaceId": "file-workspace-3",
+          "projectId": "file-project-3",
+          "createdAt": 1793798914736,
+          "phase": "done",
+          "submissionContext": {
+            "sdkConversationId": 5,
+            "associationVersion": 5,
+            "location": {
+              "workspaceId": "file-workspace-3",
+              "version": 1,
+              "identity": "f7972ca1b212cfc8a0eb86a87815aff586c6c723bc37d61d5014b83f0dcaf1b1"
+            }
+          }
+        },
+        "entries": [
+          {
+            "id": "15",
+            "role": "user",
+            "text": "FILE_ROUNDTRIP",
+            "persisted": true
+          },
+          {
+            "id": "43",
+            "role": "tool",
+            "text": "FILE-ROUNDTRIP-PASS:{\"root\":\".durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1\",\"canonical\":\"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1/nested/original.bin\",\"renamed\":\"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1/nested/renamed.bin\",\"originalReadSha256\":\"21d2dd19a7be6710a6dddb879d382fcccf37bc896b7b76ca43018335f8f6d576\",\"bashWriteSha256\":\"b2adabd0a6befce9391a9877023b9a86b42f96c4b8d1f1f18054b0b2357a9138\",\"finalSha256\":\"17fa4ffb988114bcc457e3e4e1a00aaa168e0043cf0f9594135d6743b7449dd6\",\"finalBytes\":11,\"watchMode\":\"polling\",\"diffPath\":\".durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1/change.txt\",\"names\":[\"original.bin\",\"renamed.bin\"]}",
+            "persisted": true
+          },
+          {
+            "id": "45",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "47",
+            "role": "user",
+            "text": "FILE_DEPENDENCY",
+            "persisted": true
+          },
+          {
+            "id": "52",
+            "role": "tool",
+            "text": "FILE-DEPENDENCY-PASS:{\"path\":\"/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-uthash-install02/lookup\",\"bytes\":11656,\"sha256\":\"e9b291013974011a54775a99e1eb1f7178425c12fd6919f44128abea08b1906b\",\"sourceSha256\":\"d5bb1eb860e50a4819f0709062ff1d083627fba44e8f58812d78ba8b999685a4\"}",
+            "persisted": true
+          },
+          {
+            "id": "54",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "56",
+            "role": "user",
+            "text": "EXEC_CONFORMANCE_SETUP",
+            "persisted": true
+          },
+          {
+            "id": "62",
+            "role": "tool",
+            "text": "conformance-directories-ready\n",
+            "persisted": true
+          },
+          {
+            "id": "64",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "67",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_0",
+            "persisted": true
+          },
+          {
+            "id": "74",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: binary reader reads byte ranges of the opened file",
+            "persisted": true
+          },
+          {
+            "id": "76",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "79",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_1",
+            "persisted": true
+          },
+          {
+            "id": "86",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: binary reader scans lines like decoding the whole file",
+            "persisted": true
+          },
+          {
+            "id": "88",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "91",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_2",
+            "persisted": true
+          },
+          {
+            "id": "102",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: binary reader keeps reading the file it opened after a rename",
+            "persisted": true
+          },
+          {
+            "id": "104",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "107",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_3",
+            "persisted": true
+          },
+          {
+            "id": "114",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: directory reader refuses missing paths and files",
+            "persisted": true
+          },
+          {
+            "id": "116",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          }
+        ],
+        "phase": "done",
+        "storedSeq": null
+      }
+    },
+    {
+      "step": {
+        "request": {
+          "method": "input.listSends",
+          "payload": {
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+          }
+        }
+      },
+      "value": {
+        "intents": [
+          {
+            "protocol": 1,
+            "intentId": "c9d04c93-a147-4efa-80d0-62ba10c3daf8",
+            "actionId": "c9d04c93-a147-4efa-80d0-62ba10c3daf8",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "84a21c73-4c85-4069-9bd2-81bfcc0e81d9",
+            "inputRevision": 13,
+            "inputDigest": "ace2adb024685c2929cf0dbfdc406c37b30e56ecdd3d8fdf3f4d3cf7265048a8",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 5,
+              "location": {
+                "workspaceId": "file-workspace-3",
+                "version": 1,
+                "identity": "f7972ca1b212cfc8a0eb86a87815aff586c6c723bc37d61d5014b83f0dcaf1b1"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798972248,
+            "preview": {
+              "text": "FILE_CONFORMANCE_3",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "c9d04c93-a147-4efa-80d0-62ba10c3daf8",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "84a21c73-4c85-4069-9bd2-81bfcc0e81d9",
+              "inputRevision": 13,
+              "inputDigest": "ace2adb024685c2929cf0dbfdc406c37b30e56ecdd3d8fdf3f4d3cf7265048a8",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 5,
+                "location": {
+                  "workspaceId": "file-workspace-3",
+                  "version": 1,
+                  "identity": "f7972ca1b212cfc8a0eb86a87815aff586c6c723bc37d61d5014b83f0dcaf1b1"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "28d3aabc-34da-48ad-a376-cfadcfcc02ad",
+              "submissionId": 108
+            }
+          },
+          {
+            "protocol": 1,
+            "intentId": "87e42731-0df9-4625-8f16-569c37050e55",
+            "actionId": "87e42731-0df9-4625-8f16-569c37050e55",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "589498b2-48b3-45dd-ac35-a607c4a713e5",
+            "inputRevision": 11,
+            "inputDigest": "57149367754261145cdb5c9cc2a067337cafbee398e9f8616844063c3387332c",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 4,
+              "location": {
+                "workspaceId": "file-workspace-2",
+                "version": 1,
+                "identity": "364a0aa0905acb63ca404436fc38773d4cc85f9d3b52324c58f3d5213c682536"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798960712,
+            "preview": {
+              "text": "FILE_CONFORMANCE_2",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "87e42731-0df9-4625-8f16-569c37050e55",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "589498b2-48b3-45dd-ac35-a607c4a713e5",
+              "inputRevision": 11,
+              "inputDigest": "57149367754261145cdb5c9cc2a067337cafbee398e9f8616844063c3387332c",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 4,
+                "location": {
+                  "workspaceId": "file-workspace-2",
+                  "version": 1,
+                  "identity": "364a0aa0905acb63ca404436fc38773d4cc85f9d3b52324c58f3d5213c682536"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "fdc95fc3-8955-4c7a-a265-697f4da1b045",
+              "submissionId": 92
+            }
+          },
+          {
+            "protocol": 1,
+            "intentId": "cf6fdf53-3dbe-4c93-b708-6e6a3bc11e3a",
+            "actionId": "cf6fdf53-3dbe-4c93-b708-6e6a3bc11e3a",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "b40a7f96-395c-4637-bbe9-6afb7aaf3f34",
+            "inputRevision": 9,
+            "inputDigest": "72134b0d49c9d965590c9ce5e83a6c8e8b8c3b1efe5f5bb11b53529f8bc06d15",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 3,
+              "location": {
+                "workspaceId": "file-workspace-1",
+                "version": 1,
+                "identity": "97ab0c3d7eeda0ce165962dc4c3df0e3460a12fe94399286f0249abc4438a2ba"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798951743,
+            "preview": {
+              "text": "FILE_CONFORMANCE_1",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "cf6fdf53-3dbe-4c93-b708-6e6a3bc11e3a",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "b40a7f96-395c-4637-bbe9-6afb7aaf3f34",
+              "inputRevision": 9,
+              "inputDigest": "72134b0d49c9d965590c9ce5e83a6c8e8b8c3b1efe5f5bb11b53529f8bc06d15",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 3,
+                "location": {
+                  "workspaceId": "file-workspace-1",
+                  "version": 1,
+                  "identity": "97ab0c3d7eeda0ce165962dc4c3df0e3460a12fe94399286f0249abc4438a2ba"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "70054444-a53d-406f-8c07-8b0e79230b71",
+              "submissionId": 80
+            }
+          },
+          {
+            "protocol": 1,
+            "intentId": "1b0a4404-2baa-4a1f-b8eb-bbe838dde827",
+            "actionId": "1b0a4404-2baa-4a1f-b8eb-bbe838dde827",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "4dbc2612-e76c-4aeb-b528-2ed58dca6a0c",
+            "inputRevision": 7,
+            "inputDigest": "8e8fd0585e4a2b6b3a51988c312f0e4e65780a4e1846f6624f583e12a8819a41",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 2,
+              "location": {
+                "workspaceId": "file-workspace-0",
+                "version": 1,
+                "identity": "cb4745e1792ef6fcd9d72225ab3a02b67dbb56ef52b6ea4ba17ace5383860564"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798944614,
+            "preview": {
+              "text": "FILE_CONFORMANCE_0",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "1b0a4404-2baa-4a1f-b8eb-bbe838dde827",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "4dbc2612-e76c-4aeb-b528-2ed58dca6a0c",
+              "inputRevision": 7,
+              "inputDigest": "8e8fd0585e4a2b6b3a51988c312f0e4e65780a4e1846f6624f583e12a8819a41",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 2,
+                "location": {
+                  "workspaceId": "file-workspace-0",
+                  "version": 1,
+                  "identity": "cb4745e1792ef6fcd9d72225ab3a02b67dbb56ef52b6ea4ba17ace5383860564"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "f2ae0473-44ed-4d8e-9508-b85f6a1ad6a4",
+              "submissionId": 68
+            }
+          },
+          {
+            "protocol": 1,
+            "intentId": "d8b76dd2-582e-48a3-8b02-d4be447b0ed5",
+            "actionId": "d8b76dd2-582e-48a3-8b02-d4be447b0ed5",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "03c37b1e-c41b-4d65-95ea-eec7c2bcf6da",
+            "inputRevision": 5,
+            "inputDigest": "32d0b83cae8c92c41b4fe6f3e84f9d9319f2494e76e53e490d4be14027c981a1",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 1,
+              "location": {
+                "workspaceId": "default",
+                "version": 1,
+                "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798940964,
+            "preview": {
+              "text": "EXEC_CONFORMANCE_SETUP",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "d8b76dd2-582e-48a3-8b02-d4be447b0ed5",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "03c37b1e-c41b-4d65-95ea-eec7c2bcf6da",
+              "inputRevision": 5,
+              "inputDigest": "32d0b83cae8c92c41b4fe6f3e84f9d9319f2494e76e53e490d4be14027c981a1",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 1,
+                "location": {
+                  "workspaceId": "default",
+                  "version": 1,
+                  "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "5e5abd19-22c2-49f5-85c5-c65d8ee06436",
+              "submissionId": 57
+            }
+          },
+          {
+            "protocol": 1,
+            "intentId": "7c2239d2-3dfa-424d-b75f-0c833d3eec52",
+            "actionId": "7c2239d2-3dfa-424d-b75f-0c833d3eec52",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "780141af-b5ba-4a33-9b00-1b862a431f37",
+            "inputRevision": 3,
+            "inputDigest": "ad5d5b115ef7ac8d5b85b2672cf86f0e891ec725de066392bb07b641c56cc783",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 1,
+              "location": {
+                "workspaceId": "default",
+                "version": 1,
+                "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798939010,
+            "preview": {
+              "text": "FILE_DEPENDENCY",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "7c2239d2-3dfa-424d-b75f-0c833d3eec52",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "780141af-b5ba-4a33-9b00-1b862a431f37",
+              "inputRevision": 3,
+              "inputDigest": "ad5d5b115ef7ac8d5b85b2672cf86f0e891ec725de066392bb07b641c56cc783",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 1,
+                "location": {
+                  "workspaceId": "default",
+                  "version": 1,
+                  "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "5e5abd19-22c2-49f5-85c5-c65d8ee06436",
+              "submissionId": 48
+            }
+          },
+          {
+            "protocol": 1,
+            "intentId": "c34ec1f2-8001-4eee-b654-c501047a7406",
+            "actionId": "c34ec1f2-8001-4eee-b654-c501047a7406",
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "inputToken": "b9b98c41-f26e-4079-b13e-e9dac8363660",
+            "inputRevision": 1,
+            "inputDigest": "568ee1a60c1a4e1f3f212a5a198e90fa82cc3e7033849de3fda65b7fa18fe986",
+            "context": {
+              "sdkConversationId": 5,
+              "associationVersion": 1,
+              "location": {
+                "workspaceId": "default",
+                "version": 1,
+                "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "createdAt": 1793798915595,
+            "preview": {
+              "text": "FILE_ROUNDTRIP",
+              "attachmentCount": 0
+            },
+            "stateVersion": 3,
+            "delivery": "acknowledged",
+            "cancelled": false,
+            "receipt": {
+              "protocol": 1,
+              "intentId": "c34ec1f2-8001-4eee-b654-c501047a7406",
+              "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+              "inputToken": "b9b98c41-f26e-4079-b13e-e9dac8363660",
+              "inputRevision": 1,
+              "inputDigest": "568ee1a60c1a4e1f3f212a5a198e90fa82cc3e7033849de3fda65b7fa18fe986",
+              "context": {
+                "sdkConversationId": 5,
+                "associationVersion": 1,
+                "location": {
+                  "workspaceId": "default",
+                  "version": 1,
+                  "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+                }
+              },
+              "queue": {
+                "whenBusy": "followUp",
+                "whenIdle": "start"
+              },
+              "controlGeneration": 1,
+              "bindingId": "5e5abd19-22c2-49f5-85c5-c65d8ee06436",
+              "submissionId": 16
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "request": {
+          "method": "history",
+          "payload": {
+            "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+            "limit": 200
+          }
+        }
+      },
+      "value": {
+        "items": [
+          {
+            "id": "15",
+            "role": "user",
+            "text": "FILE_ROUNDTRIP",
+            "persisted": true
+          },
+          {
+            "id": "43",
+            "role": "tool",
+            "text": "FILE-ROUNDTRIP-PASS:{\"root\":\".durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1\",\"canonical\":\"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1/nested/original.bin\",\"renamed\":\"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1/nested/renamed.bin\",\"originalReadSha256\":\"21d2dd19a7be6710a6dddb879d382fcccf37bc896b7b76ca43018335f8f6d576\",\"bashWriteSha256\":\"b2adabd0a6befce9391a9877023b9a86b42f96c4b8d1f1f18054b0b2357a9138\",\"finalSha256\":\"17fa4ffb988114bcc457e3e4e1a00aaa168e0043cf0f9594135d6743b7449dd6\",\"finalBytes\":11,\"watchMode\":\"polling\",\"diffPath\":\".durableagent-t10-ba1a5cb4-544e-4e3f-8a16-20558aa14ca1/change.txt\",\"names\":[\"original.bin\",\"renamed.bin\"]}",
+            "persisted": true
+          },
+          {
+            "id": "45",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "47",
+            "role": "user",
+            "text": "FILE_DEPENDENCY",
+            "persisted": true
+          },
+          {
+            "id": "52",
+            "role": "tool",
+            "text": "FILE-DEPENDENCY-PASS:{\"path\":\"/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-uthash-install02/lookup\",\"bytes\":11656,\"sha256\":\"e9b291013974011a54775a99e1eb1f7178425c12fd6919f44128abea08b1906b\",\"sourceSha256\":\"d5bb1eb860e50a4819f0709062ff1d083627fba44e8f58812d78ba8b999685a4\"}",
+            "persisted": true
+          },
+          {
+            "id": "54",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "56",
+            "role": "user",
+            "text": "EXEC_CONFORMANCE_SETUP",
+            "persisted": true
+          },
+          {
+            "id": "62",
+            "role": "tool",
+            "text": "conformance-directories-ready\n",
+            "persisted": true
+          },
+          {
+            "id": "64",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "67",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_0",
+            "persisted": true
+          },
+          {
+            "id": "74",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: binary reader reads byte ranges of the opened file",
+            "persisted": true
+          },
+          {
+            "id": "76",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "79",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_1",
+            "persisted": true
+          },
+          {
+            "id": "86",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: binary reader scans lines like decoding the whole file",
+            "persisted": true
+          },
+          {
+            "id": "88",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "91",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_2",
+            "persisted": true
+          },
+          {
+            "id": "102",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: binary reader keeps reading the file it opened after a rename",
+            "persisted": true
+          },
+          {
+            "id": "104",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          },
+          {
+            "id": "107",
+            "role": "user",
+            "text": "FILE_CONFORMANCE_3",
+            "persisted": true
+          },
+          {
+            "id": "114",
+            "role": "tool",
+            "text": "SDK-CONFORMANCE-PASS: directory reader refuses missing paths and files",
+            "persisted": true
+          },
+          {
+            "id": "116",
+            "role": "assistant",
+            "text": "你好🌍",
+            "persisted": true
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true,
+  "completed": "2026-11-04T13:36:28.119Z"
+}

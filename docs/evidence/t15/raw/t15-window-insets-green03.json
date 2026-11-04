@@ -1,0 +1,37 @@
+{
+  "started": "2026-11-04T12:50:29.735Z",
+  "scope": "Fresh Activity then two retained-Activity input-only domain switches; real menu hit targets must avoid Android system bars and accept physical taps. No model input or host.",
+  "freshRun": "fc6dd77e-9d52-4398-913b-9e56f7220364",
+  "freshLaunch": "Starting: Intent { flg=0x10008000 cmp=dev.durableagent.probe/.AgentActivity (has extras) }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: dev.durableagent.probe/.AgentActivity\r\nTotalTime: 2170\r\nWaitTime: 2173\r\nComplete",
+  "fresh": {
+    "uiPid": "7949",
+    "webViewTarget": "73BD5EF8FD831A0215F351877509391A",
+    "activity": "32429705",
+    "nativeStatusBottom": 132,
+    "dom": {
+      "dpr": 2.625,
+      "width": 412,
+      "height": 915,
+      "topPadding": "51px",
+      "rect": {
+        "x": 20,
+        "y": 70,
+        "width": 46,
+        "height": 46,
+        "top": 70,
+        "right": 66,
+        "bottom": 116,
+        "left": 20
+      },
+      "expanded": "false",
+      "scrollY": 0,
+      "viewportY": 0
+    },
+    "unobscured": true,
+    "physicalMenuTapOpened": true
+  },
+  "reusedRun": "c98b1db3-d76a-42a0-a9f8-c94172c7d822",
+  "reusedLaunch": "Starting: Intent { cmp=dev.durableagent.probe/.AgentActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: dev.durableagent.probe/.AgentActivity\r\nTotalTime: 0\r\nWaitTime: 7\r\nComplete",
+  "error": "Error: Menu ready: \"Error: CDP timeout Runtime.evaluate\"",
+  "completed": "2026-11-04T12:50:56.052Z"
+}

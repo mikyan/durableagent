@@ -1,0 +1,260 @@
+{
+  "plan": {
+    "name": "restored",
+    "steps": [
+      {
+        "wait": "innerHeight>innerWidth&&document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      {
+        "evaluate": "document.querySelector('[data-testid=message-input]').value",
+        "assert": "原生边距回归草稿 🌍"
+      },
+      {
+        "request": {
+          "method": "input.listSends",
+          "payload": {
+            "id": "71b86d4b-f620-4048-8d9d-ffe3a1437be1"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "history",
+          "payload": {
+            "id": "71b86d4b-f620-4048-8d9d-ffe3a1437be1",
+            "limit": 30
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "input.read",
+          "payload": {
+            "id": "71b86d4b-f620-4048-8d9d-ffe3a1437be1"
+          }
+        }
+      },
+      {
+        "shot": "portrait-restored"
+      }
+    ]
+  },
+  "started": "2026-11-04T13:28:06.305Z",
+  "pid": "11149",
+  "steps": [
+    {
+      "step": {
+        "wait": "innerHeight>innerWidth&&document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "evaluate": "document.querySelector('[data-testid=message-input]').value",
+        "assert": "原生边距回归草稿 🌍"
+      },
+      "value": "原生边距回归草稿 🌍"
+    },
+    {
+      "step": {
+        "request": {
+          "method": "input.listSends",
+          "payload": {
+            "id": "71b86d4b-f620-4048-8d9d-ffe3a1437be1"
+          }
+        }
+      },
+      "value": {
+        "intents": []
+      }
+    },
+    {
+      "step": {
+        "request": {
+          "method": "history",
+          "payload": {
+            "id": "71b86d4b-f620-4048-8d9d-ffe3a1437be1",
+            "limit": 30
+          }
+        }
+      },
+      "value": {
+        "items": []
+      }
+    },
+    {
+      "step": {
+        "request": {
+          "method": "input.read",
+          "payload": {
+            "id": "71b86d4b-f620-4048-8d9d-ffe3a1437be1"
+          }
+        }
+      },
+      "value": {
+        "id": "71b86d4b-f620-4048-8d9d-ffe3a1437be1",
+        "revision": 1,
+        "text": "原生边距回归草稿 🌍",
+        "selections": [],
+        "committed": true,
+        "stateVersion": 1,
+        "capability": {
+          "provider": "fixture",
+          "modelId": "conversation",
+          "input": [
+            "text"
+          ],
+          "source": "validation",
+          "limits": {},
+          "applicationPolicy": {
+            "draftCharacters": 100000,
+            "attachments": 4,
+            "sourceImageBytes": 16777216,
+            "sourcePixels": 25165824,
+            "textBytes": 262144,
+            "imageWidth": 1024,
+            "imageHeight": 1024,
+            "imageBytes": 1572864,
+            "totalBase64Bytes": 8388608,
+            "requestBytes": 10485760
+          },
+          "version": "d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"
+        },
+        "submissionContext": {
+          "sdkConversationId": 5,
+          "associationVersion": 1,
+          "location": {
+            "workspaceId": "default",
+            "version": 1,
+            "identity": "f39cc8399fe00baa63ca511c84b2967754398895ca14314d7279d69e1d3e96fb"
+          }
+        }
+      }
+    },
+    {
+      "step": {
+        "shot": "portrait-restored"
+      },
+      "value": {
+        "width": 412,
+        "height": 840,
+        "dpr": 2.625,
+        "title": "新会话",
+        "active": "71b86d4b-f620-4048-8d9d-ffe3a1437be1",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 20,
+              "y": 19,
+              "width": 46,
+              "height": 46,
+              "top": 19,
+              "right": 66,
+              "bottom": 65,
+              "left": 20
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 346.1845397949219,
+              "y": 19,
+              "width": 46,
+              "height": 46,
+              "top": 19,
+              "right": 392.1845397949219,
+              "bottom": 65,
+              "left": 346.1845397949219
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 25.761905670166016,
+              "y": 686.2142944335938,
+              "width": 38,
+              "height": 38,
+              "top": 686.2142944335938,
+              "right": 63.761905670166016,
+              "bottom": 724.2142944335938,
+              "left": 25.761905670166016
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 71.76190948486328,
+              "y": 689.2142944335938,
+              "width": 28,
+              "height": 38,
+              "top": 689.2142944335938,
+              "right": 99.76190948486328,
+              "bottom": 727.2142944335938,
+              "left": 71.76190948486328
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": false,
+            "rect": {
+              "x": 342.4285888671875,
+              "y": 683.2142944335938,
+              "width": 44,
+              "height": 44,
+              "top": 683.2142944335938,
+              "right": 386.4285888671875,
+              "bottom": 727.2142944335938,
+              "left": 342.4285888671875
+            }
+          }
+        ],
+        "nativeView": {
+          "attached": true,
+          "empty": false,
+          "height": 2205,
+          "never_attached": false,
+          "screenX": 0,
+          "screenY": 132,
+          "visible": true,
+          "width": 1080
+        },
+        "metadata": [
+          {
+            "label": "草稿已保存",
+            "rect": {
+              "x": 16,
+              "y": 743.9761962890625,
+              "width": 380.19049072265625,
+              "height": 16.5,
+              "top": 743.9761962890625,
+              "right": 396.19049072265625,
+              "bottom": 760.4761962890625,
+              "left": 16
+            }
+          },
+          {
+            "label": "省流已关上下文约 0+ token验证模型YOLO默认工作区位置尚未核验",
+            "rect": {
+              "x": 16,
+              "y": 770.4761962890625,
+              "width": 380.19049072265625,
+              "height": 54.52381134033203,
+              "top": 770.4761962890625,
+              "right": 396.19049072265625,
+              "bottom": 825.0000076293945,
+              "left": 16
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true,
+  "completed": "2026-11-04T13:28:08.069Z"
+}

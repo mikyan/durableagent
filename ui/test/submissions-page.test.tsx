@@ -13,10 +13,11 @@ import {SendStates} from '../src/extensions/submissions';
 it('keeps external uncertainty visible after SDK abort and confirms completion only with native proof',()=>{
   const controller={refreshSubmissions:async()=>{}} as unknown as ConversationController;
   const control={id:'one',version:1,generation:1,stoppedThrough:1};
-  const state={submissions:{items:[],control,stopping:false,stopStatus:{control,phase:'external-unconfirmed',externalPending:1,externalUnknown:1}}} as unknown as UiState;
+  const state={submissions:{items:[],control,error:'读取暂未确认',stopping:false,stopStatus:{control,phase:'external-unconfirmed',externalPending:1,externalUnknown:1}}} as unknown as UiState;
   try{
     const {rerender}=render(<SendStates controller={controller} state={state}/>);
     expect(screen.getByTestId('stop-status').textContent).toContain('外部结果待核验');
+    expect(screen.getByRole('button',{name:/发送状态：.*外部结果待核验.*状态读取未确认/})).toBeTruthy();
     expect(screen.getByTestId('stop-status').textContent).not.toContain('停止完成');
     rerender(<SendStates controller={controller} state={{...state,submissions:{...state.submissions!,stopStatus:{control,phase:'stopped',externalPending:0,externalUnknown:0}}} as UiState}/>);
     expect(screen.getByTestId('stop-status').textContent).toContain('停止完成');

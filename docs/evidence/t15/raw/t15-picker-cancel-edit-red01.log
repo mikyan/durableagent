@@ -1,0 +1,11 @@
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/ui
+
+ ❯ test/drafts.test.ts (18 tests | 1 failed | 17 skipped) 13ms
+   × automatically saves edits made while a cancelled picker held the draft 11ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 17 skipped (18)
+   Start at  20:00:10
+   Duration  234ms (transform 59%, import 23%, tests 13%, worker 4%)
+
