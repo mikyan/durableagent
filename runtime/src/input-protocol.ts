@@ -1,6 +1,6 @@
 // Shared data only. Native input storage stays usable without the Agent JS owner.
 export const INPUT_PROTOCOL=1;
-export const INPUT_EXTENSION={id:'input',actions:['input.list','input.read','input.inspect','input.save','input.clear','input.select','input.prepare','input.freeze','input.discard','input.maintain']} as const;
+export const INPUT_EXTENSION={id:'input',actions:['input.list','input.read','input.inspect','input.save','input.clear','input.select','input.capabilities','input.prepare','input.freeze','input.discard','input.maintain']} as const;
 export type InputMethod=typeof INPUT_EXTENSION.actions[number]|import('./submission-protocol.js').NativeSendMethod;
 /** Conservative application budgets, not advertised device/Provider maxima. */
 export const INPUT_BUDGETS={draftCharacters:100000,attachments:4,sourceImageBytes:16*1024*1024,sourcePixels:24*1024*1024,textBytes:256*1024,imageWidth:1024,imageHeight:1024,imageBytes:1536*1024,totalBase64Bytes:8*1024*1024,requestBytes:10*1024*1024} as const;
@@ -18,7 +18,8 @@ export interface FrozenInputAccess {readFrozen(token:string):Promise<FrozenInput
  * inspect {id} -> NativeDraft (fast durable preparation state; does not claim fresh source access).
  * save {id,expectedRevision,operationId,text,selectionIds:string[]} -> NativeDraft, after COMMIT.
  * clear {id,expectedRevision,operationId} -> NativeDraft; revisions never reset (ABA safe).
- * select {id,expectedRevision,operationId,kind:'image'|'file'} -> NativeDraft via native SAF chooser.
+ * capabilities {} -> {camera:boolean}; availability of a system image-capture Activity, not an application permission grant.
+ * select {id,expectedRevision,operationId,kind:'image'|'file'|'camera'} -> NativeDraft via the native system picker or camera. Camera bytes remain a private local source.
  * prepare {id,selectionId,operationId} -> NativeDraft. No network; only supported, bounded formats.
  * freeze {id,expectedRevision,operationId} -> FrozenInput. Exact bytes are pinned; not SDK admission.
  * discard {token,operationId} -> {}. Explicit release only; never delete a user source.

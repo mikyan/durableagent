@@ -220,6 +220,7 @@ export class Application {
         }
         case 'create':value=await this.submissions!.coordinate(()=>this.create(this.text(payload,'creationId',128),typeof payload.title==='string'?payload.title.slice(0,120):'新会话'));break;
         case 'open':value=await this.snapshot(this.text(payload,'id',128));break;
+        case 'context.get':value=await this.contextView(this.text(payload,'id',128));break;
         case 'history':value=await this.history(this.text(payload,'id',128),payload.cursor,payload.limit);break;
         case 'send': {
           if(!this.submissions)throw new ActionError('INPUT_UNAVAILABLE','原生发送意图存储尚不可用');
@@ -325,6 +326,26 @@ export class Application {
       if(this.rememberedInputs.get(product.id)!==key){this.options.inputs.rememberConversation(conversation,capability);this.rememberedInputs.set(product.id,key);}
     }
     return {id:product.id,revision:++this.revision,conversation:{id:product.id,title:product.title,model:selected,workspaceId:product.workspaceId,projectId:product.projectId??null,createdAt:product.createdAt,phase,submissionContext:this.submissionContext(product)},entries,progress:text?{text,persisted:false}:undefined,phase,storedSeq:this.storedSeq,reason:recovery?.message??live?.runFailure?.detail??live?.generation?.retry?.error,...(recovery?{recovery}:{})};
+  }
+  private async contextView(id:string):Promise<import('./application-protocol.js').ConversationContext> {
+    const product=await this.product(id),conversation=(await this.ready().conversation(product.sdkId as ConversationId,context))!;
+    const [view,agent]=await Promise.all([conversation.context(context),conversation.agent(context)]);
+    const model=agent.model?this.options.models.getModel(agent.model.provider,agent.model.modelId):undefined;
+    const modelLimit=model&&Number.isFinite(model.contextWindow)&&model.contextWindow>0?model.contextWindow:undefined;
+    // Read the SDK-derived active context, after reset/compaction/edit semantics. Do not count
+    // the visible history window, provider cumulative spend, or base64 image bytes as tokens.
+    let characters=0,images=false;
+    for(const message of view.messages){
+      if(typeof message.content==='string')characters+=Buffer.byteLength(message.content,'utf8');
+      else for(const part of message.content){
+        if(part.type==='image'){images=true;continue;}
+        if(part.type==='text')characters+=Buffer.byteLength(part.text,'utf8');
+        else if(part.type==='toolCall')characters+=Buffer.byteLength(part.name+JSON.stringify(part.arguments),'utf8');
+        else if(part.type==='thinking')characters+=Buffer.byteLength(part.thinking,'utf8');
+      }
+    }
+    return {id,state:images?'unavailable':'estimated',...(images?{}:{tokens:Math.ceil(characters/3)}),modelLimit,messages:view.messages.length,scope:'committed-messages',
+      note:images?'当前上下文含图片，无法可靠估算 token 占用。':'按 SDK 当前已提交消息的 UTF-8 字节数 / 3 粗估；不含动态系统指令、工具定义、协议开销、未提交生成与草稿，不是服务商精确计数。'};
   }
   private content(value:any):string {return typeof value==='string'?value:Array.isArray(value)?value.filter(x=>x.type==='text').map(x=>x.text).join(''):'';}
   private message(entry:EntryRecord):HistoryMessage[] {return (entry.model??[]).flatMap((message:any,index:number)=>{

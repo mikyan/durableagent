@@ -1,0 +1,185 @@
+{
+  "run": "818f0f4c-64c8-4a0e-b1bc-cb072fa5d32f",
+  "draft": "原生边距回归草稿 🌍",
+  "scope": "Actual portrait/landscape IME bounds and rotation retain one unsent draft. Fixture mode, no model input.",
+  "started": "2026-11-04T13:03:36.860Z",
+  "baseline": {
+    "ime": "0",
+    "auto": "1",
+    "rotation": "0"
+  },
+  "portrait": {
+    "plan": {
+      "name": "portrait",
+      "steps": [
+        {
+          "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+        },
+        {
+          "click": "[data-testid=create-conversation]"
+        },
+        {
+          "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+        },
+        {
+          "fill": "原生边距回归草稿 🌍"
+        },
+        {
+          "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+        },
+        {
+          "shot": "portrait-ime"
+        },
+        {
+          "evaluate": "localStorage.getItem('durableagent.ui.selectedConversation')"
+        }
+      ]
+    },
+    "started": "2026-11-04T13:03:37.716Z",
+    "pid": "9051",
+    "steps": [
+      {
+        "step": {
+          "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+        },
+        "value": true
+      },
+      {
+        "step": {
+          "click": "[data-testid=create-conversation]"
+        }
+      },
+      {
+        "step": {
+          "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+        },
+        "value": true
+      },
+      {
+        "step": {
+          "fill": "原生边距回归草稿 🌍"
+        }
+      },
+      {
+        "step": {
+          "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+        },
+        "value": true
+      },
+      {
+        "step": {
+          "shot": "portrait-ime"
+        },
+        "value": {
+          "width": 412,
+          "height": 528,
+          "dpr": 2.625,
+          "title": "新会话",
+          "active": "fcd6fa6c-68fe-4120-896c-0b64e4737771",
+          "draft": "saved",
+          "controls": [
+            {
+              "label": "打开会话列表",
+              "disabled": false,
+              "rect": {
+                "x": 14,
+                "y": 7,
+                "width": 46,
+                "height": 46,
+                "top": 7,
+                "right": 60,
+                "bottom": 53,
+                "left": 14
+              }
+            },
+            {
+              "label": "新建会话",
+              "disabled": false,
+              "rect": {
+                "x": 352.1845397949219,
+                "y": 7,
+                "width": 46,
+                "height": 46,
+                "top": 7,
+                "right": 398.1845397949219,
+                "bottom": 53,
+                "left": 352.1845397949219
+              }
+            },
+            {
+              "label": "会话详情",
+              "disabled": false,
+              "rect": {
+                "x": 25.761905670166016,
+                "y": 423.21429443359375,
+                "width": 38,
+                "height": 38,
+                "top": 423.21429443359375,
+                "right": 63.761905670166016,
+                "bottom": 461.21429443359375,
+                "left": 25.761905670166016
+              }
+            },
+            {
+              "label": "添加附件",
+              "disabled": false,
+              "rect": {
+                "x": 71.76190948486328,
+                "y": 426.21429443359375,
+                "width": 28,
+                "height": 38,
+                "top": 426.21429443359375,
+                "right": 99.76190948486328,
+                "bottom": 464.21429443359375,
+                "left": 71.76190948486328
+              }
+            },
+            {
+              "label": "发送消息",
+              "disabled": false,
+              "rect": {
+                "x": 342.4285888671875,
+                "y": 420.21429443359375,
+                "width": 44,
+                "height": 44,
+                "top": 420.21429443359375,
+                "right": 386.4285888671875,
+                "bottom": 464.21429443359375,
+                "left": 342.4285888671875
+              }
+            }
+          ],
+          "nativeView": {
+            "attached": true,
+            "empty": false,
+            "height": 1385,
+            "never_attached": false,
+            "screenX": 0,
+            "screenY": 132,
+            "visible": true,
+            "width": 1080
+          }
+        }
+      },
+      {
+        "step": {
+          "evaluate": "localStorage.getItem('durableagent.ui.selectedConversation')"
+        },
+        "value": "fcd6fa6c-68fe-4120-896c-0b64e4737771"
+      }
+    ],
+    "passed": true,
+    "completed": "2026-11-04T13:03:43.766Z"
+  },
+  "error": "AssertionError [ERR_ASSERTION]: Real system status bar and visible IME",
+  "cleanupErrors": [
+    {
+      "error": "Error: Command failed: C:\\Users\\AI_BA\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -s [device] shell run-as dev.durableagent.probe /system/bin/am stopservice --user 0 -n dev.durableagent.probe/.ApplicationService\nService stopped\r\n",
+      "exitStatus": 255,
+      "stdout": "Stopping service: Intent { cmp=dev.durableagent.probe/.ApplicationService }\r\n",
+      "stderr": "Service stopped\r\n"
+    }
+  ],
+  "finalService": "ACTIVITY MANAGER SERVICES (dumpsys activity services)\r\n  User 0 active services:\r\n  * ServiceRecord{b47dab4 u0 dev.durableagent.probe/.ApplicationService c:dev.durableagent.probe}\r\n    intent={cmp=dev.durableagent.probe/.ApplicationService}\r\n    packageName=dev.durableagent.probe\r\n    processName=dev.durableagent.probe:agent\r\n    targetSdkVersion=36\r\n    baseDir=/data/app/~~38sh4gy6id3_NrLNsdHtfw==/dev.durableagent.probe-ki4n3wZSf82XtmA3a7UJyg==/base.apk\r\n    dataDir=/data/user/0/dev.durableagent.probe\r\n    app=ProcessRecord{5a69a0a 9493:dev.durableagent.probe:agent/u0a222}\r\n    useNewWiuLogic_forCapabilities()=true\r\n    useNewWiuLogic_forStart()=true\r\n    useNewBfslLogic()=true\r\n    mAllowWiu_noBinding=PROC_STATE_TOP\r\n    mAllowWiu_inBindService=PROC_STATE_TOP\r\n    mAllowWiu_byBindings=DENIED\r\n    getFgsAllowWiu_legacy=PROC_STATE_TOP\r\n    getFgsAllowWiu_new=PROC_STATE_TOP\r\n    getFgsAllowWiu_forStart=PROC_STATE_TOP\r\n    getFgsAllowWiu_forCapabilities=PROC_STATE_TOP\r\n    allowUiJobScheduling=false\r\n    recentCallingPackage=null\r\n    recentCallingUid=10222\r\n    mAllowStart_noBinding=PROC_STATE_TOP\r\n    mAllowStart_inBindService=PROC_STATE_TOP\r\n    mAllowStart_byBindings=DENIED\r\n    getFgsAllowStart_legacy=PROC_STATE_TOP\r\n    getFgsAllowStart_new=PROC_STATE_TOP\r\n    getFgsAllowStart=PROC_STATE_TOP\r\n    startForegroundCount=0\r\n    infoAllowStartForeground=[callingPackage: dev.durableagent.probe; callingUid: 10222; uidState: TOP ; uidBFSL: [BFSL]; intent: Intent { xflg=0x4 cmp=dev.durableagent.probe/.ApplicationService (has extras) }; code:PROC_STATE_TOP; tempAllowListReason:<null>; allowWiu:12; targetSdkVersion:36; callerTargetSdkVersion:36; startForegroundCount:0; bindFromPackage:null: isBindService:true]\r\n    createTime=-7s938ms startingBgTimeout=--\r\n    lastActivity=-7s926ms restartTime=-7s938ms createdFromFg=true\r\n    startRequested=false delayedStop=false stopIfKilled=true callStart=false lastStartId=1\r\n startCommandResult=2\r\n    Bindings:\r\n    * IntentBindRecord{2ac7182 CREATE}:\r\n      intent={xflg=0x4 cmp=dev.durableagent.probe/.ApplicationService}\r\n      binder=android.os.BinderProxy@a8e2093\r\n      requested=true received=true hasBound=true doRebind=false\r\n      * Client AppBindRecord{122d8d0 ProcessRecord{b86929 9051:dev.durableagent.probe/u0a222}}\r\n        Per-process Connections:\r\n          ConnectionRecord{bcd1252 u0 CR dev.durableagent.probe/.ApplicationService:@d7326dd flags=0x1}\r\n    All Connections:\r\n      ConnectionRecord{bcd1252 u0 CR dev.durableagent.probe/.ApplicationService:@d7326dd flags=0x1}\r\n\r\n  Connection bindings to services:\r\n  * ConnectionRecord{bcd1252 u0 CR dev.durableagent.probe/.ApplicationService:@d7326dd flags=0x1}\r\n    binding=AppBindRecord{122d8d0 dev.durableagent.probe/.ApplicationService:dev.durableagent.probe}\r\n    activity=ActivityRecord{41434274 u0 dev.durableagent.probe/.AgentActivity t114 f}}\r\n    conn=android.os.BinderProxy@d7326dd flags=0x1",
+  "completed": "2026-11-04T13:03:45.130Z"
+}

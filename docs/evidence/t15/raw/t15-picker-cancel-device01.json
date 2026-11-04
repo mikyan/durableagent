@@ -1,0 +1,10 @@
+{
+  "run": "e480f7fa-597e-48e9-9430-890d8dbdebe0",
+  "mode": "fixture",
+  "started": "2026-11-04T12:18:15.203Z",
+  "scope": "Actual ACTION_OPEN_DOCUMENT cancellation with a concurrent edit delivered to retained React while system picker is foreground; then real UI SIGKILL and native observation. No model input or Termux action.",
+  "conversationId": "923dcd8b-9d54-4a10-8a50-4824bfe65f7e",
+  "pickerComponent": "com.google.android.documentsui/com.android.documentsui.picker.PickActivity",
+  "error": "Error: Actual external picker foreground: false",
+  "completed": "2026-11-04T12:19:05.929Z"
+}

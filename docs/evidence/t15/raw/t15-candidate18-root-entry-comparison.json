@@ -1,0 +1,10 @@
+{
+  "comparedAt": "2026-11-04T13:46:46.863675+00:00",
+  "baseApkSha256": "c77c95e6a61f5bfd8194e1ae6b2cb2bb1a6cb8286c8e6e380012aec23adbf074",
+  "finalApkSha256": "ce24d14f10310f4f0323e19cc91118a804e01a03cd2d3f17be7e884f8b54ea45",
+  "nonUiEntriesIdentical": true,
+  "nonUiEntries": 21,
+  "uiJsHtmlIdenticalAfterGeneratedFilenameNormalization": true,
+  "firstComparisonLimitation": "Initial normalizer omitted conversation/models/projects/timeline generated asset names and failed before writing output; this comparison maps every actual asset basename.",
+  "scope": "CSS foreground-only follow-up to candidate16; no repeated execution claim"
+}

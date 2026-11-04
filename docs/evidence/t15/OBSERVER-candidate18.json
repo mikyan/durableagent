@@ -1,0 +1,9 @@
+{
+  "scope": "External navigation-only observer authored after the frozen APK source; not part of that APK build",
+  "path": "tools/console-retained-file-diff.mjs",
+  "frozenFile": "console-retained-file-diff.mjs",
+  "sha256": "9013ed9994b8cce52f11a258824c1705557b1792a53f024a4dfed7de5609c421",
+  "syntaxCheck": "node --check passed",
+  "applicationMutationSteps": false,
+  "retainedDomainOnly": true
+}

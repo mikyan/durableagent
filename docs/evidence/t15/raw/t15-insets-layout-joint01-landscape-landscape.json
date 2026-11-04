@@ -1,0 +1,167 @@
+{
+  "plan": {
+    "name": "landscape",
+    "steps": [
+      {
+        "wait": "innerWidth>innerHeight&&document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      {
+        "evaluate": "document.querySelector('[data-testid=message-input]').value",
+        "assert": "原生边距回归草稿 🌍"
+      },
+      {
+        "click": "[data-testid=message-input]"
+      },
+      {
+        "shot": "landscape-ime"
+      }
+    ]
+  },
+  "started": "2026-11-04T13:27:59.517Z",
+  "pid": "11149",
+  "steps": [
+    {
+      "step": {
+        "wait": "innerWidth>innerHeight&&document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "evaluate": "document.querySelector('[data-testid=message-input]').value",
+        "assert": "原生边距回归草稿 🌍"
+      },
+      "value": "原生边距回归草稿 🌍"
+    },
+    {
+      "step": {
+        "click": "[data-testid=message-input]"
+      }
+    },
+    {
+      "step": {
+        "shot": "landscape-ime"
+      },
+      "value": {
+        "width": 864,
+        "height": 122,
+        "dpr": 2.625,
+        "title": "新会话",
+        "active": "71b86d4b-f620-4048-8d9d-ffe3a1437be1",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 14,
+              "y": 0,
+              "width": 46,
+              "height": 46,
+              "top": 0,
+              "right": 60,
+              "bottom": 46,
+              "left": 14
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 803.9940795898438,
+              "y": 0,
+              "width": 46,
+              "height": 46,
+              "top": 0,
+              "right": 849.9940795898438,
+              "bottom": 46,
+              "left": 803.9940795898438
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 61.761905670166016,
+              "y": 53.761905670166016,
+              "width": 38,
+              "height": 38,
+              "top": 53.761905670166016,
+              "right": 99.76190567016602,
+              "bottom": 91.76190567016602,
+              "left": 61.761905670166016
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 107.76190948486328,
+              "y": 56.761905670166016,
+              "width": 28,
+              "height": 38,
+              "top": 56.761905670166016,
+              "right": 135.76190948486328,
+              "bottom": 94.76190567016602,
+              "left": 107.76190948486328
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": false,
+            "rect": {
+              "x": 758.2380981445312,
+              "y": 50.761905670166016,
+              "width": 44,
+              "height": 44,
+              "top": 50.761905670166016,
+              "right": 802.2380981445312,
+              "bottom": 94.76190567016602,
+              "left": 758.2380981445312
+            }
+          }
+        ],
+        "nativeView": {
+          "attached": true,
+          "empty": false,
+          "height": 320,
+          "never_attached": false,
+          "screenX": 132,
+          "screenY": 74,
+          "visible": true,
+          "width": 2268
+        },
+        "metadata": [
+          {
+            "label": "草稿已保存",
+            "rect": {
+              "x": 52,
+              "y": 99.52381134033203,
+              "width": 54.970237731933594,
+              "height": 16,
+              "top": 99.52381134033203,
+              "right": 106.9702377319336,
+              "bottom": 115.52381134033203,
+              "left": 52
+            }
+          },
+          {
+            "label": "省流已关上下文约 0+ token验证模型YOLO默认工作区位置尚未核验",
+            "rect": {
+              "x": 413.8511962890625,
+              "y": 99.52381134033203,
+              "width": 398.1488037109375,
+              "height": 16,
+              "top": 99.52381134033203,
+              "right": 812,
+              "bottom": 115.52381134033203,
+              "left": 413.8511962890625
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true,
+  "completed": "2026-11-04T13:28:04.049Z"
+}

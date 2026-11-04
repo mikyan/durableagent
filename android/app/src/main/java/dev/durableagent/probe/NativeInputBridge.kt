@@ -19,11 +19,13 @@ class NativeInputBridge(private val activity:Activity,namespace:String,private v
     @Volatile private var closed=false
     private var selection:JSONObject?=null
     private var notificationProduct:String?=null
+    private var capture:android.net.Uri?=null
     fun accept(encoded:String):Boolean {
         val request=try{JSONObject(encoded)}catch(_:Exception){return false}
         val method=request.optString("method")
         if(!method.startsWith("input."))return false
         if(request.optInt("protocol")!=1){reply(request,error("PROTOCOL_MISMATCH","界面与原生输入版本不兼容。"));return true}
+        if(method=="input.capabilities"){reply(request,result{JSONObject().put("camera",Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE).resolveActivity(activity.packageManager)!=null)});return true}
         if(method=="input.stopNotification"){
             execute(request,false,action={result{store.readControl(request.getJSONObject("payload").getString("id"))}},done={encoded->
                 val result=JSONObject(encoded);if(!result.optBoolean("ok")){reply(request,encoded);return@execute}
@@ -38,14 +40,14 @@ class NativeInputBridge(private val activity:Activity,namespace:String,private v
         if(method=="input.select"){
             if(selection!=null){reply(request,error("INPUT_PICKER_OPEN","附件选择器已打开，请完成或取消当前选择。"));return true}
             val kind=request.optJSONObject("payload")?.optString("kind")
-            if(kind!="image"&&kind!="file"){reply(request,error("INVALID_ARGUMENT","请选择图片或 UTF-8 文本文件。"));return true}
+            if(kind!="image"&&kind!="file"&&kind!="camera"){reply(request,error("INVALID_ARGUMENT","请选择图片或 UTF-8 文本文件。"));return true}
             selection=request
             execute(request,false,action={
                 result{val payload=request.getJSONObject("payload");store.selectionReceipt(payload.getString("id"),revision(payload),payload.getString("operationId"),nativeKind(kind))?:JSONObject.NULL}
             },done={encoded->
                 if(selection===request){
                     val value=JSONObject(encoded)
-                    if(!value.optBoolean("ok")||!value.isNull("value")){selection=null;reply(request,encoded)}else openPicker(request,kind)
+                    if(!value.optBoolean("ok")||!value.isNull("value")){selection=null;reply(request,encoded)}else if(kind=="camera")openCamera(request)else openPicker(request,kind)
                 }
             })
             return true
@@ -60,11 +62,13 @@ class NativeInputBridge(private val activity:Activity,namespace:String,private v
         return true
     }
     fun selected(requestCode:Int,resultCode:Int,data:Intent?):Boolean {
-        if(requestCode!=PICK_DOCUMENT)return false
+        if(requestCode!=PICK_DOCUMENT&&requestCode!=PICK_CAMERA)return false
         val request=selection?:return true;selection=null
-        val uri=data?.data
-        if(resultCode!=Activity.RESULT_OK||uri==null){reply(request,error("INPUT_PICKER_CANCELLED","已取消附件选择，原草稿保持不变。"));return true}
-        val flags=data.flags
+        val captured=if(requestCode==PICK_CAMERA)capture.also{capture=null}else null
+        val uri=captured?:data?.data
+        if(resultCode!=Activity.RESULT_OK||uri==null){captured?.let{activity.revokeUriPermission(it,Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION);CameraCaptureProvider.discard(activity,it)};reply(request,error("INPUT_PICKER_CANCELLED","已取消附件选择，原草稿保持不变。"));return true}
+        val flags=if(captured!=null)Intent.FLAG_GRANT_READ_URI_PERMISSION else data?.flags?:0
+        captured?.let{activity.revokeUriPermission(it,Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)}
         execute(request,false,action={
             val payload=request.getJSONObject("payload")
             result{
@@ -84,6 +88,16 @@ class NativeInputBridge(private val activity:Activity,namespace:String,private v
             finally{finished()}
         }}catch(_:RejectedExecutionException){admission.close();finished()}
     }
+    private fun openCamera(request:JSONObject){
+        try{
+            val uri=CameraCaptureProvider.create(activity);capture=uri
+            activity.startActivityForResult(Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE).apply{
+                putExtra(android.provider.MediaStore.EXTRA_OUTPUT,uri)
+                clipData=android.content.ClipData.newRawUri("Camera capture",uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            },PICK_CAMERA)
+        }catch(_:Exception){capture?.let{CameraCaptureProvider.discard(activity,it)};capture=null;selection=null;reply(request,error("INPUT_PICKER_UNAVAILABLE","无法打开系统相机，草稿已保留。"))}
+    }
     private fun openPicker(request:JSONObject,kind:String){
         try{activity.startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT).apply{
             addCategory(Intent.CATEGORY_OPENABLE);type=if(kind=="image")"image/*" else "text/*"
@@ -91,7 +105,7 @@ class NativeInputBridge(private val activity:Activity,namespace:String,private v
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
         },PICK_DOCUMENT)}catch(_:Exception){selection=null;reply(request,error("INPUT_PICKER_UNAVAILABLE","无法打开系统文件选择器，草稿已保留。"))}
     }
-    private fun nativeKind(kind:String)=if(kind=="file")"text" else kind
+    private fun nativeKind(kind:String)=if(kind=="file")"text" else "image"
     private fun revision(payload:JSONObject):Long {val value=payload.opt("expectedRevision");if(value !is Number||value.toDouble()!=value.toLong().toDouble()||value.toLong()<0)throw NativeInputException("INPUT_INVALID","草稿版本必须是有效整数。");return value.toLong()}
     private fun execute(request:JSONObject,io:Boolean,action:()->String,done:(String)->Unit={reply(request,it)}){
         if(closed)return
@@ -114,7 +128,7 @@ class NativeInputBridge(private val activity:Activity,namespace:String,private v
         if(!closed)try{writes.execute{runCatching{NativeStopController.publish(activity.applicationContext,mode,run,store.readControl(id))}}}catch(_:RejectedExecutionException){}
         return true
     }
-    companion object {const val PICK_DOCUMENT=4606;const val NOTIFICATIONS=4611
+    companion object {const val PICK_CAMERA=4615;const val PICK_DOCUMENT=4606;const val NOTIFICATIONS=4611
         fun namespace(mode:String,run:String?):String {
             if(mode=="product")return "input-v1"
             require(run?.matches(Regex("[a-zA-Z0-9-]{1,80}"))==true)

@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import type {ConversationController,UiState} from '../controller';
 import type {SendView} from '../submissions';
 
@@ -7,7 +8,7 @@ function presentation(item:SendView,stoppedThrough:number,abortPending:boolean){
   if(item.durable==='failed')return {stage:'failed',label:'发送尚未保存',detail:'未凭此结果向 SDK 投递。请保留草稿并检查错误。'};
   if(item.durable==='unknown')return {stage:'unknown',label:'发送保存未确认',detail:'请核验同一次发送；不要把它当作未发送而重复创建。'};
   const progress=item.status?.submission;
-  if(progress?.status==='done'||progress?.status==='unanswered')return {stage:'settled',label:progress.status==='done'?'输入已结算':'输入已结算 · 未获回答',detail:progress.reason??'不代表整个会话或外部操作全部结束。'};
+  if(progress?.status==='done'||progress?.status==='unanswered')return {stage:'settled',label:progress.status==='done'?'输入已结算':'输入已结算 · 未获回答',detail:progress.reason?(({aborted:'会话已停止',reset:'上下文已重置',turn_limit:'达到本轮限制',no_model:'模型未配置',model_error:'模型请求失败',faulted:'执行异常',restart_limit:'达到恢复次数限制',interrupted:'执行中断',nothing_to_answer:'没有待回答内容'} as Record<string,string>)[progress.reason]??'未获回答')+'（'+progress.reason+'）':'不代表整个会话或外部操作全部结束。'};
   if(item.intent?.cancelled||item.intent&&item.intent.controlGeneration<=stoppedThrough){
     const interrupted=!!item.intent&&item.intent.controlGeneration<=stoppedThrough&&!abortPending;
     if(accepted&&!interrupted)return {stage:'stop-pending',label:'已接纳 · 已请求停止',detail:'停止请求已保存，等待会话中断核验。这次发送不会重新投递。'};
@@ -22,12 +23,16 @@ function presentation(item:SendView,stoppedThrough:number,abortPending:boolean){
 }
 
 export function SendStates({controller,state}:{controller:ConversationController;state:UiState}){
+  const [expanded,setExpanded]=useState(false);
   const sends=state.submissions;if(!sends)return null;
   const stoppedThrough=sends.control?.stoppedThrough??0;
   const status=sends.stopStatus?.control.version===sends.control?.version?sends.stopStatus:undefined;
   const showStop=sends.stopping||sends.stopError||sends.control?.pendingAbort||status&&status.externalPending>0||sends.control&&sends.control.generation<=stoppedThrough;
   const stopLabel=sends.stopping?'正在保存停止请求…':sends.control&&stoppedThrough>0?(sends.control.pendingAbort?'停止请求已保存 · 等待会话中断核验':status?.phase==='external-unconfirmed'?'停止已请求，外部结果待核验':status?.phase==='stopped'?'停止完成 · 相关受管操作已核验':'停止请求已保存 · 会话中断已确认'):'停止请求未确认';
-  return <section className="send-states" aria-label="发送状态">
+  const known=showStop?stopLabel:sends.items[0]?presentation(sends.items[0],stoppedThrough,!!sends.control?.pendingAbort).label:undefined;
+  const summary=sends.stopError||sends.error?(known??'发送状态待读取')+' · 状态读取未确认':known;
+  return <section className={'send-states'+(expanded?' is-expanded':'')} aria-label="发送状态">
+    {summary&&<button type="button" className="send-states-summary" aria-expanded={expanded} onClick={()=>setExpanded(value=>!value)}>{'发送状态：'+summary+ (expanded?' · 收起':' · 展开')}</button>}
     {(sends.items.length>0||sends.error||showStop)&&<div className="send-states-heading"><span>发送状态</span><button className="text-button" data-testid="refresh-submissions" onClick={()=>void controller.refreshSubmissions()} disabled={sends.loading}>刷新发送状态</button></div>}
     {showStop&&<p className="stop-status" data-testid="stop-status" role="status">{stopLabel}{sends.stopError&&<span>{sends.stopError}</span>}</p>}
     {sends.error&&<p className="send-error" role="status">{sends.error}</p>}

@@ -1,0 +1,325 @@
+{
+  "plan": {
+    "name": "t15-rotation-green02",
+    "steps": [
+      {
+        "wait": "innerWidth>=900&&document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      {
+        "swipe": [
+          110,
+          345,
+          110,
+          100,
+          400
+        ]
+      },
+      {
+        "shot": "rotated-navigation-scroll"
+      },
+      {
+        "click": ".navigation>button.nav-item:last-of-type"
+      },
+      {
+        "wait": "!!document.querySelector('[data-testid=preferences-page]')"
+      },
+      {
+        "shot": "rotated-settings"
+      },
+      {
+        "click": ".conversation-list button"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=message-input]')?.value==='拍照只加入这份草稿，不自动发送。'"
+      },
+      {
+        "shot": "rotated-returned-draft"
+      }
+    ]
+  },
+  "started": "2026-11-04T10:44:51.779Z",
+  "pid": "23571",
+  "steps": [
+    {
+      "step": {
+        "wait": "innerWidth>=900&&document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "swipe": [
+          110,
+          345,
+          110,
+          100,
+          400
+        ]
+      }
+    },
+    {
+      "step": {
+        "shot": "rotated-navigation-scroll"
+      },
+      "value": {
+        "width": 915,
+        "height": 412,
+        "dpr": 2.625,
+        "title": "新会话",
+        "active": "f0416a5c-ad20-4ca9-889b-0e2abddefc33",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 234,
+              "y": 7,
+              "width": 46,
+              "height": 46,
+              "top": 7,
+              "right": 280,
+              "bottom": 53,
+              "left": 234
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 595.0416870117188,
+              "y": 7,
+              "width": 46,
+              "height": 46,
+              "top": 7,
+              "right": 641.0416870117188,
+              "bottom": 53,
+              "left": 595.0416870117188
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 245.76190185546875,
+              "y": 307.4047546386719,
+              "width": 38,
+              "height": 38,
+              "top": 307.4047546386719,
+              "right": 283.76190185546875,
+              "bottom": 345.4047546386719,
+              "left": 245.76190185546875
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 291.76190185546875,
+              "y": 310.4047546386719,
+              "width": 28,
+              "height": 38,
+              "top": 310.4047546386719,
+              "right": 319.76190185546875,
+              "bottom": 348.4047546386719,
+              "left": 291.76190185546875
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": true,
+            "rect": {
+              "x": 585.2857055664062,
+              "y": 304.4047546386719,
+              "width": 44,
+              "height": 44,
+              "top": 304.4047546386719,
+              "right": 629.2857055664062,
+              "bottom": 348.4047546386719,
+              "left": 585.2857055664062
+            }
+          },
+          {
+            "label": "关闭辅助区域",
+            "disabled": false,
+            "rect": {
+              "x": 845.0416870117188,
+              "y": 20,
+              "width": 56.00595474243164,
+              "height": 39.52381134033203,
+              "top": 20,
+              "right": 901.0476417541504,
+              "bottom": 59.52381134033203,
+              "left": 845.0416870117188
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "click": ".navigation>button.nav-item:last-of-type"
+      }
+    },
+    {
+      "step": {
+        "wait": "!!document.querySelector('[data-testid=preferences-page]')"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "shot": "rotated-settings"
+      },
+      "value": {
+        "width": 915,
+        "height": 412,
+        "dpr": 2.625,
+        "title": "设置",
+        "active": "f0416a5c-ad20-4ca9-889b-0e2abddefc33",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 234,
+              "y": 7,
+              "width": 46,
+              "height": 46,
+              "top": 7,
+              "right": 280,
+              "bottom": 53,
+              "left": 234
+            }
+          },
+          {
+            "label": "返回会话",
+            "disabled": false,
+            "rect": {
+              "x": 855.0416870117188,
+              "y": 7,
+              "width": 46,
+              "height": 46,
+              "top": 7,
+              "right": 901.0416870117188,
+              "bottom": 53,
+              "left": 855.0416870117188
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "click": ".conversation-list button"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=message-input]')?.value==='拍照只加入这份草稿，不自动发送。'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "shot": "rotated-returned-draft"
+      },
+      "value": {
+        "width": 915,
+        "height": 412,
+        "dpr": 2.625,
+        "title": "新会话",
+        "active": "f0416a5c-ad20-4ca9-889b-0e2abddefc33",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 234,
+              "y": 7,
+              "width": 46,
+              "height": 46,
+              "top": 7,
+              "right": 280,
+              "bottom": 53,
+              "left": 234
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 595.0416870117188,
+              "y": 7,
+              "width": 46,
+              "height": 46,
+              "top": 7,
+              "right": 641.0416870117188,
+              "bottom": 53,
+              "left": 595.0416870117188
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 245.76190185546875,
+              "y": 307.4047546386719,
+              "width": 38,
+              "height": 38,
+              "top": 307.4047546386719,
+              "right": 283.76190185546875,
+              "bottom": 345.4047546386719,
+              "left": 245.76190185546875
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 291.76190185546875,
+              "y": 310.4047546386719,
+              "width": 28,
+              "height": 38,
+              "top": 310.4047546386719,
+              "right": 319.76190185546875,
+              "bottom": 348.4047546386719,
+              "left": 291.76190185546875
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": true,
+            "rect": {
+              "x": 585.2857055664062,
+              "y": 304.4047546386719,
+              "width": 44,
+              "height": 44,
+              "top": 304.4047546386719,
+              "right": 629.2857055664062,
+              "bottom": 348.4047546386719,
+              "left": 585.2857055664062
+            }
+          },
+          {
+            "label": "关闭辅助区域",
+            "disabled": false,
+            "rect": {
+              "x": 845.0416870117188,
+              "y": 20,
+              "width": 56.00595474243164,
+              "height": 39.52381134033203,
+              "top": 20,
+              "right": 901.0476417541504,
+              "bottom": 59.52381134033203,
+              "left": 845.0416870117188
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true,
+  "completed": "2026-11-04T10:45:02.588Z"
+}

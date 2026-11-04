@@ -1,0 +1,28 @@
+Service stopped
+node:internal/errors:985
+  const err = new Error(message);
+              ^
+
+Error: Command failed: C:\Users\AI_BA\AppData\Local\Android\Sdk\platform-tools\adb.exe -s emulator-5584 shell run-as dev.durableagent.probe /system/bin/am stopservice --user 0 -n dev.durableagent.probe/.ApplicationService
+Service stopped
+
+
+    at genericNodeError (node:internal/errors:985:15)
+    at wrappedFn (node:internal/errors:539:14)
+    at checkExecSyncError (node:child_process:925:11)
+    at execFileSync (node:child_process:961:15)
+    at adb (file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-insets-layout.mjs:11:22)
+    at file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-insets-layout.mjs:71:173 {
+  status: 255,
+  signal: null,
+  output: [
+    null,
+    'Stopping service: Intent { cmp=dev.durableagent.probe/.ApplicationService }\r\n',
+    'Service stopped\r\n'
+  ],
+  pid: 88480,
+  stdout: 'Stopping service: Intent { cmp=dev.durableagent.probe/.ApplicationService }\r\n',
+  stderr: 'Service stopped\r\n'
+}
+
+Node.js v24.14.1

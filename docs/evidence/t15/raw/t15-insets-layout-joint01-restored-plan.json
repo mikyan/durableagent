@@ -1,0 +1,40 @@
+{
+  "name": "restored",
+  "steps": [
+    {
+      "wait": "innerHeight>innerWidth&&document.querySelector('[data-testid=message-input]')?.disabled===false"
+    },
+    {
+      "evaluate": "document.querySelector('[data-testid=message-input]').value",
+      "assert": "原生边距回归草稿 🌍"
+    },
+    {
+      "request": {
+        "method": "input.listSends",
+        "payload": {
+          "id": "71b86d4b-f620-4048-8d9d-ffe3a1437be1"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "history",
+        "payload": {
+          "id": "71b86d4b-f620-4048-8d9d-ffe3a1437be1",
+          "limit": 30
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "input.read",
+        "payload": {
+          "id": "71b86d4b-f620-4048-8d9d-ffe3a1437be1"
+        }
+      }
+    },
+    {
+      "shot": "portrait-restored"
+    }
+  ]
+}

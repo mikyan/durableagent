@@ -1,0 +1,165 @@
+{
+  "plan": {
+    "name": "t15-camera-launch",
+    "launch": {
+      "mode": "console",
+      "run": "T15cameraactual01",
+      "restart": true
+    },
+    "steps": [
+      {
+        "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+      },
+      {
+        "click": "[data-testid=create-conversation]"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      {
+        "fill": "拍照只加入这份草稿，不自动发送。"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+      },
+      {
+        "click": "[data-testid=add-attachment]"
+      },
+      {
+        "shot": "camera-menu"
+      },
+      {
+        "click": ".attachment-menu button:first-child"
+      }
+    ]
+  },
+  "started": "2026-11-04T10:34:59.574Z",
+  "pid": "22870",
+  "steps": [
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "click": "[data-testid=create-conversation]"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "fill": "拍照只加入这份草稿，不自动发送。"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "click": "[data-testid=add-attachment]"
+      }
+    },
+    {
+      "step": {
+        "shot": "camera-menu"
+      },
+      "value": {
+        "width": 412,
+        "height": 915,
+        "dpr": 2.625,
+        "title": "新会话",
+        "active": "f0416a5c-ad20-4ca9-889b-0e2abddefc33",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 20,
+              "y": 70,
+              "width": 46,
+              "height": 46,
+              "top": 70,
+              "right": 66,
+              "bottom": 116,
+              "left": 20
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 346.1845397949219,
+              "y": 70,
+              "width": 46,
+              "height": 46,
+              "top": 70,
+              "right": 392.1845397949219,
+              "bottom": 116,
+              "left": 346.1845397949219
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 25.761905670166016,
+              "y": 782.2619018554688,
+              "width": 38,
+              "height": 38,
+              "top": 782.2619018554688,
+              "right": 63.761905670166016,
+              "bottom": 820.2619018554688,
+              "left": 25.761905670166016
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 71.76190948486328,
+              "y": 785.2619018554688,
+              "width": 28,
+              "height": 38,
+              "top": 785.2619018554688,
+              "right": 99.76190948486328,
+              "bottom": 823.2619018554688,
+              "left": 71.76190948486328
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": false,
+            "rect": {
+              "x": 342.4285888671875,
+              "y": 779.2619018554688,
+              "width": 44,
+              "height": 44,
+              "top": 779.2619018554688,
+              "right": 386.4285888671875,
+              "bottom": 823.2619018554688,
+              "left": 342.4285888671875
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "click": ".attachment-menu button:first-child"
+      }
+    }
+  ],
+  "passed": true,
+  "completed": "2026-11-04T10:35:26.832Z"
+}

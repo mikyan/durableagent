@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.os.Bundle
 import android.webkit.*
+import android.view.WindowInsets
+import android.widget.FrameLayout
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -20,7 +22,23 @@ class AgentActivity:Activity() {
     var webView:WebView?=null
         private set
     private var destroyed=false
-    override fun onCreate(savedInstanceState:Bundle?){super.onCreate(savedInstanceState);openPage()}
+    @Volatile private var pendingTarget:String?=null
+    private fun modeOf(value:Intent)=if((applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE)!=0)value.getStringExtra("validationMode")?:"product" else "product"
+    private fun runOf(value:Intent)=if((applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE)!=0)value.getStringExtra("validationRun") else null
+    private fun targetOf(value:Intent):String?{
+        val id=value.getStringExtra("targetConversationId")?:return null
+        if(!Regex("[-A-Za-z0-9_]{1,128}").matches(id))return null
+        val namespace=runCatching{NativeInputBridge.namespace(modeOf(value),runOf(value))}.getOrNull()?:return null
+        return id.takeIf{value.dataString=="durable-conversation:"+namespace+":"+id}
+    }
+    override fun onNewIntent(value:Intent){
+        super.onNewIntent(value)
+        val changedDomain=modeOf(intent)!=modeOf(value)||runOf(intent)!=runOf(value)
+        intent=value;pendingTarget=targetOf(value)
+        if(changedDomain){openPage();return}
+        pendingTarget?.let{id->webView?.evaluateJavascript("window.__durableOpenConversation?.("+JSONObject.quote(id)+")"){result->if(result=="true"&&pendingTarget==id){pendingTarget=null;intent.removeExtra("targetConversationId")}}}
+    }
+    override fun onCreate(savedInstanceState:Bundle?){super.onCreate(savedInstanceState);pendingTarget=targetOf(intent);openPage()}
     private fun openPage(){
         if(destroyed)return
         client?.disconnect();inputs?.close();execution?.close();documents?.close();webView?.let{it.removeJavascriptInterface("DurableNative");it.destroy()}
@@ -53,6 +71,7 @@ class AgentActivity:Activity() {
             }
         }
         view.addJavascriptInterface(object {
+            @JavascriptInterface fun initialConversationId():String?=pendingTarget.also{pendingTarget=null;runOnUiThread{intent.removeExtra("targetConversationId")}}
             @JavascriptInterface fun postMessage(json:String){runOnUiThread {if(webView===view&&!destroyed){
                 if(json.length>650000)return@runOnUiThread
                 if(view.url?.substringBefore('#')!="https://appassets.androidplatform.net/assets/ui/index.html")return@runOnUiThread
@@ -67,7 +86,20 @@ class AgentActivity:Activity() {
             }}}
             @JavascriptInterface fun writeCredential(json:String){runOnUiThread {if(webView===view&&!destroyed&&json.length<=120000&&view.url?.substringBefore('#')=="https://appassets.androidplatform.net/assets/ui/index.html")client?.writeCredential(json)}}
         },"DurableNative")
-        setContentView(view);view.loadUrl("https://appassets.androidplatform.net/assets/ui/index.html")
+        // Own occluded window geometry here, including initial/replacement WebViews.
+        // Older WebViews do not reliably expose system bars through CSS safe areas.
+        val frame=FrameLayout(this).apply{setBackgroundColor(android.graphics.Color.rgb(37,37,40))}
+        frame.addView(view,FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT))
+        frame.setOnApplyWindowInsetsListener{container,insets->
+            val system=WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout()
+            val bars=insets.getInsets(system)
+            val ime=if(insets.isVisible(WindowInsets.Type.ime()))insets.getInsets(WindowInsets.Type.ime()).bottom else 0
+            container.setPadding(bars.left,bars.top,bars.right,maxOf(bars.bottom,ime))
+            // Keep one owner: do not ask CSS/newer WebViews to apply these again.
+            // M133 reads the cutout object directly, so clear it as well as its type.
+            WindowInsets.Builder(insets).setInsets(system or WindowInsets.Type.ime(),android.graphics.Insets.NONE).setDisplayCutout(null).build()
+        }
+        setContentView(frame);frame.requestApplyInsets();view.loadUrl("https://appassets.androidplatform.net/assets/ui/index.html")
     }
     private fun denied()=WebResourceResponse("text/plain","utf-8",403,"Forbidden",emptyMap(),ByteArrayInputStream(ByteArray(0)))
     private fun showRecovery(reason:String){

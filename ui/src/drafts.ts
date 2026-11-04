@@ -5,7 +5,7 @@ import type {NativeAdmissionAck} from '../../runtime/src/submission-protocol';
 export type DraftView={id:string;text:string;selections:InputSelection[];revision:number;stateVersion:number;status:'saved'|'pending'|'failed'|'conflict';error?:string;busy:boolean;preparingIds:string[];observingIds:string[];preparationErrors:Record<string,string>;submissionContext?:NativeDraft['submissionContext']};
 type Save={operationId:string;expectedRevision:number;text:string;selectionIds:string[];editEpoch:number};
 type Edit=Pick<Save,'text'|'selectionIds'|'editEpoch'>;
-type RecordState={saved:NativeDraft;text:string;selections:InputSelection[];editEpoch:number;savedEpoch:number;status:DraftView['status'];error?:string;preparationErrors:Record<string,string>;writer?:Promise<void>;freezeBarrier?:Promise<void>;retry?:Save;admissionClear?:{fromRevision:number;toRevision:number;throughEpoch:number};selectionRetry?:{operationId:string;expectedRevision:number;kind:'image'|'file';editEpoch:number};debounce?:ReturnType<typeof setTimeout>;maximum?:ReturnType<typeof setTimeout>;busy:boolean};
+type RecordState={saved:NativeDraft;text:string;selections:InputSelection[];editEpoch:number;savedEpoch:number;status:DraftView['status'];error?:string;preparationErrors:Record<string,string>;writer?:Promise<void>;freezeBarrier?:Promise<void>;retry?:Save;admissionClear?:{fromRevision:number;toRevision:number;throughEpoch:number};selectionRetry?:{operationId:string;expectedRevision:number;kind:'image'|'file'|'camera';editEpoch:number};debounce?:ReturnType<typeof setTimeout>;maximum?:ReturnType<typeof setTimeout>;busy:boolean};
 type Observation={timer?:ReturnType<typeof setTimeout>;attempts:number;failures:number;deadline:number;selectionIds:Set<string>};
 
 /** Owns only UI edits and commit barriers. The native store owns durable input and bytes. */
@@ -106,7 +106,7 @@ export class DraftCoordinator {
     try{await writer;}catch(error){this.fail(r,error);throw error;}finally{r.busy=false;if(r.writer===writer)r.writer=undefined;this.notify();}
     if(saveLocal)await this.flush(id);
   }
-  async select(id:string,kind:'image'|'file'){
+  async select(id:string,kind:'image'|'file'|'camera'){
     const r=this.records.get(id);if(!r||r.busy)return;
     r.busy=true;this.notify();
     try{if(!r.selectionRetry)await this.flush(id);}catch(error){r.busy=false;this.notify();throw error;}
@@ -118,14 +118,18 @@ export class DraftCoordinator {
         const value=await this.request<NativeDraft>('input.select',{id,kind:selection.kind,expectedRevision:selection.expectedRevision,operationId:selection.operationId},180000);
         r.selectionRetry=undefined;r.error=undefined;
         if(value.stateVersion>=r.saved.stateVersion){r.saved=value;r.selections=value.selections;r.savedEpoch=selection.editEpoch;if(r.editEpoch===selection.editEpoch){r.text=value.text;r.status='saved';}else r.status='pending';}
-      }catch(error){if(error instanceof ApplicationFailure&&error.code==='INPUT_PICKER_CANCELLED')r.selectionRetry=undefined;this.fail(r,error);throw error;}
+      }catch(error){if(error instanceof ApplicationFailure&&error.code==='INPUT_PICKER_CANCELLED'){r.selectionRetry=undefined;r.error=undefined;throw error;}this.fail(r,error);throw error;}
     })();r.writer=writer;
-    try{await writer;}finally{r.busy=false;if(r.writer===writer)r.writer=undefined;this.notify();}
+    try{await writer;}finally{
+      r.busy=false;if(r.writer===writer)r.writer=undefined;this.notify();
+      // Autosaves waiting on a cancelled picker reject too. Resume pending edits
+      // after releasing that writer, while preserving the cancellation result.
+      if(r.status==='pending')void this.flush(id).catch(()=>{});
+    }
     for(const selection of r.selections)if(!before.has(selection.id)){
       if(selection.preparation.state==='selected')void this.prepare(id,selection.id).catch(()=>{});
       else if(selection.preparation.state==='preparing'){this.automaticPreparations.add(`${id}:${selection.id}`);this.poll(id,[selection.id]);}
     }
-    if(r.status==='pending')void this.flush(id).catch(()=>{});
   }
   async prepare(id:string,selectionId:string){
     const r=this.records.get(id),key=`${id}:${selectionId}`;

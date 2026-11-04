@@ -160,7 +160,7 @@ class ApplicationService:Service() {
     private fun open(mode:String,run:String?) {
         try {
             val actualMode=mode.removePrefix("recovery-")
-            check(actualMode in setOf("product","fixture","hang","real","models","models-fixture","execution","execution-real","extensions-fixture","extensions-real"))
+            check(actualMode in setOf("product","fixture","console","hang","real","models","models-fixture","execution","execution-real","extensions-fixture","extensions-real"))
             check(mode=="product"||run?.matches(Regex("[a-zA-Z0-9-]{1,80}"))==true)
             check(!File(noBackupFilesDir,"unsupported-restore").exists()) { "检测到不受支持的系统恢复，原数据已保留；运行已关闭，请使用原安装的数据继续核验。" }
             NativeInputStore(this,NativeInputBridge.namespace(mode,run)).withLeaseWait(1000).use{it.pendingStops()}

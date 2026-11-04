@@ -1,0 +1,109 @@
+{
+  "run": "ef2759df-5bc2-4dcc-931e-2546f3c4de31",
+  "mode": "fixture",
+  "started": "2026-11-04T12:20:44.149Z",
+  "scope": "Actual ACTION_OPEN_DOCUMENT cancellation with a concurrent edit delivered to retained React while system picker is foreground; then real UI SIGKILL and native observation. No model input or Termux action.",
+  "conversationId": "37e82890-e668-43be-954e-547e4292359a",
+  "pickerComponent": "com.google.android.documentsui/com.android.documentsui.picker.PickActivity",
+  "pickerFocus": "  mCurrentFocus=Window{6afc4c5 u0 com.google.android.documentsui/com.android.documentsui.picker.PickActivity}\r",
+  "pending": {
+    "text": "选择器打开期间继续编辑的草稿 🌍",
+    "state": "pending",
+    "busy": true,
+    "historyItems": 0
+  },
+  "saved": {
+    "id": "37e82890-e668-43be-954e-547e4292359a",
+    "revision": 2,
+    "text": "选择器打开期间继续编辑的草稿 🌍",
+    "selections": [],
+    "committed": true,
+    "stateVersion": 2,
+    "capability": {
+      "provider": "fixture",
+      "modelId": "conversation",
+      "input": [
+        "text"
+      ],
+      "source": "validation",
+      "limits": {},
+      "applicationPolicy": {
+        "draftCharacters": 100000,
+        "attachments": 4,
+        "sourceImageBytes": 16777216,
+        "sourcePixels": 25165824,
+        "textBytes": 262144,
+        "imageWidth": 1024,
+        "imageHeight": 1024,
+        "imageBytes": 1572864,
+        "totalBase64Bytes": 8388608,
+        "requestBytes": 10485760
+      },
+      "version": "d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"
+    },
+    "submissionContext": {
+      "sdkConversationId": 5,
+      "associationVersion": 1,
+      "location": {
+        "workspaceId": "default",
+        "version": 1,
+        "identity": "749b68279625238dfb9c007c2010bca79e397d0fa07a6b2297c807b437296268"
+      }
+    }
+  },
+  "before": {
+    "uiPid": "3669",
+    "agentPid": "3794"
+  },
+  "after": {
+    "uiPid": "5099",
+    "agentPid": "3794",
+    "draft": {
+      "text": "选择器打开期间继续编辑的草稿 🌍",
+      "state": "saved",
+      "busy": false,
+      "historyItems": 0
+    },
+    "native": {
+      "id": "37e82890-e668-43be-954e-547e4292359a",
+      "revision": 2,
+      "text": "选择器打开期间继续编辑的草稿 🌍",
+      "selections": [],
+      "committed": true,
+      "stateVersion": 2,
+      "capability": {
+        "provider": "fixture",
+        "modelId": "conversation",
+        "input": [
+          "text"
+        ],
+        "source": "validation",
+        "limits": {},
+        "applicationPolicy": {
+          "draftCharacters": 100000,
+          "attachments": 4,
+          "sourceImageBytes": 16777216,
+          "sourcePixels": 25165824,
+          "textBytes": 262144,
+          "imageWidth": 1024,
+          "imageHeight": 1024,
+          "imageBytes": 1572864,
+          "totalBase64Bytes": 8388608,
+          "requestBytes": 10485760
+        },
+        "version": "d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"
+      },
+      "submissionContext": {
+        "sdkConversationId": 5,
+        "associationVersion": 1,
+        "location": {
+          "workspaceId": "default",
+          "version": 1,
+          "identity": "749b68279625238dfb9c007c2010bca79e397d0fa07a6b2297c807b437296268"
+        }
+      }
+    }
+  },
+  "error": "AssertionError [ERR_ASSERTION]: The input did not match the regular expression /OK \\(1 test\\)/. Input:\n\n'INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ConsolePickerObservationTest\\r\\n' +\n  'INSTRUMENTATION_STATUS: current=1\\r\\n' +\n  'INSTRUMENTATION_STATUS: id=AndroidJUnitRunner\\r\\n' +\n  'INSTRUMENTATION_STATUS: numtests=1\\r\\n' +\n  'INSTRUMENTATION_STATUS: stream=\\r\\n' +\n  'dev.durableagent.probe.ConsolePickerObservationTest:\\r\\n' +\n  'INSTRUMENTATION_STATUS: test=savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner\\r\\n' +\n  'INSTRUMENTATION_STATUS_CODE: 1\\r\\n' +\n  'INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ConsolePickerObservationTest\\r\\n' +\n  'INSTRUMENTATION_STATUS: current=1\\r\\n' +\n  'INSTRUMENTATION_STATUS: id=AndroidJUnitRunner\\r\\n' +\n  'INSTRUMENTATION_STATUS: numtests=1\\r\\n' +\n  'INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Expected the retained host process expected:<3794> but was:<5231>\\r\\n' +\n  '\\tat org.junit.Assert.fail(Assert.java:89)\\r\\n' +\n  '\\tat org.junit.Assert.failNotEquals(Assert.java:835)\\r\\n' +\n  '\\tat org.junit.Assert.assertEquals(Assert.java:120)\\r\\n' +\n  '\\tat dev.durableagent.probe.ConsolePickerObservationTest.savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(ConsolePickerObservationTest.kt:35)\\r\\n' +\n  '\\r\\n' +\n  'INSTRUMENTATION_STATUS: stream=\\r\\n' +\n  'Error in savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(dev.durableagent.probe.ConsolePickerObservationTest):\\r\\n' +\n  'java.lang.AssertionError: Expected the retained host process expected:<3794> but was:<5231>\\r\\n' +\n  '\\tat org.junit.Assert.fail(Assert.java:89)\\r\\n' +\n  '\\tat org.junit.Assert.failNotEquals(Assert.java:835)\\r\\n' +\n  '\\tat org.junit.Assert.assertEquals(Assert.java:120)\\r\\n' +\n  '\\tat dev.durableagent.probe.ConsolePickerObservationTest.savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(ConsolePickerObservationTest.kt:35)\\r\\n' +\n  '\\r\\n' +\n  'INSTRUMENTATION_STATUS: test=savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner\\r\\n' +\n  'INSTRUMENTATION_STATUS_CODE: -2\\r\\n' +\n  'INSTRUMENTATION_RESULT: stream=\\r\\n' +\n  '\\r\\n' +\n  'Time: 1.272\\r\\n' +\n  'There was 1 failure:\\r\\n' +\n  '1) savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(dev.durableagent.probe.ConsolePickerObservationTest)\\r\\n' +\n  'java.lang.AssertionError: Expected the retained host process expected:<3794> but was:<5231>\\r\\n' +\n  '\\tat org.junit.Assert.fail(Assert.java:89)\\r\\n' +\n  '\\tat org.junit.Assert.failNotEquals(Assert.java:835)\\r\\n' +\n  '\\tat org.junit.Assert.assertEquals(Assert.java:120)\\r\\n' +\n  '\\tat dev.durableagent.probe.ConsolePickerObservationTest.savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(ConsolePickerObservationTest.kt:35)\\r\\n' +\n  '\\r\\n' +\n  'FAILURES!!!\\r\\n' +\n  'Tests run: 1,  Failures: 1\\r\\n' +\n  '\\r\\n' +\n  '\\r\\n' +\n  'INSTRUMENTATION_CODE: -1'\n",
+  "completed": "2026-11-04T12:20:55.550Z"
+}

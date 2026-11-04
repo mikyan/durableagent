@@ -1,6 +1,6 @@
 // Only the model HTTP boundary is replaced. Pi AI still loads its lazy provider,
 // parses SSE, decodes UTF-8 and assembles deltas using the published packages.
-export type FixtureOptions={hang?:boolean;observeRequest?:(body:string)=>void;toolName?:(input?:unknown)=>string|undefined;toolArguments?:(input:unknown)=>Record<string,unknown>;tool?:boolean;invalidTool?:boolean;failFirst?:number};
+export type FixtureOptions={reply?:string;hang?:boolean;observeRequest?:(body:string)=>void;toolName?:(input?:unknown)=>string|undefined;toolArguments?:(input:unknown)=>Record<string,unknown>;tool?:boolean;invalidTool?:boolean;failFirst?:number};
 export function fixtureTransport(options:FixtureOptions & {requested:()=>void; aborted:()=>void}): typeof fetch {
   let requests=0;
   return async (_input, init) => {
@@ -13,7 +13,7 @@ export function fixtureTransport(options:FixtureOptions & {requested:()=>void; a
       {tool_calls:[{index:0,id:'tool-1',type:'function',function:{name:'echo',arguments:'{"city":"北'}}]},
       {tool_calls:[{index:0,function:{arguments:'京🌍","count":'}}]},
       {tool_calls:[{index:0,function:{arguments:options.invalidTool?'"many"}':'"2"}'}}]}
-    ] : ['你', '好', '🌍'].map(content=>({content}));
+    ] : (options.reply?options.reply.match(/[\s\S]{1,180}/g)!:['你', '好', '🌍']).map(content=>({content}));
     let index = 0;
     let done=false;
     let abort:()=>void;

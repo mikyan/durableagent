@@ -1,0 +1,172 @@
+{
+  "run": "4c3b2b42-895a-40e6-8cdf-d5b82600872a",
+  "mode": "models",
+  "started": "2026-11-04T12:36:54.417Z",
+  "scope": "Real bundled React/native vault/SDK request to actual MiMo endpoint using only a deliberately invalid synthetic key. One explicit send; visible Chinese guidance and navigation preserve original intent/history.",
+  "uiPid": "5919",
+  "connectionId": "5e872bd2-3300-40d8-9391-7839590ae3a6",
+  "endpoint": "https://token-plan-cn.xiaomimimo.com/v1",
+  "model": "mimo-v2.6-flash",
+  "conversationId": "b38c520e-f0aa-43cb-ba1f-6942ebca5052",
+  "explicitSendClicks": 1,
+  "failure": {
+    "phase": "failed",
+    "title": "鉴权失败 · 401",
+    "guidance": "模型服务拒绝了当前凭据，请检查 API Key 与连接地址。",
+    "rawReason": "401: {\"message\":\"Invalid API Key\",\"param\":\"Please provide valid API Key\",\"code\":\"401\",\"type\":\"invalid_key\"}",
+    "action": "检查模型与凭据"
+  },
+  "beforeNavigation": {
+    "intents": {
+      "intents": [
+        {
+          "protocol": 1,
+          "intentId": "0e89b703-0123-4e91-bd89-077ec10a530b",
+          "actionId": "0e89b703-0123-4e91-bd89-077ec10a530b",
+          "id": "b38c520e-f0aa-43cb-ba1f-6942ebca5052",
+          "inputToken": "68b7c2d4-9a8e-4e41-bdec-468aece36718",
+          "inputRevision": 1,
+          "inputDigest": "6ff7dbb3d9059c991c1102e21b50688f649615c01619ef68886c16b3cef28381",
+          "context": {
+            "sdkConversationId": 6,
+            "associationVersion": 1,
+            "location": {
+              "workspaceId": "default",
+              "version": 1,
+              "identity": "2055a155d3e84cd9fb92fae4e205ee1f300cc144a4fc1571adae6acc482f49c5"
+            }
+          },
+          "queue": {
+            "whenBusy": "followUp",
+            "whenIdle": "start"
+          },
+          "controlGeneration": 1,
+          "createdAt": 1793795831023,
+          "preview": {
+            "text": "验证真实服务在无效凭据下给出明确错误。",
+            "attachmentCount": 0
+          },
+          "stateVersion": 3,
+          "delivery": "acknowledged",
+          "cancelled": false,
+          "receipt": {
+            "protocol": 1,
+            "intentId": "0e89b703-0123-4e91-bd89-077ec10a530b",
+            "id": "b38c520e-f0aa-43cb-ba1f-6942ebca5052",
+            "inputToken": "68b7c2d4-9a8e-4e41-bdec-468aece36718",
+            "inputRevision": 1,
+            "inputDigest": "6ff7dbb3d9059c991c1102e21b50688f649615c01619ef68886c16b3cef28381",
+            "context": {
+              "sdkConversationId": 6,
+              "associationVersion": 1,
+              "location": {
+                "workspaceId": "default",
+                "version": 1,
+                "identity": "2055a155d3e84cd9fb92fae4e205ee1f300cc144a4fc1571adae6acc482f49c5"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "bindingId": "9c072735-da29-4004-8c0c-19653e1af0bc",
+            "submissionId": 17
+          }
+        }
+      ]
+    },
+    "history": {
+      "items": [
+        {
+          "id": "16",
+          "role": "user",
+          "text": "验证真实服务在无效凭据下给出明确错误。",
+          "persisted": true
+        }
+      ]
+    },
+    "context": {
+      "id": "b38c520e-f0aa-43cb-ba1f-6942ebca5052",
+      "state": "estimated",
+      "tokens": 19,
+      "modelLimit": 1048576,
+      "messages": 2,
+      "scope": "committed-messages",
+      "note": "按 SDK 当前已提交消息的 UTF-8 字节数 / 3 粗估；不含动态系统指令、工具定义、协议开销、未提交生成与草稿，不是服务商精确计数。"
+    }
+  },
+  "afterNavigation": {
+    "intents": {
+      "intents": [
+        {
+          "protocol": 1,
+          "intentId": "0e89b703-0123-4e91-bd89-077ec10a530b",
+          "actionId": "0e89b703-0123-4e91-bd89-077ec10a530b",
+          "id": "b38c520e-f0aa-43cb-ba1f-6942ebca5052",
+          "inputToken": "68b7c2d4-9a8e-4e41-bdec-468aece36718",
+          "inputRevision": 1,
+          "inputDigest": "6ff7dbb3d9059c991c1102e21b50688f649615c01619ef68886c16b3cef28381",
+          "context": {
+            "sdkConversationId": 6,
+            "associationVersion": 1,
+            "location": {
+              "workspaceId": "default",
+              "version": 1,
+              "identity": "2055a155d3e84cd9fb92fae4e205ee1f300cc144a4fc1571adae6acc482f49c5"
+            }
+          },
+          "queue": {
+            "whenBusy": "followUp",
+            "whenIdle": "start"
+          },
+          "controlGeneration": 1,
+          "createdAt": 1793795831023,
+          "preview": {
+            "text": "验证真实服务在无效凭据下给出明确错误。",
+            "attachmentCount": 0
+          },
+          "stateVersion": 3,
+          "delivery": "acknowledged",
+          "cancelled": false,
+          "receipt": {
+            "protocol": 1,
+            "intentId": "0e89b703-0123-4e91-bd89-077ec10a530b",
+            "id": "b38c520e-f0aa-43cb-ba1f-6942ebca5052",
+            "inputToken": "68b7c2d4-9a8e-4e41-bdec-468aece36718",
+            "inputRevision": 1,
+            "inputDigest": "6ff7dbb3d9059c991c1102e21b50688f649615c01619ef68886c16b3cef28381",
+            "context": {
+              "sdkConversationId": 6,
+              "associationVersion": 1,
+              "location": {
+                "workspaceId": "default",
+                "version": 1,
+                "identity": "2055a155d3e84cd9fb92fae4e205ee1f300cc144a4fc1571adae6acc482f49c5"
+              }
+            },
+            "queue": {
+              "whenBusy": "followUp",
+              "whenIdle": "start"
+            },
+            "controlGeneration": 1,
+            "bindingId": "9c072735-da29-4004-8c0c-19653e1af0bc",
+            "submissionId": 17
+          }
+        }
+      ]
+    },
+    "history": {
+      "items": [
+        {
+          "id": "16",
+          "role": "user",
+          "text": "验证真实服务在无效凭据下给出明确错误。",
+          "persisted": true
+        }
+      ]
+    }
+  },
+  "passed": true,
+  "completed": "2026-11-04T12:37:17.471Z"
+}
