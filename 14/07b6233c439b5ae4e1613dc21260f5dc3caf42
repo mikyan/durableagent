@@ -1,0 +1,21 @@
+managed-execution/FILE-VALIDATION.md
+  s_467dcb949b5b60::t_2aaa88739e8a42 80,84-85,88
+managed-execution/evidence/t10-android-real-files.json
+  s_467dcb949b5b60::t_eafb6a762dde6b 1-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "1407b6233c439b5ae4e1613dc21260f5dc3caf42",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
