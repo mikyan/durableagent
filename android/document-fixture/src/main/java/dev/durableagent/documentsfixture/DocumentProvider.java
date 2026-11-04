@@ -29,6 +29,9 @@ public final class DocumentProvider extends DocumentsProvider {
         boolean root=id.equals("root");File file=Fixture.original(getContext());
         if(!root&&!id.equals("original"))throw new FileNotFoundException("Synthetic original is absent");
         long size=root?0:Fixture.size(getContext());
+        Object modified=null;
+        if(root)modified=Long.valueOf(0);
+        else if(Fixture.shared(getContext())==null)modified=Long.valueOf(file.lastModified());
         MatrixCursor.RowBuilder row=cursor.newRow();
         for(String column:cursor.getColumnNames())row.add(column,switch(column){
             case DocumentsContract.Document.COLUMN_DOCUMENT_ID -> id;
@@ -36,7 +39,7 @@ public final class DocumentProvider extends DocumentsProvider {
             case DocumentsContract.Document.COLUMN_MIME_TYPE -> root?DocumentsContract.Document.MIME_TYPE_DIR:"application/octet-stream";
             case DocumentsContract.Document.COLUMN_FLAGS -> root?0:DocumentsContract.Document.FLAG_SUPPORTS_WRITE;
             case DocumentsContract.Document.COLUMN_SIZE -> size;
-            case DocumentsContract.Document.COLUMN_LAST_MODIFIED -> root?0:Fixture.shared(getContext())==null?file.lastModified():null;
+            case DocumentsContract.Document.COLUMN_LAST_MODIFIED -> modified;
             default -> null;
         });
         return cursor;
