@@ -1,0 +1,167 @@
+android/app/src/main/java/dev/durableagent/probe/NativeInputAccess.kt
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 60-63
+ui/src/extensions.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-11
+docs/evidence/t14/emu16k-third-targeted.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-90
+docs/evidence/t14/README.md
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-185
+android/app/src/androidTest/java/dev/durableagent/probe/NativeRoutingTest.kt
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-100
+docs/evidence/t14/android-lint.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-40
+runtime/src/projects.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 8,51-68
+docs/evidence/t14/browser-subscription-red.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1
+ui/src/extensions.css
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1
+docs/evidence/t14/emu16k-native-green.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-23
+docs/evidence/t14/source-stop-label-red.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-3
+docs/specs/v1/tickets/14-extensions-and-routing.md
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 9-21
+runtime/validation/registry-policy.mjs
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-49
+docs/evidence/t14/emu16k-full-first.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-216
+docs/evidence/t14/ui-final.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-19
+docs/evidence/t14/credential-audit-third.json
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-19
+docs/evidence/t14/emu16k-native-red.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-32
+docs/evidence/t14/scoped-development-gate-review.md
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-86
+docs/evidence/t14/credential-audit-second.json
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-19
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 22,26-30,61-64
+  s_467dcb949b5b60::t_e90bfb65372934 39,44,60
+runtime/src/extension-protocol.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-19
+android/app/src/debug/java/dev/durableagent/probe/SubmissionFaultProbeService.kt
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 21,34
+runtime/src/extensions/assembly.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-21
+runtime/test/extensions.test.mjs
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-3
+runtime/test/routing.test.mjs
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-3
+ui/src/controller.ts
+  s_467dcb949b5b60::t_e90bfb65372934 11
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 32-34,42,117
+android/app/src/androidTest/java/dev/durableagent/probe/ExtensionApplicationTest.kt
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-159
+docs/evidence/t14/emu16k-real-lost-ack.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-25
+docs/evidence/t14/results.json
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-387
+docs/evidence/t14/source-cancel-location-paired.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-12
+docs/evidence/t14/route-draft-red.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-3
+runtime/src/submission-protocol.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 13,21-22,27-28,31,37
+docs/evidence/t14/emu16k-final-targeted.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-68
+docs/evidence/t14/emu16k-bootstrap-close-red.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-46
+runtime/src/routing-protocol.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-6
+ui/src/extensions/timeline.tsx
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-31
+docs/evidence/t14/emu16k-native-combined.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-210
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 10,59,96,107,111
+docs/evidence/t14/runtime-final.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-190
+docs/evidence/t14/final-apk-inspection.json
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-227
+docs/specs/v1/README.md
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 3,37
+  s_467dcb949b5b60::t_79b95ae987914c 38
+docs/evidence/t14/runtime-first.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-201
+android/app/src/androidTest/java/dev/durableagent/probe/NativeRoutingCrashTest.kt
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-73
+runtime/src/submission.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 5,16-19,28,51,77,82,84
+ui/src/browser.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 15-16
+ui/test/extension-host.test.tsx
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-26
+ui/test/extensions-real.test.mjs
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-46
+runtime/src/extensions/routing-agent.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-18
+ui/src/extensions/submissions.tsx
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 16
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_e90bfb65372934 88,103,221
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 25,57,66-67,159-163
+runtime/validation/submission-authority.mjs
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 4,20-38,42-43
+runtime/src/application.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 6-11,35-37,67,69-70,75,92,135-139,179,194-198,225
+  s_467dcb949b5b60::t_e90bfb65372934 32,55,68
+android/app/src/main/java/dev/durableagent/probe/NativeInputStore.kt
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 383-396,407
+ui/test/browser.test.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 26-36
+runtime/EXTENSIONS.md
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-51
+ui/test/timeline.test.tsx
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-45
+docs/evidence/t14/source-cancel-location-green.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-3
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_e90bfb65372934 14
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 18
+android/app/src/main/java/dev/durableagent/probe/NativeSubmissionRecords.kt
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 129-159,197-198,200-207,238,320-327
+runtime/test/application.test.mjs
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 155,162-164
+ui/src/extension-host.tsx
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-29
+runtime/validation/extension-policy.mjs
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-144
+ui/src/submissions.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 40-41,81
+ui/src/client.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 13,40,52,54
+docs/evidence/t14/emu16k-third-diagnostic.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-48
+runtime/src/live-model.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 7,14
+runtime/src/extensions/models-agent.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-8
+docs/evidence/t14/emu16k-full-second.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-295
+runtime/src/transport.ts
+  s_467dcb949b5b60::t_e90bfb65372934 3,7
+runtime/src/routing.ts
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-43
+docs/evidence/t14/android-final-build.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-86
+docs/evidence/t14/source-cancel-location-red.log
+  s_467dcb949b5b60::t_9e9f5c7e5d00ad 1-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "f4ba09724e1ee5c6f3ebc9e3f594aec86c84ac0b",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
