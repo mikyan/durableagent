@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit
 class StopExecutionTest {
     private val instrumentation=InstrumentationRegistry.getInstrumentation()
     private val context=instrumentation.targetContext
+    private var phase="opening"
+    private fun phase(value:String){phase=value}
     private fun id()=UUID.randomUUID().toString()
     private fun until(label:String,timeout:Long=90000,condition:()->Boolean){val end=SystemClock.elapsedRealtime()+timeout;while(!condition()){assertTrue(label,SystemClock.elapsedRealtime()<end);Thread.sleep(30)}}
     private fun observe(action:()->JSONObject):JSONObject{val end=SystemClock.elapsedRealtime()+2000;while(true){try{return action()}catch(error:NativeInputException){if(error.code!="INPUT_STORAGE_BUSY"||SystemClock.elapsedRealtime()>=end)throw error;Thread.sleep(20)}}}
@@ -41,10 +43,11 @@ class StopExecutionTest {
         override fun close(){client.disconnect()}
     }
     private fun send(store:NativeInputStore,wire:Wire,product:String,text:String,dispatch:Boolean=true):JSONObject{
-        val current=observe{store.inspect(product)};val saved=store.save(product,current.getLong("revision"),id(),text,emptyList());val fixed=store.freeze(product,saved.getLong("revision"),id())
+        phase("$product.inspect");val current=observe{store.inspect(product)};phase("$product.save");val saved=store.save(product,current.getLong("revision"),id(),text,emptyList());phase("$product.freeze");val fixed=store.freeze(product,saved.getLong("revision"),id())
         val location=wire.call("open",JSONObject().put("id",product)).getJSONObject("conversation").getJSONObject("submissionContext")
+        phase("$product.create-send")
         val intent=store.createSend(JSONObject().put("id",product).put("actionId",id()).put("inputToken",fixed.getString("token")).put("expectedContext",location).put("expectedControlVersion",observe{store.readControl(product)}.getLong("version")).put("queue",JSONObject().put("whenBusy","followUp").put("whenIdle","start")))
-        if(dispatch)wire.call("send",JSONObject().put("intentId",intent.getString("intentId")));return intent
+        if(dispatch){phase("$product.dispatch");wire.call("send",JSONObject().put("intentId",intent.getString("intentId")))};return intent
     }
     private fun nativeQuery(access:ExecutionAccess,executionId:String):JSONObject{
         val begun=JSONObject(access.beginJson("query",JSONObject().put("executionId",executionId).toString()));assertTrue(begun.toString(),begun.getBoolean("ok"));val operation=begun.getJSONObject("value").getString("operationId");var result=JSONObject()
@@ -54,8 +57,8 @@ class StopExecutionTest {
     private fun finish(page:ActivityScenario<AgentActivity>,wire:Wire,primary:Throwable?){runCatching{page.close()};try{wire.client.control(20,"close");until("Host closes",20000){wire.state().optString("phase")=="closed"}}catch(error:Throwable){if(primary!=null)primary.addSuppressed(error)else throw error}finally{wire.close()}}
 
     /** Deliberately external test actor: no application intent, SDK tool or writer-queue bypass in production. */
-    private inner class IndependentSleepScope:AutoCloseable {
-        val executionId="stop-isolation-"+id()
+    private inner class IndependentSleepScope(run:String):AutoCloseable {
+        val executionId="stop-isolation-$run"
         private val identity=ExecutionIdentity(context,"production-v1",allowCreate=false)
         private val peer=ExecutionPairingStore(context).use{it.requireClient(identity.certificateSha256())}
         private val client=ExecutionTlsClient(identity,peer)
@@ -79,31 +82,40 @@ class StopExecutionTest {
         override fun close(){if(!attempted)return;verified(client.request("cancel",JSONObject().put("executionId",executionId).put("reason","user")));until("Independent fixture scope cleanup",15000){query().let{it.optBoolean("scopeConfirmed")&&it.optString("state") in setOf("stopped","not_started","completed")}};attempted=false}
     }
 
+    @Test(timeout=30000) fun inspectExistingIndependentFixtureScopes(){
+        val identity=ExecutionIdentity(context,"production-v1",allowCreate=false);val peer=ExecutionPairingStore(context).use{it.requireClient(identity.certificateSha256())};val client=ExecutionTlsClient(identity,peer)
+        val page=client.request("list",JSONObject().put("cursor","stop-isolation-").put("limit",10));val rows=page.getJSONArray("executions");val scopes=org.json.JSONArray()
+        for(index in 0 until rows.length()){val receipt=rows.getJSONObject(index);val executionId=receipt.getString("executionId");if(!executionId.startsWith("stop-isolation-"))continue;assertEquals(executionId,receipt.getJSONObject("context").getString("productId"));assertEquals(peer.executorId,receipt.getString("executorId"));assertEquals(peer.ledgerEpoch,receipt.getString("ledgerEpoch"));scopes.put(receipt)}
+        instrumentation.sendStatus(0,Bundle().apply{putString("independentStopFixtureObservation",JSONObject().put("scopes",scopes).put("nextCursor",page.opt("nextCursor")).put("noHarness",true).put("noDispatchOrCancellation",true).toString())})
+    }
+
     @Test(timeout=240000) fun notificationStopsOnlyOwnedTermuxScopeDuringBusyJsAndNewGenerationIsIndependent(){
         val run=id();val mode="execution";val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode",mode).putExtra("validationRun",run));val wire=Wire(mode,run);val namespace=NativeInputBridge.namespace(mode,run)
         var primary:Throwable?=null;var unrelated:IndependentSleepScope?=null
-        NativeInputStore(context,namespace).use{store->ExecutionAccess(context).use{native->try{
-            val before=wire.ready();wire.call("create",JSONObject().put("creationId","target").put("title","target"))
+        NativeInputStore(context,namespace).withLeaseWait(1000).use{store->ExecutionAccess(context).use{native->try{
+            phase("host.ready");val before=wire.ready();phase("target.create");wire.call("create",JSONObject().put("creationId","target").put("title","target"))
             // T10 serializes application shell writers. The unrelated witness is an explicit
             // external fixture with only a fixed sleep, not a second application shell tool.
-            val independent=IndependentSleepScope();unrelated=independent;independent.start()
+            phase("independent.start");val independent=IndependentSleepScope(run);unrelated=independent;independent.start()
             val old=send(store,wire,"target","EXEC_CANCEL")
-            var target=JSONObject();var other=JSONObject();until("Target and independent external fixture run"){target=wire.execution("target")?:return@until false;other=independent.query();target.optString("state")=="running"&&other.optString("state")=="running"}
+            phase("scopes.running");var target=JSONObject();var other=JSONObject();until("Target and independent external fixture run"){target=wire.execution("target")?:return@until false;other=independent.query();target.optString("state")=="running"&&other.optString("state")=="running"}
             val targetId=target.getString("executionId")
-            val control=observe{store.readControl("target")};NativeStopController.publish(context,mode,run,control)
+            phase("notification.publish");val control=observe{store.readControl("target")};NativeStopController.publish(context,mode,run,control)
             val manager=context.getSystemService(NotificationManager::class.java);assertTrue("Enable the app notification permission for this actual notification test",manager.areNotificationsEnabled())
             val notification=manager.activeNotifications.single{it.tag=="$namespace:target"};assertEquals("target",notification.notification.extras.getString(android.app.Notification.EXTRA_TITLE))
             val stopAction=notification.notification.actions.single().actionIntent
-            wire.client.control(34,"15000");until("Actual JS busy",3000){wire.state(35,3).getLong("started")>0}
+            phase("node.busy");wire.client.control(34,"15000");until("Actual JS busy",3000){wire.state(35,3).getLong("started")>0}
             page.close();val at=SystemClock.elapsedRealtime();stopAction.send();until("Notification durably commits without JS",3000){observe{store.readControl("target")}.getLong("stoppedThrough")==1L}
             stopAction.send();assertEquals(1L,observe{store.readControl("target")}.getLong("version"))
             // Do not call JS while busy: use the original immutable location from the accepted intent.
-            val draft=observe{store.inspect("target")};val saved=store.save("target",draft.getLong("revision"),id(),"EXEC_VERIFY_CANCEL",emptyList());val fixed=store.freeze("target",saved.getLong("revision"),id())
+            phase("new-generation.inspect");val draft=observe{store.inspect("target")};phase("new-generation.save");val saved=store.save("target",draft.getLong("revision"),id(),"EXEC_VERIFY_CANCEL",emptyList());phase("new-generation.freeze");val fixed=store.freeze("target",saved.getLong("revision"),id())
+            phase("new-generation.create-send")
             val fresh=store.createSend(JSONObject().put("id","target").put("actionId",id()).put("inputToken",fixed.getString("token")).put("expectedContext",old.getJSONObject("context")).put("expectedControlVersion",observe{store.readControl("target")}.getLong("version")).put("queue",JSONObject().put("whenBusy","followUp").put("whenIdle","start")))
-            val later=observe{store.inspect("target")};store.save("target",later.getLong("revision"),id(),"new unsent draft 世界",emptyList())
-            var stopped=JSONObject();until("Actual original process scope stops",9000){stopped=nativeQuery(native,targetId);stopped.optString("state")=="stopped"&&stopped.optBoolean("scopeConfirmed")}
+            phase("later-draft.save");val later=observe{store.inspect("target")};store.save("target",later.getLong("revision"),id(),"new unsent draft 世界",emptyList())
+            phase("target.confirm-stop");var stopped=JSONObject();until("Actual original process scope stops",9000){stopped=nativeQuery(native,targetId);stopped.optString("state")=="stopped"&&stopped.optBoolean("scopeConfirmed")}
             val untouched=independent.query();assertEquals("running",untouched.getString("state"));assertFalse(untouched.optBoolean("cancelRequested"))
-            val reopened=wire.ready();assertNotEquals(before.getInt("pid"),reopened.getInt("pid"));var freshStatus=JSONObject()
+            phase("owner.reopen");val reopened=wire.ready();assertNotEquals(before.getInt("pid"),reopened.getInt("pid"));var freshStatus=JSONObject()
+            phase("new-generation.settle")
             until("Fresh generation accepted and verifier finished"){freshStatus=wire.call("sendStatus",JSONObject().put("intentId",fresh.getString("intentId")));freshStatus.optBoolean("accepted")&&freshStatus.optJSONObject("submission")?.optString("status")=="done"}
             val oldStatus=wire.call("sendStatus",JSONObject().put("intentId",old.getString("intentId")));assertEquals("unanswered",oldStatus.getJSONObject("submission").getString("status"));assertFalse(observe{store.readControl("target")}.has("pendingAbort"))
             assertEquals("new unsent draft 世界",observe{store.inspect("target")}.getString("text"));assertEquals("stopped",observe{store.stopStatus("target")}.getString("phase"))
@@ -112,7 +124,7 @@ class StopExecutionTest {
             stopAction.send();Thread.sleep(150);assertEquals(1L,observe{store.readControl("target")}.getLong("stoppedThrough"))
             independent.close()
             instrumentation.sendStatus(0,Bundle().apply{putString("stopExecutionEvidence",JSONObject().put("case","notification-busy-termux").put("target",stopped).put("unrelatedAtTargetStop",untouched).put("unrelatedSource","independent-fixed-sleep-fixture").put("unrelatedCleanup",independent.query()).put("oldPid",before.getInt("pid")).put("newPid",reopened.getInt("pid")).put("elapsedMs",SystemClock.elapsedRealtime()-at).put("freshReceipt",freshStatus.getJSONObject("receipt")).put("verifier",verifier).put("laterDraftPreserved",true).put("oldNotificationCannotStopNewGeneration",true).toString())})
-        }catch(error:Throwable){primary=error;throw error}finally{try{unrelated?.close()}catch(error:Throwable){if(primary!=null)primary!!.addSuppressed(error)else throw error}finally{finish(page,wire,primary)}}}}
+        }catch(error:Throwable){primary=error;instrumentation.sendStatus(0,Bundle().apply{putString("stopIsolationFailure",JSONObject().put("run",run).put("phase",phase).put("code",(error as? NativeInputException)?.code?:error.javaClass.simpleName).put("independentExecutionId",unrelated?.executionId).toString())});throw error}finally{try{unrelated?.let{it.close();instrumentation.sendStatus(0,Bundle().apply{putString("stopIsolationCleanup",JSONObject().put("run",run).put("receipt",it.query()).toString())})}}catch(error:Throwable){if(primary!=null)primary!!.addSuppressed(error)else throw error}finally{finish(page,wire,primary)}}}}
     }
 
     @Test(timeout=240000) fun realMimoToolStopHasNoOldFollowupAndExplicitNewInputUsesNewGeneration(){
