@@ -1,0 +1,27 @@
+runtime/src/canonical.ts
+  s_467dcb949b5b60::t_b4ae97f5782a29 1-2
+runtime/src/file-writes.ts
+  s_467dcb949b5b60::t_ecb5bc54906966 1
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_00df3a41aefdf4 1
+runtime/src/projects.ts
+  s_467dcb949b5b60::t_aa5996e2559f7a 1
+runtime/src/submission.ts
+  s_467dcb949b5b60::t_4d523f8d4ff48c 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "0e207f22204f32d90cfe1c3aa0543c7c2791959a",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
