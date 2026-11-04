@@ -50,4 +50,3 @@ converts a user document URI into a shell pathname. Termux must independently
 read the recorded path with its normal granted shared-storage access before
 any cross-entry claim is made. No broad cleanup or existing user-file mutation
 is performed by this fixture.
-
