@@ -1,0 +1,91 @@
+{
+  "started": "2026-11-04T12:55:56.248Z",
+  "scope": "Fresh Activity then two retained-Activity input-only domain switches; real menu hit targets must avoid Android system bars and accept physical taps. No model input or host.",
+  "freshRun": "314ffbe4-133f-43f3-8892-48be749ec50a",
+  "freshLaunch": "Starting: Intent { flg=0x10008000 cmp=dev.durableagent.probe/.AgentActivity (has extras) }\r\nStatus: ok\r\nLaunchState: COLD\r\nActivity: dev.durableagent.probe/.AgentActivity\r\nTotalTime: 1346\r\nWaitTime: 1359\r\nComplete",
+  "fresh": {
+    "uiPid": "8685",
+    "webViewTarget": "D4735C0EC47834D0BA05D13CFC8558A0",
+    "activity": "191102040",
+    "nativeStatusBottom": 132,
+    "dom": {
+      "dpr": 2.625,
+      "width": 412,
+      "height": 915,
+      "topPadding": "51px",
+      "rect": {
+        "x": 20,
+        "y": 70,
+        "width": 46,
+        "height": 46,
+        "top": 70,
+        "right": 66,
+        "bottom": 116,
+        "left": 20
+      },
+      "expanded": "false",
+      "scrollY": 0,
+      "viewportY": 0
+    },
+    "unobscured": true,
+    "physicalMenuTapOpened": true
+  },
+  "reusedRun": "6982dbdb-216e-46ac-9413-bca312732c23",
+  "reusedLaunch": "Starting: Intent { cmp=dev.durableagent.probe/.AgentActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: dev.durableagent.probe/.AgentActivity\r\nTotalTime: 0\r\nWaitTime: 2\r\nComplete",
+  "reused": {
+    "uiPid": "8685",
+    "webViewTarget": "6A042DDFDF343205651E631EA0AA1B8C",
+    "activity": "191102040",
+    "nativeStatusBottom": 132,
+    "dom": {
+      "dpr": 2.625,
+      "width": 412,
+      "height": 915,
+      "topPadding": "0px",
+      "rect": {
+        "x": 20,
+        "y": 19,
+        "width": 46,
+        "height": 46,
+        "top": 19,
+        "right": 66,
+        "bottom": 65,
+        "left": 20
+      },
+      "expanded": "false",
+      "scrollY": 0,
+      "viewportY": 0
+    },
+    "unobscured": false
+  },
+  "reusedAgainRun": "34a4fda1-f327-425c-a4ff-3afd1d1e88bb",
+  "reusedAgainLaunch": "Starting: Intent { cmp=dev.durableagent.probe/.AgentActivity (has extras) }\r\nWarning: Activity not started, intent has been delivered to currently running top-most instance.\r\nStatus: ok\r\nLaunchState: UNKNOWN (0)\r\nActivity: dev.durableagent.probe/.AgentActivity\r\nTotalTime: 0\r\nWaitTime: 5\r\nComplete",
+  "reusedAgain": {
+    "uiPid": "8685",
+    "webViewTarget": "A8D5BA415EC1EFB9318EF315841F0E55",
+    "activity": "191102040",
+    "nativeStatusBottom": 132,
+    "dom": {
+      "dpr": 2.625,
+      "width": 412,
+      "height": 915,
+      "topPadding": "0px",
+      "rect": {
+        "x": 20,
+        "y": 19,
+        "width": 46,
+        "height": 46,
+        "top": 19,
+        "right": 66,
+        "bottom": 65,
+        "left": 20
+      },
+      "expanded": "false",
+      "scrollY": 0,
+      "viewportY": 0
+    },
+    "unobscured": false
+  },
+  "error": "AssertionError [ERR_ASSERTION]: reused: entire menu target overlaps Android status bar (49.875 < 132)",
+  "completed": "2026-11-04T12:56:03.478Z"
+}

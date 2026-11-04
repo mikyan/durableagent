@@ -1,0 +1,21 @@
+{
+  "candidate16": "c77c95e6a61f5bfd8194e1ae6b2cb2bb1a6cb8286c8e6e380012aec23adbf074",
+  "candidate17": "8dae4e47d04b71592749b6770061b57f294f791f7caf48926a8a528062a6ba3e",
+  "changedEntries": [
+    "assets/ui/assets/conversation-1ghmcqvR.js",
+    "assets/ui/assets/conversation-CoWFtsT3.js",
+    "assets/ui/assets/index-BEIllqgs.js",
+    "assets/ui/assets/index-Bwualnw1.css",
+    "assets/ui/assets/index-CO3--rR5.js",
+    "assets/ui/assets/index-D4_vGizF.css",
+    "assets/ui/assets/models-BYkF3bFK.js",
+    "assets/ui/assets/models-D0DvKqiy.js",
+    "assets/ui/assets/projects-BEB3XzEx.js",
+    "assets/ui/assets/projects-Dyn0HA3C.js",
+    "assets/ui/assets/timeline-DrlSXwmb.js",
+    "assets/ui/assets/timeline-DyfwN2yW.js",
+    "assets/ui/index.html"
+  ],
+  "outsideUiIdentical": true,
+  "unchangedEntries": 25
+}

@@ -1,0 +1,42 @@
+{
+  "ARTIFACTS-candidate17.json": {
+    "sha256": "43a719893e7c60330234887f333e06f0dfbfb6704636f311ab63e97bf293e1e7",
+    "bytes": 2811
+  },
+  "CANDIDATE17.md": {
+    "sha256": "9bd5025f027dae4154208f290acf9368bbb7ff9c792fb33cacd7f4ab825d7964",
+    "bytes": 2324
+  },
+  "raw/t15-candidate17-build01.log": {
+    "sha256": "65c5c0d23e7c0fee0f0c3d003d687328822fdf5597a0527ca9f2af05e18a22fa",
+    "bytes": 3932
+  },
+  "raw/t15-candidate17-retained-diff03-observation.json": {
+    "sha256": "ce21f083cf2872f1295de5ce622e84ff1df0e9ed8879d4356a25245c8f5077d4",
+    "bytes": 61100
+  },
+  "raw/t15-candidate17-retained-diff03-plan.json": {
+    "sha256": "bae525f9ff2cd7b18d0f2e98c6cf80aaf8084d13bee93ae054bb320ca11be1a2",
+    "bytes": 2787
+  },
+  "raw/t15-candidate17-retained-diff03-retained-file-diff.json": {
+    "sha256": "003374bcd71048d3044acf93d24b67414413681c370cbd3ccc37facfb2b4451c",
+    "bytes": 60851
+  },
+  "raw/t15-candidate17-retained-diff03.log": {
+    "sha256": "ce320185fe0cdb5b33a31758d96a7ef6bad6055840f7fbd8abcda5506c46481f",
+    "bytes": 185
+  },
+  "raw/t15-candidate17-root-entry-comparison.json": {
+    "sha256": "1a1fc7404a34d35649c708529e5b141767804224b345b11d483afaccd5ab9621",
+    "bytes": 838
+  },
+  "raw/t15-candidate17-ui-delta.json": {
+    "sha256": "e6c309f029ecc3f0ca68cc324409d4284ca2167b588b7f86ddf70b9e432c3238",
+    "bytes": 212
+  },
+  "screenshots/t15-candidate17-retained-diff03-retained-original-diff.png": {
+    "sha256": "71c7e7ff6af97143d91cc9fa77eac88d1f4d1a74d4d47f6ccac8209273870de1",
+    "bytes": 290625
+  }
+}

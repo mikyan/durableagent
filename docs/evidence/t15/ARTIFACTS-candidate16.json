@@ -1,0 +1,36 @@
+{
+  "sourceCommit": "c44d8ceeae3c2bf740891d09f1a4f95ee2dcc2d2",
+  "files": {
+    "app-debug.apk": {
+      "sha256": "c77c95e6a61f5bfd8194e1ae6b2cb2bb1a6cb8286c8e6e380012aec23adbf074",
+      "bytes": 371040362
+    },
+    "source.zip": {
+      "sha256": "692b93d76ce05074909f7fa33f4283fe7b103d9ffd43e1622b6d3797316190cb",
+      "bytes": 10682653
+    },
+    "test.apk": {
+      "sha256": "b9722ecd598de73d4a158a3b7d7c7c9506bd12b009c8328abef20c8d168f937e",
+      "bytes": 4174212
+    }
+  },
+  "packagedAssets": {
+    "assets/execution-setup.txt": {
+      "sha256": "bccdfe9de7ff1179542aef37e7bc1bdf448ba7df6fcd6806368e84ee83e103b2",
+      "bytes": 49558
+    },
+    "assets/execution-capabilities.json": {
+      "sha256": "10d7375d4565a83647d278efdea74cd71fe280896609987d12bb19a1e7302b1b",
+      "bytes": 183,
+      "value": {
+        "helperSha256": "13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1",
+        "runnerSha256": "be8b68ec5e9e204b2995a7546d3c372fea7e08775a9e19b1ff711515bee884ff",
+        "version": 1
+      }
+    },
+    "assets/runtime.zip": {
+      "sha256": "ff27bf20d7fc7977a13708d2229de6b28e947fce9b6b7afc90186db7a3c1865f",
+      "bytes": 22422480
+    }
+  }
+}

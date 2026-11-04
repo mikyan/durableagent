@@ -1,0 +1,8 @@
+file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-window-insets.mjs:69
+}catch(error){evidence.error=String(error).replaceAll(serial,'[device]');throw Error(evidence.error);}
+                                                                               ^
+
+Error: AssertionError [ERR_ASSERTION]: reusedAgain: entire menu target overlaps Android status bar (49.875 < 132)
+    at file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-window-insets.mjs:69:80
+
+Node.js v24.14.1

@@ -1,0 +1,414 @@
+
+> @durableagent/ui@0.1.0 pretest
+> npm run build --prefix ../runtime
+
+
+> @durableagent/runtime-probe@0.1.0 build
+> tsc
+
+
+> @durableagent/ui@0.1.0 test
+> vitest run --maxWorkers=2 test/console-page.test.tsx
+
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/ui
+
+ ❯ test/console-page.test.tsx (10 tests | 1 failed) 2761ms
+   × reaches the current conversation Data Saver wait from Console and grants only that execution without sending the draft 1355ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/console-page.test.tsx > reaches the current conversation Data Saver wait from Console and grants only that execution without sending the draft
+TestingLibraryElementError: Unable to find role="button" and name "省流等待 · 查看"
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="application"
+      data-nav-open="false"
+      data-status="ready"
+      data-testid="application"
+    >
+      <aside
+        aria-label="会话导航"
+        class="navigation "
+        inert=""
+      >
+        <button
+          aria-label="返回首页"
+          class="brand"
+        >
+          <span
+            class="brand-mark"
+          >
+            π
+          </span>
+          <span>
+            Durable Agent
+            <small>
+              你的本地会话空间
+            </small>
+          </span>
+        </button>
+        <button
+          class="nav-item "
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.6"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-7h6v7"
+            />
+          </svg>
+          首页
+        </button>
+        <button
+          class="nav-item"
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.6"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 5v14M5 12h14"
+            />
+          </svg>
+          新建
+        </button>
+        <button
+          class="nav-item "
+          data-testid="open-model-settings"
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.6"
+            viewBox="0 0 24 24"
+          >
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="4"
+              y="4"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="14"
+              y="4"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="4"
+              y="14"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="14"
+              y="14"
+            />
+          </svg>
+          模型与连接
+        </button>
+        <button
+          class="nav-item "
+          data-testid="open-project-settings"
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.6"
+            viewBox="0 0 24 24"
+          >
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="4"
+              y="4"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="14"
+              y="4"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="4"
+              y="14"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="14"
+              y="14"
+            />
+          </svg>
+          项目与工作区
+        </button>
+        <button
+          class="nav-item "
+          data-testid="open-extensions"
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.6"
+            viewBox="0 0 24 24"
+          >
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="4"
+              y="4"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="14"
+              y="4"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              [...
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="application"
+      data-nav-open="false"
+      data-status="ready"
+      data-testid="application"
+    >
+      <aside
+        aria-label="会话导航"
+        class="navigation "
+        inert=""
+      >
+        <button
+          aria-label="返回首页"
+          class="brand"
+        >
+          <span
+            class="brand-mark"
+          >
+            π
+          </span>
+          <span>
+            Durable Agent
+            <small>
+              你的本地会话空间
+            </small>
+          </span>
+        </button>
+        <button
+          class="nav-item "
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.6"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-7h6v7"
+            />
+          </svg>
+          首页
+        </button>
+        <button
+          class="nav-item"
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.6"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 5v14M5 12h14"
+            />
+          </svg>
+          新建
+        </button>
+        <button
+          class="nav-item "
+          data-testid="open-model-settings"
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.6"
+            viewBox="0 0 24 24"
+          >
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="4"
+              y="4"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="14"
+              y="4"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="4"
+              y="14"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="14"
+              y="14"
+            />
+          </svg>
+          模型与连接
+        </button>
+        <button
+          class="nav-item "
+          data-testid="open-project-settings"
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.6"
+            viewBox="0 0 24 24"
+          >
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="4"
+              y="4"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="14"
+              y="4"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="4"
+              y="14"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="14"
+              y="14"
+            />
+          </svg>
+          项目与工作区
+        </button>
+        <button
+          class="nav-item "
+          data-testid="open-extensions"
+        >
+          <svg
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.6"
+            viewBox="0 0 24 24"
+          >
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="4"
+              y="4"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              x="14"
+              y="4"
+            />
+            <rect
+              height="6"
+              rx="1"
+              width="6"
+              [...
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/console-page.test.tsx:48:28
+     46|  try{
+     47|   render(<App controller={f.controller}/>);fireEvent.click((await scre…
+     48|   const entry=await screen.findByRole('button',{name:'省流等待 · 查看'});
+       |                            ^
+     49|   expect(screen.queryByLabelText('省流模式')).toBeNull();fireEvent.click(e…
+     50|   expect(await screen.findByRole('heading',{name:'设置',level:1})).toBeT…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  21:16:24
+   Duration  4.45s (tests 64%, environment 28%, import 6%, transform 1%)
+

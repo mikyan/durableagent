@@ -1,0 +1,74 @@
+{
+  "sourceCommit": "4b7c4683cd448b5c453388c662289a5765f46a20",
+  "testApkSourceCommit": "c44d8ceeae3c2bf740891d09f1a4f95ee2dcc2d2",
+  "changeScope": "File diff foreground theme colors only; test APK unchanged",
+  "files": {
+    "app-debug.apk": {
+      "sha256": "8dae4e47d04b71592749b6770061b57f294f791f7caf48926a8a528062a6ba3e",
+      "bytes": 371040362
+    },
+    "source.zip": {
+      "sha256": "721970448c02566e2116c1a055a2615c1d006468c01f708fc5e03b3460bcfc41",
+      "bytes": 10682676
+    },
+    "test.apk": {
+      "sha256": "b9722ecd598de73d4a158a3b7d7c7c9506bd12b009c8328abef20c8d168f937e",
+      "bytes": 4174212
+    }
+  },
+  "apkEntryDeltaFromCandidate16": {
+    "assets/ui/assets/conversation-1ghmcqvR.js": {
+      "before": null,
+      "after": "fa490842fdf2919e356b706c7315ab3a8dbed93c896d6b897844a2a54051b0a9"
+    },
+    "assets/ui/assets/conversation-CoWFtsT3.js": {
+      "before": "f357087b5bfdaa996d332dbb5185ddb118297c4676f5181191e5fdbadb330730",
+      "after": null
+    },
+    "assets/ui/assets/index-BEIllqgs.js": {
+      "before": "f15143024a4d3ee9d01e267f9f59d28fa0588631ab78e84f844439a3f90954de",
+      "after": null
+    },
+    "assets/ui/assets/index-Bwualnw1.css": {
+      "before": null,
+      "after": "1b607391d64cbffbb2442bd5535a08d6f2a8b2d961aa13f4e16cf392a18d3259"
+    },
+    "assets/ui/assets/index-CO3--rR5.js": {
+      "before": null,
+      "after": "87a9c7e8c4581b4b324f139f8084abe8343bd08b3b961a6bffe7bdfb67f7bd0c"
+    },
+    "assets/ui/assets/index-D4_vGizF.css": {
+      "before": "24fbc892c2e8ff93591d129330b8e5353cbb622f2dd97be68fc65d511fa474c9",
+      "after": null
+    },
+    "assets/ui/assets/models-BYkF3bFK.js": {
+      "before": null,
+      "after": "b9bbd617a2a14c88a9937730252417f77dc0194eafcfcb63f046fd961b5c120b"
+    },
+    "assets/ui/assets/models-D0DvKqiy.js": {
+      "before": "dbeb9b250eefa7056cff4bd4b7c7608a38ffc5abfc26cf9d4e459481b3b0008a",
+      "after": null
+    },
+    "assets/ui/assets/projects-BEB3XzEx.js": {
+      "before": null,
+      "after": "7abe59c0f6b950df65ab44e3fe3028a98e1364312703ad27b634f1b22714a63f"
+    },
+    "assets/ui/assets/projects-Dyn0HA3C.js": {
+      "before": "1b88533e46073c48e71d032598036a5026b2d3f417be3ec3afd3e3887e2de295",
+      "after": null
+    },
+    "assets/ui/assets/timeline-DrlSXwmb.js": {
+      "before": null,
+      "after": "63ed2f7df0b75c036717ffdfe22aa37d02982b3b942d0921f6516eba101467c7"
+    },
+    "assets/ui/assets/timeline-DyfwN2yW.js": {
+      "before": "490085ed2be1e2b2d339ee556feea5440910629792148eeb61a6f3aa2c9de411",
+      "after": null
+    },
+    "assets/ui/index.html": {
+      "before": "1983cac07262eca0997470a15892a16a593f23c97b1edeb1ad729d5f888110f8",
+      "after": "fd1faf5a2e99378a8dd7a54bd51eeeba5cd406b239e714af886809a311f0b716"
+    }
+  },
+  "identicalNativeRuntimeAndSetup": true
+}
