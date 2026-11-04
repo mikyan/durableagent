@@ -67,7 +67,21 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         return JSONObject().put("resources",values).put("nextCursor",if(count<records.size)last else JSONObject.NULL)
     }
     fun describe(resourceId:String):JSONObject = current(resource(resourceId))
-    fun verify(operationId:String):JSONObject = fail("DOCUMENT_VERIFY_UNAVAILABLE","原文件独立核验尚不可用。")
+    fun verify(operationId:String):JSONObject {
+        val fixed=query(operationId)
+        val observation=try{
+            val opened=open(fixed.getString("resourceId"));val closed=closeRead(opened.getString("readerId"))
+            if(!closed.getBoolean("unchanged"))JSONObject().put("status","changed_during_read").put("reasonCode","DOCUMENT_READ_UNSTABLE").put("reason","核验期间原件发生变化，未把读回当作完成证明。")
+            else JSONObject().put("status","read").put("currentDigest",closed.getString("currentDigest")).put("byteLength",closed.getLong("byteLength"))
+                .put("matchesExpected",closed.getString("currentDigest")==fixed.getString("expectedDigest"))
+                .put("matchesContent",closed.getString("currentDigest")==fixed.getString("contentDigest"))
+        }catch(error:NativeDocumentException){JSONObject().put("status","unavailable").put("reasonCode",error.code).put("reason",error.message)}
+        catch(_:Exception){JSONObject().put("status","unavailable").put("reasonCode","DOCUMENT_UNAVAILABLE").put("reason","原件读回尚未确认，请核验授权及存储状态。")}
+        observation.put("observedAt",System.currentTimeMillis())
+        // Matching bytes cannot prove that a lost Provider operation ended. Only actual
+        // durable operation evidence may advance state; this observation is never persisted.
+        return query(operationId).put("verification",observation)
+    }
     fun cancel(request:JSONObject):JSONObject {
         val id=operationId(request);val requested=digest(request,"requestDigest")
         return locked{db->
