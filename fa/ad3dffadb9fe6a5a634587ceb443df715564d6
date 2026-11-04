@@ -1,0 +1,96 @@
+android/app/src/main/java/dev/durableagent/probe/ExecutionFileMethods.kt
+  s_467dcb949b5b60::t_9262b6aab83c4c 4
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_37fb75d166ede3 3,46-47,84-92,204,268
+  s_467dcb949b5b60::t_18e7a9c15aa0fe 12,44,49
+  s_467dcb949b5b60::t_ade2201d6835b2 13,45,51,59-60,77,119,215-216,239,248
+  s_467dcb949b5b60::t_ca61f8ba9f0d8a 264
+  s_467dcb949b5b60::t_524c21f4e60139 269
+runtime/src/document-writes.ts
+  s_467dcb949b5b60::t_f50191459dd25e 1-62,64
+  s_467dcb949b5b60::t_b88e18970d992f 63
+runtime/src/storage-format.ts
+  s_467dcb949b5b60::t_095f61ec4adff2 19-20
+runtime/src/managed-files.ts
+  s_467dcb949b5b60::t_1ae394b3580798 3,17-33
+runtime/src/file-writes.ts
+  s_467dcb949b5b60::t_a780ec50eb3199 42
+  s_467dcb949b5b60::t_29278c1672ba83 50
+  s_467dcb949b5b60::t_2e69011f2cf3e0 77,81-83,85
+  s_467dcb949b5b60::t_dfb5f89d6cccfa 12-13,52,57-58,74,104
+  s_467dcb949b5b60::t_f5a50d3a905d5a 102-103,105
+managed-execution/FILE-VALIDATION.md
+  s_467dcb949b5b60::t_ea6450620668f8 55-63
+  s_467dcb949b5b60::t_7c5e1692184f63 23,43-46
+  s_467dcb949b5b60::t_9ce82dd83357a5 24-25,27,47-49,53
+runtime/src/workspace-coordination.ts
+  s_467dcb949b5b60::t_a780ec50eb3199 4,18
+ui/src/extensions/file-changes.tsx
+  s_467dcb949b5b60::t_358d0fde5e419d 6,11-12,16,28,32-33,42
+  s_467dcb949b5b60::t_d8e877b565c556 1-3,5,7-10,13-15,17-27,29-31,34-35,37-41,43-45
+  s_467dcb949b5b60::t_7db12d6cd6578e 4,36
+ui/test/execution-page.test.tsx
+  s_467dcb949b5b60::t_888a5b29cd18c6 32,34-39
+  s_467dcb949b5b60::t_517885d961dfba 25,28,31
+  s_467dcb949b5b60::t_257bcb026319bc 3,22-24,26-27,29-30
+  s_467dcb949b5b60::t_0819eee8347ac1 33
+managed-execution/file_service.py
+  s_467dcb949b5b60::t_fdeca3545ec816 222,227-244,466-470,482-499,511,628-631,644-645
+  s_467dcb949b5b60::t_37fa9ce93c30c9 308,331-332,368-417
+  s_467dcb949b5b60::t_332ce1d7cbcd51 153-206,211-212,452-455,465,474-475,569-570,580-602
+  s_467dcb949b5b60::t_9c772560a63dca 418,603
+managed-execution/test_file_service.py
+  s_467dcb949b5b60::t_776bf71830717c 47-71
+  s_467dcb949b5b60::t_427bfd3de26066 109-140
+  s_467dcb949b5b60::t_411c83f0ec7f5b 72-108
+runtime/test/workspace-coordination.test.mjs
+  s_467dcb949b5b60::t_932ec5089c055c 16-27
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_ab21952e556695 34,56
+runtime/src/managed-documents.ts
+  s_467dcb949b5b60::t_0c1720aa1366de 2-6,8-15,23-38
+  s_467dcb949b5b60::t_25cea25d43b212 1,7,16
+  s_467dcb949b5b60::t_ffcca001b04231 17-22
+runtime/src/application.ts
+  s_467dcb949b5b60::t_8dbf08bacdbda9 288
+  s_467dcb949b5b60::t_e3c0db0bf19b49 141
+runtime/test/managed-files.test.mjs
+  s_467dcb949b5b60::t_51df7e3fbff5c1 6-15
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_a3fd348acef5a5 50,331-332
+  s_467dcb949b5b60::t_6aa6fc8c6d3efa 27,373-385
+  s_467dcb949b5b60::t_e7cd220adf9dda 349-356
+  s_467dcb949b5b60::t_4cb2677b801821 314,316,321-322,328,330
+  s_467dcb949b5b60::t_b2f8ad0d30be04 333-341
+  s_467dcb949b5b60::t_469122ee9be491 365-372,386
+  s_467dcb949b5b60::t_949644f18fa064 387-412
+  s_467dcb949b5b60::t_82790f687be18c 357-364
+  s_467dcb949b5b60::t_cec592ae97470f 413-420
+  s_467dcb949b5b60::t_ded1e586f093b2 342-348
+ui/src/extensions/execution.tsx
+  s_467dcb949b5b60::t_dde0b3449d038d 4,34
+ui/src/execution.css
+  s_467dcb949b5b60::t_02856bc3ed516e 16-18
+managed-execution/evidence/t10-build-inventory.txt
+  s_467dcb949b5b60::t_b6f578e687e482 1-66
+managed-execution/evidence/t10-build-private.json
+  s_467dcb949b5b60::t_459a8d03ed69d5 1-145
+managed-execution/evidence/t10-build-shared.json
+  s_467dcb949b5b60::t_bd9636ab334504 1-60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "faad3dffadb9fe6a5a634587ceb443df715564d6",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
