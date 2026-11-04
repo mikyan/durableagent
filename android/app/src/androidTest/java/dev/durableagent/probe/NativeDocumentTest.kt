@@ -34,6 +34,37 @@ class NativeDocumentTest {
     }
     private fun until(label:String,timeout:Long=150000,check:()->Boolean){val end=SystemClock.elapsedRealtime()+timeout;while(!check()){assertTrue(label,SystemClock.elapsedRealtime()<end);Thread.sleep(50)}}
     private fun evidence(value:JSONObject)=instrument.sendStatus(0,Bundle().apply{putString("documentEvidence",value.toString())})
+    @Test(timeout=30000) fun trustedJavetChannelReadsActualOriginalThroughBoundedRequests(){
+        assumeTrue(InstrumentationRegistry.getArguments().getString("retainedGrant")=="true")
+        val fixture=control("reset");assertNotEquals(android.os.Process.myUid(),fixture.getInt("providerUid"))
+        val uri=android.net.Uri.parse("content://$FIXTURE.documents/document/original")
+        val grant=context.contentResolver.persistedUriPermissions.firstOrNull{it.uri==uri}
+        assertTrue("Requires an actual previous system-picker persisted grant",grant?.isReadPermission==true&&grant.isWritePermission)
+        val run=UUID.randomUUID().toString();val namespace="document-channel-$run"
+        val resource=NativeDocumentStore(context,namespace).use{it.select(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)}
+        NativeDocumentAccess(context,namespace,"input-document-$run").use{access->
+            com.caoccao.javet.interop.V8Host.getNodeI18nInstance().createV8Runtime<com.caoccao.javet.interop.NodeRuntime>().use{runtime->
+                runtime.createV8ValueObject().use{value->value.bind(access);runtime.globalObject.set("__nativeDocuments",value)}
+                fun request(method:String,payload:JSONObject):JSONObject {
+                    val begun=JSONObject(runtime.getExecutor("__nativeDocuments.beginJson("+JSONObject.quote(method)+","+JSONObject.quote(payload.toString())+")").executeString())
+                    assertTrue("Trusted original channel must admit the real capability: $begun",begun.getBoolean("ok"))
+                    val token=begun.getJSONObject("value").getString("operationId");var result:JSONObject?=null
+                    until("Native original channel response",10000){
+                        val polled=JSONObject(runtime.getExecutor("__nativeDocuments.pollJson("+JSONObject.quote(token)+")").executeString())
+                        assertTrue(polled.toString(),polled.getBoolean("ok"));val value=polled.getJSONObject("value")
+                        if(!value.getBoolean("pending")){result=value.getJSONObject("result");true}else false
+                    }
+                    assertTrue(result.toString(),result!!.getBoolean("ok"));return result!!.getJSONObject("value")
+                }
+                val opened=request("open",JSONObject().put("resourceId",resource.getString("resourceId")))
+                val body=request("read",JSONObject().put("readerId",opened.getString("readerId")).put("offset",0).put("maxBytes",32768))
+                assertArrayEquals(expected,Base64.decode(body.getString("base64"),Base64.DEFAULT));assertTrue(body.getBoolean("eof"))
+                val closed=request("closeRead",JSONObject().put("readerId",opened.getString("readerId")))
+                assertTrue(closed.getBoolean("unchanged"));assertEquals(opened.getString("contentDigest"),closed.getString("currentDigest"))
+                evidence(JSONObject().put("stage","actual-javet-native-original-read").put("resourceId",resource.getString("resourceId")).put("digest",closed.getString("currentDigest")))
+            }
+        }
+    }
     @Test(timeout=45000) fun cancellationProvesNoStartOnlyBeforeOriginalIoAndKeepsActiveScopeUnconfirmed(){
         assumeTrue(InstrumentationRegistry.getArguments().getString("retainedGrant")=="true")
         val fixture=control("reset");assertNotEquals(android.os.Process.myUid(),fixture.getInt("providerUid"))
