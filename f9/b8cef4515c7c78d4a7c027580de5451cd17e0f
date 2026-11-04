@@ -1,0 +1,23 @@
+runtime/MANAGED_EXECUTION.md
+  s_467dcb949b5b60::t_16bef8e5867bf2 31
+runtime/FILES.md
+  s_467dcb949b5b60::t_16bef8e5867bf2 1-47
+android/app/src/androidTest/java/dev/durableagent/probe/StopExecutionTest.kt
+  s_467dcb949b5b60::t_b275d30d0db299 56-81,84,86-92,105,113-115
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "f9b8cef4515c7c78d4a7c027580de5451cd17e0f",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
