@@ -1,0 +1,20 @@
+android/app/src/androidTest/java/dev/durableagent/probe/RecoveryApplicationTest.kt
+  s_467dcb949b5b60::t_1107e55a2f0b73 13,82-101
+  s_467dcb949b5b60::t_e9e52d5738f8bd 102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "c73b6bbe1b0ceb832b4120eeca154ecd956eea74",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
