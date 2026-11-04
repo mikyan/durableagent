@@ -61,7 +61,7 @@ export async function install(mode:string) {
   }else if(mode==='product'||mode==='models'||mode==='models-fixture'){
     const native=host.__nativeCredentials;delete host.__nativeCredentials;
     const invoke=(name:string,id:string)=>{const result=JSON.parse(native[name](id));if(!result.ok)throw new ModelConfigurationError(result.error.code,result.error.message);return result.value;};
-    connections=new ModelConnections({credentials:{metadata:async id=>invoke('metadataJson',id),resolve:async id=>invoke('resolveJson',id)},onRequest:receipt=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;metrics.lastCredentialGeneration=receipt.generation;metrics.lastConnectionId=receipt.connectionId;metrics.lastInput=receipt.input;},...(mode==='models-fixture'?{fetch:fixtureTransport({requested:()=>{},aborted:()=>{}})}:{})});
+    connections=new ModelConnections({credentials:{metadata:async id=>invoke('metadataJson',id),resolve:async id=>invoke('resolveJson',id)},onRequest:receipt=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;metrics.lastCredentialGeneration=receipt.generation;metrics.lastConnectionId=receipt.connectionId;metrics.lastInput=receipt.input;metrics.lastRequestTools=receipt.requestTools;},...(mode==='models-fixture'?{fetch:fixtureTransport({requested:()=>{},aborted:()=>{}})}:{})});
     configuration={models:connections.models,workspacePath:configuration.workspacePath};
   }else throw new Error('Unsupported native application mode');
   // Fixture workspace defaults are replaced by the same stable private domain.

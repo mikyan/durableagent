@@ -12,7 +12,7 @@ export type StoredModels={version:number;defaultModel:ModelSelection|null;connec
 export class ModelConfigurationError extends Error {constructor(readonly code:string,message:string){super(message);}}
 const failure=(code:string,message:string):never=>{throw new ModelConfigurationError(code,message);};
 const marker='application-request-auth';
-type Options={credentials:CredentialAccess;fetch?:typeof fetch;allowLoopbackHttp?:boolean;beforePublish?:(configuration:StoredModels)=>void;providerFactory?:(definition:ConnectionDefinition)=>Provider;onRequest?:(receipt:{connectionId:string;generation:number;endpoint:string;input:ProviderInputEvidence})=>void};
+type Options={credentials:CredentialAccess;fetch?:typeof fetch;allowLoopbackHttp?:boolean;beforePublish?:(configuration:StoredModels)=>void;providerFactory?:(definition:ConnectionDefinition)=>Provider;onRequest?:(receipt:{connectionId:string;generation:number;endpoint:string;input:ProviderInputEvidence;requestTools:{names:string[];choice:string}})=>void};
 /** Immutable connection definitions and one synchronous publication. Secrets only cross final fetch. */
 export class ModelConnections {
   readonly models;
@@ -69,6 +69,9 @@ export class ModelConnections {
       if(request.url!==`${definition.endpoint}/chat/completions`||request.method!=='POST')return failure('DESTINATION_REJECTED','模型请求地址不符合连接定义');
       let inputEvidence:ProviderInputEvidence;
       try{inputEvidence=await validateProviderInput(request,model);}catch(error){if(error instanceof InputError)admission.inputFailure=error.message;throw error;}
+      const body=this.options.onRequest?await request.clone().json() as any:undefined;
+      const toolName=(value:unknown)=>typeof value==='string'&&/^[A-Za-z0-9_-]{1,128}$/.test(value)?value:'invalid';
+      const requestTools={names:Array.isArray(body?.tools)?body.tools.map((tool:any)=>toolName(tool?.function?.name)):[],choice:body?.tool_choice===undefined?'default':['auto','none','required'].includes(body.tool_choice)?body.tool_choice:body.tool_choice?.type==='function'?'function:'+toolName(body.tool_choice.function?.name):'other'};
       const credential=await this.options.credentials.resolve(definition.id).catch(error=>{if(error instanceof ModelConfigurationError)throw error;return failure('CREDENTIAL_UNAVAILABLE','模型凭据不可用，请检查设置');});
       if(admission.expectedGeneration!==undefined&&credential.generation!==admission.expectedGeneration)return failure('DEFERRED_ACCOUNT_UNKNOWN','旧响应凭据兼容性未确认，请处理原响应。');
       // Recheck after asynchronous credential resolution. Already sent requests continue unchanged.
@@ -81,7 +84,7 @@ export class ModelConnections {
       const headers=new Headers(request.headers);headers.delete('authorization');headers.delete('api-key');
       headers.set(definition.protocol==='mimo-cn'?'api-key':'authorization',definition.protocol==='mimo-cn'?credential.key:`Bearer ${credential.key}`);
       let response:Response;
-      this.options.onRequest?.({connectionId:definition.id,generation:credential.generation,endpoint:definition.endpoint,input:inputEvidence});
+      this.options.onRequest?.({connectionId:definition.id,generation:credential.generation,endpoint:definition.endpoint,input:inputEvidence,requestTools});
       try{response=await (this.options.fetch??fetch)(new Request(request,{headers,redirect:'error'}));}catch{return failure('MODEL_NETWORK_ERROR','模型网络请求失败');}
       return redactResponse(response,credential.key);
     };
