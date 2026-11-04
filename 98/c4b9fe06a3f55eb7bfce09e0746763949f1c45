@@ -1,0 +1,53 @@
+docs/evidence/t15/raw/t15-candidate15-restored.json
+  s_467dcb949b5b60::t_afea2e461a85e8 1-16
+docs/evidence/t15/raw/t15-picker-observer-build03.log
+  s_467dcb949b5b60::t_afea2e461a85e8 1-72
+docs/evidence/t15/CANDIDATE15.md
+  s_467dcb949b5b60::t_5a281b5da72b53 3,5-6,14-15,17,19,44
+  s_467dcb949b5b60::t_d4be414d306183 1-2,4,7-13,16,18,20-43
+docs/evidence/t15/ARTIFACTS-candidate15.json
+  s_467dcb949b5b60::t_afea2e461a85e8 2,10-16,30-36
+  s_467dcb949b5b60::t_4cd0b409297b5a 1,3-9,17-29,37-38
+docs/evidence/t15/raw/t15-picker-cancel-device03.json
+  s_467dcb949b5b60::t_afea2e461a85e8 1-175
+docs/evidence/t15/raw/t15-picker-cancel-device03.log
+  s_467dcb949b5b60::t_afea2e461a85e8 1
+docs/evidence/t15/raw/t15-picker-cancel-device03-observation.log
+  s_467dcb949b5b60::t_afea2e461a85e8 1-25
+docs/evidence/t15/raw/t15-picker-cancel-device03-history.log
+  s_467dcb949b5b60::t_afea2e461a85e8 1-25
+docs/evidence/t15/README.md
+  s_467dcb949b5b60::t_5a281b5da72b53 51,64-65
+docs/evidence/t15/raw/t15-candidate15-boot.json
+  s_467dcb949b5b60::t_93f6a76b2647d7 1-15
+docs/evidence/t15/raw/t15-candidate15-build02.log
+  s_467dcb949b5b60::t_2f395a2a66e9f4 1-94
+docs/evidence/t15/raw/t15-picker-cancel-device01.json
+  s_467dcb949b5b60::t_7b2d5221b57939 1-10
+docs/evidence/t15/raw/t15-picker-cancel-device01.log
+  s_467dcb949b5b60::t_cb3b551591e45f 1-9
+docs/evidence/t15/raw/t15-picker-cancel-device02-instrumentation-process-events.log
+  s_467dcb949b5b60::t_d81d784f4943a7 1-14
+docs/evidence/t15/raw/t15-picker-cancel-device02-observation.log
+  s_467dcb949b5b60::t_a5be407eb8042d 1-44
+docs/evidence/t15/raw/t15-picker-cancel-device02.json
+  s_467dcb949b5b60::t_0ca8f6033ce06c 1-109
+docs/evidence/t15/raw/t15-picker-cancel-device02.log
+  s_467dcb949b5b60::t_00e9e6a3a0b676 1-104
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "98c4b9fe06a3f55eb7bfce09e0746763949f1c45",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
