@@ -1,0 +1,75 @@
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-cold-loop/iteration-1-host-cold-start.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-28
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-cold-loop/iteration-2-host-cold-start.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-28
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-package-facts.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-5
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-before-first-unlock-processes.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-3
+termux-probe/evidence/emu16k-pinned-bootstrap-failure.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-18
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-notification-facts.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-cold-loop/iteration-1-termux-process-death.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-30
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-probe-artifact.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-reboot-first-unlock-ready.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-18
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-boot-id-before.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-first-unlock-launch.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-7
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-platform.txt
+  s_467dcb949b5b60::t_1d9c19c2bccb96 1-10
+docs/specs/v1/README.md
+  s_467dcb949b5b60::t_d0ee1a8d40b328 3,5,33
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-prelock-ready.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-18
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-boot-id-after.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-unlock-observed.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-5
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-cold-loop/iteration-3-host-cold-start.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-28
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-cold-loop/iteration-3-termux-process-death.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-30
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-first-unlock-user.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-2
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-cold-loop/iteration-2-termux-process-death.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-30
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-first-ready.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-18
+termux-probe/validation.md
+  s_467dcb949b5b60::t_129b0907dcea69 48-49,59-61,63-74
+  s_467dcb949b5b60::t_3bf5c528114387 62
+  s_467dcb949b5b60::t_d0ee1a8d40b328 3
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-lock-resume-ready.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-18
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-before-first-unlock-lock.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-7
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-before-first-unlock-user.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-18
+termux-probe/evidence/emu4k-lifecycle/t03-emu4k-lock-observed.txt
+  s_467dcb949b5b60::t_257b57a69e462d 1-7
+docs/specs/v1/tickets/03-termux-managed-startup.md
+  s_467dcb949b5b60::t_a7b51f3519ca6a 3-4,11-20
+termux-probe/evidence/t03-scoped-development-gate-review.md
+  s_467dcb949b5b60::t_2ddfbeeef83752 1-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "8d1ef01338263ab6f58261ae008ff7ddb458fc1e",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
