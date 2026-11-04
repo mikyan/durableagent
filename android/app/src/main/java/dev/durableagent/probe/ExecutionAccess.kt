@@ -19,12 +19,16 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
     // Reserved capacity and a separate socket ensure output waits cannot occupy cancellation's worker.
     private val control = pool(1,4,"ExecutionControl")
     private var closed = false
+    private val policyDelegate=lazy{inputNamespace?.let{NativeDataSaverAccess(this.context,it)}}
+    private val dataSaver by policyDelegate
     init{if(recoverCatalogue&&inputNamespace!=null)NativeInputStore(this.context,inputNamespace).withLeaseWait(1000).use{it.effectRecovery(false)}}
 
     @V8Function fun rememberIntentJson(payloadJson:String):String=envelope{
         if(payloadJson.toByteArray(Charsets.UTF_8).size>60000)throw ExecutionChannelException("FRAME_LIMIT")
         val namespace=inputNamespace?:throw ExecutionChannelException("CONTROL_UNAVAILABLE")
-        NativeInputStore(context,namespace).withLeaseWait(1000).use{NativeExecutionFence(it).remember(JSONObject(payloadJson));JSONObject()}
+        val request=JSONObject(payloadJson)
+        NativeInputStore(context,namespace).withLeaseWait(1000).use{NativeExecutionFence(it).remember(request)}
+        dataSaver!!.remember(request);JSONObject()
     }
     @V8Function fun recoveryCompleteJson():String=envelope{
         val namespace=inputNamespace?:throw ExecutionChannelException("CONTROL_UNAVAILABLE")
@@ -37,7 +41,9 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
         if(!executionId.matches(Regex("[A-Za-z0-9_-]{1,128}")))return failed("INVALID_EXECUTION_ID")
         return begin("cancel",JSONObject().put("executionId",executionId).put("reason","user").toString(),true)
     }
-    private fun begin(method: String, payloadJson: String, verifyReceipt: Boolean): String = envelope {
+    /** Native policy worker only: bind the authenticated query before cancelling. */
+    fun beginPolicyCancelJson(expected:JSONObject):String=begin("cancel",JSONObject().put("executionId",expected.getString("executionId")).put("reason","network_policy").toString(),true,expected)
+    private fun begin(method: String, payloadJson: String, verifyReceipt: Boolean,expected:JSONObject?=null): String = envelope {
         if (method !in METHODS) throw ExecutionChannelException("INVALID_METHOD")
         if (payloadJson.toByteArray(Charsets.UTF_8).size > 60000) throw ExecutionChannelException("FRAME_LIMIT")
         val payload = JSONObject(payloadJson)
@@ -60,10 +66,15 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
                         val peer = ExecutionPairingStore(context).use { it.requireClient(identity.certificateSha256()) }
                         val client=ExecutionTlsClient(identity,peer)
                         if(verifyReceipt) {
-                            verifiedCancel(client,peer,payload)
+                            verifiedCancel(client,peer,payload,expected)
                         } else if(inputNamespace!=null) NativeInputStore(context,inputNamespace).withLeaseWait(1000).use{store->
                             val fence=NativeExecutionFence(store);fence.before(method,payload)
-                            client.request(method,payload).also{fence.observe(method,payload,it)}
+                            if(method=="prepare")dataSaver!!.remember(payload)
+                            if(method=="start"){dataSaver!!.requireStart(payload.getString("executionId"),payload.getString("finalDigest"));fence.before(method,payload)}
+                            client.request(method,payload).also{result->
+                                fence.observe(method,payload,result)
+                                if(method in setOf("prepare","start","query","cancel")&&result.has("context"))dataSaver!!.observe(result)
+                            }
                         } else {
                             if(method in setOf("prepare","start"))throw ExecutionChannelException("CONTROL_UNAVAILABLE")
                             client.request(method,payload)
@@ -79,7 +90,7 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
         JSONObject().put("operationId",id)
     }
 
-    private fun verifiedCancel(client:ExecutionTlsClient,peer:ExecutionPairing,payload:JSONObject):JSONObject {
+    private fun verifiedCancel(client:ExecutionTlsClient,peer:ExecutionPairing,payload:JSONObject,expected:JSONObject?):JSONObject {
         val id=payload.getString("executionId")
         val namespace="termux:"+peer.executorId
         fun identity(value:JSONObject):Boolean=value.opt("protocol")==1 && value.optString("executionId")==id &&
@@ -93,6 +104,7 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
             !before.has("context") && !before.has("finalDigest") && !before.has("requestDigest")
         val cancelledBeforeAcceptance=tombstone(before)
         if(!identity(before) || !(missing||cancelledBeforeAcceptance||bound(before)))throw ExecutionChannelException("EXECUTION_RECEIPT_REQUIRED")
+        if(expected!=null&&(namespace!=expected.getString("namespace")||bound(before)&&(before.getString("requestDigest")!=expected.getString("requestDigest")||before.getString("finalDigest")!=expected.getString("finalDigest"))))throw ExecutionChannelException("EXECUTION_IDENTITY_CONFLICT")
         // An authenticated missing receipt permits writing a cancellation tombstone.
         // It does not itself prove that no in-flight prepare can subsequently arrive.
         val result=client.request("cancel",payload)
@@ -135,7 +147,7 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
     private fun failed(code: String) = JSONObject().put("ok",false).put("error",JSONObject().put("code",code).put("message","执行通道未完成请求（$code）")).toString()
     override fun close() {
         synchronized(operations) { closed=true; operations.clear() }
-        ordinary.shutdownNow(); control.shutdownNow()
+        ordinary.shutdownNow(); control.shutdownNow();if(policyDelegate.isInitialized())dataSaver?.close()
         // Abandoning a socket or worker does not acknowledge remote cancellation or stopped effects.
     }
     companion object {

@@ -26,6 +26,8 @@ class ApplicationService:Service() {
     private var credentials:NativeCredentialAccess?=null
     private var inputs:NativeInputAccess?=null
     private var execution:ExecutionAccess?=null
+    private var dataSaver:NativeDataSaverAccess?=null
+    private var dataSaverMonitor:NativeDataSaverMonitor?=null
     private val busyStarted=AtomicLong(0)
     private val busyEnded=AtomicLong(0)
     private val ownerProgress=AtomicLong(0)
@@ -149,6 +151,9 @@ class ApplicationService:Service() {
             runtime.createV8ValueObject().use {access->access.bind(credentials!!);runtime.globalObject.set("__nativeCredentials",access)}
             inputs=NativeInputAccess(NativeInputStore(this,NativeInputBridge.namespace(mode,run)).withLeaseWait(1000))
             runtime.createV8ValueObject().use {access->access.bind(inputs!!);runtime.globalObject.set("__nativeInputs",access)}
+            dataSaverMonitor=NativeDataSaverMonitor(this,NativeInputBridge.namespace(mode,run))
+            dataSaver=NativeDataSaverAccess(this,NativeInputBridge.namespace(mode,run))
+            runtime.createV8ValueObject().use {access->access.bind(dataSaver!!);runtime.globalObject.set("__nativeDataSaver",access)}
             execution=ExecutionAccess(this,NativeInputBridge.namespace(mode,run),mode in setOf("product","execution","execution-real"))
             runtime.createV8ValueObject().use {access->access.bind(execution!!);runtime.globalObject.set("__nativeExecution",access)}
             if(mode=="real"||mode=="execution-real"||mode=="extensions-real"){
@@ -273,6 +278,6 @@ class ApplicationService:Service() {
     }
     private fun status()=JSONObject(phase).put("instance",instance).put("pid",Process.myPid()).put("domainOwned",lease!=null).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).toString()
     private fun fail(error:Throwable){phase=JSONObject().put("phase","failed").put("reason",error.message?:error.javaClass.simpleName).toString();release()}
-    private fun release(){acceptedStops.clear();ownerReady=false;ownerRunsJavaScript=false;inputNamespace=null;node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
+    private fun release(){acceptedStops.clear();ownerReady=false;ownerRunsJavaScript=false;inputNamespace=null;node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;dataSaver?.close();dataSaver=null;dataSaverMonitor?.close();dataSaverMonitor=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
     override fun onDestroy(){emergency.shutdownNow();main.removeCallbacksAndMessages(null);owner.post {release();thread.quitSafely()};super.onDestroy()}
 }

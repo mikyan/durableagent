@@ -424,7 +424,7 @@ class Executor:
         return self.query(execution_id)
 
     def cancel(self, execution_id, reason):
-        if reason not in ("user", "timeout", "output_limit"):
+        if reason not in ("user", "timeout", "output_limit", "network_policy"):
             raise ExecutionFault("INVALID_CANCEL_REASON")
         with self.transaction():
             receipt = self.query(execution_id)
@@ -439,6 +439,8 @@ class Executor:
             if receipt["state"] in ("completed", "stopped", "unknown", "not_started"):
                 return receipt
             never_started = receipt["state"] == "accepted_not_started"
+            # A later policy sweep cannot demote an already requested user stop.
+            reason = "user" if receipt.get("cancelReason") == "user" else reason
             receipt.update(cancelRequested=True, cancelReason=reason,
                            state="stopped" if never_started else "stop_requested", sequence=receipt["sequence"] + 1)
             if never_started:

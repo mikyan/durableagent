@@ -1,3 +1,5 @@
+import {DataSaverPanel} from './data-saver';
+import {DATA_SAVER_EXTENSION} from '../../../runtime/src/data-saver-protocol';
 import {lazy,memo,Suspense,useEffect,useId,useRef,useState,type FormEvent} from 'react';
 import {CONVERSATION_EXTENSION,type ConversationPhase} from '../../../runtime/src/application-protocol';
 import type {ConversationController,UiState} from '../controller';
@@ -57,6 +59,12 @@ export default function ConversationPage({controller,state}:{controller:Conversa
   const sendContext=state.draft?.submissionContext??active?.submissionContext;
   const modelsPage=state.page==='models';
   const projectsPage=state.page==='projects',extensionsPage=state.page==='extensions',settingsPage=modelsPage||projectsPage||extensionsPage;
+  const hasDataSaver=ready&&state.status.extensions.includes(DATA_SAVER_EXTENSION.id);
+  useEffect(()=>{
+    if(!hasDataSaver)return;let active=true;let timer:ReturnType<typeof setTimeout>;
+    const poll=async()=>{if(!active)return;if(!controller.dataSaver.view().loading&&!controller.dataSaver.view().pending)await controller.dataSaver.refresh(state.activeId);if(active)timer=setTimeout(poll,1500);};
+    timer=setTimeout(poll,1500);return()=>{active=false;clearTimeout(timer);};
+  },[controller,hasDataSaver,state.activeId]);
   const hasModels=state.status.extensions.includes(MODELS_EXTENSION.id);
   const hasProjects=state.status.extensions.includes(PROJECTS_EXTENSION.id);
   const startupReason=state.status.reason??(state.status.phase==='opening'?'正在连接运行宿主…':state.status.phase==='configuring'?'正在装载配置，请稍候。':state.status.phase==='closed'?'运行宿主已关闭，请重新连接。':state.status.phase==='failed'?'连接未完成，请重新连接。':!ready?'当前运行宿主未提供会话功能。':undefined);
@@ -107,6 +115,7 @@ export default function ConversationPage({controller,state}:{controller:Conversa
         {settingsPage?<><div className="title-pill"><h1>{modelsPage?'模型与连接':projectsPage?'项目与工作区':'扩展与时间线'}</h1></div><button className="round-button" aria-label="返回会话" onClick={()=>modelsPage?controller.leaveModels():projectsPage?controller.leaveProjects():controller.leaveExtensions()}><Icon name="close"/></button></>:state.activeId?<><div className="title-pill"><span className={`dot phase-${phase}`}/><h1>{active?.title??'正在打开会话'}</h1></div><button className="round-button" data-testid="create-conversation" aria-label="新建会话" disabled={!ready||state.pending} onClick={create}><Icon name="plus"/></button></>:<span className="topbar-label">本地 · 会话</span>}
       </header>
       {reason&&<div className="connection-notice" role={state.error?'alert':'status'}><span>{reason}</span><button onClick={reconnect}>重新连接</button></div>}
+      {!settingsPage&&hasDataSaver&&state.dataSaver&&<DataSaverPanel policy={controller.dataSaver} view={state.dataSaver}/>}
       {!settingsPage&&<ExecutionPanel controller={controller} state={state}/>}
       {extensionsPage?<ExtensionPage client={controller.extensionClient} conversationId={state.activeId}/>:projectsPage?<Suspense fallback={<p className="empty-state">正在打开项目设置…</p>}><ProjectSettings controller={controller} state={state}/></Suspense>:modelsPage?<Suspense fallback={<p className="empty-state">正在打开模型设置…</p>}><ModelSettings controller={controller} state={state}/></Suspense>:!state.activeId?<div className="home-content">
         <div className="home-brand">π</div><p className="eyebrow">DURABLE AGENT</p><h1>从一个问题开始</h1><p className="home-description">独立的会话，同一个工作空间。</p>

@@ -7,7 +7,8 @@ import {posix} from 'node:path';
 import type {AdoptedBinding,LocationAdapter} from './project-bindings.js';
 import type {EffectAuthority,EffectSnapshot} from './projects.js';
 import type {SendAuthority} from './submission-protocol.js';
-import type {ExecutionChannel} from './execution-channel.js';
+import {ExecutionChannelError,type ExecutionChannel} from './execution-channel.js';
+import type {DataSaverAuthority} from './data-saver-protocol.js';
 
 export const EXECUTION_EXTENSION={id:'managed-execution',actions:['execution.list','execution.readOutput']} as const;
 type Command={kind:'shell';script:string}|{kind:'argv';argv:string[]};
@@ -34,7 +35,7 @@ export class ManagedExecution implements EffectAuthority {
  private tail:Promise<unknown>=Promise.resolve();
  private closedOwners=new Set<string>();
  readonly locations:LocationAdapter;
- constructor(private readonly options:{channel:ExecutionChannel;authority:SendAuthority;boundary?:(stage:string,request:Readonly<Request>)=>void|Promise<void>}){
+ constructor(private readonly options:{channel:ExecutionChannel;authority:SendAuthority;dataSaver?:DataSaverAuthority;boundary?:(stage:string,request:Readonly<Request>)=>void|Promise<void>}){
   this.locations={deferInspection:true,inspect:async workspace=>{
    if(workspace.environment!=='termux')return {state:'environment-changed',reason:'此位置不属于当前 Termux 执行环境'};
    try{const value=await options.channel.request('inspectWorkspace',{path:workspace.path});if(value.state!=='available'||typeof value.identity!=='string'||typeof value.namespace!=='string')return {state:'missing',reason:'Termux 中的位置不可用，保留原位置'};this.namespace=value.namespace;return {state:'available',identity:value.identity};}
@@ -60,6 +61,39 @@ export class ManagedExecution implements EffectAuthority {
   if(control.pendingAbort||control.generation!==request.context.controlGeneration||control.stoppedThrough>=request.context.controlGeneration)return failure('EXECUTION_STOPPED','原控制代次已停止，不能启动命令');
   if(api&&(await api.getTask(api.taskId,context))?.abortRequested)return failure('EXECUTION_STOPPED','此工具调用已停止');
  }
+ private async awaitNetwork(request:Request,receipt:Receipt,api:ToolExecutionApi,context:Context){
+  const authority=this.options.dataSaver;if(!authority)return;
+  let decision=await this.policyRead(request,api,context,()=>authority.prepared(request.executionId,hash(request),String(receipt.finalDigest)));
+  for(;;){
+   await this.policyRead(request,api,context,async()=>undefined);
+   if(decision.executionId!==request.executionId||decision.requestDigest!==hash(request)||decision.finalDigest!==receipt.finalDigest)return failure('DATA_SAVER_IDENTITY_CONFLICT','省流许可与最终执行内容不一致');
+   if(decision.policyInterrupted)await this.holdPolicyInterrupted(request,api,context);
+   if(decision.phase==='allowed'||decision.phase==='granted')return;
+   if(decision.phase!=='waiting')return failure('DATA_SAVER_RESULT_UNVERIFIED','网络变化后的原执行需要核验，不能自动重跑');
+   // This is one pending SDK invocation, not a second task scheduler or a new execution ID.
+   await new Promise(resolve=>setTimeout(resolve,100));
+   decision=await this.policyRead(request,api,context,()=>authority.decision(request.executionId));
+  }
+ }
+ private async policyRead<T>(request:Request,api:ToolExecutionApi,context:Context,read:()=>Promise<T>):Promise<T>{
+  for(;;){
+   context.abortSignal?.throwIfAborted();
+   try{await this.policy(request,api,context);return await read();}
+   catch(error){
+    const code=typeof error==='object'&&error!==null&&'code'in error?String(error.code):'';
+    if(!['DATA_SAVER_BUSY','DATA_SAVER_UNAVAILABLE','DATA_SAVER_STORAGE_LOST','DATA_SAVER_STORAGE_FAILED','DATA_SAVER_STORAGE_CORRUPT','DATA_SAVER_WAITING_UNLOCK','INPUT_STORAGE_BUSY','INPUT_STORAGE_FAILED','INPUT_WAITING_UNLOCK'].includes(code))throw error;
+   }
+   // A readiness failure has not authorized transport. It also must not become
+   // a tool error that asks the model to invent another execution identity.
+   await new Promise(resolve=>setTimeout(resolve,100));
+  }
+ }
+ private async holdPolicyInterrupted(request:Request,api:ToolExecutionApi,context:Context):Promise<never>{
+  // A confirmed process stop is not proof that arbitrary earlier side effects can
+  // be repeated. Keep this SDK invocation pending, even after Wi-Fi returns. An
+  // explicit user stop still crosses the existing control/task abort barrier.
+  for(;;){await this.policyRead(request,api,context,async()=>undefined);await new Promise(resolve=>setTimeout(resolve,100));}
+ }
  private receipt(value:Record<string,unknown>,request:Request):Receipt{
   if(value.protocol!==1||value.executionId!==request.executionId||value.namespace!==request.context.namespace||!states.has(String(value.state)))return failure('EXECUTION_RECEIPT_MISMATCH','执行回执不属于当前执行');
   if(value.state==='unknown'&&value.reason==='NO_RECEIPT')return value as Receipt;
@@ -82,7 +116,7 @@ export class ManagedExecution implements EffectAuthority {
    if(terminal.has(entry.state))continue;
    const saved=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);
    if(!saved?.request)return failure('EXECUTION_STORAGE_INCONSISTENT','执行索引缺少持久意图，运行保持关闭');
-   const request=copy(saved.request);await this.options.channel.rememberIntent?.(request);let receipt:Receipt;
+   const request=copy(saved.request);await this.options.channel.rememberIntent?.(request);await this.options.dataSaver?.register(request);let receipt:Receipt;
    try{receipt=this.receipt(await this.options.channel.request('query',{executionId}),request);if(receipt.reason==='NO_RECEIPT')throw Error('Acceptance not yet confirmed');}
    catch{receipt={...saved.receipt,protocol:1,executionId,namespace:request.context.namespace,context:request.context,state:'unknown',reason:'CLIENT_CONFIRMATION_LOST',source:'application'};}
    await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,entry.key,null),index=await tx.doc(Index);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_STORAGE_INCONSISTENT','执行意图在核验时改变');if(terminal.has(intent.receipt?.state??''))return;if(receipt.source!=='application'&&intent.receipt&&Number(receipt.sequence??0)<Number(intent.receipt.sequence??0))return;intent.receipt=copy(receipt);index.items[executionId].state=receipt.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});
@@ -114,15 +148,23 @@ export class ManagedExecution implements EffectAuthority {
    if(context.abortSignal?.aborted)onAbort();
    await this.options.boundary?.('intent-persisted',copy(request));
    await this.policy(request,api,context);
+   if(this.options.dataSaver)await this.policyRead(request,api,context,()=>this.options.dataSaver!.register(request));
    let receipt=this.receipt(await this.options.channel.request('query',{executionId:request.executionId}),request);
    if(receipt.state==='unknown'&&receipt.reason==='NO_RECEIPT')receipt=this.receipt(await this.options.channel.request('prepare',request),request);
    await this.save(api,key,request,receipt);
    await this.options.boundary?.('accepted',copy(request));
-   if(receipt.state==='accepted_not_started'){
-    await this.policy(request,api,context);
+   while(receipt.state==='accepted_not_started'){
+    await this.awaitNetwork(request,receipt,api,context);
+    if(this.options.dataSaver)await this.policyRead(request,api,context,async()=>undefined);else await this.policy(request,api,context);
     const position=await this.locations.inspect(binding.location);
     if(position.state!=='available'||!workspaceIdentity||position.identity!==workspaceIdentity)return failure('EXECUTION_LOCATION_CHANGED','执行位置已经改变，未启动命令');
-    receipt=this.receipt(await this.options.channel.request('start',{executionId:request.executionId,finalDigest:receipt.finalDigest}),request);
+    try{receipt=this.receipt(await this.options.channel.request('start',{executionId:request.executionId,finalDigest:receipt.finalDigest}),request);}
+    catch(error){
+     // Only these explicit *pre-transport* native refusals prove start was not
+     // sent. A timeout, lost response or storage failure never enters this path.
+     if(this.options.dataSaver&&error instanceof ExecutionChannelError&&['DATA_SAVER_WAIT','DATA_SAVER_INTERRUPTED'].includes(error.code)){await new Promise(resolve=>setTimeout(resolve,100));continue;}
+     throw error;
+    }
     await this.save(api,key,request,receipt);
    }
    if(receipt.state==='not_started'&&receipt.neverStarted===true&&receipt.reason==='CANCELLED_BEFORE_ACCEPTANCE')return {ok:false,error:new ExecutionError('aborted','命令在接纳前已取消，执行端确认未开始')};
@@ -136,6 +178,7 @@ export class ManagedExecution implements EffectAuthority {
     receipt=this.receipt(await this.options.channel.request('query',{executionId:request.executionId}),request);
     await this.save(api,key,request,receipt,cursor);
     await this.options.boundary?.('output-checkpoint',copy(request));
+    if(receipt.cancelReason==='network_policy')await this.holdPolicyInterrupted(request,api,context);
     if(receipt.state==='unknown')return {ok:false,error:new ExecutionError('unknown','执行结果不明，保留原执行身份；不能自动重跑')};
     if(terminal.has(receipt.state)&&cursor===receipt.outputCursor){
      for(const stream of ['stdout','stderr'] as const)emit(decoders[stream].decode(),stream);

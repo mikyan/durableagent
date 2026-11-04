@@ -69,6 +69,22 @@ class ExecutionContract(unittest.TestCase):
             self.endpoint.prepare({**request, "command": {"kind": "shell", "script": "printf 'different'"}})
         self.assertEqual(self.endpoint.query("execution-one"), first)
 
+    def test_network_policy_cancellation_is_durable_and_never_starts_the_prepared_identity(self):
+        request = self.request("policy-wait")
+        prepared = self.endpoint.prepare(request)
+        stopped = self.endpoint.cancel("policy-wait", "network_policy")
+        self.assertEqual(stopped["cancelReason"], "network_policy")
+        self.assertTrue(stopped["scopeConfirmed"])
+        self.assertTrue(stopped["neverStarted"])
+        self.endpoint.close()
+        self.endpoint = Executor(self.root / "authority")
+        self.assertEqual(self.endpoint.start("policy-wait", prepared["finalDigest"]), stopped)
+        self.assertEqual(self.endpoint.prepare(request), stopped)
+        other = self.request("user-stop")
+        self.endpoint.prepare(other)
+        user_stopped = self.endpoint.cancel("user-stop", "user")
+        self.assertEqual(self.endpoint.cancel("user-stop", "network_policy"), user_stopped)
+
     def test_command_starts_once_and_reconnect_reads_same_output(self):
         request = self.request()
         request["command"] = {"kind": "argv", "argv": [sys.executable, "-c",

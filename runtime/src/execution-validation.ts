@@ -11,6 +11,9 @@ export function executionValidation(run:string,requested:()=>void){
   EXEC_FAILURE:{command:"printf 'expected failure\\n' >&2; exit 7"},
   EXEC_LARGE:{command:"python -c \"import sys; sys.stdout.buffer.write(('line-世界\\n'*100000).encode()); sys.stdout.buffer.flush()\""},
   EXEC_CANCEL:{command:`printf 'ready-to-cancel\\n'; sleep 30; printf 'too-late\\n' >> '${prefix}-cancel'`},
+  // A fixed root-owned streaming endpoint; no arbitrary URL or command enters the debug host.
+  // The Python child makes genuine HTTP reads until the native policy stops its whole scope.
+  EXEC_NETWORK_DOWNLOAD:{command:`python -u -c 'import urllib.request; r=urllib.request.urlopen("http://10.0.2.2:18763/t13/${run}",timeout=60); print("t13-download-open",flush=True); n=0\nwhile True:\n b=r.read(1024)\n if not b: break\n n+=len(b)\nprint("t13-download-finished",n,flush=True)' & wait`},
   EXEC_UNRELATED:{command:"printf 'unrelated-running\\n'; sleep 30; printf 'unrelated-finished\\n'"},
   EXEC_VERIFY_CANCEL:{command:`if test ! -e '${prefix}-cancel'; then printf 'cancel-effect-absent\\n'; else exit 99; fi`},
   EXEC_RECONNECT:{command:`printf 'before-disconnect\\n'; sleep 2; printf 'after-reconnect\\n'; printf 'one\\n' >> '${prefix}-reconnect'`},
