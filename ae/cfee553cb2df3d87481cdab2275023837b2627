@@ -1,0 +1,38 @@
+docs/evidence/t17/ACCEPTANCE.md
+  s_467dcb949b5b60::t_abfdabd37f76a3 3,5,7-9,11,13,16-18
+docs/evidence/t17/LOG-SHA256.json
+  s_467dcb949b5b60::t_75badcedbf14d3 44-58,169-183
+docs/evidence/t17/README.md
+  s_467dcb949b5b60::t_abfdabd37f76a3 3,7,13-16,19-22,27,45,48,52,73-74,83-92,101,105
+  s_467dcb949b5b60::t_cb65c70c162c26 23,26,28,53
+docs/evidence/t17/REPRODUCE.md
+  s_467dcb949b5b60::t_1744a6f47ee13f 19-20,31-32,98,108-109
+docs/evidence/t17/t17-final-real-stop01-credential-audit.json
+  s_467dcb949b5b60::t_9223f0f7c3590d 1-19
+docs/evidence/t17/t17-final-real-stop01-device.log
+  s_467dcb949b5b60::t_0b50575eab4e4c 1-25
+docs/evidence/t17/t17-final-real-stop01-termux-observation.log
+  s_467dcb949b5b60::t_f3ffd0ff1cba10 1
+docs/evidence/t17/t17-real-mimo04-credential-audit.json
+  s_467dcb949b5b60::t_70222edda687cf 1-19
+docs/evidence/t17/t17-real-mimo04-termux-read-launch.json
+  s_467dcb949b5b60::t_c3166061da2bf1 1
+docs/evidence/t17/t17-real-mimo04-termux-read.log
+  s_467dcb949b5b60::t_19f85e27e54bec 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "aecfee553cb2df3d87481cdab2275023837b2627",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
