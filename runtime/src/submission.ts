@@ -1,3 +1,4 @@
+import {canonical} from './canonical.js';
 import {BACKGROUND_CONTEXT as context} from '@earendil-works/chord/context';
 import {defineDocFamily,type Harness,type ConversationId,type SubmissionId,type Tx} from '@earendil-works/pi-durable';
 import type {Models} from '@earendil-works/pi-ai/models';
@@ -12,7 +13,6 @@ export class SubmissionError extends Error {constructor(readonly code:string,mes
 export const Admission=defineDocFamily({kind:'app.admission',version:1,scope:'session',family:true,initial:(_:null)=>({receipt:null as AdmissionReceipt|null}),checkpointWhen:()=>false});
 export const Binding=defineDocFamily({kind:'app.submission-binding',version:1,scope:'session',family:true,initial:(_:null)=>({id:null as string|null,context:null as SubmissionContext|null,location:null as import('./project-protocol.js').WorkspaceRecord|null,projectId:null as string|null,sourceProductId:null as string|null,actualIdentity:null as string|null}),checkpointWhen:()=>false});
 export const CurrentBinding=defineDocFamily({kind:'app.current-submission-binding',version:1,scope:'session',family:true,initial:(_:null)=>({id:null as string|null}),checkpointWhen:()=>false});
-const canonical=(value:any):any=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
 const equal=(a:unknown,b:unknown)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));
 export function receiptMatchesIntent(intent:NativeSendIntent,receipt:AdmissionReceipt){
  const expected={protocol:1,intentId:intent.intentId,id:intent.id,inputToken:intent.inputToken,inputRevision:intent.inputRevision,inputDigest:intent.inputDigest,context:intent.context,queue:intent.queue,controlGeneration:intent.controlGeneration,...(intent.source?{source:intent.source}:{})};

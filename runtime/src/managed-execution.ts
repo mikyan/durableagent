@@ -1,3 +1,4 @@
+import {canonical} from './canonical.js';
 import {defineDoc,defineDocFamily,type Harness,type Registry,type ToolExecutionApi,type ToolRegistration} from '@earendil-works/pi-durable';
 import {createBashTool,createReadTool,createWriteTool} from '@earendil-works/pi-durable/tools';
 import {ExecutionError,FileError,StreamDecoder,type ExecutionEnv,type FileSystem,type ShellExecOptions,type Result,type ShellExecResult,type FileWatcher,type WatchTarget,type FileChange} from '@earendil-works/pi-durable/env';
@@ -28,7 +29,6 @@ type StoredIntent={request:Request|null;receipt:Receipt|null;cursor:number;works
 type IndexEntry={key:string;productId:string;bindingId:string;namespace:string;state:string};
 const Intent=defineDocFamily({kind:'app.managed-execution-intent',version:1,scope:'session',family:true,initial:(_:null):StoredIntent=>({request:null,receipt:null,cursor:0,workspaceIdentity:null}),checkpointWhen:()=>false});
 const Index=defineDoc({kind:'app.managed-execution-index',version:1,scope:'session',initial:()=>({items:{} as Record<string,IndexEntry>}),checkpointWhen:()=>false});
-const canonical=(value:any):any=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
 const same=(a:unknown,b:unknown)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));
 const hash=(value:unknown)=>createHash('sha256').update(JSON.stringify(canonical(value))).digest('hex');
 const copy=<T>(value:T):T=>JSON.parse(JSON.stringify(value));
