@@ -1,0 +1,31 @@
+ui/src/drafts.ts
+  s_467dcb949b5b60::t_737c5f27753cb3 123-128
+docs/evidence/t15/README.md
+  s_467dcb949b5b60::t_c8e800a358d9f7 51
+docs/evidence/t15/raw/t15-picker-cancel-edit-build01.log
+  s_467dcb949b5b60::t_02b7304882e365 1-26
+ui/test/drafts.test.ts
+  s_467dcb949b5b60::t_7f4a40b38bc8fd 109-131
+docs/evidence/t15/raw/t15-picker-cancel-edit-suite01.log
+  s_467dcb949b5b60::t_02b7304882e365 1-32
+docs/evidence/t15/raw/t15-picker-cancel-edit-green01.log
+  s_467dcb949b5b60::t_d6b8d3c884f3bb 1-9
+docs/evidence/t15/raw/t15-picker-cancel-edit-red01.log
+  s_467dcb949b5b60::t_670d5ed9841f99 1-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "df312047bc828db473c234bd0e4c390867f0c23a",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
