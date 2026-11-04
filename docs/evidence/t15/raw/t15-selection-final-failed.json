@@ -1,0 +1,29 @@
+{
+  "run": "be7f2fe3-95c6-4221-a2bf-1ec2e2b57309",
+  "mode": "fixture",
+  "started": "2026-11-04T10:46:31.603Z",
+  "observed": [
+    {
+      "id": "bd6278a9-a649-4afd-9539-99d87b1d3eb4",
+      "text": "第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n",
+      "state": "saved",
+      "historyItems": 0
+    },
+    {
+      "id": "e0ccaf62-e389-4421-b268-5d1dcc047646",
+      "text": "第二份独立草稿：引号\"、反斜线\\、换行\n和中文🌍",
+      "state": "saved",
+      "historyItems": 0
+    }
+  ],
+  "scope": "Actual UI process SIGKILL/reopen of two confirmed text drafts, no observer binding; same native process, empty submitted histories. Exact model request counts are covered by separate instrumentation.",
+  "before": {
+    "uiPid": "24083",
+    "hostPid": "24170"
+  },
+  "beforeViewport": {
+    "width": 412,
+    "height": 915
+  },
+  "error": "Error: UI process timeout: \"Command failed: C:\\\\Users\\\\AI_BA\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\platform-tools\\\\adb.exe -s [device] shell pidof dev.durableagent.probe\""
+}

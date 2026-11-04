@@ -1,0 +1,13 @@
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/ui
+
+··························
+
+ Test Files  2 passed (2)
+      Tests  26 passed (26)
+   Start at  18:32:24
+   Duration  3.84s (tests 54%, environment 35%, import 7%, transform 3%)
+
+    Isolate  2 workers spawned · ~739ms startup each (spawn + environment, per file)
+             at least ~739ms faster with isolate: false — reuses workers across files instead of one per file
+

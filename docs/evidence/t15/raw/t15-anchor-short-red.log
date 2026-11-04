@@ -1,0 +1,42 @@
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/ui
+
+····x····
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/console-page.test.tsx > shows the question strip only above the visible transcript and supports jump and dismiss
+AssertionError: expected <button …(2)>…(2)</button> to be null
+
+- Expected:
+null
+
++ Received:
+<button
+  aria-label="回到本次输入"
+  class="question-jump"
+>
+  <small>
+    本次输入 ↑
+  </small>
+  <span>
+    核对原始文件
+  </span>
+</button>
+
+ ❯ test/console-page.test.tsx:138:56
+    136|   expect(document.activeElement).toBe(input);
+    137|   viewportPosition.mockReturnValue(rect(100,130));fireEvent.scroll(vie…
+    138|   expect(screen.queryByRole('button',{name:'回到本次输入'})).toBeNull();
+       |                                                        ^
+    139|   viewportPosition.mockReturnValue(rect(100,700));fireEvent.scroll(vie…
+    140|   fireEvent.click(await screen.findByRole('button',{name:'关闭输入浮条'}));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 8 passed (9)
+   Start at  18:29:57
+   Duration  4.25s (tests 56%, environment 36%, import 6%, transform 2%)
+

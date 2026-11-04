@@ -1,0 +1,9 @@
+file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-selection-process.mjs:14
+async function until(fn,label,timeout=60000){const deadline=Date.now()+timeout;let last;while(Date.now()<deadline){try{last=await fn();if(last)return last;}catch(e){last=e.message;}await pause(100);}throw Error(`${label} timeout: ${JSON.stringify(last)}`);}
+                                                                                                                                                                                                             ^
+
+Error: Dead Activity removed or replacement UI started timeout: false
+    at until (file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-selection-process.mjs:14:206)
+    at async file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-selection-process.mjs:73:3
+
+Node.js v24.14.1

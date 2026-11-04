@@ -1,0 +1,60 @@
+
+11-04 10:46:31.279   670  1763 I ActivityManager: Force stopping dev.durableagent.probe appid=10222 user=0: from pid 24075
+11-04 10:46:31.495   670  1763 W ActivityTaskManager: callingPackage for (uid=2000, pid=24080) has no WPC
+11-04 10:46:31.505   670  1763 I ActivityTaskManager: START u0 {flg=0x10000000 xflg=0x5 cmp=dev.durableagent.probe/.AgentActivity (has extras)} with LAUNCH_SINGLE_TOP from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
+11-04 10:46:31.603   670   708 W ActivityManager: Slow operation: 83ms so far, now at startProcess: returned from zygote!
+11-04 10:46:31.603   670   708 W ActivityManager: Slow operation: 83ms so far, now at startProcess: done updating battery stats
+11-04 10:46:31.603   670   708 W ActivityManager: Slow operation: 83ms so far, now at startProcess: building log message
+11-04 10:46:31.603   670   708 I ActivityManager: Start proc 24083:dev.durableagent.probe/u0a222 for next-top-activity {dev.durableagent.probe/dev.durableagent.probe.AgentActivity}
+11-04 10:46:31.603   670   708 W ActivityManager: Slow operation: 83ms so far, now at startProcess: starting to update pids map
+11-04 10:46:31.618   670   708 I ActivityManager: ProcessObserver broadcast disabled
+11-04 10:46:31.618   670   708 W ActivityManager: Slow operation: 99ms so far, now at startProcess: done updating pids map
+11-04 10:46:32.518   670  1010 I ActivityManager: Start proc 24126:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i54 for  {dev.durableagent.probe/org.chromium.content.app.SandboxedProcessService0:0}
+11-04 10:46:32.518   670  1010 I ActivityManager: ProcessObserver broadcast disabled
+11-04 10:46:32.533   670  1010 D ActivityManager: sync unfroze 1470 com.google.android.gms for 6
+11-04 10:46:32.533   670  1010 D ActivityManager: sync unfroze 4189 com.google.android.adservices.api for 6
+11-04 10:46:32.569   670  1763 D ActivityManager: sync unfroze 4129 com.google.android.webview:webview_service for 6
+11-04 10:46:32.887   670   708 I ActivityManager: Start proc 24170:dev.durableagent.probe:agent/u0a222 for service {dev.durableagent.probe/dev.durableagent.probe.ApplicationService}
+11-04 10:46:32.887   670   708 I ActivityManager: ProcessObserver broadcast disabled
+11-04 10:46:33.243   670   698 I ActivityTaskManager: Displayed dev.durableagent.probe/.AgentActivity for user 0: +1s746ms
+11-04 10:46:33.303   670  1826 W ActivityManager: Slow operation: 88ms so far, now at attachApplicationLocked: immediately after bindApplication
+11-04 10:46:33.303   670  1826 W ActivityManager: Slow operation: 88ms so far, now at attachApplicationLocked: after updateLruProcessLocked
+11-04 10:46:33.304   670  1826 W ActivityManager: Slow operation: 89ms so far, now at attachApplicationLocked: after updateOomAdjLocked
+11-04 10:46:39.317   670  1010 W ActivityTaskManager: callingPackage for (uid=2000, pid=24213) has no WPC
+11-04 10:46:39.328   670  1010 W ActivityManager: pid 670 system sent binder code 54 with flags 1 to frozen apps and got error -32
+11-04 10:46:39.399   670  1995 I ActivityManager: Process dev.durableagent.probe (pid 24083) has died: fg  TOP 
+11-04 10:46:39.408   670  1010 I ActivityTaskManager: START u0 {flg=0x10000000 xflg=0x5 cmp=dev.durableagent.probe/.AgentActivity (has extras)} with LAUNCH_SINGLE_TOP from uid 2000 (BAL_ALLOW_PERMISSION) result code=3
+11-04 10:46:39.419   670  1995 W ActivityManager: pid 670 system sent binder code 12 with flags 1 to frozen apps and got error -32
+11-04 10:46:39.419   670  1995 D ActivityManager: Too many transaction errors, throttling freezer binder callback.
+11-04 10:46:39.429   670  1995 W ActivityManager: Exception when unbinding service dev.durableagent.probe/org.chromium.content.app.SandboxedProcessService0:0
+11-04 10:46:39.429   670  1995 W ActivityManager: android.os.DeadObjectException
+11-04 10:46:39.429   670  1995 W ActivityManager: 	at android.os.BinderProxy.transactNative(Native Method)
+11-04 10:46:39.429   670  1995 W ActivityManager: 	at android.os.BinderProxy.transact(BinderProxy.java:592)
+11-04 10:46:39.429   670  1995 W ActivityManager: 	at android.app.IApplicationThread$Stub$Proxy.scheduleUnbindService(IApplicationThread.java:1751)
+11-04 10:46:39.429   670  1995 W ActivityManager: 	at android.app.IApplicationThread$Delegator.scheduleUnbindService(IApplicationThread.java:271)
+11-04 10:46:39.429   670  1995 W ActivityManager: 	at com.android.server.am.ActiveServices.removeConnectionLocked(ActiveServices.java:6673)
+11-04 10:46:39.429   670  1995 W ActivityManager: 	at com.android.server.am.ActiveServices.killServicesLocked(ActiveServices.java:7234)
+11-04 10:46:39.429   670  1995 W ActivityManager: 	at com.android.server.am.ActivityManagerService.cleanUpApplicationRecordLocked(ActivityManagerService.java:13544)
+11-04 10:46:39.429   670  1995 W ActivityManager: 	at com.android.server.am.ActivityManagerService.handleAppDiedLocked(ActivityManagerService.java:3349)
+11-04 10:46:39.429   670  1995 W ActivityManager: 	at com.android.server.am.ActivityManagerService.appDiedLocked(ActivityManagerService.java:3470)
+11-04 10:46:39.429   670  1995 W ActivityManager: 	at com.android.server.am.ActivityManagerService$AppDeathRecipient.binderDied(ActivityManagerService.java:1526)
+11-04 10:46:39.429   670  1995 W ActivityManager: 	at android.os.IBinder$DeathRecipient.binderDied(IBinder.java:340)
+11-04 10:46:39.429   670  1995 W ActivityManager: 	at android.os.BinderProxy.sendDeathNotice(BinderProxy.java:780)
+11-04 10:46:39.432   670  1995 W ActivityManager: pid 670 system sent binder code 31 with flags 1 to frozen apps and got error -32
+11-04 10:46:39.432   670  1995 D ActivityManager: Too many transaction errors, throttling freezer binder callback.
+11-04 10:46:39.433   670  1995 W ActivityManager: pid 670 system sent binder code 41 with flags 1 to frozen apps and got error -32
+11-04 10:46:39.433   670  1995 D ActivityManager: Too many transaction errors, throttling freezer binder callback.
+11-04 10:46:39.433   670  1995 I ActivityManager: Killing 24126:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a222i54 (adj 900): isolated not needed
+11-04 10:46:39.440   670  1995 W ActivityTaskManager: Force removing ActivityRecord{240213734 u0 dev.durableagent.probe/.AgentActivity t95}: app died, no saved state
+11-04 10:46:39.451   670   701 W ActivityManager: setHasOverlayUi called on unknown pid: 24083
+11-04 10:47:09.561   670   707 D ActivityManager: sync unfroze 1470 com.google.android.gms for 10
+11-04 10:47:09.562   670   707 D ActivityManager: sync unfroze 4189 com.google.android.adservices.api for 10
+11-04 10:47:09.566   670   707 D ActivityManager: sync unfroze 2696 com.google.android.gms.unstable for 10
+11-04 10:47:09.566   670   707 D ActivityManager: sync unfroze 2637 com.google.android.gms.ui for 10
+11-04 10:47:39.447   670   707 W ActivityManager: Stopping service due to app idle: u0a222 -1m6s600ms dev.durableagent.probe/.ApplicationService
+11-04 10:47:39.617   670   780 D ActivityManager: freezing 1470 com.google.android.gms
+11-04 10:47:39.619   670   780 D ActivityManager: freezing 4189 com.google.android.adservices.api
+11-04 10:47:39.620   670   780 D ActivityManager: freezing 2696 com.google.android.gms.unstable
+11-04 10:47:39.621   670   780 D ActivityManager: freezing 2637 com.google.android.gms.ui
+11-04 10:47:49.469   670   780 D ActivityManager: freezing 24170 dev.durableagent.probe:agent
+

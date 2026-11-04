@@ -1,0 +1,16 @@
+{
+  "observedAt": "2026-11-04T11:06:08.211379+00:00",
+  "serial": "emulator-5584",
+  "physicalSize": "1080x2400",
+  "sizeOverride": null,
+  "physicalDensity": 420,
+  "densityOverride": null,
+  "fontScale": 1.0,
+  "accelerometerRotation": 1,
+  "userRotation": 0,
+  "showImeWithHardKeyboard": 0,
+  "appDataCleared": false,
+  "providerDataReset": false,
+  "currentFixture": "console/T15console01",
+  "currentFixtureState": "done; UI home"
+}

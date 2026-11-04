@@ -1,0 +1,41 @@
+{
+  "run": "e9012731-69d0-4766-8a0b-7805b24e95d0",
+  "mode": "fixture",
+  "started": "2026-11-04T09:23:41.942Z",
+  "observed": [
+    {
+      "id": "50cfb735-a9b1-42f1-9aa1-1c946a6328d1",
+      "text": "第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n第一份尚未发送的草稿 🌍\n",
+      "state": "saved",
+      "historyItems": 0
+    },
+    {
+      "id": "3d30b9c9-a18e-4913-8d8a-2d424a3bb591",
+      "text": "第二份独立草稿：引号\"、反斜线\\、换行\n和中文🌍",
+      "state": "saved",
+      "historyItems": 0
+    }
+  ],
+  "scope": "Actual UI process SIGKILL/reopen of two confirmed text drafts, no observer binding; same native process, empty submitted histories. Exact model request counts are covered by separate instrumentation.",
+  "before": {
+    "uiPid": "18179",
+    "hostPid": "18300"
+  },
+  "beforeViewport": {
+    "width": 412,
+    "height": 915
+  },
+  "after": {
+    "uiPid": "18355",
+    "hostPid": "18300"
+  },
+  "restoredSelected": "3d30b9c9-a18e-4913-8d8a-2d424a3bb591",
+  "expectedLastSelected": "3d30b9c9-a18e-4913-8d8a-2d424a3bb591",
+  "lastSelectedRestored": true,
+  "afterViewport": {
+    "width": 412,
+    "height": 915
+  },
+  "passed": true,
+  "completed": "2026-11-04T09:24:03.528Z"
+}

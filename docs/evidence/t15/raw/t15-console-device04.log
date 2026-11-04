@@ -1,0 +1,41 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ConsoleApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ConsoleApplicationTest:
+INSTRUMENTATION_STATUS: test=notificationTargetsSelectKnownDraftsWithoutCreatingOrSending
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: consoleEvidence={"case":"known-notification-target-only","result":{"run":"2258312d-9674-4993-a7c1-a0064da3afde","conversations":2,"wrongNamespaceIgnored":true,"unknownTargetIgnored":true,"draftsPreserved":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ConsoleApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=notificationTargetsSelectKnownDraftsWithoutCreatingOrSending
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ConsoleApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=cancelledSystemCameraRetainsConfirmedDraft
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: consoleEvidence={"case":"camera-cancel-public-ui","result":{"run":"f8a20813-bd51-45d6-bff1-ba4595ebea5c","systemCameraAvailable":true,"cameraLaunches":1,"draftRevision":1,"draftPreserved":true,"cameraResult":"controlled cancellation; no capture success claim"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ConsoleApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancelledSystemCameraRetainsConfirmedDraft
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 13.105
+
+OK (2 tests)
+
+
+INSTRUMENTATION_CODE: -1

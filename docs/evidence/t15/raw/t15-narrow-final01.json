@@ -1,0 +1,667 @@
+{
+  "plan": {
+    "name": "t15-narrow-final01",
+    "launch": {
+      "mode": "hang",
+      "run": "T15narrowfinal01",
+      "restart": true
+    },
+    "steps": [
+      {
+        "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+      },
+      {
+        "click": "[data-testid=create-conversation]"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      {
+        "fill": "键盘布局验证：保持等待以检查停止入口。"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+      },
+      {
+        "click": "[data-testid=send-message]"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=conversation-status]')?.dataset.phase==='running'"
+      },
+      {
+        "fill": "这份后续草稿保留在键盘上方，不自动发送。"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+      },
+      {
+        "shot": "narrow-keyboard-running"
+      },
+      {
+        "evaluate": "innerHeight<500&&document.querySelector('.context-pill').getBoundingClientRect().bottom<=innerHeight",
+        "assert": true,
+        "label": "actual short viewport with complete context row"
+      },
+      {
+        "evaluate": "document.querySelector('.thread-scroll').getBoundingClientRect().height>=100||!document.querySelector('.question-anchor')",
+        "assert": true,
+        "label": "floating strip never covers compact composer state"
+      },
+      {
+        "evaluate": "document.querySelector('[data-testid=message-input]').value",
+        "assert": "这份后续草稿保留在键盘上方，不自动发送。"
+      },
+      {
+        "evaluate": "({window:innerHeight,visual:visualViewport.height,composer:document.querySelector('.composer').getBoundingClientRect().toJSON(),input:document.querySelector('[data-testid=message-input]').value})"
+      },
+      {
+        "click": "[data-testid=stop-generation]"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=conversation-status]')?.dataset.phase==='stopped'"
+      },
+      {
+        "shot": "narrow-phone-keyboard-stopped"
+      },
+      {
+        "back": true,
+        "when": "innerHeight<500"
+      },
+      {
+        "shot": "narrow-phone-after-keyboard"
+      },
+      {
+        "click": "button[aria-label=会话详情]"
+      },
+      {
+        "shot": "narrow-font150-details"
+      },
+      {
+        "click": "[aria-label=关闭详情]"
+      },
+      {
+        "shot": "narrow-font150-panel-closed"
+      }
+    ]
+  },
+  "started": "2026-11-04T10:53:53.102Z",
+  "pid": "26772",
+  "steps": [
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "click": "[data-testid=create-conversation]"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "fill": "键盘布局验证：保持等待以检查停止入口。"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "click": "[data-testid=send-message]"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=conversation-status]')?.dataset.phase==='running'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "fill": "这份后续草稿保留在键盘上方，不自动发送。"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "shot": "narrow-keyboard-running"
+      },
+      "value": {
+        "width": 360,
+        "height": 341,
+        "dpr": 3,
+        "title": "新会话",
+        "active": "8c52f4d8-955b-4533-862e-4a65f0394490",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 14,
+              "y": 43,
+              "width": 46,
+              "height": 46,
+              "top": 43,
+              "right": 60,
+              "bottom": 89,
+              "left": 14
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 300,
+              "y": 43,
+              "width": 46,
+              "height": 46,
+              "top": 43,
+              "right": 346,
+              "bottom": 89,
+              "left": 300
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 26,
+              "y": 193.25,
+              "width": 38,
+              "height": 38,
+              "top": 193.25,
+              "right": 64,
+              "bottom": 231.25,
+              "left": 26
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 72,
+              "y": 196.25,
+              "width": 28,
+              "height": 38,
+              "top": 196.25,
+              "right": 100,
+              "bottom": 234.25,
+              "left": 72
+            }
+          },
+          {
+            "label": "停止生成",
+            "disabled": false,
+            "rect": {
+              "x": 254,
+              "y": 196.25,
+              "width": 28,
+              "height": 38,
+              "top": 196.25,
+              "right": 282,
+              "bottom": 234.25,
+              "left": 254
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": false,
+            "rect": {
+              "x": 290,
+              "y": 190.25,
+              "width": 44,
+              "height": 44,
+              "top": 190.25,
+              "right": 334,
+              "bottom": 234.25,
+              "left": 290
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "evaluate": "innerHeight<500&&document.querySelector('.context-pill').getBoundingClientRect().bottom<=innerHeight",
+        "assert": true,
+        "label": "actual short viewport with complete context row"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "evaluate": "document.querySelector('.thread-scroll').getBoundingClientRect().height>=100||!document.querySelector('.question-anchor')",
+        "assert": true,
+        "label": "floating strip never covers compact composer state"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "evaluate": "document.querySelector('[data-testid=message-input]').value",
+        "assert": "这份后续草稿保留在键盘上方，不自动发送。"
+      },
+      "value": "这份后续草稿保留在键盘上方，不自动发送。"
+    },
+    {
+      "step": {
+        "evaluate": "({window:innerHeight,visual:visualViewport.height,composer:document.querySelector('.composer').getBoundingClientRect().toJSON(),input:document.querySelector('[data-testid=message-input]').value})"
+      },
+      "value": {
+        "window": 341,
+        "visual": 341,
+        "composer": {
+          "x": 16,
+          "y": 180.25,
+          "width": 328,
+          "height": 64,
+          "top": 180.25,
+          "right": 344,
+          "bottom": 244.25,
+          "left": 16
+        },
+        "input": "这份后续草稿保留在键盘上方，不自动发送。"
+      }
+    },
+    {
+      "step": {
+        "click": "[data-testid=stop-generation]"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=conversation-status]')?.dataset.phase==='stopped'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "shot": "narrow-phone-keyboard-stopped"
+      },
+      "value": {
+        "width": 360,
+        "height": 640,
+        "dpr": 3,
+        "title": "新会话",
+        "active": "8c52f4d8-955b-4533-862e-4a65f0394490",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 14,
+              "y": 55,
+              "width": 46,
+              "height": 46,
+              "top": 55,
+              "right": 60,
+              "bottom": 101,
+              "left": 14
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 300,
+              "y": 55,
+              "width": 46,
+              "height": 46,
+              "top": 55,
+              "right": 346,
+              "bottom": 101,
+              "left": 300
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 26,
+              "y": 466.0520935058594,
+              "width": 38,
+              "height": 38,
+              "top": 466.0520935058594,
+              "right": 64,
+              "bottom": 504.0520935058594,
+              "left": 26
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 72,
+              "y": 469.0520935058594,
+              "width": 28,
+              "height": 38,
+              "top": 469.0520935058594,
+              "right": 100,
+              "bottom": 507.0520935058594,
+              "left": 72
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": false,
+            "rect": {
+              "x": 290,
+              "y": 463.0520935058594,
+              "width": 44,
+              "height": 44,
+              "top": 463.0520935058594,
+              "right": 334,
+              "bottom": 507.0520935058594,
+              "left": 290
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "back": true,
+        "when": "innerHeight<500"
+      },
+      "skipped": true
+    },
+    {
+      "step": {
+        "shot": "narrow-phone-after-keyboard"
+      },
+      "value": {
+        "width": 360,
+        "height": 640,
+        "dpr": 3,
+        "title": "新会话",
+        "active": "8c52f4d8-955b-4533-862e-4a65f0394490",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 14,
+              "y": 55,
+              "width": 46,
+              "height": 46,
+              "top": 55,
+              "right": 60,
+              "bottom": 101,
+              "left": 14
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 300,
+              "y": 55,
+              "width": 46,
+              "height": 46,
+              "top": 55,
+              "right": 346,
+              "bottom": 101,
+              "left": 300
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 26,
+              "y": 466.0520935058594,
+              "width": 38,
+              "height": 38,
+              "top": 466.0520935058594,
+              "right": 64,
+              "bottom": 504.0520935058594,
+              "left": 26
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 72,
+              "y": 469.0520935058594,
+              "width": 28,
+              "height": 38,
+              "top": 469.0520935058594,
+              "right": 100,
+              "bottom": 507.0520935058594,
+              "left": 72
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": false,
+            "rect": {
+              "x": 290,
+              "y": 463.0520935058594,
+              "width": 44,
+              "height": 44,
+              "top": 463.0520935058594,
+              "right": 334,
+              "bottom": 507.0520935058594,
+              "left": 290
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "click": "button[aria-label=会话详情]"
+      }
+    },
+    {
+      "step": {
+        "shot": "narrow-font150-details"
+      },
+      "value": {
+        "width": 360,
+        "height": 640,
+        "dpr": 3,
+        "title": "新会话",
+        "active": "8c52f4d8-955b-4533-862e-4a65f0394490",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 14,
+              "y": 55,
+              "width": 46,
+              "height": 46,
+              "top": 55,
+              "right": 60,
+              "bottom": 101,
+              "left": 14
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 300,
+              "y": 55,
+              "width": 46,
+              "height": 46,
+              "top": 55,
+              "right": 346,
+              "bottom": 101,
+              "left": 300
+            }
+          },
+          {
+            "label": "关闭详情",
+            "disabled": false,
+            "rect": {
+              "x": 293,
+              "y": 145.1666717529297,
+              "width": 30,
+              "height": 30,
+              "top": 145.1666717529297,
+              "right": 323,
+              "bottom": 175.1666717529297,
+              "left": 293
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 26,
+              "y": 466.0520935058594,
+              "width": 38,
+              "height": 38,
+              "top": 466.0520935058594,
+              "right": 64,
+              "bottom": 504.0520935058594,
+              "left": 26
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 72,
+              "y": 469.0520935058594,
+              "width": 28,
+              "height": 38,
+              "top": 469.0520935058594,
+              "right": 100,
+              "bottom": 507.0520935058594,
+              "left": 72
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": false,
+            "rect": {
+              "x": 290,
+              "y": 463.0520935058594,
+              "width": 44,
+              "height": 44,
+              "top": 463.0520935058594,
+              "right": 334,
+              "bottom": 507.0520935058594,
+              "left": 290
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "click": "[aria-label=关闭详情]"
+      }
+    },
+    {
+      "step": {
+        "shot": "narrow-font150-panel-closed"
+      },
+      "value": {
+        "width": 360,
+        "height": 640,
+        "dpr": 3,
+        "title": "新会话",
+        "active": "8c52f4d8-955b-4533-862e-4a65f0394490",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 14,
+              "y": 55,
+              "width": 46,
+              "height": 46,
+              "top": 55,
+              "right": 60,
+              "bottom": 101,
+              "left": 14
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 300,
+              "y": 55,
+              "width": 46,
+              "height": 46,
+              "top": 55,
+              "right": 346,
+              "bottom": 101,
+              "left": 300
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 26,
+              "y": 466.0520935058594,
+              "width": 38,
+              "height": 38,
+              "top": 466.0520935058594,
+              "right": 64,
+              "bottom": 504.0520935058594,
+              "left": 26
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 72,
+              "y": 469.0520935058594,
+              "width": 28,
+              "height": 38,
+              "top": 469.0520935058594,
+              "right": 100,
+              "bottom": 507.0520935058594,
+              "left": 72
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": false,
+            "rect": {
+              "x": 290,
+              "y": 463.0520935058594,
+              "width": 44,
+              "height": 44,
+              "top": 463.0520935058594,
+              "right": 334,
+              "bottom": 507.0520935058594,
+              "left": 290
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true,
+  "completed": "2026-11-04T10:54:26.832Z"
+}
