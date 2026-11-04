@@ -1,0 +1,26 @@
+ui/test/submissions-page.test.tsx
+  s_467dcb949b5b60::t_890a79c8314368 16,20
+tools/console-selection-process.mjs
+  s_467dcb949b5b60::t_0471f3b740dec1 1-72,74-85
+  s_467dcb949b5b60::t_5fd517c0579c16 73
+ui/src/extensions/submissions.tsx
+  s_467dcb949b5b60::t_4e505938082118 32-33
+ui/src/style.css
+  s_467dcb949b5b60::t_c58679ef22643f 96-97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "ce6ac2a983b70f99de51fe6f0fd8eecf42d6493a",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
