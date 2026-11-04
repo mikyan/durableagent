@@ -1,0 +1,118 @@
+{
+  "sourceCommit": "664e5f2ceba3f32d79d273fb1969ac934e1d9772",
+  "artifacts": {
+    "app": "48faee5b25ea08c52661420a072c33091c0172b9f80c2825d11cd4e893bde87b",
+    "originalTest": "caeb3877a062d0b8470914ef1fc16d95fb5b688e4e57fa661f17a61521c05bb8",
+    "observerTest": "3d2a9e3ce49f6a6025315472772a044c993ff88b320e1a9d266678d6b697bb0d"
+  },
+  "originalResult": "FAIL: expected shell+local lines, actual shell line only",
+  "observationResult": "PASS 1/1 in 1.866s, no Harness or new dispatch",
+  "run": "de0a687c-89d8-4608-8639-08710403dfe8",
+  "harnessNotOpened": true,
+  "files": [
+    {
+      "operationId": "cd1d1e67-d959-48d3-bc46-d2545bee764c",
+      "productId": "local",
+      "bindingId": "227b4c33-bf52-4071-9723-79de14c4133f",
+      "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-de0a687c-89d8-4608-8639-08710403dfe8/queue.txt",
+      "position": {
+        "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+        "canonicalPath": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-de0a687c-89d8-4608-8639-08710403dfe8/queue.txt",
+        "objectId": null,
+        "ancestorObjectIds": [
+          "65079:625095",
+          "65079:625085",
+          "65079:574536",
+          "65079:574110",
+          "65079:557678",
+          "65079:558047",
+          "65079:557923",
+          "65079:548865",
+          "65079:2",
+          "65029:2"
+        ],
+        "parentAnchor": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace",
+        "missingParents": [
+          ".durableagent-t10-de0a687c-89d8-4608-8639-08710403dfe8"
+        ],
+        "writeRoot": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-de0a687c-89d8-4608-8639-08710403dfe8"
+      },
+      "mode": "append",
+      "planRecorded": false,
+      "executionId": "ba90d706-0285-43f1-9934-fecbfda9d4ae",
+      "resultState": "not_started",
+      "proof": {
+        "operationId": "cd1d1e67-d959-48d3-bc46-d2545bee764c",
+        "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+        "requestDigest": "e56f92fd5486a276a065bb23033be23669bd5b8cd7b86037b675af35e63f307b",
+        "state": "not_started",
+        "scopeConfirmed": true,
+        "sequence": 1
+      }
+    }
+  ],
+  "nativeExecutionQueries": [
+    {
+      "executionId": "225d570c-44e2-474f-b863-ce5b74f451f9",
+      "response": {
+        "ok": true,
+        "value": {
+          "captureIncomplete": false,
+          "context": {
+            "bindingId": "ad683780-d760-443e-a118-3410de4d4c71",
+            "callId": "location-1",
+            "controlGeneration": 1,
+            "locationVersion": 1,
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "productId": "shell",
+            "sdkConversationId": 12,
+            "taskId": 41
+          },
+          "createdAt": 1793779514017,
+          "defaultWorkspace": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace",
+          "executionId": "225d570c-44e2-474f-b863-ce5b74f451f9",
+          "executorId": "a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "exitCode": 0,
+          "finalDigest": "37416879d47e5e1055b047dd699297d2d52e3d5192a77bdcbff4222d469a71b4",
+          "finishedAt": 1793779522442,
+          "guardianPid": 6763,
+          "ledgerEpoch": "c156417c-ec2d-4528-99d1-78d257676c18",
+          "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "outputBytes": 41,
+          "outputCursor": 2,
+          "outputRef": "/data/data/com.termux/files/home/.local/share/durableagent-execution/outputs/225d570c-44e2-474f-b863-ce5b74f451f9.raw",
+          "protocol": 1,
+          "rawSha256": "0e931a044f96b989c9d18d21e27544bb57f769ec778a7f6db1f5ffe5c503236b",
+          "requestDigest": "fb75653c378f5dd6a91ef37e2ca3ffe02d803d413f17dd0dfb0f11f93ff15be4",
+          "scopeConfirmed": true,
+          "sequence": 6,
+          "startRequestedAt": 1793779514278,
+          "startedAt": 1793779514394,
+          "state": "completed"
+        }
+      }
+    },
+    {
+      "executionId": "ba90d706-0285-43f1-9934-fecbfda9d4ae",
+      "response": {
+        "ok": true,
+        "value": {
+          "cancelReason": "user",
+          "cancelRequested": true,
+          "defaultWorkspace": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace",
+          "executionId": "ba90d706-0285-43f1-9934-fecbfda9d4ae",
+          "executorId": "a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "finishedAt": 1793779523011,
+          "ledgerEpoch": "c156417c-ec2d-4528-99d1-78d257676c18",
+          "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "neverStarted": true,
+          "protocol": 1,
+          "reason": "CANCELLED_BEFORE_ACCEPTANCE",
+          "scopeConfirmed": true,
+          "sequence": 1,
+          "state": "not_started"
+        }
+      }
+    }
+  ]
+}
