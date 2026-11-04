@@ -1,0 +1,81 @@
+runtime/src/application.ts
+  s_467dcb949b5b60::t_3b892bbfc16fdc 162,267-286
+runtime/test/application.test.mjs
+  s_467dcb949b5b60::t_d72cbedf7d0d31 184-193,195-198
+  s_467dcb949b5b60::t_9ea13408dd881a 194
+runtime/src/input-protocol.ts
+  s_467dcb949b5b60::t_abd2c823a9fbf3 3,21-22
+android/app/src/main/java/dev/durableagent/probe/CameraCaptureProvider.kt
+  s_467dcb949b5b60::t_abd2c823a9fbf3 1-26,28-45
+  s_467dcb949b5b60::t_7762513f79dbe2 27
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_3b892bbfc16fdc 4,12,15
+ui/src/extensions/context.ts
+  s_467dcb949b5b60::t_e0aa24f2e13c04 1-20
+ui/src/controller.ts
+  s_467dcb949b5b60::t_78d8d99205520c 11-12,35,103
+  s_467dcb949b5b60::t_451b2ab7d94326 25,56,78-79,98-102
+  s_467dcb949b5b60::t_abd2c823a9fbf3 143
+ui/src/extensions/auxiliary.tsx
+  s_467dcb949b5b60::t_67e53e49ca0a11 1-18
+ui/src/extensions/question-anchor.tsx
+  s_467dcb949b5b60::t_b1cbed50bd6521 1-3,5-15
+  s_467dcb949b5b60::t_4003787e95f413 4
+ui/src/browser.ts
+  s_467dcb949b5b60::t_451b2ab7d94326 8,11,30,36-38
+ui/src/drafts.ts
+  s_467dcb949b5b60::t_abd2c823a9fbf3 8,109
+ui/src/style.css
+  s_467dcb949b5b60::t_34c8ec8b7afedf 49-54
+  s_467dcb949b5b60::t_67e53e49ca0a11 13-41
+  s_467dcb949b5b60::t_b1cbed50bd6521 42-48
+android/app/src/main/java/dev/durableagent/probe/NativeInputBridge.kt
+  s_467dcb949b5b60::t_abd2c823a9fbf3 20,26,41,48,63,65-69,89-98,106,129
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_467dcb949b5b60::t_451b2ab7d94326 23-39,72
+ui/src/extensions/failure-notice.tsx
+  s_467dcb949b5b60::t_34c8ec8b7afedf 1-9
+ui/src/extensions/conversation-history.tsx
+  s_467dcb949b5b60::t_e0b08645ab69bf 1-21
+android/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_451b2ab7d94326 9
+  s_467dcb949b5b60::t_abd2c823a9fbf3 6,8
+ui/src/client.ts
+  s_467dcb949b5b60::t_451b2ab7d94326 4
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_e0aa24f2e13c04 14,18,57,61,74-75,80,95-99,115-116,118-120,131,134,149,172
+  s_467dcb949b5b60::t_34c8ec8b7afedf 17,155
+  s_467dcb949b5b60::t_abd2c823a9fbf3 54-56,108,163
+  s_467dcb949b5b60::t_67e53e49ca0a11 15,47-51,86,89-90,109-111,130,160,176
+  s_467dcb949b5b60::t_b1cbed50bd6521 16,142
+ui/test/console-page.test.tsx
+  s_467dcb949b5b60::t_32281c794f4e88 24-25,165-181
+  s_467dcb949b5b60::t_77be6d44a20d0b 2,121-140
+  s_467dcb949b5b60::t_9ea13408dd881a 1,3-19,21-23,26-27,29,33-36,38-98,120,184
+  s_467dcb949b5b60::t_34c8ec8b7afedf 149
+  s_467dcb949b5b60::t_7d92eb47640eb2 185-197
+  s_467dcb949b5b60::t_4003787e95f413 20,28,30,37,141-148,150-164,182-183
+  s_467dcb949b5b60::t_4dbe7930181b5d 31-32,99-119
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_bbe0bf9b3787b4 141
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_69692b4a04b84f 42
+runtime/src/transport.ts
+  s_467dcb949b5b60::t_56fd3d20c7b3da 3,16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "7339a5b48cc1cecf93dc020783dfe9ab57f71193",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
