@@ -443,3 +443,26 @@ test('lost original-write confirmation survives host reopen and explicit query r
   documents.connected=true;const verified=(await call(app,'files.list',{id:'one'})).documents.changes[0];assert.equal(verified.state,'completed');assert.equal(verified.scopeConfirmed,true);await execution.withSnapshot(async snapshot=>{assert.equal(snapshot.known,true);assert.deepEqual(snapshot.pendingControlProductIds,[]);});assert.equal(documents.starts,1);assert.equal(peer.starts,0);
  }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
 });
+
+
+test('an accepted file helper confirmed stopped before spawn proves no original write and releases its claim',async()=>{
+ class NeverSpawnedFilePeer extends ExecutionPeer {
+  plan;position={namespace:this.identity.namespace,canonicalPath:'/termux/default-workspace/stopped.txt',objectId:'1:9',ancestorObjectIds:['1:2']};
+  async request(method,payload){const prefix=['/termux/python','/termux/file_service.py','apply','/termux/records'];
+   if(method==='file.describe')return {ok:true,value:{protocol:1,namespace:this.identity.namespace,applyArgvPrefix:prefix}};
+   if(method==='file.canonical')return {ok:true,value:this.position.canonicalPath};
+   if(method==='file.resolveWrite')return {ok:true,value:this.position};
+   if(method==='file.prepareWrite'){this.plan={...payload,namespace:this.identity.namespace,requestDigest:hash(payload),position:this.position,argv:[...prefix,payload.operationId]};return {ok:true,value:this.plan};}
+   if(method==='file.writeResult')return {ok:true,value:{...this.plan,state:'prepared'}};
+   if(method==='file.verifyWrite')throw Error('Never-spawned helper must not rely on content equality');
+   if(method==='start'){const row=this.records.get(payload.executionId);row.receipt={...row.receipt,state:'stopped',scopeConfirmed:true,neverStarted:true,cancelReason:'user',sequence:2};return structuredClone(row.receipt);}
+   if(method==='readOutput')return {...this.identity,executionId:payload.executionId,cursor:0,nextCursor:0,chunks:[]};
+   return super.request(method,payload);
+  }
+ }
+ const dir=await mkdtemp(join(tmpdir(),'managed-file-never-spawned-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new NeverSpawnedFilePeer(),options={...configuration('write',{path:'stopped.txt',content:'after'}),path:join(dir,'sdk.sqlite'),inputs:native,sends:native};let execution=new ManagedExecution({channel:peer,authority:native}),app=new Application({...options,execution});
+ try{await app.start();await call(app,'create',{creationId:'one'});await native.create('one','file','file');await call(app,'send',{intentId:'file'});await until(async()=>(await call(app,'sendStatus',{intentId:'file'})).submission?.status==='done');const command=(await call(app,'execution.list',{id:'one'})).executions[0];assert.equal(command.state,'stopped');assert.equal(command.neverStarted,true);assert.equal(peer.starts,0);
+  const file=(await call(app,'files.list',{id:'one'})).changes[0];assert.equal(file.state,'not_started');assert.equal(file.scopeConfirmed,true);await execution.withSnapshot(async value=>{assert.equal(value.known,true);assert.deepEqual(value.pendingBindingIds,[]);});
+  await app.close();execution=new ManagedExecution({channel:peer,authority:native});app=new Application({...options,execution});await app.start();const reopened=(await call(app,'files.list',{id:'one'})).changes[0];assert.equal(reopened.operationId,file.operationId);assert.equal(reopened.state,'not_started');assert.equal(reopened.scopeConfirmed,true);assert.equal(peer.starts,0);
+ }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
