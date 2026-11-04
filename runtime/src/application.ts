@@ -1,3 +1,4 @@
+import {ModelRetryAfter} from './model-retry-after.js';
 import {BACKGROUND_CONTEXT as context} from '@earendil-works/chord/context';
 import type {Models} from '@earendil-works/pi-ai/models';
 import {Harness,createRegistry,defineDoc,type ConversationId,type ConversationView,type HarnessSettings,type Storage,type EntryRecord,type ConversationWatch} from '@earendil-works/pi-durable';
@@ -59,6 +60,7 @@ export class Application {
   private productsCache=new Map<string,ProductRecord>();
   private dispatch=new DispatchGate();
   private recovery?:Recovery;
+  private modelRetryAfter?:ModelRetryAfter;
   private waking?:Promise<void>;
   private projecting?:Promise<void>;
   private projectAgain=false;
@@ -93,6 +95,7 @@ export class Application {
       await verifyApplicationStorage(storage,this.options.storageFormats);
       this.harness=await Harness.open(storage,{models:()=>this.dispatch.models(this.options.models),settings:()=>this.runtimeSettings(),registry:this.registry,conversationCreated:inheritBinding,...(this.recovery?{onWake:wake=>this.recovery!.schedule(wake),now:this.options.recovery!.now}:{}),...(this.options.locations?{env:target=>bindingEnvironment(target,this.options.locations)}:{})},context);
     }catch(error){if(storageFailure(error)?.code==='STORAGE_VERSION_UNSUPPORTED')this.retained=await RetainedHistory.open(storage);if(!this.retained)await storage.close(context);throw error;}
+    if(this.options.connections){this.modelRetryAfter=new ModelRetryAfter(this.harness,this.options.recovery?.now??Date.now,at=>{this.recovery?.setModelDeadline(at);for(const subscription of this.subscriptions.values())subscription.refresh?.();this.queueHostProjection();});await this.modelRetryAfter.initialize();this.options.connections.attachRetryAfter(this.modelRetryAfter);}
     this.options.execution?.attach(this.harness);
     void this.harness.closed.then(result=>{if(result.kind==='failed')this.state={...this.state,phase:'failed',reason:this.safeError(result.error),failure:storageFailure(result.error)};});
     this.harness.observeCommits({advance:publication=>{this.storedSeq=publication.seq;this.recovery?.changedConditions();this.queueHostProjection();},end:()=>{}});
@@ -245,11 +248,11 @@ export class Application {
           const watch=await conversation.watch(context);const subscription:{connectionId:string;watch:ConversationWatch;refresh?:()=>void}={connectionId:request.connectionId,watch};
           if(!current()){await watch.stop();throw new ActionError('CONNECTION_CLOSED','订阅连接已更换');}
           this.subscriptions.set(key,subscription);
-          value=this.project(product,watch.value);
+          value=await this.project(product,watch.value);
           const publish=(snapshot:ConversationSnapshot)=>{if(current()&&this.subscriptions.get(key)===subscription)emit({type:'conversation',protocol:1,connectionId:request.connectionId,subscriptionId,snapshot});};
           const failed=(error:unknown)=>{if(current()&&this.subscriptions.get(key)===subscription)emit({type:'subscription-error',protocol:1,connectionId:request.connectionId,subscriptionId,error:{code:'OBSERVATION_UNAVAILABLE',message:this.safeError(error)}});};
-          subscription.refresh=()=>publish(this.project(product,watch.value));
-          watch.start(async call=>{if(call.kind==='value')publish(this.project(product,call.value));else failed(call.error);});
+          subscription.refresh=()=>{void this.project(product,watch.value).then(publish,failed);};
+          watch.start(async call=>{if(call.kind==='value')publish(await this.project(product,call.value));else failed(call.error);});
           void watch.closed.then(end=>{if(end.kind==='failed')failed(end.error);});break;
         }
         case 'unsubscribe': {
@@ -307,15 +310,23 @@ export class Application {
   private async snapshot(id:string,known?:ProductRecord) {
     const product=known??await this.product(id),harness=this.ready();
     const watch=await (await harness.conversation(product.sdkId as ConversationId,context))!.watch(context);
-    try{return this.project(product,watch.value);}finally{await watch.stop();}
+    try{return await this.project(product,watch.value);}finally{await watch.stop();}
   }
-  private project(product:ProductRecord,view:ConversationView):ConversationSnapshot {
+  private async project(product:ProductRecord,view:ConversationView):Promise<ConversationSnapshot> {
     product=this.productsCache.get(product.id)??product;
     const live=view.docs['pi.live'] as any,agent=view.docs['pi.agent'] as any;
     const ref=agent?.model??{},model=this.options.models.getModel(ref.provider,ref.modelId);
     const entries=view.entries.flatMap(entry=>this.message(entry));
     const retry=live?.generation?.retry,deferred=live?.generation?.deferred;
-    const recovery=live?.run?(this.recovery?.status(product.id)??(retry?{phase:'waiting' as const,reason:'model-retry' as const,message:retry.error,nextAt:retry.at,used:live.generation.attempt,limit:this.runtimeSettings().retry?.maxRetries??3}:deferred?{phase:'waiting' as const,reason:'deferred-poll' as const,message:'等待原模型响应的下一次查询；不会创建新请求',nextAt:deferred.pollAt}:undefined)):undefined;
+    // Read the public task checkpoint: a selected model is for later prepare,
+    // while an already-prepared request, deferred poll or compaction stays pinned.
+    const task=live?.run?await this.harness?.getTask(live.run.taskId,context):undefined;
+    let checkpoint=task?.state.status!=='terminal'?(task?.state as any)?.checkpoint:undefined;
+    if(checkpoint?.compacted){const child=await this.harness?.getTask(checkpoint.compacted,context);if(child?.state.status!=='terminal'&&(child?.state as any)?.checkpoint?.model)checkpoint=(child!.state as any).checkpoint;}
+    const rateProvider=checkpoint?.model?.provider??checkpoint?.poll?.model?.provider??ref.provider;
+    const rateAt=this.modelRetryAfter?.until(rateProvider);
+    const rateWait=rateAt!==undefined&&live?.generation?{phase:'waiting' as const,reason:'model-retry' as const,message:'等待模型服务指定的重试时间',nextAt:Math.max(rateAt,retry?.at??0),used:live.generation.attempt,limit:this.runtimeSettings().retry?.maxRetries??3}:undefined;
+    const recovery=live?.run?(this.recovery?.status(product.id)??rateWait??(retry?{phase:'waiting' as const,reason:'model-retry' as const,message:retry.error,nextAt:retry.at,used:live.generation.attempt,limit:this.runtimeSettings().retry?.maxRetries??3}:deferred?{phase:'waiting' as const,reason:'deferred-poll' as const,message:'等待原模型响应的下一次查询；不会创建新请求',nextAt:deferred.pollAt}:undefined)):undefined;
     const phase=live?.run?(recovery||live.generation?.retry||live.generation?.deferred?'waiting':'running'):live?.runFailure?(live.runFailure.reason==='aborted'?'stopped':'failed'):entries.some(entry=>entry.role==='assistant')?'done':'idle';
     const text=live?.run?this.content(live.generation?.message?.content):'';
     const selected={provider:ref.provider??'',modelId:ref.modelId??'',name:model?.name??ref.modelId??'未配置模型'};

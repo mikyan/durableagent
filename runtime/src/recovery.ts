@@ -19,10 +19,12 @@ export class Recovery {
  private wakeTail:Promise<void>=Promise.resolve();
  private wakeFailure:unknown;
  private latestWake?:Wake;
+ private modelDeadline?:number;
+ setModelDeadline(at?:number){if(this.modelDeadline===at)return;this.modelDeadline=at;if(this.latestWake)this.schedule(this.latestWake);}
  constructor(private readonly host:RecoveryHost,private readonly publish:()=>void){this.unsubscribe=host.subscribe(()=>{this.changedConditions();this.publish();});}
  changedConditions(){this.version++;for(const wake of [...this.listeners])wake();}
  status(productId:string){const state=this.waiting.get(productId);return state?{...state}:undefined;}
- schedule(wake:Wake){if(this.closed)return;const fixed={...wake};this.latestWake=fixed;this.wakeTail=this.wakeTail.then(()=>this.host.publishWake(fixed)).then(()=>{this.wakeFailure=undefined;}).catch(error=>{this.wakeFailure=error;this.publish();});}
+ schedule(wake:Wake){if(this.closed)return;const fixed={...wake};this.latestWake=fixed;const at=this.modelDeadline;const combined=at===undefined?fixed:{...fixed,active:true,at:Math.min(fixed.at??Infinity,at)};this.wakeTail=this.wakeTail.then(()=>this.host.publishWake(combined)).then(()=>{this.wakeFailure=undefined;}).catch(error=>{this.wakeFailure=error;this.publish();});}
  async flushWake(){await this.wakeTail;if(this.wakeFailure&&this.latestWake&&!this.closed){this.schedule(this.latestWake);await this.wakeTail;}if(this.wakeFailure)throw this.wakeFailure;}
  install(registry:Registry,continuation?:(productId:string,context:Context)=>Promise<void>){registry.install({name:'application-recovery',hooks:[{task:'pi.generation',handlers:{beforeRequest:async(_request:unknown,api:HookApi,context:Context)=>{
   const binding=await api.snapshot(ExecutionBinding,api.conversationId,context);

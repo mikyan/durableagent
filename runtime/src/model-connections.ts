@@ -1,3 +1,4 @@
+import type {ModelRetryAfter} from './model-retry-after.js';
 import {createModels,createProvider,type Models,type Provider} from '@earendil-works/pi-ai/models';
 import {xiaomiTokenPlanCnProvider} from '@earendil-works/pi-ai/providers/xiaomi-token-plan-cn';
 import {openAICompletionsApi} from '@earendil-works/pi-ai/api/openai-completions.lazy';
@@ -18,6 +19,8 @@ export class ModelConnections {
   readonly models;
   private stored:StoredModels={version:0,defaultModel:null,connections:[]};
   private usable=false;
+  private retryAfter?:ModelRetryAfter;
+  attachRetryAfter(value:ModelRetryAfter){this.retryAfter=value;}
   constructor(private readonly options:Options) {
     const credentials:CredentialStore={read:async id=>{const info=await options.credentials.metadata(id);return info.configured?{type:'api_key',key:marker}:undefined;},list:async()=>{const metadata=await Promise.all(this.stored.connections.map(item=>options.credentials.metadata(item.id)));return metadata.filter(item=>item.configured).map(item=>({providerId:item.connectionId,type:'api_key' as const}));},modify:async()=>failure('NATIVE_WRITE_REQUIRED','请使用原生凭据入口'),delete:async()=>failure('NATIVE_WRITE_REQUIRED','请使用原生凭据入口')};
     this.models=createModels({credentials,authContext:{env:async()=>undefined,fileExists:async()=>false}});
@@ -64,7 +67,7 @@ export class ModelConnections {
     const builtin=xiaomiTokenPlanCnProvider().getModels();
     const models=definition.models.map(item=>{const catalog=builtin.find(model=>definition.protocol==='mimo-cn'&&model.id===item.id);return {...catalog,...item,api:'openai-completions' as const,provider:definition.id,baseUrl:definition.endpoint,reasoning:false,input:catalog?.input??['text' as const],cost:{input:0,output:0,cacheRead:0,cacheWrite:0}};});
     const provider=this.options.providerFactory?.(definition)??createProvider({id:definition.id,name:definition.name,baseUrl:definition.endpoint,models,auth:{apiKey:{name:'应用凭据',resolve:async()=>({auth:{apiKey:marker}})}},api});
-    const checkedFetch=(admission:{generation:number;secrets:Set<string>;expectedGeneration?:number;inputFailure?:string},model:Model<Api>):typeof fetch=>async(input,init)=>{
+    const checkedFetch=(admission:{generation:number;secrets:Set<string>;expectedGeneration?:number;inputFailure?:string;preDispatchWait?:boolean},model:Model<Api>):typeof fetch=>async(input,init)=>{
       const request=new Request(input,init);this.enabled(definition.id);
       if(request.url!==`${definition.endpoint}/chat/completions`||request.method!=='POST')return failure('DESTINATION_REJECTED','模型请求地址不符合连接定义');
       let inputEvidence:ProviderInputEvidence;
@@ -79,6 +82,9 @@ export class ModelConnections {
       const current=await this.options.credentials.metadata(definition.id);
       if(!current.configured||current.generation!==credential.generation)return failure('CREDENTIAL_CHANGED','凭据已变更，请重试');
       this.enabled(definition.id); // Final synchronous gate after the last asynchronous read.
+      // No await between this final eligibility check and fetch: another
+      // response may have extended the deadline during credential resolution.
+      if(this.retryAfter?.until(definition.id)!==undefined){admission.preDispatchWait=true;return failure('MODEL_NOT_BEFORE','等待模型服务允许下一次请求');}
       admission.generation=credential.generation;
       admission.secrets.add(credential.key);
       const headers=new Headers(request.headers);headers.delete('authorization');headers.delete('api-key');
@@ -86,6 +92,7 @@ export class ModelConnections {
       let response:Response;
       this.options.onRequest?.({connectionId:definition.id,generation:credential.generation,endpoint:definition.endpoint,input:inputEvidence,requestTools});
       try{response=await (this.options.fetch??fetch)(new Request(request,{headers,redirect:'error'}));}catch{return failure('MODEL_NETWORK_ERROR','模型网络请求失败');}
+      if(response.status===429||response.status===503)await this.retryAfter?.record(definition.id,response.headers.get('retry-after'));
       return redactResponse(response,credential.key);
     };
     const invoke=(model:Model<Api>,options:any,run:(options:any,handle?:DeferredHandle)=>AssistantMessageEventStream,handle?:DeferredHandle,transcript?:{messages:readonly {content:unknown}[]})=>{
@@ -102,22 +109,30 @@ export class ModelConnections {
             if(!this.usable)failure('CONFIG_UNAVAILABLE','旧响应配置尚未就绪，请处理原响应。');
             if(!this.stored.connections.find(item=>item.id===definition.id)?.enabled)failure('DEFERRED_DISABLED','旧连接已停用，请处理原响应。');
           }else this.enabled(definition.id);
-          const credential=await this.options.credentials.metadata(definition.id);
-          let original=handle;
-          if(handle){
-            const data=handle.data as any,stamp=data?.appCredential;
-            if(handle.provider!==definition.id||handle.modelId!==model.id||stamp?.version!==1||stamp.connectionId!==definition.id)failure('DEFERRED_UNRECOVERABLE','旧响应无法恢复，请处理原响应。');
-            if(!credential.configured||stamp.generation!==credential.generation)failure('DEFERRED_ACCOUNT_UNKNOWN','旧响应凭据兼容性未确认，请处理原响应。');
-            original={...handle,data:data.providerData??undefined};
-          }else if(!credential.configured)failure('CREDENTIAL_UNAVAILABLE','模型凭据不可用，请检查设置');
-          const admission:{generation:number;secrets:Set<string>;expectedGeneration?:number;inputFailure?:string}={generation:credential.generation,secrets:new Set<string>(),expectedGeneration:handle?credential.generation:undefined};
-          const selected={...options,apiKey:marker,headers:undefined,fetch:checkedFetch(admission,model),onProviderStreamEvent:options?.onProviderStreamEvent?((event:unknown)=>options.onProviderStreamEvent(sanitizeEvent(event,admission.secrets))):undefined,maxRetries:0,timeoutMs:45000,maxTokens:Math.min(options?.maxTokens??1024,4096),...(definition.protocol==='mimo-cn'?{reasoning:'off',samplingParams:{thinking:{type:'disabled'}}}:{})};
-          for await(const event of run(selected,original)){
-            if(admission.inputFailure&&event.type==='error')event.error.errorMessage=admission.inputFailure;
-            if(event.type==='done'&&event.message.deferred){event.message.deferred={...event.message.deferred,data:{appCredential:{version:1,connectionId:definition.id,generation:admission.generation},providerData:event.message.deferred.data??null}};}
-            // Provider JSON parsing can decode escaped credentials that byte filtering cannot see.
-            // Each invocation retains its sent credential, even if the vault is rotated meanwhile.
-            output.push(sanitizeEvent(event,admission.secrets));
+          // Eligibility is outside the provider HTTP timeout and is abortable.
+          // This loop only rebuilds a provider invocation that sent no request.
+          for(;;){
+            await this.retryAfter?.wait(definition.id,options?.signal);
+            this.enabled(definition.id);
+            const credential=await this.options.credentials.metadata(definition.id);
+            let original=handle;
+            if(handle){
+              const data=handle.data as any,stamp=data?.appCredential;
+              if(handle.provider!==definition.id||handle.modelId!==model.id||stamp?.version!==1||stamp.connectionId!==definition.id)failure('DEFERRED_UNRECOVERABLE','旧响应无法恢复，请处理原响应。');
+              if(!credential.configured||stamp.generation!==credential.generation)failure('DEFERRED_ACCOUNT_UNKNOWN','旧响应凭据兼容性未确认，请处理原响应。');
+              original={...handle,data:data.providerData??undefined};
+            }else if(!credential.configured)failure('CREDENTIAL_UNAVAILABLE','模型凭据不可用，请检查设置');
+            const admission:{generation:number;secrets:Set<string>;expectedGeneration?:number;inputFailure?:string;preDispatchWait?:boolean}={generation:credential.generation,secrets:new Set<string>(),expectedGeneration:handle?credential.generation:undefined};
+            const selected={...options,apiKey:marker,headers:undefined,fetch:checkedFetch(admission,model),onProviderStreamEvent:options?.onProviderStreamEvent?((event:unknown)=>options.onProviderStreamEvent(sanitizeEvent(event,admission.secrets))):undefined,maxRetries:0,timeoutMs:45000,maxTokens:Math.min(options?.maxTokens??1024,4096),...(definition.protocol==='mimo-cn'?{reasoning:'off',samplingParams:{thinking:{type:'disabled'}}}:{})};
+            for await(const event of run(selected,original)){
+              if(admission.preDispatchWait)continue;
+              if(admission.inputFailure&&event.type==='error')event.error.errorMessage=admission.inputFailure;
+              if(event.type==='done'&&event.message.deferred){event.message.deferred={...event.message.deferred,data:{appCredential:{version:1,connectionId:definition.id,generation:admission.generation},providerData:event.message.deferred.data??null}};}
+              // Provider JSON parsing can decode escaped credentials that byte filtering cannot see.
+              // Each invocation retains its sent credential, even if the vault is rotated meanwhile.
+              output.push(sanitizeEvent(event,admission.secrets));
+            }
+            if(!admission.preDispatchWait)break;
           }
         }catch(error){
           const message=error instanceof ModelConfigurationError||error instanceof InputError?error.message:'模型请求无法完成，请检查连接设置';
