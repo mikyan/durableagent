@@ -1,0 +1,45 @@
+docs/evidence/recovery-diagnostics/TIMEOUT30.md
+  s_467dcb949b5b60::t_4bf266bf38385c 1-23
+android/app/src/androidTest/java/dev/durableagent/probe/RecoveryFailureObservation.kt
+  s_467dcb949b5b60::t_5f396d07999cde 33-60
+android/app/src/androidTest/java/dev/durableagent/probe/RecoveryFailureObservationTest.kt
+  s_467dcb949b5b60::t_4ea94dcd124e3d 6,16-48
+docs/evidence/recovery-diagnostics/t17-fixed-request-observer01-device.log
+  s_467dcb949b5b60::t_4904161a2b2fff 1-23
+docs/evidence/recovery-diagnostics/t17-real-mimo04-timeout30-device.log
+  s_467dcb949b5b60::t_baf0310d4421fb 1-35
+docs/evidence/recovery-diagnostics/t17-timeout30-diagnostic-review.md
+  s_467dcb949b5b60::t_1e7209e402f3f1 1-30
+docs/evidence/recovery-diagnostics/t17-timeout30-test-build01.log
+  s_467dcb949b5b60::t_c9aecc2876a7ed 1-73
+docs/evidence/recovery-diagnostics/timeout30-evidence-manifest.json
+  s_467dcb949b5b60::t_e272b97b1d8fb1 1-24
+docs/evidence/recovery-diagnostics/timeout30-source-manifest.json
+  s_467dcb949b5b60::t_fbdd1cd2e9d449 1-20
+android/app/src/androidTest/java/dev/durableagent/probe/RecoveryRealApplicationTest.kt
+  s_5d213130eaba5f::t_71015c0baa84b1 55,72,84-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "b03f76b305585d68034237cbf4ef7c5964c15346",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_5d213130eaba5f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a720-af4f-7c11-9c6c-306f136edb4a",
+        "model": "unknown"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
