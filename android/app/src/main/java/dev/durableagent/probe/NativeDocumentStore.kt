@@ -18,6 +18,10 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.io.FileInputStream
+import java.io.RandomAccessFile
+import java.nio.ByteBuffer
+import java.nio.charset.CodingErrorAction
 import java.security.MessageDigest
 import java.util.UUID
 
@@ -55,10 +59,189 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         return JSONObject().put("resources",JSONArray(records.map(::current)))
     }
     fun describe(resourceId:String):JSONObject = current(resource(resourceId))
-    fun prepare(request:JSONObject):JSONObject = fail("DOCUMENT_WRITE_UNAVAILABLE","原文件写入尚不可用。")
-    fun stage(request:JSONObject):JSONObject = fail("DOCUMENT_WRITE_UNAVAILABLE","原文件写入尚不可用。")
-    fun start(request:JSONObject):JSONObject = fail("DOCUMENT_WRITE_UNAVAILABLE","原文件写入尚不可用。")
-    fun query(operationId:String):JSONObject = fail("DOCUMENT_OPERATION_NOT_FOUND","未找到此原文件操作。")
+    fun prepare(request:JSONObject):JSONObject {
+        val plan=plan(request);val operationId=plan.getString("operationId")
+        val digest=NativeInputStore.sha256(plan.toString().toByteArray(Charsets.UTF_8))
+        val existing=locked{db->operationOrNull(db,operationId)}
+        if(existing!=null){if(existing.getString("requestDigest")!=digest)conflict();return existing}
+        val original=describe(plan.getString("resourceId"))
+        return locked{db->
+            operationOrNull(db,operationId)?.let{if(it.getString("requestDigest")!=digest)conflict();return@locked it}
+            val row=JSONObject(plan.toString()).put("protocol",1).put("requestDigest",digest).put("namespace",original.getString("namespace"))
+                .put("kind","file").put("source","saf").put("original",true).put("uri",original.getString("uri")).put("displayName",original.getString("displayName"))
+                .put("nativeControlNamespace",inputNamespace)
+                .put("state","accepted_not_started").put("scopeConfirmed",false).put("sequence",0).put("stagedOffset",0).put("sealed",plan.getLong("byteLength")==0L)
+                .put("diff",JSONObject().put("state","unavailable").put("reason","not_completed"))
+            // Native stop indexing precedes an acknowledged document plan. A crash between
+            // the two stores leaves an indexed unknown intent, never executable missing bytes.
+            NativeInputStore(context,inputNamespace).use{inputs->
+                var existed=false
+                try{inputs.requireEffect(operationId);existed=true}
+                catch(error:NativeInputException){if(error.code=="EXECUTION_STOPPED")existed=true else if(error.code!="EXECUTION_UNREGISTERED")throw error}
+                try{inputs.registerEffect(effect(row))}
+                catch(error:NativeInputException){if(error.code!="EXECUTION_STOPPED")throw error;inputs.adoptEffect(effect(row));row.put("state","not_started").put("scopeConfirmed",true).put("reason","EXECUTION_STOPPED")}
+                // A surviving native effect with a missing original receipt may reflect partial
+                // recovery. Reconstruct identity for observation, never infer dispatch eligibility.
+                if(existed)row.put("state","unknown").put("scopeConfirmed",false).put("reason","DOCUMENT_PLAN_RECOVERY_UNKNOWN")
+            }
+            saveOperation(db,row);publish(row);row
+        }
+    }
+    fun stage(request:JSONObject):JSONObject {
+        val id=operationId(request);val offset=integer(request,"offset",0,MAX_CONTENT)
+        val encoded=request.opt("base64") as? String?:fail("DOCUMENT_INVALID","原文件分块格式无效。")
+        if(encoded.length>43692)fail("DOCUMENT_FRAME_LIMIT","原文件分块超过 32 KiB。")
+        val bytes=try{Base64.decode(encoded,Base64.DEFAULT)}catch(_:IllegalArgumentException){fail("DOCUMENT_INVALID","原文件分块格式无效。")}
+        if(bytes.size>32768||Base64.encodeToString(bytes,Base64.NO_WRAP)!=encoded)fail("DOCUMENT_INVALID","原文件分块格式无效。")
+        return locked{db->
+            val row=operation(db,id);if(row.getString("state")!="accepted_not_started")fail("DOCUMENT_NOT_STAGING","此原文件操作已离开准备阶段。")
+            val next=row.getLong("stagedOffset");val total=row.getLong("byteLength")
+            if(offset>next||offset+bytes.size>total||bytes.isEmpty()&&total!=0L)fail("DOCUMENT_INVALID","原文件分块范围不连续。")
+            RandomAccessFile(stageFile(id),"rw").use{file->
+                if(offset<next){
+                    if(offset+bytes.size>next)conflict()
+                    val previous=ByteArray(bytes.size);file.seek(offset);file.readFully(previous);if(!previous.contentEquals(bytes))conflict()
+                }else if(!row.getBoolean("sealed")){
+                    file.setLength(next);file.seek(next);file.write(bytes);file.fd.sync()
+                    val advanced=next+bytes.size
+                    if(advanced==total&&hashFile(stageFile(id))!=row.getString("contentDigest"))fail("DOCUMENT_CONTENT_CONFLICT","暂存内容摘要不符，未改动原文件。")
+                    row.put("stagedOffset",advanced).put("sealed",advanced==total).put("sequence",row.getLong("sequence")+1);saveOperation(db,row)
+                }
+            }
+            JSONObject().put("operationId",id).put("nextOffset",row.getLong("stagedOffset")).put("sealed",row.getBoolean("sealed"))
+        }
+    }
+    /** Trusted core already owns the shared environment writer claim. This is no second queue. */
+    fun start(request:JSONObject):JSONObject {
+        val id=operationId(request);val requested=digest(request,"requestDigest")
+        var ownership:StorageDomainLease?=null
+        val first=locked{db->
+            val row=operation(db,id);if(row.getString("requestDigest")!=requested)conflict()
+            if(row.getString("nativeControlNamespace")!=inputNamespace)conflict()
+            if(row.getString("state")!="accepted_not_started")return@locked row
+            ownership=StorageDomainLease.acquire(operationDirectory(id))
+            if(ownership==null)return@locked row
+            if(!row.getBoolean("sealed")){ownership?.close();ownership=null;fail("DOCUMENT_NOT_SEALED","原文件内容尚未完整暂存，未开始写入。")}
+            row
+        }
+        val lease=ownership?:return first
+        var began=false
+        try{return lease.use{
+            val file=stageFile(id)
+            if(first.getLong("byteLength")==0L&&!file.exists())RandomAccessFile(file,"rw").use{it.fd.sync()}
+            if(file.length()!=first.getLong("byteLength")||hashFile(file)!=first.getString("contentDigest"))fail("DOCUMENT_CONTENT_CONFLICT","暂存内容无法核验，未改动原文件。")
+            // Read-only preflight rejects a stale expected digest before opening for write.
+            val before=open(first.getString("resourceId"))
+            val verified=closeRead(before.getString("readerId"))
+            if(before.getString("contentDigest")!=first.getString("expectedDigest")||!verified.getBoolean("unchanged"))fail("DOCUMENT_PRECONDITION_CONFLICT","原文件已变化，未覆盖新内容。")
+            val capability=describe(first.getString("resourceId"))
+            if(!capability.getJSONObject("grant").getBoolean("write"))fail("DOCUMENT_PERMISSION_REQUIRED","原文件写入授权已撤销或尚未取得。")
+            if(capability.getLong("providerFlags") and DocumentsContract.Document.FLAG_SUPPORTS_WRITE.toLong()==0L)fail("DOCUMENT_UNSUPPORTED","此提供者未声明支持原件写入。")
+            val running=locked{db->
+                val row=operation(db,id);if(row.getString("state")!="accepted_not_started")return@locked row
+                NativeInputStore(context,inputNamespace).use{it.requireEffect(id)}
+                transition(db,row,"running",false,null)
+            }
+            if(running.getString("state")!="running")return@use running
+            // Last native generation check immediately precedes the original Provider call.
+            NativeInputStore(context,inputNamespace).use{it.requireEffect(id)}
+            began=true
+            val uri=Uri.parse(first.getString("uri"));var oldBytes:ByteArray?=null
+            originalIo{
+                val descriptor=resolver.openFileDescriptor(uri,"rw")?:fail("DOCUMENT_UNAVAILABLE","文档提供者暂不可用。")
+                descriptor.use{original->
+                    ParcelFileDescriptor.AutoCloseInputStream(ParcelFileDescriptor.dup(original.fileDescriptor)).use{input->
+                        val actual=hashOriginal(input)
+                        if(actual.first!=first.getString("expectedDigest"))fail("DOCUMENT_PRECONDITION_CONFLICT","原文件在写入前发生变化，未覆盖新内容；提供者操作范围尚待核验。")
+                        if(actual.second<=32768){
+                            input.channel.position(0);val bytes=ByteArray(actual.second.toInt());var offset=0
+                            while(offset<bytes.size){val count=input.read(bytes,offset,bytes.size-offset);if(count<0)fail("DOCUMENT_PRECONDITION_CONFLICT","原文件在写入前发生变化。");offset+=count}
+                            if(NativeInputStore.sha256(bytes)!=first.getString("expectedDigest"))fail("DOCUMENT_PRECONDITION_CONFLICT","原文件在写入前发生变化。")
+                            oldBytes=bytes
+                        }
+                    }
+                    // A Provider open can block. Recheck both current authorization and the
+                    // durable stop fence after it returns, before the first original byte write.
+                    requireGrant(uri,WRITE)
+                    locked{db->
+                        if(operation(db,id).getString("state")!="running")fail("DOCUMENT_CANCEL_UNCONFIRMED","原件写入已请求停止，提供者范围尚待核验。")
+                        NativeInputStore(context,inputNamespace).use{it.requireEffect(id)}
+                    }
+                    ParcelFileDescriptor.AutoCloseOutputStream(ParcelFileDescriptor.dup(original.fileDescriptor)).use{output->
+                        output.channel.position(0);FileInputStream(file).use{input->input.copyTo(output,32768)}
+                        output.channel.truncate(first.getLong("byteLength"));output.flush();output.fd.sync()
+                    }
+                }
+            }
+            val after=open(first.getString("resourceId"));val closed=closeRead(after.getString("readerId"))
+            if(after.getString("contentDigest")!=first.getString("contentDigest")||after.getLong("byteLength")!=first.getLong("byteLength")||!closed.getBoolean("unchanged"))fail("DOCUMENT_READBACK_CONFLICT","原件回读与写入内容不符，结果尚未确认。")
+            val change=diff(oldBytes,if(file.length()<=32768)file.readBytes()else null)
+            locked{db->
+                // Completion and actual diff are one durable receipt, not a later UI embellishment.
+                val row=operation(db,id).put("diff",change).put("verifiedDigest",after.getString("contentDigest"))
+                transition(db,row,"completed",true,null)
+            }
+        }}catch(error:Exception){
+            val code=when(error){is NativeDocumentException->error.code;is NativeInputException->error.code;else->"DOCUMENT_IO_UNCONFIRMED"}
+            return locked{db->
+                val row=operation(db,id)
+                if(terminal(row))row else transition(db,row,if(began)"unknown" else "not_started",!began,code)
+            }
+        }
+    }
+    fun query(operationId:String):JSONObject = locked{db->
+        val row=operation(db,operationId)
+        if(row.getString("state") in setOf("running","stop_requested")){
+            StorageDomainLease.acquire(operationDirectory(operationId))?.use{transition(db,row,"unknown",false,"DOCUMENT_HOST_LOST")}
+        }else if(row.getString("state")=="accepted_not_started"){
+            try{NativeInputStore(context,controlNamespace(row)).use{it.requireEffect(operationId)}}
+            catch(error:NativeInputException){if(error.code=="EXECUTION_STOPPED")transition(db,row,"not_started",true,"EXECUTION_STOPPED")else throw error}
+        }
+        publish(row);row
+    }
+    private fun effect(row:JSONObject)=JSONObject().put("operationId",row.getString("operationId")).put("productId",row.getString("productId"))
+        .put("kind","file").put("source","saf").put("namespace",row.getString("namespace")).put("requestDigest",row.getString("requestDigest"))
+        .put("controlGeneration",row.getLong("controlGeneration")).put("sdkConversationId",row.getLong("sdkConversationId"))
+    private fun controlNamespace(row:JSONObject)=row.getString("nativeControlNamespace").takeIf{it.matches(Regex("[a-zA-Z0-9._-]{1,100}"))}?:fail("DOCUMENT_STORAGE_CORRUPT","原文件操作的控制关联无效，未重新执行。")
+    private fun publish(row:JSONObject){try{NativeInputStore(context,controlNamespace(row)).use{it.recordEffectEvidence(row.getString("operationId"),row)}}catch(_:NativeInputException){/* Durable document receipt remains authoritative; query retries native stop indexing. */}}
+    private fun plan(value:JSONObject):JSONObject {
+        val plan=JSONObject().put("operationId",operationId(value)).put("resourceId",digest(value,"resourceId")).put("productId",identifier(value,"productId"))
+            .put("controlGeneration",integer(value,"controlGeneration",1,9_007_199_254_740_991L)).put("sdkConversationId",integer(value,"sdkConversationId",1,9_007_199_254_740_991L))
+            .put("expectedDigest",digest(value,"expectedDigest")).put("contentDigest",digest(value,"contentDigest")).put("byteLength",integer(value,"byteLength",0,MAX_CONTENT))
+        if(plan.getLong("byteLength")==0L&&plan.getString("contentDigest")!=NativeInputStore.sha256(byteArrayOf()))fail("DOCUMENT_CONTENT_CONFLICT","空原件内容摘要不符。")
+        return plan
+    }
+    private fun identifier(value:JSONObject,key:String)=(value.opt(key) as? String)?.takeIf{it.matches(Regex("[A-Za-z0-9][A-Za-z0-9._:-]{0,199}"))}?:fail("DOCUMENT_INVALID","原文件操作身份无效。")
+    private fun operationId(value:JSONObject)=identifier(value,"operationId")
+    private fun digest(value:JSONObject,key:String)=(value.opt(key) as? String)?.takeIf{it.matches(Regex("[a-f0-9]{64}"))}?:fail("DOCUMENT_INVALID","原文件摘要或资源身份无效。")
+    private fun integer(value:JSONObject,key:String,min:Long,max:Long):Long {val number=value.opt(key);if(number !is Number||number.toDouble()!=number.toLong().toDouble()||number.toLong() !in min..max)fail("DOCUMENT_INVALID","原文件操作范围无效。");return number.toLong()}
+    private fun operationOrNull(db:SQLiteDatabase,id:String):JSONObject?=db.rawQuery("SELECT record FROM operations WHERE id=?",arrayOf(id)).use{if(it.moveToFirst())JSONObject(it.getString(0))else null}
+    private fun operation(db:SQLiteDatabase,id:String)=operationOrNull(db,id)?:fail("DOCUMENT_OPERATION_NOT_FOUND","未找到此原文件操作，未重新执行。")
+    private fun saveOperation(db:SQLiteDatabase,row:JSONObject){db.beginTransaction();try{
+        val id=row.getString("operationId");val encoded=row.toString()
+        db.execSQL("INSERT INTO operations(id,record) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET record=excluded.record",arrayOf(id,encoded))
+        db.execSQL("INSERT INTO operation_receipts(operation_id,sequence,record) VALUES(?,?,?)",arrayOf(id,row.getLong("sequence"),encoded));db.setTransactionSuccessful()
+    }finally{db.endTransaction()}}
+    private fun terminal(row:JSONObject)=row.getString("state") in setOf("completed","not_started","stopped")&&row.getBoolean("scopeConfirmed")
+    private fun transition(db:SQLiteDatabase,row:JSONObject,state:String,confirmed:Boolean,reason:String?):JSONObject {
+        if(terminal(row))return row
+        row.put("state",state).put("scopeConfirmed",confirmed).put("sequence",row.getLong("sequence")+1)
+        if(reason==null)row.remove("reason")else row.put("reason",reason)
+        saveOperation(db,row);publish(row);return row
+    }
+    private fun stageFile(id:String):File {val directory=File(File(context.noBackupFilesDir,namespace),"staging");if(!directory.mkdirs()&&!directory.isDirectory)fail("DOCUMENT_STORAGE_FAILED","无法保存原文件暂存内容。");return File(directory,NativeInputStore.sha256(id.toByteArray(Charsets.UTF_8))+".bin")}
+    private fun operationDirectory(id:String)=File(File(File(context.noBackupFilesDir,namespace),"operations"),NativeInputStore.sha256(id.toByteArray(Charsets.UTF_8)))
+    private fun hashFile(file:File):String {val hash=MessageDigest.getInstance("SHA-256");FileInputStream(file).use{input->val bytes=ByteArray(32768);while(true){val count=input.read(bytes);if(count<0)break;hash.update(bytes,0,count)}};return hash.digest().joinToString(""){"%02x".format(it)}}
+    private fun conflict():Nothing=fail("DOCUMENT_OPERATION_CONFLICT","此操作身份已绑定不同的原件或内容，未覆盖已有记录。")
+    private fun diff(before:ByteArray?,after:ByteArray?):JSONObject {
+        val result=JSONObject().put("state","unavailable")
+        if(before==null||after==null)return result.put("reason","text_budget")
+        fun text(bytes:ByteArray):String?=try{Charsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT).decode(ByteBuffer.wrap(bytes)).toString().takeUnless{it.contains('\u0000')}}catch(_:Exception){null}
+        val old=text(before)?:return result.put("reason","binary");val updated=text(after)?:return result.put("reason","binary")
+        val unified="--- original\n+++ updated\n"+old.lines().joinToString("\n"){"-$it"}+"\n"+updated.lines().joinToString("\n"){"+$it"}
+        if(unified.toByteArray(Charsets.UTF_8).size>32768)return result.put("reason","text_budget")
+        return JSONObject().put("state","available").put("format","whole-file-lines").put("text",unified)
+    }
     fun open(resourceId:String):JSONObject {
         val record=resource(resourceId);val uri=Uri.parse(record.getString("uri"));requireGrant(uri,READ)
         return originalIo {
@@ -156,17 +339,19 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         try{lease.use{val database=helper?:DocumentDatabase(context,File(directory,"documents.sqlite").absolutePath).also{helper=it};action(database.writableDatabase)}}
         catch(error:NativeDocumentException){throw error}
         catch(_:SQLiteException){fail("DOCUMENT_STORAGE_FAILED","原文件记录无法保存或读取，原记录已保留。")}
+        catch(_:IOException){fail("DOCUMENT_STORAGE_FAILED","原文件暂存内容无法保存或读取，原记录已保留。")}
     }
     override fun close(){
         synchronized(monitor){closed=true;helper?.close();helper=null}
         val opened=synchronized(readers){readers.values.toList().also{readers.clear()}}
         opened.forEach{reader->synchronized(reader){try{reader.input.close()}catch(_:Exception){}}}
     }
-    private class DocumentDatabase(context:Context,path:String):SQLiteOpenHelper(context,path,null,1,DatabaseErrorHandler{throw NativeDocumentException("DOCUMENT_STORAGE_CORRUPT","原文件记录损坏，已保留原库。")}){
+    private class DocumentDatabase(context:Context,path:String):SQLiteOpenHelper(context,path,null,2,DatabaseErrorHandler{throw NativeDocumentException("DOCUMENT_STORAGE_CORRUPT","原文件记录损坏，已保留原库。")}){
         init{setWriteAheadLoggingEnabled(true)}
         override fun onConfigure(db:SQLiteDatabase){db.execSQL("PRAGMA synchronous=FULL")}
-        override fun onCreate(db:SQLiteDatabase){db.execSQL("CREATE TABLE resources(id TEXT PRIMARY KEY,record TEXT NOT NULL)")}
-        override fun onUpgrade(db:SQLiteDatabase,oldVersion:Int,newVersion:Int){fail("DOCUMENT_STORAGE_INCOMPATIBLE","原文件记录版本不兼容，已保留原库。")}
+        private fun operations(db:SQLiteDatabase){db.execSQL("CREATE TABLE operations(id TEXT PRIMARY KEY,record TEXT NOT NULL)");db.execSQL("CREATE TABLE operation_receipts(operation_id TEXT NOT NULL,sequence INTEGER NOT NULL,record TEXT NOT NULL,PRIMARY KEY(operation_id,sequence))")}
+        override fun onCreate(db:SQLiteDatabase){db.execSQL("CREATE TABLE resources(id TEXT PRIMARY KEY,record TEXT NOT NULL)");operations(db)}
+        override fun onUpgrade(db:SQLiteDatabase,oldVersion:Int,newVersion:Int){if(oldVersion==1&&newVersion==2)operations(db)else fail("DOCUMENT_STORAGE_INCOMPATIBLE","原文件记录版本不兼容，已保留原库。")}
         override fun onDowngrade(db:SQLiteDatabase,oldVersion:Int,newVersion:Int){fail("DOCUMENT_STORAGE_INCOMPATIBLE","原文件记录来自更新版本，已保留原库。")}
     }
     companion object {
