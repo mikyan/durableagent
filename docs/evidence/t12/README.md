@@ -74,6 +74,16 @@ force-stop01 的 run 为 `5b2b1716-4437-49a7-8134-a9c624c6c99e`、product `a1d19
 
 AC63 的 [artifact journal](t12-joint-t13-lifecycle01-artifacts.json) 明确一个打包限制：旧 worktree 中未重新写出的 Python helper 为 CRLF，虽 Git 内容与已验收源码一致、冻结字节也通过对应核验，打包 capability `13af9386…`／setup `cfc66690…` 与已验收 LF 字节的 `10d7375d…`／`bccdfe9d…` 不同。因此此 APK 只用于上述零工具 marker 生命周期，不作本地文件或 helper 资格声明，也没有为迁就它更改设备执行端。现 worktree 已按 HEAD Git blob 精确恢复 LF，[逐文件核验](t12-final-helper-lf-normalization.json) 与 Git 零差异确认后重新生成 capability／setup，完整 hash 已匹配已验收版本；最终联合构建仍须重新冻结及检查。
 
+## 独立审查发现的输出读取预算缺陷
+
+在上述设备候选之后，独立审查复现了 P2：固定命令已有 completed／scopeConfirmed 收据，但 `readOutput` 连续失败时，旧 `holdReceipt` 立即把终态当成已核验，递归重新读取而没有消耗恢复预算。首次有限诊断为 [20 次读取／1 次执行／0 次预算](t12-review-output-retry.log)；随后 [固定独立回归](t12-review-output-retry-regression.mjs) 用 100ms 外部计时器截断，旧实现 [RED](t12-review-output-retry-regression-red.log) 发生 1259 次读取、1 次执行、0 次预算、无等待状态。它使用实际 ManagedExecution／Recovery 方法，但 Harness／writer 为内存诊断 seam，没有真实 SDK、Android 或模型请求；不声称发生重复执行。
+
+修复仅增加持久的结果确认标记，保留外部完成事实；重入或重开先用原 executionId 的同一耐久预算重新核验，再读取原结果，完整结果确认才清除标记。模型继续入口不因 terminal receipt 绕过此标记；自动预算用完后仍停留在可见等待，不交给模型生成替代命令。[同一独立回归 GREEN](t12-review-output-retry-regression-green02.log) 为 1 次初始读取、1 次执行、1 次已耗尽预算检查、external-unconfirmed used=5。源码／设备候选范围分开：这个修复尚不属于已运行的 AC63。
+
+正式 [真实 SDK 回归](../../../runtime/test/recovery-output.test.mjs) 使用公开 Application、实际输入／SDK／执行账本／预算 SQLite，输出和模型传输为受控外部边界。[RED](t12-output-budget-red01.log) 在初始读取连续失败后没有可见预算等待；最终 [两项 GREEN](t12-output-budget-green03.log) 证实初始读加总计 5 次预算内重试，关闭应用并重新打开预算数据库后总读取仍为 6，同一命令效果文件仅一条、模型请求保持 1，普通 wake 不补充额度，原 Stop 和重新打开不复活。明确的新代次发送可以完成独立的新工作；另一个正向用例证明一次读取故障恢复后仍返回原输出、只花 1 次预算，不阻止后续模型回合，完成后重开不再读取。
+
+独立复核还发现第一版标记会让一个已停止、已确认完成的旧代次阻挡下一代次的直接 continuation 检查。[固定诊断 RED](t12-review-stopped-output-new-generation-regression-red.log) 与 [同断言 GREEN](t12-review-stopped-output-new-generation-regression-green.log) 保留；修复只豁免已由停止 fence 覆盖且 terminal／scopeConfirmed=true 的旧记录，未知外部效果继续阻挡。真实 Application 的新代次扩展用例在该 guard 前就 [通过](t12-output-new-generation-public-before-guard.log)，因此该项 RED 只归于独立内存 seam，不拼造公开路径失败。两份有限诊断可从 `runtime/` 运行 `node ../docs/evidence/t12/t12-review-output-retry-regression.mjs` 和 `node ../docs/evidence/t12/t12-review-stopped-output-new-generation-regression.mjs`；正式测试使用 `node --test test/recovery-output.test.mjs`。最终 [完整 runtime 回归](t12-output-final-runtime01.log) 为 260/260，27.865 秒，包括原 deferred、停止与正常完成重开用例。
+
 ## 候选对应关系
 
 | 源码／用途 | 主应用 SHA-256 | 测试 APK SHA-256 |

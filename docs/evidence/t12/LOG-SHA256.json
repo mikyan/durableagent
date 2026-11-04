@@ -172,6 +172,26 @@
       "gitBlobSha256": "de33221ef68aba3816b3b72d905b74cb18123c0a3bc85b2802743e7039e57d78"
     },
     {
+      "file": "t12-output-budget-green03.log",
+      "retainedLocalSha256": "4c84e5507970579be4bed9073279d517f72f0a5de5e12e262e78cb7d14af5c9f",
+      "gitBlobSha256": "84473822df062bfee5db63bc8d85bacba3a441da93583d996b8764b9505a5fb8"
+    },
+    {
+      "file": "t12-output-budget-red01.log",
+      "retainedLocalSha256": "14c83668e70e4acaede68520bfc23d3f4b73fe7351f75552e05db2cb766575a3",
+      "gitBlobSha256": "71512e3fd391ac846252e29afafb1e4c48df4e0951632d164fb6b0b7954f47bd"
+    },
+    {
+      "file": "t12-output-final-runtime01.log",
+      "retainedLocalSha256": "ee020f094b251edaa857a6cf192d43d239a875204f9a26f9769d1094e3ae3433",
+      "gitBlobSha256": "4acbe64bce3e6ef4562a5630a9d672e34a6559082e5a5dd4ac3fcb6102b5df4a"
+    },
+    {
+      "file": "t12-output-new-generation-public-before-guard.log",
+      "retainedLocalSha256": "c8cc696395b07330d38e57089c7b5cb81b7b7c37fea5abf32855c9d120287478",
+      "gitBlobSha256": "7943bd7f60638f93798e63ba60e30970733a069651a57597ea41a84aec8524cc"
+    },
+    {
       "file": "t12-probe-authority-green01.log",
       "retainedLocalSha256": "68d131251150026663ef77300b28474fbb174b01652abd043b417e671eaeaf85",
       "gitBlobSha256": "69b0789304754dc0b4fa0476acace2fad42b3a6b583c69f8289852f0d4539794"
@@ -265,6 +285,41 @@
       "file": "t12-reboot02-verify.json",
       "retainedLocalSha256": "6b06c83b750119bf2a15a072f8c572e45ec26e62e181e2b012405d36899724e8",
       "gitBlobSha256": "6b06c83b750119bf2a15a072f8c572e45ec26e62e181e2b012405d36899724e8"
+    },
+    {
+      "file": "t12-review-output-retry-regression-green02.log",
+      "retainedLocalSha256": "2e17fc4f50d95267122e4c84b1cfc58bfdebbfe155a50117ac30b90b23070d1d",
+      "gitBlobSha256": "003ea4ba98a4397699774723a48a80e229c30eb24f54687036416883dcd06d13"
+    },
+    {
+      "file": "t12-review-output-retry-regression-red.log",
+      "retainedLocalSha256": "3dcbdca1efe8cee83fe5b7dbced1d80c3a6edaaab8f9af9069ab60692cac83b4",
+      "gitBlobSha256": "a906ecd4530e56c9694c41a1fad084c05bdd7b0fc594465bdba9516ef3911435"
+    },
+    {
+      "file": "t12-review-output-retry-regression.mjs",
+      "retainedLocalSha256": "9f3a68f23e0ab49d3efa1b7976c474ac981313c51a1a542adc58568ae90c6d3f",
+      "gitBlobSha256": "bfa35ef89de768c7211b3b6c9fc4837dd43dae373979fbb96e39e20a395a4dad"
+    },
+    {
+      "file": "t12-review-output-retry.log",
+      "retainedLocalSha256": "e8e3009fc5dd0c057ce9a81a8a914d613e4afef1007617051094c3cc59c3ddb6",
+      "gitBlobSha256": "1bf9978a74ac08322cb9a1ee9339dcb9ba2c4bc7aba7d2825299b617eaefcf52"
+    },
+    {
+      "file": "t12-review-stopped-output-new-generation-regression-green.log",
+      "retainedLocalSha256": "a126c3ab92e17ca1a82d628f1a11e3822add0ac9b5b0fe8453d067850e9f151b",
+      "gitBlobSha256": "d5ba645d196d0e84d3e94fdc1a5e5124de188359aa3502af665651eafee8f051"
+    },
+    {
+      "file": "t12-review-stopped-output-new-generation-regression-red.log",
+      "retainedLocalSha256": "eebdf92c0e407bb0f632a227fe22dfaf29b9d36044716f43ec2cc803e4c068dd",
+      "gitBlobSha256": "ed33cae0556be53015d408aa8f42412e1a1657b8e3c1d0957a7ef6b43be4681d"
+    },
+    {
+      "file": "t12-review-stopped-output-new-generation-regression.mjs",
+      "retainedLocalSha256": "f76acb106944b4fdc2b55c37e417ae6c57239b25d0343f5ef2fc29a3debb853f",
+      "gitBlobSha256": "e1a7e1e6d790272b138e3bcf5a9f160305ca899ffc2ebb8919cc20d796af0c48"
     },
     {
       "file": "t12-runtime-stage31b-all.log",

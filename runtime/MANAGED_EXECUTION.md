@@ -20,6 +20,8 @@
 
 传输错误只把应用事实标为 `CLIENT_CONFIRMATION_LOST`，不猜测远端是否停止。`execution.list` 在同一存活宿主内重新查询未决执行并持久保存最新事实。UI 的原生查询／取消先展示自己的回执，再独立触发这个核心核验；Node 忙时不等待它才显示原生结果。
 
+终态收据只证明外部效果事实，不代表输出已读取。结果确认失败会另存 `confirmationPending`，保留原 completed／scopeConfirmed 收据；后续重入及宿主重开先以原 executionId 取得耐久恢复预算并重新核验，再读取原结果。完整结果成功返回前不清除此标记；额度耗尽保持可见等待，不把读取失败返回给模型诱发替代命令。模型继续入口也尊重该标记。已经被原生停止 fence 覆盖、且终态作用域已确认的旧代次不会阻挡用户明确的新代次；未知外部效果仍按原规则阻挡，不因停止代次变化被视为已完成。
+
 `EffectAuthority.withSnapshot()` 在同一个核心串行范围内核验收据，并把真实未决 `pendingBindingIds` 与 `pendingControlProductIds` 交给位置修改事务。unknown 保持 `known=false`。断线、SDK 工具结束或当前位置指针释放，都不自动释放未决外部效果。
 
 `ExecutionEnv.cleanup()` 的范围是该 binding 与实际 SDK 会话的所有者；它阻止本宿主继续为该所有者接纳新命令及 SAF 原件写入，并按各自持久身份查询和请求取消。清理会分别尝试命令及原件记录；任一作用域未确认都保留占用并失败。只有终态且 `scopeConfirmed` 才确认完成清理；不以 Provider 字节匹配替代作用域证据，也不影响共享 binding 的另一 SDK 所有者。普通取消只针对一次执行。T11 负责完整会话停止 fence，T10 负责工作区互斥。
@@ -43,5 +45,7 @@
 ## 验证边界
 
 `test/managed-execution.test.mjs` 使用真实 SDK 与两个实际 SQLite 权威，在外部传输边界控制执行端响应；四个恢复窗口使用真正独立的 Node 子进程 SIGKILL 与文件效果。它不能代替 Termux 设备验证。
+
+`test/recovery-output.test.mjs` 通过公开 Application／SDK 和实际 SQLite 输入、执行账本及恢复预算验证完成后的输出失败：跨宿主重开维持同一总预算、耗尽可见等待、原停止与明确新发送，以及输出恢复后只返回原结果。执行端和模型传输仍是受控边界，不是新增 Android／真实模型实测。
 
 Android 的 `ExecutionApplicationTest` 通过真实 React、原生发送意图、SDK 与 Termux 演示六个基本场景，另有 Node 忙时原生取消与四个未修改的 SDK shell conformance cases。`ExecutionRecoveryTest` 检验实际 `:agent` 死亡、原执行恢复及完整 raw 输出同环境读取。`ExecutionRealProviderTest` 需要根代理安全提供既有加密测试凭据，实际调用 MiMo；凭据不进入测试源码或工具输出。精确实测范围以 T09 验证记录为准，不把尚未运行的测试当成通过。
