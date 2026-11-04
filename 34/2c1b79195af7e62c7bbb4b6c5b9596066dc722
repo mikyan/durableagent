@@ -1,0 +1,20 @@
+tools/recovery-lifecycle-process.mjs
+  s_467dcb949b5b60::t_601bd20e87c121 8-9,63,65-66,110-127
+  s_467dcb949b5b60::t_38304b20a1b148 57-58,60,64,67-72,74-78,109,128
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "342c1b79195af7e62c7bbb4b6c5b9596066dc722",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
