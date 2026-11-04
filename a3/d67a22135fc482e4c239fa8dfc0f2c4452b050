@@ -1,0 +1,55 @@
+docs/evidence/t12/t12-joint-t13-lifecycle01-artifacts.json
+  s_467dcb949b5b60::t_32f22048a7ee21 1-21
+docs/evidence/t12/t12-forcestop01-verify.json
+  s_467dcb949b5b60::t_32f22048a7ee21 1-60
+tools/recovery-lifecycle-process.mjs
+  s_467dcb949b5b60::t_efe312685e32ad 9,58,60-61,95-97
+docs/evidence/t12/LOG-SHA256.json
+  s_467dcb949b5b60::t_fb26f23f44ed13 24-53,64-83,229-233,249-268
+tools/recovery-lifecycle-RUN.md
+  s_467dcb949b5b60::t_aa3cee93499ed7 33-35
+docs/evidence/t12/t12-forcestop01-reopen.json
+  s_467dcb949b5b60::t_32f22048a7ee21 1-61
+docs/evidence/t12/t12-forcestop01-external-completion.json
+  s_467dcb949b5b60::t_32f22048a7ee21 1-133
+docs/evidence/t12/README.md
+  s_467dcb949b5b60::t_3d64d2f07ec8d2 3,22-23,61-76,87,94-95
+docs/evidence/t12/t12-final-helper-lf-normalization.json
+  s_467dcb949b5b60::t_05966319d41c3f 1-42
+docs/evidence/t12/t12-forcestop01-prepare.json
+  s_467dcb949b5b60::t_5d0f36023a8b96 1-75
+docs/evidence/t12/t12-forcestop01-stopped-interval.json
+  s_467dcb949b5b60::t_0a87b9bffb8818 1-554
+docs/evidence/t12/t12-joint-t13-build01.log
+  s_467dcb949b5b60::t_190b8c6fe6a4d1 1-145
+docs/evidence/t12/t12-joint-t13-host01-root-cwd-failed.log
+  s_467dcb949b5b60::t_600578dc9f9f68 1-193
+docs/evidence/t12/t12-joint-t13-host02-runtime-cwd.log
+  s_467dcb949b5b60::t_86e6af533be158 1-107
+docs/evidence/t12/t12-reboot-forcestop-credential-audit01.json
+  s_467dcb949b5b60::t_645ce263509967 1-19
+docs/evidence/t12/t12-reboot02-before-first-unlock.json
+  s_467dcb949b5b60::t_db37bc448e735a 1-58
+docs/evidence/t12/t12-reboot02-external-completion.json
+  s_467dcb949b5b60::t_6fefdc5f855bd0 1-217
+docs/evidence/t12/t12-reboot02-prepare.json
+  s_467dcb949b5b60::t_3f002a3a6ec9e0 1-75
+docs/evidence/t12/t12-reboot02-verify.json
+  s_467dcb949b5b60::t_9aad7984a82525 1-60
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "a3d67a22135fc482e4c239fa8dfc0f2c4452b050",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
