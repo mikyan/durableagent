@@ -1,0 +1,21 @@
+docs/evidence/t12/README.md
+  s_467dcb949b5b60::t_c0e230693d9311 12
+tools/recovery-lifecycle-process.mjs
+  s_467dcb949b5b60::t_c0e230693d9311 65
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "c3cb30d044bc0c1096833870018f0783cd9c7688",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
