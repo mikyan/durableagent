@@ -1,0 +1,23 @@
+runtime/test/live-model.test.mjs
+  s_467dcb949b5b60::t_ab47e539cb0362 19-29
+managed-execution/FILE-VALIDATION.md
+  s_467dcb949b5b60::t_dfe103725ad67d 64,76-81
+runtime/test/project-live-transport.test.mjs
+  s_467dcb949b5b60::t_ab47e539cb0362 19-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "664e5f2ceba3f32d79d273fb1969ac934e1d9772",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
