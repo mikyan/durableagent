@@ -1,0 +1,471 @@
+docs/evidence/t13/t13-provider-review-sdk-network-before.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-cutover-actual01/before.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1
+docs/evidence/t13/t13-storage-loss-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-41
+runtime/src/document-writes.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 5,22,35,48-65,82-109,134
+docs/evidence/t13/t13-react-grant08-network-after.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-python-local03-termux.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-11
+docs/evidence/t13/t13-cutover-actual03/before.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1
+docs/evidence/t13/t13-provider-sdk-first-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-50
+docs/evidence/t13/t13-network-green01-root-actions.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-4
+docs/evidence/t13/t13-cutover-actual02/events.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-31
+managed-execution/test_executor.py
+  s_467dcb949b5b60::t_4bd98cededdd9a 29-50,52-59,61,89-127
+  s_467dcb949b5b60::t_9b675faba1c76f 128
+runtime/src/data-saver-protocol.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-18
+docs/evidence/t13/t13-policy-read-snapshot-red.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-30
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_4bd98cededdd9a 18-53
+docs/evidence/t13/t13-provider-staged-sequence-green.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-15
+docs/evidence/t13/t13-cutover-actual01/server.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-provider-projection-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+docs/evidence/t13/t13-react-grant08-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-49
+runtime/test/execution-channel.test.mjs
+  s_467dcb949b5b60::t_4bd98cededdd9a 59-65
+docs/evidence/t13/t13-cutover-actual02/after.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1
+docs/evidence/t13/t13-local-native-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-41
+android/app/src/main/java/dev/durableagent/probe/NativeProviderPolicy.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-72
+docs/evidence/t13/t13-react-grant07-network-before.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-provider-write-ack-red.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-46
+docs/evidence/t13/native-ui-lease-artifacts.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-11
+android/app/src/androidTest/java/dev/durableagent/probe/DataSaverAccessTest.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-80
+docs/evidence/t13/t13-period-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-93
+docs/evidence/t13/t13-period-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-41
+docs/evidence/t13/t13-network-green01-policy-before.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+android/scripts/data-saver-download-server.py
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-37
+android/app/src/androidTest/java/dev/durableagent/probe/DataSaverSweepTest.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-33
+docs/evidence/t13/t13-projection-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-69
+docs/evidence/t13/t13-fed-final-real-network-metered.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/native-ui-config-source-hashes.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-373
+docs/evidence/t13/t13-cutover-actual01/instrumentation.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-51
+managed-execution/test_local_capabilities.py
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-66
+docs/evidence/t13/native-ui-config-artifacts.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-11
+docs/evidence/t13/t13-provider-review-real-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+runtime/src/workspace-coordination.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 8-14,16,36,41-52,65
+docs/evidence/t13/t13-fed-final-sdk-network-after.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 29-30,157-159,286
+docs/evidence/t13/t13-interruption-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-32
+runtime/src/application.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 25,36,60,142-160
+docs/evidence/t13/t13-provider-selection-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+docs/evidence/t13/t13-local-product-first-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-47
+ui/src/extensions/data-saver.tsx
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-26
+docs/evidence/t13/t13-provider-ack-green02-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+docs/evidence/t13/native-ui-lease-apk-inspection.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-374
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 52
+docs/evidence/t13/t13-provider-routing-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-44
+docs/evidence/t13/.gitattributes
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-provider-staged-sequence-red.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-30
+docs/evidence/t13/t13-react-grant07-network-metered.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+runtime/src/file-writes.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 11,14,44,52
+docs/evidence/t13/t13-provider-sdk-first-policy-observation.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-206
+ui/test/console-page.test.tsx
+  s_467dcb949b5b60::t_fdb188a7b47759 11,21-22,31-33,44-60
+docs/evidence/t13/t13-network-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+docs/evidence/t13/t13-ui-lease-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+docs/evidence/t13/native-ui-config-apk-inspection.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-374
+docs/evidence/t13/t13-review-owner-host-green.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-17
+docs/evidence/t13/t13-provider-history-fixture02-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-44
+docs/evidence/t13/t13-cutover-actual01/events.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-90
+docs/evidence/t13/t13-react-grant08-network-metered.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-sweep-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+ui/test/document-policy.test.tsx
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-28
+runtime/test/execution-continuation.test.mjs
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-13
+ui/test/data-saver-page.test.tsx
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-24
+ui/test/data-saver-controller.test.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-51
+runtime/src/storage-format.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 16,20
+docs/evidence/t13/t13-file-rpc-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+ui/src/style.css
+  s_467dcb949b5b60::t_d1f1eb51547ba8 98
+docs/evidence/t13/native-projection-artifacts.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-11
+docs/evidence/t13/t13-execution-second-real-credential-audit.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-19
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_432c5854e4abab 1-2,78-83
+  s_467dcb949b5b60::t_09271882043f92 142,181
+docs/evidence/t13/t13-react-grant07-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+docs/evidence/t13/t13-react-grant09-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-29
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentService.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 47-48,54,81
+docs/evidence/t13/t13-file-rpc-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-32
+android/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_4bd98cededdd9a 3
+docs/evidence/t13/t13-provider-projection-green-build.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-101
+docs/evidence/t13/t13-react-grant04-retained.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 10-11,14,50,54,56,64,82,106-139,166,171-175,206-213,215,219-222,225-231,245,281,283,314
+docs/evidence/t13/t13-react-grant04-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-49
+docs/evidence/t13/t13-sweep-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-47
+android/app/src/androidTest/java/dev/durableagent/probe/DataSaverApplicationTest.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-53
+docs/evidence/t13/t13-projection-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-38
+docs/evidence/t13/t13-react-grant02-native-observation.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-31
+docs/evidence/t13/t13-cutover-actual02/before.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentStore.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 32,50,55,63,69-155,157-174,193,241-256,278,291,311,313,401,418,431,440,446,469,489-490
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_432c5854e4abab 15
+docs/evidence/t13/t13-native-green03-regression.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-51
+docs/evidence/t13/fed-independent-original-read.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1
+docs/evidence/t13/second-review-artifacts.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-11
+docs/evidence/t13/t13-cutover-actual02-retained-observation.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+docs/evidence/t13/t13-react-grant05-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-61
+docs/evidence/t13/t13-ui-config-green-build.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-101
+docs/evidence/t13/native-projection-apk-inspection.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-374
+android/app/src/androidTest/java/dev/durableagent/probe/DataSaverNetworkTest.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-29
+docs/evidence/t13/t13-provider-review-sdk-network-metered.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-review-owner-host-inrepo-red.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-46
+managed-execution/durable_executor.py
+  s_467dcb949b5b60::t_4bd98cededdd9a 20,22-34,192,300-309,319-320,441-444,446,459,474-475
+android/app/src/main/java/dev/durableagent/probe/ExecutionAccess.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 22-23,29-31,44-46,69,72-78,94,108,151
+android/app/src/main/java/dev/durableagent/probe/NativeDataSaverSweep.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-30
+docs/evidence/t13/t13-network-green01-events.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-4
+runtime/src/execution-validation.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 10,16-18,29
+docs/evidence/t13/t13-fed-final-sdk-network-metered.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-policy-start-inrepo-red.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-30
+android/app/src/androidTest/java/dev/durableagent/probe/InputApplicationTest.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 113-178
+docs/evidence/t13/t13-policy-final-android-build.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-135
+docs/evidence/t13/t13-native-green03-same-test.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+docs/evidence/t13/t13-react-grant02-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-47
+docs/evidence/t13/t13-cutover-actual01-retained-observation.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+docs/evidence/t13/t13-c5-final-sdk-original-after.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-6
+docs/evidence/t13/README.md
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-385
+docs/evidence/t13/t13-fed-final-credential-audit.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-19
+android/app/src/androidTest/java/dev/durableagent/probe/DataSaverProviderTest.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-201
+docs/evidence/t13/t13-native-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentBridge.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 12-13,21,37-38
+docs/evidence/t13/t13-local-product-second-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+runtime/src/document-protocol.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 2-3
+docs/evidence/t13/native-fixes-review.md
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-22
+docs/evidence/t13/t13-policy-final-runtime.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-302
+docs/evidence/t13/t13-policy-read-snapshot-green.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-20
+docs/evidence/t13/t13-provider-real02-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+docs/evidence/t13/t13-native-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-32
+docs/evidence/t13/t13-provider-sdk-first-retained-observation.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+docs/evidence/t13/t13-react-grant09-network-after.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+runtime/src/execution-continuation.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-8
+tools/build_execution_setup.py
+  s_467dcb949b5b60::t_4bd98cededdd9a 6,57,61-64
+docs/evidence/t13/t13-provider-review-real-credential-audit.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-19
+docs/evidence/t13/evidence-hashes.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-630
+runtime/src/document-reads.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-47
+docs/evidence/t13/t13-react-grant07-network-after.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-react-grant06-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-49
+android/app/src/androidTest/java/dev/durableagent/probe/DataSaverStoreTest.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-128
+docs/evidence/t13/t13-provider-write-first-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-37
+docs/evidence/t13/artifacts.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-11
+docs/evidence/t13/t13-provider-real02-credential-audit.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-19
+android/app/src/main/java/dev/durableagent/probe/NativeDataSaverAccess.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-81
+docs/evidence/t13/t13-final-fence-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-32
+docs/evidence/t13/t13-verify-ui-red.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-187
+docs/evidence/t13/t13-provider-review-sdk-network-after.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/second-review-fixes-review.md
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-39
+docs/evidence/t13/t13-provider-orphan-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-38
+android/app/src/main/java/dev/durableagent/probe/NativeDataSaverStore.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-238
+docs/evidence/t13/t13-provider-read-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+docs/evidence/t13/t13-review-final-lint.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-43
+docs/evidence/t13/t13-ui-lease-green-build.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-70
+docs/evidence/t13/native-ui-configuration-review.md
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-51
+runtime/src/execution-channel.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 60-63,68
+docs/evidence/t13/t13-ui-lease-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-38
+docs/evidence/t13/t13-provider-orphan-green02-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+docs/evidence/t13/t13-review-final-runtime.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-299
+docs/evidence/t13/t13-cutover-actual03/events.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-107
+docs/evidence/t13/t13-interruption-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-79
+docs/evidence/t13/t13-ui-config-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-41
+docs/evidence/t13/t13-provider-selection-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-41
+runtime/test/data-saver.test.mjs
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-151
+ui/src/extensions/documents.tsx
+  s_467dcb949b5b60::t_4bd98cededdd9a 10,33-40,44,47
+docs/evidence/t13/t13-cutover-actual02/server.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-provider-read-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-32
+docs/evidence/t13/t13-public-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-47
+docs/evidence/t13/t13-cutover-actual02/instrumentation.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-46
+runtime/INPUTS.md
+  s_467dcb949b5b60::t_4bd98cededdd9a 5-8
+android/app/src/main/java/dev/durableagent/probe/NativeInputBridge.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 12-14
+docs/evidence/t13/t13-cutover-actual03/server.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-provider-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+docs/evidence/t13/independent-original-read.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1
+docs/evidence/t13/t13-local-product-first-retained-observation.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+runtime/src/managed-documents.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 17,23-24
+ui/src/data-saver.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-41
+docs/evidence/t13/t13-storage-loss-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-65
+ui/src/extensions/file-changes.tsx
+  s_467dcb949b5b60::t_4bd98cededdd9a 27-28,32,38-42,45,49,51-53,62
+docs/evidence/t13/t13-provider-review-native-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-37
+docs/evidence/t13/t13-cutover-actual03/after.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1
+docs/evidence/t13/t13-verify-ui-green.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-9
+docs/evidence/t13/t13-provider-sdk-second-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-44
+docs/evidence/t13/t13-c5-final-sdk-retained.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+docs/evidence/t13/t13-provider-write-ack-green.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-14
+docs/evidence/t13/t13-ui-config-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-38
+docs/evidence/t13/t13-public-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+android/app/src/main/java/dev/durableagent/probe/NativeInputStore.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 37,42-43,46
+docs/evidence/t13/t13-provider-projection-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-44
+docs/evidence/t13/t13-provider-write-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-41
+android/app/src/main/java/dev/durableagent/probe/NativeDataSaverMonitor.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-43
+docs/evidence/t13/t13-cutover-actual03/instrumentation.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-29
+docs/evidence/t13/t13-fed-final-real-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+docs/evidence/t13/final-apk-inspection.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-374
+android/app/build.gradle.kts
+  s_467dcb949b5b60::t_4bd98cededdd9a 59,62-63
+runtime/validation/execution-peer.mjs
+  s_467dcb949b5b60::t_4bd98cededdd9a 10,12
+docs/evidence/t13/t13-provider-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-32
+docs/evidence/t13/t13-network-green01-policy-after.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-execution-second-real-mimo-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+docs/evidence/t13/scoped-development-gate-review.md
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-138
+docs/evidence/t13/source-hashes.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-373
+docs/evidence/t13/t13-fed-final-real-network-after.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+docs/evidence/t13/t13-provider-history-fixture03-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+ui/src/controller.ts
+  s_467dcb949b5b60::t_432c5854e4abab 9-10,14,35,47,81,117,144,317
+ui/test/execution-page.test.tsx
+  s_467dcb949b5b60::t_4bd98cededdd9a 49
+docs/evidence/t13/t13-review-final-ui.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-32
+android/app/src/androidTest/java/dev/durableagent/probe/DataSaverExecutionTest.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-236
+  s_467dcb949b5b60::t_c95278fbac4723 237-244
+runtime/validation/data-saver-crash-child.mjs
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-20
+docs/evidence/t13/t13-fed-final-sdk-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+docs/evidence/t13/t13-final-fence-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+runtime/DATA_SAVER.md
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-145
+android/app/src/main/java/dev/durableagent/probe/AndroidDataSaverNetwork.kt
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-50
+docs/evidence/t13/t13-provider-review-native-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-71
+docs/specs/v1/README.md
+  s_467dcb949b5b60::t_4bd98cededdd9a 3,37
+  s_467dcb949b5b60::t_e384625806500c 38
+docs/evidence/t13/t13-native-red03-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-41
+docs/evidence/t13/t13-network-red01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-44
+docs/evidence/t13/t13-policy-after-dispatch-red.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-30
+docs/evidence/t13/t13-policy-after-dispatch-green.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-19
+runtime/test/data-saver-documents.test.mjs
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-130
+docs/evidence/t13/t13-react-grant02-retained.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+docs/evidence/t13/t13-cutover-actual01/after.json
+  s_467dcb949b5b60::t_4bd98cededdd9a 1
+docs/evidence/t13/t13-c5-final-sdk-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-50
+docs/evidence/t13/t13-react-grant09-network-metered.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-2
+.gitattributes
+  s_467dcb949b5b60::t_4bd98cededdd9a 4
+docs/evidence/t13/t13-execution-second-metered-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+docs/evidence/t13/t13-local-native-green01-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-23
+runtime/test/workspace-coordination.test.mjs
+  s_467dcb949b5b60::t_4bd98cededdd9a 6,11,70-100
+docs/evidence/t13/REPRODUCE.md
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-108
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_4bd98cededdd9a 19,33,37-43,55,67,72
+docs/evidence/t13/t13-policy-final-ui.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-32
+docs/evidence/t13/t13-provider-review-sdk-device.log
+  s_467dcb949b5b60::t_4bd98cededdd9a 1-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "c44d8ceeae3c2bf740891d09f1a4f95ee2dcc2d2",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
