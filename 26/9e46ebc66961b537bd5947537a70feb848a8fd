@@ -1,0 +1,80 @@
+docs/evidence/t12/t12-existing-executor-green02.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-5
+docs/evidence/t12/t12-autostart-red01-artifacts.json
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-7
+docs/evidence/t12/t12-runtime02-provenance.json
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-16
+docs/evidence/t12/t12-observe-python-full01-result.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-71
+docs/evidence/t12/t12-autostart-red02-artifacts.json
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-5
+docs/evidence/t12/t12-autostart-red03-device.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-23
+docs/evidence/t12/t12-observe-old-listener01-result.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1
+docs/evidence/t12/t12-existing-executor-green01.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-5
+docs/evidence/t12/t12-transport-green01-source-hashes.json
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-5
+docs/evidence/t12/t12-observe-helper-upgrade01-result.log
+  s_467dcb949b5b60::t_30319d9a83acac 1-4
+docs/evidence/t12/t12-autostart-red01-device.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-23
+docs/evidence/t12/t12-autostart-red02-device.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-17
+docs/evidence/t12/t12-existing-executor-red01.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-40
+docs/evidence/t12/t12-python-full02-source-hashes.json
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-11
+docs/evidence/t12/LOG-SHA256.json
+  s_467dcb949b5b60::t_f2163c69c33e78 4-73,94-108,159-163,309-338,429-438,589-593,599-608
+docs/evidence/t12/t12-autostart-final-build01.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-104
+docs/evidence/t12/README.md
+  s_467dcb949b5b60::t_30319d9a83acac 159-160
+  s_467dcb949b5b60::t_4c719eb2b3b12f 140-158
+docs/evidence/t12/t12-autostart-test-build01.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-103
+docs/evidence/t12/t12-autostart-test-build02.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-106
+docs/evidence/t12/t12-autostart-test-build03.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-106
+docs/evidence/t12/t12-autostart-final02-apk-inspection.json
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-403
+docs/evidence/t12/t12-autostart-final02-artifacts.json
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-11
+docs/evidence/t12/t12-python-full01-source-hashes.json
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-11
+docs/evidence/t12/t12-autostart-final-build02.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-101
+docs/evidence/t12/t12-observe-python-full02-result.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-55
+docs/evidence/t12/t12-transport-red01-source-hashes.json
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-4
+docs/evidence/t12/t12-observe-transport-red01-result.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-14
+docs/evidence/t12/t12-autostart-assets01.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-6
+docs/evidence/t12/t12-observe-transport-green01-result.log
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-5
+docs/evidence/t12/t12-helper-upgrade01-manifest.json
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-18
+docs/evidence/t12/t12-autostart-red03-artifacts.json
+  s_467dcb949b5b60::t_db2ce39ea112a1 1-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "269e46ebc66961b537bd5947537a70feb848a8fd",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
