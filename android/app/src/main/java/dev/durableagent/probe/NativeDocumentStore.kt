@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.os.Process
+import android.os.SystemClock
 import android.os.UserManager
 import android.provider.DocumentsContract
 import android.util.Base64
@@ -33,7 +34,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     private val resolver=this.context.contentResolver
     private var helper:DocumentDatabase?=null
     @Volatile private var closed=false
-    private data class Reader(val resourceId:String,val input:ParcelFileDescriptor.AutoCloseInputStream,val digest:String,val length:Long)
+    private data class Reader(val resourceId:String,val uri:Uri,val input:ParcelFileDescriptor.AutoCloseInputStream,val digest:String,val length:Long)
     private val readers=mutableMapOf<String,Reader>()
     init { require(namespace.matches(Regex("[a-zA-Z0-9._-]{1,100}"))) }
     fun select(uri:Uri,resultFlags:Int):JSONObject {
@@ -286,7 +287,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
                 synchronized(readers){
                     if(closed)fail("DOCUMENT_STORE_CLOSED","原文件记录已关闭，请重新连接。")
                     if(readers.size>=8)fail("DOCUMENT_READER_LIMIT","打开的原件过多，请先结束已有读取。")
-                    readers[id]=Reader(resourceId,input,result.first,result.second)
+                    readers[id]=Reader(resourceId,uri,input,result.first,result.second)
                 }
                 JSONObject().put("readerId",id).put("resourceId",resourceId).put("contentDigest",result.first).put("byteLength",result.second)
             }catch(error:Exception){try{input.close()}catch(_:Exception){};throw error}
@@ -296,6 +297,9 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         if(offset !in 0..MAX_CONTENT||maxBytes !in 1..32768)fail("DOCUMENT_INVALID","原文件读取范围无效。")
         val reader=synchronized(readers){readers[readerId]}?:fail("DOCUMENT_READER_LOST","原文件 reader 已失效，请重新开始读取并核验内容。")
         return synchronized(reader){originalIo{
+            // Android can leave an already-open FD readable after URI grant revocation.
+            // The application's capability still requires current authorization per call.
+            requireGrant(reader.uri,READ)
             reader.input.channel.position(offset)
             val bytes=ByteArray(maxBytes);var count=0
             while(count<bytes.size){val amount=reader.input.read(bytes,count,bytes.size-count);if(amount<0)break;count+=amount}
@@ -305,10 +309,11 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     }
     fun closeRead(readerId:String):JSONObject {
         val reader=synchronized(readers){readers.remove(readerId)}?:fail("DOCUMENT_READER_LOST","原文件 reader 已失效，请重新开始读取并核验内容。")
-        return synchronized(reader){try{originalIo{
-            val result=hashOriginal(reader.input)
+        return synchronized(reader){originalIo{reader.input.use{input->
+            requireGrant(reader.uri,READ)
+            val result=hashOriginal(input)
             JSONObject().put("currentDigest",result.first).put("byteLength",result.second).put("unchanged",result.first==reader.digest&&result.second==reader.length)
-        }}finally{reader.input.close()}}
+        }}}
     }
     private fun hashOriginal(input:ParcelFileDescriptor.AutoCloseInputStream):Pair<String,Long> {
         try{input.channel.position(0)}catch(_:IOException){fail("DOCUMENT_UNSUPPORTED","此提供者不支持可定位的原件 reader。")}
@@ -372,11 +377,21 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         if(closed)fail("DOCUMENT_STORE_CLOSED","原文件记录已关闭，请重新连接。")
         if(!context.getSystemService(UserManager::class.java).isUserUnlocked)fail("DOCUMENT_WAITING_UNLOCK","请在开机后先解锁设备。")
         val directory=File(context.noBackupFilesDir,namespace)
-        val lease=StorageDomainLease.acquire(directory)?:fail("DOCUMENT_STORAGE_BUSY","原文件记录正在提交，请稍后重试。")
-        try{lease.use{val database=helper?:DocumentDatabase(context,File(directory,"documents.sqlite").absolutePath).also{helper=it};action(database.writableDatabase)}}
+        try{metadataLease(directory).use{val database=helper?:DocumentDatabase(context,File(directory,"documents.sqlite").absolutePath).also{helper=it};action(database.writableDatabase)}}
         catch(error:NativeDocumentException){throw error}
         catch(_:SQLiteException){fail("DOCUMENT_STORAGE_FAILED","原文件记录无法保存或读取，原记录已保留。")}
         catch(_:IOException){fail("DOCUMENT_STORAGE_FAILED","原文件暂存内容无法保存或读取，原记录已保留。")}
+    }
+    private fun metadataLease(directory:File):StorageDomainLease {
+        // A UI observation and the agent can briefly contend on the same durable ledger.
+        // Wait only before admission: never replay a transaction, staging or Provider I/O.
+        val deadline=SystemClock.elapsedRealtime()+1500
+        while(true){
+            StorageDomainLease.acquire(directory)?.let{return it}
+            val remaining=deadline-SystemClock.elapsedRealtime()
+            if(remaining<=0)fail("DOCUMENT_STORAGE_BUSY","原文件记录正在提交，请稍后重试。")
+            try{Thread.sleep(minOf(10L,remaining))}catch(_:InterruptedException){Thread.currentThread().interrupt();fail("DOCUMENT_STORAGE_BUSY","原文件记录等待已中断，请查询原操作。")}
+        }
     }
     override fun close(){
         synchronized(monitor){closed=true;helper?.close();helper=null}

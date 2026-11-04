@@ -34,6 +34,32 @@ class NativeDocumentTest {
     }
     private fun until(label:String,timeout:Long=150000,check:()->Boolean){val end=SystemClock.elapsedRealtime()+timeout;while(!check()){assertTrue(label,SystemClock.elapsedRealtime()<end);Thread.sleep(50)}}
     private fun evidence(value:JSONObject)=instrument.sendStatus(0,Bundle().apply{putString("documentEvidence",value.toString())})
+    @Test(timeout=30000) fun revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader(){
+        assumeTrue(InstrumentationRegistry.getArguments().getString("retainedGrant")=="true")
+        val fixture=control("reset");assertNotEquals(android.os.Process.myUid(),fixture.getInt("providerUid"))
+        val uri=android.net.Uri.parse("content://$FIXTURE.documents/document/original")
+        val granted=context.contentResolver.persistedUriPermissions.firstOrNull{it.uri==uri}
+        assertTrue("Requires an actual prior picker grant; reacquire it before repeating this trace",granted?.isReadPermission==true&&granted.isWritePermission)
+        NativeDocumentStore(context,"document-revoked-"+UUID.randomUUID()).use{store->
+            val selected=store.select(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            val id=selected.getString("resourceId");val opened=store.open(id);val reader=opened.getString("readerId")
+            ParcelFileDescriptor.AutoCloseInputStream(context.contentResolver.openFileDescriptor(uri,"r")!!).use{platformProbe->
+                control("revoke")
+                assertEquals(android.content.pm.PackageManager.PERMISSION_DENIED,context.checkUriPermission(uri,android.os.Process.myPid(),android.os.Process.myUid(),Intent.FLAG_GRANT_READ_URI_PERMISSION))
+                val platformBytes=try{platformProbe.readBytes()}catch(_:Exception){null}
+                evidence(JSONObject().put("stage","actual-grant-revoked").put("platformHeldFdStillReadable",platformBytes?.contentEquals(expected)==true).put("applicationPolicy","reject-further-original-reads-after-current-uri-grant-revocation"))
+                assertEquals("permission_required",store.describe(id).getString("availability"))
+                fun denied(action:()->Unit){try{action();fail("Application original capability must reject reads after current URI grant revocation")}
+                    catch(error:NativeDocumentException){assertEquals("DOCUMENT_PERMISSION_REQUIRED",error.code)}}
+                denied{store.open(id)}
+                denied{store.read(id,0,32768)}
+                denied{store.readReader(reader,0,32768)}
+                denied{store.closeRead(reader)}
+                assertArrayEquals(expected,Base64.decode(control("read").getString("base64"),Base64.DEFAULT))
+                evidence(JSONObject().put("stage","revoked-capability-denied-including-held-reader").put("resourceId",id))
+            }
+        }
+    }
     @Test(timeout=30000) fun trustedJavetChannelReadsActualOriginalThroughBoundedRequests(){
         assumeTrue(InstrumentationRegistry.getArguments().getString("retainedGrant")=="true")
         val fixture=control("reset");assertNotEquals(android.os.Process.myUid(),fixture.getInt("providerUid"))
