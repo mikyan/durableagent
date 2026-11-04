@@ -18,7 +18,7 @@ class NativeDocumentBridge(private val activity:Activity,namespace:String,privat
     fun accept(encoded:String):Boolean {
         val request=try{JSONObject(encoded)}catch(_:Exception){return false}
         val method=request.optString("method")
-        if(method !in setOf("document.select","document.list","document.describe","document.query"))return false
+        if(method !in setOf("document.select","document.list","document.describe","document.query","document.verify"))return false
         if(encoded.toByteArray(Charsets.UTF_8).size>60000||request.optString("connectionId").length !in 1..128||request.optString("requestId").length !in 1..128){reply(request,failure("DOCUMENT_INVALID","原文件请求格式无效。"));return true}
         if(request.optInt("protocol")!=1){reply(request,failure("PROTOCOL_MISMATCH","界面与原文件能力版本不兼容。"));return true}
         if(method=="document.select"){
@@ -33,6 +33,7 @@ class NativeDocumentBridge(private val activity:Activity,namespace:String,privat
             when(method){
                 "document.list"->store.list(if(payload.has("cursor"))payload.getString("cursor")else null)
                 "document.query"->store.query(payload.getString("operationId"))
+                "document.verify"->store.verify(payload.getString("operationId"))
                 else->store.describe(payload.getString("resourceId"))
             }
         }

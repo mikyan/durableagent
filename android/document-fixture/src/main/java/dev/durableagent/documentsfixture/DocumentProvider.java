@@ -52,7 +52,7 @@ public final class DocumentProvider extends DocumentsProvider {
         android.content.SharedPreferences state=getContext().getSharedPreferences("state",0);
         if(mode.contains("w"))state.edit().putBoolean("writeSeen",true).putInt("writeOpens",state.getInt("writeOpens",0)+1).commit();
         else if(state.getBoolean("writeSeen",false)){
-            long end=android.os.SystemClock.elapsedRealtime()+30000;
+            long end=android.os.SystemClock.elapsedRealtime()+state.getLong("readbackMillis",30000);
             while(state.getBoolean("holdReadback",false)&&android.os.SystemClock.elapsedRealtime()<end){
                 if(signal!=null)signal.throwIfCanceled();
                 try{Thread.sleep(20);}catch(InterruptedException error){Thread.currentThread().interrupt();throw new FileNotFoundException("Synthetic readback interrupted");}

@@ -51,6 +51,7 @@ class NativeDocumentService(context:Context,namespace:String,inputNamespace:Stri
         "stage"->store.stage(payload)
         "start"->store.start(payload)
         "query"->store.query(text(payload,"operationId"))
+        "verify"->store.verify(text(payload,"operationId"))
         "cancel"->store.cancel(payload)
         else->fail("DOCUMENT_UNKNOWN_ACTION","未登记的原文件操作。")
     }
@@ -74,7 +75,7 @@ class NativeDocumentService(context:Context,namespace:String,inputNamespace:Stri
         Thread({try{ordinary.awaitTermination(Long.MAX_VALUE,TimeUnit.NANOSECONDS);control.awaitTermination(Long.MAX_VALUE,TimeUnit.NANOSECONDS)}finally{store.close()}},"OriginalDocumentClose").apply{isDaemon=true;start()}
     }
     companion object {
-        private val METHODS=setOf("list","describe","open","read","closeRead","prepare","stage","start","query","cancel")
+        private val METHODS=setOf("list","describe","open","read","closeRead","prepare","stage","start","query","cancel","verify")
         private fun fail(code:String,message:String):Nothing=throw NativeDocumentException(code,message)
         private fun pool(threads:Int,capacity:Int,name:String)=ThreadPoolExecutor(threads,threads,0,TimeUnit.MILLISECONDS,ArrayBlockingQueue(capacity),{task->Thread(task,name).apply{isDaemon=true}},ThreadPoolExecutor.AbortPolicy())
     }
