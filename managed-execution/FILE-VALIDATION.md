@@ -1,6 +1,6 @@
-# T10 implementation evidence
+# T10 implementation evidence and scoped acceptance
 
-This journal records completed engineering checks and their exact scope. All twelve criteria have evidence below; final frozen-artifact inspection and independent integration acceptance remain pending. The T09 execution evidence in `VALIDATION.md` remains distinct.
+T10's twelve acceptance criteria passed the [independent scoped development gate](evidence/scoped-file-development-gate-review.md) on 2026-11-04. The journal below retains incremental failures and the exact source/artifact scope of each subsequent result; it does not combine them into one all-green device run. Production07 was independently mapped to the reviewed source, not rerun on device. T09 execution evidence in `VALIDATION.md`, T12 automatic recovery and T17 final OEM acceptance remain distinct.
 
 ## Acceptance evidence map
 
