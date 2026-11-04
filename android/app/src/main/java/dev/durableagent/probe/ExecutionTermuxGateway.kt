@@ -73,6 +73,32 @@ class ExecutionTermuxGateway(private val context: Context) {
         } while (SystemClock.elapsedRealtime()<deadline)
         throw last
     }
+    /** Reopen only an already-paired authority; never initialize trust or replay an operation. */
+    fun ensureExisting(eligible:()->Boolean={true}):ExecutionPairing {
+        val deadline=SystemClock.elapsedRealtime()+10000
+        fun remaining():Long {
+            if(Thread.currentThread().isInterrupted||!eligible())throw ExecutionChannelException("CHANNEL_CLOSED")
+            return (deadline-SystemClock.elapsedRealtime()).also{if(it<=0)throw ExecutionChannelException("EXISTING_EXECUTOR_UNAVAILABLE")}
+        }
+        remaining();requireReady()
+        val identity=ExecutionIdentity(context,"production-v1",allowCreate=false)
+        val pairing=ExecutionPairingStore(context).use{it.requireClient(identity.certificateSha256())}
+        fun reachable():Boolean = try {
+            val value=ExecutionTlsClient(identity,pairing).request("ping",JSONObject(),minOf(2000L,remaining()))
+            if(value.opt("protocol")!=1||value.optString("executorId")!=pairing.executorId||value.optString("ledgerEpoch")!=pairing.ledgerEpoch)throw ExecutionChannelException("INSTANCE_MISMATCH")
+            remaining();true
+        }catch(error:ExecutionChannelException){if(error.code!="CONNECTION_ABSENT")throw error;false}
+        if(reachable())return pairing
+        // The independent control socket remains separate. Only overlapping
+        // absent-listener launches are coalesced, outside every native input lease.
+        if(!existingStart.tryLock(remaining(),java.util.concurrent.TimeUnit.MILLISECONDS))throw ExecutionChannelException("EXISTING_EXECUTOR_UNAVAILABLE")
+        try{
+            remaining();if(reachable())return pairing
+            requireReady();remaining()
+            if(!dispatch("if [ ! -x '$PYTHON' ] || [ ! -f '$SCRIPT' ]; then exit 78; fi; exec '$PYTHON' '$SCRIPT' serve-existing >/dev/null 2>&1",null))throw ExecutionChannelException("TERMUX_START_UNCONFIRMED")
+            do{remaining();if(reachable())return pairing;Thread.sleep(minOf(100L,remaining()))}while(true)
+        }finally{existingStart.unlock()}
+    }
     fun requireReady() {
         val pm=context.packageManager
         val pkg=try { pm.getPackageInfo("com.termux",PackageManager.GET_SIGNING_CERTIFICATES) }
@@ -101,6 +127,7 @@ class ExecutionTermuxGateway(private val context: Context) {
         catch (_: Exception) { throw ExecutionChannelException("TERMUX_START_UNCONFIRMED") }
     }
     companion object {
+        private val existingStart=java.util.concurrent.locks.ReentrantLock()
         const val PERMISSION="com.termux.permission.RUN_COMMAND"
         const val PORT=47193
         private const val PYTHON="/data/data/com.termux/files/usr/bin/python"

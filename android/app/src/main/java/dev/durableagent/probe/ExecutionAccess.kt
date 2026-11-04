@@ -18,7 +18,7 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
     private val ordinary = pool(2,8,"ExecutionRequest")
     // Reserved capacity and a separate socket ensure output waits cannot occupy cancellation's worker.
     private val control = pool(1,4,"ExecutionControl")
-    private var closed = false
+    @Volatile private var closed = false
     private val policyDelegate=lazy{inputNamespace?.let{NativeDataSaverAccess(this.context,it)}}
     private val dataSaver by policyDelegate
     init{if(recoverCatalogue&&inputNamespace!=null)NativeInputStore(this.context,inputNamespace).withLeaseWait(1000).use{it.effectRecovery(false)}}
@@ -62,8 +62,11 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
                         val peer = ExecutionTermuxGateway(context).connect()
                         JSONObject().put("protocol",1).put("executorId",peer.executorId).put("ledgerEpoch",peer.ledgerEpoch)
                     } else {
+                        // Eligibility and listener startup happen before acquiring
+                        // the stop/input lease and before transmitting this operation.
+                        val peer = ExecutionTermuxGateway(context).ensureExisting{!closed}
+                        if(closed||Thread.currentThread().isInterrupted)throw ExecutionChannelException("CHANNEL_CLOSED")
                         val identity = ExecutionIdentity(context,"production-v1",allowCreate=false)
-                        val peer = ExecutionPairingStore(context).use { it.requireClient(identity.certificateSha256()) }
                         val client=ExecutionTlsClient(identity,peer)
                         if(verifyReceipt) {
                             verifiedCancel(client,peer,payload,expected)
@@ -72,12 +75,14 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
                             if(method in EXECUTION_FILE_METHODS)dataSaver!!.requireLocalFiles(client.request("list",JSONObject().put("limit",1)))
                             if(method=="prepare")dataSaver!!.remember(payload)
                             if(method=="start"){dataSaver!!.requireStart(payload.getString("executionId"),payload.getString("finalDigest"));fence.before(method,payload)}
+                            if(closed||Thread.currentThread().isInterrupted)throw ExecutionChannelException("CHANNEL_CLOSED")
                             client.request(method,payload).also{result->
                                 fence.observe(method,payload,result)
                                 if(method in setOf("prepare","start","query","cancel")&&result.has("context"))dataSaver!!.observe(result)
                             }
                         } else {
                             if(method in setOf("prepare","start"))throw ExecutionChannelException("CONTROL_UNAVAILABLE")
+                            if(closed||Thread.currentThread().isInterrupted)throw ExecutionChannelException("CHANNEL_CLOSED")
                             client.request(method,payload)
                         }
                     }
@@ -108,6 +113,7 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
         if(expected!=null&&(namespace!=expected.getString("namespace")||bound(before)&&(before.getString("requestDigest")!=expected.getString("requestDigest")||before.getString("finalDigest")!=expected.getString("finalDigest"))))throw ExecutionChannelException("EXECUTION_IDENTITY_CONFLICT")
         // An authenticated missing receipt permits writing a cancellation tombstone.
         // It does not itself prove that no in-flight prepare can subsequently arrive.
+        if(closed||Thread.currentThread().isInterrupted)throw ExecutionChannelException("CHANNEL_CLOSED")
         val result=client.request("cancel",payload)
         if(!identity(result))throw ExecutionChannelException("EXECUTION_CANCEL_UNCONFIRMED")
         if(result.optString("state")=="not_started"&&(result.opt("neverStarted")!=true||result.opt("scopeConfirmed")!=true) ||

@@ -16,6 +16,56 @@ from pathlib import Path
 from durable_executor import Executor, ExecutionFault
 
 
+class ExistingExecutorContract(unittest.TestCase):
+    def test_existing_only_open_retains_identity_and_original_receipt(self):
+        with tempfile.TemporaryDirectory(prefix="existing-executor-") as directory:
+            root = Path(directory) / "authority"
+            with_executor = Executor(root)
+            identity = with_executor.identity()
+            receipt = with_executor.cancel("never-started", "user")
+            with_executor.close()
+            existing = Executor(root, existing=True)
+            try:
+                self.assertEqual(identity, existing.identity())
+                self.assertEqual(receipt, existing.query("never-started"))
+            finally:
+                existing.close()
+
+    def test_existing_only_missing_ledger_never_creates_a_replacement(self):
+        with tempfile.TemporaryDirectory(prefix="existing-executor-") as directory:
+            root = Path(directory) / "absent"
+            with self.assertRaisesRegex(ExecutionFault, "LEDGER_REQUIRED"):
+                Executor(root, existing=True)
+            self.assertFalse(root.exists())
+            initialized = Executor(root)
+            initialized.close()
+            (root / "execution.sqlite").unlink()
+            before = {str(p.relative_to(root)): p.read_bytes() for p in root.rglob('*') if p.is_file()}
+            with self.assertRaisesRegex(ExecutionFault, "LEDGER_REQUIRED"):
+                Executor(root, existing=True)
+            self.assertEqual(before, {str(p.relative_to(root)): p.read_bytes() for p in root.rglob('*') if p.is_file()})
+            self.assertFalse((root / "execution.sqlite").exists())
+
+    def test_existing_only_damaged_identity_or_schema_fails_without_repair(self):
+        for fault in ["DELETE FROM identity WHERE key='ledgerEpoch'", "DROP TABLE prepared"]:
+            with self.subTest(fault=fault), tempfile.TemporaryDirectory(prefix="existing-executor-") as directory:
+                root = Path(directory)
+                initialized = Executor(root)
+                initialized.close()
+                db = sqlite3.connect(root / "execution.sqlite")
+                db.execute(fault)
+                db.commit()
+                original = db.execute("SELECT key,value FROM identity ORDER BY key").fetchall()
+                schema = db.execute("SELECT name,sql FROM sqlite_master ORDER BY name").fetchall()
+                db.close()
+                with self.assertRaisesRegex(ExecutionFault, "LEDGER_(IDENTITY|SCHEMA)_UNAVAILABLE"):
+                    Executor(root, existing=True)
+                db = sqlite3.connect(root / "execution.sqlite")
+                self.assertEqual(original, db.execute("SELECT key,value FROM identity ORDER BY key").fetchall())
+                self.assertEqual(schema, db.execute("SELECT name,sql FROM sqlite_master ORDER BY name").fetchall())
+                db.close()
+
+
 class ExecutionContract(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="durable-execution-test-")

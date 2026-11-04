@@ -23,7 +23,7 @@ class NativeDataSaverMonitor(context:Context,namespace:String):AutoCloseable {
     private fun request(method:String,payload:JSONObject,expected:JSONObject?=null):JSONObject {
         val begun=JSONObject(if(expected==null)transport.beginJson(method,payload.toString())else transport.beginPolicyCancelJson(expected))
         if(!begun.getBoolean("ok"))throw ExecutionChannelException(begun.getJSONObject("error").getString("code"))
-        val id=begun.getJSONObject("value").getString("operationId");val deadline=SystemClock.elapsedRealtime()+10000
+        val id=begun.getJSONObject("value").getString("operationId");val deadline=SystemClock.elapsedRealtime()+40000
         while(!closed.get()&&!Thread.currentThread().isInterrupted&&SystemClock.elapsedRealtime()<deadline){
             val response=JSONObject(transport.pollJson(id));if(!response.getBoolean("ok"))throw ExecutionChannelException(response.getJSONObject("error").getString("code"))
             val result=response.getJSONObject("value")

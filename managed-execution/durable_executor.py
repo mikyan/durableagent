@@ -144,7 +144,7 @@ class ProcessScope:
 
 
 class Executor:
-    def __init__(self, root, boundary=None, limits=None):
+    def __init__(self, root, boundary=None, limits=None, existing=False):
         # Local fault-injection seam for crash tests; never selectable over the transport.
         self.boundary = boundary or (lambda stage: None)
         # Local construction may narrow budgets for a deployment/test, never raise
@@ -155,38 +155,67 @@ class Executor:
         if any(type(value) is not int or not 0 < value <= DEFAULT_LIMITS[key] for key, value in self.limits.items()) or self.limits["outputChunks"] > self.limits["retainedChunks"]:
             raise ExecutionFault("INVALID_LIMITS")
         self.root = Path(root)
-        self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
-        (self.root / "workspace").mkdir(exist_ok=True, mode=0o700)
-        (self.root / "owners").mkdir(exist_ok=True, mode=0o700)
-        (self.root / "outputs").mkdir(exist_ok=True, mode=0o700)
+        if existing:
+            if self.root.is_symlink() or any(not (self.root / name).is_dir() or (self.root / name).is_symlink() for name in (".", "workspace", "owners", "outputs")) or any(not (self.root / name).is_file() or (self.root / name).is_symlink() for name in ("execution.sqlite", "writes.lock")):
+                raise ExecutionFault("LEDGER_REQUIRED")
+        else:
+            self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
+            (self.root / "workspace").mkdir(exist_ok=True, mode=0o700)
+            (self.root / "owners").mkdir(exist_ok=True, mode=0o700)
+            (self.root / "outputs").mkdir(exist_ok=True, mode=0o700)
         self.lock = threading.RLock()
         self.workers = set()
-        self.write_gate = os.open(self.root / "writes.lock", os.O_RDWR | os.O_CREAT, 0o600)
+        self.write_gate = os.open(self.root / "writes.lock", os.O_RDWR | (0 if existing else os.O_CREAT) | getattr(os, "O_NOFOLLOW", 0), 0o600)
         if fcntl is not None:
             fcntl.flock(self.write_gate, fcntl.LOCK_EX)
+        opened = False
         try:
-            self.db = sqlite3.connect(str(self.root / "execution.sqlite"), timeout=5, check_same_thread=False)
-            self.db.execute("PRAGMA journal_mode=WAL")
+            # mode=rw cannot create a replacement ledger if it disappears between
+            # the existence check and SQLite open. Existing startup never runs DDL.
+            target = (self.root / "execution.sqlite").absolute().as_uri() + "?mode=rw" if existing else str(self.root / "execution.sqlite")
+            try:
+                self.db = sqlite3.connect(target, uri=existing, timeout=5, check_same_thread=False)
+            except sqlite3.Error:
+                raise ExecutionFault("LEDGER_REQUIRED") from None
+            if existing:
+                if self.db.execute("PRAGMA journal_mode").fetchone()[0] != "wal":
+                    raise ExecutionFault("LEDGER_SCHEMA_UNAVAILABLE")
+            else:
+                self.db.execute("PRAGMA journal_mode=WAL")
             self.db.execute("PRAGMA synchronous=FULL")
             version = self.db.execute("PRAGMA user_version").fetchone()[0]
-            if version not in (0, 1):
+            if version not in ((1,) if existing else (0, 1)):
                 self.db.close()
                 raise ExecutionFault("LEDGER_VERSION_UNSUPPORTED")
-            with self.db:
-                self.db.execute("CREATE TABLE IF NOT EXISTS identity (key TEXT PRIMARY KEY, value TEXT NOT NULL) STRICT")
-                self.db.execute("CREATE TABLE IF NOT EXISTS executions (id TEXT PRIMARY KEY, request TEXT NOT NULL, receipt TEXT NOT NULL) STRICT")
-                self.db.execute("CREATE TABLE IF NOT EXISTS prepared (id TEXT PRIMARY KEY, value TEXT NOT NULL) STRICT")
-                self.db.execute("CREATE TABLE IF NOT EXISTS output (id TEXT NOT NULL, sequence INTEGER NOT NULL, stream TEXT NOT NULL, data BLOB NOT NULL, PRIMARY KEY(id, sequence)) STRICT")
-                self.db.execute("CREATE TABLE IF NOT EXISTS cancelled_ids (id TEXT PRIMARY KEY, receipt TEXT NOT NULL) STRICT")
-                self.db.execute("INSERT OR IGNORE INTO identity VALUES ('executorId', ?)", (str(uuid.uuid4()),))
-                self.db.execute("INSERT OR IGNORE INTO identity VALUES ('ledgerEpoch', ?)", (str(uuid.uuid4()),))
-                self.db.execute("PRAGMA user_version=1")
-            self.meta = dict(self.db.execute("SELECT key, value FROM identity"))
+            if not existing:
+                with self.db:
+                    self.db.execute("CREATE TABLE IF NOT EXISTS identity (key TEXT PRIMARY KEY, value TEXT NOT NULL) STRICT")
+                    self.db.execute("CREATE TABLE IF NOT EXISTS executions (id TEXT PRIMARY KEY, request TEXT NOT NULL, receipt TEXT NOT NULL) STRICT")
+                    self.db.execute("CREATE TABLE IF NOT EXISTS prepared (id TEXT PRIMARY KEY, value TEXT NOT NULL) STRICT")
+                    self.db.execute("CREATE TABLE IF NOT EXISTS output (id TEXT NOT NULL, sequence INTEGER NOT NULL, stream TEXT NOT NULL, data BLOB NOT NULL, PRIMARY KEY(id, sequence)) STRICT")
+                    self.db.execute("CREATE TABLE IF NOT EXISTS cancelled_ids (id TEXT PRIMARY KEY, receipt TEXT NOT NULL) STRICT")
+                    self.db.execute("INSERT OR IGNORE INTO identity VALUES ('executorId', ?)", (str(uuid.uuid4()),))
+                    self.db.execute("INSERT OR IGNORE INTO identity VALUES ('ledgerEpoch', ?)", (str(uuid.uuid4()),))
+                    self.db.execute("PRAGMA user_version=1")
+            try:
+                for table, columns in {"identity": "key,value", "executions": "id,request,receipt", "prepared": "id,value", "output": "id,sequence,stream,data", "cancelled_ids": "id,receipt"}.items():
+                    self.db.execute(f"SELECT {columns} FROM {table} LIMIT 0")
+                self.meta = dict(self.db.execute("SELECT key, value FROM identity"))
+            except sqlite3.Error:
+                raise ExecutionFault("LEDGER_SCHEMA_UNAVAILABLE") from None
+            if set(self.meta) != {"executorId", "ledgerEpoch"} or any(type(value) is not str or not 1 <= len(value) <= 128 for value in self.meta.values()):
+                raise ExecutionFault("LEDGER_IDENTITY_UNAVAILABLE")
             self.meta.update(protocol=1, namespace="termux:" + self.meta["executorId"], defaultWorkspace=str((self.root / "workspace").absolute()))
             self.files = FileService(self.meta["namespace"], self.root / "file-capabilities")
+            opened = True
         finally:
             if fcntl is not None:
                 fcntl.flock(self.write_gate, fcntl.LOCK_UN)
+            if not opened:
+                if hasattr(self, "db"):
+                    self.db.close()
+                os.close(self.write_gate)
+                self.write_gate = None
 
     def identity(self):
         return {**self.meta, "localCapabilities": {"version": 1, **_SOURCE_PROOF}}
@@ -657,7 +686,7 @@ class Executor:
 
 def main():
     if len(sys.argv) in (5, 6) and sys.argv[1] == "worker":
-        endpoint = Executor(sys.argv[2], limits=json.loads(sys.argv[5]) if len(sys.argv) == 6 else None)
+        endpoint = Executor(sys.argv[2], limits=json.loads(sys.argv[5]) if len(sys.argv) == 6 else None, existing=True)
         try:
             endpoint.run_worker(sys.argv[3])
         finally:
@@ -672,10 +701,11 @@ def main():
     pairing.add_argument("--client-cert-base64", required=True)
     pairing.add_argument("--nonce", required=True)
     commands.add_parser("serve")
+    commands.add_parser("serve-existing")
     args = parser.parse_args()
     endpoint = None
     try:
-        endpoint = Executor(args.root)
+        endpoint = Executor(args.root, existing=args.mode == "serve-existing")
         if args.mode == "bootstrap":
             value = bootstrap(endpoint.root, args.client_cert_base64, args.nonce, endpoint.identity())
             print(canonical(value), flush=True)

@@ -65,6 +65,52 @@ class ExecutionTransportTest {
             assertFalse(store.complete(nonce,"late"))
         }
     }
+    @Test(timeout=90000) fun actualOrdinaryOperationRestartsPairedExecutorWithoutExplicitConnect() {
+        assumeTrue(InstrumentationRegistry.getArguments().getString("executionProduction")=="true")
+        val identity=ExecutionIdentity(context,"production-v1",allowCreate=false)
+        val before=ExecutionPairingStore(context).use{it.requireClient(identity.certificateSha256())}
+        val original=ExecutionTlsClient(identity,before).request("ping",JSONObject())
+        // Narrow test-only fault injection in the existing Termux UID. Exact argv
+        // selects only our idle fixed listener, never command workers or another app.
+        val script="""
+import json,os,signal,socket,time
+from pathlib import Path
+script='/data/data/com.termux/files/home/.local/share/durableagent-execution/durable_executor.py'
+pids=[]
+for item in Path('/proc').iterdir():
+ if not item.name.isdecimal(): continue
+ try: args=(item/'cmdline').read_bytes().split(bytes([0])); args=[a.decode() for a in args if a]
+ except (OSError,UnicodeError): continue
+ if len(args)==3 and args[1]==script and args[2] in ('serve','serve-existing'): pids.append(int(item.name))
+assert len(pids)==1, 'Expected exactly our one existing listener'
+os.kill(pids[0],signal.SIGKILL)
+for _ in range(100):
+ with socket.socket() as sock:
+  sock.settimeout(.1); absent=sock.connect_ex(('127.0.0.1',47193))!=0
+ if absent: break
+ time.sleep(.02)
+assert absent, 'Owned listener must be absent before ordinary operation'
+print(json.dumps({'killedOwnedListenerPid':pids[0],'listenerAbsentBeforeRequest':True}))
+""".trimIndent()
+        val nonce=UUID.randomUUID().toString()
+        val callback=android.app.PendingIntent.getBroadcast(context,0,android.content.Intent(context,ExecutionBootstrapReceiver::class.java).setAction(ExecutionBootstrapReceiver.ACTION).setData(android.net.Uri.parse("durableagent-execution://bootstrap/$nonce")),android.app.PendingIntent.FLAG_MUTABLE or android.app.PendingIntent.FLAG_ONE_SHOT or android.app.PendingIntent.FLAG_CANCEL_CURRENT)
+        val fault=ExecutionBootstrapStore(context).use{mailbox->mailbox.register(nonce);try{
+            context.startForegroundService(android.content.Intent("com.termux.RUN_COMMAND").apply{component=android.content.ComponentName("com.termux","com.termux.app.RunCommandService");putExtra("com.termux.RUN_COMMAND_PATH","/data/data/com.termux/files/usr/bin/python");putExtra("com.termux.RUN_COMMAND_ARGUMENTS",arrayOf("-c",script));putExtra("com.termux.RUN_COMMAND_WORKDIR","/data/data/com.termux/files/home");putExtra("com.termux.RUN_COMMAND_BACKGROUND",true);putExtra("com.termux.RUN_COMMAND_PENDING_INTENT",callback)})
+            val end=android.os.SystemClock.elapsedRealtime()+15000;var receipt:String?=null
+            while(receipt==null&&android.os.SystemClock.elapsedRealtime()<end){receipt=mailbox.take(nonce);if(receipt==null)Thread.sleep(25)}
+            val response=JSONObject(receipt?:error("Fixed listener fault injection did not return"));assertTrue(response.toString(),response.getBoolean("ok"));JSONObject(response.getString("stdout"))
+        }finally{callback.cancel();mailbox.forget(nonce)}}
+        instrumentation.sendStatus(0,android.os.Bundle().apply{putString("automaticExecutorBefore",JSONObject().put("original",original).put("fault",fault).put("explicitConnectCalled",false).toString())})
+        val after=ExecutionAccess(context).use{access->
+            val begun=JSONObject(access.beginJson("ping","{}"));assertTrue(begun.toString(),begun.getBoolean("ok"));val operation=begun.getJSONObject("value").getString("operationId");val end=android.os.SystemClock.elapsedRealtime()+40000
+            var result:JSONObject?=null
+            while(result==null&&android.os.SystemClock.elapsedRealtime()<end){val value=JSONObject(access.pollJson(operation)).getJSONObject("value");if(!value.getBoolean("pending"))result=value.getJSONObject("result") else Thread.sleep(25)}
+            val response=result?:error("Ordinary ping did not settle");assertTrue("Ordinary request must reopen the paired executor without Connect: $response",response.getBoolean("ok"));response.getJSONObject("value")
+        }
+        assertEquals(before.executorId,after.getString("executorId"));assertEquals(before.ledgerEpoch,after.getString("ledgerEpoch"));assertNotEquals(original.getString("processEpoch"),after.getString("processEpoch"))
+        assertEquals(before,ExecutionPairingStore(context).use{it.requireClient(identity.certificateSha256())})
+        instrumentation.sendStatus(0,android.os.Bundle().apply{putString("automaticExecutorAfter",JSONObject().put("after",after).put("pairingUnchanged",true).put("explicitConnectCalled",false).toString())})
+    }
     @Test fun productionBootstrapUsesRealTermuxAndPersistsVerifiedPeer() {
         assumeTrue(InstrumentationRegistry.getArguments().getString("executionProduction")=="true")
         val connected=ExecutionTermuxGateway(context).connect()
