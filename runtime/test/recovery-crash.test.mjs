@@ -7,6 +7,7 @@ import {tmpdir} from 'node:os';
 import {fileURLToPath} from 'node:url';
 import {Application} from '../validation/application-fixture.mjs';
 import {validationConfiguration} from '../dist/application-validation.js';
+import {deferredConfiguration} from './fixtures/recovery-deferred-provider.mjs';
 const call=async(app,method,payload={})=>{const value=await app.request({protocol:1,connectionId:'recovery-parent',requestId:crypto.randomUUID(),method,payload});if(!value.ok)throw Error(value.error.message);return value.value;};
 const until=async condition=>{const end=Date.now()+5000;while(!await condition()){assert.ok(Date.now()<end,'Recovered SDK input did not settle');await new Promise(resolve=>setTimeout(resolve,10));}};
 const host={conditions:async()=>({network:'available',userUnlocked:true}),subscribe:()=>()=>{},publishWake:async()=>{}};
@@ -39,4 +40,16 @@ test('SDK restart_limit wins before another request while normal close does not 
   app=new Application({path:join(closed,'app.sqlite'),...validationConfiguration({requested:()=>requests++}),recovery:host,bootstrapSettings:()=>({retry:{enabled:false,maxRetries:0},restartLimit:1})});
   await app.start();await until(async()=>(await call(app,'sendStatus',{intentId:'original'})).submission?.status==='done');assert.equal(requests,1);assert.equal((await call(app,'history',{id:'chat'})).items.filter(value=>value.role==='user').length,1);
  }finally{await app?.close();await rm(closed,{recursive:true,force:true});}
+});
+
+test('actual deferred poll crashes retain the original handle and spend one shared SDK retry budget',async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'recovery-poll-crash-'));let starts=0,polls=0,cancels=0,app;
+ try{
+  await child(directory,'poll-crash',5,1);await child(directory,'poll-crash',5,1);
+  assert.equal(await readFile(join(directory,'deferred-starts.txt'),'utf8'),'request\n');assert.equal(await readFile(join(directory,'polls.txt'),'utf8'),'poll\npoll\n');
+  app=new Application({path:join(directory,'app.sqlite'),workspacePath:directory,...deferredConfiguration({started:()=>starts++,polled:()=>polls++,cancelled:()=>cancels++}),recovery:host,bootstrapSettings:()=>({retry:{enabled:true,maxRetries:1,baseDelayMs:10},restartLimit:5,stream:{deferred:true}})});
+  await app.start();await until(async()=>(await call(app,'open',{id:'chat'})).phase==='failed');
+  assert.equal((await call(app,'sendStatus',{intentId:'original'})).submission.reason,'interrupted');assert.equal(starts,0);assert.equal(polls,0);assert.equal(cancels,1);
+  await app.wake();await app.wake();assert.equal(starts,0);assert.equal(polls,0);assert.equal((await call(app,'history',{id:'chat'})).items.filter(value=>value.role==='user').length,1);
+ }finally{await app?.close();await rm(directory,{recursive:true,force:true});}
 });
