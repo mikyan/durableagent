@@ -1,6 +1,6 @@
 """Root-only external observation; never starts an Android application component.
 
-Reads only the dedicated native recovery DB after :agent has exited, with two
+Reads only the dedicated native recovery DB after ApplicationService has exited, with two
 identical copies, absent journal/WAL, SQLite integrity check and read-only access.
 No credential, SDK database, instrumentation, service or broadcast is opened.
 """
@@ -26,6 +26,10 @@ def agent():
  result=call('shell','pidof',package+':agent',check=False)
  assert result.returncode in (0,1), 'ADB observation failed'
  return result.stdout.decode().strip()
+def service_state():
+ dump=text('shell','dumpsys','activity','services',package)
+ registered=bool(re.search(r'ServiceRecord\{[^\n]*dev\.durableagent\.probe/(?:\.ApplicationService|dev\.durableagent\.probe\.ApplicationService)\b',dump))
+ return registered,dump
 def journals_absent():
  command='test ! -e '+database+'-journal && test ! -e '+database+'-wal && test ! -e '+database+'-shm'
  return call('shell','run-as',package,'sh','-c',"'"+command+"'",check=False).returncode==0
@@ -46,15 +50,16 @@ def capture_state():
  assert user_line and re.search(r'\bstopped=(true|false)\b',user_line), 'Actual package stopped state not recognized'
  trust=text('shell','dumpsys','trust')
  users=text('shell','dumpsys','user')
- return {'at':now(),'agentPid':agent(),'packageUserState':user_line,'stopped':'stopped=true' in user_line,**primary_user_conditions(trust,users)},trust,users
+ registered,_=service_state()
+ return {'at':now(),'agentPid':agent(),'applicationServiceRegistered':registered,'packageUserState':user_line,'stopped':'stopped=true' in user_line,**primary_user_conditions(trust,users)},trust,users
 def stable_snapshot(index):
- if agent() or not journals_absent():return None
+ if service_state()[0] or not journals_absent():return None
  first=call('exec-out','run-as',package,'cat',database,check=False)
  if first.returncode!=0:return None
- if not journals_absent() or agent():return None
+ if not journals_absent() or service_state()[0]:return None
  time.sleep(.1)
  second=call('exec-out','run-as',package,'cat',database,check=False)
- if second.returncode!=0 or second.stdout!=first.stdout or not journals_absent() or agent():return None
+ if second.returncode!=0 or second.stdout!=first.stdout or not journals_absent() or service_state()[0]:return None
  assert first.stdout.startswith(b'SQLite format 3\x00'),'Unexpected native recovery database format'
  path=destination/f'recovery-{index}.sqlite';path.write_bytes(first.stdout)
  connection=sqlite3.connect(path.resolve().as_uri()+'?mode=ro&immutable=1',uri=True)
@@ -68,7 +73,7 @@ def stable_snapshot(index):
   if completion:
    assert conversation and conversation.get('phase')=='done','Completion projection must agree with settled product state'
    assert any(identity==completion['identity'] for identity,_ in outbox),'Matching durable native outbox row is required'
-  return {'sha256':hashlib.sha256(first.stdout).hexdigest(),'bytes':len(first.stdout),'file':path.name,'journalAbsent':True,'identicalCopies':2,'integrity':'ok','readOnly':True,'completion':completion,'outbox':[{'identity':identity,'delivery':published} for identity,published in outbox],'conversation':conversation}
+  return {'sha256':hashlib.sha256(first.stdout).hexdigest(),'bytes':len(first.stdout),'file':path.name,'journalAbsent':True,'identicalCopies':2,'integrity':'ok','readOnly':True,'applicationServiceAbsentBeforeAndAfterCopy':True,'completion':completion,'outbox':[{'identity':identity,'delivery':published} for identity,published in outbox],'conversation':conversation}
  finally:connection.close()
 report={'product':product,'run':prepared['run'],'startedAt':now(),'observerStartedTarget':False,'instrumentationUsed':False,'sdkOpened':False,'credentialsResolved':False,'stoppedInterval':args.stopped_interval,'observations':[],'completed':False}
 end=time.monotonic()+args.wait;index=0
@@ -78,11 +83,11 @@ try:
   assert state['userUnlocked'],'External completion observation requires actual primary user RUNNING_UNLOCKED'
   if args.require_locked:assert state['lockedDetected'],'Actual dumpsys trust did not establish locked state; root must inspect device evidence'
   if args.stopped_interval:assert state['stopped'] and not state['agentPid'],'Force-stop interval lost stopped state or acquired an agent process'
-  snapshot=stable_snapshot(index) if not state['agentPid'] else None
+  snapshot=stable_snapshot(index) if not state['applicationServiceRegistered'] else None
   state['nativeSnapshot']=snapshot;report['observations'].append(state)
   if snapshot and snapshot['completion']:
    assert not args.stopped_interval,'Original offline work completed during force-stop interval'
-   after,trust,users=capture_state();assert not after['agentPid'] and after['userUnlocked'],'Owner/user state changed after stable completion copy'
+   after,trust,users=capture_state();assert not after['applicationServiceRegistered'] and after['userUnlocked'],'Service/user state changed after stable completion copy'
    if args.require_locked:assert after['lockedDetected'],'Primary device became unlocked before completion proof ended'
    state['afterSnapshot']=after
    # Capture system records without executing any PendingIntent. A full notification
@@ -91,7 +96,8 @@ try:
    (destination/'pending-intents.txt').write_text(text('shell','dumpsys','activity','intents'),encoding='utf-8')
    (destination/'trust.txt').write_text(trust,encoding='utf-8')
    (destination/'users.txt').write_text(users,encoding='utf-8')
-   report.update(completed=True,observedAt=now(),nativeSnapshot=snapshot,ownerAbsentBeforeAndAfterCopy=True)
+   (destination/'services.txt').write_text(service_state()[1],encoding='utf-8')
+   report.update(completed=True,observedAt=now(),nativeSnapshot=snapshot,applicationServiceAbsentBeforeAndAfterCopy=True,cachedAgentPid=after['agentPid'] or None,processExitRequired=False)
    break
   if time.monotonic()>=end:
    if args.stopped_interval:
