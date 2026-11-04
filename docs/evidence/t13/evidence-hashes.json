@@ -44,8 +44,8 @@
     "sha256": "d6ca887af413fcf7bd25c54f86e55f6b2de2f7edbf926a7f8982ff5fb47220ce"
   },
   "native-ui-configuration-review.md": {
-    "bytes": 4054,
-    "sha256": "7dea01dac75643afc119351c3e7ae147e4df928c48fe485420a2584bff46844a"
+    "bytes": 5414,
+    "sha256": "84bc2834e8029e5c9e0ee5c5530502840ff60b9354406260877a38e5df2b0835"
   },
   "native-ui-lease-apk-inspection.json": {
     "bytes": 33536,
@@ -56,8 +56,8 @@
     "sha256": "a49e216f371c7a4e134c4222ec18f00c2607907ee568aa881bc716ebd54cf8cb"
   },
   "REPRODUCE.md": {
-    "bytes": 6130,
-    "sha256": "7e05dc16f94c609496028709a4df67a9dfb9eb4a0490f09f9e081c2f8659fbe4"
+    "bytes": 6863,
+    "sha256": "5bd19c9dd4405aa796abbbceb354a425697d22686700357e6f79e7b05ea9e748"
   },
   "second-review-artifacts.json": {
     "bytes": 610,
@@ -539,6 +539,26 @@
     "bytes": 273008,
     "sha256": "98018e9c7ba3d68c78256c56ce8dce50a77e333b67c5070240f8545e2b1192af"
   },
+  "t13-react-grant09-device.log": {
+    "bytes": 4005,
+    "sha256": "fa8899e2bc11dc3753989428f5dac089adcf01524aacaa2909b391ff32031d6d"
+  },
+  "t13-react-grant09-network-after.log": {
+    "bytes": 36,
+    "sha256": "5857f970f5b46e421ecc8648963478465da92b6a8e26da496537d6e75e4b47d2"
+  },
+  "t13-react-grant09-network-metered.log": {
+    "bytes": 36,
+    "sha256": "610bf02e9699d95ea85616536300f504c7ad4daec33840ca24df973cc280f5a0"
+  },
+  "t13-react-grant09-next-waiting.png": {
+    "bytes": 293879,
+    "sha256": "cbc0a16987500a3b9097f5c70125dfdc42de78c1fde16083c92aee76e791d1d2"
+  },
+  "t13-react-grant09-waiting.png": {
+    "bytes": 268781,
+    "sha256": "8ba037bd9a31d4c052fbe57563c7a86b8ec0eb1dd8894b824122c88dcd9d1539"
+  },
   "t13-review-final-lint.log": {
     "bytes": 1880,
     "sha256": "078379e44fc8e68c11616eb2bbc11b140eb03dacb265592b028d5fb9cdbc2737"
@@ -578,6 +598,10 @@
   "t13-ui-config-green-build.log": {
     "bytes": 4806,
     "sha256": "a055694bed6b84d4468692574400e16130b25eb1ad5d2a3bc403c37dca4b207f"
+  },
+  "t13-ui-config-green01-device.log": {
+    "bytes": 2100,
+    "sha256": "e10c103be93eb0265671af44f77cb2264746c6cbe1ae031edc797c9effc09150"
   },
   "t13-ui-config-red01-device.log": {
     "bytes": 1958,

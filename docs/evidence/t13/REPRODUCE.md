@@ -53,6 +53,11 @@ Use the exact BB5 test for the separate projection RED/GREEN. Candidate hashes
 and actual outcomes are in [README](README.md); do not run old failed inputs
 again to change their historical result.
 
+Recorded final native result:0AE plus unchanged497E test passed both construction
+and public freeze cases,2/2 in8.932s. Construction1ms, one freeze response200ms,
+unreleased lease failure1048ms. The exact log is
+[t13-ui-config-green01-device.log](t13-ui-config-green01-device.log).
+
 ## Integrated execution and visible UI
 
 Use a retained official Termux installation already paired with the validation
@@ -89,6 +94,13 @@ WebView visual-state/frame barrier, then capture and **inspect the actual PNG**.
 Retain pointer coordinates and trusted DOM event targets. An assertion or a saved
 PNG path alone is not visible proof. The retained08 failure demonstrates why
 visibility without enabled state is inadequate.
+
+Recorded final UI result:0AE+2727 [actual09](t13-react-grant09-device.log),1/1
+in19.688s. One trusted pointerdown/up/click reaches the same enabled first
+identity; the second identity waits and UI stop settles it. Both current-ID
+screenshots were inspected. The next row's top label is clipped by scrolling,
+while its identity, scope and button are visible. The retained network query
+confirms the original `AndroidWifi;none` override was restored.
 
 The actual download cutover requires the separate host HTTP server and externally
 coordinated network transition used in [cutover03](t13-cutover-actual03/events.json).

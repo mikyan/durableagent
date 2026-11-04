@@ -32,10 +32,10 @@ transportC20F4EF5…, setupBCCDFE9D…; [artifact metadata](artifacts.json) and
 | SDK-first | `d01cb7adb6bef4f6ed76ed90966464ab5b11e761fe7c8091ffa8aa1a5f191781` | `6264fd6ef04885f91bff9f0e5211d8c227625c44288e3ce82ca600b3438cd843` |
 | SDK-second / orphan and ACK repair | `0ba39359794213df91781ca29b1e8f547224834688ffa1e83c7ab99731d8d4aa` | `f3730b3d678c734047c6f5d3a5a791ff584b6c8a90e2dc48355918ed9de202a3` |
 | Review fixes / native and SDK/MiMo | `b945aaf6c9700732945de12247f8ebe95d185942c8273fe7eca0dd28b269825c` | `cd232a8d5739da4c3a1a3c0d8a4304d3470d10652499da3258eb722158a463c7` |
-| Second review fixes / host and build only, device pending | `d92fad39bf074264db081089906aac44a7ee566e39367b5b0caa1673930297cc` | `dea2ffac355c6a5ee1fbbf29197eb80509cbf8a7927293d3af37ebb5d92484fa` |
+| Second review fixes / host and build only, superseded before device run | `d92fad39bf074264db081089906aac44a7ee566e39367b5b0caa1673930297cc` | `dea2ffac355c6a5ee1fbbf29197eb80509cbf8a7927293d3af37ebb5d92484fa` |
 | Native UI lease fix / public input and actual React | `c5ddd4356cc07bca0a65302508584124209f6d52d3c9b046a6a1d0d2120222de` | `e51e1a1fc6a98def231e36a713d6b21ed74cd7454aec366f6195c23400690a99` |
 | Explicit native dispatch projection / native, full SDK and real MiMo | `fedf063ccde1492599b24bb8a489f80f5486f7b9a286a66272446e9a79aa0849` | `1819107ddbb005626d31808a9f55bf0d3bb09e1ab69038ad5c1cd422759c5574` |
-| Nonblocking native bridge configuration / build passed, device pending | `0ae3793028954e3934419bd163c2d6da569d5c41f54e4a99e82c6d13b072f907` | `2727f470bb0cd415328ebdb41b68e2806aef6ea88c062047a9d749db1ae6f8bd` |
+| Nonblocking native bridge configuration / same-test native2/2 and actual React09 | `0ae3793028954e3934419bd163c2d6da569d5c41f54e4a99e82c6d13b072f907` | `2727f470bb0cd415328ebdb41b68e2806aef6ea88c062047a9d749db1ae6f8bd` |
 
 The reviewed app matched70 runtime entries and11 UI resources. Both Javet native
 libraries match the pinned i18n6.0.3 AAR and satisfy ZIP/ELF16KiB alignment; all
@@ -250,9 +250,10 @@ entries,11 UI resources,213 source entries and unchanged aligned native/setup
 artifacts. The [latest exact-credential audit](t13-fed-final-credential-audit.json)
 found no credential in50,906,624 bytes of scoped app data or337,088 bytes of
 retained application logs, with positive controls and verified tar completion.
-The native construction-time lock GREEN, corrected enabled-control UI follow-up,
-public-file audit and owner integration handoff remain pending.
-T13 is not marked accepted here.
+Final0AE native construction/freeze and actual React09 now pass as detailed
+below. All eleven criteria have mapped development evidence and no known code
+blocker remains from the reported fixes. Independent merge review and final
+publication audit remain owner gates; T13 is not marked accepted by this report.
 
 The first actual React attempt02 failed before any durable intent; its original
 cause remains unresolved. Diagnostic04 subsequently did create an intent, but
@@ -306,7 +307,23 @@ operation stayed undispatched with no grant or error; it is not reopened or rese
 The follow-up requires the exact operation's button to be enabled, connected,
 visible and hit-testable before capture and one pointer injection, with a visual
 barrier after scrolling and passive trusted pointer/click diagnostics. It does
-not inject a second click or repeat the send. Its actual result remains pending.
+not inject a second click or repeat the send.
+
+[Actual09](t13-react-grant09-device.log) on0AE+2727 passed1/1 in19.688s.
+Its single pointerdown, pointerup and click were all trusted, enabled, and
+targeted `81464076-381d-438d-8d44-b47cf911a488`; that first identity completed.
+The next explicit input produced `ec022c77-9d81-4b73-8d02-8f7e53b29a9c`,
+which waited without inheriting the grant. Global Data Saver stayed enabled,
+three controlled-model requests were observed, and explicit UI stop settled
+only the next waiting operation. The root and implementer inspected the
+[first waiting PNG](t13-react-grant09-waiting.png) and
+[next waiting PNG](t13-react-grant09-next-waiting.png): both show the matching
+current identity, fixed scope and grant button; the next also shows the earlier
+completed row below. The next row's top label is clipped by the deliberate
+scroll, so the image is not claimed to show that label. The recorded DOM and
+native policy establish its waiting state. The
+[final network query](t13-react-grant09-network-after.log) contains two
+`AndroidWifi;none` rows. Earlier failed runs and stale07 capture remain unchanged.
 The new [APK inspection](native-ui-lease-apk-inspection.json) verifies70 runtime
 entries,11 UI resources, pinned native libraries/16KiB alignment and unchanged
 three-module setup; it does not assert16KiB execution.
@@ -323,7 +340,11 @@ per-instance setting volatile and assigns it without the global monitor. The
 default zero, validation range, one-second UI action wait and once-sampled
 deadline are unchanged. This proves only bridge construction, not full Activity
 recreation or all lifecycle latency. A [scoped source review](native-ui-configuration-review.md)
-found no source blocker; exact same-test GREEN is pending.
+found no source blocker. [Exact same497E test GREEN](t13-ui-config-green01-device.log)
+on0AE passed together with the public freeze regression,2/2 in8.932s. Bridge
+construction took1ms while the old reader still waited. One freeze request and
+one response completed in200ms after lease release; an unreleased lease failed
+visibly in1048ms. No send intent, SDK owner or model request was created.
 
 [0AE build](t13-ui-config-green-build.log) passed dual APK and lint with0 errors
 and12 existing warnings. Its [371-source frozen manifest](native-ui-config-source-hashes.json)
@@ -334,7 +355,8 @@ MiMo results are not relabelled as runs of0AE. None of these source reviews is a
 whole-ticket acceptance claim. Root's independent
 [0AE APK inspection](native-ui-config-apk-inspection.json) matches70 runtime,
 11 UI and213 application source entries, pinned aligned native libraries and the
-unchanged three-module executor/setup. Device GREEN and UI09 remain pending.
+unchanged three-module executor/setup. These two native tests and React09 are
+the direct0AE device scope; FEDF's SDK/MiMo results retain their own scope.
 
 ## T13 criterion mapping
 
@@ -347,12 +369,12 @@ These are separate development evidence slices, not a single final-device matrix
 | 2. Models and controlled local work continue | Actual metered local files/fixed Bash with zero grants; FEDF SDK local work while Provider write waits; real MiMo flows | Model requests are exempt only through the configured model module |
 | 3. Unknown commands remain unknown | Native capability-proof tests and actual unknown Bash waiting; temporary real executor5/5 verifies fixed helper bytes despite path mutation | Authenticated controlled capability, not arbitrary-code or hostile-Termux isolation |
 | 4. Final arguments, environment, nested calls and safe replay | Real SDK direct/nested beforeTool+prepare mutation tests; native final fence; same prepared execution restored after SDK host death; fixed Provider snapshot reopen | Host replay tests use controlled native boundaries; actual execution evidence is reported separately |
-| 5. Single-operation visible grant | Actual React07 pointer grant completes first identity; second explicit input waits; global setting remains enabled |07 next-row PNG has stale pixels;08 targeted disabled control; enabled-control follow-up pending |
+| 5. Single-operation visible grant | Actual React09 one trusted pointer/click completes first identity; second explicit input waits; global setting remains enabled; both current-ID screenshots inspected |07 stale next PNG and08 disabled-control failure retained;09 next top label clipped, with identity/scope/button visible |
 | 6. Stable grant identity and invalidation | Native period/reopen6/6, changed final digest refusal, stale grant RED→GREEN, real MiMo next identity waits then user stop invalidates it | Grant covers one immutable operation and one network period |
 | 7. Native cutover while JS is busy | Actual download03 confirms managed child cancellation368ms after restricted observation; one GET/256000 server-written bytes; local and model flows separately pass | One measured emulator transition, not zero traffic or latency guarantee |
 | 8. Distinct stop reason and no blind replay | Actual `network_policy` cancellation retains one tool/execution after return to unmetered; user stop then settles it; explicit undispatched evidence controls same-ID recovery | Interrupted or uncertain external effects are not automatically restarted |
 | 9. Repeated facts, restart, stop fence and policy loss | Native period/current-fact tests; public setting fresh owner; host pending-tool recovery; native missing-policy4/4 and final fence;65-row sweep fairness | No claim of OEM lifecycle coverage; storage loss is conservative |
-| 10. Specific visible reasons | React policy tests and actual grant07 flow; separate original-verification observation UI regression | No general approval queue; uncertain write stays uncertain after matching read |
+| 10. Specific visible reasons | React policy tests and actual grant09 flow; separate original-verification observation UI regression | No general approval queue; uncertain write stays uncertain after matching read |
 | 11. Required validation matrix and scope | Real model, actual local files, actual download/child cutover, unknown Bash, real SDK safe replay, native fences, actual Provider read/write and independent original read | Controlled-tool policy on API36/4KiB emulator; T17 physical/OEM conditions remain |
 
 [Evidence hashes](evidence-hashes.json) cover copied logs and safe JSON. APKs,

@@ -27,3 +27,25 @@ The README's eleven-row mapping correctly states separate development slices and
 `visible`/`touch` currently require viewport visibility and DOM hit-testing but do not require the grant button to be enabled. The production button is intentionally disabled while its exact prepared final digest is unavailable, while another policy action is pending, or while policy state is unconfirmed. A native operation can already be waiting while the UI has not received its prepared digest; such a visible disabled button must not be treated as an actionable grant.
 
 The parent/root reports UI08's actual waiting screenshot shows that disabled button. This is stronger evidence than the speculative coordinate/timing explanations. Requiring the same operation's button to become enabled before the one physical touch, and recording passive trusted pointer/click events, is an appropriate test correction. It must not retry the grant, reopen the failed input, or convert the failed UI08 run into a pass. This reviewer has not yet inspected the PNG or the corrected test; those remain separate pending observations.
+
+## Implementer evidence addendum after root's final runs
+
+Added2026-11-04 by the implementer; the independent inspection above is retained
+as written and is not represented as a second reviewer-run device test.
+
+Root's [same497E test GREEN](t13-ui-config-green01-device.log) on frozen0AE
+passes both native cases,2/2 in8.932s. New bridge construction took1ms while
+the older read still waited; the same public freeze completed once in200ms.
+An unreleased lease produced the bounded visible failure in1048ms. No SDK
+owner, model request or send intent was created. This closes the reported
+construction regression within the stated bridge-only scope.
+
+Root's [actual React09](t13-react-grant09-device.log) on0AE+2727 passed1/1
+in19.688s after the enabled exact-identity fixture correction. It recorded one
+trusted pointerdown/up/click to the same enabled first operation, that operation's
+completion, a new waiting identity with no inherited grant, unchanged global
+setting, and explicit UI stop. Root and implementer inspected both copied PNGs:
+current identities/scope/buttons are visible; the next top label is clipped by
+the intentional scroll. Earlier08 failed evidence remains retained. The final
+README maps all eleven criteria and keeps separate candidate, emulator, model
+and OEM limits. Independent whole-ticket merge review remains a separate gate.
