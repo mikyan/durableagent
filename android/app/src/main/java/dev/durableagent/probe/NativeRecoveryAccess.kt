@@ -33,7 +33,14 @@ class NativeRecoveryAccess(private val service:Service,private val mode:String,p
         val projection=store.readProjection().put("restoring",true)
         NativeRecoveryNotifications.running(service,mode,run,projection)?.let{publishForeground(it)}
     }
-    private fun publishForeground(notification:android.app.Notification){try{service.startForeground(NativeRecoveryNotifications.RUNNING_ID,notification,ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);foreground=true;startBlocked=false}catch(_:RuntimeException){startBlocked=true}}
+    private fun publishForeground(notification:android.app.Notification){try{
+        service.startForeground(NativeRecoveryNotifications.RUNNING_ID,notification,ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        // startForeground alone does not turn a job-only binding into a started
+        // Service. Retain the owner only after Android has accepted foreground
+        // execution; startService is still subject to platform eligibility.
+        if(!foreground)service.startService(Intent(service,ApplicationService::class.java).putExtra("validationMode",mode).putExtra("validationRun",run))
+        foreground=true;startBlocked=false
+    }catch(_:RuntimeException){if(!foreground)service.stopForeground(Service.STOP_FOREGROUND_REMOVE);startBlocked=true}}
     fun conditions():JSONObject {
         val value=network.current()
         return JSONObject().put("userUnlocked",service.getSystemService(UserManager::class.java).isUserUnlocked)
