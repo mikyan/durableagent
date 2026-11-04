@@ -1,0 +1,542 @@
+--------- beginning of system
+11-04 04:33:11.444   670   670 D BackupManagerService: Default backup user id = 0
+11-04 04:33:22.727   670   973 I BackupManagerService: Starting service for user: 0
+11-04 04:33:22.730   670   973 D BackupManagerService: Starting with transport com.google.android.gms/.backup.BackupTransportService for user 0
+11-04 04:33:22.796   670   973 D BackupManagerService: Started thread backup-0 for user 0
+11-04 04:33:23.425   670   973 D BackupManagerService: [UserID:0] No ancestral data
+11-04 04:33:24.003   670   973 I BackupManagerService: isBackupEnabled() => false due to absent settings file
+11-04 04:33:24.003   670   973 D BackupManagerService: user:0 readBackupEnableState enabled:false
+11-04 04:33:24.003   670   973 I BackupManagerService: [UserID:0] Backup enabled => false
+11-04 04:33:32.121   670  1695 D BackupManagerService: [UserID:0] Transport com.android.localtransport/.LocalTransport registered 9126ms after first request (delay = 3000ms)
+11-04 04:33:35.137   670  1695 D BackupManagerService: [UserID:0] Transport com.google.android.gms/.backup.BackupTransportService registered 12141ms after first request (delay = 3000ms)
+11-04 04:34:02.592   670  1695 D BackupManagerService: [UserID:0] Transport com.google.android.gms/.backup.migrate.service.D2dTransport registered 39596ms after first request (delay = 3000ms)
+--------- beginning of main
+11-04 04:34:14.129  2637  3596 D Backup  : [BackupGoogleSettingsIO] Back up or restore entry point is not enabled
+11-04 04:34:21.357  2637  3602 D Backup  : [BackupGoogleSettingsIO] Back up or restore entry point is not enabled
+11-04 04:34:38.456   670   738 D BackupManagerService: [UserID:0] restoreAtInstall pkg=dev.durableagent.retention token=1 restoreSet=0
+11-04 04:34:38.464   670   738 D BackupManagerService: [UserID:0] Finishing install immediately
+11-04 04:34:39.336   670   738 D BackupManagerService: [UserID:0] restoreAtInstall pkg=dev.durableagent.retention.test token=2 restoreSet=0
+11-04 04:34:39.337   670   738 D BackupManagerService: [UserID:0] Finishing install immediately
+11-04 04:34:40.684   670   738 D BackupManagerService: [UserID:0] restoreAtInstall pkg=dev.durableagent.backupfixture.control token=3 restoreSet=0
+11-04 04:34:40.684   670   738 D BackupManagerService: [UserID:0] Finishing install immediately
+11-04 04:34:41.664   670   738 D BackupManagerService: [UserID:0] restoreAtInstall pkg=dev.durableagent.backupfixture.control.test token=4 restoreSet=0
+11-04 04:34:41.665   670   738 D BackupManagerService: [UserID:0] Finishing install immediately
+11-04 04:34:42.252   670   738 D BackupManagerService: [UserID:0] restoreAtInstall pkg=dev.durableagent.backupfixture.rules token=5 restoreSet=0
+11-04 04:34:42.253   670   738 D BackupManagerService: [UserID:0] Finishing install immediately
+11-04 04:34:43.329   670   738 D BackupManagerService: [UserID:0] restoreAtInstall pkg=dev.durableagent.backupfixture.rules.test token=6 restoreSet=0
+11-04 04:34:43.333   670   738 D BackupManagerService: [UserID:0] Finishing install immediately
+11-04 04:34:44.630  1470  4074 V Backup  : [MigrateUtil] Clearing migrate temp dir: /data/user/0/com.google.android.gms/files/migrate_dir
+11-04 04:34:44.702  1470  4074 D Backup  : [MigrateCleaner] D2D transport was not selected, not selecting cloud transport.
+11-04 04:34:44.709  1470  4072 V Backup  : [G1ModuleInitIntentOperation] BbG1 notifications disabled by flag
+11-04 04:34:44.724  1470  4072 V Backup  : [SettingsModuleInit] onInitRuntimeState
+11-04 04:34:44.742  1470  4072 V Backup  : [NoBackupNotification] Disabled, not scheduling
+11-04 04:34:44.753  1470  4071 V Backup  : [AccountChangedIO] Received intent, action = android.intent.action.BOOT_COMPLETED
+11-04 04:34:44.779  1470  4072 V Backup  : [ComponentEnabler] Enabling components
+11-04 04:34:44.844  1470  4072 I Backup  : [TargetEnabler] Setting target components to enabled = false
+11-04 04:34:44.906  1470  4072 I Backup  : [TargetEnabler] Enabling D2dMigrateHelperService on non-Pixel on P+
+11-04 04:34:44.967  1470  4072 I Backup  : [SourceEnabler] Setting source components to enabled = true
+11-04 04:34:44.992  1470  4072 V Backup  : [MigrateUtil] Using O+ select transport api
+11-04 04:34:45.157  1470  4072 W Backup  : [ComponentEnablerUtil] Unable to set component 'com.google.android.gms.backup.component.RestoreSessionV0Service' to enabled=true
+11-04 04:34:45.284  1470  4072 W Backup  : [ComponentEnablerUtil] Unable to set component 'com.google.android.gms.backup.component.CloudRestoreFlowActivity' to enabled=true
+11-04 04:34:45.307  1470  4072 W Backup  : [ComponentEnablerUtil] Unable to set component 'com.google.android.gms.backup.component.D2dMigrateFlowActivity' to enabled=false
+11-04 04:34:45.320  1470  4072 V Backup  : [ComponentEnabler] Scheduling tasks.
+11-04 04:34:45.322  1470  4072 V Backup  : [GmsBackupScheduler] Disabled, not scheduling.
+11-04 04:34:45.500  1470  4072 V Backup  : [MmsBackupScheduler] Scheduled task to run in 1440 minutes, while idle: true, require charging: true, require wifi: true
+11-04 04:34:45.514  1470  4072 V Backup  : [CustomBackupNewScheduleLog] Task is scheduled to run
+11-04 04:34:45.780  1470  4072 V Backup  : [DeviceStateSnapshotLoggingTask] Task is scheduled to run
+11-04 04:34:45.783  1470  4072 V Backup  : [RequireWifiAndChargingBackupTask] Scheduled
+11-04 04:34:45.783  1470  4072 V Backup  : [RequireIdleWifiAndChargingBackupTask] Won't schedule, disabled
+11-04 04:34:45.785  1470  4071 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 04:34:45.790  1470  4072 D Backup  : [KeyValueSchedulerFrequencySetter] Target value already set: key_value_backup_interval_milliseconds=43200000
+11-04 04:34:45.790  1470  4072 V Backup  : [PhotosBackupMissingPermissionNotificationTask] Not scheduling task, flag is disabled or device is wearable.
+11-04 04:34:45.804  1470  2705 V Backup  : [PostD2dAppTransferInitIntentOperation] Init PostD2dAppTransfer feature on action android.intent.action.BOOT_COMPLETED
+11-04 04:34:46.416  1339  4098 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 04:34:46.447  1470  4071 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 04:34:46.600  1470  4071 V Backup  : [AccountChangedIO] currentDestinationString: null
+11-04 04:34:46.618  1339  4098 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 04:35:10.448  1470  4610 V Backup  : [CustomDownloadSchedulingIO] Received Action: com.google.android.gms.phenotype.com.google.android.gms.backup.COMMITTED
+11-04 04:35:10.448  1470  4610 V Backup  : [CustomDownloadSchedulingIO] customBackupDownloadEnableSuwTriggerWithGmsUpdateCheck flag on
+11-04 04:35:10.448  1470  4606 V Backup  : [GmsBackupSchedulerIO] Phenotype updated, attempting to schedule backup tasks
+11-04 04:35:10.449  1470  4532 V Backup  : [G1ModuleInitIntentOperation] Flags updated
+11-04 04:35:10.449  1470  4532 V Backup  : [G1ModuleInitIntentOperation] Running restore operation is disabled by flag
+11-04 04:35:10.450  1470  4606 V Backup  : [RequireWifiAndChargingBackupTask] Scheduled
+11-04 04:35:10.450  1470  4606 V Backup  : [RequireIdleWifiAndChargingBackupTask] Scheduled
+11-04 04:35:10.450  1470  4606 D Backup  : [KeyValueSchedulerFrequencySetter] Target value already set: key_value_backup_interval_milliseconds=43200000
+11-04 04:36:04.433  2637  4860 D Backup  : [BackupGoogleSettingsIO] Back up or restore entry point is not enabled
+11-04 04:36:04.664  2637  4843 D Backup  : [BackupGoogleSettingsIO] Back up or restore entry point is not enabled
+11-04 04:37:43.378   670   738 D BackupManagerService: [UserID:0] restoreAtInstall pkg=dev.durableagent.probe token=8 restoreSet=0
+11-04 04:37:43.380   670   738 D BackupManagerService: [UserID:0] Finishing install immediately
+11-04 04:37:44.181   670   738 D BackupManagerService: [UserID:0] restoreAtInstall pkg=dev.durableagent.probe.test token=9 restoreSet=0
+11-04 04:37:44.181   670   738 D BackupManagerService: [UserID:0] Finishing install immediately
+11-04 04:39:23.389   670   738 D BackupManagerService: [UserID:0] restoreAtInstall pkg=dev.durableagent.inputsource token=a restoreSet=0
+11-04 04:39:23.389   670   738 D BackupManagerService: [UserID:0] Finishing install immediately
+11-04 04:42:09.072   670  1748 D BackupManagerService: [UserID:0] selectBackupTransport(transport = com.android.localtransport/.LocalTransport): previous transport = com.google.android.gms/.backup.BackupTransportService
+11-04 04:42:10.393   670  1827 I BackupManagerService: [UserID:0] Disabling backup scheduling
+11-04 04:42:11.480   670  1827 I BackupManagerService: [UserID:0] Backup enabled => true
+11-04 04:42:11.480   670  1827 D BackupManagerService: user:0 writeBackupEnableState enable:true
+11-04 04:42:12.669   670  1695 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 04:42:12.674   670  5942 D PFTBT   : backupmanager pftbt token=1c8a3002
+11-04 04:42:12.771   670  5943 I PFTBT   : Initiating full-data transport backup of dev.durableagent.backupfixture.control token: 478818306
+11-04 04:42:12.778   670  5944 D BackupManagerService: [UserID:0] awaiting agent for dev.durableagent.backupfixture.control
+11-04 04:42:12.911   670  1985 D BackupManagerService: [UserID:0] agentConnected pkg=dev.durableagent.backupfixture.control agent=android.os.BinderProxy@b39da0b
+11-04 04:42:12.932   670  5959 D BackupManagerService: Calling doFullBackup() on dev.durableagent.backupfixture.control
+11-04 04:42:12.952   670  5944 I BackupManagerService: [UserID:0] Killing agent host process
+11-04 04:42:12.954   670  5943 I PFTBT   : Transport suggested backoff=0
+11-04 04:42:12.965   670  5943 I PFTBT   : Unbinding agent in dev.durableagent.backupfixture.control
+11-04 04:42:12.965   670  5943 I PFTBT   : Initiating full-data transport backup of dev.durableagent.backupfixture.rules token: 478818306
+11-04 04:42:12.968   670  5960 D BackupManagerService: [UserID:0] awaiting agent for dev.durableagent.backupfixture.rules
+11-04 04:42:13.130   670  1989 D BackupManagerService: [UserID:0] agentConnected pkg=dev.durableagent.backupfixture.rules agent=android.os.BinderProxy@1914f73
+11-04 04:42:13.146   670  5943 W PFTBT   : Error -1002 backing up dev.durableagent.backupfixture.rules
+11-04 04:42:13.146   670  5943 I PFTBT   : Transport suggested backoff=0
+11-04 04:42:13.146   670  5943 I PFTBT   : Transport rejected backup of dev.durableagent.backupfixture.rules, skipping
+11-04 04:42:13.148   670  5943 I BackupManagerService: [UserID:0] Killing agent host process
+11-04 04:42:13.148   670  5943 I PFTBT   : Unbinding agent in dev.durableagent.backupfixture.rules
+11-04 04:42:13.148   670  5943 I PFTBT   : Full backup completed with status: 0
+11-04 04:42:13.154   670  5943 I PFTBT   : Full data backup pass finished.
+11-04 04:42:13.155   670  5943 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 04:42:14.192   670  1985 D BackupManagerService: [UserID:0] beginRestoreSession: pkg=null transport=null
+11-04 04:42:14.201   670  1985 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 04:42:14.218   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 04:42:14.218   670  1695 D BackupManagerService: [UserID:0] Clearing restore session and halting timeout
+11-04 04:47:13.234   670  1695 D BackupManagerService: Timeout for token=54840405
+11-04 04:54:23.542   670  1990 D BackupManagerService: [UserID:0] beginRestoreSession: pkg=null transport=null
+11-04 04:54:23.552   670   694 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 04:54:23.558   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 04:54:23.559   670   694 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 04:54:23.560   670  1695 D BackupManagerService: MSG_RUN_RESTORE observer=android.app.backup.IRestoreObserver$Stub$Proxy@454c560
+11-04 04:54:23.562   670  1695 D BackupManagerService: Starting restore.
+11-04 04:54:23.575   670  1695 D BackupManagerService: initiateOneRestore packageName=@pm@
+11-04 04:54:23.728   670  1695 I BackupManagerService: Next restore package: RestoreDescription{dev.durableagent.backupfixture.control : STREAM}
+11-04 04:54:23.732   670  6983 D BackupManagerService: signaturesMatch(): stored=[android.content.pm.Signature@75f72162] device=[android.content.pm.Signature@75f72162]
+11-04 04:54:23.732   670  6983 I BackupManagerService: Sig + version match; taking data
+11-04 04:54:23.733   670  6983 D BackupManagerService: Clearing app data preparatory to full restore
+11-04 04:54:23.762   670  6983 D BackupManagerService: [UserID:0] awaiting agent for dev.durableagent.backupfixture.control
+11-04 04:54:23.920   670  1763 D BackupManagerService: [UserID:0] agentConnected pkg=dev.durableagent.backupfixture.control agent=android.os.BinderProxy@26470dc
+11-04 04:54:23.993   670  1695 D BackupManagerService: restoreFinished packageName=dev.durableagent.backupfixture.control
+11-04 04:54:24.003   670  1695 I BackupManagerService: [UserID:0] Killing agent host process
+11-04 04:54:24.019   670  1695 D BackupManagerService: No more packages; finishing restore
+11-04 04:54:24.052   670  1695 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 04:54:24.434   670  1695 I BackupManagerService: Restore complete.
+11-04 04:54:24.437   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 04:54:24.437   670  1695 D BackupManagerService: [UserID:0] Clearing restore session and halting timeout
+11-04 04:58:32.441   670  1946 I BackupManagerService: [UserID:0] Backup enabled => false
+11-04 04:58:32.441   670  1946 D BackupManagerService: user:0 writeBackupEnableState enable:false
+11-04 04:58:32.466   670   670 D BackupManagerService: Running a device init; 3 pending
+11-04 04:58:32.466   670   670 D BackupManagerService: [UserID:0] initializeTransport(): [com.android.localtransport/.LocalTransport, com.google.android.gms/.backup.migrate.service.D2dTransport, com.google.android.gms/.backup.BackupTransportService]
+11-04 04:58:32.466   670   670 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 04:58:32.467   670  1695 I BackupManagerService: Initializing (wiping) backup transport storage: com.android.localtransport/.LocalTransport
+11-04 04:58:32.540   670  1695 I BackupManagerService: Device init successful
+11-04 04:58:32.554   670  1695 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 04:58:32.684   670  1695 I BackupManagerService: Initializing (wiping) backup transport storage: com.google.android.gms/.backup.migrate.service.D2dTransport
+11-04 04:58:32.761  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 04:58:32.764  1470  2725 D Backup  : [D2dTransport] wiping all data
+11-04 04:58:32.787  1470  2725 I Backup  : [TestingFlowsUtils] B&R Test flows are disabled. Cleaning up all the test data and related URI permissions.
+11-04 04:58:32.789  1470  2725 I Backup  : [TestingFlowsUtils] Resetting the testing flows state.
+11-04 04:58:32.833  1470  2725 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/restore_token_file
+11-04 04:58:32.834  1470  2725 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/pm_backup
+11-04 04:58:32.835  1470  2725 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/app_backup
+11-04 04:58:32.835  1470  2725 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/auth_backup
+11-04 04:58:32.835  1470  2725 I Backup  : [TestingFlowsUtils] Cancelling reset task.
+11-04 04:58:32.836  1470  2725 I Backup  : [TestingFlowsUtils] Updating reset task scheduled state in ProtoDataStore: false
+11-04 04:58:32.855  1470  2725 D Backup  : [D2dTransport] Moved from state 0 to 3
+11-04 04:58:32.856  1470  2725 D Backup  : [D2dTransport] finishBackup from: 3, package: null
+11-04 04:58:32.861  1470  2725 D Backup  : [D2dTransport] Moved from state 3 to 0
+11-04 04:58:32.862  1470  2725 D Backup  : [D2dTransport] backup finished
+11-04 04:58:32.862  1470  2725 D Backup  : [D2dTransport] finishBackup from: 0; initializeDevice has cleared data already.
+11-04 04:58:32.863   670  1695 I BackupManagerService: Device init successful
+11-04 04:58:32.878   670  1695 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 04:58:33.020   670  1695 I BackupManagerService: Initializing (wiping) backup transport storage: com.google.android.gms/.backup.BackupTransportService
+11-04 04:58:33.052  1470  1470 D Backup  : [BackupScheduler] Setting backup scheduler enabled=true due to desired state 1
+11-04 04:58:33.053  1470  1470 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 04:58:33.053  1470  2728 V Backup  : [GmsBackupTransport] *** initializing device ***
+11-04 04:58:33.056  1470  2728 I Backup  : [BackupRecords] Removing all backup records.
+11-04 04:58:33.058  1470  1470 V Backup  : [GmsBackupTransport] currentDestinationString: null
+11-04 04:58:33.063  1470  2728 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 04:58:33.073  1470  5686 V Backup  : [BackupRecords] Successfully removed all backup records.
+11-04 04:58:33.074  1470  2728 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 04:58:33.078  1470  2728 V Backup  : [GmsBackupTransport] No backup account for initializeDevice, returning OK
+11-04 04:58:33.089  1470  7471 V Backup  : [NoBackupNotificationIO] Intent: Intent { act=com.google.android.gms.backup.ACTION_TRANSPORT_INITIALIZE_DEVICE flg=0x10 xflg=0x4 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.GmsIntentOperationService (has extras) }
+11-04 04:58:33.097  1339  7469 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 04:58:33.101  1470  2728 D Backup  : [GmsBackupTransport] Updating lastKvBackupPassTimeMs to 1793768313088
+11-04 04:58:33.106  1470  2728 I Backup  : [GmsBackupTransport] Backup finished for null
+11-04 04:58:33.110  1470  7471 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 04:58:33.111  1339  7469 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 04:58:33.112   670  1695 I BackupManagerService: Device init successful
+11-04 04:58:33.113  1339  7469 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 04:58:33.118  1339  7469 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 04:58:33.119  1470  7471 V Backup  : [NoBackupNotification] Disabled, not rescheduling
+11-04 04:58:33.134   670  1695 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 04:58:33.275   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 04:58:33.574  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 04:58:33.581  1470  2725 W Backup  : [D2dTransport] Current restore set requested.
+11-04 04:58:33.583   670  1990 D BackupManagerService: [UserID:0] selectBackupTransport(transport = com.google.android.gms/.backup.migrate.service.D2dTransport): previous transport = com.android.localtransport/.LocalTransport
+11-04 04:58:34.686   670  1993 D BackupManagerService: [UserID:0] initializeTransport(): [com.google.android.gms/.backup.migrate.service.D2dTransport]
+11-04 04:58:34.688   670  1993 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 04:58:34.689   670  1695 I BackupManagerService: Initializing (wiping) backup transport storage: com.google.android.gms/.backup.migrate.service.D2dTransport
+11-04 04:58:34.695  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 04:58:34.698  1470  3977 D Backup  : [D2dTransport] wiping all data
+11-04 04:58:34.702  1470  3977 I Backup  : [TestingFlowsUtils] B&R Test flows are disabled. Cleaning up all the test data and related URI permissions.
+11-04 04:58:34.702  1470  3977 I Backup  : [TestingFlowsUtils] Resetting the testing flows state.
+11-04 04:58:34.703  1470  3977 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/restore_token_file
+11-04 04:58:34.703  1470  3977 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/pm_backup
+11-04 04:58:34.703  1470  3977 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/app_backup
+11-04 04:58:34.703  1470  3977 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/auth_backup
+11-04 04:58:34.704  1470  3977 I Backup  : [TestingFlowsUtils] Cancelling reset task.
+11-04 04:58:34.704  1470  3977 I Backup  : [TestingFlowsUtils] Updating reset task scheduled state in ProtoDataStore: false
+11-04 04:58:34.707  1470  3977 D Backup  : [D2dTransport] Moved from state 0 to 3
+11-04 04:58:34.707  1470  3977 D Backup  : [D2dTransport] finishBackup from: 3, package: null
+11-04 04:58:34.709  1470  3977 D Backup  : [D2dTransport] Moved from state 3 to 0
+11-04 04:58:34.710  1470  3977 D Backup  : [D2dTransport] backup finished
+11-04 04:58:34.710  1470  3977 D Backup  : [D2dTransport] finishBackup from: 0; initializeDevice has cleared data already.
+11-04 04:58:34.711   670  1695 I BackupManagerService: Device init successful
+11-04 04:58:34.736   670  1695 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 04:58:34.920   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 04:58:35.945   670  1993 I BackupManagerService: [UserID:0] Backup enabled => true
+11-04 04:58:35.945   670  1993 D BackupManagerService: user:0 writeBackupEnableState enable:true
+11-04 04:58:37.019  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 04:58:37.023   670  1695 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 04:58:37.024   670  7523 D PFTBT   : backupmanager pftbt token=19cea409
+11-04 04:58:37.053   670  7523 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 04:58:37.218  1470  3977 D Backup  : [D2dTransport] wiping all data
+11-04 04:58:37.218  1470  3977 I Backup  : [TestingFlowsUtils] B&R Test flows are disabled. Cleaning up all the test data and related URI permissions.
+11-04 04:58:37.218  1470  3977 I Backup  : [TestingFlowsUtils] Resetting the testing flows state.
+11-04 04:58:37.219  1470  3977 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/restore_token_file
+11-04 04:58:37.219  1470  3977 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/pm_backup
+11-04 04:58:37.220  1470  3977 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/app_backup
+11-04 04:58:37.220  1470  3977 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/auth_backup
+11-04 04:58:37.221  1470  3977 I Backup  : [TestingFlowsUtils] Cancelling reset task.
+11-04 04:58:37.221  1470  3977 I Backup  : [TestingFlowsUtils] Updating reset task scheduled state in ProtoDataStore: false
+11-04 04:58:37.223  1470  3977 D Backup  : [D2dTransport] Moved from state 0 to 3
+11-04 04:58:37.223  1470  3977 D Backup  : [D2dTransport] finishBackup from: 3, package: null
+11-04 04:58:37.224  1470  3977 D Backup  : [D2dTransport] Moved from state 3 to 0
+11-04 04:58:37.234  1470  3977 W Backup  : [D2dTransport] Current restore set requested.
+11-04 04:58:37.234  1470  3977 D Backup  : [D2dTransport] Moved from state 0 to 1
+11-04 04:58:37.235  1470  3977 D Backup  : [D2dTransport] backup finished
+11-04 04:58:37.235  1470  3977 D Backup  : [D2dTransport] finishBackup from: 1, package: @pm@
+11-04 04:58:37.236  1470  3977 D Backup  : [D2dTransport] Moved from state 1 to 0
+11-04 04:58:37.239  1470  3977 W Backup  : [D2dTransport] Current restore set requested.
+11-04 04:58:37.260   670  7523 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 04:58:37.438   670  7524 I PFTBT   : Initiating full-data transport backup of dev.durableagent.backupfixture.control token: 432972809
+11-04 04:58:37.439  1470  3977 D Backup  : [D2dTransport] Moved from state 0 to 1
+11-04 04:58:37.439  1470  3977 I Backup  : [D2dTransport] performFullBackup : PackageInfo{18bda8b dev.durableagent.backupfixture.control}
+11-04 04:58:37.443   670  7525 D BackupManagerService: [UserID:0] awaiting agent for dev.durableagent.backupfixture.control
+11-04 04:58:37.609   670  1990 D BackupManagerService: [UserID:0] agentConnected pkg=dev.durableagent.backupfixture.control agent=android.os.BinderProxy@11d825a
+11-04 04:58:37.641   670  7539 D BackupManagerService: Calling doFullBackup() on dev.durableagent.backupfixture.control
+11-04 04:58:37.667   670  7525 I BackupManagerService: [UserID:0] Killing agent host process
+11-04 04:58:37.668  1470  3977 D Backup  : [D2dTransport] backup finished
+11-04 04:58:37.669  1470  3977 D Backup  : [D2dTransport] finishBackup from: 1, package: dev.durableagent.backupfixture.control
+11-04 04:58:37.669  1470  3977 D Backup  : [D2dTransport] Moved from state 1 to 0
+11-04 04:58:37.670   670  7524 I PFTBT   : Transport suggested backoff=0
+11-04 04:58:37.683   670  7524 I PFTBT   : Unbinding agent in dev.durableagent.backupfixture.control
+11-04 04:58:37.683   670  7524 I PFTBT   : Initiating full-data transport backup of dev.durableagent.backupfixture.rules token: 432972809
+11-04 04:58:37.683  1470  3977 D Backup  : [D2dTransport] Moved from state 0 to 1
+11-04 04:58:37.683  1470  3977 I Backup  : [D2dTransport] performFullBackup : PackageInfo{942c026 dev.durableagent.backupfixture.rules}
+11-04 04:58:37.686   670  7540 D BackupManagerService: [UserID:0] awaiting agent for dev.durableagent.backupfixture.rules
+11-04 04:58:37.847   670  1946 D BackupManagerService: [UserID:0] agentConnected pkg=dev.durableagent.backupfixture.rules agent=android.os.BinderProxy@fc47c62
+11-04 04:58:37.860  1470  3977 I Backup  : [D2dTransport] Package dev.durableagent.backupfixture.rules doesn't have any backup data.
+11-04 04:58:37.862  1470  3977 I Backup  : [D2dTransport] Canceling full backup of dev.durableagent.backupfixture.rules
+11-04 04:58:37.862  1470  3977 D Backup  : [D2dTransport] finishBackup from: 1, package: dev.durableagent.backupfixture.rules
+11-04 04:58:37.862  1470  3977 I Backup  : [D2dTransport] Deleting partial backup data file: dev.durableagent.backupfixture.rules due to error: 5
+11-04 04:58:37.863  1470  3977 D Backup  : [D2dTransport] Moved from state 1 to 0
+11-04 04:58:37.863   670  7524 W PFTBT   : Error -1002 backing up dev.durableagent.backupfixture.rules
+11-04 04:58:37.864   670  7524 I PFTBT   : Transport suggested backoff=0
+11-04 04:58:37.864   670  7524 I PFTBT   : Transport rejected backup of dev.durableagent.backupfixture.rules, skipping
+11-04 04:58:37.866   670  7524 I BackupManagerService: [UserID:0] Killing agent host process
+11-04 04:58:37.866   670  7524 I PFTBT   : Unbinding agent in dev.durableagent.backupfixture.rules
+11-04 04:58:37.866   670  7524 I PFTBT   : Initiating full-data transport backup of dev.durableagent.retention token: 432972809
+11-04 04:58:37.867  1470  3977 D Backup  : [D2dTransport] Moved from state 0 to 1
+11-04 04:58:37.867  1470  3977 I Backup  : [D2dTransport] performFullBackup : PackageInfo{bdfc214 dev.durableagent.retention}
+11-04 04:58:37.873   670  7554 D BackupManagerService: [UserID:0] awaiting agent for dev.durableagent.retention
+11-04 04:58:37.889   670  1946 D BackupManagerService: [UserID:0] agentConnected pkg=dev.durableagent.retention agent=android.os.BinderProxy@deb447
+11-04 04:58:37.930  1470  3977 I Backup  : [D2dTransport] Package dev.durableagent.retention doesn't have any backup data.
+11-04 04:58:37.931  1470  3977 I Backup  : [D2dTransport] Canceling full backup of dev.durableagent.retention
+11-04 04:58:37.931  1470  3977 D Backup  : [D2dTransport] finishBackup from: 1, package: dev.durableagent.retention
+11-04 04:58:37.931  1470  3977 I Backup  : [D2dTransport] Deleting partial backup data file: dev.durableagent.retention due to error: 5
+11-04 04:58:37.933  1470  3977 D Backup  : [D2dTransport] Moved from state 1 to 0
+11-04 04:58:37.934   670  7524 W PFTBT   : Error -1002 backing up dev.durableagent.retention
+11-04 04:58:37.934   670  7524 I PFTBT   : Transport suggested backoff=0
+11-04 04:58:37.934   670  7524 I PFTBT   : Transport rejected backup of dev.durableagent.retention, skipping
+11-04 04:58:37.935   670  7524 I BackupManagerService: [UserID:0] Killing agent host process
+11-04 04:58:37.935   670  7524 I PFTBT   : Unbinding agent in dev.durableagent.retention
+11-04 04:58:37.935   670  7524 I PFTBT   : Full backup completed with status: 0
+11-04 04:58:37.939   670  7524 I PFTBT   : Full data backup pass finished.
+11-04 04:58:37.940   670  7524 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 04:58:39.021   670  1990 D BackupManagerService: [UserID:0] beginRestoreSession: pkg=null transport=null
+11-04 04:58:39.031  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 04:58:39.038   670  1954 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 04:58:39.040  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 04:58:39.042  1470  2728 W Backup  : [D2dTransport] List of available restore sets requested. Unsupported operation.
+11-04 04:58:39.046   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 04:58:39.046   670  1695 D BackupManagerService: [UserID:0] Clearing restore session and halting timeout
+11-04 05:00:28.481   670  1117 D BackupManagerService: [UserID:0] beginRestoreSession: pkg=null transport=null
+11-04 05:00:28.497  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 05:00:28.503   670   694 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 05:00:28.506  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 05:00:28.508  1470  2013 W Backup  : [D2dTransport] List of available restore sets requested. Unsupported operation.
+11-04 05:00:28.512   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 05:00:28.513   670  1993 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 05:00:28.513   670  1695 D BackupManagerService: MSG_RUN_RESTORE observer=android.app.backup.IRestoreObserver$Stub$Proxy@e247ce9
+11-04 05:00:28.513   670  1695 D BackupManagerService: Starting restore.
+11-04 05:00:28.517  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 05:00:28.532  1470  2013 W Backup  : [D2dTransport] Can't restore from D2d Transport.
+11-04 05:00:28.532   670  1695 E BackupManagerService: Transport error -1000; no restore possible
+11-04 05:00:28.533   670  1695 I BackupManagerService: Restore complete.
+11-04 05:00:28.537   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 05:00:28.537   670  1695 D BackupManagerService: [UserID:0] Clearing restore session and halting timeout
+11-04 05:00:30.862   670  1992 I BackupManagerService: [UserID:0] Backup enabled => false
+11-04 05:00:30.862   670  1992 D BackupManagerService: user:0 writeBackupEnableState enable:false
+11-04 05:00:30.867   670   670 D BackupManagerService: Running a device init; 3 pending
+11-04 05:00:30.867   670   670 D BackupManagerService: [UserID:0] initializeTransport(): [com.android.localtransport/.LocalTransport, com.google.android.gms/.backup.migrate.service.D2dTransport, com.google.android.gms/.backup.BackupTransportService]
+11-04 05:00:30.867   670   670 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 05:00:30.880   670  1695 I BackupManagerService: Initializing (wiping) backup transport storage: com.android.localtransport/.LocalTransport
+11-04 05:00:30.922   670  1695 I BackupManagerService: Device init successful
+11-04 05:00:30.952   670  1695 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 05:00:31.073   670  1695 I BackupManagerService: Initializing (wiping) backup transport storage: com.google.android.gms/.backup.migrate.service.D2dTransport
+11-04 05:00:31.076  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 05:00:31.078  1470  2686 D Backup  : [D2dTransport] wiping all data
+11-04 05:00:31.078  1470  2686 I Backup  : [TestingFlowsUtils] B&R Test flows are disabled. Cleaning up all the test data and related URI permissions.
+11-04 05:00:31.078  1470  2686 I Backup  : [TestingFlowsUtils] Resetting the testing flows state.
+11-04 05:00:31.078  1470  2686 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/restore_token_file
+11-04 05:00:31.079  1470  2686 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/pm_backup
+11-04 05:00:31.079  1470  2686 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/app_backup
+11-04 05:00:31.079  1470  2686 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/auth_backup
+11-04 05:00:31.079  1470  2686 I Backup  : [TestingFlowsUtils] Cancelling reset task.
+11-04 05:00:31.079  1470  2686 I Backup  : [TestingFlowsUtils] Updating reset task scheduled state in ProtoDataStore: false
+11-04 05:00:31.082  1470  2686 D Backup  : [D2dTransport] Moved from state 0 to 3
+11-04 05:00:31.083  1470  2686 D Backup  : [D2dTransport] finishBackup from: 3, package: null
+11-04 05:00:31.084  1470  2686 D Backup  : [D2dTransport] Moved from state 3 to 0
+11-04 05:00:31.084  1470  2686 D Backup  : [D2dTransport] backup finished
+11-04 05:00:31.084  1470  2686 D Backup  : [D2dTransport] finishBackup from: 0; initializeDevice has cleared data already.
+11-04 05:00:31.085   670  1695 I BackupManagerService: Device init successful
+11-04 05:00:31.101   670  1695 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 05:00:31.232   670  1695 I BackupManagerService: Initializing (wiping) backup transport storage: com.google.android.gms/.backup.BackupTransportService
+11-04 05:00:31.238  1470  1470 D Backup  : [BackupScheduler] Setting backup scheduler enabled=true due to desired state 1
+11-04 05:00:31.238  1470  2013 V Backup  : [GmsBackupTransport] *** initializing device ***
+11-04 05:00:31.239  1470  2013 I Backup  : [BackupRecords] Removing all backup records.
+11-04 05:00:31.239  1470  1470 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 05:00:31.241  1470  1470 V Backup  : [GmsBackupTransport] currentDestinationString: null
+11-04 05:00:31.242  1470  2013 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 05:00:31.242  1470  3102 V Backup  : [BackupRecords] Successfully removed all backup records.
+11-04 05:00:31.244  1339  7696 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 05:00:31.245  1470  2013 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 05:00:31.250  1470  2013 V Backup  : [GmsBackupTransport] No backup account for initializeDevice, returning OK
+11-04 05:00:31.252  1470  7694 V Backup  : [NoBackupNotificationIO] Intent: Intent { act=com.google.android.gms.backup.ACTION_TRANSPORT_INITIALIZE_DEVICE flg=0x10 xflg=0x4 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.GmsIntentOperationService (has extras) }
+11-04 05:00:31.256  1339  7696 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 05:00:31.261  1339  7696 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 05:00:31.261  1470  2013 D Backup  : [GmsBackupTransport] Updating lastKvBackupPassTimeMs to 1793768431253
+11-04 05:00:31.263  1470  2013 I Backup  : [GmsBackupTransport] Backup finished for null
+11-04 05:00:31.264   670  1695 I BackupManagerService: Device init successful
+11-04 05:00:31.267  1470  7694 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 05:00:31.268  1470  7694 V Backup  : [NoBackupNotification] Disabled, not rescheduling
+11-04 05:00:31.276  1339  7696 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 05:00:31.294   670  1695 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 05:00:31.467   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 05:00:31.894  1470  1470 D Backup  : [BackupScheduler] Setting backup scheduler enabled=true due to desired state 1
+11-04 05:00:31.894  1470  1470 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 05:00:31.895  1470  1470 V Backup  : [GmsBackupTransport] currentDestinationString: null
+11-04 05:00:31.898   670  1117 D BackupManagerService: [UserID:0] selectBackupTransport(transport = com.google.android.gms/.backup.BackupTransportService): previous transport = com.google.android.gms/.backup.migrate.service.D2dTransport
+11-04 05:00:31.899  1339  7696 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 05:03:37.871   670  1695 D BackupManagerService: Timeout for token=6690c10c
+11-04 05:03:37.902   670  1695 D BackupManagerService: Timeout for token=1d86c60d
+11-04 05:10:20.950   670  1273 I BackupManagerService: [UserID:0] Backup enabled => true
+11-04 05:10:20.950   670  1273 D BackupManagerService: user:0 writeBackupEnableState enable:true
+11-04 05:10:22.072  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 05:10:22.085  1470  3251 W Backup  : [D2dTransport] Current restore set requested.
+11-04 05:10:22.091   670  1271 D BackupManagerService: [UserID:0] selectBackupTransport(transport = com.google.android.gms/.backup.migrate.service.D2dTransport): previous transport = com.google.android.gms/.backup.BackupTransportService
+11-04 05:10:23.136   670  1271 D BackupManagerService: [UserID:0] initializeTransport(): [com.google.android.gms/.backup.migrate.service.D2dTransport]
+11-04 05:10:23.137   670  1271 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 05:10:23.138   670  1695 I BackupManagerService: Initializing (wiping) backup transport storage: com.google.android.gms/.backup.migrate.service.D2dTransport
+11-04 05:10:23.140  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 05:10:23.143  1470  2390 D Backup  : [D2dTransport] wiping all data
+11-04 05:10:23.156  1470  2390 I Backup  : [TestingFlowsUtils] B&R Test flows are disabled. Cleaning up all the test data and related URI permissions.
+11-04 05:10:23.156  1470  2390 I Backup  : [TestingFlowsUtils] Resetting the testing flows state.
+11-04 05:10:23.157  1470  2390 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/restore_token_file
+11-04 05:10:23.159  1470  2390 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/pm_backup
+11-04 05:10:23.159  1470  2390 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/app_backup
+11-04 05:10:23.159  1470  2390 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/auth_backup
+11-04 05:10:23.159  1470  2390 I Backup  : [TestingFlowsUtils] Cancelling reset task.
+11-04 05:10:23.159  1470  2390 I Backup  : [TestingFlowsUtils] Updating reset task scheduled state in ProtoDataStore: false
+11-04 05:10:23.162  1470  2390 D Backup  : [D2dTransport] Moved from state 0 to 3
+11-04 05:10:23.162  1470  2390 D Backup  : [D2dTransport] finishBackup from: 3, package: null
+11-04 05:10:23.162  1470  2390 D Backup  : [D2dTransport] Moved from state 3 to 0
+11-04 05:10:23.163  1470  2390 D Backup  : [D2dTransport] backup finished
+11-04 05:10:23.163  1470  2390 D Backup  : [D2dTransport] finishBackup from: 0; initializeDevice has cleared data already.
+11-04 05:10:23.163   670  1695 I BackupManagerService: Device init successful
+11-04 05:10:23.181   670  1695 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 05:10:23.316   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 05:10:25.404  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 05:10:25.407   670  1695 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 05:10:25.407   670  8793 D PFTBT   : backupmanager pftbt token=454d9910
+11-04 05:10:25.424   670  8793 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 05:10:25.536  1470  2390 D Backup  : [D2dTransport] wiping all data
+11-04 05:10:25.536  1470  2390 I Backup  : [TestingFlowsUtils] B&R Test flows are disabled. Cleaning up all the test data and related URI permissions.
+11-04 05:10:25.536  1470  2390 I Backup  : [TestingFlowsUtils] Resetting the testing flows state.
+11-04 05:10:25.537  1470  2390 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/restore_token_file
+11-04 05:10:25.537  1470  2390 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/pm_backup
+11-04 05:10:25.537  1470  2390 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/app_backup
+11-04 05:10:25.538  1470  2390 I Backup  : [TestingFlowsUtils] Revoking permissions for URI: content://com.google.android.gms.fileprovider/backup_testing_flows/auth_backup
+11-04 05:10:25.538  1470  2390 I Backup  : [TestingFlowsUtils] Cancelling reset task.
+11-04 05:10:25.539  1470  2390 I Backup  : [TestingFlowsUtils] Updating reset task scheduled state in ProtoDataStore: false
+11-04 05:10:25.540  1470  2390 D Backup  : [D2dTransport] Moved from state 0 to 3
+11-04 05:10:25.540  1470  2390 D Backup  : [D2dTransport] finishBackup from: 3, package: null
+11-04 05:10:25.541  1470  2390 D Backup  : [D2dTransport] Moved from state 3 to 0
+11-04 05:10:25.554  1470  2390 W Backup  : [D2dTransport] Current restore set requested.
+11-04 05:10:25.555  1470  2390 D Backup  : [D2dTransport] Moved from state 0 to 1
+11-04 05:10:25.560  1470  2390 D Backup  : [D2dTransport] backup finished
+11-04 05:10:25.561  1470  2390 D Backup  : [D2dTransport] finishBackup from: 1, package: @pm@
+11-04 05:10:25.562  1470  2390 D Backup  : [D2dTransport] Moved from state 1 to 0
+11-04 05:10:25.565  1470  2390 W Backup  : [D2dTransport] Current restore set requested.
+11-04 05:10:25.579   670  8793 D BackupManagerService: [UserID:0] Ancestral packages:  202
+11-04 05:10:25.710   670  8794 I PFTBT   : Initiating full-data transport backup of dev.durableagent.backupfixture.control token: 1162713360
+11-04 05:10:25.711  1470  2390 D Backup  : [D2dTransport] Moved from state 0 to 1
+11-04 05:10:25.712  1470  2390 I Backup  : [D2dTransport] performFullBackup : PackageInfo{caf2e8f dev.durableagent.backupfixture.control}
+11-04 05:10:25.718   670  8795 D BackupManagerService: [UserID:0] awaiting agent for dev.durableagent.backupfixture.control
+11-04 05:10:25.850   670  1271 D BackupManagerService: [UserID:0] agentConnected pkg=dev.durableagent.backupfixture.control agent=android.os.BinderProxy@b57ff45
+11-04 05:10:25.875   670  8809 D BackupManagerService: Calling doFullBackup() on dev.durableagent.backupfixture.control
+11-04 05:10:25.898   670  8795 I BackupManagerService: [UserID:0] Killing agent host process
+11-04 05:10:25.900  1470  2390 D Backup  : [D2dTransport] backup finished
+11-04 05:10:25.901  1470  2390 D Backup  : [D2dTransport] finishBackup from: 1, package: dev.durableagent.backupfixture.control
+11-04 05:10:25.905  1470  2390 D Backup  : [D2dTransport] Moved from state 1 to 0
+11-04 05:10:25.905   670  8794 I PFTBT   : Transport suggested backoff=0
+11-04 05:10:25.917   670  8794 I PFTBT   : Unbinding agent in dev.durableagent.backupfixture.control
+11-04 05:10:25.917   670  8794 I PFTBT   : Initiating full-data transport backup of dev.durableagent.backupfixture.rules token: 1162713360
+11-04 05:10:25.918  1470  2390 D Backup  : [D2dTransport] Moved from state 0 to 1
+11-04 05:10:25.918  1470  2390 I Backup  : [D2dTransport] performFullBackup : PackageInfo{e416fa dev.durableagent.backupfixture.rules}
+11-04 05:10:25.922   670  8811 D BackupManagerService: [UserID:0] awaiting agent for dev.durableagent.backupfixture.rules
+11-04 05:10:26.069   670  1273 D BackupManagerService: [UserID:0] agentConnected pkg=dev.durableagent.backupfixture.rules agent=android.os.BinderProxy@dab6484
+11-04 05:10:26.090  1470  2390 I Backup  : [D2dTransport] Package dev.durableagent.backupfixture.rules doesn't have any backup data.
+11-04 05:10:26.091  1470  3977 I Backup  : [D2dTransport] Canceling full backup of dev.durableagent.backupfixture.rules
+11-04 05:10:26.092  1470  3977 D Backup  : [D2dTransport] finishBackup from: 1, package: dev.durableagent.backupfixture.rules
+11-04 05:10:26.092  1470  3977 I Backup  : [D2dTransport] Deleting partial backup data file: dev.durableagent.backupfixture.rules due to error: 5
+11-04 05:10:26.093  1470  3977 D Backup  : [D2dTransport] Moved from state 1 to 0
+11-04 05:10:26.093   670  8794 W PFTBT   : Error -1002 backing up dev.durableagent.backupfixture.rules
+11-04 05:10:26.094   670  8794 I PFTBT   : Transport suggested backoff=0
+11-04 05:10:26.096   670  8794 I PFTBT   : Transport rejected backup of dev.durableagent.backupfixture.rules, skipping
+11-04 05:10:26.097   670  8794 I BackupManagerService: [UserID:0] Killing agent host process
+11-04 05:10:26.097   670  8794 I PFTBT   : Unbinding agent in dev.durableagent.backupfixture.rules
+11-04 05:10:26.097   670  8794 I PFTBT   : Full backup completed with status: 0
+11-04 05:10:26.105   670  8794 I PFTBT   : Full data backup pass finished.
+11-04 05:10:26.107   670  8794 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 05:10:27.247   670  1271 D BackupManagerService: [UserID:0] beginRestoreSession: pkg=null transport=null
+11-04 05:10:27.253  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 05:10:27.259   670  1273 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 05:10:27.263  1470  1470 D Backup  : [D2dTransport] Moved from state 0 to 0
+11-04 05:10:27.266  1470  2390 W Backup  : [D2dTransport] List of available restore sets requested. Unsupported operation.
+11-04 05:10:27.274   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 05:10:27.274   670  1695 D BackupManagerService: [UserID:0] Clearing restore session and halting timeout
+11-04 05:10:31.185  1470  1470 D Backup  : [BackupScheduler] Setting backup scheduler enabled=true due to desired state 1
+11-04 05:10:31.189  1470  1470 D Backup  : [BackupScheduler] Setting backup scheduler enabled=true due to desired state 1
+11-04 05:10:31.190  1470  1470 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 05:10:31.205   670  1080 D BackupManagerService: [UserID:0] selectBackupTransport(transport = com.google.android.gms/.backup.BackupTransportService): previous transport = com.google.android.gms/.backup.migrate.service.D2dTransport
+11-04 05:10:31.215  1470  1470 V Backup  : [GmsBackupTransport] currentDestinationString: null
+11-04 05:10:31.245  1339  8980 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 05:10:31.261  1339  8980 V Backup  : [BackupAccountNotifier] Shared pref value: false
+11-04 05:10:31.278  1339  8980 I Backup  : [BackupAccountNotifier] Showing notification.
+11-04 05:10:32.232   670   738 D BackupManagerService: [UserID:0] restoreAtInstall pkg=dev.durableagent.backupfixture.control token=18 restoreSet=38560027a81c3c14
+11-04 05:10:32.233   670   738 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 05:10:32.236   670  1695 D BackupManagerService: MSG_RUN_RESTORE observer=null
+11-04 05:10:32.236   670  1695 D BackupManagerService: Starting restore.
+11-04 05:10:32.248  1470  1470 D Backup  : [BackupScheduler] Setting backup scheduler enabled=true due to desired state 1
+11-04 05:10:32.249  1470  1470 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 05:10:32.250  1470  1470 V Backup  : [GmsBackupTransport] currentDestinationString: null
+11-04 05:10:32.253  1470  2390 V Backup  : [GmsBackupTransport] Found launcher: com.google.android.apps.nexuslauncher
+11-04 05:10:32.253  1470  2390 V Backup  : [GmsBackupTransport] Whitelisted launchers: com.google.android.apps.nexuslauncher
+11-04 05:10:32.254  1339  8980 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 05:10:32.254  1339  8980 V Backup  : [BackupAccountNotifier] Shared pref value: true
+11-04 05:10:32.254  1339  8980 I Backup  : [BackupAccountNotifier] Not showing notification - waiting until 1794373831275.
+11-04 05:10:32.254  1470  3977 V Backup  : [BackupManagerMonitorEventParser] Skipping agent logs: package is not allowlisted
+11-04 05:10:32.255  1470  2390 I Backup  : [GmsBackupTransport] New restore session, 2 apps
+11-04 05:10:32.266  1470  2390 D Backup  : [CacheRestoreHelper] found data for @pm@
+11-04 05:10:32.266  1470  2390 D Backup  : [CacheRestoreHelper] found data for dev.durableagent.backupfixture.control
+11-04 05:10:32.266  1470  2390 V Backup  : [GmsBackupTransport] Restoring from d2d data.
+11-04 05:10:32.267  1470  2390 I Backup  : [DenylistedInfoRequestProcessor] Attaching GetAppKeyDenylistInfo request to restore request.
+11-04 05:10:32.268  1470  2390 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 05:10:32.269  1470  2390 W Backup  : [BackupTransportCS] Backup account missing, trying again later. Moratorium: 1794373832269
+11-04 05:10:32.272  1339  8980 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 05:10:32.272  1339  8980 V Backup  : [BackupAccountNotifier] Shared pref value: true
+11-04 05:10:32.272  1339  8980 I Backup  : [BackupAccountNotifier] Not showing notification - waiting until 1794373831275.
+11-04 05:10:32.273  1470  2390 E Backup  : [ClearcutEventLogger] RequestErrorEvent logged with an unknown request type 10, can't set flow id.
+11-04 05:10:32.275  1470  2390 E Backup  : [GmsBackupTransport] Exception on getting denylisted application info.
+11-04 05:10:32.275  1470  2390 E Backup  : apkw: No backup account found.
+11-04 05:10:32.275  1470  2390 E Backup  : 	at com.google.android.gms.backup.transport.BackupTransportChimeraService.a(:com.google.android.gms@252635038@25.26.35 (260800-783060121):44)
+11-04 05:10:32.275  1470  2390 E Backup  : 	at com.google.android.gms.backup.transport.BackupTransportChimeraService.h(:com.google.android.gms@252635038@25.26.35 (260800-783060121):25)
+11-04 05:10:32.275  1470  2390 E Backup  : 	at arot.a(:com.google.android.gms@252635038@25.26.35 (260800-783060121):16)
+11-04 05:10:32.275  1470  2390 E Backup  : 	at aroq.startRestore(:com.google.android.gms@252635038@25.26.35 (260800-783060121):1317)
+11-04 05:10:32.275  1470  2390 E Backup  : 	at android.app.backup.BackupTransport$TransportImpl.startRestore(BackupTransport.java:842)
+11-04 05:10:32.275  1470  2390 E Backup  : 	at com.android.internal.backup.IBackupTransport$Stub.onTransact(IBackupTransport.java:729)
+11-04 05:10:32.275  1470  2390 E Backup  : 	at android.os.Binder.transact(Binder.java:1273)
+11-04 05:10:32.275  1470  2390 E Backup  : 	at cack.onTransact(:com.google.android.gms@252635038@25.26.35 (260800-783060121):10)
+11-04 05:10:32.275  1470  2390 E Backup  : 	at android.os.Binder.transact(Binder.java:1273)
+11-04 05:10:32.275  1470  2390 E Backup  : 	at bpxw.onTransact(:com.google.android.gms@252635038@25.26.35 (260800-783060121):157)
+11-04 05:10:32.275  1470  2390 E Backup  : 	at android.os.Binder.execTransactInternal(Binder.java:1426)
+11-04 05:10:32.275  1470  2390 E Backup  : 	at android.os.Binder.execTransact(Binder.java:1365)
+11-04 05:10:32.275  1470  2390 E Backup  : [ClearcutEventLogger] RequestErrorEvent logged with an unknown request type 10, can't set flow id.
+11-04 05:10:32.280  1470  1470 D Backup  : [BackupScheduler] Setting backup scheduler enabled=true due to desired state 1
+11-04 05:10:32.284   670  1695 D BackupManagerService: initiateOneRestore packageName=@pm@
+11-04 05:10:32.284  1470  2390 V Backup  : [CacheRestoreHelper] Starting d2d restore of k/v package: @pm@
+11-04 05:10:32.285  1470  2390 V Backup  : [CacheRestoreHelper] D2d restore complete.
+11-04 05:10:32.302   670  1695 I BackupManagerService: Next restore package: RestoreDescription{dev.durableagent.backupfixture.control : STREAM}
+11-04 05:10:32.303  1470  2390 V Backup  : [BackupManagerMonitorEventParser] Skipping agent logs: package is not allowlisted
+11-04 05:10:32.303  1470  2390 V Backup  : [BackupManagerMonitorEventParser] Skipping agent logs: package is not allowlisted
+11-04 05:10:32.305  1470  3977 V Backup  : [CacheRestoreHelper] Starting d2d full restore of dev.durableagent.backupfixture.control
+11-04 05:10:32.305  1470  3977 V Backup  : [CacheRestoreHelper] Restored 12800 bytes.
+11-04 05:10:32.306   670  8999 D BackupManagerService: signaturesMatch(): stored=[android.content.pm.Signature@75f72162] device=[android.content.pm.Signature@75f72162]
+11-04 05:10:32.306   670  8999 I BackupManagerService: Sig + version match; taking data
+11-04 05:10:32.306   670  8999 D BackupManagerService: Clearing app data preparatory to full restore
+11-04 05:10:32.307  1470  2390 V Backup  : [BackupManagerMonitorEventParser] Skipping agent logs: package is not allowlisted
+11-04 05:10:32.330   670  8999 D BackupManagerService: [UserID:0] awaiting agent for dev.durableagent.backupfixture.control
+11-04 05:10:32.334  1470  3977 V Backup  : [CacheRestoreHelper] Full d2d restore complete.
+11-04 05:10:32.481   670  1271 D BackupManagerService: [UserID:0] agentConnected pkg=dev.durableagent.backupfixture.control agent=android.os.BinderProxy@a606c94
+11-04 05:10:32.520   670  1695 D BackupManagerService: restoreFinished packageName=dev.durableagent.backupfixture.control
+11-04 05:10:32.522  1470  2390 V Backup  : [BackupManagerMonitorEventParser] Skipping agent logs: package is not allowlisted
+11-04 05:10:32.523   670  1695 I BackupManagerService: [UserID:0] Killing agent host process
+11-04 05:10:32.523  1470  3251 V Backup  : [BackupManagerMonitorEventParser] Skipping agent logs: package is not allowlisted
+11-04 05:10:32.524   670  1695 D BackupManagerService: No more packages; finishing restore
+11-04 05:10:32.524  1470  3251 I Backup  : [GmsBackupTransport] d2d restore finished
+11-04 05:10:32.524   670  1695 I BackupManagerService: Restore complete.
+11-04 05:10:32.525  1470  3251 V Backup  : [BackupManagerMonitorEventParser] Skipping agent logs: package is not allowlisted
+11-04 05:10:32.533   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695
+11-04 05:10:32.821   670   738 D BackupManagerService: [UserID:0] restoreAtInstall pkg=dev.durableagent.backupfixture.rules token=19 restoreSet=1
+11-04 05:10:32.822   670   738 D BackupManagerService: [UserID:0] Acquired wakelock:*backup*-0-1695
+11-04 05:10:32.823   670  1695 D BackupManagerService: MSG_RUN_RESTORE observer=null
+11-04 05:10:32.825   670  1695 D BackupManagerService: Starting restore.
+11-04 05:10:32.833  1470  1470 D Backup  : [BackupScheduler] Setting backup scheduler enabled=true due to desired state 1
+11-04 05:10:32.834  1470  1470 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 05:10:32.835  1470  3251 V Backup  : [BackupManagerMonitorEventParser] Skipping agent logs: package is not allowlisted
+11-04 05:10:32.837  1470  1470 V Backup  : [GmsBackupTransport] currentDestinationString: null
+11-04 05:10:32.837  1470  3251 V Backup  : [GmsBackupTransport] Found launcher: com.google.android.apps.nexuslauncher
+11-04 05:10:32.837  1470  3251 V Backup  : [GmsBackupTransport] Whitelisted launchers: com.google.android.apps.nexuslauncher
+11-04 05:10:32.837  1470  3251 I Backup  : [GmsBackupTransport] New restore session, 2 apps
+11-04 05:10:32.838  1470  3251 D Backup  : [CacheRestoreHelper] found data for @pm@
+11-04 05:10:32.838  1470  3251 D Backup  : [CacheRestoreHelper] not found data for dev.durableagent.backupfixture.rules
+11-04 05:10:32.841  1470  3251 I Backup  : [DenylistedInfoRequestProcessor] Attaching GetAppKeyDenylistInfo request to restore request.
+11-04 05:10:32.841  1470  3251 I Backup  : [GmsBackupAccountManager] Backup account not found in gmscore.
+11-04 05:10:32.851  1470  3251 W Backup  : [BackupTransportCS] Backup account missing, trying again later. Moratorium: 1794373832850
+11-04 05:10:32.851  1470  3251 E Backup  : [GmsBackupTransport] Exception on restoring data for next application
+11-04 05:10:32.851  1470  3251 E Backup  : apkw: No backup account found.
+11-04 05:10:32.851  1470  3251 E Backup  : 	at com.google.android.gms.backup.transport.BackupTransportChimeraService.a(:com.google.android.gms@252635038@25.26.35 (260800-783060121):44)
+11-04 05:10:32.851  1470  3251 E Backup  : 	at com.google.android.gms.backup.transport.BackupTransportChimeraService.h(:com.google.android.gms@252635038@25.26.35 (260800-783060121):25)
+11-04 05:10:32.851  1470  3251 E Backup  : 	at arot.a(:com.google.android.gms@252635038@25.26.35 (260800-783060121):16)
+11-04 05:10:32.851  1470  3251 E Backup  : 	at aroq.m(:com.google.android.gms@252635038@25.26.35 (260800-783060121):202)
+11-04 05:10:32.851  1470  3251 E Backup  : 	at aroq.startRestore(:com.google.android.gms@252635038@25.26.35 (260800-783060121):1043)
+11-04 05:10:32.851  1470  3251 E Backup  : 	at android.app.backup.BackupTransport$TransportImpl.startRestore(BackupTransport.java:842)
+11-04 05:10:32.851  1470  3251 E Backup  : 	at com.android.internal.backup.IBackupTransport$Stub.onTransact(IBackupTransport.java:729)
+11-04 05:10:32.851  1470  3251 E Backup  : 	at android.os.Binder.transact(Binder.java:1273)
+11-04 05:10:32.851  1470  3251 E Backup  : 	at cack.onTransact(:com.google.android.gms@252635038@25.26.35 (260800-783060121):10)
+11-04 05:10:32.851  1470  3251 E Backup  : 	at android.os.Binder.transact(Binder.java:1273)
+11-04 05:10:32.851  1470  3251 E Backup  : 	at bpxw.onTransact(:com.google.android.gms@252635038@25.26.35 (260800-783060121):157)
+11-04 05:10:32.851  1470  3251 E Backup  : 	at android.os.Binder.execTransactInternal(Binder.java:1426)
+11-04 05:10:32.851  1470  3251 E Backup  : 	at android.os.Binder.execTransact(Binder.java:1365)
+11-04 05:10:32.851  1470  3251 E Backup  : [GmsBackupTransport] Error getting restore data from server
+11-04 05:10:32.851   670  1695 E BackupManagerService: Transport error -1000; no restore possible
+11-04 05:10:32.852  1470  3251 V Backup  : [BackupManagerMonitorEventParser] Skipping agent logs: package is not allowlisted
+11-04 05:10:32.853  1470  3251 I Backup  : [GmsBackupTransport] restore finished
+11-04 05:10:32.874  1339  8945 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 05:10:32.908  1339  8945 V Backup  : [BackupAccountNotifier] Shared pref value: true
+11-04 05:10:32.908  1339  8945 I Backup  : [BackupAccountNotifier] Not showing notification - waiting until 1794373831275.
+11-04 05:10:32.920   670  1695 I BackupManagerService: Restore complete.
+11-04 05:10:32.922  1470  2390 V Backup  : [BackupManagerMonitorEventParser] Skipping agent logs: package is not allowlisted
+11-04 05:10:32.924  1339  8945 V Backup  : [BackupAccountNotifier] Handling new intent. Show notification: true
+11-04 05:10:32.936  1339  8945 V Backup  : [BackupAccountNotifier] Shared pref value: true
+11-04 05:10:32.936  1339  8945 I Backup  : [BackupAccountNotifier] Not showing notification - waiting until 1794373831275.
+11-04 05:10:32.948   670  1695 D BackupManagerService: [UserID:0] Released wakelock:*backup*-0-1695

@@ -1,0 +1,13 @@
+{
+  "serial": "emulator-5584",
+  "fingerprint": "google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys",
+  "api": "36",
+  "pageSize": "4096",
+  "originalStayAwake": "1",
+  "backupEnabled": "Backup Manager currently disabled",
+  "transports": [
+    "    com.android.localtransport/.LocalTransport",
+    "    com.google.android.gms/.backup.migrate.service.D2dTransport",
+    "  * com.google.android.gms/.backup.BackupTransportService"
+  ]
+}

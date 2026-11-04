@@ -1,0 +1,988 @@
+--------- beginning of main
+11-04 04:34:44.736  4209  4209 I agent.retention: Late-enabling -Xcheck:jni
+11-04 04:34:44.778  4209  4209 I agent.retention: Using CollectorTypeCMC GC.
+11-04 04:34:44.780  4209  4209 W agent.retention: Unexpected CPU variant for x86: x86_64.
+11-04 04:34:44.780  4209  4209 W agent.retention: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 04:34:44.796  4209  4209 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+--------- beginning of system
+11-04 04:34:45.690  4209  4209 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[dev.durableagent.retention]: x86_64, null instrumentation[dev.durableagent.retention.test]: null, null
+11-04 04:34:45.793  4209  4209 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[])
+11-04 04:34:45.980  4209  4209 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020])
+11-04 04:34:46.093  4209  4209 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393])
+11-04 04:34:46.292  4209  4209 D nativeloader: Configuring clns-9 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~AJMR-bMMZRE67lOOGkA1UA==/dev.durableagent.retention.test-YSFF9pycN9EkQpf7zbUbYg==/base.apk:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~AJMR-bMMZRE67lOOGkA1UA==/dev.durableagent.retention.test-YSFF9pycN9EkQpf7zbUbYg==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64:/data/app/~~AJMR-bMMZRE67lOOGkA1UA==/dev.durableagent.retention.test-YSFF9pycN9EkQpf7zbUbYg==/base.apk!/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 04:34:46.299  4209  4209 I agent.retention: AssetManager2(0x7dddbc29b838) locale list changing from [] to [en-US]
+11-04 04:34:46.358  4209  4209 V GraphicsEnvironment: Currently set values for:
+11-04 04:34:46.358  4209  4209 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 04:34:46.358  4209  4209 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 04:34:46.358  4209  4209 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 04:34:46.362  4209  4209 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 04:34:46.362  4209  4209 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 04:34:46.362  4209  4209 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 04:34:46.411  4209  4209 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 04:34:46.439  4209  4209 D nativeloader: Configuring clns-10 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~AJMR-bMMZRE67lOOGkA1UA==/dev.durableagent.retention.test-YSFF9pycN9EkQpf7zbUbYg==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 04:34:46.440  4209  4209 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 04:34:46.463  4209  4209 D nativeloader: Configuring clns-11 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~AJMR-bMMZRE67lOOGkA1UA==/dev.durableagent.retention.test-YSFF9pycN9EkQpf7zbUbYg==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 04:34:46.468  4209  4209 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~AJMR-bMMZRE67lOOGkA1UA==/dev.durableagent.retention.test-YSFF9pycN9EkQpf7zbUbYg==/base.apk*3722032642:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk*2772163103])
+11-04 04:34:46.479  4209  4209 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~AJMR-bMMZRE67lOOGkA1UA==/dev.durableagent.retention.test-YSFF9pycN9EkQpf7zbUbYg==/base.apk*3722032642:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk*2772163103])
+11-04 04:34:46.498  4209  4209 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~AJMR-bMMZRE67lOOGkA1UA==/dev.durableagent.retention.test-YSFF9pycN9EkQpf7zbUbYg==/base.apk*3722032642:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk*2772163103])
+11-04 04:34:46.641  4209  4209 I agent.retention: AssetManager2(0x7dddbc296a18) locale list changing from [] to [en-US]
+11-04 04:34:46.697  4209  4209 I AndroidJUnitRunner: newApplication android.app.Application
+11-04 04:34:46.725  4209  4209 I AndroidJUnitRunner: onCreate Bundle[mParcelledData.dataSize=288]
+11-04 04:34:46.728  4209  4209 D AndroidJUnitRunner: Use the raw file system for managing file I/O.
+11-04 04:34:46.771  4209  4209 V TestEventClient: No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+11-04 04:34:46.778  4209  4264 D AndroidJUnitRunner: onStart is called.
+11-04 04:34:46.807  4209  4264 I InstrConnection: Could not send broadcast or register receiver (isolatedProcess?)
+11-04 04:34:46.846  4209  4264 I TestRunner: run started: 32 tests
+11-04 04:34:46.847  4209  4264 I TestRunner: started: aNewDurableOwnerInvalidatesAnEarlierCleanupCandidateAcrossReopen(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:34:46.883  4209  4264 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+11-04 04:34:47.137  4209  4264 I TestRunner: finished: aNewDurableOwnerInvalidatesAnEarlierCleanupCandidateAcrossReopen(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:34:47.143  4209  4264 I TestRunner: started: sdkHandoffKeepsOriginalFrozenOwnerUntilBothAuthoritiesCanBeVerified(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:34:47.438  4209  4264 I TestRunner: finished: sdkHandoffKeepsOriginalFrozenOwnerUntilBothAuthoritiesCanBeVerified(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:34:47.449  4209  4264 I TestRunner: started: interruptedQuarantineRejectsANewReferenceAndSafelyFinishesAfterReopen(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:34:47.917  4209  4264 I TestRunner: finished: interruptedQuarantineRejectsANewReferenceAndSafelyFinishesAfterReopen(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:34:47.920  4209  4264 I TestRunner: started: committedSelectionIsReturnedBeforeSlowSourceAndIndependentTextSaveIsPreserved(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:49.927  4209  4264 I TestRunner: finished: committedSelectionIsReturnedBeforeSlowSourceAndIndependentTextSaveIsPreserved(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:49.938  4209  4264 I TestRunner: started: jpegExifOrientationIsAppliedToTheWholeImageAndTruncatedDataIsRejected(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:50.299  4209  4264 W HWUI    : Image decoding logging dropped!
+11-04 04:34:50.411  4209  4264 W HWUI    : Image decoding logging dropped!
+11-04 04:34:50.595  4209  4264 I TestRunner: finished: jpegExifOrientationIsAppliedToTheWholeImageAndTruncatedDataIsRejected(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:50.605  4209  4264 I TestRunner: started: changedSourceUnknownLengthAndInvalidUtf8NeverBecomeReadyOrSilentlyTruncated(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:51.273  4209  4264 I TestRunner: finished: changedSourceUnknownLengthAndInvalidUtf8NeverBecomeReadyOrSilentlyTruncated(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:51.281  4209  4264 I TestRunner: started: twoBlockedWorkersDoNotBlockThirdAdmissionSaveOrPendingOwnershipCleanup(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:51.745  4209  4264 I TestRunner: finished: twoBlockedWorkersDoNotBlockThirdAdmissionSaveOrPendingOwnershipCleanup(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:51.749  4209  4264 I TestRunner: started: sourceLossIsVisibleWithoutDiscardingPreparedRecoveryBytes(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:52.022  4209  4264 I TestRunner: finished: sourceLossIsVisibleWithoutDiscardingPreparedRecoveryBytes(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:52.028  4209  4264 I TestRunner: started: inputFilesAreCeNoBackupAndBothBackupModesExcludeEveryPrivateDomain(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:52.084  4209  4264 I TestRunner: finished: inputFilesAreCeNoBackupAndBothBackupModesExcludeEveryPrivateDomain(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:52.089  4209  4264 I TestRunner: started: failedFinalPublicationCanRecoverInTheSameProcessAfterStorageReturns(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:52.398  4209  4264 I TestRunner: finished: failedFinalPublicationCanRecoverInTheSameProcessAfterStorageReturns(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:52.406  4209  4264 I TestRunner: started: committedDraftsReopenIndependentlyAndClearNeverResetsRevision(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:52.618  4209  4264 I TestRunner: finished: committedDraftsReopenIndependentlyAndClearNeverResetsRevision(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:52.623  4209  4264 I TestRunner: started: preparedTextFreezePinsExactBytesAfterSourceChangesAndDraftIsCleared(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:52.971  4209  4264 I TestRunner: finished: preparedTextFreezePinsExactBytesAfterSourceChangesAndDraftIsCleared(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:52.977  4209  4264 I TestRunner: started: oversizedPngDimensionsAndMimeMismatchFailWithoutPartialPreparation(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:53.414  4209  4264 I TestRunner: finished: oversizedPngDimensionsAndMimeMismatchFailWithoutPartialPreparation(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:53.419  4209  4264 I TestRunner: started: pngPreparationKeepsAlphaAndRecordsActualFullFrameResize(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:53.725  4209  4264 W HWUI    : Image decoding logging dropped!
+11-04 04:34:53.815  4209  4264 W HWUI    : Image decoding logging dropped!
+11-04 04:34:53.826  4209  4264 I TestRunner: finished: pngPreparationKeepsAlphaAndRecordsActualFullFrameResize(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:53.831  4209  4264 I TestRunner: started: slowSourceCannotBlockTextCommitAndLateResultCannotRestoreRemovedSelection(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:54.067  4209  4264 I TestRunner: finished: slowSourceCannotBlockTextCommitAndLateResultCannotRestoreRemovedSelection(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:54.077  4209  4264 I TestRunner: started: lostSelectionReceiptReplaysBeforeReopeningAnUnavailableSource(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:54.251  4209  4264 I TestRunner: finished: lostSelectionReceiptReplaysBeforeReopeningAnUnavailableSource(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:54.258  4209  4264 I TestRunner: started: duplicateOperationReplaysItsReceiptAndStaleCallbacksCannotReplaceNewerDrafts(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:54.438  4209  4264 I TestRunner: finished: duplicateOperationReplaysItsReceiptAndStaleCallbacksCannotReplaceNewerDrafts(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:54.443  4209  4264 I TestRunner: started: realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:54.448  4209  4264 E TestRunner: failed: realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:54.451  4209  4264 E TestRunner: ----- begin exception -----
+11-04 04:34:54.451  4209  4264 E TestRunner: java.util.concurrent.ExecutionException: java.lang.IllegalStateException: Synthetic external provider operation failed: reset (-99)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:372)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2072)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at dev.durableagent.probe.ExternalInputFixture.control(ExternalInputFixture.kt:31)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at dev.durableagent.probe.ExternalInputFixture.control$default(ExternalInputFixture.kt:19)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at dev.durableagent.probe.NativeInputStoreTest.realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(NativeInputStoreTest.kt:321)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:463)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2597)
+11-04 04:34:54.451  4209  4264 E TestRunner: Caused by: java.lang.IllegalStateException: Synthetic external provider operation failed: reset (-99)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at dev.durableagent.probe.ExternalInputFixture$control$1.onReceive(ExternalInputFixture.kt:26)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at android.app.LoadedApk$ReceiverDispatcher$Args.lambda$getRunnable$0(LoadedApk.java:1839)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at android.app.LoadedApk$ReceiverDispatcher$Args.$r8$lambda$mcNAAl1SQ4MyJPyDg8TJ2x2h0Rk(Unknown Source:0)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0.run(D8$$SyntheticClass:0)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at android.os.Handler.handleCallback(Handler.java:995)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at android.os.Handler.dispatchMessage(Handler.java:103)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at android.os.Looper.loopOnce(Looper.java:248)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at android.os.Looper.loop(Looper.java:338)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at android.app.ActivityThread.main(ActivityThread.java:9067)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:593)
+11-04 04:34:54.451  4209  4264 E TestRunner: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:932)
+11-04 04:34:54.451  4209  4264 E TestRunner: ----- end exception -----
+11-04 04:34:54.457  4209  4264 I TestRunner: finished: realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:54.461  4209  4264 I TestRunner: started: realSqliteQuotaFailureNeverAcknowledgesOrErasesTheLastCommittedDraft(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:54.815  4209  4264 E SQLiteLog: (13) statement aborts at 26: [UPDATE drafts SET revision=revision+1,state_version=state_version+1,text=?,selection_ids=? WHERE id=?] database or disk is full
+11-04 04:34:54.816  4209  4264 E SQLiteLog: (1) statement aborts at 1: [ROLLBACK;] cannot rollback - no transaction is active
+11-04 04:34:54.868  4209  4264 I TestRunner: finished: realSqliteQuotaFailureNeverAcknowledgesOrErasesTheLastCommittedDraft(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:54.871  4209  4264 I TestRunner: started: capabilitiesGatePreparationAndNewVersionsNeverMutatePinnedRepresentations(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:55.059  4209  4264 W HWUI    : Image decoding logging dropped!
+11-04 04:34:55.198  4209  4264 W HWUI    : Image decoding logging dropped!
+11-04 04:34:55.297  4209  4264 I TestRunner: finished: capabilitiesGatePreparationAndNewVersionsNeverMutatePinnedRepresentations(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:55.301  4209  4264 I TestRunner: started: unicodeDigestIsCrossLanguageAndInvalidSurrogatesDoNotOverwriteCommittedText(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:55.402  4209  4264 I TestRunner: finished: unicodeDigestIsCrossLanguageAndInvalidSurrogatesDoNotOverwriteCommittedText(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:34:55.405  4209  4264 I TestRunner: started: externalCryptoFailuresAreDistinguishedWithoutLeakingTheirCauseOrChangingCiphertext(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:55.725  4209  4264 I TestRunner: finished: externalCryptoFailuresAreDistinguishedWithoutLeakingTheirCauseOrChangingCiphertext(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:55.730  4209  4264 I TestRunner: started: sameUidCompetitorCannotEnterVaultAndProcessDeathReleasesItsLease(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:55.806  4387  4387 I ial_lease_probe: Late-enabling -Xcheck:jni
+11-04 04:34:55.833  4387  4387 I ial_lease_probe: Using CollectorTypeCMC GC.
+11-04 04:34:55.834  4387  4387 W ial_lease_probe: Unexpected CPU variant for x86: x86_64.
+11-04 04:34:55.834  4387  4387 W ial_lease_probe: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 04:34:55.856  4387  4387 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-04 04:34:55.923  4387  4387 D nativeloader: Configuring clns-9 for other apk /data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 04:34:55.931  4387  4387 I ial_lease_probe: AssetManager2(0x7dddbc28f038) locale list changing from [] to [en-US]
+11-04 04:34:55.937  4387  4387 V GraphicsEnvironment: Currently set values for:
+11-04 04:34:55.938  4387  4387 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 04:34:55.938  4387  4387 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 04:34:55.938  4387  4387 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 04:34:55.938  4387  4387 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 04:34:55.938  4387  4387 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 04:34:55.938  4387  4387 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 04:34:55.992  4387  4387 I Process : Sending signal. PID: 4387 SIG: 9
+11-04 04:34:56.071  4209  4264 I TestRunner: finished: sameUidCompetitorCannotEnterVaultAndProcessDeathReleasesItsLease(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:56.076  4209  4264 I TestRunner: started: narrowNativeAdapterOnlyReturnsPlaintextAtExplicitRequestTimeResolve(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:56.187  4209  4264 I agent.retention: IncrementDisableThreadFlip blocked for 5.272ms
+11-04 04:34:56.224  4209  4264 I TestRunner: finished: narrowNativeAdapterOnlyReturnsPlaintextAtExplicitRequestTimeResolve(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:56.230  4209  4264 I TestRunner: started: concurrentInstancesAdmitExactlyOneExpectedGeneration(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:56.330  4209  4224 W agent.retention: Suspending all threads took: 6.273ms
+11-04 04:34:56.404  4209  4264 I TestRunner: finished: concurrentInstancesAdmitExactlyOneExpectedGeneration(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:56.412  4209  4264 I TestRunner: started: rotationAndDeletionUseMonotonicCasWithoutConnectionInheritance(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:56.540  4209  4224 W agent.retention: Suspending all threads took: 14.857ms
+11-04 04:34:56.561  4209  4264 W agent.retention: Weak pointer dereference blocked for 13 milliseconds.
+11-04 04:34:56.765  4209  4264 I TestRunner: finished: rotationAndDeletionUseMonotonicCasWithoutConnectionInheritance(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:56.770  4209  4264 I TestRunner: started: ordinaryMetadataDoesNotDecryptTamperedCiphertextAndResolvePreservesIt(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:56.898  4209  4224 W agent.retention: Suspending all threads took: 60.279ms
+11-04 04:34:57.151  4209  4264 I TestRunner: finished: ordinaryMetadataDoesNotDecryptTamperedCiphertextAndResolvePreservesIt(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:57.157  4209  4264 I TestRunner: started: incompatibleAndMalformedEnvelopesAreNeverSilentlyReplaced(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:57.276  4209  4264 I TestRunner: finished: incompatibleAndMalformedEnvelopesAreNeverSilentlyReplaced(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:57.282  4209  4264 I TestRunner: started: failedAtomicReplacementKeepsPreviousCredentialAndNeverFallsBackToPlaintext(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:57.456  4209  4264 I TestRunner: finished: failedAtomicReplacementKeepsPreviousCredentialAndNeverFallsBackToPlaintext(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:57.461  4209  4264 I TestRunner: started: missingProtectionKeyPreservesCiphertextAndCanBeExplicitlyReconfigured(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:57.591  4209  4264 I TestRunner: finished: missingProtectionKeyPreservesCiphertextAndCanBeExplicitlyReconfigured(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:57.597  4209  4264 I TestRunner: started: actualProtectionKeyHasNoPerUseAuthAndRecordsItsSecurityLevel(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:57.634  4209  4224 W agent.retention: Suspending all threads took: 9.852ms
+11-04 04:34:57.677  4209  4264 I TestRunner: finished: actualProtectionKeyHasNoPerUseAuthAndRecordsItsSecurityLevel(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:57.681  4209  4264 I TestRunner: started: savedCredentialSurvivesReopenWithoutPlaintextAtRest(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:57.763  4209  4264 I TestRunner: finished: savedCredentialSurvivesReopenWithoutPlaintextAtRest(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:34:57.769  4209  4264 I TestRunner: run finished: 32 tests, 1 failed, 0 ignored
+11-04 04:36:59.551  5110  5110 I agent.retention: Late-enabling -Xcheck:jni
+11-04 04:36:59.586  5110  5110 I agent.retention: Using CollectorTypeCMC GC.
+11-04 04:36:59.587  5110  5110 W agent.retention: Unexpected CPU variant for x86: x86_64.
+11-04 04:36:59.587  5110  5110 W agent.retention: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 04:36:59.604  5110  5110 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-04 04:36:59.653  5110  5110 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[dev.durableagent.retention]: x86_64, null instrumentation[dev.durableagent.retention.test]: null, null
+11-04 04:36:59.661  5110  5110 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[])
+11-04 04:36:59.668  5110  5110 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020])
+11-04 04:36:59.675  5110  5110 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393])
+11-04 04:36:59.733  5110  5110 D nativeloader: Configuring clns-9 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~ANsoEdLUm87X4W5CVGRl9w==/dev.durableagent.retention.test-50KgaBJUgqwAL5zJ_8lkag==/base.apk:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~ANsoEdLUm87X4W5CVGRl9w==/dev.durableagent.retention.test-50KgaBJUgqwAL5zJ_8lkag==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64:/data/app/~~ANsoEdLUm87X4W5CVGRl9w==/dev.durableagent.retention.test-50KgaBJUgqwAL5zJ_8lkag==/base.apk!/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 04:36:59.746  5110  5110 I agent.retention: AssetManager2(0x7dddbc29b838) locale list changing from [] to [en-US]
+11-04 04:36:59.757  5110  5110 V GraphicsEnvironment: Currently set values for:
+11-04 04:36:59.757  5110  5110 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 04:36:59.757  5110  5110 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 04:36:59.757  5110  5110 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 04:36:59.757  5110  5110 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 04:36:59.757  5110  5110 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 04:36:59.757  5110  5110 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 04:36:59.764  5110  5110 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 04:36:59.769  5110  5110 D nativeloader: Configuring clns-10 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~ANsoEdLUm87X4W5CVGRl9w==/dev.durableagent.retention.test-50KgaBJUgqwAL5zJ_8lkag==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 04:36:59.775  5110  5110 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 04:36:59.780  5110  5110 D nativeloader: Configuring clns-11 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~ANsoEdLUm87X4W5CVGRl9w==/dev.durableagent.retention.test-50KgaBJUgqwAL5zJ_8lkag==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 04:36:59.790  5110  5110 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~ANsoEdLUm87X4W5CVGRl9w==/dev.durableagent.retention.test-50KgaBJUgqwAL5zJ_8lkag==/base.apk*2945438955:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk*2772163103])
+11-04 04:36:59.796  5110  5110 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~ANsoEdLUm87X4W5CVGRl9w==/dev.durableagent.retention.test-50KgaBJUgqwAL5zJ_8lkag==/base.apk*2945438955:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk*2772163103])
+11-04 04:36:59.801  5110  5110 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~ANsoEdLUm87X4W5CVGRl9w==/dev.durableagent.retention.test-50KgaBJUgqwAL5zJ_8lkag==/base.apk*2945438955:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk*2772163103])
+11-04 04:36:59.832  5110  5110 I agent.retention: AssetManager2(0x7dddbc296a18) locale list changing from [] to [en-US]
+11-04 04:36:59.843  5110  5110 I AndroidJUnitRunner: newApplication android.app.Application
+11-04 04:36:59.849  5110  5110 I AndroidJUnitRunner: onCreate Bundle[mParcelledData.dataSize=280]
+11-04 04:36:59.849  5110  5110 D AndroidJUnitRunner: Use the raw file system for managing file I/O.
+11-04 04:36:59.860  5110  5110 V TestEventClient: No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+11-04 04:36:59.862  5110  5125 D AndroidJUnitRunner: onStart is called.
+11-04 04:36:59.872  5110  5125 I InstrConnection: Could not send broadcast or register receiver (isolatedProcess?)
+11-04 04:36:59.890  5110  5125 I TestRunner: run started: 1 tests
+11-04 04:36:59.892  5110  5125 I TestRunner: started: interruptedNativeUpgradePreservesStableSendFrozenInputAndStopBeforeRetry(dev.durableagent.probe.NativeRetentionMigrationTest)
+11-04 04:36:59.928  5110  5125 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+11-04 04:37:00.061  5110  5125 E TestRunner: failed: interruptedNativeUpgradePreservesStableSendFrozenInputAndStopBeforeRetry(dev.durableagent.probe.NativeRetentionMigrationTest)
+11-04 04:37:00.061  5110  5125 E TestRunner: ----- begin exception -----
+11-04 04:37:00.061  5110  5125 E TestRunner: dev.durableagent.probe.NativeInputException: 发送字段格式无效。
+11-04 04:37:00.061  5110  5125 E TestRunner: ----- end exception -----
+11-04 04:37:00.062  5110  5125 I TestRunner: finished: interruptedNativeUpgradePreservesStableSendFrozenInputAndStopBeforeRetry(dev.durableagent.probe.NativeRetentionMigrationTest)
+11-04 04:37:00.066  5110  5125 I TestRunner: run finished: 1 tests, 1 failed, 0 ignored
+11-04 04:39:25.149  5527  5527 I agent.retention: Late-enabling -Xcheck:jni
+11-04 04:39:25.196  5527  5527 I agent.retention: Using CollectorTypeCMC GC.
+11-04 04:39:25.197  5527  5527 W agent.retention: Unexpected CPU variant for x86: x86_64.
+11-04 04:39:25.197  5527  5527 W agent.retention: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 04:39:25.216  5527  5527 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-04 04:39:25.265  5527  5527 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[dev.durableagent.retention]: x86_64, null instrumentation[dev.durableagent.retention.test]: null, null
+11-04 04:39:25.268  5527  5527 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[])
+11-04 04:39:25.269  5527  5527 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020])
+11-04 04:39:25.272  5527  5527 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393])
+11-04 04:39:25.316  5527  5527 D nativeloader: Configuring clns-9 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~FFmFqPKjlWLwNnjobfArXg==/dev.durableagent.retention.test-AA9q3wZrr4lGwaiMOCDSCw==/base.apk:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~FFmFqPKjlWLwNnjobfArXg==/dev.durableagent.retention.test-AA9q3wZrr4lGwaiMOCDSCw==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64:/data/app/~~FFmFqPKjlWLwNnjobfArXg==/dev.durableagent.retention.test-AA9q3wZrr4lGwaiMOCDSCw==/base.apk!/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 04:39:25.323  5527  5527 I agent.retention: AssetManager2(0x7dddbc2963d8) locale list changing from [] to [en-US]
+11-04 04:39:25.327  5527  5527 V GraphicsEnvironment: Currently set values for:
+11-04 04:39:25.328  5527  5527 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 04:39:25.328  5527  5527 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 04:39:25.328  5527  5527 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 04:39:25.328  5527  5527 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 04:39:25.328  5527  5527 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 04:39:25.328  5527  5527 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 04:39:25.335  5527  5527 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 04:39:25.339  5527  5527 D nativeloader: Configuring clns-10 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~FFmFqPKjlWLwNnjobfArXg==/dev.durableagent.retention.test-AA9q3wZrr4lGwaiMOCDSCw==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 04:39:25.340  5527  5527 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 04:39:25.346  5527  5527 D nativeloader: Configuring clns-11 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~FFmFqPKjlWLwNnjobfArXg==/dev.durableagent.retention.test-AA9q3wZrr4lGwaiMOCDSCw==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 04:39:25.349  5527  5527 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~FFmFqPKjlWLwNnjobfArXg==/dev.durableagent.retention.test-AA9q3wZrr4lGwaiMOCDSCw==/base.apk*1654592019:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk*2772163103])
+11-04 04:39:25.354  5527  5527 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~FFmFqPKjlWLwNnjobfArXg==/dev.durableagent.retention.test-AA9q3wZrr4lGwaiMOCDSCw==/base.apk*1654592019:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk*2772163103])
+11-04 04:39:25.357  5527  5527 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~FFmFqPKjlWLwNnjobfArXg==/dev.durableagent.retention.test-AA9q3wZrr4lGwaiMOCDSCw==/base.apk*1654592019:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk*2772163103])
+11-04 04:39:25.398  5527  5527 I agent.retention: AssetManager2(0x7dddbc295d98) locale list changing from [] to [en-US]
+11-04 04:39:25.405  5527  5527 I AndroidJUnitRunner: newApplication android.app.Application
+11-04 04:39:25.411  5527  5527 I AndroidJUnitRunner: onCreate Bundle[mParcelledData.dataSize=488]
+11-04 04:39:25.413  5527  5527 D AndroidJUnitRunner: Use the raw file system for managing file I/O.
+11-04 04:39:25.429  5527  5527 V TestEventClient: No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+11-04 04:39:25.430  5527  5545 D AndroidJUnitRunner: onStart is called.
+11-04 04:39:25.437  5527  5545 I InstrConnection: Could not send broadcast or register receiver (isolatedProcess?)
+11-04 04:39:25.459  5527  5545 I TestRunner: run started: 2 tests
+11-04 04:39:25.460  5527  5545 I TestRunner: started: interruptedNativeUpgradePreservesStableSendFrozenInputAndStopBeforeRetry(dev.durableagent.probe.NativeRetentionMigrationTest)
+11-04 04:39:25.484  5527  5545 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+11-04 04:39:25.635  5527  5545 E TestRunner: failed: interruptedNativeUpgradePreservesStableSendFrozenInputAndStopBeforeRetry(dev.durableagent.probe.NativeRetentionMigrationTest)
+11-04 04:39:25.637  5527  5545 E TestRunner: ----- begin exception -----
+11-04 04:39:25.637  5527  5545 E TestRunner: java.lang.AssertionError: Migration must not succeed after injected interruption
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.Assert.fail(Assert.java:89)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at dev.durableagent.probe.NativeRetentionMigrationTest.interruptedNativeUpgradePreservesStableSendFrozenInputAndStopBeforeRetry(NativeRetentionMigrationTest.kt:34)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:463)
+11-04 04:39:25.637  5527  5545 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2597)
+11-04 04:39:25.637  5527  5545 E TestRunner: ----- end exception -----
+11-04 04:39:25.638  5527  5545 I TestRunner: finished: interruptedNativeUpgradePreservesStableSendFrozenInputAndStopBeforeRetry(dev.durableagent.probe.NativeRetentionMigrationTest)
+11-04 04:39:25.644  5527  5545 I TestRunner: started: realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:39:26.198  5527  5545 I TestRunner: finished: realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:39:26.200  5527  5545 I TestRunner: run finished: 2 tests, 1 failed, 0 ignored
+11-04 04:43:31.245  6030  6030 I agent.retention: Late-enabling -Xcheck:jni
+11-04 04:43:31.267  6030  6030 I agent.retention: Using CollectorTypeCMC GC.
+11-04 04:43:31.268  6030  6030 W agent.retention: Unexpected CPU variant for x86: x86_64.
+11-04 04:43:31.268  6030  6030 W agent.retention: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 04:43:31.346  6030  6030 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-04 04:43:31.478  6030  6030 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[dev.durableagent.retention]: x86_64, null instrumentation[dev.durableagent.retention.test]: null, null
+11-04 04:43:31.484  6030  6030 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[])
+11-04 04:43:31.493  6030  6030 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020])
+11-04 04:43:31.499  6030  6030 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393])
+11-04 04:43:31.555  6030  6030 D nativeloader: Configuring clns-9 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/base.apk:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64:/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/base.apk!/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 04:43:31.568  6030  6030 I agent.retention: AssetManager2(0x7dddbc2963d8) locale list changing from [] to [en-US]
+11-04 04:43:31.581  6030  6030 V GraphicsEnvironment: Currently set values for:
+11-04 04:43:31.581  6030  6030 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 04:43:31.581  6030  6030 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 04:43:31.581  6030  6030 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 04:43:31.582  6030  6030 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 04:43:31.583  6030  6030 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 04:43:31.583  6030  6030 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 04:43:31.588  6030  6030 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 04:43:31.594  6030  6030 D nativeloader: Configuring clns-10 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 04:43:31.600  6030  6030 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 04:43:31.605  6030  6030 D nativeloader: Configuring clns-11 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/lib/x86_64:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 04:43:31.608  6030  6030 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/base.apk*2712746264:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk*2772163103])
+11-04 04:43:31.613  6030  6030 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/base.apk*2712746264:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk*2772163103])
+11-04 04:43:31.616  6030  6030 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/base.apk*2712746264:/data/app/~~71YPD2nQJ11jgZ5b4pLQSg==/dev.durableagent.retention-rdDmfqQJOgv2oqAYYc57Rw==/base.apk*2772163103])
+11-04 04:43:31.648  6030  6030 I agent.retention: AssetManager2(0x7dddbc295d98) locale list changing from [] to [en-US]
+11-04 04:43:31.657  6030  6030 I AndroidJUnitRunner: newApplication android.app.Application
+11-04 04:43:31.661  6030  6030 I AndroidJUnitRunner: onCreate Bundle[mParcelledData.dataSize=256]
+11-04 04:43:31.664  6030  6030 D AndroidJUnitRunner: Use the raw file system for managing file I/O.
+11-04 04:43:31.672  6030  6030 V TestEventClient: No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+11-04 04:43:31.673  6030  6072 D AndroidJUnitRunner: onStart is called.
+11-04 04:43:31.681  6030  6072 I InstrConnection: Could not send broadcast or register receiver (isolatedProcess?)
+11-04 04:43:31.704  6030  6072 I TestRunner: run started: 1 tests
+11-04 04:43:31.705  6030  6072 I TestRunner: started: contentCapacityFailureIsVisibleWithoutDestroyingPreviouslyFrozenBytes(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:43:31.729  6030  6072 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+11-04 04:43:31.959  6030  6072 E TestRunner: failed: contentCapacityFailureIsVisibleWithoutDestroyingPreviouslyFrozenBytes(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:43:31.961  6030  6072 E TestRunner: ----- begin exception -----
+11-04 04:43:31.961  6030  6072 E TestRunner: org.junit.ComparisonFailure: expected:<[failed]> but was:<[ready]>
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.Assert.assertEquals(Assert.java:117)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.Assert.assertEquals(Assert.java:146)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at dev.durableagent.probe.NativeRetentionTest.contentCapacityFailureIsVisibleWithoutDestroyingPreviouslyFrozenBytes(NativeRetentionTest.kt:83)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:463)
+11-04 04:43:31.961  6030  6072 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2597)
+11-04 04:43:31.961  6030  6072 E TestRunner: ----- end exception -----
+11-04 04:43:31.962  6030  6072 I TestRunner: finished: contentCapacityFailureIsVisibleWithoutDestroyingPreviouslyFrozenBytes(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:43:31.971  6030  6072 I TestRunner: run finished: 1 tests, 1 failed, 0 ignored
+11-04 04:52:34.766  6673  6673 I agent.retention: Late-enabling -Xcheck:jni
+11-04 04:52:34.805  6673  6673 I agent.retention: Using CollectorTypeCMC GC.
+11-04 04:52:34.806  6673  6673 W agent.retention: Unexpected CPU variant for x86: x86_64.
+11-04 04:52:34.806  6673  6673 W agent.retention: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 04:52:34.814  6673  6673 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-04 04:52:35.024  6673  6673 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[dev.durableagent.retention]: x86_64, null instrumentation[dev.durableagent.retention.test]: null, null
+11-04 04:52:35.028  6673  6673 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[])
+11-04 04:52:35.030  6673  6673 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020])
+11-04 04:52:35.035  6673  6673 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393])
+11-04 04:52:35.114  6673  6673 D nativeloader: Configuring clns-9 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/base.apk:/data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/lib/x86_64:/data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/lib/x86_64:/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/base.apk!/lib/x86_64:/data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 04:52:35.130  6673  6673 I agent.retention: AssetManager2(0x7dddbc2963d8) locale list changing from [] to [en-US]
+11-04 04:52:35.135  6673  6673 V GraphicsEnvironment: Currently set values for:
+11-04 04:52:35.135  6673  6673 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 04:52:35.135  6673  6673 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 04:52:35.136  6673  6673 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 04:52:35.136  6673  6673 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 04:52:35.136  6673  6673 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 04:52:35.136  6673  6673 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 04:52:35.143  6673  6673 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 04:52:35.145  6673  6673 D nativeloader: Configuring clns-10 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/lib/x86_64:/data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 04:52:35.148  6673  6673 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 04:52:35.150  6673  6673 D nativeloader: Configuring clns-11 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/lib/x86_64:/data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 04:52:35.151  6673  6673 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/base.apk*2712746264:/data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/base.apk*1283114750])
+11-04 04:52:35.152  6673  6673 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/base.apk*2712746264:/data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/base.apk*1283114750])
+11-04 04:52:35.155  6673  6673 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~NRxVDPHoqKJAVOQQ53Tcvg==/dev.durableagent.retention.test-f53DzeYpG1Meh3tnPCS5Fg==/base.apk*2712746264:/data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/base.apk*1283114750])
+11-04 04:52:35.179  6673  6673 I agent.retention: AssetManager2(0x7dddbc295d98) locale list changing from [] to [en-US]
+11-04 04:52:35.193  6673  6673 I AndroidJUnitRunner: newApplication android.app.Application
+11-04 04:52:35.199  6673  6673 I AndroidJUnitRunner: onCreate Bundle[mParcelledData.dataSize=584]
+11-04 04:52:35.199  6673  6673 D AndroidJUnitRunner: Use the raw file system for managing file I/O.
+11-04 04:52:35.210  6673  6673 V TestEventClient: No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+11-04 04:52:35.213  6673  6723 D AndroidJUnitRunner: onStart is called.
+11-04 04:52:35.217  6673  6723 I InstrConnection: Could not send broadcast or register receiver (isolatedProcess?)
+11-04 04:52:35.259  6673  6723 I TestRunner: run started: 50 tests
+11-04 04:52:35.260  6673  6723 I TestRunner: started: interruptedNativeUpgradePreservesStableSendFrozenInputAndStopBeforeRetry(dev.durableagent.probe.NativeRetentionMigrationTest)
+11-04 04:52:35.292  6673  6723 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+11-04 04:52:35.460  6673  6723 I TestRunner: finished: interruptedNativeUpgradePreservesStableSendFrozenInputAndStopBeforeRetry(dev.durableagent.probe.NativeRetentionMigrationTest)
+11-04 04:52:35.467  6673  6723 I TestRunner: started: aNewDurableOwnerInvalidatesAnEarlierCleanupCandidateAcrossReopen(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:52:35.723  6673  6723 I TestRunner: finished: aNewDurableOwnerInvalidatesAnEarlierCleanupCandidateAcrossReopen(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:52:35.728  6673  6723 I TestRunner: started: sdkHandoffKeepsOriginalFrozenOwnerUntilBothAuthoritiesCanBeVerified(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:52:35.867  6673  6723 I TestRunner: finished: sdkHandoffKeepsOriginalFrozenOwnerUntilBothAuthoritiesCanBeVerified(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:52:35.870  6673  6723 I TestRunner: started: contentCapacityFailureIsVisibleWithoutDestroyingPreviouslyFrozenBytes(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:52:35.989  6673  6723 I TestRunner: finished: contentCapacityFailureIsVisibleWithoutDestroyingPreviouslyFrozenBytes(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:52:35.992  6673  6723 I TestRunner: started: interruptedQuarantineRejectsANewReferenceAndSafelyFinishesAfterReopen(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:52:36.067  6673  6723 I TestRunner: finished: interruptedQuarantineRejectsANewReferenceAndSafelyFinishesAfterReopen(dev.durableagent.probe.NativeRetentionTest)
+11-04 04:52:36.068  6673  6723 I TestRunner: started: committedSelectionIsReturnedBeforeSlowSourceAndIndependentTextSaveIsPreserved(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.080  6673  6723 I TestRunner: finished: committedSelectionIsReturnedBeforeSlowSourceAndIndependentTextSaveIsPreserved(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.083  6673  6723 I TestRunner: started: jpegExifOrientationIsAppliedToTheWholeImageAndTruncatedDataIsRejected(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.129  6673  6723 W HWUI    : Image decoding logging dropped!
+11-04 04:52:38.143  6673  6723 W HWUI    : Image decoding logging dropped!
+11-04 04:52:38.164  6673  6723 I TestRunner: finished: jpegExifOrientationIsAppliedToTheWholeImageAndTruncatedDataIsRejected(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.168  6673  6723 I TestRunner: started: changedSourceUnknownLengthAndInvalidUtf8NeverBecomeReadyOrSilentlyTruncated(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.340  6673  6723 I TestRunner: finished: changedSourceUnknownLengthAndInvalidUtf8NeverBecomeReadyOrSilentlyTruncated(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.342  6673  6723 I TestRunner: started: twoBlockedWorkersDoNotBlockThirdAdmissionSaveOrPendingOwnershipCleanup(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.448  6673  6723 I TestRunner: finished: twoBlockedWorkersDoNotBlockThirdAdmissionSaveOrPendingOwnershipCleanup(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.449  6673  6723 I TestRunner: started: sourceLossIsVisibleWithoutDiscardingPreparedRecoveryBytes(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.523  6673  6723 I TestRunner: finished: sourceLossIsVisibleWithoutDiscardingPreparedRecoveryBytes(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.524  6673  6723 I TestRunner: started: inputFilesAreCeNoBackupAndBothBackupModesExcludeEveryPrivateDomain(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.550  6673  6723 I TestRunner: finished: inputFilesAreCeNoBackupAndBothBackupModesExcludeEveryPrivateDomain(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.551  6673  6723 I TestRunner: started: failedFinalPublicationCanRecoverInTheSameProcessAfterStorageReturns(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.617  6673  6723 I TestRunner: finished: failedFinalPublicationCanRecoverInTheSameProcessAfterStorageReturns(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.619  6673  6723 I TestRunner: started: committedDraftsReopenIndependentlyAndClearNeverResetsRevision(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.666  6673  6723 I TestRunner: finished: committedDraftsReopenIndependentlyAndClearNeverResetsRevision(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.667  6673  6723 I TestRunner: started: preparedTextFreezePinsExactBytesAfterSourceChangesAndDraftIsCleared(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.733  6673  6723 I TestRunner: finished: preparedTextFreezePinsExactBytesAfterSourceChangesAndDraftIsCleared(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.734  6673  6723 I TestRunner: started: oversizedPngDimensionsAndMimeMismatchFailWithoutPartialPreparation(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.827  6673  6723 I TestRunner: finished: oversizedPngDimensionsAndMimeMismatchFailWithoutPartialPreparation(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.829  6673  6723 I TestRunner: started: pngPreparationKeepsAlphaAndRecordsActualFullFrameResize(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.938  6673  6723 W HWUI    : Image decoding logging dropped!
+11-04 04:52:38.972  6673  6723 W HWUI    : Image decoding logging dropped!
+11-04 04:52:38.977  6673  6723 I TestRunner: finished: pngPreparationKeepsAlphaAndRecordsActualFullFrameResize(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:38.980  6673  6723 I TestRunner: started: slowSourceCannotBlockTextCommitAndLateResultCannotRestoreRemovedSelection(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.029  6673  6723 I TestRunner: finished: slowSourceCannotBlockTextCommitAndLateResultCannotRestoreRemovedSelection(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.031  6673  6723 I TestRunner: started: lostSelectionReceiptReplaysBeforeReopeningAnUnavailableSource(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.086  6673  6723 I TestRunner: finished: lostSelectionReceiptReplaysBeforeReopeningAnUnavailableSource(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.088  6673  6723 I TestRunner: started: duplicateOperationReplaysItsReceiptAndStaleCallbacksCannotReplaceNewerDrafts(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.120  6673  6723 I TestRunner: finished: duplicateOperationReplaysItsReceiptAndStaleCallbacksCannotReplaceNewerDrafts(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.121  6673  6723 I TestRunner: started: realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.297  6673  6723 I TestRunner: finished: realCrossUidGrantRevocationRetainsOnlyPreviouslyFixedContent(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.300  6673  6723 I TestRunner: started: realSqliteQuotaFailureNeverAcknowledgesOrErasesTheLastCommittedDraft(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.362  6673  6723 E SQLiteLog: (13) statement aborts at 26: [UPDATE drafts SET revision=revision+1,state_version=state_version+1,text=?,selection_ids=? WHERE id=?] database or disk is full
+11-04 04:52:39.362  6673  6723 E SQLiteLog: (1) statement aborts at 1: [ROLLBACK;] cannot rollback - no transaction is active
+11-04 04:52:39.372  6673  6723 I TestRunner: finished: realSqliteQuotaFailureNeverAcknowledgesOrErasesTheLastCommittedDraft(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.374  6673  6723 I TestRunner: started: capabilitiesGatePreparationAndNewVersionsNeverMutatePinnedRepresentations(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.427  6673  6723 W HWUI    : Image decoding logging dropped!
+11-04 04:52:39.449  6673  6723 W HWUI    : Image decoding logging dropped!
+11-04 04:52:39.476  6673  6723 I TestRunner: finished: capabilitiesGatePreparationAndNewVersionsNeverMutatePinnedRepresentations(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.477  6673  6723 I TestRunner: started: unicodeDigestIsCrossLanguageAndInvalidSurrogatesDoNotOverwriteCommittedText(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.510  6673  6723 I TestRunner: finished: unicodeDigestIsCrossLanguageAndInvalidSurrogatesDoNotOverwriteCommittedText(dev.durableagent.probe.NativeInputStoreTest)
+11-04 04:52:39.512  6673  6723 I TestRunner: started: stopSurvivesReopenAndNewExplicitIntentRetainsExactOldAbortBarrier(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:39.592  6673  6723 I TestRunner: finished: stopSurvivesReopenAndNewExplicitIntentRetainsExactOldAbortBarrier(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:39.593  6673  6723 I TestRunner: started: explicitIntentReopensWithItsFixedIdentityAndNeverAdoptsLaterDraftText(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:39.644  6673  6723 I TestRunner: finished: explicitIntentReopensWithItsFixedIdentityAndNeverAdoptsLaterDraftText(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:39.645  6673  6723 I TestRunner: started: malformedPersistedControlCannotBeReadAsPermissionToDispatch(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:39.706  6673  6723 I TestRunner: finished: malformedPersistedControlCannotBeReadAsPermissionToDispatch(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:39.708  6673  6723 I TestRunner: started: acknowledgementClearsOnlyOriginalRevisionAndReplayPreservesNewDraft(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:39.756  6673  6723 I TestRunner: finished: acknowledgementClearsOnlyOriginalRevisionAndReplayPreservesNewDraft(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:39.758  6673  6723 I TestRunner: started: intentsRetainRealObjectPinsAcrossPendingUncertainAcknowledgedAndCancelledStates(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:39.848  6673  6723 I TestRunner: finished: intentsRetainRealObjectPinsAcrossPendingUncertainAcknowledgedAndCancelledStates(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:39.850  6673  6723 I TestRunner: started: lateAcknowledgementPreservesAuthorAbaAndNewRepresentationAtSameAuthorRevision(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:39.990  6673  6723 I TestRunner: finished: lateAcknowledgementPreservesAuthorAbaAndNewRepresentationAtSameAuthorRevision(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:39.992  6673  6723 I TestRunner: started: previousNativeSchemaMigratesWithoutCreatingSendsOrLosingDraftObjectAndOperationReceipts(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:40.094  6673  6723 I TestRunner: finished: previousNativeSchemaMigratesWithoutCreatingSendsOrLosingDraftObjectAndOperationReceipts(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:40.095  6673  6723 I TestRunner: started: nativeCommitFailuresNeverPublishAnIntentAckOrStopAndPublicBridgeCannotForgeAuthority(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:40.234  6673  6723 I TestRunner: finished: nativeCommitFailuresNeverPublishAnIntentAckOrStopAndPublicBridgeCannotForgeAuthority(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:40.236  6673  6723 I TestRunner: started: identicalBodyExplicitActionsStayDistinctAndPagingRejectsAChangedScope(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:40.283  6673  6723 I TestRunner: finished: identicalBodyExplicitActionsStayDistinctAndPagingRejectsAChangedScope(dev.durableagent.probe.NativeSubmissionStoreTest)
+11-04 04:52:40.285  6673  6723 I TestRunner: started: finishingInstallsEveryAuthoritativeContextAtomicallyAndRefusesPartialOrRegressingSnapshots(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.340  6673  6723 I TestRunner: finished: finishingInstallsEveryAuthoritativeContextAtomicallyAndRefusesPartialOrRegressingSnapshots(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.342  6673  6723 I TestRunner: started: lateOrdinaryPublicationNeverReinstallsAnOlderLocationOrContradictsTheSameVersion(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.380  6673  6723 I TestRunner: finished: lateOrdinaryPublicationNeverReinstallsAnOlderLocationOrContradictsTheSameVersion(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.383  6673  6723 I TestRunner: started: failedPublicationRollsBackEveryContextAndKeepsTheFenceForCanonicalRecovery(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.438  6673  6723 I TestRunner: finished: failedPublicationRollsBackEveryContextAndKeepsTheFenceForCanonicalRecovery(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.441  6673  6723 I TestRunner: started: previousSendSchemaMigratesWithoutChangingIntentPinsStopOrDraft(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.503  6673  6723 E TestRunner: failed: previousSendSchemaMigratesWithoutChangingIntentPinsStopOrDraft(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.503  6673  6723 E TestRunner: ----- begin exception -----
+11-04 04:52:40.503  6673  6723 E TestRunner: java.lang.AssertionError: expected:<4> but was:<6>
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.Assert.fail(Assert.java:89)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.Assert.failNotEquals(Assert.java:835)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.Assert.assertEquals(Assert.java:120)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.Assert.assertEquals(Assert.java:146)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at dev.durableagent.probe.NativeProjectFenceTest.previousSendSchemaMigratesWithoutChangingIntentPinsStopOrDraft(NativeProjectFenceTest.kt:188)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:463)
+11-04 04:52:40.503  6673  6723 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2597)
+11-04 04:52:40.504  6673  6723 E TestRunner: ----- end exception -----
+11-04 04:52:40.505  6673  6723 I TestRunner: finished: previousSendSchemaMigratesWithoutChangingIntentPinsStopOrDraft(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.518  6673  6723 I TestRunner: started: unknownOrCorruptFenceNeverOpensNewSendingAndGenericUiCannotReleaseIt(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.601  6673  6723 I TestRunner: finished: unknownOrCorruptFenceNeverOpensNewSendingAndGenericUiCannotReleaseIt(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.602  6673  6723 I TestRunner: started: editFenceBlocksOnlyNewIntentsAndPersistsWhileDraftStopAndOldAckRemainAvailable(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.645  6673  6723 I TestRunner: finished: editFenceBlocksOnlyNewIntentsAndPersistsWhileDraftStopAndOldAckRemainAvailable(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.647  6673  6723 I TestRunner: started: ordinaryPublicationCannotChangeLocationWhileFenceIsHeldEvenWithAHigherVersion(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.686  6673  6723 I TestRunner: finished: ordinaryPublicationCannotChangeLocationWhileFenceIsHeldEvenWithAHigherVersion(dev.durableagent.probe.NativeProjectFenceTest)
+11-04 04:52:40.688  6673  6723 I TestRunner: started: externalCryptoFailuresAreDistinguishedWithoutLeakingTheirCauseOrChangingCiphertext(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:40.817  6673  6723 I TestRunner: finished: externalCryptoFailuresAreDistinguishedWithoutLeakingTheirCauseOrChangingCiphertext(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:40.819  6673  6723 I TestRunner: started: sameUidCompetitorCannotEnterVaultAndProcessDeathReleasesItsLease(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:40.906  6738  6738 I ial_lease_probe: Late-enabling -Xcheck:jni
+11-04 04:52:40.918  6738  6738 I ial_lease_probe: Using CollectorTypeCMC GC.
+11-04 04:52:40.919  6738  6738 W ial_lease_probe: Unexpected CPU variant for x86: x86_64.
+11-04 04:52:40.919  6738  6738 W ial_lease_probe: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 04:52:40.934  6738  6738 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-04 04:52:40.991  6738  6738 D nativeloader: Configuring clns-9 for other apk /data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/lib/x86_64:/data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 04:52:41.001  6738  6738 I ial_lease_probe: AssetManager2(0x7dddbc28f038) locale list changing from [] to [en-US]
+11-04 04:52:41.009  6738  6738 V GraphicsEnvironment: Currently set values for:
+11-04 04:52:41.009  6738  6738 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 04:52:41.009  6738  6738 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 04:52:41.009  6738  6738 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 04:52:41.009  6738  6738 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 04:52:41.009  6738  6738 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 04:52:41.009  6738  6738 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 04:52:41.029  6738  6738 I Process : Sending signal. PID: 6738 SIG: 9
+11-04 04:52:41.055  6673  6723 I TestRunner: finished: sameUidCompetitorCannotEnterVaultAndProcessDeathReleasesItsLease(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.057  6673  6723 I TestRunner: started: narrowNativeAdapterOnlyReturnsPlaintextAtExplicitRequestTimeResolve(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.098  6673  6723 I TestRunner: finished: narrowNativeAdapterOnlyReturnsPlaintextAtExplicitRequestTimeResolve(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.100  6673  6723 I TestRunner: started: concurrentInstancesAdmitExactlyOneExpectedGeneration(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.170  6673  6723 I TestRunner: finished: concurrentInstancesAdmitExactlyOneExpectedGeneration(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.172  6673  6723 I TestRunner: started: rotationAndDeletionUseMonotonicCasWithoutConnectionInheritance(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.240  6673  6723 I TestRunner: finished: rotationAndDeletionUseMonotonicCasWithoutConnectionInheritance(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.242  6673  6723 I TestRunner: started: ordinaryMetadataDoesNotDecryptTamperedCiphertextAndResolvePreservesIt(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.329  6673  6723 I TestRunner: finished: ordinaryMetadataDoesNotDecryptTamperedCiphertextAndResolvePreservesIt(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.330  6673  6723 I TestRunner: started: incompatibleAndMalformedEnvelopesAreNeverSilentlyReplaced(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.377  6673  6723 I TestRunner: finished: incompatibleAndMalformedEnvelopesAreNeverSilentlyReplaced(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.379  6673  6723 I TestRunner: started: failedAtomicReplacementKeepsPreviousCredentialAndNeverFallsBackToPlaintext(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.487  6673  6723 I TestRunner: finished: failedAtomicReplacementKeepsPreviousCredentialAndNeverFallsBackToPlaintext(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.491  6673  6723 I TestRunner: started: missingProtectionKeyPreservesCiphertextAndCanBeExplicitlyReconfigured(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.559  6673  6723 I TestRunner: finished: missingProtectionKeyPreservesCiphertextAndCanBeExplicitlyReconfigured(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.562  6673  6723 I TestRunner: started: actualProtectionKeyHasNoPerUseAuthAndRecordsItsSecurityLevel(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.611  6673  6723 I TestRunner: finished: actualProtectionKeyHasNoPerUseAuthAndRecordsItsSecurityLevel(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.616  6673  6723 I TestRunner: started: savedCredentialSurvivesReopenWithoutPlaintextAtRest(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.659  6673  6723 I TestRunner: finished: savedCredentialSurvivesReopenWithoutPlaintextAtRest(dev.durableagent.probe.CredentialVaultTest)
+11-04 04:52:41.660  6673  6723 I TestRunner: run finished: 50 tests, 1 failed, 0 ignored
+11-04 04:54:22.331  6910  6910 I agent.retention: Late-enabling -Xcheck:jni
+11-04 04:54:22.349  6910  6910 I agent.retention: Using CollectorTypeCMC GC.
+11-04 04:54:22.350  6910  6910 W agent.retention: Unexpected CPU variant for x86: x86_64.
+11-04 04:54:22.350  6910  6910 W agent.retention: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 04:54:22.358  6910  6910 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-04 04:54:22.486  6910  6910 D nativeloader: Configuring clns-9 for other apk /data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/lib/x86_64:/data/app/~~z6s1poccBfuKvpMqY5H7GA==/dev.durableagent.retention-ApYo7HqeAWRy3_2mLXdR7w==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 04:54:22.495  6910  6910 I agent.retention: AssetManager2(0x7dddbc28f038) locale list changing from [] to [en-US]
+11-04 04:54:22.502  6910  6910 V GraphicsEnvironment: Currently set values for:
+11-04 04:54:22.502  6910  6910 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 04:54:22.502  6910  6910 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 04:54:22.502  6910  6910 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 04:54:22.502  6910  6910 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 04:54:22.502  6910  6910 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 04:54:22.502  6910  6910 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 04:58:37.882  6910  6910 D ActivityThread: Package [dev.durableagent.probe] reported as REPLACED, but missing application info. Assuming REMOVED.
+11-04 04:58:37.892  6910  6934 I agent.retention: Waiting for a blocking GC ProfileSaver
+11-04 04:58:37.910  6910  6934 I agent.retention: WaitForGcToComplete blocked ProfileSaver on Background for 18.205ms
+11-04 04:58:37.937  6910  6910 I Process : Sending signal. PID: 6910 SIG: 9
+11-04 05:05:37.203  7989  7989 I agent.retention: Late-enabling -Xcheck:jni
+11-04 05:05:37.249  7989  7989 I agent.retention: Using CollectorTypeCMC GC.
+11-04 05:05:37.249  7989  7989 W agent.retention: Unexpected CPU variant for x86: x86_64.
+11-04 05:05:37.249  7989  7989 W agent.retention: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 05:05:37.284  7989  7989 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-04 05:05:37.350  7989  7989 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[dev.durableagent.retention]: x86_64, null instrumentation[dev.durableagent.retention.test]: null, null
+11-04 05:05:37.355  7989  7989 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[])
+11-04 05:05:37.356  7989  7989 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020])
+11-04 05:05:37.360  7989  7989 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393])
+11-04 05:05:37.414  7989  7989 D nativeloader: Configuring clns-9 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~pT3vJ9FZm625h6QYjM8RXQ==/dev.durableagent.retention.test-RkcfCn7j-y7wmhn7uRWdRg==/base.apk:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~pT3vJ9FZm625h6QYjM8RXQ==/dev.durableagent.retention.test-RkcfCn7j-y7wmhn7uRWdRg==/lib/x86_64:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/lib/x86_64:/data/app/~~pT3vJ9FZm625h6QYjM8RXQ==/dev.durableagent.retention.test-RkcfCn7j-y7wmhn7uRWdRg==/base.apk!/lib/x86_64:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 05:05:37.429  7989  7989 I agent.retention: AssetManager2(0x7dddbc2963d8) locale list changing from [] to [en-US]
+11-04 05:05:37.434  7989  7989 V GraphicsEnvironment: Currently set values for:
+11-04 05:05:37.435  7989  7989 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 05:05:37.435  7989  7989 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 05:05:37.435  7989  7989 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 05:05:37.436  7989  7989 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 05:05:37.436  7989  7989 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 05:05:37.436  7989  7989 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 05:05:37.449  7989  7989 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 05:05:37.451  7989  7989 D nativeloader: Configuring clns-10 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~pT3vJ9FZm625h6QYjM8RXQ==/dev.durableagent.retention.test-RkcfCn7j-y7wmhn7uRWdRg==/lib/x86_64:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 05:05:37.456  7989  7989 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 05:05:37.458  7989  7989 D nativeloader: Configuring clns-11 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~pT3vJ9FZm625h6QYjM8RXQ==/dev.durableagent.retention.test-RkcfCn7j-y7wmhn7uRWdRg==/lib/x86_64:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 05:05:37.460  7989  7989 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~pT3vJ9FZm625h6QYjM8RXQ==/dev.durableagent.retention.test-RkcfCn7j-y7wmhn7uRWdRg==/base.apk*1246987344:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk*3074892484])
+11-04 05:05:37.461  7989  7989 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~pT3vJ9FZm625h6QYjM8RXQ==/dev.durableagent.retention.test-RkcfCn7j-y7wmhn7uRWdRg==/base.apk*1246987344:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk*3074892484])
+11-04 05:05:37.466  7989  7989 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~pT3vJ9FZm625h6QYjM8RXQ==/dev.durableagent.retention.test-RkcfCn7j-y7wmhn7uRWdRg==/base.apk*1246987344:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk*3074892484])
+11-04 05:05:37.508  7989  7989 I agent.retention: AssetManager2(0x7dddbc295d98) locale list changing from [] to [en-US]
+11-04 05:05:37.525  7989  7989 I AndroidJUnitRunner: newApplication android.app.Application
+11-04 05:05:37.533  7989  7989 I AndroidJUnitRunner: onCreate Bundle[mParcelledData.dataSize=696]
+11-04 05:05:37.534  7989  7989 D AndroidJUnitRunner: Use the raw file system for managing file I/O.
+11-04 05:05:37.558  7989  7989 V TestEventClient: No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+11-04 05:05:37.560  7989  8004 D AndroidJUnitRunner: onStart is called.
+11-04 05:05:37.571  7989  8004 I InstrConnection: Could not send broadcast or register receiver (isolatedProcess?)
+11-04 05:05:37.589  7989  8004 I TestRunner: run started: 3 tests
+11-04 05:05:37.590  7989  8004 I TestRunner: started: incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(dev.durableagent.probe.RetentionApplicationTest)
+11-04 05:05:37.602  7989  8006 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+11-04 05:05:37.614  7989  8006 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+11-04 05:05:37.722  7989  7989 I agent.retention: AssetManager2(0x7dddbc29b838) locale list changing from [] to [en-US]
+11-04 05:05:37.737  7989  8007 I DisplayManager: Choreographer implicitly registered for the refresh rate.
+11-04 05:05:37.799  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: PRE_ON_CREATE
+11-04 05:05:37.801  7989  8007 I EGL_emulation: Opening libGLESv1_CM_emulation.so
+11-04 05:05:37.803  7989  7989 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+11-04 05:05:37.812  7989  8007 I EGL_emulation: Opening libGLESv2_emulation.so
+11-04 05:05:37.834  7989  7989 I agent.retention: AssetManager2(0x7dddbc29a578) locale list changing from [] to [en-US]
+11-04 05:05:37.834  7989  7989 I WebViewFactory: Loading com.google.android.webview version 133.0.6943.137 (code 694313738)
+11-04 05:05:37.836  7989  7989 I agent.retention: AssetManager2(0x7dddbc299f38) locale list changing from [] to [en-US]
+11-04 05:05:37.837  7989  7989 I agent.retention: AssetManager2(0x7dddbc297058) locale list changing from [] to [en-US]
+11-04 05:05:37.839  7989  7989 I agent.retention: AssetManager2(0x7dddbc299c18) locale list changing from [] to [en-US]
+11-04 05:05:37.846  7989  7989 I agent.retention: AssetManager2(0x7dddbc29e0d8) locale list changing from [] to [en-US]
+11-04 05:05:37.846  7989  7989 V ResourcesManager: The following library key has been added: ResourcesKey{ mHash=39697eec mResDir=null mSplitDirs=[] mOverlayDirs=[] mLibDirs=[/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/WebViewGoogle.apk,/data/app/~~twi_Gu6KIAxw5Uiwb-jgrw==/com.google.android.trichromelibrary_694313738-bpA1EIyq6HHTPJA220N2AQ==/TrichromeLibrary.apk,/system_ext/framework/androidx.window.extensions.jar] mDisplayId=0 mOverrideConfig=v36 mCompatInfo={420dpi always-compat} mLoaders=[]}
+11-04 05:05:37.848  7989  7989 W agent.retention: Failed to find entry 'classes.dex': Entry not found
+11-04 05:05:37.851  7989  7989 D nativeloader: Configuring clns-12 for other apk /data/app/~~twi_Gu6KIAxw5Uiwb-jgrw==/com.google.android.trichromelibrary_694313738-bpA1EIyq6HHTPJA220N2AQ==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/lib/x86_64:/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/WebViewGoogle.apk!/lib/x86_64:/data/app/~~twi_Gu6KIAxw5Uiwb-jgrw==/com.google.android.trichromelibrary_694313738-bpA1EIyq6HHTPJA220N2AQ==/TrichromeLibrary.apk!/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 05:05:37.853  7989  7989 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+11-04 05:05:37.866  7989  8007 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+11-04 05:05:37.869  7989  7989 D nativeloader: Configuring clns-13 for other apk /data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/lib/x86_64:/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/WebViewGoogle.apk!/lib/x86_64:/data/app/~~twi_Gu6KIAxw5Uiwb-jgrw==/com.google.android.trichromelibrary_694313738-bpA1EIyq6HHTPJA220N2AQ==/TrichromeLibrary.apk!/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 05:05:38.072  7989  7989 I cr_WVCFactoryProvider: version=133.0.6943.137 (694313738) minSdkVersion=29 isBundle=false multiprocess=true packageId=2
+11-04 05:05:38.137  7989  7989 D nativeloader: Load /data/app/~~twi_Gu6KIAxw5Uiwb-jgrw==/com.google.android.trichromelibrary_694313738-bpA1EIyq6HHTPJA220N2AQ==/TrichromeLibrary.apk!/lib/x86_64/libmonochrome_64.so using class loader ns clns-13 (caller=/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/WebViewGoogle.apk): ok
+11-04 05:05:38.157  7989  7989 D nativeloader: Load /system/lib64/libwebviewchromium_plat_support.so using class loader ns clns-13 (caller=/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/WebViewGoogle.apk): ok
+11-04 05:05:38.304  7989  7989 I cr_LibraryLoader: Successfully loaded native library
+11-04 05:05:38.315  7989  7989 I cr_CachingUmaRecorder: Flushed 6 samples from 6 histograms, 0 samples were dropped.
+11-04 05:05:38.316  7989  8014 I chromium: [1104/050538.293958:INFO:variations_seed_loader.cc(67)] Failed to open file for reading.: No such file or directory (2)
+11-04 05:05:38.337  7989  8014 I cr_VariationsUtils: Failed reading seed file "/data/user/0/dev.durableagent.retention/app_webview/variations_seed_new"
+11-04 05:05:38.337  7989  8014 I chromium: [INFO:variations_seed_loader.cc(67)] Failed to open file for reading.: No such file or directory (2)
+11-04 05:05:38.338  7989  8014 I cr_VariationsUtils: Failed reading seed file "/data/user/0/dev.durableagent.retention/app_webview/variations_seed"
+11-04 05:05:38.340  7989  7989 I cr_CombinedPProvider: #registerProvider() provider:WV.C8@5b41c2f isPolicyCacheEnabled:false policyProvidersSize:0
+11-04 05:05:38.345  7989  8012 I cr_VariationsUtils: Requesting new seed from IVariationsSeedServer
+11-04 05:05:38.363  7989  7989 I cr_PolicyProvider: #setManagerAndSource() 0
+11-04 05:05:38.579  7989  7989 I cr_CombinedPProvider: #linkNativeInternal() 1
+11-04 05:05:38.580  7989  7989 I cr_AppResProvider: #getApplicationRestrictionsFromUserManager() Bundle[EMPTY_PARCEL]
+11-04 05:05:38.580  7989  7989 I cr_PolicyProvider: #notifySettingsAvailable() 0
+11-04 05:05:38.581  7989  7989 I cr_CombinedPProvider: #onSettingsAvailable() 0
+11-04 05:05:38.581  7989  7989 I cr_CombinedPProvider: #flushPolicies()
+11-04 05:05:38.764  7989  8035 W chromium: [WARNING:dns_config_service_android.cc(81)] Failed to read DnsConfig.
+11-04 05:05:38.792  7989  7989 I agent.retention: AssetManager2(0x7dddbc298318) locale list changing from [] to [en-US]
+11-04 05:05:38.794  7989  7989 I agent.retention: AssetManager2(0x7dddbc29e3f8) locale list changing from [] to [en-US]
+11-04 05:05:38.798  7989  7989 D DesktopModeFlags: Toggle override initialized to: OVERRIDE_UNSET
+11-04 05:05:39.063  7989  7989 I agent.retention: AssetManager2(0x7dddbc298958) locale list changing from [] to [en-US]
+11-04 05:05:39.070  7989  7989 D CompatChangeReporter: Compat change id reported: 377864165; UID 10216; state: ENABLED
+11-04 05:05:39.239  7989  8039 W cr_media: BLUETOOTH_CONNECT permission is missing.
+11-04 05:05:39.246  7989  8039 W cr_media: getBluetoothAdapter() requires BLUETOOTH permission
+11-04 05:05:39.246  7989  8039 W cr_media: registerBluetoothIntentsIfNeeded: Requires BLUETOOTH permission
+11-04 05:05:39.297  7989  8052 W libc    : Access denied finding property "vendor.mesa.log"
+11-04 05:05:39.297  7989  8052 W libc    : Access denied finding property "vendor.mesa.log.file"
+11-04 05:05:39.297  7989  8052 E MESA    : Failed to open rendernode: No such file or directory
+11-04 05:05:39.323  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: CREATED
+11-04 05:05:39.327  7989  7989 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=dev.durableagent.probe.AgentActivity@1907386
+11-04 05:05:39.328  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: STARTED
+11-04 05:05:39.328  7989  7989 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=dev.durableagent.probe.AgentActivity@1907386
+11-04 05:05:39.332  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: RESUMED
+11-04 05:05:39.333  7989  7989 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=dev.durableagent.probe.AgentActivity@1907386
+11-04 05:05:39.365  7989  7989 W HWUI    : Unknown dataspace 0
+11-04 05:05:39.374  7989  8052 D vulkan  : searching for layers in '/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/lib/x86_64'
+11-04 05:05:39.376  7989  8052 D vulkan  : searching for layers in '/data/app/~~pT3vJ9FZm625h6QYjM8RXQ==/dev.durableagent.retention.test-RkcfCn7j-y7wmhn7uRWdRg==/base.apk!/lib/x86_64'
+11-04 05:05:39.377  7989  8052 D vulkan  : searching for layers in '/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk!/lib/x86_64'
+11-04 05:05:39.390  7989  8052 W libc    : Access denied finding property "vendor.mesa.vk.trace.per.submit"
+11-04 05:05:39.408  7989  8052 W libc    : Access denied finding property "vendor.mesa.gallium.print.optio"
+11-04 05:05:39.408  7989  8052 W libc    : Access denied finding property "vendor.mesa.vk.trace.frame"
+11-04 05:05:39.442  7989  8052 W libc    : Access denied finding property "vendor.mesa.vk.wsi.headless.swa"
+11-04 05:05:39.494  7989  8066 I CameraManagerGlobal: Connecting to camera service
+11-04 05:05:39.596  8070  8070 I retention:agent: Late-enabling -Xcheck:jni
+11-04 05:05:39.638  8070  8070 I retention:agent: Using CollectorTypeCMC GC.
+11-04 05:05:39.639  8070  8070 W retention:agent: Unexpected CPU variant for x86: x86_64.
+11-04 05:05:39.639  8070  8070 W retention:agent: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 05:05:39.661  7989  8052 W chromium: [WARNING:viz_main_impl.cc(85)] VizNullHypothesis is disabled (not a warning)
+11-04 05:05:39.693  8070  8070 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-04 05:05:39.932  7989  7989 D InsetsController: hide(ime(), fromIme=false)
+11-04 05:05:39.933  7989  7989 I ImeTracker: dev.durableagent.retention:2225940c: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+11-04 05:05:40.034  8070  8070 D nativeloader: Configuring clns-9 for other apk /data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/lib/x86_64:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 05:05:40.075  8070  8070 I retention:agent: AssetManager2(0x7dddbc28f038) locale list changing from [] to [en-US]
+11-04 05:05:40.130  8070  8070 V GraphicsEnvironment: Currently set values for:
+11-04 05:05:40.131  8070  8070 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 05:05:40.132  8070  8070 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 05:05:40.132  8070  8070 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 05:05:40.133  8070  8070 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 05:05:40.133  8070  8070 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 05:05:40.133  8070  8070 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 05:05:41.569  7989  7993 I agent.retention: Compiler allocated 5042KB to compile void android.view.ViewRootImpl.performTraversals()
+11-04 05:05:42.526  8070  8079 W retention:agent: Suspending all threads took: 10.211ms
+11-04 05:05:43.068  7989  7989 I Choreographer: Skipped 110 frames!  The application may be doing too much work on its main thread.
+11-04 05:05:43.075  7989  8073 I HWUI    : Davey! duration=1920ms; Flags=0, FrameTimelineVsyncId=56064, IntendedVsync=2014126844099, Vsync=2014210177429, InputEventId=0, HandleInputStart=2014214214766, AnimationStart=2014214216407, PerformTraversalsStart=2014215442990, DrawStart=2014215587286, FrameDeadline=2014243510761, FrameStartTime=2014214193757, FrameInterval=16666666, WorkloadTarget=16666666, SyncQueued=2014216038556, SyncStart=2014254090819, IssueDrawCommandsStart=2014254172029, SwapBuffers=2016081319154, FrameCompleted=2016085259908, DequeueBufferDuration=4790, QueueBufferDuration=371630, GpuCompleted=2016085152226, SwapBuffersCompleted=2016085259908, DisplayPresentTime=0, CommandSubmissionCompleted=2016081319154, 
+11-04 05:05:43.135  7989  8068 I HWUI    : Davey! duration=1893ms; Flags=0, FrameTimelineVsyncId=56095, IntendedVsync=2014260177427, Vsync=2016093510687, InputEventId=0, HandleInputStart=2016109528896, AnimationStart=2016109530299, PerformTraversalsStart=2016120486984, DrawStart=2016120578127, FrameDeadline=2016143510685, FrameStartTime=2016105444263, FrameInterval=16666666, WorkloadTarget=16666666, SyncQueued=2016121237502, SyncStart=2016121435842, IssueDrawCommandsStart=2016121531212, SwapBuffers=2016132447679, FrameCompleted=2016153621332, DequeueBufferDuration=4052, QueueBufferDuration=485536, GpuCompleted=2016153621332, SwapBuffersCompleted=2016141859555, DisplayPresentTime=0, CommandSubmissionCompleted=2016132447679, 
+11-04 05:05:43.255  8070  8079 W retention:agent: Suspending all threads took: 5.618ms
+11-04 05:05:45.939  8070  8090 D nativeloader: Load /data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk!/lib/x86_64/libjavet-node-android-i18n.v.6.0.3.so using class loader ns clns-9 (caller=/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk): ok
+11-04 05:05:46.364  8070  8090 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+11-04 05:06:28.082  7989  7994 I agent.retention: Background concurrent mark compact GC freed 2720KB AllocSpace bytes, 0(0B) LOS objects, 49% free, 2820KB/5640KB, paused 105us,6.311ms total 19.751ms
+11-04 05:07:17.070  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: PAUSED
+11-04 05:07:17.070  7989  7989 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=dev.durableagent.probe.AgentActivity@1907386
+11-04 05:07:17.895  7989  7989 D VRI[AgentActivity]: visibilityChanged oldVisibility=true newVisibility=false
+11-04 05:07:18.129  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: STOPPED
+11-04 05:07:18.129  7989  7989 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=dev.durableagent.probe.AgentActivity@1907386
+11-04 05:07:18.149  7989  7989 W cr_AwContents: WebView.destroy() called while WebView is still attached to window.
+11-04 05:07:18.154  7989  7989 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.app.Activity$$ExternalSyntheticLambda0@7038bc0
+11-04 05:07:18.156  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: DESTROYED
+11-04 05:07:18.156  7989  7989 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+11-04 05:07:18.183  7989  7989 D ViewRootImpl: Skipping stats log for color mode
+11-04 05:07:18.307  7989  7989 E chromium: [ERROR:aw_browser_terminator.cc(165)] Renderer process (8019) crash detected (code -1).
+11-04 05:07:18.498  8070  8090 W NodeRuntime: 18 V8 callback context object(s) not recycled.
+11-04 05:07:18.905  7989  8004 E TestRunner: failed: incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(dev.durableagent.probe.RetentionApplicationTest)
+11-04 05:07:18.906  7989  8004 E TestRunner: ----- begin exception -----
+11-04 05:07:18.906  7989  8004 E TestRunner: java.lang.AssertionError: Retention host timeout
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at org.junit.Assert.fail(Assert.java:89)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at org.junit.Assert.assertTrue(Assert.java:42)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at dev.durableagent.probe.RetentionApplicationTest.until(RetentionApplicationTest.kt:24)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at dev.durableagent.probe.RetentionApplicationTest.until$default(RetentionApplicationTest.kt:24)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at dev.durableagent.probe.RetentionApplicationTest.incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(RetentionApplicationTest.kt:53)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:299)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:293)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at java.util.concurrent.FutureTask.run(FutureTask.java:317)
+11-04 05:07:18.906  7989  8004 E TestRunner: 	at java.lang.Thread.run(Thread.java:1119)
+11-04 05:07:18.910  7989  8004 E TestRunner: ----- end exception -----
+11-04 05:07:18.914  7989  8004 I TestRunner: finished: incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(dev.durableagent.probe.RetentionApplicationTest)
+11-04 05:07:18.973  7989  8004 I TestRunner: started: actualAndroidSdkRetentionMigrationCapacityAndReadOnlyPolicy(dev.durableagent.probe.RetentionApplicationTest)
+11-04 05:07:18.993  7989  8139 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+11-04 05:07:19.260  7989  7989 I agent.retention: AssetManager2(0x7dddbc29d778) locale list changing from [] to [en-US]
+11-04 05:07:19.264  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@12bcd75 in: PRE_ON_CREATE
+11-04 05:07:19.266  7989  7989 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+11-04 05:07:19.354  7989  7989 D AutofillManager: Fill dialog is enabled:false, hints=[]
+11-04 05:07:19.424  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@12bcd75 in: CREATED
+11-04 05:07:19.425  7989  7989 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=dev.durableagent.probe.AgentActivity@12bcd75
+11-04 05:07:19.433  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@12bcd75 in: STARTED
+11-04 05:07:19.433  7989  7989 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=dev.durableagent.probe.AgentActivity@12bcd75
+11-04 05:07:19.437  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@12bcd75 in: RESUMED
+11-04 05:07:19.437  7989  7989 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=dev.durableagent.probe.AgentActivity@12bcd75
+11-04 05:07:19.758  7989  7989 D InsetsController: hide(ime(), fromIme=false)
+11-04 05:07:19.758  7989  7989 I ImeTracker: dev.durableagent.retention:5cedcc85: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+11-04 05:07:22.293  8070  8080 I BpBinder: onLastStrongRef automatically unlinking death recipients: 
+11-04 05:07:22.294  8070  8080 I BpBinder: onLastStrongRef automatically unlinking death recipients: 
+11-04 05:07:24.351  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@12bcd75 in: PAUSED
+11-04 05:07:24.351  7989  7989 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=dev.durableagent.probe.AgentActivity@12bcd75
+11-04 05:07:24.685  7989  7989 D VRI[AgentActivity]: visibilityChanged oldVisibility=true newVisibility=false
+11-04 05:07:24.689  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@12bcd75 in: STOPPED
+11-04 05:07:24.689  7989  7989 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=dev.durableagent.probe.AgentActivity@12bcd75
+11-04 05:07:24.695  7989  7989 W cr_AwContents: WebView.destroy() called while WebView is still attached to window.
+11-04 05:07:24.710  7989  7989 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.app.Activity$$ExternalSyntheticLambda0@5e9536
+11-04 05:07:24.712  7989  7989 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@12bcd75 in: DESTROYED
+11-04 05:07:24.712  7989  7989 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+11-04 05:07:24.723  7989  7989 D ViewRootImpl: Skipping stats log for color mode
+11-04 05:07:24.750  7989  7989 E chromium: [ERROR:aw_browser_terminator.cc(165)] Renderer process (8141) crash detected (code -1).
+11-04 05:07:24.903  8070  8090 W NodeRuntime: 18 V8 callback context object(s) not recycled.
+11-04 05:07:24.983  7989  8004 I TestRunner: finished: actualAndroidSdkRetentionMigrationCapacityAndReadOnlyPolicy(dev.durableagent.probe.RetentionApplicationTest)
+11-04 05:07:24.988  7989  8004 I TestRunner: started: aTextOnlySdkHandoffRetainsItsFrozenTokenAcrossReopenWithoutANativeIntent(dev.durableagent.probe.NativeRetentionTest)
+11-04 05:07:25.221  7989  8004 E TestRunner: failed: aTextOnlySdkHandoffRetainsItsFrozenTokenAcrossReopenWithoutANativeIntent(dev.durableagent.probe.NativeRetentionTest)
+11-04 05:07:25.221  7989  8004 E TestRunner: ----- begin exception -----
+11-04 05:07:25.221  7989  8004 E TestRunner: java.lang.AssertionError: SDK-held text-only input must not be discarded
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.Assert.fail(Assert.java:89)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at dev.durableagent.probe.NativeRetentionTest.aTextOnlySdkHandoffRetainsItsFrozenTokenAcrossReopenWithoutANativeIntent(NativeRetentionTest.kt:98)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:68)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:59)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:463)
+11-04 05:07:25.221  7989  8004 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2597)
+11-04 05:07:25.221  7989  8004 E TestRunner: ----- end exception -----
+11-04 05:07:25.222  7989  8004 I TestRunner: finished: aTextOnlySdkHandoffRetainsItsFrozenTokenAcrossReopenWithoutANativeIntent(dev.durableagent.probe.NativeRetentionTest)
+11-04 05:07:25.228  7989  8004 I TestRunner: run finished: 3 tests, 2 failed, 0 ignored
+11-04 05:10:29.974  8920  8920 I agent.retention: Late-enabling -Xcheck:jni
+11-04 05:10:30.016  8920  8920 I agent.retention: Using CollectorTypeCMC GC.
+11-04 05:10:30.017  8920  8920 W agent.retention: Unexpected CPU variant for x86: x86_64.
+11-04 05:10:30.017  8920  8920 W agent.retention: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 05:10:30.027  8920  8920 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-04 05:10:31.101  8920  8920 D nativeloader: Configuring clns-9 for other apk /data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/lib/x86_64:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 05:10:31.107  8920  8920 I agent.retention: AssetManager2(0x7dddbc29b838) locale list changing from [] to [en-US]
+11-04 05:10:31.116  8920  8920 V GraphicsEnvironment: Currently set values for:
+11-04 05:10:31.116  8920  8920 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 05:10:31.116  8920  8920 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 05:10:31.116  8920  8920 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 05:10:31.116  8920  8920 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 05:10:31.116  8920  8920 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 05:10:31.116  8920  8920 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 05:11:09.405  9236  9236 I agent.retention: Late-enabling -Xcheck:jni
+11-04 05:11:09.423  9236  9236 I agent.retention: Using CollectorTypeCMC GC.
+11-04 05:11:09.423  9236  9236 W agent.retention: Unexpected CPU variant for x86: x86_64.
+11-04 05:11:09.423  9236  9236 W agent.retention: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 05:11:09.435  9236  9236 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-04 05:11:09.464  9236  9236 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[dev.durableagent.retention]: x86_64, null instrumentation[dev.durableagent.retention.test]: null, null
+11-04 05:11:09.467  9236  9236 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[])
+11-04 05:11:09.467  9236  9236 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020])
+11-04 05:11:09.468  9236  9236 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393])
+11-04 05:11:09.536  9236  9236 D nativeloader: Configuring clns-9 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~7hqIPtSS5kuYx2mlX3pmgA==/dev.durableagent.retention.test-ue0IVS98SqjQpbs7cHIijQ==/base.apk:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~7hqIPtSS5kuYx2mlX3pmgA==/dev.durableagent.retention.test-ue0IVS98SqjQpbs7cHIijQ==/lib/x86_64:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/lib/x86_64:/data/app/~~7hqIPtSS5kuYx2mlX3pmgA==/dev.durableagent.retention.test-ue0IVS98SqjQpbs7cHIijQ==/base.apk!/lib/x86_64:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 05:11:09.614  9236  9236 I agent.retention: AssetManager2(0x7dddbc2963d8) locale list changing from [] to [en-US]
+11-04 05:11:09.650  9236  9236 V GraphicsEnvironment: Currently set values for:
+11-04 05:11:09.650  9236  9236 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 05:11:09.650  9236  9236 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 05:11:09.650  9236  9236 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 05:11:09.650  9236  9236 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 05:11:09.650  9236  9236 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 05:11:09.650  9236  9236 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 05:11:09.682  9236  9236 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 05:11:09.692  9236  9236 D nativeloader: Configuring clns-10 for other apk /system/framework/android.test.mock.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~7hqIPtSS5kuYx2mlX3pmgA==/dev.durableagent.retention.test-ue0IVS98SqjQpbs7cHIijQ==/lib/x86_64:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 05:11:09.695  9236  9236 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+11-04 05:11:09.698  9236  9236 D nativeloader: Configuring clns-11 for other apk /system/framework/android.test.runner.jar. target_sdk_version=36, uses_libraries=ALL, library_path=/data/app/~~7hqIPtSS5kuYx2mlX3pmgA==/dev.durableagent.retention.test-ue0IVS98SqjQpbs7cHIijQ==/lib/x86_64:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 05:11:09.698  9236  9236 W agent.retention: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~7hqIPtSS5kuYx2mlX3pmgA==/dev.durableagent.retention.test-ue0IVS98SqjQpbs7cHIijQ==/base.apk*3366541720:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk*3074892484])
+11-04 05:11:09.715  9236  9236 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~7hqIPtSS5kuYx2mlX3pmgA==/dev.durableagent.retention.test-ue0IVS98SqjQpbs7cHIijQ==/base.apk*3366541720:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk*3074892484])
+11-04 05:11:09.717  9236  9236 W agent.retention: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~7hqIPtSS5kuYx2mlX3pmgA==/dev.durableagent.retention.test-ue0IVS98SqjQpbs7cHIijQ==/base.apk*3366541720:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk*3074892484])
+11-04 05:11:09.763  9236  9236 I agent.retention: AssetManager2(0x7dddbc295d98) locale list changing from [] to [en-US]
+11-04 05:11:09.771  9236  9236 I AndroidJUnitRunner: newApplication android.app.Application
+11-04 05:11:09.776  9236  9236 I AndroidJUnitRunner: onCreate Bundle[mParcelledData.dataSize=248]
+11-04 05:11:09.776  9236  9236 D AndroidJUnitRunner: Use the raw file system for managing file I/O.
+11-04 05:11:09.788  9236  9236 V TestEventClient: No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+11-04 05:11:09.789  9236  9282 D AndroidJUnitRunner: onStart is called.
+11-04 05:11:09.800  9236  9282 I InstrConnection: Could not send broadcast or register receiver (isolatedProcess?)
+11-04 05:11:09.818  9236  9282 I TestRunner: run started: 1 tests
+11-04 05:11:09.819  9236  9282 I TestRunner: started: incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(dev.durableagent.probe.RetentionApplicationTest)
+11-04 05:11:09.831  9236  9284 W Settings: Setting always_finish_activities has moved from android.provider.Settings.System to android.provider.Settings.Global, returning read-only value.
+11-04 05:11:09.833  9236  9284 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+11-04 05:11:09.872  9236  9285 I DisplayManager: Choreographer implicitly registered for the refresh rate.
+11-04 05:11:09.885  9236  9236 I agent.retention: AssetManager2(0x7dddbc292eb8) locale list changing from [] to [en-US]
+11-04 05:11:09.933  9236  9236 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: PRE_ON_CREATE
+11-04 05:11:09.936  9236  9236 V ActivityScenario: Activity lifecycle changed event received but ignored because the reported transition was not ON_CREATE while the last known transition was PRE_ON_CREATE
+11-04 05:11:09.945  9236  9236 I agent.retention: AssetManager2(0x7dddbc293e58) locale list changing from [] to [en-US]
+11-04 05:11:09.945  9236  9236 I WebViewFactory: Loading com.google.android.webview version 133.0.6943.137 (code 694313738)
+11-04 05:11:09.949  9236  9236 I agent.retention: AssetManager2(0x7dddbc299f38) locale list changing from [] to [en-US]
+11-04 05:11:09.954  9236  9236 I agent.retention: AssetManager2(0x7dddbc297058) locale list changing from [] to [en-US]
+11-04 05:11:09.955  9236  9236 I agent.retention: AssetManager2(0x7dddbc299c18) locale list changing from [] to [en-US]
+11-04 05:11:09.957  9236  9236 I agent.retention: AssetManager2(0x7dddbc29e0d8) locale list changing from [] to [en-US]
+11-04 05:11:09.958  9236  9236 V ResourcesManager: The following library key has been added: ResourcesKey{ mHash=39697eec mResDir=null mSplitDirs=[] mOverlayDirs=[] mLibDirs=[/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/WebViewGoogle.apk,/data/app/~~twi_Gu6KIAxw5Uiwb-jgrw==/com.google.android.trichromelibrary_694313738-bpA1EIyq6HHTPJA220N2AQ==/TrichromeLibrary.apk,/system_ext/framework/androidx.window.extensions.jar] mDisplayId=0 mOverrideConfig=v36 mCompatInfo={420dpi always-compat} mLoaders=[]}
+11-04 05:11:09.959  9236  9236 W agent.retention: Failed to find entry 'classes.dex': Entry not found
+11-04 05:11:09.959  9236  9236 D nativeloader: Configuring clns-12 for other apk /data/app/~~twi_Gu6KIAxw5Uiwb-jgrw==/com.google.android.trichromelibrary_694313738-bpA1EIyq6HHTPJA220N2AQ==/TrichromeLibrary.apk. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/lib/x86_64:/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/WebViewGoogle.apk!/lib/x86_64:/data/app/~~twi_Gu6KIAxw5Uiwb-jgrw==/com.google.android.trichromelibrary_694313738-bpA1EIyq6HHTPJA220N2AQ==/TrichromeLibrary.apk!/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 05:11:09.962  9236  9236 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+11-04 05:11:09.964  9236  9236 D nativeloader: Configuring clns-13 for other apk /data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/WebViewGoogle.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/lib/x86_64:/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/WebViewGoogle.apk!/lib/x86_64:/data/app/~~twi_Gu6KIAxw5Uiwb-jgrw==/com.google.android.trichromelibrary_694313738-bpA1EIyq6HHTPJA220N2AQ==/TrichromeLibrary.apk!/lib/x86_64, permitted_path=/data:/mnt/expand
+11-04 05:11:09.997  9236  9285 I EGL_emulation: Opening libGLESv1_CM_emulation.so
+11-04 05:11:09.997  9236  9285 I EGL_emulation: Opening libGLESv2_emulation.so
+11-04 05:11:10.030  9236  9285 W HWUI    : Failed to initialize 101010-2 format, error = EGL_SUCCESS
+11-04 05:11:10.038  9236  9236 I cr_WVCFactoryProvider: version=133.0.6943.137 (694313738) minSdkVersion=29 isBundle=false multiprocess=true packageId=2
+11-04 05:11:10.084  9236  9236 D nativeloader: Load /data/app/~~twi_Gu6KIAxw5Uiwb-jgrw==/com.google.android.trichromelibrary_694313738-bpA1EIyq6HHTPJA220N2AQ==/TrichromeLibrary.apk!/lib/x86_64/libmonochrome_64.so using class loader ns clns-13 (caller=/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/WebViewGoogle.apk): ok
+11-04 05:11:10.085  9236  9236 D nativeloader: Load /system/lib64/libwebviewchromium_plat_support.so using class loader ns clns-13 (caller=/data/app/~~SLag7ksFm0qSDoCaVQTQSg==/com.google.android.webview-y3UpRpIeUphwdiYNm0SjRQ==/WebViewGoogle.apk): ok
+11-04 05:11:10.134  9236  9236 I cr_LibraryLoader: Successfully loaded native library
+11-04 05:11:10.136  9236  9236 I cr_CachingUmaRecorder: Flushed 6 samples from 6 histograms, 0 samples were dropped.
+11-04 05:11:10.137  9236  9236 I cr_VariationsUtils: Loaded seed with age 2178s
+11-04 05:11:10.140  9236  9236 I cr_CombinedPProvider: #registerProvider() provider:WV.C8@76debc5 isPolicyCacheEnabled:false policyProvidersSize:0
+11-04 05:11:10.141  9236  9236 I cr_PolicyProvider: #setManagerAndSource() 0
+11-04 05:11:10.160  9236  9236 I cr_CombinedPProvider: #linkNativeInternal() 1
+11-04 05:11:10.160  9236  9236 I cr_AppResProvider: #getApplicationRestrictionsFromUserManager() Bundle[EMPTY_PARCEL]
+11-04 05:11:10.160  9236  9236 I cr_PolicyProvider: #notifySettingsAvailable() 0
+11-04 05:11:10.160  9236  9236 I cr_CombinedPProvider: #onSettingsAvailable() 0
+11-04 05:11:10.160  9236  9236 I cr_CombinedPProvider: #flushPolicies()
+11-04 05:11:10.240  9236  9236 I agent.retention: AssetManager2(0x7dddbc298f98) locale list changing from [] to [en-US]
+11-04 05:11:10.247  9236  9236 I agent.retention: AssetManager2(0x7dddbc297378) locale list changing from [] to [en-US]
+11-04 05:11:10.253  9236  9236 D DesktopModeFlags: Toggle override initialized to: OVERRIDE_UNSET
+11-04 05:11:10.257  9236  9307 W chromium: [WARNING:dns_config_service_android.cc(81)] Failed to read DnsConfig.
+11-04 05:11:10.387  9236  9236 I agent.retention: AssetManager2(0x7dddbc298318) locale list changing from [] to [en-US]
+11-04 05:11:10.389  9236  9236 D CompatChangeReporter: Compat change id reported: 377864165; UID 10216; state: ENABLED
+11-04 05:11:10.475  9236  9312 W cr_media: BLUETOOTH_CONNECT permission is missing.
+11-04 05:11:10.477  9236  9312 W cr_media: getBluetoothAdapter() requires BLUETOOTH permission
+11-04 05:11:10.477  9236  9312 W cr_media: registerBluetoothIntentsIfNeeded: Requires BLUETOOTH permission
+11-04 05:11:10.486  9236  9327 W libc    : Access denied finding property "vendor.mesa.log"
+11-04 05:11:10.487  9236  9327 W libc    : Access denied finding property "vendor.mesa.log.file"
+11-04 05:11:10.488  9236  9327 E MESA    : Failed to open rendernode: No such file or directory
+11-04 05:11:10.512  9236  9236 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: CREATED
+11-04 05:11:10.512  9236  9236 V ActivityScenario: Update currentActivityStage to CREATED, currentActivity=dev.durableagent.probe.AgentActivity@1907386
+11-04 05:11:10.513  9236  9236 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: STARTED
+11-04 05:11:10.513  9236  9236 V ActivityScenario: Update currentActivityStage to STARTED, currentActivity=dev.durableagent.probe.AgentActivity@1907386
+11-04 05:11:10.514  9236  9327 D vulkan  : searching for layers in '/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/lib/x86_64'
+11-04 05:11:10.515  9236  9327 D vulkan  : searching for layers in '/data/app/~~7hqIPtSS5kuYx2mlX3pmgA==/dev.durableagent.retention.test-ue0IVS98SqjQpbs7cHIijQ==/base.apk!/lib/x86_64'
+11-04 05:11:10.522  9236  9327 D vulkan  : searching for layers in '/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk!/lib/x86_64'
+11-04 05:11:10.523  9236  9236 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: RESUMED
+11-04 05:11:10.523  9236  9236 V ActivityScenario: Update currentActivityStage to RESUMED, currentActivity=dev.durableagent.probe.AgentActivity@1907386
+11-04 05:11:10.531  9236  9327 W libc    : Access denied finding property "vendor.mesa.vk.trace.per.submit"
+11-04 05:11:10.531  9236  9327 W libc    : Access denied finding property "vendor.mesa.gallium.print.optio"
+11-04 05:11:10.531  9236  9327 W libc    : Access denied finding property "vendor.mesa.vk.trace.frame"
+11-04 05:11:10.537  9236  9327 W libc    : Access denied finding property "vendor.mesa.vk.wsi.headless.swa"
+11-04 05:11:10.550  9236  9236 W HWUI    : Unknown dataspace 0
+11-04 05:11:10.578  9236  9327 W chromium: [WARNING:viz_main_impl.cc(85)] VizNullHypothesis is disabled (not a warning)
+11-04 05:11:10.666  9345  9345 I retention:agent: Late-enabling -Xcheck:jni
+11-04 05:11:10.668  9236  9341 I CameraManagerGlobal: Connecting to camera service
+11-04 05:11:10.691  9345  9345 I retention:agent: Using CollectorTypeCMC GC.
+11-04 05:11:10.693  9345  9345 W retention:agent: Unexpected CPU variant for x86: x86_64.
+11-04 05:11:10.693  9345  9345 W retention:agent: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, alderlake, default
+11-04 05:11:10.708  9345  9345 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+11-04 05:11:10.798  9345  9345 D nativeloader: Configuring clns-9 for other apk /data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/lib/x86_64:/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/dev.durableagent.retention
+11-04 05:11:10.800  9345  9345 I retention:agent: AssetManager2(0x7dddbc28f038) locale list changing from [] to [en-US]
+11-04 05:11:10.801  9345  9345 V GraphicsEnvironment: Currently set values for:
+11-04 05:11:10.801  9345  9345 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+11-04 05:11:10.801  9345  9345 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+11-04 05:11:10.801  9345  9345 V GraphicsEnvironment: dev.durableagent.retention is not listed in per-application setting
+11-04 05:11:10.801  9345  9345 V GraphicsEnvironment: ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast
+11-04 05:11:10.801  9345  9345 V GraphicsEnvironment: dev.durableagent.retention is not listed in ANGLE allowlist or settings, returning default
+11-04 05:11:10.801  9345  9345 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+11-04 05:11:11.088  9236  9236 D InsetsController: hide(ime(), fromIme=false)
+11-04 05:11:11.088  9236  9236 I ImeTracker: dev.durableagent.retention:2d46c092: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+11-04 05:11:11.567  9345  9361 D nativeloader: Load /data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk!/lib/x86_64/libjavet-node-android-i18n.v.6.0.3.so using class loader ns clns-9 (caller=/data/app/~~YGQP55dRWRCvRx9KCjQGBQ==/dev.durableagent.retention-RqNs3lxJFnU3LnQ88RKijQ==/base.apk): ok
+11-04 05:11:12.730  9345  9361 E ashmem  : Pinning is deprecated since Android Q. Please use trim or other methods.
+11-04 05:11:12.818  9236  9240 I agent.retention: Compiler allocated 5042KB to compile void android.view.ViewRootImpl.performTraversals()
+11-04 05:11:13.765  9236  9236 I Choreographer: Skipped 89 frames!  The application may be doing too much work on its main thread.
+11-04 05:11:13.789  9236  9365 I HWUI    : Davey! duration=1898ms; Flags=0, FrameTimelineVsyncId=81100, IntendedVsync=2344910164201, Vsync=2344910164201, InputEventId=0, HandleInputStart=2344913921585, AnimationStart=2344913923608, PerformTraversalsStart=2344917325553, DrawStart=2344917453072, FrameDeadline=2344926830867, FrameStartTime=2344913863502, FrameInterval=16666666, WorkloadTarget=16666666, SyncQueued=2344917799467, SyncStart=2344923966593, IssueDrawCommandsStart=2344924072247, SwapBuffers=2346796370375, FrameCompleted=2346814599215, DequeueBufferDuration=4511, QueueBufferDuration=477501, GpuCompleted=2346814599215, SwapBuffersCompleted=2346801218804, DisplayPresentTime=0, CommandSubmissionCompleted=2346796370375, 
+11-04 05:11:13.876  9236  9367 I HWUI    : Davey! duration=1535ms; Flags=0, FrameTimelineVsyncId=81136, IntendedVsync=2345310164185, Vsync=2346793497459, InputEventId=0, HandleInputStart=2346803046633, AnimationStart=2346803047501, PerformTraversalsStart=2346805463772, DrawStart=2346805636265, FrameDeadline=2346860164123, FrameStartTime=2346802642557, FrameInterval=16666666, WorkloadTarget=16666666, SyncQueued=2346809434953, SyncStart=2346827549916, IssueDrawCommandsStart=2346827652018, SwapBuffers=2346838394830, FrameCompleted=2346863807564, DequeueBufferDuration=1347759, QueueBufferDuration=255801, GpuCompleted=2346863807564, SwapBuffersCompleted=2346849083245, DisplayPresentTime=0, CommandSubmissionCompleted=2346838394830, 
+11-04 05:12:44.658  9236  9236 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: PAUSED
+11-04 05:12:44.658  9236  9236 V ActivityScenario: Update currentActivityStage to PAUSED, currentActivity=dev.durableagent.probe.AgentActivity@1907386
+11-04 05:12:45.258  9236  9236 D VRI[AgentActivity]: visibilityChanged oldVisibility=true newVisibility=false
+11-04 05:12:45.353  9236  9236 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: STOPPED
+11-04 05:12:45.353  9236  9236 V ActivityScenario: Update currentActivityStage to STOPPED, currentActivity=dev.durableagent.probe.AgentActivity@1907386
+11-04 05:12:45.379  9236  9236 W cr_AwContents: WebView.destroy() called while WebView is still attached to window.
+11-04 05:12:45.413  9236  9236 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.app.Activity$$ExternalSyntheticLambda0@337c3af
+11-04 05:12:45.415  9236  9236 D LifecycleMonitor: Lifecycle status change: dev.durableagent.probe.AgentActivity@1907386 in: DESTROYED
+11-04 05:12:45.415  9236  9236 V ActivityScenario: Update currentActivityStage to DESTROYED, currentActivity=null
+11-04 05:12:45.422  9236  9236 D ViewRootImpl: Skipping stats log for color mode
+11-04 05:12:45.468  9236  9236 E chromium: [ERROR:aw_browser_terminator.cc(165)] Renderer process (9293) crash detected (code -1).
+11-04 05:12:45.648  9345  9361 W NodeRuntime: 18 V8 callback context object(s) not recycled.
+11-04 05:12:45.790  9236  9282 E TestRunner: failed: incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(dev.durableagent.probe.RetentionApplicationTest)
+11-04 05:12:45.790  9236  9282 E TestRunner: ----- begin exception -----
+11-04 05:12:45.790  9236  9282 E TestRunner: java.lang.AssertionError: Retention host timeout
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at org.junit.Assert.fail(Assert.java:89)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at org.junit.Assert.assertTrue(Assert.java:42)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at dev.durableagent.probe.RetentionApplicationTest.until(RetentionApplicationTest.kt:24)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at dev.durableagent.probe.RetentionApplicationTest.until$default(RetentionApplicationTest.kt:24)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at dev.durableagent.probe.RetentionApplicationTest.incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(RetentionApplicationTest.kt:53)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:299)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:293)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at java.util.concurrent.FutureTask.run(FutureTask.java:317)
+11-04 05:12:45.790  9236  9282 E TestRunner: 	at java.lang.Thread.run(Thread.java:1119)
+11-04 05:12:45.790  9236  9282 E TestRunner: ----- end exception -----
+11-04 05:12:45.796  9236  9282 I TestRunner: finished: incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(dev.durableagent.probe.RetentionApplicationTest)
+11-04 05:12:45.825  9236  9282 I TestRunner: run finished: 1 tests, 1 failed, 0 ignored

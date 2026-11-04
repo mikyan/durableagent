@@ -1,0 +1,18 @@
+Running incremental backup for 3 requested packages.
+Package dev.durableagent.retention with result: Backup is not allowed
+Package @pm@ with result: Success
+Package dev.durableagent.backupfixture.control with progress: 2560/10240
+Package dev.durableagent.backupfixture.control with progress: 3584/10240
+Package dev.durableagent.backupfixture.control with progress: 5120/10240
+Package dev.durableagent.backupfixture.control with progress: 6656/10240
+Package dev.durableagent.backupfixture.control with progress: 7680/10240
+Package dev.durableagent.backupfixture.control with progress: 8704/10240
+Package dev.durableagent.backupfixture.control with progress: 9216/10240
+Package dev.durableagent.backupfixture.control with progress: 10752/10240
+Package dev.durableagent.backupfixture.control with progress: 11776/10240
+Package dev.durableagent.backupfixture.control with progress: 12800/10240
+=> Event{AGENT / AGENT_LOGGING_RESULTS : package = dev.durableagent.backupfixture.control(v1), results = [], other keys = android.app.backup.extra.OPERATION_TYPE}
+Package dev.durableagent.backupfixture.control with result: Success
+=> Event{BACKUP_MANAGER_POLICY / ERROR_PREFLIGHT : package = dev.durableagent.backupfixture.rules(v1), other keys = android.app.backup.extra.LOG_PREFLIGHT_ERROR}
+Package dev.durableagent.backupfixture.rules with result: Transport rejected package because it wasn't able to process it at the time
+Backup finished with result: Success

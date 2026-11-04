@@ -1,0 +1,9 @@
+{
+  "candidate": "05",
+  "apkSha256": "30ff2f040427544dd5fd82009421df7c864d916e8b89354184a0bccf37e2011a",
+  "compiledRuntimeFilesEqual": 41,
+  "compiledUiFilesEqual": 11,
+  "hasFutureSeedEntry": true,
+  "originalStartupRejectBehavior": true,
+  "bridgeSha256": "0dbf24a62050e4bd4d6b5c6ad4025ea9b4c2fcf51266786a8501f81a4953b921"
+}

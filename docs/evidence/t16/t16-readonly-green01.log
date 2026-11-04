@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RetentionApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RetentionApplicationTest:
+INSTRUMENTATION_STATUS: test=incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: retentionEvidence={"case":"native-readonly-reopen","state":{"phase":"failed","extensions":["projects","conversation","input","submission"],"reason":"会话记录版本不兼容，原数据已保留且运行关闭。请使用兼容的新版本；安全可读的原生草稿仍可查看。","failure":{"domain":"sdk","code":"STORAGE_VERSION_UNSUPPORTED","message":"会话记录版本不兼容，原数据已保留且运行关闭。请使用兼容的新版本；安全可读的原生草稿仍可查看。","retained":true,"retry":"compatible-version"},"readOnly":true,"metrics":{},"instance":"6954ab6c-e7fe-4c05-9551-d292fb9e012a","pid":10458,"domainOwned":true,"nativeOwners":1},"history":[{"id":"15","role":"user","text":"Original retained native history 北京🌍","persisted":true},{"id":"19","role":"assistant","text":"你好🌍","persisted":true}],"newModelRequests":0}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RetentionApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 10.221
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1
