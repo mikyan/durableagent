@@ -1,0 +1,70 @@
+docs/evidence/t12/t12-observe-helper-upgrade02-result.log
+  s_467dcb949b5b60::t_9a270eff891b73 1
+docs/evidence/t12/README.md
+  s_467dcb949b5b60::t_6b7818c294fd77 3,95,113-114,121,156,158,160-180
+  s_467dcb949b5b60::t_341a6fccdc62d5 181-183
+docs/evidence/t12/t12-final-ui-build01.log
+  s_467dcb949b5b60::t_6b7818c294fd77 1-129
+docs/evidence/t12/t12-autostart-final02-install.log
+  s_467dcb949b5b60::t_6b7818c294fd77 1-4
+docs/evidence/t12/t12-final-ui01-root-artifact-delta.json
+  s_467dcb949b5b60::t_6b7818c294fd77 1-19
+docs/evidence/t12/t12-final-ui01-ui-only-comparison.json
+  s_467dcb949b5b60::t_6b7818c294fd77 1-31
+docs/evidence/t12/t12-autostart-green01-device.log
+  s_467dcb949b5b60::t_6b7818c294fd77 1-12
+docs/evidence/t12/t12-helper-upgrade02-root-review.json
+  s_467dcb949b5b60::t_9a270eff891b73 1-8
+docs/evidence/t12/t12-final-baseline01.json
+  s_467dcb949b5b60::t_6b7818c294fd77 1-10
+docs/evidence/t12/t12-final-wakes01-device.log
+  s_467dcb949b5b60::t_6b7818c294fd77 1-12
+docs/evidence/t12/t12-force-stop-message-red01.log
+  s_467dcb949b5b60::t_6b7818c294fd77 1-30
+docs/evidence/t12/t12-force-stop-message-ui-build01.log
+  s_467dcb949b5b60::t_6b7818c294fd77 1-26
+docs/evidence/t12/v1-autostart-fix-review.md
+  s_467dcb949b5b60::t_341a6fccdc62d5 1-126
+docs/evidence/t12/v1-code-review-aggregate.md
+  s_467dcb949b5b60::t_341a6fccdc62d5 1-66
+docs/evidence/t12/t12-force-stop-message-green01.log
+  s_467dcb949b5b60::t_6b7818c294fd77 1-9
+docs/evidence/t12/t12-final-native-credential-audit.json
+  s_467dcb949b5b60::t_6b7818c294fd77 1-19
+docs/evidence/t12/t12-final-ui01-root-inspection.json
+  s_467dcb949b5b60::t_6b7818c294fd77 1-403
+docs/evidence/t12/t12-observe-upgrade-inventory01-result.log
+  s_467dcb949b5b60::t_9a270eff891b73 1
+docs/evidence/t12/t12-final-ui01-artifacts.json
+  s_467dcb949b5b60::t_6b7818c294fd77 1-11
+docs/evidence/t12/t12-helper-upgrade02-manifest.json
+  s_467dcb949b5b60::t_9a270eff891b73 1-34
+docs/evidence/t12/t12-final-job01-device.log
+  s_467dcb949b5b60::t_6b7818c294fd77 1-12
+docs/evidence/t12/t12-final-original01-device.log
+  s_467dcb949b5b60::t_6b7818c294fd77 1-10
+docs/evidence/t12/t12-final-ui01-apk-inspection.json
+  s_467dcb949b5b60::t_6b7818c294fd77 1-403
+docs/evidence/t12/t12-observe-upgrade-inventory02-result.log
+  s_467dcb949b5b60::t_9a270eff891b73 1
+docs/evidence/t12/v1-review-spec-final-addendum.md
+  s_467dcb949b5b60::t_341a6fccdc62d5 1-11
+docs/evidence/t12/LOG-SHA256.json
+  s_467dcb949b5b60::t_356ec0004d68bb 29-38,119-123,129-133,154-213,244-253,404-408,434-443,774-783,798-802
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "df68812ec39acdbc1a9c703fb70397a3f0227244",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
