@@ -35,7 +35,8 @@ class FileRealProviderTest {
   try{
    until{val state=control(12);check(state.optString("phase")!="failed"){state.toString()};state.optString("phase")=="ready"};until{js("document.querySelector('[data-testid=application]')?.dataset.status==='ready'")=="true"};click("[data-testid=create-conversation]");until{call("list").getJSONArray("conversations").length()==1};val id=call("list").getJSONArray("conversations").getJSONObject(0).getString("id");val target=JSONObject().put("id",id)
    fun send(tool:String,prompt:String,count:Int):JSONObject{
-    assertEquals(tool,control(57,tool).getJSONObject("metrics").getString("executionValidationTool"))
+    control(57,tool) // This control acknowledges dispatch; status is refreshed by the next native pump.
+    until(10000){control(12).getJSONObject("metrics").optString("executionValidationTool")==tool}
     js("(()=>{const e=document.querySelector('[data-testid=message-input]');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(e,${JSONObject.quote(prompt)});e.dispatchEvent(new Event('input',{bubbles:true}));})()");until{js("document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'")=="true"&&store.inspect(id).getString("text")==prompt};click("[data-testid=send-message]")
     var snapshot=JSONObject();until{snapshot=call("open",target);val rows=snapshot.getJSONArray("entries");val tools=(0 until rows.length()).count{rows.getJSONObject(it).optString("role")=="tool"};assertTrue("Unexpected additional model tool",tools<=count);snapshot.optString("phase")=="done"&&tools==count};return snapshot
    }

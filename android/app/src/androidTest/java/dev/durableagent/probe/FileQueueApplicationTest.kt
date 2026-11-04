@@ -31,7 +31,17 @@ class FileQueueApplicationTest {
   fun closeHost(){client.control(20,"close");until(15000){control(12).optString("phase")=="closed"}}
   override fun close(){client.disconnect()}
  }
- private fun prepare(store:NativeInputStore,id:String,text:String):String {val before=store.inspect(id);val saved=store.save(id,before.getLong("revision"),uuid(),text,emptyList());val frozen=store.freeze(id,saved.getLong("revision"),uuid());return store.createSend(JSONObject().put("actionId",uuid()).put("id",id).put("inputToken",frozen.getString("token")).put("expectedContext",store.inspect(id).getJSONObject("submissionContext")).put("expectedControlVersion",store.readControl(id).getLong("version")).put("queue",JSONObject().put("whenBusy","followUp").put("whenIdle","start"))).getString("intentId")}
+ private var activeRun="";private var activeOrder=""
+ private fun trace(phase:String,id:String?=null,code:String?=null){instrumentation.sendStatus(0,Bundle().apply{putString("fileQueuePhase",JSONObject().put("run",activeRun).put("order",activeOrder).put("phase",phase).put("id",id).put("code",code).toString())})}
+ private fun <T> nativeStep(id:String,phase:String,action:()->T):T{trace(phase+".before",id);return try{action().also{trace(phase+".after",id)}}catch(error:NativeInputException){trace(phase+".failed",id,error.code);throw IllegalStateException("Native fixture $phase failed for $id in $activeRun: ${error.code}",error)}}
+ private fun prepare(store:NativeInputStore,id:String,text:String):String {
+  val before=nativeStep(id,"inspect"){store.inspect(id)}
+  val saved=nativeStep(id,"save"){store.save(id,before.getLong("revision"),uuid(),text,emptyList())}
+  val frozen=nativeStep(id,"freeze"){store.freeze(id,saved.getLong("revision"),uuid())}
+  val current=nativeStep(id,"inspect-context"){store.inspect(id)}
+  val control=nativeStep(id,"read-control"){store.readControl(id)}
+  return nativeStep(id,"create-send"){store.createSend(JSONObject().put("actionId",uuid()).put("id",id).put("inputToken",frozen.getString("token")).put("expectedContext",current.getJSONObject("submissionContext")).put("expectedControlVersion",control.getLong("version")).put("queue",JSONObject().put("whenBusy","followUp").put("whenIdle","start")))}.getString("intentId")
+ }
  private fun execution(wire:Wire,id:String):JSONObject? {val rows=wire.call("execution.list",target(id)).getJSONArray("executions");return if(rows.length()==0)null else rows.getJSONObject(rows.length()-1)}
  private fun texts(wire:Wire,id:String):List<String>{val rows=wire.call("open",target(id)).getJSONArray("entries");return (0 until rows.length()).map{rows.getJSONObject(it).optString("text","")}}
  private fun completed(wire:Wire,intentId:String){until{wire.call("sendStatus",JSONObject().put("intentId",intentId)).optJSONObject("submission")?.optString("status")=="done"}}
@@ -39,6 +49,7 @@ class FileQueueApplicationTest {
  @Test(timeout=240000) fun actualLocalReservationAndUnknownShellSerializeBothOrdersAndQueuedStop(){
   for(order in listOf("local-reserved-first","shell-first","cancel-local")){
    val run=uuid();val wire=Wire(run);val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode","execution").putExtra("validationRun",run));val store=NativeInputStore(context,NativeInputBridge.namespace("execution",run))
+   activeRun=run;activeOrder=order;trace("scenario.begin")
    try{
     wire.ready();for(id in listOf("local","shell","pure","read"))wire.call("create",JSONObject().put("creationId",id))
     val localFirst=order=="local-reserved-first";val first=if(localFirst)"local" else "shell";val second=if(localFirst)"shell" else "local"
@@ -50,7 +61,7 @@ class FileQueueApplicationTest {
     until{execution(wire,second)?.optString("state")=="queued"};val waiting=execution(wire,second)!!
     val pure=prepare(store,"pure","FILE_PURE");wire.call("send",JSONObject().put("intentId",pure));completed(wire,pure);assertTrue(texts(wire,"pure").contains("FILE-PURE-PASS"));assertEquals("queued",execution(wire,second)!!.getString("state"))
     if(order=="cancel-local"){
-     val control=store.readControl("local");val stopped=NativeStopController.request(context,"execution",run,JSONObject().put("id","local").put("actionId",uuid()).put("expectedControlVersion",control.getLong("version")))
+     val control=nativeStep("local","stop.read-control"){store.readControl("local")};val stopped=NativeStopController.request(context,"execution",run,JSONObject().put("id","local").put("actionId",uuid()).put("expectedControlVersion",control.getLong("version")))
      wire.call("stop",target("local").put("stopId",stopped.getJSONObject("pendingAbort").getString("stopId")))
      until{execution(wire,"local")?.optString("state")=="not_started"}
      val change=wire.call("files.list",target("local")).getJSONArray("changes").getJSONObject(0);assertEquals("not_started",change.getString("state"));assertTrue(change.getBoolean("scopeConfirmed"))

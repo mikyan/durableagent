@@ -1,7 +1,7 @@
 import {useEffect,useRef,useState} from 'react';
 import type {ConversationController,UiState} from '../controller';
 
-type Change={operationId:string;executionId:string|null;bindingId:string;path:string;destination?:string;namespace:string;original:boolean;state:string;scopeConfirmed:boolean;diff:{available:boolean;text?:string;reason?:string}};
+type Change={operationId:string;executionId:string|null;bindingId:string;path:string;destination?:string;namespace:string;resourceId?:string;requestDigest?:string;sequence?:number;original:boolean;state:string;scopeConfirmed:boolean;diff:{available:boolean;text?:string;reason?:string}};
 type UnknownChange={executionId:string;state:string;diff:{available:false;reason:'unknown_command_scope'}};
 type Page={changes:Change[];nextCursor:string|null;documents?:{changes:Change[];limited:boolean};untrackedExecutions:UnknownChange[];untrackedLimited:boolean};
 const id=(value:unknown)=>typeof value==='string'&&/^[-A-Za-z0-9_]{1,128}$/.test(value);
@@ -14,6 +14,44 @@ function page(value:any):Page{
  return value;
 }
 function stateLabel(row:Change){if(row.state==='queued')return '等待其他写入完成';if(row.state==='completed')return row.scopeConfirmed?'原件修改已核验':'原件结果已记录，执行范围待核验';if(row.state==='not_started'&&row.scopeConfirmed)return '确认未修改';return '原件结果待核验';}
+const digest=(value:unknown)=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
+const terminal=(value:Change)=>value.scopeConfirmed&&['completed','stopped','not_started'].includes(value.state);
+function documentReceipt(value:any,row:Change):Change {
+ if(!value||value.protocol!==1||value.operationId!==row.operationId||value.resourceId!==row.resourceId||value.namespace!==row.namespace||value.requestDigest!==row.requestDigest||value.uri!==row.path||value.original!==true||!Number.isSafeInteger(value.sequence)||value.sequence<Number(row.sequence)||typeof value.scopeConfirmed!=='boolean'||!['accepted_not_started','running','stop_requested','completed','stopped','not_started','unknown'].includes(value.state))throw Error('原生收据与这次原件操作不匹配。');
+ const next={...row,state:value.state,scopeConfirmed:value.scopeConfirmed,sequence:value.sequence,diff:value.diff??row.diff};
+ if(terminal(row)&&(!terminal(next)||next.state!==row.state))throw Error('原生收据不能撤回已核验的终态。');
+ if(!next.diff||typeof next.diff.available!=='boolean'||next.diff.available&&(typeof next.diff.text!=='string'||new TextEncoder().encode(next.diff.text).length>16384))throw Error('原生差异记录格式无法确认。');
+ return next;
+}
+function verificationLabel(value:any,confirmed:boolean):string {
+ if(!value||!Number.isSafeInteger(value.observedAt)||value.observedAt<0)throw Error('原件只读核验格式无法确认。');
+ if(value.status==='read'){
+  if(!digest(value.currentDigest)||!Number.isSafeInteger(value.byteLength)||value.byteLength<0||typeof value.matchesExpected!=='boolean'||typeof value.matchesContent!=='boolean')throw Error('原件只读核验格式无法确认。');
+  return value.matchesContent?(confirmed?'当前内容与本次写入相符。':'当前内容与本次写入相符；执行范围仍未确认。'):value.matchesExpected?'当前内容与写入前的内容相符。':'当前内容已发生变化。';
+ }
+ if(value.status==='changed_during_read')return '核验过程中原件发生变化，未得到稳定内容。';
+ if(value.status==='unavailable')return '当前无法读取原件；已有执行状态保持不变。';
+ throw Error('原件只读核验格式无法确认。');
+}
+function ChangeRow({row,controller}:{row:Change;controller:ConversationController}){
+ const [native,setNative]=useState<Change>(),[busy,setBusy]=useState(false),[notice,setNotice]=useState<string>(),[error,setError]=useState<string>();
+ const alive=useRef(true);useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
+ const current=native&&native.requestDigest===row.requestDigest&&(terminal(native)||Number(native.sequence)>=Number(row.sequence))?native:row;
+ const capable=digest(row.resourceId)&&digest(row.requestDigest)&&row.namespace==='saf:'+row.resourceId&&Number.isSafeInteger(row.sequence)&&row.path.startsWith('content://');
+ async function inspect(method:'document.query'|'document.verify'){
+  if(busy||!controller.extensionClient||!capable)return;setBusy(true);setError(undefined);setNotice(undefined);
+  try{const value=await controller.extensionClient.request<any>(method,{operationId:row.operationId});const next=documentReceipt(value,current);const label=method==='document.verify'?verificationLabel(value.verification,next.scopeConfirmed):'原生状态已核验';if(alive.current){setNative(next);setNotice(label);}}
+  catch(reason){if(alive.current)setError(reason instanceof Error?reason.message:'尚未得到原生核验结果。');}finally{if(alive.current)setBusy(false);}
+ }
+ return <li>
+  <div className="execution-row-title"><strong>{stateLabel(current)}</strong><span>{current.original?'原件':'副本'}</span></div><code>{current.path}</code>
+  {current.destination&&<p>重命名目标：<code>{current.destination}</code></p>}
+  <details><summary>查看操作关联</summary><code>文件操作：{current.operationId}</code><code>执行：{current.executionId??'尚未登记执行'}</code><code>位置关联：{current.bindingId}</code></details>
+  {current.diff.available?<pre className="file-diff">{current.diff.text||'内容未变化'}</pre>:<p>{reasons[current.diff.reason??'']??'本次文本差异不可得'}</p>}
+  {capable&&<div className="execution-actions"><button type="button" disabled={busy} onClick={()=>void inspect('document.query')}>直接核验原件状态</button><button type="button" disabled={busy} onClick={()=>void inspect('document.verify')}>只读核验原件内容</button></div>}
+  {notice&&<p role="status">{notice}</p>}{error&&<p role="alert">{error}</p>}
+ </li>;
+}
 
 /** Read-only original-file evidence. No editor or write dispatch is exposed to WebView. */
 export function FileChangesPanel({controller,state}:{controller:ConversationController;state:UiState}){
@@ -30,13 +68,7 @@ export function FileChangesPanel({controller,state}:{controller:ConversationCont
   <div className="execution-actions"><strong>文件变更</strong><button type="button" onClick={()=>void load()} disabled={!state.activeId||state.status.phase!=='ready'||view.loading}>{view.loading?'正在核验文件…':'查看文件变更'}</button></div>
   {view.error&&<p role="alert" className="execution-error">{view.error}</p>}
   {current&&changes.length===0&&<p>本会话暂无已知的逐文件修改记录。</p>}
-  {current&&<ul className="execution-list" aria-label="本会话文件变更">{changes.map(row=><li key={row.operationId}>
-   <div className="execution-row-title"><strong>{stateLabel(row)}</strong><span>{row.original?'原件':'副本'}</span></div>
-   <code>{row.path}</code>
-   {row.destination&&<p>重命名目标：<code>{row.destination}</code></p>}
-   <details><summary>查看操作关联</summary><code>文件操作：{row.operationId}</code><code>执行：{row.executionId??'尚未登记执行'}</code><code>位置关联：{row.bindingId}</code></details>
-   {row.diff.available?<pre className="file-diff">{row.diff.text||'内容未变化'}</pre>:<p>{reasons[row.diff.reason??'']??'本次文本差异不可得'}</p>}
-  </li>)}</ul>}
+  {current&&<ul className="execution-list" aria-label="本会话文件变更">{changes.map(row=><ChangeRow key={`${state.activeId}:${row.operationId}`} row={row} controller={controller}/>)}</ul>}
   {current?.nextCursor&&!view.limited&&<button type="button" disabled={view.loading} onClick={()=>void load(current.nextCursor!)}>查看更多文件变更</button>}
   {view.limited&&<p>本页已显示 200 条文件变更，后续记录尚未载入。</p>}
   {current?.documents?.limited&&<p>此处显示最近 20 条文档原件变更。</p>}
