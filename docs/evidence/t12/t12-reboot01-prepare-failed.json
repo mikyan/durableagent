@@ -1,0 +1,23 @@
+{
+  "stage": "prepare",
+  "startedAt": "2026-11-04T12:49:02.569Z",
+  "mode": "product",
+  "instrumentationUsed": false,
+  "run": "d4457b77-3f77-4d01-bb29-3613390b6b7f",
+  "text": "这是恢复验证。只回复 T12-LIFECYCLE-d4457b77-3f77-4d01-bb29-3613390b6b7f，不调用工具。",
+  "credentialGeneration": 1,
+  "configurationVersion": 2,
+  "product": "a1158484-4780-4ba9-8005-a01677cd6f1e",
+  "explicitSendClicks": 1,
+  "dom": {
+    "draft": "草稿已保存 · 正在确认操作",
+    "sendError": "草稿存储正在提交，请稍后重试。",
+    "alerts": [],
+    "phase": "idle",
+    "viewport": {
+      "width": 412,
+      "height": 915
+    }
+  },
+  "error": "Error: Actual UI send failed: 草稿存储正在提交，请稍后重试。"
+}

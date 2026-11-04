@@ -52,6 +52,16 @@
       "gitBlobSha256": "50dd269a19d00edb4c3fd230368f8180591494cf8dfe8537095aa84a11075232"
     },
     {
+      "file": "t12-laterlock01-verify02-failed.json",
+      "retainedLocalSha256": "25528da85e5839ecf0c8897f6d081cbf1803e38a5d63ed360ec3f4ff3dca6813",
+      "gitBlobSha256": "25528da85e5839ecf0c8897f6d081cbf1803e38a5d63ed360ec3f4ff3dca6813"
+    },
+    {
+      "file": "t12-laterlock01-verify03.json",
+      "retainedLocalSha256": "283722a79ef0e1e567bacc27ef4397390941c05c1533cdd92a7cdc39e3bcaaf8",
+      "gitBlobSha256": "283722a79ef0e1e567bacc27ef4397390941c05c1533cdd92a7cdc39e3bcaaf8"
+    },
+    {
       "file": "t12-native-green01-device.log",
       "retainedLocalSha256": "2bacfab50c47eae5198bb46bb382f4510c92ce6c5f1a0a071a0e3e27109ffc57",
       "gitBlobSha256": "23a3e285bea65df50f60de24ac6f992f0b01b7ccb6d3e1b17b05d59bc6ae8afa"
@@ -165,6 +175,21 @@
       "file": "t12-real62-independent-file.log",
       "retainedLocalSha256": "7114e17e7e531a573de5c98712d5b522acb4830edd4b0d67efff877ffb883272",
       "gitBlobSha256": "7552591f60a53b55afbf69865dfa3c4d84444b2ce9df1835bfd8aeb2637f26f9"
+    },
+    {
+      "file": "t12-reboot01-cleanup02.json",
+      "retainedLocalSha256": "68ecb5003e5c433fac107b61c12d3fec85c4b5a3e0b4855f6d52b34cf437552f",
+      "gitBlobSha256": "68ecb5003e5c433fac107b61c12d3fec85c4b5a3e0b4855f6d52b34cf437552f"
+    },
+    {
+      "file": "t12-reboot01-diagnose.json",
+      "retainedLocalSha256": "5d203546184e44b39cb76aca6954089b5b46d90e8cc5da2f28245d5ddaed823a",
+      "gitBlobSha256": "5d203546184e44b39cb76aca6954089b5b46d90e8cc5da2f28245d5ddaed823a"
+    },
+    {
+      "file": "t12-reboot01-prepare-failed.json",
+      "retainedLocalSha256": "9ce6fcce6aa48c6a9b750564d8ea80a42d2658295f8d7b81b5993a45a69d0bee",
+      "gitBlobSha256": "9ce6fcce6aa48c6a9b750564d8ea80a42d2658295f8d7b81b5993a45a69d0bee"
     },
     {
       "file": "t12-runtime-stage31b-all.log",

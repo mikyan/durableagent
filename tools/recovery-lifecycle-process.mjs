@@ -40,8 +40,8 @@ async function finishActivity(){
  const actions=[];evidence.activityExit=actions;
  for(let attempt=0;attempt<3;attempt++){
   if(activityRecords().length===0)return;
-  const focus=adb('shell','dumpsys','window','windows').split('\n').find(line=>line.includes('mCurrentFocus='))??'';
-  if(!focus.includes(`${pkg}/.AgentActivity`)){
+  const focus=adb('shell','dumpsys','window').split('\n').find(line=>line.includes('mCurrentFocus='))??'';
+  if(!/dev\.durableagent\.probe\/(?:\.AgentActivity|dev\.durableagent\.probe\.AgentActivity)(?:\s|\})/.test(focus)){
    // A finishing record can outlive its window briefly. Never send Back into
    // another app, the launcher or keyguard to clean up our Activity.
    const deadline=Date.now()+5000;while(Date.now()<deadline){if(activityRecords().length===0)return;await pause(150);}
@@ -73,8 +73,17 @@ try{
   await until(()=>page.evaluate(`document.querySelector('[data-testid=message-input]')?.value===${JSON.stringify(text)}&&document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'`),'UI save receipt for exact text');
   const draft=await request('input.inspect',{id:product});assert.equal(draft.text,text);assert.equal(draft.committed,true);assert.ok(draft.revision>0);
   await pointer('[data-testid=send-message]');evidence.explicitSendClicks=1;
-  await until(async()=>{const state=await page.evaluate("({rows:[...document.querySelectorAll('[data-testid=submission-item]')].map(e=>({id:e.dataset.intentId,stage:e.dataset.stage})),error:document.querySelector('.send-error')?.textContent,confirming:document.querySelector('[data-testid=draft-status]')?.textContent.includes('正在确认操作')})");assert.ok(state.rows.length<=1,'One explicit UI send identity');if(state.error)throw Error('Actual UI send failed: '+state.error);return state.rows.length===1&&['accepted','queued','placed','settled'].includes(state.rows[0].stage)&&!state.confirming;},'UI confirms original send without native observer contention');
+  evidence.uiSend=await until(async()=>{
+   const state=await page.evaluate("({rows:[...document.querySelectorAll('[data-testid=submission-item]')].map(e=>({id:e.dataset.intentId,stage:e.dataset.stage,error:e.querySelector('.send-error')?.textContent,retryReady:e.querySelector('[data-testid=retry-submission]')?.disabled===false})),refreshError:document.querySelector('.send-states > .send-error')?.textContent,confirming:document.querySelector('[data-testid=draft-status]')?.textContent.includes('正在确认操作')})");
+   assert.ok(state.rows.length<=1,'One explicit UI send identity');
+   // Section refresh can fail while this exact send is still being committed.
+   // Only the settled row's own failure describes the submitted action.
+   const row=state.rows[0];
+   if(!state.confirming&&row?.retryReady&&['failed','unknown'].includes(row.stage)&&row.error)throw Error('Original UI send needs intervention: '+row.error);
+   return row&&['accepted','queued','placed','settled'].includes(row.stage)&&!state.confirming&&state;
+  },'UI confirms original send without native observer contention');
   const intents=(await request('input.listSends',{id:product})).intents;assert.equal(intents.length,1);const intent=intents[0];evidence.intentId=intent.intentId;
+  assert.equal(intent.intentId,evidence.uiSend.rows[0].id,'Public durable identity matches the original UI row');
   const status=await request('sendStatus',{intentId:intent.intentId});assert.ok(status.receipt,'Durable SDK admission');
   const waiting=await until(async()=>{const value=await request('open',{id:product});return value.recovery?.reason==='network-offline'&&value;},'Actual offline wait');
   evidence.admission=status.receipt;evidence.waiting=waiting.recovery;evidence.history=await request('history',{id:product});evidence.ownerPid=pid(`${pkg}:agent`);assert.match(evidence.ownerPid,/^\d+$/);assert.equal((await request('execution.list',{id:product})).executions.length,0);await screenshot('prepared');
@@ -89,6 +98,6 @@ try{
  }
  await writeFile(`${output}.json`,JSON.stringify(evidence,null,2)+'\n',{flag:'wx'});process.stdout.write(JSON.stringify({stage,product:evidence.product,prepared:evidence.prepared,passed:evidence.passed,evidence:`${output}.json`})+'\n');
 }catch(error){
- if(page)try{evidence.dom=await page.evaluate("({draft:document.querySelector('[data-testid=draft-status]')?.textContent,sendError:document.querySelector('.send-error')?.textContent,alerts:[...document.querySelectorAll('[role=alert]')].map(e=>e.textContent),phase:document.querySelector('[data-testid=conversation-status]')?.dataset.phase,viewport:{width:innerWidth,height:innerHeight}})");await screenshot('failed');}catch{}
+ if(page)try{evidence.dom=await page.evaluate("({draft:document.querySelector('[data-testid=draft-status]')?.textContent,rows:[...document.querySelectorAll('[data-testid=submission-item]')].map(e=>({id:e.dataset.intentId,stage:e.dataset.stage,error:e.querySelector('.send-error')?.textContent,retryReady:e.querySelector('[data-testid=retry-submission]')?.disabled===false})),refreshError:document.querySelector('.send-states > .send-error')?.textContent,alerts:[...document.querySelectorAll('[role=alert]')].map(e=>e.textContent),phase:document.querySelector('[data-testid=conversation-status]')?.dataset.phase,viewport:{width:innerWidth,height:innerHeight}})");await screenshot('failed');}catch{}
  await writeFile(`${output}-failed.json`,JSON.stringify({...evidence,error:String(error).replaceAll(serial,'[device]')},null,2)+'\n',{flag:'wx'});throw error;
 }finally{page?.close();}
