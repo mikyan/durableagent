@@ -1,0 +1,51 @@
+ui/src/style.css
+  s_467dcb949b5b60::t_f9d5536252fbe9 66-73
+  s_467dcb949b5b60::t_4859047e306c7e 39-40,43,48,55-65
+android/app/src/androidTest/java/dev/durableagent/probe/ConsoleApplicationTest.kt
+  s_467dcb949b5b60::t_b29cce5c39396f 1-27,31-32,34-39,44-47,49,51-56,58-81
+  s_467dcb949b5b60::t_4859047e306c7e 28-30,40-43,57
+  s_467dcb949b5b60::t_d8f2da0c62ea43 33,48,50
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_4859047e306c7e 91,93-95,117
+  s_467dcb949b5b60::t_f9d5536252fbe9 158,162-163,173
+ui/src/drafts.ts
+  s_467dcb949b5b60::t_e1dfdfc3bd301d 121
+docs/evidence/t15/README.md
+  s_467dcb949b5b60::t_870432f682b304 1-33
+android/app/src/main/java/dev/durableagent/probe/NativeInputBridge.kt
+  s_467dcb949b5b60::t_e1dfdfc3bd301d 67
+tools/console-device.mjs
+  s_467dcb949b5b60::t_dbd41d201c7606 35
+  s_467dcb949b5b60::t_d190bcd17a5ed8 1-21,23-29,31-33,37-44,46-54
+  s_467dcb949b5b60::t_1c031e2c2478b3 22,30,34,36,45
+ui/test/console-page.test.tsx
+  s_467dcb949b5b60::t_7a341ab4227bfe 182
+ui/src/extensions/auxiliary.tsx
+  s_467dcb949b5b60::t_4859047e306c7e 8-9
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionUiTest.kt
+  s_467dcb949b5b60::t_0ca15f805c233d 22-24
+android/app/src/androidTest/java/dev/durableagent/probe/FileApplicationTest.kt
+  s_467dcb949b5b60::t_53385fa8412539 69
+android/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_799c1d7f81fb59 9
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_467dcb949b5b60::t_bf20d321374967 8-9,89-98
+ui/src/extensions/submissions.tsx
+  s_467dcb949b5b60::t_1021399bdfe146 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "f11a880699edf01edf9471f109b1ce465c1bd7a5",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
