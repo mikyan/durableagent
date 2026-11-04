@@ -17,8 +17,21 @@ import sys
 import threading
 import time
 import uuid
+import types
 from contextlib import contextmanager
-from file_service import FileService
+
+# Capture the actual fixed implementation once. Workers and isolated local helpers
+# execute these bytes; a later file replacement cannot change an accepted command.
+# Python itself and its standard library are trusted runtime dependencies, not a sandbox.
+_RUNNER_PATH = str(Path(__file__).resolve())
+_FILE_PATH = str(Path(__file__).with_name("file_service.py").resolve())
+_RUNNER_SOURCE = globals().get("_FIXED_RUNNER_SOURCE") or Path(_RUNNER_PATH).read_bytes()
+_FILE_SOURCE = globals().get("_FIXED_FILE_SOURCE") or Path(_FILE_PATH).read_bytes()
+_file_module = types.ModuleType("file_service")
+_file_module.__file__ = _FILE_PATH
+exec(compile(_FILE_SOURCE, _FILE_PATH, "exec"), _file_module.__dict__)
+FileService = _file_module.FileService
+_SOURCE_PROOF = {"runnerSha256": hashlib.sha256(_RUNNER_SOURCE).hexdigest(), "helperSha256": hashlib.sha256(_FILE_SOURCE).hexdigest()}
 try:
     import fcntl
 except ImportError:
@@ -176,7 +189,7 @@ class Executor:
                 fcntl.flock(self.write_gate, fcntl.LOCK_UN)
 
     def identity(self):
-        return dict(self.meta)
+        return {**self.meta, "localCapabilities": {"version": 1, **_SOURCE_PROOF}}
 
     def dispatch(self, method, payload):
         if isinstance(method, str) and method.startswith("file."):
@@ -284,6 +297,16 @@ class Executor:
             command = request["command"]
             shell = str(Path(os.environ["PREFIX"]) / "bin/bash") if "PREFIX" in os.environ else shutil.which("bash")
             argv = [shell, "-c", command["script"]] if command["kind"] == "shell" else command["argv"]
+            local = None
+            if not request["inheritEnv"] and not request["env"]:
+                if (command["kind"] == "argv" and len(argv) == 5
+                        and argv[:4] == [sys.executable, _FILE_PATH, "apply", str(self.files.write_root().resolve())]
+                        and re.fullmatch(r"[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}", argv[4])):
+                    argv = [sys.executable, "-I", "-S", "-c", _FILE_SOURCE.decode("utf-8"), "apply", argv[3], argv[4]]
+                    local = {"kind": "file-apply-v1", "isolatedPython": True, **_SOURCE_PROOF}
+                elif command == {"kind": "shell", "script": "builtin pwd -P"}:
+                    argv = [shell, "--noprofile", "--norc", "-c", "builtin pwd -P"]
+                    local = {"kind": "physical-cwd-v1", **_SOURCE_PROOF}
             prepared = {"argv": argv, "cwd": request["cwd"], "cwdLocation": self.inspect_workspace(request["cwd"]),
                         "env": environment, "timeoutMs": request["timeoutMs"]}
             if len(canonical(prepared).encode("utf-8")) > self.limits["preparedBytes"]:
@@ -293,6 +316,8 @@ class Executor:
                        "context": request["context"], "state": "accepted_not_started", "sequence": 1,
                        "createdAt": int(time.time() * 1000), "outputCursor": 0, "outputBytes": 0,
                        "outputRef": str(output_path), "captureIncomplete": False}
+            if local is not None:
+                receipt["localCapability"] = local
             self.boundary("accept_before_commit")
             self.db.execute("INSERT INTO executions VALUES (?, ?, ?)", (execution_id, encoded, canonical(receipt)))
             self.db.execute("INSERT INTO prepared VALUES (?, ?)", (execution_id, canonical(prepared)))
@@ -413,9 +438,12 @@ class Executor:
             self.boundary("start_committed")
             # The inherited lock bridges durable start -> child exec. It is NOT inherited by user commands.
             # A crash in any gap releases it; recovery records unknown and never spawns again.
-            worker = subprocess.Popen([sys.executable, str(Path(__file__).resolve()), "worker", str(self.root), execution_id, str(owner), canonical(self.limits)],
+            bootstrap = ("import sys\nsys.argv[0]=" + repr(_RUNNER_PATH) + "\nr=" + repr(_RUNNER_SOURCE) + "\nf=" + repr(_FILE_SOURCE)
+                         + "\nexec(compile(r," + repr(_RUNNER_PATH) + ",'exec'),{'__name__':'__main__','__file__':" + repr(_RUNNER_PATH)
+                         + ", '_FIXED_RUNNER_SOURCE':r, '_FIXED_FILE_SOURCE':f})")
+            worker = subprocess.Popen([sys.executable, "-I", "-S", "-c", bootstrap, "worker", str(self.root), execution_id, str(owner), canonical(self.limits)],
                                       stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                                      start_new_session=True, close_fds=True, pass_fds=(owner,))
+                                      env={}, start_new_session=True, close_fds=True, pass_fds=(owner,))
         except OSError:
             return self.update(execution_id, {"state": "unknown", "reason": "WORKER_START_UNCONFIRMED", "scopeConfirmed": False})
         finally:
@@ -428,7 +456,7 @@ class Executor:
         return self.query(execution_id)
 
     def cancel(self, execution_id, reason):
-        if reason not in ("user", "timeout", "output_limit"):
+        if reason not in ("user", "timeout", "output_limit", "network_policy"):
             raise ExecutionFault("INVALID_CANCEL_REASON")
         with self.transaction():
             receipt = self.query(execution_id)
@@ -443,6 +471,8 @@ class Executor:
             if receipt["state"] in ("completed", "stopped", "unknown", "not_started"):
                 return receipt
             never_started = receipt["state"] == "accepted_not_started"
+            # A later policy sweep cannot demote an already requested user stop.
+            reason = "user" if receipt.get("cancelReason") == "user" else reason
             receipt.update(cancelRequested=True, cancelReason=reason,
                            state="stopped" if never_started else "stop_requested", sequence=receipt["sequence"] + 1)
             if never_started:

@@ -1,0 +1,61 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: dataSaverUiFailure={"run":"6d18143e-bde0-497f-9c32-44be4f9664d6","productId":"5e9669c0-f2a7-4757-8bf7-462140db9a8c","stage":"first-native-admission","lastOperations":[],"dom":{"alerts":[],"draft":"草稿已保存 · 正在确认操作","policy":"省流 当前网络按流量计费省流模式受限网络上保留模型通信与已核验的本地能力。其他联网或未知行为等待条件恢复，或仅放行所选执行。刷新省流状态","sendDisabled":true,"sendErrors":["草稿存储正在提交，请稍后重试。"],"sends":"发送状态刷新发送状态草稿存储正在提交，请稍后重试。正在保存此次发送11:59 AMEXEC_SUCCESS尚未确认原生发送意图提交。核验并重试此次发送","status":"准备就绪"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: UI send state: {"alerts":[],"draft":"草稿已保存 · 正在确认操作","policy":"省流 当前网络按流量计费省流模式受限网络上保留模型通信与已核验的本地能力。其他联网或未知行为等待条件恢复，或仅放行所选执行。刷新省流状态","sendDisabled":true,"sendErrors":["草稿存储正在提交，请稍后重试。"],"sends":"发送状态刷新发送状态草稿存储正在提交，请稍后重试。","status":"准备就绪"} expected:<0> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting$lambda$3$0(DataSaverExecutionTest.kt:71)
+	at dev.durableagent.probe.DataSaverExecutionTest.$r8$lambda$ANNySchvBjF7LoogvgvF8miwPOM(Unknown Source:0)
+	at dev.durableagent.probe.DataSaverExecutionTest$$ExternalSyntheticLambda4.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.until$default(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(DataSaverExecutionTest.kt:71)
+
+INSTRUMENTATION_STATUS: stream=
+Error in actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(dev.durableagent.probe.DataSaverExecutionTest):
+java.lang.AssertionError: UI send state: {"alerts":[],"draft":"草稿已保存 · 正在确认操作","policy":"省流 当前网络按流量计费省流模式受限网络上保留模型通信与已核验的本地能力。其他联网或未知行为等待条件恢复，或仅放行所选执行。刷新省流状态","sendDisabled":true,"sendErrors":["草稿存储正在提交，请稍后重试。"],"sends":"发送状态刷新发送状态草稿存储正在提交，请稍后重试。","status":"准备就绪"} expected:<0> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting$lambda$3$0(DataSaverExecutionTest.kt:71)
+	at dev.durableagent.probe.DataSaverExecutionTest.$r8$lambda$ANNySchvBjF7LoogvgvF8miwPOM(Unknown Source:0)
+	at dev.durableagent.probe.DataSaverExecutionTest$$ExternalSyntheticLambda4.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.until$default(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(DataSaverExecutionTest.kt:71)
+
+INSTRUMENTATION_STATUS: test=actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 6.764
+There was 1 failure:
+1) actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(dev.durableagent.probe.DataSaverExecutionTest)
+java.lang.AssertionError: UI send state: {"alerts":[],"draft":"草稿已保存 · 正在确认操作","policy":"省流 当前网络按流量计费省流模式受限网络上保留模型通信与已核验的本地能力。其他联网或未知行为等待条件恢复，或仅放行所选执行。刷新省流状态","sendDisabled":true,"sendErrors":["草稿存储正在提交，请稍后重试。"],"sends":"发送状态刷新发送状态草稿存储正在提交，请稍后重试。","status":"准备就绪"} expected:<0> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting$lambda$3$0(DataSaverExecutionTest.kt:71)
+	at dev.durableagent.probe.DataSaverExecutionTest.$r8$lambda$ANNySchvBjF7LoogvgvF8miwPOM(Unknown Source:0)
+	at dev.durableagent.probe.DataSaverExecutionTest$$ExternalSyntheticLambda4.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.until$default(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(DataSaverExecutionTest.kt:71)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

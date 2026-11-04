@@ -1,0 +1,29 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: dataSaverPointerBefore={"position":{"connected":true,"enabled":true,"executionId":"81464076-381d-438d-8d44-b47cf911a488","rect":{"bottom":354.23810386657715,"left":22.761905670166016,"right":130.7678565979004,"top":334.71429443359375},"viewport":{"height":915.047607421875,"left":0,"scale":1,"top":0,"width":412.19049072265625},"visible":true,"width":412,"x":76.7648811340332,"y":344.47619915008545},"originX":0,"originY":0,"webViewWidth":1080,"webViewHeight":2400,"cssToScreenScale":2.621359223300971,"screenX":201.22833,"screenY":902.99585}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: dataSaverPointerAfter={"position":{"connected":true,"enabled":true,"executionId":"81464076-381d-438d-8d44-b47cf911a488","rect":{"bottom":354.23810386657715,"left":22.761905670166016,"right":130.7678565979004,"top":334.71429443359375},"viewport":{"height":915.047607421875,"left":0,"scale":1,"top":0,"width":412.19049072265625},"visible":true,"width":412,"x":76.7648811340332,"y":344.47619915008545},"originX":0,"originY":0,"webViewWidth":1080,"webViewHeight":2400,"cssToScreenScale":2.621359223300971,"screenX":201.22833,"screenY":902.99585,"events":[{"button":"仅放行这一次执行","disabled":false,"executionId":"81464076-381d-438d-8d44-b47cf911a488","target":"BUTTON","trusted":true,"type":"pointerdown","x":76.65849304199219,"y":343.9985046386719},{"button":"仅放行这一次执行","disabled":false,"executionId":"81464076-381d-438d-8d44-b47cf911a488","target":"BUTTON","trusted":true,"type":"pointerup","x":76.65849304199219,"y":343.9985046386719},{"button":"仅放行这一次执行","disabled":false,"executionId":"81464076-381d-438d-8d44-b47cf911a488","target":"BUTTON","trusted":true,"type":"click","x":76,"y":344}]}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: dataSaverExecutionEvidence={"case":"actual-react-single-grant","run":"4307bb77-514b-4fca-ae9c-72ccd0502503","productId":"f0086f24-d65a-4241-be1b-b032cdf98e8c","firstExecutionId":"81464076-381d-438d-8d44-b47cf911a488","nextExecutionId":"ec022c77-9d81-4b73-8d02-8f7e53b29a9c","globalEnabled":true,"modelRequests":3,"grantInput":"instrumentation-pointer","firstVisible":{"connected":true,"enabled":true,"executionId":"81464076-381d-438d-8d44-b47cf911a488","rect":{"bottom":354.23810386657715,"left":22.761905670166016,"right":130.7678565979004,"top":334.71429443359375},"viewport":{"height":915.047607421875,"left":0,"scale":1,"top":0,"width":412.19049072265625},"visible":true,"width":412,"x":76.7648811340332,"y":344.47619915008545},"nextVisible":{"connected":true,"enabled":true,"executionId":"ec022c77-9d81-4b73-8d02-8f7e53b29a9c","rect":{"bottom":283.190465927124,"left":22.761905670166016,"right":130.7678565979004,"top":263.6666564941406},"viewport":{"height":915.047607421875,"left":0,"scale":1,"top":0,"width":412.19049072265625},"visible":true,"width":412,"x":76.7648811340332,"y":273.4285612106323},"beforeScreenshot":"files\/validation-ui\/t13-4307bb77-514b-4fca-ae9c-72ccd0502503-waiting.png","afterScreenshot":"files\/validation-ui\/t13-4307bb77-514b-4fca-ae9c-72ccd0502503-next-waiting.png"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 19.688
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

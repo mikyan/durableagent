@@ -110,6 +110,72 @@ class InputApplicationTest {
         return DocumentsContract.buildDocumentUri(InputTestDocumentsProvider.AUTHORITY,id)
     }
     private fun pickerFilter()=IntentFilter(Intent.ACTION_OPEN_DOCUMENT).apply{addCategory(Intent.CATEGORY_OPENABLE);addDataType("*/*")}
+    @Test(timeout=30000) fun configuringNewUiBridgeDoesNotWaitForAnotherStoreLease(){
+        val run=UUID.randomUUID().toString();val heldNamespace="input-held-$run";val store=NativeInputStore(context,heldNamespace).withLeaseWait(2000)
+        var page:ActivityScenario<AgentActivity>?=null;var lease:StorageDomainLease?=null;var worker:Thread?=null
+        val construction=CompletableFuture<NativeInputBridge>();val read=CompletableFuture<JSONObject>()
+        try{
+            store.rememberConversation(JSONObject().put("id","held-chat").put("title","held-chat").put("model",JSONObject().put("provider","fixture").put("modelId","text").put("name","文字")))
+            page=scenario("input-only",run);var activity:AgentActivity?=null;page.onActivity{activity=it}
+            until(10000){js(page,"typeof window.DurableNative==='object'")=="true"}
+            lease=StorageDomainLease.acquire(java.io.File(context.noBackupFilesDir,heldNamespace))?:error("Fixture lease unavailable")
+            worker=Thread({try{read.complete(store.inspect("held-chat"))}catch(error:Throwable){read.completeExceptionally(error)}},"HeldNativeInputReader").apply{start()}
+            until(1000){worker.state==Thread.State.TIMED_WAITING}
+            assertFalse(read.isDone)
+            val started=SystemClock.elapsedRealtime()
+            android.os.Handler(android.os.Looper.getMainLooper()).post{
+                try{construction.complete(NativeInputBridge(requireNotNull(activity),"input-$run","input-only",run){})}catch(error:Throwable){construction.completeExceptionally(error)}
+            }
+            try{construction.get(500,TimeUnit.MILLISECONDS)}catch(_:java.util.concurrent.TimeoutException){fail("Configuring a new native UI bridge blocked behind another store's lease wait")}
+            val elapsed=SystemClock.elapsedRealtime()-started
+            assertFalse("The original native read must still be waiting for its OS lease",read.isDone)
+            lease.close();lease=null
+            assertEquals("held-chat",read.get(5,TimeUnit.SECONDS).getString("id"))
+            evidence("native-ui-configuration",JSONObject().put("run",run).put("mainThreadConstructionMs",elapsed).put("oldReadWaitingAtConstruction",true).put("sdkOwnerOpened",false))
+        }finally{
+            lease?.close();worker?.join(5000)
+            runCatching{construction.get(5,TimeUnit.SECONDS)}.getOrNull()?.let{bridge->instrumentation.runOnMainSync{bridge.close()}}
+            page?.close();store.close()
+        }
+    }
+    @Test(timeout=30000) fun publicInputFreezeWaitsForShortNativeLeaseWithoutRetryingTheAction(){
+        val run=UUID.randomUUID().toString();val namespace="input-$run";val store=NativeInputStore(context,namespace);var page:ActivityScenario<AgentActivity>?=null;var lease:StorageDomainLease?=null
+        try{
+            val capability=JSONObject().put("version","lease-fixture-1").put("provider","fixture").put("modelId","text").put("source","validation").put("input",org.json.JSONArray(listOf("text"))).put("limits",JSONObject()).put("applicationPolicy",JSONObject())
+            store.rememberConversation(JSONObject().put("id","lease-chat").put("title","原生输入短事务等待").put("model",JSONObject().put("provider","fixture").put("modelId","text").put("name","文字")),capability)
+            store.save("lease-chat",0,"save-before-lease","one fixed input 世界",emptyList())
+            page=scenario("input-only",run);open(page,"lease-chat");saved(page)
+            js(page,"window.__leaseReplies=[];window.__leaseReceive=window.__durableReceive;window.__durableReceive=e=>{window.__leaseReceive(e);if(e.connectionId==='lease-test')window.__leaseReplies.push(e)}")
+            fun post(requestId:String,method:String,payload:JSONObject){
+                val envelope=JSONObject().put("protocol",1).put("connectionId","lease-test").put("requestId",requestId).put("method",method).put("payload",payload)
+                js(page,"window.DurableNative.postMessage(${JSONObject.quote(envelope.toString())})")
+            }
+            fun reply(requestId:String):JSONObject{
+                until(5000){js(page,"window.__leaseReplies.some(e=>e.requestId===${JSONObject.quote(requestId)})")=="true"}
+                return JSONObject(JSONTokener(js(page,"JSON.stringify(window.__leaseReplies.find(e=>e.requestId===${JSONObject.quote(requestId)}))")).nextValue() as String)
+            }
+            // Use the real OS lease, held outside NativeInputStore's process-wide
+            // monitor, to reproduce a competing owner without blocking the UI.
+            lease=StorageDomainLease.acquire(java.io.File(context.noBackupFilesDir,namespace))?:error("Fixture lease unavailable")
+            val start=SystemClock.elapsedRealtime()
+            post("one-freeze","input.freeze",JSONObject().put("id","lease-chat").put("expectedRevision",1).put("operationId","one-freeze-operation"))
+            Thread.sleep(150)
+            assertEquals("Short native contention must not reject the one UI action", "0", js(page,"window.__leaseReplies.filter(e=>e.requestId==='one-freeze').length"))
+            lease.close();lease=null
+            val frozen=reply("one-freeze");assertTrue(frozen.toString(),frozen.getBoolean("ok"));val value=frozen.getJSONObject("value")
+            assertEquals("one fixed input 世界",store.readFrozen(value.getString("token")).getString("text"));assertEquals(1L,store.inspect("lease-chat").getLong("revision"))
+            assertEquals("1",js(page,"window.__leaseReplies.filter(e=>e.requestId==='one-freeze').length"))
+            val completedMs=SystemClock.elapsedRealtime()-start
+            lease=StorageDomainLease.acquire(java.io.File(context.noBackupFilesDir,namespace))?:error("Fixture lease unavailable")
+            val boundedStart=SystemClock.elapsedRealtime()
+            post("bounded-read","input.readControl",JSONObject().put("id","lease-chat"))
+            val blocked=reply("bounded-read");assertFalse(blocked.getBoolean("ok"));assertEquals("INPUT_STORAGE_BUSY",blocked.getJSONObject("error").getString("code"))
+            val boundedMs=SystemClock.elapsedRealtime()-boundedStart;assertTrue("Unreleased authority must return a bounded visible failure",boundedMs<5000)
+            lease.close();lease=null
+            assertEquals("one fixed input 世界",store.inspect("lease-chat").getString("text"));assertEquals(0,store.listSends(JSONObject().put("id","lease-chat")).getJSONArray("intents").length())
+            evidence("native-ui-lease-acquisition",JSONObject().put("run",run).put("freezeRequests",1).put("freezeResponses",1).put("freezeElapsedMs",completedMs).put("unreleasedLeaseFailureMs",boundedMs).put("sdkOwnerOpened",false).put("modelRequests",0).put("sendIntents",0))
+        }finally{lease?.close();page?.close();store.close()}
+    }
     @Test(timeout=120000) fun lostSelectionReceiptReplaysThroughActualBridgeWithoutOpeningAnotherPicker(){
         val run=UUID.randomUUID().toString();val store=NativeInputStore(context,"input-$run");var page:ActivityScenario<AgentActivity>?=null
         val monitor=instrumentation.addMonitor(pickerFilter(),Instrumentation.ActivityResult(Activity.RESULT_CANCELED,null),true)

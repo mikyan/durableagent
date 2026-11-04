@@ -1,0 +1,51 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: T13_EXECUTION_WAIT_METERED={"run":"1e8006ef-e4d2-4f99-82ac-0f0f270d9979","executionId":"19ea084b-a8cc-4c52-b3f9-91ea4225ed91","busyStartedElapsed":28930569}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: T13_EXECUTION_WAIT_UNMETERED={"run":"1e8006ef-e4d2-4f99-82ac-0f0f270d9979","observedToConfirmedMs":660,"stopped":{"cancelReason":"network_policy","cancelRequested":true,"captureIncomplete":false,"context":{"bindingId":"11a40772-657f-4b98-a966-617314893306","callId":"location-1","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"policy-chat","sdkConversationId":5,"taskId":20},"createdAt":1793783608313,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"19ea084b-a8cc-4c52-b3f9-91ea4225ed91","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","exitCode":-15,"finalDigest":"babcaf8fa0c280221adf6e0c7ba75aa860f3cd181c1b6c330bf52d70ed934256","finishedAt":1793783611481,"guardianPid":12818,"ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","localCapabilities":{"helperSha256":"13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1","runnerSha256":"be8b68ec5e9e204b2995a7546d3c372fea7e08775a9e19b1ff711515bee884ff","version":1},"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":455,"outputCursor":3,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/19ea084b-a8cc-4c52-b3f9-91ea4225ed91.raw","protocol":1,"rawSha256":"3d2bb862eabd9c7fac3f5aaa398fb9c82a78a0bd3391a9adc308fc03fb19b513","requestDigest":"412967ef6dc158cacc2fb385a6a7722006dfa254f3798e4c148439118861bd6f","scopeConfirmed":true,"sequence":8,"startRequestedAt":1793783608767,"startedAt":1793783608962,"state":"stopped"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: expected:<1> but was:<2>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay(DataSaverExecutionTest.kt:77)
+
+INSTRUMENTATION_STATUS: stream=
+Error in actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay(dev.durableagent.probe.DataSaverExecutionTest):
+java.lang.AssertionError: expected:<1> but was:<2>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay(DataSaverExecutionTest.kt:77)
+
+INSTRUMENTATION_STATUS: test=actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 26.223
+There was 1 failure:
+1) actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay(dev.durableagent.probe.DataSaverExecutionTest)
+java.lang.AssertionError: expected:<1> but was:<2>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay(DataSaverExecutionTest.kt:77)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

@@ -22,6 +22,7 @@ import {Projects,ProjectError,type LocationAdapter,type EffectAuthority,type Pro
 import {PROJECTS_EXTENSION,type LocationEditAuthority} from './project-protocol.js';
 import {DispatchGate} from './dispatch-gate.js';
 import {ManagedExecution,ManagedExecutionError,EXECUTION_EXTENSION} from './managed-execution.js';
+import {DATA_SAVER_EXTENSION,type DataSaverAuthority} from './data-saver-protocol.js';
 import {storageFailure} from './storage-failure.js';
 import {verifyApplicationStorage} from './storage-format.js';
 import {RetainedHistory} from './retained-history.js';
@@ -32,7 +33,7 @@ class DuplicateCreation extends Error {constructor(readonly productId:string){su
 class ActionError extends Error {constructor(readonly code:string,message:string){super(message);}}
 const settings:HarnessSettings={progress:{partialIntervalMs:1,outputIntervalMs:1,persistWithinMs:1000},retry:{enabled:false,maxRetries:0,baseDelayMs:1}};
 export type ApplicationInputs=FrozenInputAccess&{rememberConversation(conversation:InputConversation,capability?:InputCapability):void};
-export type ApplicationOptions={storageFormats?:Readonly<Record<string,import('./storage-format.js').ApplicationRecordFormat>>;execution?:ManagedExecution;routes?:RouteAuthority;extensions?:readonly ExtensionDescriptor[];agentFactories?:AgentFactories;path:string;models:Models;connections?:ModelConnections;inputs?:ApplicationInputs;sends?:SendAuthority;submissionBoundary?:(stage:SubmissionBoundary,intent:import('./submission-protocol.js').NativeSendIntent)=>void|Promise<void>;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;projectBoundary?:(stage:ProjectBoundary)=>void|Promise<void>;registry?:ReturnType<typeof createRegistry>;effects?:EffectAuthority;locationEdits?:LocationEditAuthority;locations?:LocationAdapter;storageFactory?:()=>Promise<Storage>};
+export type ApplicationOptions={dataSaver?:DataSaverAuthority;storageFormats?:Readonly<Record<string,import('./storage-format.js').ApplicationRecordFormat>>;execution?:ManagedExecution;routes?:RouteAuthority;extensions?:readonly ExtensionDescriptor[];agentFactories?:AgentFactories;path:string;models:Models;connections?:ModelConnections;inputs?:ApplicationInputs;sends?:SendAuthority;submissionBoundary?:(stage:SubmissionBoundary,intent:import('./submission-protocol.js').NativeSendIntent)=>void|Promise<void>;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;projectBoundary?:(stage:ProjectBoundary)=>void|Promise<void>;registry?:ReturnType<typeof createRegistry>;effects?:EffectAuthority;locationEdits?:LocationEditAuthority;locations?:LocationAdapter;storageFactory?:()=>Promise<Storage>};
 export class Application {
   private harness?:Harness;
   private retained?:RetainedHistory;
@@ -56,7 +57,7 @@ export class Application {
   private productsCache=new Map<string,ProductRecord>();
   private dispatch=new DispatchGate();
   private workspace={id:'default',path:''};
-  constructor(private readonly options:ApplicationOptions) {for(const action of ['extensions.get','routing.list','routing.query','routing.create','routing.send'])this.actions.add(action);if(options.execution){options.locations=options.execution.locations;options.effects=options.execution;this.state.extensions.push(EXECUTION_EXTENSION.id);for(const action of EXECUTION_EXTENSION.actions)this.actions.add(action);}this.state.extensions.push(PROJECTS_EXTENSION.id);for(const action of PROJECTS_EXTENSION.actions)this.actions.add(action);installConversationAgent(extension=>{this.state.extensions.push(extension.id);for(const action of extension.actions)this.actions.add(action);});if(options.connections){this.state.extensions.push(MODELS_EXTENSION.id);for(const action of MODELS_EXTENSION.actions)this.actions.add(action);}if(options.inputs)this.state.extensions.push(INPUT_EXTENSION.id);if(options.sends){this.state.extensions.push(SUBMISSION_EXTENSION.id);for(const action of SUBMISSION_EXTENSION.actions)this.actions.add(action);}}
+  constructor(private readonly options:ApplicationOptions) {if(options.dataSaver){this.state.extensions.push(DATA_SAVER_EXTENSION.id);for(const action of DATA_SAVER_EXTENSION.actions)this.actions.add(action);}for(const action of ['extensions.get','routing.list','routing.query','routing.create','routing.send'])this.actions.add(action);if(options.execution){options.locations=options.execution.locations;options.effects=options.execution;this.state.extensions.push(EXECUTION_EXTENSION.id);for(const action of EXECUTION_EXTENSION.actions)this.actions.add(action);}this.state.extensions.push(PROJECTS_EXTENSION.id);for(const action of PROJECTS_EXTENSION.actions)this.actions.add(action);installConversationAgent(extension=>{this.state.extensions.push(extension.id);for(const action of extension.actions)this.actions.add(action);});if(options.connections){this.state.extensions.push(MODELS_EXTENSION.id);for(const action of MODELS_EXTENSION.actions)this.actions.add(action);}if(options.inputs)this.state.extensions.push(INPUT_EXTENSION.id);if(options.sends){this.state.extensions.push(SUBMISSION_EXTENSION.id);for(const action of SUBMISSION_EXTENSION.actions)this.actions.add(action);}}
   status(){return {...this.state};}
   start():Promise<void> {
     if(this.closing)return this.closing.then(()=>this.start());
@@ -138,6 +139,25 @@ export class Application {
       let value:unknown;
       if(PROJECTS_EXTENSION.actions.includes(request.method as any))return {...base,ok:true,value:request.method==='projects.get'?await this.projects!.view(typeof payload.id==='string'?payload.id:undefined):await this.submissions!.coordinate(()=>this.projects!.change(request.method,payload))};
       switch(request.method) {
+        case 'dataSaver.get':value=await this.options.dataSaver!.get();break;
+        case 'dataSaver.configure':
+          if(typeof payload.enabled!=='boolean'||!Number.isSafeInteger(payload.expectedVersion)||Number(payload.expectedVersion)<0)throw new ActionError('INVALID_ARGUMENT','省流设置参数无效');
+          value=await this.options.dataSaver!.configure(payload.enabled,Number(payload.expectedVersion));break;
+        case 'dataSaver.operations':{
+          const product=await this.product(this.text(payload,'id',128));
+          value=await this.options.dataSaver!.operations(product.id,typeof payload.cursor==='string'?payload.cursor:undefined);break;
+        }
+        case 'dataSaver.grant':{
+          const product=await this.product(this.text(payload,'id',128)),executionId=this.text(payload,'executionId',128);
+          const requestDigest=this.text(payload,'requestDigest',64),finalDigest=this.text(payload,'finalDigest',64),period=Number(payload.period);
+          if(!/^[a-f0-9]{64}$/.test(requestDigest)||!/^[a-f0-9]{64}$/.test(finalDigest)||!Number.isSafeInteger(payload.period)||period<1)throw new ActionError('INVALID_ARGUMENT','临时放行必须指向固定执行及当前网络期间');
+          const operation=await this.options.dataSaver!.decision(executionId);
+          if(operation.productId!==product.id||operation.requestDigest!==requestDigest||operation.finalDigest!==finalDigest)throw new ActionError('DATA_SAVER_IDENTITY_CONFLICT','临时放行目标或固定内容已改变');
+          if(!this.options.sends)throw new ActionError('EXECUTION_STOPPED','当前无法核验控制资格');
+          const control=await this.options.sends.readControl(product.id);
+          if(control.pendingAbort||control.generation!==operation.controlGeneration||control.stoppedThrough>=operation.controlGeneration)throw new ActionError('EXECUTION_STOPPED','该执行所属控制代次已停止，不能恢复许可');
+          value=await this.options.dataSaver!.grant({executionId,requestDigest,finalDigest,period});break;
+        }
         case 'files.list':value=await this.options.execution!.fileChanges(this.text(payload,'id'),payload.cursor);break;
         case 'execution.list':value=await this.options.execution!.list(this.text(payload,'id'),payload.cursor);break;
         case 'execution.readOutput':value=await this.options.execution!.readOutput(this.text(payload,'id'),this.text(payload,'executionId'),payload.cursor);break;

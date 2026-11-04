@@ -1,0 +1,44 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverProviderTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverProviderTest:
+INSTRUMENTATION_STATUS: test=nativeProviderProjectionMakesUndispatchedEvidenceExplicitAcrossReopen
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverProviderTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: The native public contract must explicitly prove no dispatch expected:<false> but was:<null>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at dev.durableagent.probe.DataSaverProviderTest.nativeProviderProjectionMakesUndispatchedEvidenceExplicitAcrossReopen(DataSaverProviderTest.kt:21)
+
+INSTRUMENTATION_STATUS: stream=
+Error in nativeProviderProjectionMakesUndispatchedEvidenceExplicitAcrossReopen(dev.durableagent.probe.DataSaverProviderTest):
+java.lang.AssertionError: The native public contract must explicitly prove no dispatch expected:<false> but was:<null>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at dev.durableagent.probe.DataSaverProviderTest.nativeProviderProjectionMakesUndispatchedEvidenceExplicitAcrossReopen(DataSaverProviderTest.kt:21)
+
+INSTRUMENTATION_STATUS: test=nativeProviderProjectionMakesUndispatchedEvidenceExplicitAcrossReopen
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.221
+There was 1 failure:
+1) nativeProviderProjectionMakesUndispatchedEvidenceExplicitAcrossReopen(dev.durableagent.probe.DataSaverProviderTest)
+java.lang.AssertionError: The native public contract must explicitly prove no dispatch expected:<false> but was:<null>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at dev.durableagent.probe.DataSaverProviderTest.nativeProviderProjectionMakesUndispatchedEvidenceExplicitAcrossReopen(DataSaverProviderTest.kt:21)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

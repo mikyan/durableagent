@@ -29,7 +29,7 @@ import java.util.UUID
 class NativeDocumentException(val code:String,message:String):RuntimeException(message,null,false,false)
 
 /** Original document capabilities, separate from immutable attachment representations. */
-class NativeDocumentStore(context:Context,private val namespace:String="document-v1",private val inputNamespace:String="input-v1"):AutoCloseable {
+class NativeDocumentStore @JvmOverloads constructor(context:Context,private val namespace:String="document-v1",private val inputNamespace:String="input-v1",private val networkSource:(()->DataSaverNetwork)?=null,private val beforePolicyResultCommit:(()->Unit)?=null):AutoCloseable {
     private val context=context.applicationContext
     private val resolver=this.context.contentResolver
     private var helper:DocumentDatabase?=null
@@ -47,13 +47,12 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
             catch(_:SecurityException){/* Current grant may still be usable; persisted flags below tell the truth. */}
         }
         val id=NativeInputStore.sha256(uri.toString().toByteArray(Charsets.UTF_8))
-        val record=current(JSONObject().put("protocol",1).put("resourceId",id).put("namespace","saf:$id").put("source","saf").put("original",true).put("uri",uri.toString()))
-        if(record.optString("availability")!="available")fail(record.optString("reasonCode","DOCUMENT_UNAVAILABLE"),record.optString("reason","原文件暂不可用。"))
+        val record=JSONObject().put("protocol",1).put("resourceId",id).put("namespace","saf:$id").put("source","saf").put("original",true).put("uri",uri.toString()).put("displayName","原文件").put("mimeType","application/octet-stream").put("providerFlags",0).put("networkAccess","unknown").put("availability","unavailable").put("freshness","not-observed").put("reason","尚未访问原件提供者。")
         locked {db->db.beginTransaction();try{
             db.execSQL("INSERT INTO resources(id,record) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET record=excluded.record",arrayOf(id,record.toString()))
             db.setTransactionSuccessful()
         }finally{db.endTransaction()}}
-        return record
+        return observeMetadata(id,UUID.randomUUID().toString())
     }
     @JvmOverloads fun list(cursor:String?=null):JSONObject {
         if(cursor!=null&&!cursor.matches(Regex("[a-f0-9]{64}")))fail("DOCUMENT_INVALID","原文件列表游标无效。")
@@ -61,26 +60,118 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         val values=JSONArray();var bytes=0;var count=0;var last:String?=null
         for(record in records){
             if(count==20)break
-            val value=current(record);val length=value.toString().toByteArray(Charsets.UTF_8).size
+            val value=cached(record);val length=value.toString().toByteArray(Charsets.UTF_8).size
             if(bytes+length>60000){if(count==0)fail("DOCUMENT_FRAME_LIMIT","此原文件记录过大，无法放入列表响应。");break}
             values.put(value);bytes+=length;count++;last=value.getString("resourceId")
         }
         return JSONObject().put("resources",values).put("nextCursor",if(count<records.size)last else JSONObject.NULL)
     }
-    fun describe(resourceId:String):JSONObject = current(resource(resourceId))
-    fun verify(operationId:String):JSONObject {
+    fun cachedResource(resourceId:String):JSONObject=cached(resource(resourceId))
+    private fun cached(record:JSONObject):JSONObject{
+        val result=grants(JSONObject(record.toString())).put("freshness","cached")
+        record.optJSONObject("observation")?.let{observation->NativeProviderPolicy(context,inputNamespace,networkSource).use{policy->result.put("observation",policy.status(observation.getString("executionId")))}}
+        return result
+    }
+    private fun grants(record:JSONObject):JSONObject{
+        val uri=Uri.parse(record.getString("uri"));val persisted=resolver.persistedUriPermissions.firstOrNull{it.uri==uri}
+        return record.put("grant",JSONObject().put("read",granted(uri,READ)).put("write",granted(uri,WRITE)).put("persistedRead",persisted?.isReadPermission==true).put("persistedWrite",persisted?.isWritePermission==true))
+    }
+    private fun saveResource(record:JSONObject){locked{db->db.execSQL("UPDATE resources SET record=? WHERE id=?",arrayOf(record.toString(),record.getString("resourceId")))}}
+    private fun metadataDescriptor(record:JSONObject)=JSONObject().put("kind","metadata").put("documentNamespace",namespace).put("uri",record.getString("uri"))
+    private fun observeMetadata(resourceId:String,id:String):JSONObject{
+        val original=resource(resourceId)
+        return NativeProviderPolicy(context,inputNamespace,networkSource).use{policy->
+            val decision=policy.prepare(id,metadataDescriptor(original))
+            val pending=grants(JSONObject(original.toString())).put("observation",decision)
+            saveResource(pending)
+            try{
+                val result=policy.execute(id){current(original).put("observedAt",System.currentTimeMillis()).put("freshness","observed")}
+                result.put("observation",policy.status(id));saveResource(result);result
+            }catch(error:NativeInputException){
+                if(error.code !in setOf("DATA_SAVER_WAIT","DATA_SAVER_INTERRUPTED","DATA_SAVER_RESULT_UNVERIFIED","DATA_SAVER_OPERATION_BUSY"))throw error
+                pending.put("observation",policy.status(id)).put("reason",error.message).put("reasonCode",error.code)
+                if(!pending.has("observedAt"))pending.put("freshness","not-observed")else pending.put("freshness","cached")
+                saveResource(pending);pending
+            }
+        }
+    }
+    private fun snapshotFile(id:String):File=File(File(File(context.noBackupFilesDir,namespace),"observations"),NativeInputStore.sha256(id.toByteArray(Charsets.UTF_8))+".bin")
+    fun observeRead(request:JSONObject):JSONObject{
+        val id=operationId(request);val resourceId=digest(request,"resourceId");val owner=request.getJSONObject("owner");identifier(owner,"productId");integer(owner,"controlGeneration",1,9_007_199_254_740_991L);integer(owner,"sdkConversationId",1,9_007_199_254_740_991L)
+        val original=resource(resourceId);val descriptor=JSONObject().put("kind","read").put("documentNamespace",namespace).put("uri",original.getString("uri")).put("owner",JSONObject(owner.toString()))
+        return NativeProviderPolicy(context,inputNamespace,networkSource).use{policy->
+            policy.prepare(id,descriptor)
+            try{
+                val result=policy.execute(id){
+                    val metadata=current(original).put("freshness","observed").put("observedAt",System.currentTimeMillis())
+                    val opened=open(resourceId);val readerId=opened.getString("readerId");var closedReader=false
+                    try{
+                        val length=opened.getLong("byteLength");if(length>16L*1024*1024)fail("DOCUMENT_BUDGET_EXCEEDED","此固定观察超过 16 MiB，未声称读取完整原件。")
+                        val target=snapshotFile(id);check(target.parentFile!!.mkdirs()||target.parentFile!!.isDirectory);val temporary=File(target.parentFile,target.name+".pending")
+                        java.io.FileOutputStream(temporary).use{output->var offset=0L;while(offset<length){val page=readReader(readerId,offset,32768);val bytes=Base64.decode(page.getString("base64"),Base64.DEFAULT);if(bytes.isEmpty())fail("DOCUMENT_READ_UNSTABLE","原件在固定观察期间变短。");output.write(bytes);offset+=bytes.size};output.fd.sync()}
+                        val verified=closeRead(readerId);closedReader=true
+                        if(!verified.getBoolean("unchanged")||temporary.length()!=length||hashFile(temporary)!=opened.getString("contentDigest"))fail("DOCUMENT_READ_UNSTABLE","原件在固定观察期间变化，未使用部分内容。")
+                        android.system.Os.rename(temporary.absolutePath,target.absolutePath)
+                        for(directory in listOf(target.parentFile!!,target.parentFile!!.parentFile!!)){val fd=android.system.Os.open(directory.absolutePath,android.system.OsConstants.O_RDONLY,0);try{android.system.Os.fsync(fd)}finally{android.system.Os.close(fd)}}
+                        JSONObject().put("snapshotId",id).put("resource",metadata).put("contentDigest",opened.getString("contentDigest")).put("byteLength",length).put("observedAt",metadata.getLong("observedAt"))
+                    }finally{if(!closedReader)runCatching{closeRead(readerId)}}
+                }
+                val file=snapshotFile(id);if(!file.isFile||file.length()!=result.getLong("byteLength")||hashFile(file)!=result.getString("contentDigest"))throw NativeInputException("DATA_SAVER_RESULT_UNVERIFIED","固定原件观察内容无法核验，未重新访问提供者。")
+                JSONObject().put("observation",policy.status(id)).put("snapshot",result)
+            }catch(error:NativeInputException){
+                if(error.code !in setOf("DATA_SAVER_WAIT","DATA_SAVER_OPERATION_BUSY","DATA_SAVER_RESULT_UNVERIFIED","DATA_SAVER_INTERRUPTED"))throw error
+                JSONObject().put("observation",policy.status(id))
+            }
+        }
+    }
+    fun readSnapshot(request:JSONObject):JSONObject{
+        val id=operationId(request);val offset=integer(request,"offset",0,16L*1024*1024);val max=integer(request,"maxBytes",1,32768).toInt()
+        val result=NativeProviderPolicy(context,inputNamespace,networkSource).use{it.result(id)}
+        requireGrant(Uri.parse(result.getJSONObject("resource").getString("uri")),READ)
+        val file=snapshotFile(id);val length=result.getLong("byteLength");if(!file.isFile||file.length()!=length||offset>length)throw NativeInputException("DATA_SAVER_RESULT_UNVERIFIED","固定原件观察内容无法核验，未重新访问提供者。")
+        val bytes=ByteArray(minOf(max.toLong(),length-offset).toInt());RandomAccessFile(file,"r").use{it.seek(offset);it.readFully(bytes)}
+        return JSONObject().put("offset",offset).put("base64",Base64.encodeToString(bytes,Base64.NO_WRAP)).put("bytesRead",bytes.size).put("eof",offset+bytes.size==length)
+    }
+    fun resumeObservation(resourceId:String,operationId:String,digest:String,period:Long):JSONObject{
+        NativeProviderPolicy(context,inputNamespace,networkSource).use{policy->
+            val decision=policy.prepare(operationId,metadataDescriptor(resource(resourceId)))
+            if(decision.getString("requestDigest")!=digest)throw NativeInputException("DATA_SAVER_IDENTITY_CONFLICT","此许可不属于同一次原文件观察。")
+            if(!decision.optBoolean("terminal"))policy.grant(operationId,digest,period)
+        }
+        return observeMetadata(resourceId,operationId)
+    }
+    fun describe(resourceId:String):JSONObject=observeMetadata(resourceId,UUID.randomUUID().toString())
+    private fun verificationDescriptor(fixed:JSONObject)=JSONObject().put("kind","verify").put("documentNamespace",namespace).put("uri",fixed.getString("uri"))
+        .put("originalOperationId",fixed.getString("operationId")).put("documentRequestDigest",fixed.getString("requestDigest"))
+    fun resumeVerification(operationId:String,observationId:String,digest:String,period:Long):JSONObject {
+        NativeProviderPolicy(context,inputNamespace,networkSource).use{policy->
+            val prepared=policy.prepare(observationId,verificationDescriptor(query(operationId)))
+            if(prepared.getString("requestDigest")!=digest)throw NativeInputException("DATA_SAVER_IDENTITY_CONFLICT","此许可不属于同一次原件核验。")
+            if(!prepared.optBoolean("terminal"))policy.grant(observationId,digest,period)
+        }
+        return verifyObservation(operationId,observationId)
+    }
+    fun verify(operationId:String):JSONObject=verifyObservation(operationId,UUID.randomUUID().toString())
+    private fun verifyObservation(operationId:String,observationId:String):JSONObject {
         val fixed=query(operationId)
-        val observation=try{
-            val opened=open(fixed.getString("resourceId"));val closed=closeRead(opened.getString("readerId"))
-            if(!closed.getBoolean("unchanged"))JSONObject().put("status","changed_during_read").put("reasonCode","DOCUMENT_READ_UNSTABLE").put("reason","核验期间原件发生变化，未把读回当作完成证明。")
-            else JSONObject().put("status","read").put("currentDigest",closed.getString("currentDigest")).put("byteLength",closed.getLong("byteLength"))
-                .put("matchesExpected",closed.getString("currentDigest")==fixed.getString("expectedDigest"))
-                .put("matchesContent",closed.getString("currentDigest")==fixed.getString("contentDigest"))
-        }catch(error:NativeDocumentException){JSONObject().put("status","unavailable").put("reasonCode",error.code).put("reason",error.message)}
-        catch(_:Exception){JSONObject().put("status","unavailable").put("reasonCode","DOCUMENT_UNAVAILABLE").put("reason","原件读回尚未确认，请核验授权及存储状态。")}
-        observation.put("observedAt",System.currentTimeMillis())
-        // Matching bytes cannot prove that a lost Provider operation ended. Only actual
-        // durable operation evidence may advance state; this observation is never persisted.
+        val observation=NativeProviderPolicy(context,inputNamespace,networkSource).use{policy->
+            policy.prepare(observationId,verificationDescriptor(fixed))
+            try{policy.execute(observationId){
+                val result=try{
+                    val opened=open(fixed.getString("resourceId"));val closed=closeRead(opened.getString("readerId"))
+                    if(!closed.getBoolean("unchanged"))JSONObject().put("status","changed_during_read").put("reasonCode","DOCUMENT_READ_UNSTABLE")
+                    else JSONObject().put("status","read").put("currentDigest",closed.getString("currentDigest")).put("byteLength",closed.getLong("byteLength"))
+                        .put("matchesExpected",closed.getString("currentDigest")==fixed.getString("expectedDigest"))
+                        .put("matchesContent",closed.getString("currentDigest")==fixed.getString("contentDigest"))
+                }catch(error:NativeDocumentException){JSONObject().put("status","unavailable").put("reasonCode",error.code)}
+                result.put("observedAt",System.currentTimeMillis())
+            }.put("observation",policy.status(observationId))}
+            catch(error:NativeInputException){
+                if(error.code !in setOf("DATA_SAVER_WAIT","DATA_SAVER_INTERRUPTED","DATA_SAVER_OPERATION_BUSY","DATA_SAVER_RESULT_UNVERIFIED"))throw error
+                JSONObject().put("status",if(error.code=="DATA_SAVER_WAIT")"waiting" else "result-unverified").put("reasonCode",error.code).put("observation",policy.status(observationId))
+            }
+        }
+        // A fixed read observation never changes the original write's scope evidence.
         return query(operationId).put("verification",observation)
     }
     fun cancel(request:JSONObject):JSONObject {
@@ -99,7 +190,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         val digest=NativeInputStore.sha256(plan.toString().toByteArray(Charsets.UTF_8))
         val existing=locked{db->operationOrNull(db,operationId)}
         if(existing!=null){if(existing.getString("requestDigest")!=digest)conflict();return existing}
-        val original=describe(plan.getString("resourceId"))
+        val original=cachedResource(plan.getString("resourceId"))
         return locked{db->
             operationOrNull(db,operationId)?.let{if(it.getString("requestDigest")!=digest)conflict();return@locked it}
             val row=JSONObject(plan.toString()).put("protocol",1).put("requestDigest",digest).put("namespace",original.getString("namespace"))
@@ -147,7 +238,22 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         }
     }
     /** Trusted core already owns the shared environment writer claim. This is no second queue. */
-    fun start(request:JSONObject):JSONObject {
+    private fun writeDescriptor(row:JSONObject)=JSONObject().put("kind","write").put("documentNamespace",namespace).put("uri",row.getString("uri"))
+        .put("documentRequestDigest",row.getString("requestDigest")).put("expectedDigest",row.getString("expectedDigest")).put("contentDigest",row.getString("contentDigest")).put("byteLength",row.getLong("byteLength"))
+        .put("owner",JSONObject().put("productId",row.getString("productId")).put("controlGeneration",row.getLong("controlGeneration")).put("sdkConversationId",row.getLong("sdkConversationId")))
+    fun writePolicy(request:JSONObject):JSONObject{
+        val row=query(operationId(request));if(row.getString("requestDigest")!=digest(request,"requestDigest")||controlNamespace(row)!=inputNamespace)conflict()
+        return NativeProviderPolicy(context,inputNamespace,networkSource).use{policy->
+            val id=row.getString("operationId");policy.prepare(id,writeDescriptor(row))
+            policy.reconcileWrite(id,row).put("documentRequestDigest",row.getString("requestDigest"))
+        }
+    }
+    fun start(request:JSONObject):JSONObject{
+        val row=query(operationId(request));if(row.getString("requestDigest")!=digest(request,"requestDigest")||controlNamespace(row)!=inputNamespace)conflict()
+        if(row.getString("state")!="accepted_not_started")return row
+        return NativeProviderPolicy(context,inputNamespace,networkSource,beforePolicyResultCommit).use{policy->policy.prepare(row.getString("operationId"),writeDescriptor(row));policy.execute(row.getString("operationId")){startOriginal(request)}}
+    }
+    private fun startOriginal(request:JSONObject):JSONObject {
         val id=operationId(request);val requested=digest(request,"requestDigest")
         var ownership:StorageDomainLease?=null
         val first=locked{db->
@@ -169,7 +275,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
             val before=open(first.getString("resourceId"))
             val verified=closeRead(before.getString("readerId"))
             if(before.getString("contentDigest")!=first.getString("expectedDigest")||!verified.getBoolean("unchanged"))fail("DOCUMENT_PRECONDITION_CONFLICT","原文件已变化，未覆盖新内容。")
-            val capability=describe(first.getString("resourceId"))
+            val capability=current(resource(first.getString("resourceId")))
             if(!capability.getJSONObject("grant").getBoolean("write"))fail("DOCUMENT_PERMISSION_REQUIRED","原文件写入授权已撤销或尚未取得。")
             if(capability.getLong("providerFlags") and DocumentsContract.Document.FLAG_SUPPORTS_WRITE.toLong()==0L)fail("DOCUMENT_UNSUPPORTED","此提供者未声明支持原件写入。")
             val running=locked{db->
@@ -182,7 +288,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
             NativeInputStore(context,inputNamespace).use{it.requireEffect(id)}
             began=true
             val uri=Uri.parse(first.getString("uri"));var oldBytes:ByteArray?=null
-            originalIo{
+            originalIo(uri){
                 val descriptor=resolver.openFileDescriptor(uri,"rw")?:fail("DOCUMENT_UNAVAILABLE","文档提供者暂不可用。")
                 descriptor.use{original->
                     ParcelFileDescriptor.AutoCloseInputStream(ParcelFileDescriptor.dup(original.fileDescriptor)).use{input->
@@ -202,8 +308,9 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
                         if(operation(db,id).getString("state")!="running")fail("DOCUMENT_CANCEL_UNCONFIRMED","原件写入已请求停止，提供者范围尚待核验。")
                         NativeInputStore(context,inputNamespace).use{it.requireEffect(id)}
                     }
+                    NativeProviderPolicy.beforeIo(context,inputNamespace,uri.toString(),networkSource)
                     ParcelFileDescriptor.AutoCloseOutputStream(ParcelFileDescriptor.dup(original.fileDescriptor)).use{output->
-                        output.channel.position(0);FileInputStream(file).use{input->input.copyTo(output,32768)}
+                        output.channel.position(0);FileInputStream(file).use{input->val chunk=ByteArray(32768);while(true){NativeProviderPolicy.beforeActiveIo();val count=input.read(chunk);if(count<0)break;output.write(chunk,0,count)}}
                         output.channel.truncate(first.getLong("byteLength"));output.flush();output.fd.sync()
                     }
                 }
@@ -291,7 +398,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     }
     fun open(resourceId:String):JSONObject {
         val record=resource(resourceId);val uri=Uri.parse(record.getString("uri"));requireGrant(uri,READ)
-        return originalIo {
+        return originalIo(uri) {
             val descriptor=resolver.openFileDescriptor(uri,"r")?:fail("DOCUMENT_UNAVAILABLE","文档提供者暂不可用。")
             val input=ParcelFileDescriptor.AutoCloseInputStream(descriptor)
             try{
@@ -308,7 +415,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     fun readReader(readerId:String,offset:Long,maxBytes:Int):JSONObject {
         if(offset !in 0..MAX_CONTENT||maxBytes !in 1..32768)fail("DOCUMENT_INVALID","原文件读取范围无效。")
         val reader=synchronized(readers){readers[readerId]}?:fail("DOCUMENT_READER_LOST","原文件 reader 已失效，请重新开始读取并核验内容。")
-        return synchronized(reader){originalIo{
+        return synchronized(reader){originalIo(reader.uri){
             // Android can leave an already-open FD readable after URI grant revocation.
             // The application's capability still requires current authorization per call.
             requireGrant(reader.uri,READ)
@@ -321,7 +428,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     }
     fun closeRead(readerId:String):JSONObject {
         val reader=synchronized(readers){readers.remove(readerId)}?:fail("DOCUMENT_READER_LOST","原文件 reader 已失效，请重新开始读取并核验内容。")
-        return synchronized(reader){originalIo{reader.input.use{input->
+        return synchronized(reader){reader.input.use{input->originalIo(reader.uri){
             requireGrant(reader.uri,READ)
             val result=hashOriginal(input)
             JSONObject().put("currentDigest",result.first).put("byteLength",result.second).put("unchanged",result.first==reader.digest&&result.second==reader.length)
@@ -330,13 +437,13 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     private fun hashOriginal(input:ParcelFileDescriptor.AutoCloseInputStream):Pair<String,Long> {
         try{input.channel.position(0)}catch(_:IOException){fail("DOCUMENT_UNSUPPORTED","此提供者不支持可定位的原件 reader。")}
         val digest=MessageDigest.getInstance("SHA-256");val bytes=ByteArray(32768);var length=0L
-        while(true){val count=input.read(bytes);if(count<0)break;length+=count;if(length>MAX_CONTENT)fail("DOCUMENT_BUDGET_EXCEEDED","原文件读取超过 64 MiB，未声称已读取完整内容。");digest.update(bytes,0,count)}
+        while(true){NativeProviderPolicy.beforeActiveIo();val count=input.read(bytes);if(count<0)break;length+=count;if(length>MAX_CONTENT)fail("DOCUMENT_BUDGET_EXCEEDED","原文件读取超过 64 MiB，未声称已读取完整内容。");digest.update(bytes,0,count)}
         return digest.digest().joinToString(""){"%02x".format(it)} to length
     }
     fun read(resourceId:String,offset:Long,maxBytes:Int):JSONObject {
         if(offset !in 0..MAX_CONTENT||maxBytes !in 1..32768)fail("DOCUMENT_INVALID","原文件读取范围无效。")
         val record=resource(resourceId);val uri=Uri.parse(record.getString("uri"));requireGrant(uri,READ)
-        return originalIo {
+        return originalIo(uri) {
             val descriptor=resolver.openFileDescriptor(uri,"r")?:fail("DOCUMENT_UNAVAILABLE","文档提供者暂不可用。")
             ParcelFileDescriptor.AutoCloseInputStream(descriptor).use{input->
                 input.channel.position(offset)
@@ -359,7 +466,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         value.put("grant",JSONObject().put("read",readable).put("write",writable).put("persistedRead",persisted?.isReadPermission==true).put("persistedWrite",persisted?.isWritePermission==true))
         try{
             if(!readable)fail("DOCUMENT_PERMISSION_REQUIRED","原文件系统授权已撤销或尚未取得，请重新选择。")
-            originalIo{
+            originalIo(uri){
                 val queried=resolver.query(uri,arrayOf(DocumentsContract.Document.COLUMN_DISPLAY_NAME,DocumentsContract.Document.COLUMN_MIME_TYPE,DocumentsContract.Document.COLUMN_FLAGS,DocumentsContract.Document.COLUMN_SIZE,DocumentsContract.Document.COLUMN_LAST_MODIFIED),null,null,null)
                     ?:fail("DOCUMENT_UNAVAILABLE","文档提供者暂不可用。")
                 queried.use{cursor->
@@ -379,7 +486,8 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     }
     private fun granted(uri:Uri,flag:Int)=context.checkUriPermission(uri,Process.myPid(),Process.myUid(),flag)==PackageManager.PERMISSION_GRANTED
     private fun requireGrant(uri:Uri,flag:Int){if(!granted(uri,flag))fail("DOCUMENT_PERMISSION_REQUIRED","原文件系统授权已撤销或尚未取得，请重新选择。")}
-    private fun <T> originalIo(action:()->T):T=try{action()}
+    private fun <T> originalIo(uri:Uri,action:()->T):T=try{NativeProviderPolicy.beforeIo(context,inputNamespace,uri.toString(),networkSource);action()}
+        catch(error:NativeInputException){throw error}
         catch(error:NativeDocumentException){throw error}
         catch(_:SecurityException){fail("DOCUMENT_PERMISSION_REQUIRED","原文件系统授权已撤销或尚未取得，请重新选择。")}
         catch(_:FileNotFoundException){fail("DOCUMENT_NOT_FOUND","原文件已移动、删除或无法定位。")}

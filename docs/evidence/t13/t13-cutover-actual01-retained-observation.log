@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.FileNativeObservationTest:
+INSTRUMENTATION_STATUS: test=inspectRetainedSdkHistoryWithoutOpeningHarness
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: retainedFileHistoryObservation={"files":[],"tasks":[{"id":17,"conversationId":5,"kind":"pi.generation","abortRequested":false,"background":false,"startedAt":1793783607084,"endedAt":1793783625338,"status":"terminal","outcome":{"status":"completed","result":{"entryId":19}},"input":"{}"},{"id":20,"conversationId":5,"kind":"pi.tool","owner":17,"abortRequested":false,"background":false,"startedAt":1793783607518,"endedAt":1793783625307,"status":"terminal","outcome":{"status":"failed","error":{"message":"Tool bash threw"},"result":{"kind":"model","entryId":24}},"input":"{\"kind\":\"model\",\"assistant\":19,\"callId\":\"location-1\"}"},{"id":25,"conversationId":5,"kind":"pi.generation","abortRequested":false,"background":false,"startedAt":1793783625353,"endedAt":1793783625625,"status":"terminal","outcome":{"status":"completed","result":{"entryId":26}},"input":"{}"}],"tasksLimited":false,"submissions":[{"conversationId":5,"requestId":"c17898d3-f369-4e11-958d-0153e4106dfd","type":"input","status":"done","entry":15,"id":16,"answer":26}],"submissionsLimited":false,"documentOperationIds":[],"executionIds":["19ea084b-a8cc-4c52-b3f9-91ea4225ed91"],"run":"1e8006ef-e4d2-4f99-82ac-0f0f270d9979","harnessNotOpened":true,"modelTransportNotInstalled":true,"conversations":[{"id":"policy-chat","entries":[{"id":"15","role":"user","text":"EXEC_NETWORK_DOWNLOAD","truncated":false},{"id":"24","role":"tool","text":"t13-download-open\n<harness>\n[error] 执行连接未确认结果，保留原身份等待核验\n<\/harness>","truncated":false},{"id":"26","role":"assistant","text":"你好🌍","truncated":false}],"more":false}],"nativeDocumentQueries":[],"nativeExecutionQueries":[{"executionId":"19ea084b-a8cc-4c52-b3f9-91ea4225ed91","response":{"ok":true,"value":{"cancelReason":"network_policy","cancelRequested":true,"captureIncomplete":false,"context":{"bindingId":"11a40772-657f-4b98-a966-617314893306","callId":"location-1","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"policy-chat","sdkConversationId":5,"taskId":20},"createdAt":1793783608313,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"19ea084b-a8cc-4c52-b3f9-91ea4225ed91","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","exitCode":-15,"finalDigest":"babcaf8fa0c280221adf6e0c7ba75aa860f3cd181c1b6c330bf52d70ed934256","finishedAt":1793783611481,"guardianPid":12818,"ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","localCapabilities":{"helperSha256":"13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1","runnerSha256":"be8b68ec5e9e204b2995a7546d3c372fea7e08775a9e19b1ff711515bee884ff","version":1},"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":455,"outputCursor":3,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/19ea084b-a8cc-4c52-b3f9-91ea4225ed91.raw","protocol":1,"rawSha256":"3d2bb862eabd9c7fac3f5aaa398fb9c82a78a0bd3391a9adc308fc03fb19b513","requestDigest":"412967ef6dc158cacc2fb385a6a7722006dfa254f3798e4c148439118861bd6f","scopeConfirmed":true,"sequence":8,"startRequestedAt":1793783608767,"startedAt":1793783608962,"state":"stopped"}}}]}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inspectRetainedSdkHistoryWithoutOpeningHarness
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 1.24
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

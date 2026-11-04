@@ -2,7 +2,7 @@ import {defineDoc,defineDocFamily,type Harness,type ToolExecutionApi} from '@ear
 import {FileError} from '@earendil-works/pi-durable/env';
 import {BACKGROUND_CONTEXT,type Context} from '@earendil-works/chord/context';
 import {createHash,randomUUID} from 'node:crypto';
-import type {ExecutionChannel} from './execution-channel.js';
+import {ExecutionChannelError,type ExecutionChannel} from './execution-channel.js';
 import type {SendAuthority} from './submission-protocol.js';
 import type {AdoptedBinding} from './project-bindings.js';
 import type {WorkspaceCoordinator,WriteClaim,WriteEvidence} from './workspace-coordination.js';
@@ -19,6 +19,7 @@ const terminal=(value:any)=>value?.scopeConfirmed===true&&['completed','not_star
 const unknown=()=>new FileError('unknown','原件写入结果尚未核验；保留原操作身份，不自动重写');
 const request=(fixed:Fixed)=>{const {bindingId,taskId,callId,...value}=fixed;return value;};
 const same=(left:unknown,right:unknown)=>JSON.stringify(left)===JSON.stringify(right);
+const confirmationLost=(error:unknown)=>error instanceof ExecutionChannelError&&['INPUT_STORAGE_BUSY','DATA_SAVER_BUSY','DATA_SAVER_STORAGE_BUSY','DATA_SAVER_UNAVAILABLE','DATA_SAVER_RESULT_UNVERIFIED','DOCUMENT_CHANNEL_BUSY','DOCUMENT_REQUEST_LOST','DOCUMENT_UNCONFIRMED','EXECUTION_WAIT_UNKNOWN'].includes(error.code);
 // Early native v2 receipts used state instead of available. Project retained facts only;
 // newly received receipts still pass the strict protocol check below.
 const publicDiff=(value:any)=>{
@@ -31,7 +32,7 @@ const publicDiff=(value:any)=>{
 export class DocumentWrites {
  private harness?:Harness;
  private coordinator?:()=>WorkspaceCoordinator;
- constructor(private readonly channel:ExecutionChannel,private readonly authority:SendAuthority,private readonly ownerClosed:(bindingId:string,sdkConversationId:number)=>boolean){}
+ constructor(private readonly channel:ExecutionChannel,private readonly authority:SendAuthority,private readonly ownerClosed:(bindingId:string,sdkConversationId:number)=>boolean,private readonly networkPolicy=false){}
  attach(harness:Harness,coordinator:()=>WorkspaceCoordinator){this.harness=harness;this.coordinator=coordinator;}
  private owner(){if(!this.harness)throw unknown();return this.harness;}
  private writes(){if(!this.coordinator)throw unknown();return this.coordinator();}
@@ -44,6 +45,24 @@ export class DocumentWrites {
  private async save(key:string,fixed:Fixed,value:Record<string,any>){await this.owner().commit(async tx=>{const stored=await tx.doc(Intent,key,null),index=await tx.doc(Index);if(!same(stored.fixed,fixed))throw unknown();if(stored.requestDigest&&stored.requestDigest!==value.requestDigest)throw unknown();stored.requestDigest=value.requestDigest;if(stored.receipt&&Number(stored.receipt.sequence)>value.sequence||terminal(stored.receipt)&&!terminal(value))return;stored.receipt=copy(value);index.items[fixed.operationId].state=terminal(value)?value.state:value.state==='completed'?'unknown':value.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});}
  private async markUnknown(key:string,fixed:Fixed){await this.owner().commit(async tx=>{const stored=await tx.doc(Intent,key,null),index=await tx.doc(Index);if(!same(stored.fixed,fixed)||terminal(stored.receipt))return;stored.receipt={...stored.receipt,operationId:fixed.operationId,namespace:'saf:'+fixed.resourceId,state:'unknown',scopeConfirmed:false,reason:'NATIVE_CONFIRMATION_LOST'};index.items[fixed.operationId].state='unknown';},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});}
  private async policy(fixed:Fixed,api:ToolExecutionApi,context:Context){context.abortSignal?.throwIfAborted();this.requireOpen(fixed.bindingId,fixed.sdkConversationId);const control=await this.authority.readControl(fixed.productId);if(control.pendingAbort||control.generation!==fixed.controlGeneration||control.stoppedThrough>=fixed.controlGeneration||(await api.getTask(api.taskId,context))?.abortRequested)throw new FileError('aborted','原件操作所属控制代次已停止');this.requireOpen(fixed.bindingId,fixed.sdkConversationId);}
+ private async network(fixed:Fixed,plan:Record<string,any>,api:ToolExecutionApi,context:Context){
+  if(!this.networkPolicy)return plan;
+  for(;;){await this.policy(fixed,api,context);
+   try{
+    // Staging and read-only reconciliation can advance the native receipt. Never
+    // present an older prepare sequence as current eligibility evidence.
+    const current=this.checked(await this.channel.request('query',{operationId:fixed.operationId}),fixed,plan.requestDigest);
+    if(current.sequence<plan.sequence)throw unknown();plan=current;
+    if(plan.state!=='accepted_not_started')return plan;
+    const value=await this.channel.request('writePolicy',{operationId:fixed.operationId,requestDigest:plan.requestDigest});
+    if(value.executionId!==fixed.operationId||value.documentRequestDigest!==plan.requestDigest)throw unknown();
+    if((value.phase==='allowed'||value.phase==='granted')&&value.dispatched===false)return plan;
+    if(typeof value.phase!=='string'||!['waiting','result-unverified','allowed','granted'].includes(value.phase)||typeof value.dispatched!=='boolean')throw unknown();
+    if(value.dispatched!==true&&plan.state==='accepted_not_started')await this.writes().waitEligibility(this.claim(fixed,plan.requestDigest),{operationId:fixed.operationId,requestDigest:plan.requestDigest,namespace:plan.namespace,state:plan.state,scopeConfirmed:false,sequence:plan.sequence,dispatched:false});
+   }catch(error){if(!confirmationLost(error))throw error;}
+   await new Promise(resolve=>setTimeout(resolve,100));
+  }
+ }
  async write(binding:AdoptedBinding,api:ToolExecutionApi|undefined,args:DocumentWriteArguments,context:Context){
   this.requireOpen(binding.id,binding.sdkConversationId);
   if(!api||!digest(args.resourceId)||!digest(args.expectedDigest)||typeof args.content!=='string')throw new FileError('invalid','原件写入参数无效');const data=Buffer.from(args.content);if(data.length>16777216)throw new FileError('not_supported','单次原件写入超过 16 MiB');
@@ -60,10 +79,35 @@ export class DocumentWrites {
    context.abortSignal?.addEventListener('abort',cancel,{once:true});if(context.abortSignal?.aborted)cancel();
    if(plan.state==='accepted_not_started'){
     let offset=0;while(offset<data.length){await this.policy(fixed,api,context);const chunk=data.subarray(offset,offset+32768),reply=await this.channel.request('stage',{operationId:fixed.operationId,offset,base64:chunk.toString('base64')});if(reply.operationId!==fixed.operationId||!Number.isSafeInteger(reply.nextOffset)||Number(reply.nextOffset)<offset+chunk.length||Number(reply.nextOffset)>data.length||reply.sealed!==(reply.nextOffset===data.length))throw unknown();offset=Number(reply.nextOffset);}
-    for(;;){await this.policy(fixed,api,context);const reservation=await this.writes().reserve(this.claim(fixed,plan.requestDigest));if(reservation.state==='cancelled')throw new FileError('aborted','等待中的原件写入已取消');if(reservation.state!=='queued')break;await this.writes().refresh();await new Promise(resolve=>setTimeout(resolve,20));}
-    await this.policy(fixed,api,context);this.requireOpen(fixed.bindingId,fixed.sdkConversationId);plan=this.checked(await this.channel.request('start',{operationId:fixed.operationId,requestDigest:plan.requestDigest}),fixed,plan.requestDigest);await this.save(key,fixed,plan);
+    for(;;){
+     plan=await this.network(fixed,plan,api,context);await this.save(key,fixed,plan);await this.policy(fixed,api,context);
+     if(plan.state!=='accepted_not_started')break;
+     const reservation=await this.writes().reserve(this.claim(fixed,plan.requestDigest));if(reservation.state==='cancelled')throw new FileError('aborted','等待中的原件写入已取消');
+     if(reservation.state==='queued'){await this.writes().refresh();await new Promise(resolve=>setTimeout(resolve,20));continue;}
+     await this.policy(fixed,api,context);this.requireOpen(fixed.bindingId,fixed.sdkConversationId);
+     try{plan=this.checked(await this.channel.request('start',{operationId:fixed.operationId,requestDigest:plan.requestDigest}),fixed,plan.requestDigest);await this.save(key,fixed,plan);break;}
+     catch(error){
+      // The bounded native service emits this code only before it accepts a worker.
+      // Recheck identity, policy and writer eligibility; no Provider action was started.
+      if(error instanceof ExecutionChannelError&&['DATA_SAVER_WAIT','DATA_SAVER_INTERRUPTED','DOCUMENT_CHANNEL_BUSY'].includes(error.code)){await new Promise(resolve=>setTimeout(resolve,100));continue;}
+      if(!this.networkPolicy||!confirmationLost(error))throw error;
+      // This error can precede admission or follow Provider I/O. Re-enter only the
+      // evidence gate: a matching accepted_not_started receipt AND undispatched
+      // policy are required before start can be retried with this same identity.
+      await new Promise(resolve=>setTimeout(resolve,100));
+     }
+    }
    }
-   for(;;){if(terminal(plan)){await this.writes().refresh();if(plan.state==='completed')return plan;throw new FileError('aborted','原件写入未开始或未完成');}if(plan.state==='unknown')throw unknown();await this.policy(fixed,api,context);await new Promise(resolve=>setTimeout(resolve,40));plan=this.checked(await this.channel.request('query',{operationId:fixed.operationId}),fixed,plan.requestDigest);await this.save(key,fixed,plan);}
+   for(;;){
+    // The original-file receipt is authoritative even if the separate policy ACK was lost.
+    if(terminal(plan)){await this.writes().refresh();if(plan.state==='completed')return plan;throw new FileError('aborted','原件写入未开始或未完成');}
+    if(plan.state==='unknown'&&!this.networkPolicy)throw unknown();
+    await this.policy(fixed,api,context);await new Promise(resolve=>setTimeout(resolve,40));
+    try{
+     plan=this.checked(await this.channel.request('query',{operationId:fixed.operationId}),fixed,plan.requestDigest);await this.save(key,fixed,plan);
+     if(this.networkPolicy)await this.channel.request('writePolicy',{operationId:fixed.operationId,requestDigest:plan.requestDigest});
+    }catch(error){if(!this.networkPolicy||!confirmationLost(error))throw error;}
+   }
   }catch(error){if(context.abortSignal?.aborted||error instanceof FileError&&error.code==='aborted')cancel();if(cancelling)await cancelling.catch(()=>{});if(fixed)await this.markUnknown(key,fixed);throw error instanceof FileError?error:unknown();}
   finally{context.abortSignal?.removeEventListener('abort',cancel);}
  }
@@ -87,7 +131,7 @@ export class DocumentWrites {
   }
   await this.writes().refresh();if(unconfirmed)throw unknown();
  }
- async recover(){for(const [operationId,entry] of Object.entries((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{})){if(['completed','not_started','stopped'].includes(entry.state))continue;const stored=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(!stored?.fixed)throw unknown();const fixed=copy(stored.fixed);try{const receipt=this.checked(await this.channel.request('query',{operationId}),fixed,stored.requestDigest);await this.save(entry.key,fixed,receipt);if(stored.requestDigest){const claim=this.claim(fixed,stored.requestDigest);if(!terminal(receipt))await this.writes().reserve(claim);else if(receipt.state==='not_started')await this.writes().cancelQueued(operationId);}}catch{await this.markUnknown(entry.key,fixed);}}}
+ async recover(){for(const [operationId,entry] of Object.entries((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{})){if(['completed','not_started','stopped'].includes(entry.state))continue;const stored=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(!stored?.fixed)throw unknown();const fixed=copy(stored.fixed);try{const receipt=this.checked(await this.channel.request('query',{operationId}),fixed,stored.requestDigest);await this.save(entry.key,fixed,receipt);if(stored.requestDigest){const claim=this.claim(fixed,stored.requestDigest);if(!terminal(receipt)){const decision=this.networkPolicy?await this.channel.request('writePolicy',{operationId,requestDigest:stored.requestDigest}):undefined;if(decision?.phase==='waiting'&&decision.dispatched!==true&&receipt.state==='accepted_not_started')await this.writes().waitEligibility(claim,{operationId,requestDigest:stored.requestDigest,namespace:receipt.namespace,state:receipt.state,scopeConfirmed:false,sequence:receipt.sequence,dispatched:false});else await this.writes().reserve(claim);}else if(receipt.state==='not_started')await this.writes().cancelQueued(operationId);}}catch{await this.markUnknown(entry.key,fixed);}}}
  async pending(){return Object.values((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{}).filter(entry=>!['completed','not_started','stopped'].includes(entry.state));}
  async list(productId:string){const all=Object.entries((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{}).filter(([,entry])=>entry.productId===productId),changes=[],queued=new Set((await this.writes().list()).filter(row=>row.source==='saf'&&row.state==='queued').map(row=>row.operationId));for(const [operationId,entry] of all.slice(-20)){const stored=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(!stored?.fixed)throw unknown();changes.push({operationId,requestDigest:stored.requestDigest,sequence:stored.receipt?.sequence??null,bindingId:stored.fixed.bindingId,executionId:null,resourceId:stored.fixed.resourceId,path:stored.receipt?.uri??'',namespace:'saf:'+stored.fixed.resourceId,original:true,state:queued.has(operationId)?'queued':stored.receipt?.state??'pending',scopeConfirmed:stored.receipt?.scopeConfirmed===true,diff:publicDiff(stored.receipt?.diff)});}return {changes,limited:all.length>20};}
 }

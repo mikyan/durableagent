@@ -1,0 +1,11 @@
+{
+  "head": "64f7ad4d73f4a95519fa9591c4cffab6e05c008e",
+  "purpose": "Second independent review fixes: proven pre-dispatch retry and fixed snapshot page contention; React diagnostic04 unchanged",
+  "artifacts": {
+    "app.apk": "d92fad39bf074264db081089906aac44a7ee566e39367b5b0caa1673930297cc",
+    "execution-capabilities.json": "10d7375d4565a83647d278efdea74cd71fe280896609987d12bb19a1e7302b1b",
+    "execution-setup.txt": "bccdfe9de7ff1179542aef37e7bc1bdf448ba7df6fcd6806368e84ee83e103b2",
+    "test.apk": "dea2ffac355c6a5ee1fbbf29197eb80509cbf8a7927293d3af37ebb5d92484fa"
+  },
+  "sources": 371
+}

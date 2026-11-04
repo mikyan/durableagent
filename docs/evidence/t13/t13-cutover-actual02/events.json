@@ -1,0 +1,31 @@
+[
+  {
+    "event": "T13_EXECUTION_WAIT_METERED",
+    "detail": {
+      "run": "b54c3476-66ac-4cfb-af7d-b8c11e54b2ef",
+      "executionId": "c2fc89d6-4555-4a19-ac92-96bde76b5861",
+      "busyStartedElapsed": 29414942
+    },
+    "hostMonotonic": 61226.0822541
+  },
+  {
+    "event": "network-override",
+    "value": "true",
+    "exitCode": 255,
+    "observed": [
+      "AndroidWifi;true",
+      "AndroidWifi;true"
+    ],
+    "hostMonotonic": 61226.3784956
+  },
+  {
+    "event": "network-override",
+    "value": "undefined",
+    "exitCode": 255,
+    "observed": [
+      "AndroidWifi;none",
+      "AndroidWifi;none"
+    ],
+    "hostMonotonic": 61241.4999079
+  }
+]
