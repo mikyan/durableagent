@@ -1,0 +1,27 @@
+runtime/src/live-model.ts
+  s_467dcb949b5b60::t_f5cb586bd14c95 7,9-10,18
+runtime/test/live-model.test.mjs
+  s_467dcb949b5b60::t_a82a023ca62707 1-18
+android/app/src/androidTest/java/dev/durableagent/probe/FileRealProviderTest.kt
+  s_467dcb949b5b60::t_aa190713bcdfe1 43-53,65
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_f5cb586bd14c95 47
+android/app/src/androidTest/java/dev/durableagent/probe/FileNativeObservationTest.kt
+  s_467dcb949b5b60::t_d2a72baf1cb05f 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "e55826a3be76ecf5e89838f1b5182ee3e1741bc1",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
