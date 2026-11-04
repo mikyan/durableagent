@@ -1,0 +1,58 @@
+[
+  {
+    "file": "managed-execution/durable_executor.py",
+    "matchesHeadBlob": true,
+    "lineEndings": "LF",
+    "sha256": "be8b68ec5e9e204b2995a7546d3c372fea7e08775a9e19b1ff711515bee884ff",
+    "rewrittenBeforeBuild": false
+  },
+  {
+    "file": "managed-execution/execution_transport.py",
+    "matchesHeadBlob": true,
+    "lineEndings": "LF",
+    "sha256": "c20f4ef5bd53bea4caf01bd00c9276790fa2df1640a2896663eac662ffd691e8",
+    "rewrittenBeforeBuild": false
+  },
+  {
+    "file": "managed-execution/file_service.py",
+    "matchesHeadBlob": true,
+    "lineEndings": "LF",
+    "sha256": "13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1",
+    "rewrittenBeforeBuild": false
+  },
+  {
+    "file": "managed-execution/test_executor.py",
+    "matchesHeadBlob": true,
+    "lineEndings": "LF",
+    "sha256": "526bad3444f0c53241b10bce36e5d741020fd6213b4985a6d565cdcfdae46c5b",
+    "rewrittenBeforeBuild": false
+  },
+  {
+    "file": "managed-execution/test_file_service.py",
+    "matchesHeadBlob": true,
+    "lineEndings": "LF",
+    "sha256": "bb914766b9ca72d34ab5e8add9b10197fafc23995d70f74d4e9a5257fd4b116a",
+    "rewrittenBeforeBuild": false
+  },
+  {
+    "file": "managed-execution/test_local_capabilities.py",
+    "matchesHeadBlob": true,
+    "lineEndings": "LF",
+    "sha256": "4f00848212097c973b8fd112d055947e37819ab041b32e5b1d8545cf8d3a3d9a",
+    "rewrittenBeforeBuild": false
+  },
+  {
+    "file": "managed-execution/test_production_wire.py",
+    "matchesHeadBlob": true,
+    "lineEndings": "LF",
+    "sha256": "d04c955eeaaf4cfa916d1f408cd31428b77a092c9f48a7df88c14566524feaa4",
+    "rewrittenBeforeBuild": false
+  },
+  {
+    "file": "managed-execution/test_transport.py",
+    "matchesHeadBlob": true,
+    "lineEndings": "LF",
+    "sha256": "abdafb05ff06173d1b030b3ba00df384036b8a069a59ef92c2ac2483a50256da",
+    "rewrittenBeforeBuild": false
+  }
+]

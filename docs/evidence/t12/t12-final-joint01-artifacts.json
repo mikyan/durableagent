@@ -1,0 +1,11 @@
+{
+  "head": "342c1b79195af7e62c7bbb4b6c5b9596066dc722",
+  "purpose": "T12 final accepted T13/T15 with bounded output confirmation; normal notification target gate",
+  "artifacts": {
+    "app.apk": "c233075040a4011fd7462f5d07aa571784f772b807804f96235d6bbd486a3d44",
+    "execution-capabilities.json": "10d7375d4565a83647d278efdea74cd71fe280896609987d12bb19a1e7302b1b",
+    "execution-setup.txt": "bccdfe9de7ff1179542aef37e7bc1bdf448ba7df6fcd6806368e84ee83e103b2",
+    "test.apk": "b5e875ea63be2f98b2a013a2d43c65dea805f2fe1868b8226d5325c39f6c10f5"
+  },
+  "sources": 411
+}

@@ -84,6 +84,16 @@ AC63 的 [artifact journal](t12-joint-t13-lifecycle01-artifacts.json) 明确一�
 
 独立复核还发现第一版标记会让一个已停止、已确认完成的旧代次阻挡下一代次的直接 continuation 检查。[固定诊断 RED](t12-review-stopped-output-new-generation-regression-red.log) 与 [同断言 GREEN](t12-review-stopped-output-new-generation-regression-green.log) 保留；修复只豁免已由停止 fence 覆盖且 terminal／scopeConfirmed=true 的旧记录，未知外部效果继续阻挡。真实 Application 的新代次扩展用例在该 guard 前就 [通过](t12-output-new-generation-public-before-guard.log)，因此该项 RED 只归于独立内存 seam，不拼造公开路径失败。两份有限诊断可从 `runtime/` 运行 `node ../docs/evidence/t12/t12-review-output-retry-regression.mjs` 和 `node ../docs/evidence/t12/t12-review-stopped-output-new-generation-regression.mjs`；正式测试使用 `node --test test/recovery-output.test.mjs`。最终 [完整 runtime 回归](t12-output-final-runtime01.log) 为 260/260，27.865 秒，包括原 deferred、停止与正常完成重开用例。
 
+## 联合 T15 的实际完成通知点击
+
+T15 `75ab2ae` 已合入生产源码 `a8ee9c0`，fixture-only `342c1b7` 增加观察模式。[冻结候选](t12-final-joint01-artifacts.json) main SHA-256 `c233075040a4011fd7462f5d07aa571784f772b807804f96235d6bbd486a3d44`、test `b5e875ea63be2f98b2a013a2d43c65dea805f2fe1868b8226d5325c39f6c10f5`。[构建／lint](t12-final-joint-build01.log) 通过；8 个 Python helper 为 exact HEAD LF，[pins](t12-final-joint-helper-pins.json) 匹配已验收 setup／capability。[根代理独立 APK 检查](t12-final-joint01-root-inspection.json) 为 72 runtime／11 UI／236 matched source paths，另有 411 文件的完整快照，范围不同。本次只安装 main，未运行 instrumentation。
+
+旧完成通知实际已不存在，原因未确定；没有编辑 outbox 或重发旧输入。按授权以保存的 MiMo 配置进行一个新 marker-only React 发送：run `1dae17ae-06d4-496a-b5ae-5baf569d1a26`、product `1ccb7b54-f5eb-4f0d-bae1-bf4f75d7daeb`、intent `a002c586-47d5-4e9a-8206-74848f67a22b`，SDK conversation 87／submission 98／user 97／assistant 101。[实际离线准备](t12-notification01-prepare.json) 后关闭客户端并恢复网络；没有重开 Activity／SDK，[外部稳定证明](t12-notification01-external-completion.json) 得到 `answer:87:101`／outbox 1，再做 [公开只读基线](t12-notification01-baseline.json)。没有观察完整 HTTP 次数，不宣称恰好一个请求。
+
+普通 UI 切到旧会话 `a1d19357-41ed-487b-a90c-da77950e8482`，保存未发送测试草稿后 Back，见 [另一会话基线](t12-notification01-background.json)。实际展开系统通知栏，确认「会话 1ccb7b54 · 点击查看已保存结果」，[一次真实控件 tap](t12-notification01-physical-tap.json) 为 (587,810)，无合成 intent／PendingIntent 反射。[整段只读目标验证](t12-notification01-target.json) 通过：实际 selectedConversation 正确，原历史、唯一 intent／admission 相同，零执行，另一会话草稿／历史／意图完全相同；正常 Back 退出。根代理独立目视通知及目标截图。最终 Activity／Service 不存在，网络 1/1，AndroidWifi overrides none。命令入口为 [运行说明](../../../tools/recovery-lifecycle-RUN.md) 和驱动 prepare／verify／background／notification；系统原始转储只本地保存。
+
+[凭据精确审计](t12-notification01-credential-audit.json) 14:04:49 UTC 对 app 55,791,104 字节、log 148,150 字节 UTF-8／UTF-16LE／UTF-16BE 零实际 key 命中且阳性对照通过。此为 C233 通知目标的成功范围；新增全量审查问题仍待修复，不代表整票完成。
+
 ## 候选对应关系
 
 | 源码／用途 | 主应用 SHA-256 | 测试 APK SHA-256 |
@@ -100,6 +110,6 @@ AC63 的 [artifact journal](t12-joint-t13-lifecycle01-artifacts.json) 明确一�
 
 ## 未完成的门槛
 
-- 通知点击返回正确会话以及完整 Console 接线，须与 T15 联合验证。
+- 联合 T15 的真实通知目标已通过；新增全量审查问题待修复及独立复核。
 - T13 已验收并合入；T12 自身最终联合构建、正确 LF helper 字节／源码／打包对应核验和独立合并审查仍待完成。
 - T17 OEM 矩阵；本文模拟器与分批验证不替代 Galaxy S23／Xiaomi 厂商行为。
