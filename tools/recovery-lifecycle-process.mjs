@@ -62,7 +62,7 @@ try{
   const waiting=await until(async()=>{const value=await request('open',{id:product});return value.recovery?.reason==='network-offline'&&value;},'Actual offline wait');
   evidence.admission=status.receipt;evidence.waiting=waiting.recovery;evidence.history=await request('history',{id:product});evidence.ownerPid=pid(`${pkg}:agent`);assert.match(evidence.ownerPid,/^\d+$/);assert.equal((await request('execution.list',{id:product})).executions.length,0);await screenshot('prepared');
   page.close();page=null;adb('shell','input','keyevent','4');await until(()=>activityRecords().length===0,'Activity naturally finished');assert.equal(pid(`${pkg}:agent`),evidence.ownerPid,'Same owner remains after all clients leave');
-  const services=adb('shell','dumpsys','activity','services',pkg);assert.match(services,/isForeground=true/);await writeFile(`${output}-services.txt`,services+'\n',{flag:'wx'});
+  const services=adb('shell','dumpsys','activity','services',pkg);const ownerRecords=services.split(/(?=  \* ServiceRecord\{)/).filter(block=>/^  \* ServiceRecord\{[^\n]*dev\.durableagent\.probe\/\.ApplicationService\b/m.test(block));assert.equal(ownerRecords.length,1);assert.match(ownerRecords[0],/isForeground=true/);assert.match(ownerRecords[0],/startRequested=true/);await writeFile(`${output}-services.txt`,services+'\n',{flag:'wx'});
   Object.assign(evidence,{prepared:true,allUiAndCdpClosed:true,preparedAt:new Date().toISOString(),httpCountObserved:false});
  }else{
   const status=await request('sendStatus',{intentId:prepared.intentId});assert.equal(status.submission?.status,'done');assert.deepEqual(status.receipt,prepared.admission);
