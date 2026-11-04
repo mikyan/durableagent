@@ -1,0 +1,282 @@
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentAccess.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-12
+docs/evidence/t10-saf/t10-saf-regrant07-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-27
+runtime/test/live-model.test.mjs
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-29
+docs/evidence/t10-saf/t10-saf-red11-storage-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-38
+android/app/src/androidTest/java/dev/durableagent/probe/FileSharedOriginalTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-93
+docs/evidence/t10-saf/t10-saf-final-write-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-25
+android/app/src/androidTest/java/dev/durableagent/probe/StopExecutionTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 26-27,46,48,50,59-91,94-103,107,111-112,114-118,125-127
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionRecoveryTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 58-71
+android/app/src/androidTest/java/dev/durableagent/probe/FileNativeObservationTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-69
+ui/test/execution-page.test.tsx
+  s_467dcb949b5b60::t_3ead79d134b4b7 3,22-65
+managed-execution/evidence/t10-build-inventory.txt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-66
+managed-execution/evidence/t10-android-queued-identity-conflict.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-118
+docs/evidence/t10-saf/t10-saf-final-provider-read.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-2
+docs/evidence/t10-saf/t10-saf-final-diff-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-27
+docs/evidence/t10-saf/t10-saf-red06-hostdeath-phaseA.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-12
+docs/evidence/t10-saf/t10-saf-storage11-diagnostic-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-40
+docs/evidence/t10-saf/t10-saf-red05-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-44
+android/app/src/androidTest/java/dev/durableagent/probe/NativeDocumentObservationTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-79
+docs/evidence/t10-saf/t10-saf-green01-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-27
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/Fixture.java
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-61
+runtime/src/document-writes.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-93
+runtime/src/storage-format.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 19-20
+docs/evidence/t10-saf/storage11-diagnostic-artifacts.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-10
+docs/evidence/t10-saf/t10-saf-red06-root-hostdeath.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-9
+runtime/src/managed-documents.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-38
+android/app/src/androidTest/java/dev/durableagent/probe/NativeDocumentFailureTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-74
+managed-execution/evidence/t10-android-stop-isolation.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-215
+android/app/src/androidTest/java/dev/durableagent/probe/FileQueueApplicationTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-83
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentBridge.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-74
+docs/evidence/t10-saf/t10-saf-red07-revocation.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-43
+managed-execution/evidence/t10-android-writer-queue.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-196
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 31,80-81,162-163
+  s_467dcb949b5b60::t_f2dca807df4c41 286
+ui/src/execution.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 3,6
+docs/evidence/t10-saf/t10-saf-restore09b-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-2
+docs/evidence/t10-saf/t10-saf-red11b-storage-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-50
+docs/evidence/t10-saf/t10-saf-red02-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-32
+docs/evidence/t10-saf/t10-saf-red08-diff.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-43
+runtime/src/execution-conformance.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 8,25,29
+docs/evidence/t10-saf/t10-saf-green06-hostdeath-phaseB.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-25
+runtime/MANAGED_EXECUTION.md
+  s_467dcb949b5b60::t_3ead79d134b4b7 25,31
+runtime/ORIGINAL_DOCUMENTS.md
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-152
+docs/evidence/t10-saf/t10-saf-final-channel-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-25
+runtime/FILES.md
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-49
+docs/evidence/t10-saf/t10-saf-final-cancel-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-25
+runtime/src/application.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 161,308
+docs/evidence/t10-saf/t10-saf-final-reader-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-25
+runtime/README.md
+  s_467dcb949b5b60::t_3ead79d134b4b7 34
+android/app/src/main/java/dev/durableagent/probe/ExecutionAccess.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 154
+ui/src/documents.css
+  s_467dcb949b5b60::t_3ead79d134b4b7 1
+android/app/src/debug/AndroidManifest.xml
+  s_467dcb949b5b60::t_3ead79d134b4b7 3
+managed-execution/FILE-VALIDATION.md
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-127
+ui/src/execution.css
+  s_467dcb949b5b60::t_3ead79d134b4b7 16-18
+tools/build_execution_setup.py
+  s_467dcb949b5b60::t_3ead79d134b4b7 13
+docs/evidence/t10-saf/t10-saf-installed-before11diag.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-14
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_3ead79d134b4b7 25,27,68,143-144,181-521
+docs/evidence/t10-saf/README.md
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-165
+docs/evidence/t10-saf/t10-saf-observation10b-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-25
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionObservationTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 31-41
+android/app/src/androidTest/java/dev/durableagent/probe/NativeDocumentDeathTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-84
+docs/evidence/t10-saf/t10-saf-red04-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-32
+managed-execution/evidence/t10-independent-gate-review.md
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-71
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_f2dca807df4c41 14
+docs/evidence/t10-saf/t10-saf-final-failures-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-27
+tools/test_execution_setup.py
+  s_467dcb949b5b60::t_3ead79d134b4b7 15-30
+android/app/src/androidTest/java/dev/durableagent/probe/NativeDocumentTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-270
+ui/src/extensions/execution.tsx
+  s_467dcb949b5b60::t_3ead79d134b4b7 4,6-7,34
+managed-execution/evidence/t10-build-shared.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-60
+docs/evidence/t10-saf/t10-saf-installed-final.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-14
+docs/evidence/t10-saf/t10-saf-green04-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-25
+docs/evidence/t10-saf/t10-saf-shared01-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-49
+docs/evidence/t10-saf/t10-saf-shared02-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-43
+runtime/test/managed-files.test.mjs
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-104
+android/app/src/main/java/dev/durableagent/probe/ExecutionFileMethods.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-4
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 32-33,44,55,66
+  s_467dcb949b5b60::t_f2dca807df4c41 67
+managed-execution/test_file_service.py
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-443
+runtime/src/file-effect-protocol.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-10
+docs/evidence/t10-saf/t10-saf-red03-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-32
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 19,26,34,50,60,81,83
+docs/evidence/t10-saf/t10-saf-red06-hostdeath-phaseB.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-32
+managed-execution/evidence/t10-uthash-install.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-109
+tools/execution_setup_installer.py
+  s_467dcb949b5b60::t_3ead79d134b4b7 27-28,100-101,116,128,130,135
+ui/src/extensions/file-changes.tsx
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-77
+android/settings.gradle.kts
+  s_467dcb949b5b60::t_3ead79d134b4b7 6
+runtime/src/workspace-coordination.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-48
+docs/evidence/t10-saf/t10-saf-final-observation-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-25
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_3ead79d134b4b7 15,121
+docs/evidence/t10-saf/t10-saf-observation10-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-32
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/DocumentProvider.java
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-74
+docs/evidence/t10-saf/t10-saf-shared03-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-27
+managed-execution/evidence/t10-android-first-tracer.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-169
+android/app/src/androidTest/java/dev/durableagent/probe/FileRealProviderTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-70
+managed-execution/evidence/t10-android-real-files.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-78
+runtime/src/file-conformance.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-59
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/ControlReceiver.java
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-41
+android/document-fixture/build.gradle.kts
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-8
+runtime/src/managed-files.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-132
+ui/src/extensions/documents.tsx
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-44
+android/app/src/androidTest/java/dev/durableagent/probe/NativeDocumentStorageTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-44
+runtime/src/file-writes.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-111
+docs/evidence/t10-saf/t10-saf-green03-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-25
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_f2dca807df4c41 52
+  s_467dcb949b5b60::t_3ead79d134b4b7 2-3,12-17,19,24,43-50,53-54,62-71,80-95,152,155-156,158,164,168,170,173,182,185,190-191,193,200-201,203,205,249,253,255-256,262-264,266-269,291,294,300,305-321
+runtime/src/execution-faults.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 4-10
+android/document-fixture/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-8
+managed-execution/evidence/t10-build-private.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-145
+ui/test/execution-controller.test.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 6-15
+docs/evidence/t10-saf/t10-saf-green02-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-25
+docs/evidence/t10-saf/t10-saf-regrant08-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-27
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentService.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-82
+docs/evidence/t10-saf/t10-saf-green08-diff.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-27
+managed-execution/durable_executor.py
+  s_467dcb949b5b60::t_3ead79d134b4b7 21,173,182-183,623
+tools/test_execution_asset.py
+  s_467dcb949b5b60::t_3ead79d134b4b7 22
+runtime/src/document-protocol.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-4
+android/app/src/androidTest/java/dev/durableagent/probe/FileApplicationTest.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-87
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentStore.kt
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-429
+android/document-fixture/README.md
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-52
+managed-execution/evidence/t10-android-file-owner-death.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-36
+managed-execution/evidence/t10-cleanup-checks.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-53
+managed-execution/file_service.py
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-738
+runtime/test/project-live-transport.test.mjs
+  s_467dcb949b5b60::t_3ead79d134b4b7 19-35
+managed-execution/evidence/t10-android-local-first.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-107
+docs/evidence/t10-saf/t10-saf-green05-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-25
+managed-execution/evidence/t10-android-shared-original.json
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-151
+docs/evidence/t10-saf/t10-saf-failures09-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-41
+android/app/build.gradle.kts
+  s_467dcb949b5b60::t_3ead79d134b4b7 7,59
+docs/evidence/t10-saf/t10-saf-green07-revocation.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-27
+docs/evidence/t10-saf/t10-saf-green11-storage-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-25
+runtime/src/live-model.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 7,9-10,18
+docs/evidence/t10-saf/t10-saf-failures09b-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-27
+docs/evidence/t10-saf/t10-saf-red01-device.log
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-43
+runtime/test/workspace-coordination.test.mjs
+  s_467dcb949b5b60::t_3ead79d134b4b7 1-68
+runtime/src/execution-validation.ts
+  s_467dcb949b5b60::t_3ead79d134b4b7 3,24,27-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "111a8964132ac08539d2e3b27edd06c8cde86f7b",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
