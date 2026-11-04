@@ -1,0 +1,25 @@
+android/app/src/androidTest/java/dev/durableagent/probe/FileApplicationTest.kt
+  s_467dcb949b5b60::t_72500412643a22 56,64
+runtime/src/managed-files.ts
+  s_467dcb949b5b60::t_72500412643a22 107
+runtime/test/managed-files.test.mjs
+  s_467dcb949b5b60::t_10df5063f0eecd 33-34
+managed-execution/evidence/t10-android-first-tracer.json
+  s_467dcb949b5b60::t_ff8c9b2c0f63af 1-169
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "774c4a945b3c3e4eb417d715e81f9e679748a484",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
