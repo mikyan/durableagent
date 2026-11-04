@@ -25,6 +25,8 @@ public final class DocumentProvider extends DocumentsProvider {
         return cursor;
     }
     private Cursor documents(String[] projection,String id)throws FileNotFoundException{
+        String fault=getContext().getSharedPreferences("state",0).getString("fault","");
+        if(fault.equals("fault-unavailable"))throw new IllegalStateException("Synthetic Provider temporarily unavailable");
         MatrixCursor cursor=new MatrixCursor(projection!=null?projection:DOC);
         boolean root=id.equals("root");File file=Fixture.original(getContext());
         if(!root&&!id.equals("original"))throw new FileNotFoundException("Synthetic original is absent");
@@ -37,7 +39,7 @@ public final class DocumentProvider extends DocumentsProvider {
             case DocumentsContract.Document.COLUMN_DOCUMENT_ID -> id;
             case DocumentsContract.Document.COLUMN_DISPLAY_NAME -> root?"DurableAgent 原文件测试":"original.bin";
             case DocumentsContract.Document.COLUMN_MIME_TYPE -> root?DocumentsContract.Document.MIME_TYPE_DIR:"application/octet-stream";
-            case DocumentsContract.Document.COLUMN_FLAGS -> root?0:DocumentsContract.Document.FLAG_SUPPORTS_WRITE;
+            case DocumentsContract.Document.COLUMN_FLAGS -> root||fault.equals("fault-readonly")?0:DocumentsContract.Document.FLAG_SUPPORTS_WRITE;
             case DocumentsContract.Document.COLUMN_SIZE -> size;
             case DocumentsContract.Document.COLUMN_LAST_MODIFIED -> modified;
             default -> null;
@@ -50,6 +52,15 @@ public final class DocumentProvider extends DocumentsProvider {
     @Override public ParcelFileDescriptor openDocument(String id,String mode,CancellationSignal signal)throws FileNotFoundException{
         if(!id.equals("original"))throw new FileNotFoundException();
         android.content.SharedPreferences state=getContext().getSharedPreferences("state",0);
+        String fault=state.getString("fault","");
+        if(fault.equals("fault-unavailable"))throw new IllegalStateException("Synthetic Provider temporarily unavailable");
+        if(fault.equals("fault-pipe")){
+            try{
+                ParcelFileDescriptor[] pipe=ParcelFileDescriptor.createPipe();
+                new Thread(()->{try(OutputStream output=new ParcelFileDescriptor.AutoCloseOutputStream(pipe[1])){output.write(Fixture.ORIGINAL);}catch(IOException ignored){}},"SyntheticOriginalPipe").start();
+                return pipe[0];
+            }catch(IOException error){throw new FileNotFoundException("Synthetic pipe unavailable");}
+        }
         if(mode.contains("w"))state.edit().putBoolean("writeSeen",true).putInt("writeOpens",state.getInt("writeOpens",0)+1).commit();
         else if(state.getBoolean("writeSeen",false)){
             long end=android.os.SystemClock.elapsedRealtime()+state.getLong("readbackMillis",30000);
