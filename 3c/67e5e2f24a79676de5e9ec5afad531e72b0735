@@ -1,0 +1,89 @@
+docs/evidence/t12/README.md
+  s_467dcb949b5b60::t_744ddfe540a053 1-54
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_7836c3b91c7da7 6,111-113
+  s_467dcb949b5b60::t_908fa162ea55a1 108-110
+  s_467dcb949b5b60::t_69da5365ecf224 114
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryAccess.kt
+  s_467dcb949b5b60::t_7836c3b91c7da7 39
+docs/evidence/t12/LOG-SHA256.json
+  s_467dcb949b5b60::t_d1eb5353891dcb 1-126
+docs/evidence/t12/t12-channel62-restore.json
+  s_467dcb949b5b60::t_0ca7b63fc3f2ae 1-8
+docs/evidence/t12/t12-completion-red01.log
+  s_467dcb949b5b60::t_c6cdcb89bcb572 1-28
+docs/evidence/t12/t12-deferred-crash-host01.log
+  s_467dcb949b5b60::t_cf69a3976aafe0 1-13
+docs/evidence/t12/t12-exhausted-stop-host01.log
+  s_467dcb949b5b60::t_8af4874927da40 1-11
+docs/evidence/t12/t12-job-greenaed-device.log
+  s_467dcb949b5b60::t_5e8e97cc9d52f5 1-27
+docs/evidence/t12/t12-job-red401-device.log
+  s_467dcb949b5b60::t_bc155639a7f7d2 1-46
+docs/evidence/t12/t12-native-green01-device.log
+  s_467dcb949b5b60::t_5cb3ab062c13cc 1-125
+docs/evidence/t12/t12-native-red01-device.log
+  s_467dcb949b5b60::t_084125e24ff415 1-65
+docs/evidence/t12/t12-native-stage59b9ab3-store-device.log
+  s_467dcb949b5b60::t_9b664ee532d372 1-37
+docs/evidence/t12/t12-notification-channel62-device.log
+  s_467dcb949b5b60::t_d3ccb90bbbfd78 1-25
+docs/evidence/t12/t12-notification-denied62-device.log
+  s_467dcb949b5b60::t_8f7355ece52fe6 1-25
+docs/evidence/t12/t12-notification-green54a5f7e-application-device.log
+  s_467dcb949b5b60::t_64f17d9292d72b 1-41
+docs/evidence/t12/t12-notification-green54a5f7e-native-device.log
+  s_467dcb949b5b60::t_49266f2b2dae9f 1-86
+docs/evidence/t12/t12-notification-window-red704605a-device.log
+  s_467dcb949b5b60::t_ff4cf5c0e3687e 1-113
+docs/evidence/t12/t12-offline-green01.log
+  s_467dcb949b5b60::t_7996aa1356b461 1-11
+docs/evidence/t12/t12-offline-red01.log
+  s_467dcb949b5b60::t_f625e12510ace3 1-30
+docs/evidence/t12/t12-probe-authority-green01.log
+  s_467dcb949b5b60::t_5804e186b707ff 1-12
+docs/evidence/t12/t12-probe-authority-red02.log
+  s_467dcb949b5b60::t_d59ceae02b3b97 1-30
+docs/evidence/t12/t12-product-preflight62-device.log
+  s_467dcb949b5b60::t_339efca2458e58 1-25
+docs/evidence/t12/t12-real-c73-device.log
+  s_467dcb949b5b60::t_877a027d751462 1-49
+docs/evidence/t12/t12-real-c73-retained.log
+  s_467dcb949b5b60::t_f018a822ae3bf6 1-25
+docs/evidence/t12/t12-real62-device.log
+  s_467dcb949b5b60::t_c63a4c8ddfdf08 1-29
+docs/evidence/t12/t12-real62-independent-file.log
+  s_467dcb949b5b60::t_e3d8f18796b8ba 1
+docs/evidence/t12/t12-runtime-stage62-all.log
+  s_467dcb949b5b60::t_7e13c1464c7517 1-307
+docs/evidence/t12/t12-stage59b9ab3-application-device.log
+  s_467dcb949b5b60::t_e3779b89e2036b 1-63
+docs/evidence/t12/t12-unlock-green01.log
+  s_467dcb949b5b60::t_555ddd6dbe9984 1-13
+docs/evidence/t12/t12-unlock-red01.log
+  s_467dcb949b5b60::t_4aa00544ba92ff 1-27
+docs/evidence/t12/t12-wake-green01.log
+  s_467dcb949b5b60::t_2e7369e994b6ba 1-12
+docs/evidence/t12/t12-wake-red01.log
+  s_467dcb949b5b60::t_e25b9e29a5a6b3 1-28
+docs/evidence/t12/t12-wake-republish-green01.log
+  s_467dcb949b5b60::t_24ba285f181b57 1-16
+docs/evidence/t12/t12-wake-republish-red01.log
+  s_467dcb949b5b60::t_924ffde328a7eb 1-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "3c67e5e2f24a79676de5e9ec5afad531e72b0735",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
