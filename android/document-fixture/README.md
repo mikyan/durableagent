@@ -26,6 +26,17 @@ or a 30-second cleanup bound. The independent control reader does not pass
 through that gate. `reset` returns the document fixture to its private original
 and clears fixture state; it leaves previously created shared evidence files in
 place. `replace` is only supported for the private retained-reader trace.
+`hold-readback-long` uses a 120-second bound for the externally controlled native
+writer death window. Neither gate holds the fixture's independent control reader.
+
+Private-only `move-away` actually renames the current original to `retired.bin`.
+`restore-moved` moves that inode back only when the original is absent, without
+replacing an existing original; it reports whether it restored and the actual
+bytes. This repairs the explicit fixture precondition after a failed missing-file
+assertion. `fault-unavailable` throws at the real Provider boundary, `fault-pipe`
+returns a real non-seekable pipe, and `fault-readonly` clears the Provider's write
+capability flag. `fault-clear` removes only this fault selector. These controls
+reject shared backend use and must not run against the shared same-object trace.
 
 Root can run the existing real picker test with `systemPicker=true` and
 `sharedOriginal=true` to create this shared original and acquire a genuine

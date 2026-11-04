@@ -1,0 +1,43 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentTest:
+INSTRUMENTATION_STATUS: test=originalTextChangesExposeCanonicalBoundedDiffFromActualBytes
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"actual-text-diff-before-protocol-check","receipt":{"operationId":"small-dcac23c2-202c-4e66-a613-2dd11496f21f","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","productId":"chat","controlGeneration":1,"sdkConversationId":101,"expectedDigest":"21998928836741932680bb7ef8fb3fe2d8709b5afdf896752642d10595f9a610","contentDigest":"7f8b1dfc466b6249f06cbe55c9174df2578e7754da793fded244ef5cba2a38f1","byteLength":8,"protocol":1,"requestDigest":"04f3f395f82d103c2315229df72b22665dfd6b4e99f7670e533b9985ac4422ea","namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","kind":"file","source":"saf","original":true,"uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","displayName":"original.bin","nativeControlNamespace":"input-document-dcac23c2-202c-4e66-a613-2dd11496f21f","state":"completed","scopeConfirmed":true,"sequence":3,"stagedOffset":8,"sealed":true,"diff":{"state":"available","format":"whole-file-lines","text":"--- original\n+++ updated\n-NEW\n-\n+changed\n+"},"verifiedDigest":"7f8b1dfc466b6249f06cbe55c9174df2578e7754da793fded244ef5cba2a38f1"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=org.json.JSONException: No value for available
+	at org.json.JSONObject.get(JSONObject.java:398)
+	at org.json.JSONObject.getBoolean(JSONObject.java:419)
+	at dev.durableagent.probe.NativeDocumentTest.originalTextChangesExposeCanonicalBoundedDiffFromActualBytes(NativeDocumentTest.kt:62)
+
+INSTRUMENTATION_STATUS: stream=
+Error in originalTextChangesExposeCanonicalBoundedDiffFromActualBytes(dev.durableagent.probe.NativeDocumentTest):
+org.json.JSONException: No value for available
+	at org.json.JSONObject.get(JSONObject.java:398)
+	at org.json.JSONObject.getBoolean(JSONObject.java:419)
+	at dev.durableagent.probe.NativeDocumentTest.originalTextChangesExposeCanonicalBoundedDiffFromActualBytes(NativeDocumentTest.kt:62)
+
+INSTRUMENTATION_STATUS: test=originalTextChangesExposeCanonicalBoundedDiffFromActualBytes
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.759
+There was 1 failure:
+1) originalTextChangesExposeCanonicalBoundedDiffFromActualBytes(dev.durableagent.probe.NativeDocumentTest)
+org.json.JSONException: No value for available
+	at org.json.JSONObject.get(JSONObject.java:398)
+	at org.json.JSONObject.getBoolean(JSONObject.java:419)
+	at dev.durableagent.probe.NativeDocumentTest.originalTextChangesExposeCanonicalBoundedDiffFromActualBytes(NativeDocumentTest.kt:62)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

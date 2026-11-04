@@ -1,0 +1,14 @@
+[
+  {
+    "Package": "dev.durableagent.saf",
+    "SHA256": "f740dd8d1399b2523e0c0afcb8d4aa49f816d7c9880ff89bf4ac94b557127729"
+  },
+  {
+    "Package": "dev.durableagent.saf.test",
+    "SHA256": "0ccf19e74e57c8af4eccf5ca855bc80e1a9bd2c084b0f9013bae20e80053f693"
+  },
+  {
+    "Package": "dev.durableagent.documentsfixture",
+    "SHA256": "10a0d34008bbd5b28d6f03f2426108d3d423d5fcaa5f52cb3f08f93e8dfdcdda"
+  }
+]

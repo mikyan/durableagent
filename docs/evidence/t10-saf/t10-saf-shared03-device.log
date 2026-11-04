@@ -1,0 +1,27 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentTest:
+INSTRUMENTATION_STATUS: test=actualSystemPickerRetainsOriginalCapabilityAndBinaryBytesAcrossReopen
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"picker-waiting","rootTitle":"DurableAgent 原文件测试","filename":"original.bin","run":"c63480bb-d303-4ee9-abc3-d4f45cb2ff01"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"original-retained","resource":{"protocol":1,"resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","source":"saf","original":true,"uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","networkAccess":"unknown","grant":{"read":true,"write":true,"persistedRead":true,"persistedWrite":true},"displayName":"original.bin","mimeType":"application\/octet-stream","providerFlags":2,"byteLength":9,"provider":"dev.durableagent.documentsfixture.documents","availability":"available"},"providerUid":10220,"appUid":10221,"binaryBytes":9,"shared":{"mediaUri":"content:\/\/media\/external_primary\/downloads\/51","path":"\/storage\/emulated\/0\/Download\/DurableAgent-SAF-963071f5-f432-4595-a84a-b260b4471fc0\/original.bin","relativePath":"Download\/DurableAgent-SAF-963071f5-f432-4595-a84a-b260b4471fc0\/","owner":"dev.durableagent.documentsfixture","documentUri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualSystemPickerRetainsOriginalCapabilityAndBinaryBytesAcrossReopen
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 32.446
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

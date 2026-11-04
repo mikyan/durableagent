@@ -1,0 +1,2 @@
+Broadcasting: Intent { flg=0x400000 cmp=dev.durableagent.documentsfixture/.ControlReceiver (has extras) }
+Broadcast completed: result=0, data="{"providerUid":10227,"restoredMoved":true,"base64":"U0FGAAr\/QUJD"}"

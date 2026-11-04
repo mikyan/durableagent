@@ -1,0 +1,38 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentStorageTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentStorageTest:
+INSTRUMENTATION_STATUS: test=legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentStorageTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=org.junit.ComparisonFailure: Incompatible open must preserve the original database bytes expected:<[7688387d826aa14c606ca7e3ec806feb84023af62612049626696c5581e7419c]> but was:<[dcc414396d759ac9b0ae9585f7f03f3c7887a8258bcef1d60c87eebf1745d767]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at dev.durableagent.probe.NativeDocumentStorageTest.legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence(NativeDocumentStorageTest.kt:33)
+
+INSTRUMENTATION_STATUS: stream=
+Error in legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence(dev.durableagent.probe.NativeDocumentStorageTest):
+org.junit.ComparisonFailure: Incompatible open must preserve the original database bytes expected:<[7688387d826aa14c606ca7e3ec806feb84023af62612049626696c5581e7419c]> but was:<[dcc414396d759ac9b0ae9585f7f03f3c7887a8258bcef1d60c87eebf1745d767]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at dev.durableagent.probe.NativeDocumentStorageTest.legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence(NativeDocumentStorageTest.kt:33)
+
+INSTRUMENTATION_STATUS: test=legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.35
+There was 1 failure:
+1) legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence(dev.durableagent.probe.NativeDocumentStorageTest)
+org.junit.ComparisonFailure: Incompatible open must preserve the original database bytes expected:<[7688387d826aa14c606ca7e3ec806feb84023af62612049626696c5581e7419c]> but was:<[dcc414396d759ac9b0ae9585f7f03f3c7887a8258bcef1d60c87eebf1745d767]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at dev.durableagent.probe.NativeDocumentStorageTest.legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence(NativeDocumentStorageTest.kt:33)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1
