@@ -1,0 +1,60 @@
+android/app/src/androidTest/java/dev/durableagent/probe/RecoveryRealApplicationTest.kt
+  s_467dcb949b5b60::t_fe8f17a9913343 54,57-58,82-83,92-94,112-114
+docs/evidence/recovery-diagnostics/t17-running-host-timing02-commit.log
+  s_467dcb949b5b60::t_026185a0b8ceeb 1-16
+runtime/test/fixtures/running-execution-peer.mjs
+  s_467dcb949b5b60::t_19d381d34b7283 1-38
+runtime/test/fixtures/running-model-connections.mjs
+  s_467dcb949b5b60::t_1c9bdbd621cfca 1-8
+docs/evidence/recovery-diagnostics/manifest.json
+  s_467dcb949b5b60::t_026185a0b8ceeb 1-68
+docs/evidence/recovery-diagnostics/README.md
+  s_467dcb949b5b60::t_b0154b942231f0 1-45
+android/app/src/androidTest/java/dev/durableagent/probe/RecoveryFailureObservationTest.kt
+  s_467dcb949b5b60::t_9ff91235c983b9 1-55
+android/app/src/androidTest/java/dev/durableagent/probe/RecoveryFailureObservation.kt
+  s_467dcb949b5b60::t_fe8f17a9913343 1-21,23,32-63
+  s_467dcb949b5b60::t_915df875118d6a 22,24-31
+runtime/test/fixtures/running-execution-crash-host.mjs
+  s_467dcb949b5b60::t_593225a661b975 11-20
+  s_467dcb949b5b60::t_1c9bdbd621cfca 7,36,39
+  s_467dcb949b5b60::t_8a729b7c1123d8 8-10,22-35,37
+  s_467dcb949b5b60::t_19d381d34b7283 1-6,21,38,40
+runtime/test/recovery-running-execution.test.mjs
+  s_467dcb949b5b60::t_775d4e4df6caf2 17,23,26-30,32
+  s_467dcb949b5b60::t_cbcb04d31f546d 33
+  s_467dcb949b5b60::t_593225a661b975 19,21
+  s_467dcb949b5b60::t_8a729b7c1123d8 16
+  s_467dcb949b5b60::t_1c9bdbd621cfca 12,24-25
+  s_467dcb949b5b60::t_19d381d34b7283 1-11,13-15,18,20,22,31,34-36
+docs/evidence/recovery-diagnostics/t17-observer-regression-green01-device.log
+  s_467dcb949b5b60::t_63ebd582ae76f9 1-23
+docs/evidence/recovery-diagnostics/t17-observer-regression-red01-device.log
+  s_467dcb949b5b60::t_8cfe7567e886c3 1-41
+docs/evidence/recovery-diagnostics/t17-running-host-baseline01.log
+  s_467dcb949b5b60::t_83a91119f6b4b0 1-33
+docs/evidence/recovery-diagnostics/t17-running-host-baseline02.log
+  s_467dcb949b5b60::t_e0a84731156e36 1-11
+docs/evidence/recovery-diagnostics/t17-running-host-baseline03-unbound.log
+  s_467dcb949b5b60::t_7308f63eaab6a8 1-11
+docs/evidence/recovery-diagnostics/t17-running-host-baseline04-product.log
+  s_467dcb949b5b60::t_bc51f97d917def 1-11
+docs/evidence/recovery-diagnostics/t17-running-host-timing01.log
+  s_467dcb949b5b60::t_5e3d96355138d5 1-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "54ed92dc29988234010e7bf710609ce6a6ac6e11",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
