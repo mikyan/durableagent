@@ -1,0 +1,137 @@
+{
+  "plan": {
+    "name": "t15-auth01-scroll-observe",
+    "steps": [
+      {
+        "evaluate": "({scroll:{x:scrollX,y:scrollY},viewport:{x:visualViewport.offsetLeft,y:visualViewport.offsetTop,w:visualViewport.width,h:visualViewport.height},nodes:[...document.querySelectorAll(\"html,body,#root,.application,.main,.topbar\")].map(e=>({name:e.className||e.tagName,scrollTop:e.scrollTop,scrollHeight:e.scrollHeight,clientHeight:e.clientHeight,paddingTop:getComputedStyle(e).paddingTop,rect:JSON.parse(JSON.stringify(e.getBoundingClientRect()))}))})"
+      }
+    ]
+  },
+  "started": "2026-11-04T12:36:32.181Z",
+  "pid": "5919",
+  "steps": [
+    {
+      "step": {
+        "evaluate": "({scroll:{x:scrollX,y:scrollY},viewport:{x:visualViewport.offsetLeft,y:visualViewport.offsetTop,w:visualViewport.width,h:visualViewport.height},nodes:[...document.querySelectorAll(\"html,body,#root,.application,.main,.topbar\")].map(e=>({name:e.className||e.tagName,scrollTop:e.scrollTop,scrollHeight:e.scrollHeight,clientHeight:e.clientHeight,paddingTop:getComputedStyle(e).paddingTop,rect:JSON.parse(JSON.stringify(e.getBoundingClientRect()))}))})"
+      },
+      "value": {
+        "scroll": {
+          "x": 0,
+          "y": 0
+        },
+        "viewport": {
+          "x": 0,
+          "y": 0,
+          "w": 412.19049072265625,
+          "h": 915.047607421875
+        },
+        "nodes": [
+          {
+            "name": "HTML",
+            "scrollTop": 0,
+            "scrollHeight": 915,
+            "clientHeight": 915,
+            "paddingTop": "0px",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 412.19049072265625,
+              "height": 915.047607421875,
+              "top": 0,
+              "right": 412.19049072265625,
+              "bottom": 915.047607421875,
+              "left": 0
+            }
+          },
+          {
+            "name": "BODY",
+            "scrollTop": 0,
+            "scrollHeight": 915,
+            "clientHeight": 915,
+            "paddingTop": "0px",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 412.19049072265625,
+              "height": 915.047607421875,
+              "top": 0,
+              "right": 412.19049072265625,
+              "bottom": 915.047607421875,
+              "left": 0
+            }
+          },
+          {
+            "name": "DIV",
+            "scrollTop": 0,
+            "scrollHeight": 915,
+            "clientHeight": 915,
+            "paddingTop": "0px",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 412.19049072265625,
+              "height": 915.047607421875,
+              "top": 0,
+              "right": 412.19049072265625,
+              "bottom": 915.047607421875,
+              "left": 0
+            }
+          },
+          {
+            "name": "application",
+            "scrollTop": 0,
+            "scrollHeight": 915,
+            "clientHeight": 915,
+            "paddingTop": "0px",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 412.19049072265625,
+              "height": 915.047607421875,
+              "top": 0,
+              "right": 412.19049072265625,
+              "bottom": 915.047607421875,
+              "left": 0
+            }
+          },
+          {
+            "name": "main home-page",
+            "scrollTop": 0,
+            "scrollHeight": 915,
+            "clientHeight": 915,
+            "paddingTop": "51px",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "width": 412.19049072265625,
+              "height": 915.047607421875,
+              "top": 0,
+              "right": 412.19049072265625,
+              "bottom": 915.047607421875,
+              "left": 0
+            }
+          },
+          {
+            "name": "topbar",
+            "scrollTop": 0,
+            "scrollHeight": 84,
+            "clientHeight": 84,
+            "paddingTop": "16px",
+            "rect": {
+              "x": 0,
+              "y": 51,
+              "width": 412.19049072265625,
+              "height": 84,
+              "top": 51,
+              "right": 412.19049072265625,
+              "bottom": 135,
+              "left": 0
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true,
+  "completed": "2026-11-04T12:36:32.315Z"
+}

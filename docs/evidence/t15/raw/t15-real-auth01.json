@@ -1,0 +1,9 @@
+{
+  "run": "20f81116-7965-4ab2-a643-0a95a9019672",
+  "mode": "models",
+  "started": "2026-11-04T12:29:45.995Z",
+  "scope": "Real bundled React/native vault/SDK request to actual MiMo endpoint using only a deliberately invalid synthetic key. One explicit send; visible Chinese guidance and navigation preserve original intent/history.",
+  "uiPid": "5919",
+  "error": "Error: Visible enabled control [data-testid=open-model-settings]: null",
+  "completed": "2026-11-04T12:30:49.928Z"
+}

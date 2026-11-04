@@ -1,5 +1,5 @@
 {
-  "stage": "T15 candidate 15; scoped actual picker regression passed, full ticket pending",
+  "stage": "T15 candidate 15; scoped actual picker and real MiMo 401 passed, full ticket pending",
   "sourceCommit": "b2bc5bd3d941943e1415795da6a77400c6f8dd12",
   "baseCommit": "b06bfc746e46b5ab59a5f4b4960df44f187316bc",
   "branch": "codex/t15-console",
@@ -34,5 +34,18 @@
     "testSha256": "36515131385fe9eaba48b36495c836df8904249dc33c3b8e1482cb2cb3ee4c9a",
     "sourceZipSha256": "a4e5594cec32a749e978760ac89812c3c7c99d755378c6cf7d7f7a83ceb69ca0",
     "driverSha256": "f0ba86fa466d8a04af6abb75aeec170ad54e567c91cd45d85c16206c9a9356d8"
+  },
+  "realAuthenticationFailure": {
+    "actualFlow": "raw/t15-real-auth02.json",
+    "driver": "tools/console-real-auth-failure.mjs",
+    "driverSha256": "0a400e7ba998b581de7cf73ea68c1fb41f101d66d408167b2c399dde57f13d51",
+    "mainApkUnchanged": true,
+    "endpoint": "https://token-plan-cn.xiaomimimo.com/v1",
+    "credential": "synthetic invalid fixture only; no user credential",
+    "explicitSendClicks": 1,
+    "actualFailure": "401 Invalid API Key",
+    "navigation": "same connection, identical 1 intent and 1 persisted user message",
+    "screenshots": "4 visually inspected",
+    "firstAttempt": "failed before settings, connection or model request; domain-switch inset issue retained"
   }
 }

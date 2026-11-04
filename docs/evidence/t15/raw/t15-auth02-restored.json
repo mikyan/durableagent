@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-04T12:38:27.1339555Z",
+  "stop": "Stopping service: Intent { cmp=dev.durableagent.probe/.ApplicationService }",
+  "services": "ACTIVITY MANAGER SERVICES (dumpsys activity services)\r\n  (nothing)",
+  "size": "Physical size: 1080x2400",
+  "density": "Physical density: 420",
+  "font": "1.0",
+  "rotation": "1",
+  "user_rotation": "0",
+  "showIme": "0",
+  "stayAwake": "7",
+  "activityMode": "input-only",
+  "activityRun": "4c3b2b42-895a-40e6-8cdf-d5b82600872a",
+  "lease": "kept running, data preserved"
+}

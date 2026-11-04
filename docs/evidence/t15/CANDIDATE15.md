@@ -20,6 +20,12 @@
 
 ## 真实 MiMo 401：安全选择器与输入
 
+2026-11-04 已用上述冻结主 APK 在保留数据的 Android 16 模拟器完成 [实际服务请求](raw/t15-real-auth02.json)。新的 `models` 隔离域 `4c3b2b42-895a-40e6-8cdf-d5b82600872a`、会话 `b38c520e-f0aa-43cb-ba1f-6942ebca5052` 只点击发送一次，MiMo 返回真实 `401 / Invalid API Key`；未使用用户 Key 或凭据胶囊。页面中文提示、原始失败原因、回到设置及原连接卡片的四张截图已逐张视觉检查，见 `screenshots/t15-real-auth02-*.png`。点击“检查模型与凭据”前后，公开 `input.listSends` 和 `history` 完全相同：一个已确认意图、一条持久用户消息；没有为了导航重发输入。`context.get` 为估算 19 tokens、模型上限 1048576，不代表成功生成或服务商精确计数。
+
+可复现驱动为 `node tools/console-real-auth-failure.mjs <明确设备序号> <新的绝对输出前缀>`，调用者须先正常关闭自己已空闲的验证宿主。驱动只新建本应用 Activity 任务，不 force-stop 包、不重置数据；实际点击控件，通过 CDP 输入文字及选择下拉项，使用公开 Interface 观察持久结果。输出前缀不允许覆盖，失败也留存，不自动重复发送。
+
+首轮 [记录](raw/t15-real-auth01.json) 在打开设置前失败，未建立连接、未输入凭据、未发送模型请求。复用 Activity 切换验证域时，新 WebView 的顶部安全边距为 0，菜单中心落入 Android 状态栏；[重新创建 Activity 后](raw/t15-domain-insets-after-recreate.json)恢复为 51px。第二轮使用全新的 Activity 才开始请求。这个 inset 问题未在此轮生产 APK 修复，不能把 401 通过视为其修复；[原截图](screenshots/t15-domain-insets-before.png)和前后 DOM 测量保留供恢复路径继续检查。
+
 旧临时 `t05-real-invalid-credential.mjs` 含无条件 `am force-stop`，不要直接运行。根任务关闭自己旧验证宿主后，用新的 UUID 启动 `AgentActivity`，`validationMode=models`、`validationRun=<新 UUID>`。不使用用户真实 Key，不消费 RSA 胶囊，以下连接只存在于新隔离验证域。
 
 1. 等 `[data-testid=application][data-status=ready]`。手机先打开 `button[aria-label="打开会话列表"]`，再点 `[data-testid=open-model-settings]`。
@@ -41,4 +47,4 @@
 
 ## 仍未完成
 
-真实 401、实际 diff 可见截图、已接受 T12/T13 接线和最终独立合并门槛均由根任务继续安排。本候选不是整票完成，不改写旧设备通过范围或 OEM 缺口。5584 保留数据冷启动后完成此轮测试；结束时尺寸／密度无 override，字体 1.0、自动旋转 1、user_rotation 0、show_ime_with_hard_keyboard 0，临时 stay_awake 从实际基线 7 改为 2 后已恢复 7，见 [恢复记录](raw/t15-candidate15-restored.json)。当前停在该测试的 input-only 草稿域，未打开 ApplicationService。
+实际 diff 可见截图、已接受 T12/T13 接线、上述 WebView inset 恢复检查和最终独立合并门槛仍由根任务安排。本候选不是整票完成，不改写旧设备通过范围或 OEM 缺口。5584 保留数据冷启动后完成选择器与真实 401 两轮验证；结束时尺寸／密度无 override，字体 1.0、自动旋转 1、user_rotation 0、show_ime_with_hard_keyboard 0、stay_awake 7，见 [401 后恢复记录](raw/t15-auth02-restored.json)。当前停在该 401 域的 input-only 页面，自己的空闲 ApplicationService 已正常停止，模拟器保留运行与全部数据。

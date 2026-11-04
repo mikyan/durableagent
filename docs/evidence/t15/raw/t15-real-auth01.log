@@ -1,0 +1,8 @@
+file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-real-auth-failure.mjs:67
+}catch(error){evidence.error=String(error).replaceAll(syntheticInvalidKey,'[synthetic key redacted]').replaceAll(serial,'[device]');throw Error(evidence.error);}
+                                                                                                                                          ^
+
+Error: Error: Visible enabled control [data-testid=open-model-settings]: null
+    at file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-real-auth-failure.mjs:67:139
+
+Node.js v24.14.1
