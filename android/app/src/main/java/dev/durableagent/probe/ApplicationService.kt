@@ -22,6 +22,7 @@ class ApplicationService:Service() {
     private var instance=""
     private var phase="{\"phase\":\"opening\"}"
     private var closing=false
+    private var closeDispatched=false
     private var credentials:NativeCredentialAccess?=null
     private var inputs:NativeInputAccess?=null
     private var execution:ExecutionAccess?=null
@@ -53,7 +54,7 @@ class ApplicationService:Service() {
                 12->reply?.let {send(it,12,status())}
                 14->reply?.let {acknowledge(it,text)}
                 15->reply?.let {receiveInput(it,transfer,index,count,text)}
-                20->if(debug&&text=="close"){closing=true;if(node==null){phase="{\"phase\":\"closed\"}";release()}else node?.getExecutor("globalThis.__appClose?.()")?.executeVoid()}
+                20->if(debug&&text=="close"){closing=true;if(node==null){phase="{\"phase\":\"closed\"}";release()}}
                 30->reply?.let {writeCredential(text,it)}
                 31->if(debug)reply?.let {importValidationCredential(text,it)}
                 32->if(debug)node?.getExecutor("globalThis.__appRunModelPolicy?.()")?.executeVoid()
@@ -62,6 +63,8 @@ class ApplicationService:Service() {
                 41->if(debug)reply?.let {node?.getExecutor("globalThis.__appProjectWitness?.(${JSONObject.quote(text)})")?.executeVoid();send(it,41,status())}
                 42->if(debug)node?.getExecutor("globalThis.__appRunProjectPolicy?.()")?.executeVoid()
                 43->if(debug)reply?.let {node?.getExecutor("globalThis.__appExecutionFault?.(${JSONObject.quote(text)})")?.executeVoid();send(it,43,status())}
+                51->if(debug)reply?.let {node?.getExecutor("globalThis.__appExtensionRoute?.(${JSONObject.quote(text)})")?.executeVoid();send(it,51,status())}
+                52->if(debug)node?.getExecutor("globalThis.__appRunExtensionPolicy?.()")?.executeVoid()
                 40->if(debug)node?.getExecutor("globalThis.__appRunSubmissionPolicy?.()")?.executeVoid()
                 34->if(debug&&node!=null){
                     val duration=(text.toLongOrNull()?:10000).coerceIn(2500,15000)
@@ -82,7 +85,7 @@ class ApplicationService:Service() {
     }
     private fun open(mode:String,run:String?) {
         try {
-            check(mode in setOf("product","fixture","hang","real","models","models-fixture","execution","execution-real"))
+            check(mode in setOf("product","fixture","hang","real","models","models-fixture","execution","execution-real","extensions-fixture","extensions-real"))
             check(mode=="product"||run?.matches(Regex("[a-zA-Z0-9-]{1,80}"))==true)
             val domain=File(filesDir,if(mode=="product")"application" else "application-validation/$run")
             lease=StorageDomainLease.acquire(domain)?:error("Application storage already owned")
@@ -97,7 +100,7 @@ class ApplicationService:Service() {
             runtime.createV8ValueObject().use {access->access.bind(inputs!!);runtime.globalObject.set("__nativeInputs",access)}
             execution=ExecutionAccess(this)
             runtime.createV8ValueObject().use {access->access.bind(execution!!);runtime.globalObject.set("__nativeExecution",access)}
-            if(mode=="real"||mode=="execution-real"){
+            if(mode=="real"||mode=="execution-real"||mode=="extensions-real"){
                 val clear=ValidationCredential.consume(this)
                 try{runtime.globalObject.set("__validationKey",String(clear,Charsets.UTF_8).trim())}finally{clear.fill(0)}
             }
@@ -153,6 +156,11 @@ class ApplicationService:Service() {
             runtime.await(V8AwaitMode.RunNoWait)
             val failure=runtime.getExecutor("globalThis.__appFailure||''").executeString()
             if(failure.isNotEmpty())error(failure)
+            // The debug close can arrive after native creation but before the asynchronous
+            // module import installs its close function. Retain it until that owner exists.
+            if(closing&&!closeDispatched&&runtime.getExecutor("typeof globalThis.__appClose").executeString()=="function"){
+                closeDispatched=true;runtime.getExecutor("globalThis.__appClose()").executeVoid()
+            }
             if(runtime.getExecutor("typeof globalThis.__appRequest").executeString()=="function"){
                 val requests=pending.toList();pending.clear()
                 for(request in requests)runtime.getExecutor("globalThis.__appRequest(${JSONObject.quote(request)})").executeVoid()
@@ -210,6 +218,6 @@ class ApplicationService:Service() {
     }
     private fun status()=JSONObject(phase).put("instance",instance).put("pid",Process.myPid()).put("domainOwned",lease!=null).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).toString()
     private fun fail(error:Throwable){phase=JSONObject().put("phase","failed").put("reason",error.message?:error.javaClass.simpleName).toString();release()}
-    private fun release(){node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;lease?.close();lease=null;closing=false;pending.clear()}
+    private fun release(){node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
     override fun onDestroy(){owner.post {release();thread.quitSafely()};super.onDestroy()}
 }

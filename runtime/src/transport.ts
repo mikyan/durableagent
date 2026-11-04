@@ -1,9 +1,10 @@
 // Only the model HTTP boundary is replaced. Pi AI still loads its lazy provider,
 // parses SSE, decodes UTF-8 and assembles deltas using the published packages.
-export type FixtureOptions={hang?:boolean;toolName?:(input?:unknown)=>string|undefined;toolArguments?:(input:unknown)=>Record<string,unknown>;tool?:boolean;invalidTool?:boolean;failFirst?:number};
+export type FixtureOptions={hang?:boolean;observeRequest?:(body:string)=>void;toolName?:(input?:unknown)=>string|undefined;toolArguments?:(input:unknown)=>Record<string,unknown>;tool?:boolean;invalidTool?:boolean;failFirst?:number};
 export function fixtureTransport(options:FixtureOptions & {requested:()=>void; aborted:()=>void}): typeof fetch {
   let requests=0;
   return async (_input, init) => {
+    if(options.observeRequest)options.observeRequest(await new Request(_input,init).text());
     const last=options.toolName?JSON.parse(await new Request(_input,init).text()).messages?.at(-1):undefined,chosen=options.toolName?.(last?.content);const witness=chosen&&last?.role==='user'?chosen:undefined;const tool=!!witness||options.tool&&requests===0;requests++;
     options.requested();
     if(requests<=(options.failFirst??0))return new Response('Injected provider unavailable',{status:503});

@@ -1,0 +1,12 @@
+(node:48484) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ never-accepted source-cancelled route releases location only after coherent absence and a verified source fence, including reopen (185.7746ms)
+✔ accepted source-cancelled target retains location protection through lost ACK, reopen, active work and unresolved effects (291.3459ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 654.4628

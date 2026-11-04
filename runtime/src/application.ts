@@ -3,6 +3,12 @@ import type {Models} from '@earendil-works/pi-ai/models';
 import {Harness,createRegistry,defineDoc,type ConversationId,type ConversationView,type HarnessSettings,type Storage,type EntryRecord,type ConversationWatch} from '@earendil-works/pi-durable';
 import {openOwnedStorage,auditStorageSecret} from './storage.js';
 import type {ApplicationRequest,ApplicationResponse,ApplicationEnvelope,ApplicationStatus,ConversationSummary,ConversationSnapshot,HistoryMessage,ModelSelection} from './application-protocol.js';
+import {BUNDLED_EXTENSIONS,type ExtensionDescriptor,type ExtensionCatalog} from './extension-protocol.js';
+import {assembleAgentExtensions,type AgentFactories} from './extensions/assembly.js';
+import {routingAgent} from './extensions/routing-agent.js';
+import {modelsAgent} from './extensions/models-agent.js';
+import {Routing} from './routing.js';
+import type {RouteAuthority,RouteRequest,RouteSource} from './routing-protocol.js';
 import {installConversationAgent} from './extensions/conversation-agent.js';
 import {MODELS_EXTENSION} from './model-protocol.js';
 import {ModelConnections,ModelConfigurationError,type StoredModels} from './model-connections.js';
@@ -23,9 +29,12 @@ class DuplicateCreation extends Error {constructor(readonly productId:string){su
 class ActionError extends Error {constructor(readonly code:string,message:string){super(message);}}
 const settings:HarnessSettings={progress:{partialIntervalMs:1,outputIntervalMs:1,persistWithinMs:1000},retry:{enabled:false,maxRetries:0,baseDelayMs:1}};
 export type ApplicationInputs=FrozenInputAccess&{rememberConversation(conversation:InputConversation,capability?:InputCapability):void};
-export type ApplicationOptions={execution?:ManagedExecution;path:string;models:Models;connections?:ModelConnections;inputs?:ApplicationInputs;sends?:SendAuthority;submissionBoundary?:(stage:SubmissionBoundary,intent:import('./submission-protocol.js').NativeSendIntent)=>void|Promise<void>;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;projectBoundary?:(stage:ProjectBoundary)=>void|Promise<void>;registry?:ReturnType<typeof createRegistry>;effects?:EffectAuthority;locationEdits?:LocationEditAuthority;locations?:LocationAdapter;storageFactory?:()=>Promise<Storage>};
+export type ApplicationOptions={execution?:ManagedExecution;routes?:RouteAuthority;extensions?:readonly ExtensionDescriptor[];agentFactories?:AgentFactories;path:string;models:Models;connections?:ModelConnections;inputs?:ApplicationInputs;sends?:SendAuthority;submissionBoundary?:(stage:SubmissionBoundary,intent:import('./submission-protocol.js').NativeSendIntent)=>void|Promise<void>;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;projectBoundary?:(stage:ProjectBoundary)=>void|Promise<void>;registry?:ReturnType<typeof createRegistry>;effects?:EffectAuthority;locationEdits?:LocationEditAuthority;locations?:LocationAdapter;storageFactory?:()=>Promise<Storage>};
 export class Application {
   private harness?:Harness;
+  private registry=createRegistry();
+  private installedExtensions=new Map<string,string>();
+  private routing?:Routing;
   private starting?:Promise<void>;
   private closing?:Promise<void>;
   private state:ApplicationStatus={phase:'opening',extensions:[]};
@@ -43,7 +52,7 @@ export class Application {
   private productsCache=new Map<string,ProductRecord>();
   private dispatch=new DispatchGate();
   private workspace={id:'default',path:''};
-  constructor(private readonly options:ApplicationOptions) {if(options.execution){options.locations=options.execution.locations;options.effects=options.execution;options.registry??=createRegistry();options.execution.install(options.registry);this.state.extensions.push(EXECUTION_EXTENSION.id);for(const action of EXECUTION_EXTENSION.actions)this.actions.add(action);}this.state.extensions.push(PROJECTS_EXTENSION.id);for(const action of PROJECTS_EXTENSION.actions)this.actions.add(action);installConversationAgent(extension=>{this.state.extensions.push(extension.id);for(const action of extension.actions)this.actions.add(action);});if(options.connections){this.state.extensions.push(MODELS_EXTENSION.id);for(const action of MODELS_EXTENSION.actions)this.actions.add(action);}if(options.inputs)this.state.extensions.push(INPUT_EXTENSION.id);if(options.sends){this.state.extensions.push(SUBMISSION_EXTENSION.id);for(const action of SUBMISSION_EXTENSION.actions)this.actions.add(action);}}
+  constructor(private readonly options:ApplicationOptions) {for(const action of ['extensions.get','routing.list','routing.query','routing.create','routing.send'])this.actions.add(action);if(options.execution){options.locations=options.execution.locations;options.effects=options.execution;this.state.extensions.push(EXECUTION_EXTENSION.id);for(const action of EXECUTION_EXTENSION.actions)this.actions.add(action);}this.state.extensions.push(PROJECTS_EXTENSION.id);for(const action of PROJECTS_EXTENSION.actions)this.actions.add(action);installConversationAgent(extension=>{this.state.extensions.push(extension.id);for(const action of extension.actions)this.actions.add(action);});if(options.connections){this.state.extensions.push(MODELS_EXTENSION.id);for(const action of MODELS_EXTENSION.actions)this.actions.add(action);}if(options.inputs)this.state.extensions.push(INPUT_EXTENSION.id);if(options.sends){this.state.extensions.push(SUBMISSION_EXTENSION.id);for(const action of SUBMISSION_EXTENSION.actions)this.actions.add(action);}}
   status(){return {...this.state};}
   start():Promise<void> {
     if(this.closing)return this.closing.then(()=>this.start());
@@ -55,11 +64,15 @@ export class Application {
   }
   private async open() {
     this.dispatch=new DispatchGate();
+    this.registry=createRegistry();for(const contribution of this.options.registry?.snapshot().installed()??[])this.registry.install(contribution);
+    this.options.execution?.install(this.registry);
+    const getRouting=()=>{this.ready();if(!this.routing)throw new ActionError('ROUTING_UNAVAILABLE','转交能力尚未就绪');return this.routing;};
+    this.installedExtensions=assembleAgentExtensions(this.options.extensions??BUNDLED_EXTENSIONS,{routing:()=>routingAgent(getRouting),models:()=>modelsAgent(async(method,payload)=>{const r=await this.request({protocol:1,connectionId:'agent-extensions',requestId:crypto.randomUUID(),method:method as any,payload});if(!r.ok)throw new ActionError(r.error.code,r.error.message);return r.value;},getRouting),...this.options.agentFactories},this.registry);
     this.runtimeSettings(); // Fail before open: SDK catches some settings getter errors during reconciliation.
     if(!this.options.inputs||!this.options.sends)throw new ActionError('INPUT_UNAVAILABLE','原生输入与停止存储尚不可用，运行保持关闭');
     const storage=this.options.storageFactory?await this.options.storageFactory():(await openOwnedStorage(this.options.path,this.options.secret)).storage;
     try {
-      this.harness=await Harness.open(storage,{models:()=>this.dispatch.models(this.options.models),settings:()=>this.runtimeSettings(),registry:this.options.registry??createRegistry(),conversationCreated:inheritBinding,env:target=>bindingEnvironment(target,this.options.locations)},context);
+      this.harness=await Harness.open(storage,{models:()=>this.dispatch.models(this.options.models),settings:()=>this.runtimeSettings(),registry:this.registry,conversationCreated:inheritBinding,...(this.options.locations?{env:target=>bindingEnvironment(target,this.options.locations)}:{})},context);
     }catch(error){await storage.close(context);throw error;}
     this.options.execution?.attach(this.harness);
     void this.harness.closed.then(result=>{if(result.kind==='failed')this.state={...this.state,phase:'failed',reason:this.safeError(result.error)};});
@@ -76,6 +89,7 @@ export class Application {
     this.projects=new Projects({harness:this.harness,sends:this.options.sends!,authority:this.options.locationEdits??(('beginLocationEdit' in this.options.sends!)?this.options.sends as unknown as LocationEditAuthority:undefined),adapter:this.options.locations,boundary:this.options.projectBoundary,effects:this.options.effects,publish:async()=>{await this.refreshProducts();}});
     await this.projects.initialize();await this.refreshProducts();await this.projects.recover();
     if(this.options.sends&&this.options.inputs)this.submissions=new Submissions({harness:this.harness,authority:this.options.sends,inputs:this.options.inputs,models:this.options.models,available:this.options.connections?async(provider,modelId)=>{const connections=this.options.connections!;return !!connections.capability(provider,modelId)&&(await connections.publicConfiguration()).connections.some(item=>item.id===provider&&item.credential.configured);}:undefined,ready:()=>{this.ready();},pause:()=>this.dispatch.pause(),boundary:this.options.submissionBoundary,resolve:(tx,id)=>this.projects!.resolve(tx,id),adopt:(tx,id,bindingId)=>this.projects!.adopt(tx,id,bindingId)});
+    this.routing=new Routing({harness:this.harness,authority:this.options.sends!,routes:this.options.routes??(('createRoute' in this.options.sends!)?this.options.sends as unknown as RouteAuthority:undefined),submissions:this.submissions!,ids:async()=>Object.keys((await this.harness!.snapshot(Products,context))?.items??{}),summary:async id=>this.summary(await this.product(id)),create:(id,title)=>this.create(id,title),ready:()=>{this.ready();}});
     await this.submissions?.prepare();
     await this.options.execution?.recover();
     if(this.submissions)this.dispatch.check=()=>this.submissions!.checkDispatch();
@@ -118,6 +132,11 @@ export class Application {
       switch(request.method) {
         case 'execution.list':value=await this.options.execution!.list(this.text(payload,'id'),payload.cursor);break;
         case 'execution.readOutput':value=await this.options.execution!.readOutput(this.text(payload,'id'),this.text(payload,'executionId'),payload.cursor);break;
+        case 'extensions.get':value=await this.extensionCatalog(typeof payload.id==='string'?payload.id:undefined);break;
+        case 'routing.list':value=await this.routing!.list(typeof payload.cursor==='string'?payload.cursor:undefined);break;
+        case 'routing.query':value=await this.routing!.query(this.text(payload,'id',128));break;
+        case 'routing.create':value=await this.routing!.create({source:payload.source as RouteSource,creationId:this.text(payload,'creationId',128),title:typeof payload.title==='string'?payload.title.slice(0,120):undefined});break;
+        case 'routing.send':value=await this.routing!.send(payload as RouteRequest);break;
         case 'models.get':value=await this.options.connections!.publicConfiguration();break;
         case 'models.create':case 'models.setDefault':case 'models.setEnabled':value=await this.changeModels(request.method,payload);break;
         case 'models.select': {
@@ -157,7 +176,7 @@ export class Application {
           this.subscriptions.set(key,subscription);
           value=this.project(product,watch.value);
           const publish=(snapshot:ConversationSnapshot)=>{if(current()&&this.subscriptions.get(key)===subscription)emit({type:'conversation',protocol:1,connectionId:request.connectionId,subscriptionId,snapshot});};
-          const failed=(error:unknown)=>{const snapshot=this.project(product,watch.value);publish({...snapshot,phase:'failed',progress:undefined,conversation:{...snapshot.conversation,phase:'failed'},reason:this.safeError(error)});};
+          const failed=(error:unknown)=>{if(current()&&this.subscriptions.get(key)===subscription)emit({type:'subscription-error',protocol:1,connectionId:request.connectionId,subscriptionId,error:{code:'OBSERVATION_UNAVAILABLE',message:this.safeError(error)}});};
           subscription.refresh=()=>publish(this.project(product,watch.value));
           watch.start(async call=>{if(call.kind==='value')publish(this.project(product,call.value));else failed(call.error);});
           void watch.closed.then(end=>{if(end.kind==='failed')failed(end.error);});break;
@@ -171,6 +190,11 @@ export class Application {
       }
       return {...base,ok:true,value};
     }catch(error){return {...base,ok:false,error:{code:error instanceof ActionError||error instanceof ModelConfigurationError||error instanceof InputError||error instanceof SubmissionError||error instanceof ProjectError||error instanceof ManagedExecutionError?error.code:'ACTION_FAILED',message:this.safeError(error)}};}
+  }
+  private async extensionCatalog(id?:string):Promise<ExtensionCatalog>{
+    const selected=id?(await (await this.ready().conversation((await this.product(id)).sdkId as ConversationId,context))!.agent(context)).extensions.map(item=>item.name):undefined;
+    const snapshot=this.registry.snapshot();
+    return {items:(this.options.extensions??BUNDLED_EXTENSIONS).map(descriptor=>{const name=this.installedExtensions.get(descriptor.id);return {descriptor,packaged:true,agent:!descriptor.agent?{state:'not-provided'}:name&&snapshot.extension(name)?{state:'installed',name,...(selected?{selected:selected.includes(name)}:{})}:{state:'unavailable',...(name?{name}:{})},ui:{state:descriptor.ui?'packaged':'not-provided'}};}),...(id?{conversationId:id}:{})};
   }
   credentialTarget(id:string){return this.state.phase==='ready'&&!!this.options.connections?.contains(id);}
   private changeModels(method:string,payload:Record<string,unknown>) {
@@ -198,7 +222,7 @@ export class Application {
     const harness=this.ready();const model=this.defaultModel;
     if(!model)throw new ActionError('MODEL_UNAVAILABLE','请先配置新会话默认模型');
     try {
-      await harness.createConversation({ownership:{kind:'ownerless'},agent:{model:{provider:model.provider,modelId:model.modelId},maxTurns:3},init:async(tx,sdkId)=>{
+      await harness.createConversation({ownership:{kind:'ownerless'},agent:{model:{provider:model.provider,modelId:model.modelId},maxTurns:8},init:async(tx,sdkId)=>{
         const products=await tx.doc(Products);if(Object.hasOwn(products.items,id))throw new DuplicateCreation(id);
         products.items[id]={id,sdkId,title:title.trim()||'新会话',workspaceId:'default',createdAt:Date.now()};
       }},context);

@@ -380,6 +380,20 @@ class NativeInputStore(
     fun createSend(request: JSONObject): JSONObject = locked { db, _ -> transaction(db) {
         NativeSubmissionRecords.create(db, request) { frozen(db, it) }.also { boundary("send.intent.beforeCommit") }
     } }.also { boundary("send.intent.afterCommit") }
+    /** Trusted runtime path: new fixed input, with no mutation of the target's authored draft. */
+    fun createRoute(request: JSONObject): JSONObject {
+        val text = request.getString("text"); validateText(text)
+        if (text.isBlank() || text.length > DRAFT_CHARACTERS) fail("INPUT_INVALID", "转交正文为空或超过文字预算。")
+        return locked { db, _ -> transaction(db) {
+            NativeSubmissionRecords.createRoute(db, request) { id, content ->
+                val token = UUID.randomUUID().toString()
+                val fixed = JSONObject().put("token", token).put("id", id).put("revision", 0).put("text", content)
+                    .put("representations", JSONArray()).put("digest", inputDigest(content, JSONArray()))
+                db.execSQL("INSERT INTO frozen(token,data) VALUES(?,?)", arrayOf(token, fixed.toString()))
+                fixed
+            }.also { boundary("route.intent.beforeCommit") }
+        } }.also { boundary("route.intent.afterCommit") }
+    }
     fun readSend(intentId: String): JSONObject = locked { db, _ -> NativeSubmissionRecords.read(db, intentId) }
     fun listSends(options: JSONObject = JSONObject()): JSONObject = locked { db, _ -> NativeSubmissionRecords.list(db, options) }
     fun readControl(id: String): JSONObject { validateId(id); return locked { db, _ -> NativeSubmissionRecords.control(db, id) } }
@@ -390,7 +404,7 @@ class NativeInputStore(
     fun confirmAbort(id: String, barrier: JSONObject): JSONObject = locked { db, _ -> transaction(db) { NativeSubmissionRecords.confirmAbort(db, id, barrier) } }
     fun markDeliveryUnknown(intentId: String): JSONObject = locked { db, _ -> transaction(db) { NativeSubmissionRecords.markUnknown(db, intentId) } }
     fun confirmAdmission(intentId: String, receipt: JSONObject): JSONObject = locked { db, _ -> transaction(db) {
-        NativeSubmissionRecords.acknowledge(db, intentId, receipt, { frozen(db, it) }, { draft(db, it) }, { id ->
+        NativeSubmissionRecords.acknowledge(db, intentId, receipt, { frozen(db, it) }, { boundary("send.ack.draft-read"); draft(db, it) }, { id ->
             val current = draft(db, id); checkRevision(current, current.getLong("revision"))
             db.execSQL("UPDATE drafts SET revision=revision+1,state_version=state_version+1,text='',selection_ids='[]' WHERE id=?", arrayOf(id))
             draft(db, id)

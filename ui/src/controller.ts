@@ -8,7 +8,7 @@ import {PROJECTS_EXTENSION,type ProjectCatalog,type ProjectMethod} from '../../r
 import {ExecutionCoordinator,type ExecutionView} from './execution';
 
 export interface SelectionPreferences {get(key:string):string|null;set(key:string,value:string):void}
-export type UiState={execution?:ExecutionView;status:ApplicationStatus;conversations:ConversationSummary[];inputConversations:InputConversation[];inputReady:boolean;inputError?:string;draft?:DraftView;submissions?:ReturnType<SubmissionCoordinator['view']>;activeId?:string;conversation?:ConversationSnapshot;history:HistoryMessage[];next?:string;loading:boolean;pending:boolean;error?:string;page:'conversation'|'models'|'projects';models?:ModelConfiguration;modelsLoading:boolean;modelsPending:boolean;modelsError?:string;modelsNotice?:string;projects?:ProjectCatalog;projectsLoading?:boolean;projectsPending?:boolean;projectsUnconfirmed?:boolean;projectsError?:string;projectsNotice?:string};
+export type UiState={execution?:ExecutionView;status:ApplicationStatus;conversations:ConversationSummary[];inputConversations:InputConversation[];inputReady:boolean;inputError?:string;draft?:DraftView;submissions?:ReturnType<SubmissionCoordinator['view']>;activeId?:string;conversation?:ConversationSnapshot;history:HistoryMessage[];next?:string;loading:boolean;pending:boolean;error?:string;page:'conversation'|'models'|'projects'|'extensions';models?:ModelConfiguration;modelsLoading:boolean;modelsPending:boolean;modelsError?:string;modelsNotice?:string;projects?:ProjectCatalog;projectsLoading?:boolean;projectsPending?:boolean;projectsUnconfirmed?:boolean;projectsError?:string;projectsNotice?:string};
 export type ConnectionInput={name:string;protocol:ConnectionProtocol;endpoint:string;modelId?:string};
 export type ModelReference={provider:string;modelId:string};
 const mergeMessages=(older:HistoryMessage[],current:HistoryMessage[])=>[...new Map([...older,...current].map(message=>[message.id,message])).values()].sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true}));
@@ -29,6 +29,9 @@ export class ConversationController {
   private readonly drafts=new DraftCoordinator(()=>this.client,()=>this.publish({draft:this.state.activeId?this.drafts.view(this.state.activeId):undefined}));
   private readonly submissions=new SubmissionCoordinator(()=>this.client,()=>this.state.status.phase==='ready',()=>this.publish({submissions:this.state.activeId?this.submissions.view(this.state.activeId):undefined}),(ack,editEpoch)=>this.drafts.confirmAdmission(ack,editEpoch));
   readonly execution=new ExecutionCoordinator(()=>this.client,()=>this.publish({execution:this.execution.view()}));
+  extensionClient?:import('./extensions/timeline').TimelineClient;
+  openExtensions(){this.publish({page:'extensions'});}
+  leaveExtensions(){this.publish({page:'conversation'});}
   private sendPoll?:ReturnType<typeof setTimeout>;
   constructor(private readonly connectClient:()=>ApplicationClient,private readonly preferences?:SelectionPreferences) {}
   snapshot=()=>this.state;
@@ -36,7 +39,7 @@ export class ConversationController {
   private publish(patch:Partial<UiState>){this.state={...this.state,...patch};for(const listener of this.listeners)listener();}
   async connect() {
     this.execution.reset();++this.epoch;clearTimeout(this.sendPoll);this.submissions.disconnect();this.subscription?.unsubscribe();this.subscription=undefined;this.client?.dispose();this.checking=undefined;
-    const client=this.connectClient();this.client=client;
+    const client=this.connectClient();this.client=client;this.extensionClient={request:client.request.bind(client),subscribe:client.subscribe.bind(client)};
     this.publish({status:{phase:'opening',extensions:[]},pending:false,modelsPending:false,modelsLoading:false,projectsPending:false,projectsLoading:false,projectsUnconfirmed:!!this.projectOperation,error:undefined});
     await Promise.all([this.refresh(),this.refreshInputs()]);
   }
@@ -111,7 +114,7 @@ export class ConversationController {
       const subscription=await client.subscribe(id,snapshot=>{
         if(!current())return;
         this.publish({conversation:snapshot,history:mergeMessages(this.state.history,snapshot.entries),conversations:this.state.conversations.map(item=>item.id===id?snapshot.conversation:item)});
-      });
+      },error=>{if(current())this.publish({error:'观察已断开，请重新连接：'+error.message});});
       if(current())this.subscription=subscription;else subscription.unsubscribe();
     }catch(error){if(current())this.publish({error:this.reason(error)});}
     finally{await draftRead;if(current())this.publish({loading:false});}
