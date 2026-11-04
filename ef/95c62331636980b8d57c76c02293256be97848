@@ -1,0 +1,89 @@
+docs/evidence/t15/raw/t15-phone-final.json
+  s_467dcb949b5b60::t_f1f14d733ec68f 1-510
+docs/evidence/t15/raw/t15-compact-status-green.log
+  s_467dcb949b5b60::t_5ebd000eb072d4 1-13
+docs/evidence/t15/raw/t15-auxiliary-live02.json
+  s_467dcb949b5b60::t_5ebd000eb072d4 1-132
+docs/evidence/t15/raw/t15-auxiliary-live03.json
+  s_467dcb949b5b60::t_5ebd000eb072d4 1-409
+docs/evidence/t15/raw/device-restored.json
+  s_467dcb949b5b60::t_775916883fd5e3 1-16
+docs/evidence/t15/raw/t15-build14.log
+  s_467dcb949b5b60::t_5ebd000eb072d4 1-122
+docs/evidence/t15/README.md
+  s_467dcb949b5b60::t_5ebd000eb072d4 1,3,5,7,9,11,13,15,17-24,26,28,30-31,33-39,41,43,45-58
+  s_467dcb949b5b60::t_f1f14d733ec68f 32
+  s_467dcb949b5b60::t_02faec1449059e 59-62
+docs/evidence/t15/ARTIFACTS.json
+  s_467dcb949b5b60::t_3d5c5756fa1432 1-48
+docs/evidence/t15/RUN.md
+  s_467dcb949b5b60::t_5e2169696425fc 1-35
+docs/evidence/t15/raw/t15-anchor-short-red.log
+  s_467dcb949b5b60::t_794e0bbe49a66f 1-42
+docs/evidence/t15/raw/t15-camera-admitted.json
+  s_467dcb949b5b60::t_4c5899514de83f 1-233
+docs/evidence/t15/raw/t15-camera-cancel.json
+  s_467dcb949b5b60::t_8a495694505011 1-226
+docs/evidence/t15/raw/t15-camera-launch.json
+  s_467dcb949b5b60::t_d9c34aeff090b6 1-165
+docs/evidence/t15/raw/t15-cancel-contract-green.log
+  s_467dcb949b5b60::t_a557e93608bdea 1-13
+docs/evidence/t15/raw/t15-compact-status-red.log
+  s_467dcb949b5b60::t_164edbc33e0dfb 1-120
+docs/evidence/t15/raw/t15-console-device04.log
+  s_467dcb949b5b60::t_2076eeea9a1256 1-41
+docs/evidence/t15/raw/t15-narrow-final01.json
+  s_467dcb949b5b60::t_79da3e38f7a341 1-667
+docs/evidence/t15/raw/t15-narrow-green02.json
+  s_467dcb949b5b60::t_db4dd76e65c8c9 1-409
+docs/evidence/t15/raw/t15-rotation-green02.json
+  s_467dcb949b5b60::t_69e0e3ad5a585c 1-325
+docs/evidence/t15/raw/t15-rotation.json
+  s_467dcb949b5b60::t_dc4e3a7ce46a4f 1-412
+docs/evidence/t15/raw/t15-runtime-suite01.log
+  s_467dcb949b5b60::t_ac37d432c27e8e 1-335
+docs/evidence/t15/raw/t15-runtime-suite02.log
+  s_467dcb949b5b60::t_f423e673db8a5c 1-263
+docs/evidence/t15/raw/t15-selection-final-failed.json
+  s_467dcb949b5b60::t_4f371fd2d8b357 1-29
+docs/evidence/t15/raw/t15-selection-final.log
+  s_467dcb949b5b60::t_515abe3b84ab1e 1-11
+docs/evidence/t15/raw/t15-selection-final02-failed.json
+  s_467dcb949b5b60::t_13b2650c24d6f3 1-29
+docs/evidence/t15/raw/t15-selection-final02.log
+  s_467dcb949b5b60::t_ee7b8f843f750e 1-9
+docs/evidence/t15/raw/t15-selection-final03.json
+  s_467dcb949b5b60::t_135e4886813158 1-41
+docs/evidence/t15/raw/t15-selection-final03.log
+  s_467dcb949b5b60::t_4d23c111f0b29a 1
+docs/evidence/t15/raw/t15-selection-launch-race-system.log
+  s_467dcb949b5b60::t_d94a263dc6860b 1-60
+docs/evidence/t15/raw/t15-selection-recovered.json
+  s_467dcb949b5b60::t_e125c37d65ea12 1-349
+docs/evidence/t15/raw/t15-selection-red.json
+  s_467dcb949b5b60::t_73720bfe18a824 1-41
+docs/evidence/t15/raw/t15-tablet-final01.json
+  s_467dcb949b5b60::t_3ee2b6d89d44b8 1-676
+docs/evidence/t15/raw/t15-tablet-green02.json
+  s_467dcb949b5b60::t_0fc099c9783bef 1-863
+docs/evidence/t15/raw/t15-ui-suite02.log
+  s_467dcb949b5b60::t_02316700cf467f 1-56
+docs/evidence/t15/raw/t15-ui-suite03.log
+  s_467dcb949b5b60::t_9965f82bb463d0 1-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "ef95c62331636980b8d57c76c02293256be97848",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
