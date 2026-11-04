@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference
 class SubmissionValidationProbe {
     private val stage=AtomicReference("")
     @V8Function fun at(value:String){
-        require(value in setOf("sdk-before","sdk-after"))
+        require(value in setOf("sdk-before","sdk-after","execution-intent-persisted","execution-accepted","execution-output-checkpoint","execution-before-result"))
         stage.set(value)
         CountDownLatch(1).await() // Instrumentation observes the boundary, then kills this owner PID.
     }

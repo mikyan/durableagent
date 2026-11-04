@@ -2,6 +2,11 @@ import {join} from 'node:path';
 import {createModels,type Models} from '@earendil-works/pi-ai/models';
 import {projectWitness} from './project-validation.js';
 import {Application} from './application.js';
+import {ManagedExecution} from './managed-execution.js';
+import {NativeExecutionChannel} from './execution-channel.js';
+import {executionValidation} from './execution-validation.js';
+import {executionConformanceRegistry} from './execution-conformance.js';
+import {executionFaults} from './execution-faults.js';
 import {validationConfiguration} from './application-validation.js';
 import {liveModels} from './live-model.js';
 import type {ApplicationEnvelope,ApplicationRequest,ModelSelection} from './application-protocol.js';
@@ -20,16 +25,18 @@ export async function install(mode:string) {
   const projectValidation=mode==='fixture'||mode==='real'?projectWitness(metrics):undefined;
   if(projectValidation)host.__appProjectWitness=(value:string)=>{if(value!=='witness')throw Error('Unknown project validation mode');projectValidation.enable();};
   const nativeInputs=host.__nativeInputs;delete host.__nativeInputs;
+  const nativeExecution=host.__nativeExecution;delete host.__nativeExecution;
   const inputInvoke=(method:string,...args:string[])=>{const response=JSON.parse(nativeInputs[method](...args));if(!response.ok)throw new InputError(response.error.code,response.error.message);return response.value;};
   const inputs:ApplicationInputs|undefined=nativeInputs?{rememberConversation:(conversation,capability)=>{inputInvoke('rememberConversationJson',JSON.stringify(conversation),JSON.stringify(capability??null));},readFrozen:async token=>inputInvoke('readFrozenJson',token),readObject:async(token,objectId)=>Buffer.from(inputInvoke('readObjectBase64',token,objectId),'base64')}:undefined;
   const locationEdits=nativeInputs?{beginLocationEdit:async(operationId:string)=>inputInvoke('beginLocationEditJson',operationId),readLocationEdit:async()=>inputInvoke('readLocationEditJson'),finishLocationEdit:async(operationId:string,contexts:unknown[])=>{inputInvoke('finishLocationEditJson',operationId,JSON.stringify(contexts));}}:undefined;
   const sends:SendAuthority|undefined=nativeInputs?{readSend:async id=>inputInvoke('readSendJson',id),listSends:async options=>inputInvoke('listSendsJson',JSON.stringify(options??{})),markDeliveryUnknown:async id=>inputInvoke('markDeliveryUnknownJson',id),confirmAdmission:async(id,receipt)=>inputInvoke('confirmAdmissionJson',id,JSON.stringify(receipt)),readControl:async id=>inputInvoke('readControlJson',id),pendingStops:async()=>inputInvoke('pendingStopsJson'),confirmAbort:async(id,barrier)=>inputInvoke('confirmAbortJson',id,JSON.stringify(barrier))}:undefined;
   let configuration:{models:Models;workspacePath:string;initialModel?:ModelSelection}={models:createModels(),workspacePath:join(host.__applicationRoot,'workspace')};
   if(mode==='fixture'||mode==='hang')configuration=validationConfiguration({hang:mode==='hang',toolName:()=>projectValidation?.enabled?'location_witness':undefined,requested:()=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;}});
-  else if(mode==='real'){
+  else if(mode==='execution')configuration=executionValidation(String(host.__applicationRoot).split(/[\\/]/).at(-1)!,()=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;});
+  else if(mode==='real'||mode==='execution-real'){
     secret=host.__validationKey;delete host.__validationKey;
     if(!secret)throw new Error('Encrypted validation credential unavailable');
-    const live=liveModels(secret,patch=>Object.assign(metrics,patch),{forceEcho:false,forceTool:()=>projectValidation?.enabled?'location_witness':undefined});
+    const live=liveModels(secret,patch=>Object.assign(metrics,patch),{forceEcho:false,forceTool:()=>mode==='execution-real'?'bash':projectValidation?.enabled?'location_witness':undefined});
     configuration={models:live.models,workspacePath:configuration.workspacePath,initialModel:{provider:live.provider,modelId:live.model,name:'MiMo V2.6 Flash'}};
   }else if(mode==='product'||mode==='models'||mode==='models-fixture'){
     const native=host.__nativeCredentials;delete host.__nativeCredentials;
@@ -38,11 +45,14 @@ export async function install(mode:string) {
     configuration={models:connections.models,workspacePath:configuration.workspacePath};
   }else throw new Error('Unsupported native application mode');
   // Fixture workspace defaults are replaced by the same stable private domain.
-  configuration.workspacePath=join(host.__applicationRoot,'workspace');
+  const executionValidationFaults=mode==='execution'&&host.__submissionValidation?executionFaults(host.__submissionValidation,metrics):undefined;
+  if(executionValidationFaults)host.__appExecutionFault=(stage:string)=>executionValidationFaults.set(stage);
+  const execution=nativeExecution&&sends&&['product','execution','execution-real'].includes(mode)?new ManagedExecution({channel:new NativeExecutionChannel(nativeExecution),authority:sends,...(executionValidationFaults?{boundary:executionValidationFaults.boundary}:{})}):undefined;
+  configuration.workspacePath=execution?'/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace':join(host.__applicationRoot,'workspace');
   const path=join(host.__applicationRoot,'application.sqlite');
   let submissionValidation:any;
   if(host.__submissionValidation){const native=host.__submissionValidation;delete host.__submissionValidation;const module=await import(new URL('../validation/submission-control.mjs',import.meta.url).href);submissionValidation=module.submissionControl(path,native,metrics,mode==='fixture'||mode==='hang');host.__appSubmissionFault=(value:string)=>submissionValidation.set(value);}
-  const app=new Application({path,...configuration,secret,connections,inputs,sends,locationEdits,...(projectValidation?{registry:projectValidation.registry,locations:projectValidation.locations}:{}),...(submissionValidation?{submissionBoundary:submissionValidation.boundary,...(submissionValidation.storageFactory?{storageFactory:submissionValidation.storageFactory}:{})}:{})});
+  const app=new Application({path,...configuration,secret,connections,inputs,sends,locationEdits,execution,...(mode==='execution'&&execution?{registry:executionConformanceRegistry(execution)}:{}),...(projectValidation?{registry:projectValidation.registry,locations:projectValidation.locations}:{}),...(submissionValidation?{submissionBoundary:submissionValidation.boundary,...(submissionValidation.storageFactory?{storageFactory:submissionValidation.storageFactory}:{})}:{})});
   if(mode==='fixture')host.__appRunProjectPolicy=()=>{
     if(metrics.projectPolicyState==='running')return;metrics.projectPolicyState='running';metrics.projectPolicyCases=[];
     void(async()=>{const directory=join(host.__applicationRoot,'project-policy-temp');await mkdir(directory,{recursive:true});const policy=await import(new URL('../validation/project-policy.mjs',import.meta.url).href);await policy.runProjectPolicyChecks((result:unknown)=>(metrics.projectPolicyCases as unknown[]).push(result),{tempRoot:directory});metrics.projectPolicyState='passed';})().catch(error=>{metrics.projectPolicyState='failed';metrics.projectPolicyError=String(error.message??error);metrics.projectPolicyDiagnostic=error.diagnostic;});

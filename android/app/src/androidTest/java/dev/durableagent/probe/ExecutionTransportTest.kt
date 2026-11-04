@@ -76,6 +76,44 @@ class ExecutionTransportTest {
         assertEquals(connected.ledgerEpoch,result.getString("ledgerEpoch"))
         instrumentation.sendStatus(0,android.os.Bundle().apply {putString("executionEvidence",JSONObject().put("case","real-termux-bootstrap").put("executorId",connected.executorId).put("ledgerEpoch",connected.ledgerEpoch).put("port",connected.port).toString())})
     }
+    @Test fun nativeCancellationOfUnacceptedIdentityPersistsTombstoneAndRejectsLateAcceptance() {
+        assumeTrue(InstrumentationRegistry.getArguments().getString("executionProduction")=="true")
+        val identity=ExecutionIdentity(context,"production-v1",allowCreate=false)
+        val peer=ExecutionPairingStore(context).use {it.requireClient(identity.certificateSha256())}
+        val client=ExecutionTlsClient(identity,peer)
+        val info=client.request("ping",JSONObject())
+        val id="native-preaccept-"+UUID.randomUUID()
+        val before=client.request("query",JSONObject().put("executionId",id))
+        assertEquals(id,before.getString("executionId"));assertEquals("unknown",before.getString("state"));assertEquals("NO_RECEIPT",before.getString("reason"))
+        assertEquals(info.getString("namespace"),before.getString("namespace"))
+        fun cancel():JSONObject=ExecutionAccess(context).use {access->
+            val started=JSONObject(access.beginVerifiedCancelJson(id));assertTrue(started.toString(),started.getBoolean("ok"))
+            val operation=started.getJSONObject("value").getString("operationId")
+            val deadline=android.os.SystemClock.elapsedRealtime()+12000
+            while(true){
+                val polled=JSONObject(access.pollJson(operation));assertTrue(polled.toString(),polled.getBoolean("ok"))
+                val value=polled.getJSONObject("value")
+                if(!value.getBoolean("pending")){
+                    val result=value.getJSONObject("result");assertTrue(result.toString(),result.getBoolean("ok"));return@use result.getJSONObject("value")
+                }
+                assertTrue("Native cancellation did not settle",android.os.SystemClock.elapsedRealtime()<deadline);Thread.sleep(25)
+            }
+            @Suppress("UNREACHABLE_CODE") JSONObject()
+        }
+        val cancelled=cancel()
+        assertEquals(id,cancelled.getString("executionId"));assertEquals(info.getString("namespace"),cancelled.getString("namespace"))
+        assertEquals("not_started",cancelled.getString("state"));assertEquals("CANCELLED_BEFORE_ACCEPTANCE",cancelled.getString("reason"))
+        assertTrue(cancelled.getBoolean("neverStarted"));assertTrue(cancelled.getBoolean("scopeConfirmed"))
+        fun sameReceipt(actual:JSONObject){assertEquals(cancelled.keys().asSequence().toSet(),actual.keys().asSequence().toSet());for(key in cancelled.keys())assertEquals("Retained field $key",cancelled.get(key),actual.get(key))}
+        sameReceipt(client.request("query",JSONObject().put("executionId",id)))
+        sameReceipt(cancel())
+        val request=JSONObject().put("executionId",id).put("context",JSONObject().put("productId","native-cancel-fixture").put("sdkConversationId",1).put("taskId",1).put("callId",id).put("bindingId","native-cancel-fixture").put("locationVersion",1).put("controlGeneration",1).put("namespace",info.getString("namespace")))
+            .put("command",JSONObject().put("kind","argv").put("argv",org.json.JSONArray().put("/data/data/com.termux/files/usr/bin/true")))
+            .put("cwd",info.getString("defaultWorkspace")).put("env",JSONObject()).put("inheritEnv",false).put("timeoutMs",JSONObject.NULL)
+        val rejected=assertThrows(ExecutionChannelException::class.java){client.request("prepare",request)}
+        assertEquals("CANCELLED_BEFORE_ACCEPTANCE",rejected.code)
+        instrumentation.sendStatus(0,android.os.Bundle().apply {putString("executionEvidence",JSONObject().put("case","native-preaccept-cancel").put("executionId",id).put("receipt",cancelled).put("lateAcceptanceRejected",true).toString())})
+    }
     @Test fun asyncBoundaryRejectsUnknownOperationsWithoutOpeningConnection() {
         ExecutionAccess(context).use { access ->
             val invalid=JSONObject(access.beginJson("shell","{}"))
@@ -93,5 +131,14 @@ class ExecutionTransportTest {
         val absent="absent-${UUID.randomUUID()}"
         val error=assertThrows(ExecutionChannelException::class.java) {ExecutionIdentity(context,absent,allowCreate=false).certificatePem()}
         assertEquals("CLIENT_IDENTITY_UNAVAILABLE",error.code)
+    }
+    @Test fun bootstrapConflictIsDiagnosedOnlyForCompleteMatchingCallback() {
+        val nonce=UUID.randomUUID().toString()
+        val stdout=JSONObject().put("protocol",1).put("nonce",nonce).put("error",JSONObject().put("code","PAIRING_CONFLICT")).toString()
+        val wire=mapOf("stdout" to stdout,"stderr" to "","stdout_original_length" to stdout.length.toString(),"stderr_original_length" to "0","err" to -1,"exitCode" to 65)
+        val diagnosed=JSONObject(decodeExecutionBootstrapResult(nonce,wire))
+        assertFalse(diagnosed.getBoolean("ok"));assertEquals("PAIRING_CONFLICT",diagnosed.getString("error"))
+        assertEquals("BOOTSTRAP_UNCONFIRMED",JSONObject(decodeExecutionBootstrapResult(UUID.randomUUID().toString(),wire)).getString("error"))
+        assertEquals("BOOTSTRAP_UNCONFIRMED",JSONObject(decodeExecutionBootstrapResult(nonce,wire+("stdout_original_length" to (stdout.length+1).toString()))).getString("error"))
     }
 }

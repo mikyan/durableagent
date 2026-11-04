@@ -267,6 +267,65 @@ class ExecutionContract(unittest.TestCase):
         self.assertLessEqual(receipt["outputBytes"], 16 * 1024 * 1024)
         self.assertFalse((self.workspace / "after-unbounded-output").exists())
 
+    def test_tiny_output_chunks_obey_per_execution_and_retained_metadata_budgets(self):
+        limits = {'outputChunks': 4, 'retainedChunks': 6, 'preparedBytes': 65536}
+        self.endpoint.close()
+        self.endpoint = Executor(self.root / 'authority', limits=limits)
+        for suffix, expected in (('first', 4), ('second', 2)):
+            execution_id = 'tiny-' + suffix
+            ack = self.workspace / ('acks-' + suffix)
+            ack.mkdir()
+            request = self.request(execution_id)
+            code = "import os,time;from pathlib import Path\nfor i in range(12):\n os.write(1,b'x')\n while not (Path(" + repr(str(ack)) + ")/str(i)).exists(): time.sleep(.005)\nPath('after-tiny-" + suffix + "').touch()"
+            request['command'] = {'kind': 'argv', 'argv': [sys.executable, '-c', code]}
+            accepted = self.endpoint.prepare(request)
+            self.endpoint.start(execution_id, accepted['finalDigest'])
+            cursor = 0
+            deadline = time.monotonic() + 15
+            while True:
+                page = self.endpoint.read_output(execution_id, cursor)
+                for chunk in page['chunks']:
+                    self.assertEqual(base64.b64decode(chunk['data']), b'x', 'Producer waits for public output observation before each byte')
+                    self.assertEqual(chunk['sequence'], cursor + 1)
+                    (ack / str(cursor)).touch()
+                    cursor += 1
+                receipt = self.endpoint.query(execution_id)
+                if receipt['state'] in ('completed', 'stopped', 'unknown'):
+                    break
+                self.assertLess(time.monotonic(), deadline, receipt)
+                time.sleep(.005)
+            self.assertEqual(receipt['state'], 'stopped', receipt)
+            self.assertEqual(receipt['cancelReason'], 'output_limit')
+            self.assertTrue(receipt['captureIncomplete'])
+            self.assertTrue(receipt['scopeConfirmed'])
+            self.assertEqual(receipt['outputCursor'], expected)
+            self.assertEqual(receipt['outputBytes'], expected)
+            self.assertEqual(base64.b64decode(self.endpoint.read_raw_output(execution_id, 0, 32768)['data']), b'x' * expected)
+            self.assertFalse((self.workspace / ('after-tiny-' + suffix)).exists())
+            self.endpoint.close()
+            self.endpoint = Executor(self.root / 'authority', limits=limits)
+        rejected = self.request('tiny-retention-full')
+        with self.assertRaisesRegex(ExecutionFault, 'RETENTION_FULL'):
+            self.endpoint.prepare(rejected)
+        self.assertEqual(self.endpoint.query(rejected['executionId'])['reason'], 'NO_RECEIPT')
+
+    def test_inherited_environment_cannot_exceed_the_final_parameter_budget(self):
+        previous = os.environ.get('T09_LIMIT_TEST')
+        request = self.request('large-prepared')
+        try:
+            os.environ['T09_LIMIT_TEST'] = 'x' * 100000
+            with self.assertRaisesRegex(ExecutionFault, 'PREPARED_LIMIT'):
+                self.endpoint.prepare(request)
+            self.assertEqual(self.endpoint.query(request['executionId'])['reason'], 'NO_RECEIPT')
+        finally:
+            if previous is None:
+                os.environ.pop('T09_LIMIT_TEST', None)
+            else:
+                os.environ['T09_LIMIT_TEST'] = previous
+        accepted = self.endpoint.prepare(request)
+        self.endpoint.start(request['executionId'], accepted['finalDigest'])
+        self.assertEqual(self.settle(request['executionId'])['state'], 'completed')
+
     def test_killed_acceptance_keeps_the_same_identity_recoverable(self):
         request = self.request("accept-crash")
         self.endpoint.close()
@@ -309,6 +368,228 @@ endpoint.prepare(json.loads(sys.argv[2]))
         self.assertEqual(receipt["cancelReason"], "user")
         self.assertTrue(receipt["scopeConfirmed"])
         self.assertFalse((self.workspace / "after-busy-output").exists())
+
+    def settle(self, execution_id, timeout=8):
+        deadline = time.monotonic() + timeout
+        while True:
+            receipt = self.endpoint.query(execution_id)
+            if receipt["state"] in ("completed", "stopped", "unknown", "not_started"):
+                return receipt
+            self.assertLess(time.monotonic(), deadline, receipt)
+            time.sleep(.02)
+
+    def test_argv_shell_cwd_and_environment_are_literal_and_frozen(self):
+        working = self.workspace / "工作 dir"
+        working.mkdir()
+        previous = os.environ.get("T09_CAPTURED")
+        os.environ["T09_CAPTURED"] = "accepted-env"
+        try:
+            request = self.request("literal-argv")
+            arguments = ["", "a b", "$T09_VALUE", "$(touch unrequested-effect)", ";touch unrequested-effect", "*", "引号'\\路径"]
+            request.update(cwd=str(working), env={"T09_VALUE": "accepted-value"}, command={"kind": "argv", "argv": [sys.executable, "-c", "import json,os,sys;print(json.dumps({'argv':sys.argv[1:],'cwd':os.getcwd(),'value':os.environ.get('T09_VALUE'),'captured':os.environ.get('T09_CAPTURED')}))", *arguments]})
+            accepted = self.endpoint.prepare(request)
+            os.environ["T09_CAPTURED"] = "later-env"
+            request["env"]["T09_VALUE"] = "later-value"
+            request["command"]["argv"][-1] = "later-argument"
+            self.endpoint.start("literal-argv", accepted["finalDigest"])
+            receipt = self.settle("literal-argv")
+            self.assertEqual(receipt["state"], "completed", receipt)
+            result = json.loads(base64.b64decode(self.endpoint.read_raw_output("literal-argv", 0, 32768)["data"]))
+            self.assertEqual(result, {"argv": arguments, "cwd": str(working), "value": "accepted-value", "captured": "accepted-env"})
+            self.assertFalse((working / "unrequested-effect").exists())
+            isolated = self.request("isolated-env")
+            isolated.update(inheritEnv=False, env={"T09_VALUE": "only-value"}, command={"kind": "argv", "argv": [sys.executable, "-c", "import os,json;print(json.dumps([os.environ.get('T09_VALUE'),os.environ.get('T09_CAPTURED')]))"]})
+            accepted = self.endpoint.prepare(isolated)
+            self.endpoint.start("isolated-env", accepted["finalDigest"])
+            self.assertEqual(self.settle("isolated-env")["state"], "completed")
+            self.assertEqual(json.loads(base64.b64decode(self.endpoint.read_raw_output("isolated-env", 0, 32768)["data"])), ["only-value", None])
+            shell = self.request("explicit-shell", "printf '%s:%s' \"$T09_VALUE\" \"$(printf shell)\"")
+            shell.update(inheritEnv=False, env={"T09_VALUE": "环境 value"})
+            accepted = self.endpoint.prepare(shell)
+            self.endpoint.start("explicit-shell", accepted["finalDigest"])
+            self.assertEqual(self.settle("explicit-shell")["state"], "completed")
+            self.assertEqual(base64.b64decode(self.endpoint.read_raw_output("explicit-shell", 0, 32768)["data"]).decode(), "环境 value:shell")
+        finally:
+            if previous is None:
+                os.environ.pop("T09_CAPTURED", None)
+            else:
+                os.environ["T09_CAPTURED"] = previous
+
+    def test_missing_program_and_cwd_confirm_not_started_without_retry(self):
+        for suffix in ("program", "cwd"):
+            request = self.request("missing-" + suffix)
+            request["command"] = {"kind": "argv", "argv": [str(self.workspace / "missing-program")] if suffix == "program" else [sys.executable, "-c", "from pathlib import Path;Path('forbidden-spawn-effect').touch()"]}
+            if suffix == "cwd":
+                request["cwd"] = str(self.workspace / "missing-directory")
+            accepted = self.endpoint.prepare(request)
+            self.endpoint.start(request["executionId"], accepted["finalDigest"])
+            receipt = self.settle(request["executionId"])
+            self.assertEqual(receipt["state"], "not_started", receipt)
+            self.assertEqual(receipt["reason"], "SPAWN_ERROR")
+            self.assertTrue(receipt["neverStarted"])
+            self.assertTrue(receipt["scopeConfirmed"])
+            self.assertEqual(self.endpoint.start(request["executionId"], accepted["finalDigest"]), receipt)
+            self.assertFalse((self.workspace / "forbidden-spawn-effect").exists())
+
+    def test_replaced_cwd_after_acceptance_never_executes_in_the_replacement(self):
+        for variant in ('directory', 'symlink'):
+            location = self.workspace / variant
+            location.mkdir()
+            request = self.request('cwd-replaced-' + variant)
+            request.update(cwd=str(location), command={'kind':'argv','argv':[sys.executable,'-c',"from pathlib import Path;Path('forbidden-effect').write_text('wrong location')"]})
+            accepted = self.endpoint.prepare(request)
+            old = self.workspace / (variant + '-old')
+            location.rename(old)
+            replacement = self.workspace / (variant + '-replacement')
+            if variant == 'symlink':
+                replacement.mkdir()
+                location.symlink_to(replacement, target_is_directory=True)
+            else:
+                location.mkdir()
+                replacement = location
+            self.endpoint.start(request['executionId'], accepted['finalDigest'])
+            receipt = self.settle(request['executionId'])
+            self.assertEqual(receipt['state'], 'not_started', receipt)
+            self.assertEqual(receipt['reason'], 'LOCATION_CHANGED')
+            self.assertTrue(receipt['neverStarted'])
+            self.assertTrue(receipt['scopeConfirmed'])
+            self.assertFalse((old / 'forbidden-effect').exists())
+            self.assertFalse((replacement / 'forbidden-effect').exists())
+            self.assertEqual(self.endpoint.start(request['executionId'], accepted['finalDigest']), receipt)
+
+    def test_cwd_missing_at_acceptance_is_not_adopted_if_it_appears_later(self):
+        location = self.workspace / 'later-directory'
+        request = self.request('cwd-late')
+        request.update(cwd=str(location), command={'kind':'argv','argv':[sys.executable,'-c',"from pathlib import Path;Path('forbidden-effect').touch()"]})
+        accepted = self.endpoint.prepare(request)
+        location.mkdir()
+        self.endpoint.start(request['executionId'], accepted['finalDigest'])
+        receipt = self.settle(request['executionId'])
+        self.assertEqual(receipt['state'], 'not_started', receipt)
+        self.assertEqual(receipt['reason'], 'SPAWN_ERROR')
+        self.assertTrue(receipt['neverStarted'])
+        self.assertFalse((location / 'forbidden-effect').exists())
+
+    def crash_at(self, stage, execution_id):
+        request = self.request(execution_id, "printf effect >> crash-window-effect")
+        code = """import json,os,signal,sys
+from durable_executor import Executor
+def boundary(stage):
+    if stage == sys.argv[3]: os.kill(os.getpid(),signal.SIGKILL)
+endpoint=Executor(sys.argv[1],boundary=boundary)
+request=json.loads(sys.argv[2]); receipt=endpoint.prepare(request)
+endpoint.start(request['executionId'],receipt['finalDigest'])
+endpoint.close()
+"""
+        child = subprocess.run([sys.executable, "-c", code, str(self.root / "authority"), json.dumps(request), stage], timeout=8)
+        self.assertEqual(child.returncode, -signal.SIGKILL)
+        return request
+
+    def test_death_after_acceptance_can_start_the_same_execution_once(self):
+        request = self.crash_at("accepted", "accepted-kill")
+        receipt = self.endpoint.query(request["executionId"])
+        self.assertEqual(receipt["state"], "accepted_not_started")
+        self.assertFalse((self.workspace / "crash-window-effect").exists())
+        self.endpoint.start(request["executionId"], receipt["finalDigest"])
+        terminal = self.settle(request["executionId"])
+        self.assertEqual(terminal["state"], "completed")
+        self.assertEqual(self.endpoint.start(request["executionId"], receipt["finalDigest"]), terminal)
+        self.assertEqual((self.workspace / "crash-window-effect").read_text(), "effect")
+
+    def test_death_after_start_commit_before_fork_is_unknown_and_never_replayed(self):
+        request = self.crash_at("start_committed", "start-commit-kill")
+        receipt = self.endpoint.query(request["executionId"])
+        self.assertEqual(receipt["state"], "unknown")
+        self.assertEqual(self.endpoint.start(request["executionId"], receipt["finalDigest"])["state"], "unknown")
+        self.assertEqual(self.endpoint.prepare(request)["state"], "unknown")
+        self.assertFalse((self.workspace / "crash-window-effect").exists())
+
+    def test_cancel_before_acceptance_survives_reopen_and_rejects_late_prepare(self):
+        request = self.request("cancel-before-accept")
+        cancelled = self.endpoint.cancel(request["executionId"], "user")
+        self.assertEqual(cancelled["state"], "not_started")
+        self.assertTrue(cancelled["neverStarted"])
+        self.assertTrue(cancelled["scopeConfirmed"])
+        self.endpoint.close()
+        self.endpoint = Executor(self.root / "authority")
+        self.assertEqual(self.endpoint.query(request["executionId"]), cancelled)
+        with self.assertRaisesRegex(ExecutionFault, "CANCELLED_BEFORE_ACCEPTANCE"):
+            self.endpoint.prepare(request)
+        self.assertEqual(self.endpoint.cancel(request["executionId"], "user"), cancelled)
+
+    def test_dispatch_lists_bounded_receipts_and_inspects_actual_workspace_identity(self):
+        identity = self.endpoint.identity()
+        self.assertTrue(Path(identity["defaultWorkspace"]).is_dir())
+        inspected = self.endpoint.dispatch("inspectWorkspace", {"path": str(self.workspace)})
+        self.assertEqual(inspected["state"], "available")
+        self.assertEqual(inspected["realPath"], str(self.workspace.resolve()))
+        self.assertEqual(inspected["namespace"], identity["namespace"])
+        self.assertEqual(inspected, self.endpoint.dispatch("inspectWorkspace", {"path": str(self.workspace)}))
+        self.workspace.rename(self.root / "old-workspace")
+        self.workspace.mkdir()
+        changed = self.endpoint.dispatch("inspectWorkspace", {"path": str(self.workspace)})
+        self.assertNotEqual(changed["identity"], inspected["identity"])
+        missing = self.endpoint.dispatch("inspectWorkspace", {"path": str(self.root / "missing")})
+        self.assertEqual(missing["state"], "unavailable")
+        self.assertNotIn("identity", missing)
+        for index in range(12):
+            request = self.request(f"page-{index:02d}")
+            self.endpoint.dispatch("prepare", request)
+        first = self.endpoint.dispatch("list", {"limit": 10})
+        self.assertEqual(len(first["executions"]), 10)
+        second = self.endpoint.dispatch("list", {"limit": 10, "cursor": first["nextCursor"]})
+        self.assertEqual(len(second["executions"]), 2)
+        self.assertIsNone(second["nextCursor"])
+        self.assertEqual(len({row["executionId"] for row in first["executions"] + second["executions"]}), 12)
+        with self.assertRaises(ExecutionFault):
+            self.endpoint.dispatch("list", {"limit": 11})
+        with self.assertRaises(ExecutionFault):
+            self.endpoint.dispatch("cancel", {"executionId": "page-00", "command": "not-an-authorized-argument"})
+
+    def test_concurrent_prepare_and_cancel_can_never_revive_the_same_execution(self):
+        code = """import json,sys,time
+from pathlib import Path
+from durable_executor import Executor,ExecutionFault
+root,request,mode,gate,ready,result=sys.argv[1:];endpoint=Executor(root);request=json.loads(request)
+Path(ready).touch()
+deadline=time.monotonic()+5
+while not Path(gate).exists():
+    if time.monotonic()>deadline:raise RuntimeError('test gate deadline')
+    time.sleep(.005)
+try:
+    value=endpoint.prepare(request) if mode=='prepare' else endpoint.cancel(request['executionId'],'user')
+except ExecutionFault as error:value={'error':error.code}
+Path(result).write_text(json.dumps(value));endpoint.close()
+"""
+        for index in range(3):
+            request = self.request(f"cancel-race-{index}", "printf effect >> forbidden-race-effect")
+            gate = self.root / f"gate-{index}"
+            children = []
+            try:
+                for mode in ("prepare", "cancel"):
+                    children.append(subprocess.Popen([sys.executable, "-c", code, str(self.root / "authority"), json.dumps(request), mode, str(gate), str(self.root / f"ready-{index}-{mode}"), str(self.root / f"result-{index}-{mode}")]))
+                deadline = time.monotonic() + 5
+                while not all((self.root / f"ready-{index}-{mode}").exists() for mode in ("prepare", "cancel")):
+                    self.assertLess(time.monotonic(), deadline)
+                    time.sleep(.01)
+                gate.touch()
+                for child in children:
+                    self.assertEqual(child.wait(timeout=8), 0)
+                receipt = self.endpoint.query(request["executionId"])
+                self.assertIn(receipt["state"], ("not_started", "stopped"))
+                self.assertTrue(receipt["neverStarted"])
+                self.assertTrue(receipt["scopeConfirmed"])
+                if "finalDigest" in receipt:
+                    self.assertEqual(self.endpoint.start(request["executionId"], receipt["finalDigest"]), receipt)
+                else:
+                    with self.assertRaisesRegex(ExecutionFault, "CANCELLED_BEFORE_ACCEPTANCE"):
+                        self.endpoint.prepare(request)
+                self.assertFalse((self.workspace / "forbidden-race-effect").exists())
+            finally:
+                for child in children:
+                    if child.poll() is None:
+                        child.terminate()
+                        child.wait(timeout=5)
 
 
 if __name__ == "__main__":

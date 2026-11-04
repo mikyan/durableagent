@@ -61,6 +61,7 @@ class ApplicationService:Service() {
                 36->if(debug)reply?.let {node?.getExecutor("globalThis.__appSubmissionFault?.(${JSONObject.quote(text)})")?.executeVoid();send(it,36,status())}
                 41->if(debug)reply?.let {node?.getExecutor("globalThis.__appProjectWitness?.(${JSONObject.quote(text)})")?.executeVoid();send(it,41,status())}
                 42->if(debug)node?.getExecutor("globalThis.__appRunProjectPolicy?.()")?.executeVoid()
+                43->if(debug)reply?.let {node?.getExecutor("globalThis.__appExecutionFault?.(${JSONObject.quote(text)})")?.executeVoid();send(it,43,status())}
                 40->if(debug)node?.getExecutor("globalThis.__appRunSubmissionPolicy?.()")?.executeVoid()
                 34->if(debug&&node!=null){
                     val duration=(text.toLongOrNull()?:10000).coerceIn(2500,15000)
@@ -81,7 +82,7 @@ class ApplicationService:Service() {
     }
     private fun open(mode:String,run:String?) {
         try {
-            check(mode in setOf("product","fixture","hang","real","models","models-fixture"))
+            check(mode in setOf("product","fixture","hang","real","models","models-fixture","execution","execution-real"))
             check(mode=="product"||run?.matches(Regex("[a-zA-Z0-9-]{1,80}"))==true)
             val domain=File(filesDir,if(mode=="product")"application" else "application-validation/$run")
             lease=StorageDomainLease.acquire(domain)?:error("Application storage already owned")
@@ -96,7 +97,7 @@ class ApplicationService:Service() {
             runtime.createV8ValueObject().use {access->access.bind(inputs!!);runtime.globalObject.set("__nativeInputs",access)}
             execution=ExecutionAccess(this)
             runtime.createV8ValueObject().use {access->access.bind(execution!!);runtime.globalObject.set("__nativeExecution",access)}
-            if(mode=="real"){
+            if(mode=="real"||mode=="execution-real"){
                 val clear=ValidationCredential.consume(this)
                 try{runtime.globalObject.set("__validationKey",String(clear,Charsets.UTF_8).trim())}finally{clear.fill(0)}
             }

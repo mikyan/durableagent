@@ -16,6 +16,26 @@ import java.util.concurrent.TimeUnit
 @RunWith(AndroidJUnit4::class)
 class ExecutionUiTest {
     private val context=InstrumentationRegistry.getInstrumentation().targetContext
+    @Test fun setupButtonCopiesTheCompletePackagedCommandWithoutNode() {
+        val run=UUID.randomUUID().toString()
+        ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode","input-only").putExtra("validationRun",run)).use {page->
+            until {js(page,"Array.from(document.querySelectorAll('button')).some(x=>x.textContent==='复制初始化命令')")=="true"}
+            js(page,"Array.from(document.querySelectorAll('button')).find(x=>x.textContent==='复制初始化命令').click()")
+            until {js(page,"document.body.textContent.includes('初始化命令已复制')")=="true"}
+            val clipboard=CompletableFuture<String>()
+            page.onActivity { activity->clipboard.complete(activity.getSystemService(android.content.ClipboardManager::class.java).primaryClip?.getItemAt(0)?.text?.toString()?:"") }
+            val actual=clipboard.get(10,TimeUnit.SECONDS)
+            val expected=context.assets.open("execution-setup.txt").bufferedReader().use {it.readText()}
+            assertEquals(expected,actual)
+            assertTrue(actual.contains("python=3.14.8"))
+            assertTrue(actual.contains("openssl-tool=1:3.6.5"))
+            assertTrue(actual.contains("DURABLE_EXECUTION_PAYLOAD"))
+            assertTrue(actual.toByteArray(Charsets.UTF_8).size in 1..600000)
+            InstrumentationRegistry.getInstrumentation().sendStatus(0,android.os.Bundle().apply {
+                putString("executionSetupEvidence",JSONObject().put("clipboardMatchesAsset",true).put("bytes",actual.toByteArray(Charsets.UTF_8).size).put("sha256",ExecutionIdentity.sha256(actual.toByteArray(Charsets.UTF_8))).toString())
+            })
+        }
+    }
     @Test fun trustedPageRejectsCommandParametersAndUntrustedDocumentCannotReachNativeControl() {
         val run=UUID.randomUUID().toString()
         val request=JSONObject().put("protocol",1).put("connectionId",run).put("requestId","native-control-proof")

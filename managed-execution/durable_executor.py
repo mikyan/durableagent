@@ -1,5 +1,6 @@
 """DurableAgent's local command endpoint. It does not own Agent conversations."""
 import hashlib
+import argparse
 import base64
 import ctypes
 import json
@@ -25,6 +26,7 @@ except ImportError:
 OUTPUT_LIMIT = 16 * 1024 * 1024
 RETAINED_OUTPUT_LIMIT = 128 * 1024 * 1024
 EXECUTION_LIMIT = 4096
+DEFAULT_LIMITS = {"outputChunks": 4096, "retainedChunks": 32768, "preparedBytes": 65536}
 
 
 def canonical(value):
@@ -128,11 +130,19 @@ class ProcessScope:
 
 
 class Executor:
-    def __init__(self, root, boundary=None):
+    def __init__(self, root, boundary=None, limits=None):
         # Local fault-injection seam for crash tests; never selectable over the transport.
         self.boundary = boundary or (lambda stage: None)
+        # Local construction may narrow budgets for a deployment/test, never raise
+        # the compiled ceilings. Public bootstrap/serve always use the defaults.
+        if limits is not None and (not isinstance(limits, dict) or set(limits) - set(DEFAULT_LIMITS)):
+            raise ExecutionFault("INVALID_LIMITS")
+        self.limits = {**DEFAULT_LIMITS, **(limits or {})}
+        if any(type(value) is not int or not 0 < value <= DEFAULT_LIMITS[key] for key, value in self.limits.items()) or self.limits["outputChunks"] > self.limits["retainedChunks"]:
+            raise ExecutionFault("INVALID_LIMITS")
         self.root = Path(root)
         self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
+        (self.root / "workspace").mkdir(exist_ok=True, mode=0o700)
         (self.root / "owners").mkdir(exist_ok=True, mode=0o700)
         (self.root / "outputs").mkdir(exist_ok=True, mode=0o700)
         self.lock = threading.RLock()
@@ -153,17 +163,79 @@ class Executor:
                 self.db.execute("CREATE TABLE IF NOT EXISTS executions (id TEXT PRIMARY KEY, request TEXT NOT NULL, receipt TEXT NOT NULL) STRICT")
                 self.db.execute("CREATE TABLE IF NOT EXISTS prepared (id TEXT PRIMARY KEY, value TEXT NOT NULL) STRICT")
                 self.db.execute("CREATE TABLE IF NOT EXISTS output (id TEXT NOT NULL, sequence INTEGER NOT NULL, stream TEXT NOT NULL, data BLOB NOT NULL, PRIMARY KEY(id, sequence)) STRICT")
+                self.db.execute("CREATE TABLE IF NOT EXISTS cancelled_ids (id TEXT PRIMARY KEY, receipt TEXT NOT NULL) STRICT")
                 self.db.execute("INSERT OR IGNORE INTO identity VALUES ('executorId', ?)", (str(uuid.uuid4()),))
                 self.db.execute("INSERT OR IGNORE INTO identity VALUES ('ledgerEpoch', ?)", (str(uuid.uuid4()),))
                 self.db.execute("PRAGMA user_version=1")
             self.meta = dict(self.db.execute("SELECT key, value FROM identity"))
-            self.meta.update(protocol=1, namespace="termux:" + self.meta["executorId"])
+            self.meta.update(protocol=1, namespace="termux:" + self.meta["executorId"], defaultWorkspace=str((self.root / "workspace").absolute()))
         finally:
             if fcntl is not None:
                 fcntl.flock(self.write_gate, fcntl.LOCK_UN)
 
     def identity(self):
         return dict(self.meta)
+
+    def dispatch(self, method, payload):
+        schemas = {
+            "start": ({"executionId", "finalDigest"}, set()), "query": ({"executionId"}, set()),
+            "cancel": ({"executionId"}, {"reason"}), "readOutput": ({"executionId", "cursor"}, {"limit"}),
+            "readRawOutput": ({"executionId", "offset", "length"}, set()), "list": (set(), {"cursor", "limit"}),
+            "inspectWorkspace": ({"path"}, set()),
+        }
+        if method == "prepare":
+            return self.prepare(payload)
+        if method not in schemas or type(payload) is not dict:
+            raise ExecutionFault("INVALID_METHOD")
+        required, optional = schemas[method]
+        if not required <= set(payload) <= required | optional:
+            raise ExecutionFault("INVALID_REQUEST")
+        if method == "start":
+            if type(payload["finalDigest"]) is not str or not re.fullmatch(r"[a-f0-9]{64}", payload["finalDigest"]):
+                raise ExecutionFault("FINAL_REQUEST_CONFLICT")
+            return self.start(payload["executionId"], payload["finalDigest"])
+        if method == "query":
+            return self.query(payload["executionId"])
+        if method == "cancel":
+            return self.cancel(payload["executionId"], payload.get("reason", "user"))
+        if method == "readOutput":
+            return self.read_output(payload["executionId"], payload["cursor"], payload.get("limit", 32768))
+        if method == "readRawOutput":
+            return self.read_raw_output(payload["executionId"], payload["offset"], payload["length"])
+        if method == "list":
+            return self.list_executions(payload.get("cursor", ""), payload.get("limit", 10))
+        return self.inspect_workspace(payload["path"])
+
+    def inspect_workspace(self, path):
+        if not text(path, 4096) or not os.path.isabs(path):
+            raise ExecutionFault("INVALID_WORKSPACE")
+        base = {"protocol": 1, "namespace": self.meta["namespace"], "path": path}
+        try:
+            actual = Path(path).resolve(strict=True)
+            info = actual.stat()
+            if not stat.S_ISDIR(info.st_mode) or not os.access(actual, os.R_OK | os.W_OK | os.X_OK):
+                return {**base, "state": "unavailable", "reason": "WORKSPACE_INACCESSIBLE"}
+            fact = {"namespace": self.meta["namespace"], "realPath": str(actual), "device": str(info.st_dev), "inode": str(info.st_ino)}
+            return {**base, **fact, "state": "available", "identity": digest(fact)}
+        except (OSError, RuntimeError):
+            return {**base, "state": "unavailable", "reason": "WORKSPACE_UNAVAILABLE"}
+
+    def list_executions(self, cursor="", limit=10):
+        if type(cursor) is not str or cursor and not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", cursor) or not positive(limit, 10):
+            raise ExecutionFault("INVALID_LIST_CURSOR")
+        with self.lock:
+            ids = [row[0] for row in self.db.execute("SELECT id FROM (SELECT id FROM executions UNION SELECT id FROM cancelled_ids) WHERE id>? ORDER BY id LIMIT ?", (cursor, limit + 1))]
+            values = []
+            for execution_id in ids[:limit]:
+                receipt = self.query(execution_id)
+                candidate = {**self.identity(), "executions": [*values, receipt], "nextCursor": execution_id}
+                if len(canonical(candidate).encode("utf-8")) > 48000:
+                    if not values:
+                        raise ExecutionFault("FRAME_LIMIT")
+                    break
+                values.append(receipt)
+            more = len(ids) > len(values)
+            return {**self.identity(), "executions": values, "nextCursor": values[-1]["executionId"] if more else None}
 
     @contextmanager
     def transaction(self):
@@ -192,20 +264,26 @@ class Executor:
         encoded = canonical(request)
         execution_id = request["executionId"]
         with self.transaction():
+            if self.db.execute("SELECT 1 FROM cancelled_ids WHERE id=?", (execution_id,)).fetchone():
+                raise ExecutionFault("CANCELLED_BEFORE_ACCEPTANCE")
             existing = self.db.execute("SELECT request, receipt FROM executions WHERE id=?", (execution_id,)).fetchone()
             if existing:
                 if existing[0] != encoded:
                     raise ExecutionFault("IDENTITY_CONFLICT")
                 return self.query(execution_id)
             self.check_unresolved()
-            if self.db.execute("SELECT COUNT(*) FROM executions").fetchone()[0] >= EXECUTION_LIMIT or self.retained_bytes() >= RETAINED_OUTPUT_LIMIT:
+            if (self.db.execute("SELECT COUNT(*) FROM executions").fetchone()[0] >= EXECUTION_LIMIT
+                    or self.retained_bytes() >= RETAINED_OUTPUT_LIMIT or self.retained_chunks() >= self.limits["retainedChunks"]):
                 raise ExecutionFault("RETENTION_FULL")
             environment = dict(os.environ) if request["inheritEnv"] else {}
             environment.update(request["env"])
             command = request["command"]
             shell = str(Path(os.environ["PREFIX"]) / "bin/bash") if "PREFIX" in os.environ else shutil.which("bash")
             argv = [shell, "-c", command["script"]] if command["kind"] == "shell" else command["argv"]
-            prepared = {"argv": argv, "cwd": request["cwd"], "env": environment, "timeoutMs": request["timeoutMs"]}
+            prepared = {"argv": argv, "cwd": request["cwd"], "cwdLocation": self.inspect_workspace(request["cwd"]),
+                        "env": environment, "timeoutMs": request["timeoutMs"]}
+            if len(canonical(prepared).encode("utf-8")) > self.limits["preparedBytes"]:
+                raise ExecutionFault("PREPARED_LIMIT")
             output_path = self.root / "outputs" / (execution_id + ".raw")
             receipt = {**self.identity(), "executionId": execution_id, "requestDigest": digest(request), "finalDigest": digest(prepared),
                        "context": request["context"], "state": "accepted_not_started", "sequence": 1,
@@ -214,6 +292,7 @@ class Executor:
             self.boundary("accept_before_commit")
             self.db.execute("INSERT INTO executions VALUES (?, ?, ?)", (execution_id, encoded, canonical(receipt)))
             self.db.execute("INSERT INTO prepared VALUES (?, ?)", (execution_id, canonical(prepared)))
+        self.boundary("accepted")
         return receipt
 
     def validate_request(self, request):
@@ -257,6 +336,9 @@ class Executor:
         with self.lock:
             row = self.db.execute("SELECT receipt FROM executions WHERE id=?", (execution_id,)).fetchone()
             if not row:
+                cancelled = self.db.execute("SELECT receipt FROM cancelled_ids WHERE id=?", (execution_id,)).fetchone()
+                if cancelled:
+                    return json.loads(cancelled[0])
                 return {**self.identity(), "executionId": execution_id, "state": "unknown", "reason": "NO_RECEIPT"}
             receipt = json.loads(row[0])
             if receipt["state"] in ("starting", "running", "stop_requested"):
@@ -296,6 +378,9 @@ class Executor:
     def retained_bytes(self):
         return self.db.execute("SELECT COALESCE(SUM(json_extract(receipt, '$.outputBytes')), 0) FROM executions").fetchone()[0]
 
+    def retained_chunks(self):
+        return self.db.execute("SELECT COALESCE(SUM(json_extract(receipt, '$.outputCursor')), 0) FROM executions").fetchone()[0]
+
     def update(self, execution_id, change):
         with self.transaction():
             receipt = self.query(execution_id)
@@ -321,9 +406,10 @@ class Executor:
                 self.check_unresolved()
                 receipt.update(state="starting", sequence=receipt["sequence"] + 1, startRequestedAt=int(time.time() * 1000))
                 self.db.execute("UPDATE executions SET receipt=? WHERE id=?", (canonical(receipt), execution_id))
+            self.boundary("start_committed")
             # The inherited lock bridges durable start -> child exec. It is NOT inherited by user commands.
             # A crash in any gap releases it; recovery records unknown and never spawns again.
-            worker = subprocess.Popen([sys.executable, str(Path(__file__).resolve()), "worker", str(self.root), execution_id, str(owner)],
+            worker = subprocess.Popen([sys.executable, str(Path(__file__).resolve()), "worker", str(self.root), execution_id, str(owner), canonical(self.limits)],
                                       stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                                       start_new_session=True, close_fds=True, pass_fds=(owner,))
         except OSError:
@@ -342,7 +428,15 @@ class Executor:
             raise ExecutionFault("INVALID_CANCEL_REASON")
         with self.transaction():
             receipt = self.query(execution_id)
-            if receipt["state"] in ("completed", "stopped", "unknown"):
+            if receipt["state"] == "unknown" and receipt.get("reason") == "NO_RECEIPT":
+                if self.db.execute("SELECT COUNT(*) FROM cancelled_ids").fetchone()[0] >= EXECUTION_LIMIT:
+                    raise ExecutionFault("RETENTION_FULL")
+                receipt = {**self.identity(), "executionId": execution_id, "state": "not_started", "reason": "CANCELLED_BEFORE_ACCEPTANCE",
+                           "neverStarted": True, "scopeConfirmed": True, "cancelRequested": True, "cancelReason": reason,
+                           "sequence": 1, "finishedAt": int(time.time() * 1000)}
+                self.db.execute("INSERT INTO cancelled_ids VALUES (?,?)", (execution_id, canonical(receipt)))
+                return receipt
+            if receipt["state"] in ("completed", "stopped", "unknown", "not_started"):
                 return receipt
             never_started = receipt["state"] == "accepted_not_started"
             receipt.update(cancelRequested=True, cancelReason=reason,
@@ -393,6 +487,8 @@ class Executor:
         with self.transaction():
             receipt = self.query(execution_id)
             available = max(0, min(OUTPUT_LIMIT - receipt["outputBytes"], RETAINED_OUTPUT_LIMIT - self.retained_bytes()))
+            if receipt["outputCursor"] >= self.limits["outputChunks"] or self.retained_chunks() >= self.limits["retainedChunks"]:
+                available = 0
             if len(data) > available:
                 if not receipt["captureIncomplete"]:
                     receipt.update(captureIncomplete=True, cancelRequested=True,
@@ -416,11 +512,30 @@ class Executor:
     def run_worker(self, execution_id):
         prepared = json.loads(self.db.execute("SELECT value FROM prepared WHERE id=?", (execution_id,)).fetchone()[0])
         scope = ProcessScope()
+        cwd_fd = None
         try:
             if self.query(execution_id)["state"] not in ("starting", "stop_requested"):
                 return
             if self.query(execution_id).get("cancelRequested"):
                 self.update(execution_id, {"state": "stopped", "scopeConfirmed": True, "neverStarted": True})
+                return
+            location = prepared.get("cwdLocation")
+            if not isinstance(location, dict) or location.get("state") != "available":
+                # Older prepared records have no pinned directory. They are not
+                # upgraded into permission to execute against today's path.
+                self.update(execution_id, {"state": "not_started", "reason": "SPAWN_ERROR" if location else "LOCATION_UNVERIFIED",
+                                           "neverStarted": True, "scopeConfirmed": True, "finishedAt": int(time.time() * 1000)})
+                return
+            try:
+                cwd_fd = os.open(prepared["cwd"], os.O_RDONLY | os.O_DIRECTORY)
+                info = os.fstat(cwd_fd)
+                same = (str(info.st_dev) == location.get("device") and str(info.st_ino) == location.get("inode")
+                        and os.path.realpath(prepared["cwd"]) == location.get("realPath"))
+            except OSError:
+                same = False
+            if not same:
+                self.update(execution_id, {"state": "not_started", "reason": "LOCATION_CHANGED", "neverStarted": True,
+                                           "scopeConfirmed": True, "finishedAt": int(time.time() * 1000)})
                 return
             # Allocate only after durable acceptance. An interrupted prepare owns no file.
             output_path = Path(self.query(execution_id)["outputRef"])
@@ -437,9 +552,18 @@ class Executor:
                 os.fsync(fd)
             finally:
                 os.close(fd)
-            child = subprocess.Popen(prepared["argv"], cwd=prepared["cwd"], env=prepared["env"],
-                                     stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                     start_new_session=True, close_fds=True)
+            try:
+                # The held descriptor pins the checked directory even if its
+                # pathname is replaced between this check and child chdir.
+                child = subprocess.Popen(prepared["argv"], cwd="/proc/self/fd/" + str(cwd_fd), env=prepared["env"],
+                                         stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                         start_new_session=True, close_fds=True, pass_fds=(cwd_fd,))
+            except OSError as error:
+                # Popen reports failed exec/chdir through its error pipe and reaps
+                # that child before raising. No user executable was entered.
+                self.update(execution_id, {"state": "not_started", "reason": "SPAWN_ERROR", "spawnErrno": error.errno,
+                                           "neverStarted": True, "scopeConfirmed": True, "finishedAt": int(time.time() * 1000)})
+                return
             self.update(execution_id, {"state": "running", "startedAt": int(time.time() * 1000), "guardianPid": os.getpid()})
             stopping_at = None
             deadline = time.monotonic() + prepared["timeoutMs"] / 1000 if prepared["timeoutMs"] is not None else None
@@ -485,6 +609,8 @@ class Executor:
                                       "exitCode": child.returncode, "scopeConfirmed": True, "rawSha256": raw_hash,
                                       "finishedAt": int(time.time() * 1000)})
         finally:
+            if cwd_fd is not None:
+                os.close(cwd_fd)
             scope.close()
 
     def close(self):
@@ -494,10 +620,45 @@ class Executor:
             self.write_gate = None
 
 
-if __name__ == "__main__" and len(sys.argv) == 5 and sys.argv[1] == "worker":
-    endpoint = Executor(sys.argv[2])
+def main():
+    if len(sys.argv) in (5, 6) and sys.argv[1] == "worker":
+        endpoint = Executor(sys.argv[2], limits=json.loads(sys.argv[5]) if len(sys.argv) == 6 else None)
+        try:
+            endpoint.run_worker(sys.argv[3])
+        finally:
+            endpoint.close()
+            os.close(int(sys.argv[4]))
+        return
+    from execution_transport import bootstrap, serve, TransportFault
+    parser = argparse.ArgumentParser(description="DurableAgent fixed local execution service")
+    parser.add_argument("--root", default=str(Path.home() / ".local/share/durableagent-execution"))
+    commands = parser.add_subparsers(dest="mode", required=True)
+    pairing = commands.add_parser("bootstrap")
+    pairing.add_argument("--client-cert-base64", required=True)
+    pairing.add_argument("--nonce", required=True)
+    commands.add_parser("serve")
+    args = parser.parse_args()
+    endpoint = None
     try:
-        endpoint.run_worker(sys.argv[3])
+        endpoint = Executor(args.root)
+        if args.mode == "bootstrap":
+            value = bootstrap(endpoint.root, args.client_cert_base64, args.nonce, endpoint.identity())
+            print(canonical(value), flush=True)
+        else:
+            serve(endpoint.root, endpoint.identity(), endpoint.dispatch)
+    except (ExecutionFault, TransportFault) as error:
+        value = {"protocol": 1, "error": {"code": error.code}}
+        if args.mode == "bootstrap":
+            value["nonce"] = args.nonce
+        print(canonical(value), flush=True)
+        raise SystemExit(78 if error.code in ("PAIRING_REQUIRED", "TLS_IDENTITY_UNAVAILABLE") else 65) from None
+    except Exception:
+        print(canonical({"protocol": 1, "error": {"code": "EXECUTOR_UNAVAILABLE"}}), flush=True)
+        raise SystemExit(70) from None
     finally:
-        endpoint.close()
-        os.close(int(sys.argv[4]))
+        if endpoint is not None:
+            endpoint.close()
+
+
+if __name__ == "__main__":
+    main()
