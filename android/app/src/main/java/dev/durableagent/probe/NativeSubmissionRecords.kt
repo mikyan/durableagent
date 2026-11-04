@@ -13,6 +13,73 @@ internal object NativeSubmissionRecords {
         db.execSQL("CREATE TABLE native_controls(conversation_id TEXT PRIMARY KEY REFERENCES conversations(id),data TEXT NOT NULL)")
     }
 
+    fun createLocationSchema(db: SQLiteDatabase) {
+        db.execSQL("CREATE TABLE native_location_edit(singleton INTEGER PRIMARY KEY CHECK(singleton=1),operation_id TEXT)")
+        db.execSQL("INSERT INTO native_location_edit(singleton,operation_id) VALUES(1,NULL)")
+    }
+    fun readLocationEdit(db: SQLiteDatabase): JSONObject? = db.rawQuery("SELECT operation_id FROM native_location_edit WHERE singleton=1", null).use {
+        if (!it.moveToFirst()) fail("INPUT_STORAGE_CORRUPT", "位置修改屏障记录缺失，已阻止新发送。")
+        if (it.isNull(0)) null else {
+            val operationId = it.getString(0)
+            try { validId(operationId) } catch (_: Exception) { fail("INPUT_STORAGE_CORRUPT", "位置修改屏障记录损坏，已保留原记录。") }
+            JSONObject().put("operationId", operationId)
+        }
+    }
+    fun beginLocationEdit(db: SQLiteDatabase, operationId: String): JSONObject {
+        validId(operationId)
+        readLocationEdit(db)?.let {
+            if (it.getString("operationId") != operationId) fail("LOCATION_EDIT_BUSY", "另一项位置修改尚未核验完成，请稍后重试。")
+            return it
+        }
+        db.execSQL("UPDATE native_location_edit SET operation_id=? WHERE singleton=1", arrayOf(operationId))
+        return JSONObject().put("operationId", operationId)
+    }
+    fun finishLocationEdit(db: SQLiteDatabase, operationId: String, contexts: JSONArray, boundary: (String) -> Unit) {
+        validId(operationId)
+        if (readLocationEdit(db)?.getString("operationId") != operationId) fail("LOCATION_EDIT_CONFLICT", "位置修改屏障已变化，未发布位置或解除屏障。")
+        val known = linkedMapOf<String, JSONObject>()
+        db.rawQuery("SELECT id,data FROM conversations ORDER BY id", null).use { rows -> while (rows.moveToNext()) known[rows.getString(0)] = JSONObject(rows.getString(1)) }
+        val updates = linkedMapOf<String, JSONObject>()
+        for (index in 0 until contexts.length()) {
+            val entry = contexts.optJSONObject(index) ?: fail("INPUT_INVALID", "位置快照条目格式无效。")
+            val productId = id(entry, "id")
+            if (!known.containsKey(productId) || updates.containsKey(productId)) fail("LOCATION_CONTEXT_INCOMPLETE", "位置快照包含未知或重复会话，保留修改屏障。")
+            val supplied = entry.optJSONObject("context") ?: fail("INPUT_INVALID", "位置快照缺少会话关联。")
+            updates[productId] = chooseContext(known.getValue(productId).optJSONObject("submissionContext"), supplied, true)
+        }
+        if (updates.keys != known.keys) fail("LOCATION_CONTEXT_INCOMPLETE", "位置快照未覆盖全部已登记会话，保留修改屏障。")
+        for ((productId, normalized) in updates) {
+            val data = known.getValue(productId)
+            if (data.optJSONObject("submissionContext")?.toString() != normalized.toString()) {
+                data.put("submissionContext", normalized)
+                db.execSQL("UPDATE conversations SET data=? WHERE id=?", arrayOf(data.toString(), productId))
+                db.execSQL("UPDATE drafts SET state_version=state_version+1 WHERE id=?", arrayOf(productId))
+                boundary("location.edit.finish.contextWritten")
+            }
+        }
+        db.execSQL("UPDATE native_location_edit SET operation_id=NULL WHERE singleton=1")
+    }
+    fun chooseContext(previous: JSONObject?, supplied: JSONObject, rejectRegression: Boolean): JSONObject {
+        val next = context(supplied)
+        val old = previous?.let { try { context(it) } catch (_: Exception) { fail("INPUT_STORAGE_CORRUPT", "缓存的位置关联损坏，已保留记录。") } } ?: return next
+        if (old.getLong("sdkConversationId") != next.getLong("sdkConversationId")) fail("SUBMISSION_CONTEXT_CONFLICT", "产品会话与 SDK 会话的稳定关联不一致。")
+        fun regression(): JSONObject {
+            if (rejectRegression) fail("SUBMISSION_CONTEXT_CONFLICT", "位置快照版本倒退，未发布或解除屏障。")
+            return old
+        }
+        val oldAssociation = old.getLong("associationVersion"); val newAssociation = next.getLong("associationVersion")
+        if (newAssociation < oldAssociation) return regression()
+        val before = old.getJSONObject("location"); val after = next.getJSONObject("location")
+        if (before.getString("workspaceId") != after.getString("workspaceId")) {
+            if (newAssociation == oldAssociation) fail("SUBMISSION_CONTEXT_CONFLICT", "同一关联版本不能指向不同工作区。")
+            return next
+        }
+        if (after.getLong("version") < before.getLong("version")) return regression()
+        if (after.getLong("version") == before.getLong("version") && after.getString("identity") != before.getString("identity"))
+            fail("SUBMISSION_CONTEXT_CONFLICT", "同一位置版本出现不同位置身份。")
+        return next
+    }
+
     fun context(value: JSONObject): JSONObject = JSONObject()
         .put("sdkConversationId", integer(value, "sdkConversationId"))
         .put("associationVersion", integer(value, "associationVersion", 1))
@@ -28,6 +95,7 @@ internal object NativeSubmissionRecords {
         val immutable = JSONObject().put("id", productId).put("inputToken", token).put("expectedContext", expected)
             .put("expectedControlVersion", expectedControl).put("queue", queue)
         replay(db, actionId, "create", immutable)?.let { return read(db, it.getString("intentId")) }
+        if (readLocationEdit(db) != null) fail("LOCATION_EDIT_PENDING", "位置修改尚未核验完成；草稿已保留，请等待位置恢复后明确发送。")
         val product = product(db, productId)
         val actual = product.optJSONObject("submissionContext") ?: fail("SUBMISSION_CONTEXT_UNAVAILABLE", "会话接纳关联尚未就绪，草稿仍保留。")
         if (context(actual).toString() != expected.toString()) fail("SUBMISSION_CONTEXT_CONFLICT", "会话关联或工作位置已变化，未改投此次输入。")

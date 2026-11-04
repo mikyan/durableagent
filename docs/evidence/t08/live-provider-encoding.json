@@ -1,0 +1,1 @@
+{"command":"node --test runtime/test/project-live-transport.test.mjs","tests":1,"passed":1,"failed":0,"durationMs":706.9367,"scope":"Real SDK plus liveModels provider encoder with only HTTP replaced; synthetic credential; no cloud request. Encoded first tool_choice is location_witness, then none after the tool result.","productionChanged":false}

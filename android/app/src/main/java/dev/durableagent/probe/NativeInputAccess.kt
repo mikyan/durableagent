@@ -3,6 +3,7 @@ package dev.durableagent.probe
 import android.util.Base64
 import com.caoccao.javet.annotations.V8Function
 import org.json.JSONObject
+import org.json.JSONArray
 
 /** Safe metadata actions; only explicitly annotated trusted-host methods can materialize bytes. */
 class NativeInputAccess(private val store: NativeInputStore) : AutoCloseable {
@@ -43,6 +44,15 @@ class NativeInputAccess(private val store: NativeInputStore) : AutoCloseable {
 
     @V8Function
     fun readFrozenJson(token: String): String = result { store.readFrozen(token) }
+
+    @V8Function
+    fun beginLocationEditJson(operationId: String): String = result { store.beginLocationEdit(operationId) }
+
+    @V8Function
+    fun readLocationEditJson(): String = result { store.readLocationEdit() ?: JSONObject.NULL }
+
+    @V8Function
+    fun finishLocationEditJson(operationId: String, contextsJson: String): String = result { store.finishLocationEdit(operationId, JSONArray(contextsJson)); JSONObject.NULL }
 
     @V8Function
     fun readSendJson(intentId: String): String = result { store.readSend(intentId) }

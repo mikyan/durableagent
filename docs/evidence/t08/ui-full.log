@@ -1,0 +1,51 @@
+
+> @durableagent/ui@0.1.0 pretest
+> npm run build --prefix ../runtime
+
+
+> @durableagent/runtime-probe@0.1.0 build
+> tsc
+
+
+> @durableagent/ui@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t08-projects/durableagent/ui
+
+(node:42660) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27312) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:34524) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  18 passed (18)
+      Tests  58 passed (58)
+   Start at  09:27:06
+   Duration  5.32s (environment 48%, tests 37%, import 12%, transform 2%, worker 1%)
+
+
+> @durableagent/ui@0.1.0 build
+> npm run typecheck && vite build
+
+
+> @durableagent/ui@0.1.0 typecheck
+> tsc --noEmit
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 36 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.67 kB │ gzip:  0.39 kB
+dist/assets/projects-DuD0xgm2.css       1.24 kB │ gzip:  0.51 kB
+dist/assets/models-Bl7ZLxqt.css         4.32 kB │ gzip:  1.32 kB
+dist/assets/index-EL03HPnM.css         15.89 kB │ gzip:  4.26 kB
+dist/assets/project-view-CKfHgYnr.js    0.22 kB │ gzip:  0.22 kB
+dist/assets/projects-BvfCnTu9.js        8.36 kB │ gzip:  2.62 kB
+dist/assets/models-CSiPRq0m.js          9.59 kB │ gzip:  3.45 kB
+dist/assets/conversation-DzPLDlH2.js   24.55 kB │ gzip:  7.60 kB
+dist/assets/index-BJw0clGV.js         262.38 kB │ gzip: 80.52 kB
+
+✓ built in 185ms

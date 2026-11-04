@@ -1,0 +1,67 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ProjectApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ProjectApplicationTest:
+INSTRUMENTATION_STATUS: test=realMimoBusyRefusalAndExplicitNewLocation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: projectEvidence={"case":"input-settled-before-run-check","result":{"intentId":"f0335453-fd56-4294-bf09-9f41977bef45","phase":"done","metrics":{"projectWitnessEnabled":true,"projectEnvironments":[{"bindingId":"629b9485-8bb3-4c8e-a9f7-7e87844de731","workspaceId":"default","version":1,"path":"\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/c3414e86-790f-437a-9444-cfc05d1a79ab\/workspace","projectId":null,"actualIdentity":"validation-directory:\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/c3414e86-790f-437a-9444-cfc05d1a79ab\/workspace","sourceProductId":"a6fb0d02-fcfb-4cdf-9ff7-21094fed93a2","controlProductId":"a6fb0d02-fcfb-4cdf-9ff7-21094fed93a2"},{"bindingId":"629b9485-8bb3-4c8e-a9f7-7e87844de731","workspaceId":"default","version":1,"path":"\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/c3414e86-790f-437a-9444-cfc05d1a79ab\/workspace","projectId":null,"actualIdentity":"validation-directory:\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/c3414e86-790f-437a-9444-cfc05d1a79ab\/workspace","sourceProductId":"a6fb0d02-fcfb-4cdf-9ff7-21094fed93a2","controlProductId":"a6fb0d02-fcfb-4cdf-9ff7-21094fed93a2"},{"bindingId":"629b9485-8bb3-4c8e-a9f7-7e87844de731","workspaceId":"default","version":1,"path":"\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/c3414e86-790f-437a-9444-cfc05d1a79ab\/workspace","projectId":null,"actualIdentity":"validation-directory:\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/c3414e86-790f-437a-9444-cfc05d1a79ab\/workspace","sourceProductId":"a6fb0d02-fcfb-4cdf-9ff7-21094fed93a2","controlProductId":"a6fb0d02-fcfb-4cdf-9ff7-21094fed93a2"}],"projectToolWitnesses":[{"bindingId":"629b9485-8bb3-4c8e-a9f7-7e87844de731","workspaceId":"default","version":1,"path":"\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/c3414e86-790f-437a-9444-cfc05d1a79ab\/workspace","projectId":null,"actualIdentity":"validation-directory:\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/c3414e86-790f-437a-9444-cfc05d1a79ab\/workspace","sourceProductId":"a6fb0d02-fcfb-4cdf-9ff7-21094fed93a2","controlProductId":"a6fb0d02-fcfb-4cdf-9ff7-21094fed93a2","sdkConversationId":5,"toolTaskId":22}],"transportRequests":2,"currentRequest":2,"transportAborted":false,"requestAbortCount":0,"bodyReadPending":false,"bodyReadError":"","bodyReadCancelled":true,"providerFinished":true,"textDeltaEvents":7,"toolDeltaEvents":1},"history":[{"id":"17","role":"user","text":"请先调用 location_witness 工具读取本次采用的位置，再回复一句简短中文问候并原样包含 T08-A-73ec15cb。","persisted":true},{"id":"23","role":"tool","text":"{\"bindingId\":\"629b9485-8bb3-4c8e-a9f7-7e87844de731\",\"workspaceId\":\"default\",\"version\":1,\"path\":\"\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/c3414e86-790f-437a-9444-cfc05d1a79ab\/workspace\",\"projectId\":null,\"actualIdentity\":\"validation-directory:\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/c3414e86-790f-437a-9444-cfc05d1a79ab\/workspace\",\"sourceProductId\":\"a6fb0d02-fcfb-4cdf-9ff7-21094fed93a2\",\"controlProductId\":\"a6fb0d02-fcfb-4cdf-9ff7-21094fed93a2\",\"sdkConversationId\":5,\"toolTaskId\":22}","persisted":true},{"id":"25","role":"assistant","text":"您好，本次采用的位置已读取，T08-A-73ec15cb","persisted":true}]}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ProjectApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: {"type":"response","protocol":1,"connectionId":"891cbd3b-732c-4c25-a240-1e19e96c8d84","requestId":"87583200-1447-458a-a234-b6d355a4d499","ok":false,"error":{"code":"INPUT_STORAGE_BUSY","message":"草稿存储正在提交，请稍后重试。"}}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ProjectApplicationTest$Wire.call(ProjectApplicationTest.kt:39)
+	at dev.durableagent.probe.ProjectApplicationTest.settled$lambda$0(ProjectApplicationTest.kt:60)
+	at dev.durableagent.probe.ProjectApplicationTest.$r8$lambda$ApnkGYHcatQwJ6xLtpG__o0_TIA(Unknown Source:0)
+	at dev.durableagent.probe.ProjectApplicationTest$$ExternalSyntheticLambda4.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.ProjectApplicationTest.until(ProjectApplicationTest.kt:28)
+	at dev.durableagent.probe.ProjectApplicationTest.until$default(ProjectApplicationTest.kt:28)
+	at dev.durableagent.probe.ProjectApplicationTest.settled(ProjectApplicationTest.kt:60)
+	at dev.durableagent.probe.ProjectApplicationTest.flow(ProjectApplicationTest.kt:120)
+	at dev.durableagent.probe.ProjectApplicationTest.realMimoBusyRefusalAndExplicitNewLocation(ProjectApplicationTest.kt:86)
+
+INSTRUMENTATION_STATUS: stream=
+Error in realMimoBusyRefusalAndExplicitNewLocation(dev.durableagent.probe.ProjectApplicationTest):
+java.lang.AssertionError: {"type":"response","protocol":1,"connectionId":"891cbd3b-732c-4c25-a240-1e19e96c8d84","requestId":"87583200-1447-458a-a234-b6d355a4d499","ok":false,"error":{"code":"INPUT_STORAGE_BUSY","message":"草稿存储正在提交，请稍后重试。"}}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ProjectApplicationTest$Wire.call(ProjectApplicationTest.kt:39)
+	at dev.durableagent.probe.ProjectApplicationTest.settled$lambda$0(ProjectApplicationTest.kt:60)
+	at dev.durableagent.probe.ProjectApplicationTest.$r8$lambda$ApnkGYHcatQwJ6xLtpG__o0_TIA(Unknown Source:0)
+	at dev.durableagent.probe.ProjectApplicationTest$$ExternalSyntheticLambda4.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.ProjectApplicationTest.until(ProjectApplicationTest.kt:28)
+	at dev.durableagent.probe.ProjectApplicationTest.until$default(ProjectApplicationTest.kt:28)
+	at dev.durableagent.probe.ProjectApplicationTest.settled(ProjectApplicationTest.kt:60)
+	at dev.durableagent.probe.ProjectApplicationTest.flow(ProjectApplicationTest.kt:120)
+	at dev.durableagent.probe.ProjectApplicationTest.realMimoBusyRefusalAndExplicitNewLocation(ProjectApplicationTest.kt:86)
+
+INSTRUMENTATION_STATUS: test=realMimoBusyRefusalAndExplicitNewLocation
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 17.226
+There was 1 failure:
+1) realMimoBusyRefusalAndExplicitNewLocation(dev.durableagent.probe.ProjectApplicationTest)
+java.lang.AssertionError: {"type":"response","protocol":1,"connectionId":"891cbd3b-732c-4c25-a240-1e19e96c8d84","requestId":"87583200-1447-458a-a234-b6d355a4d499","ok":false,"error":{"code":"INPUT_STORAGE_BUSY","message":"草稿存储正在提交，请稍后重试。"}}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ProjectApplicationTest$Wire.call(ProjectApplicationTest.kt:39)
+	at dev.durableagent.probe.ProjectApplicationTest.settled$lambda$0(ProjectApplicationTest.kt:60)
+	at dev.durableagent.probe.ProjectApplicationTest.$r8$lambda$ApnkGYHcatQwJ6xLtpG__o0_TIA(Unknown Source:0)
+	at dev.durableagent.probe.ProjectApplicationTest$$ExternalSyntheticLambda4.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.ProjectApplicationTest.until(ProjectApplicationTest.kt:28)
+	at dev.durableagent.probe.ProjectApplicationTest.until$default(ProjectApplicationTest.kt:28)
+	at dev.durableagent.probe.ProjectApplicationTest.settled(ProjectApplicationTest.kt:60)
+	at dev.durableagent.probe.ProjectApplicationTest.flow(ProjectApplicationTest.kt:120)
+	at dev.durableagent.probe.ProjectApplicationTest.realMimoBusyRefusalAndExplicitNewLocation(ProjectApplicationTest.kt:86)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1
