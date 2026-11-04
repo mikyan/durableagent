@@ -466,3 +466,19 @@ test('an accepted file helper confirmed stopped before spawn proves no original 
   await app.close();execution=new ManagedExecution({channel:peer,authority:native});app=new Application({...options,execution});await app.start();const reopened=(await call(app,'files.list',{id:'one'})).changes[0];assert.equal(reopened.operationId,file.operationId);assert.equal(reopened.state,'not_started');assert.equal(reopened.scopeConfirmed,true);assert.equal(peer.starts,0);
  }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
 });
+
+
+test('a malformed native original diff cannot be published as a verified document result',async()=>{
+ const resourceId='a'.repeat(64),expectedDigest='b'.repeat(64),content='after';
+ class Documents {plan;starts=0;valid=false;async request(method,payload){
+  if(method==='prepare')return this.plan??={...payload,protocol:1,namespace:'saf:'+resourceId,requestDigest:hash(payload),original:true,uri:'content://fixture.documents/document/diff',state:'accepted_not_started',scopeConfirmed:false,sequence:1};
+  if(method==='stage')return {operationId:payload.operationId,nextOffset:Buffer.from(payload.base64,'base64').length,sealed:true};
+  if(method==='start'){this.starts++;this.plan={...this.plan,state:'completed',scopeConfirmed:true,sequence:3};}
+  if(method==='start'||method==='query')return {...this.plan,diff:this.valid?{available:true,text:'-before\n+after'}:{state:'available',text:'-before\n+after'}};
+  throw Error('Unexpected original method');
+ }}
+ const dir=await mkdtemp(join(tmpdir(),'managed-document-diff-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new ExecutionPeer(),documents=new Documents(),execution=new ManagedExecution({channel:peer,authority:native,documents}),app=new Application({...configuration('document_write',{resourceId,expectedDigest,content}),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution});
+ try{await app.start();await call(app,'create',{creationId:'one'});await native.create('one','document','document');await call(app,'send',{intentId:'document'});await until(async()=>(await call(app,'sendStatus',{intentId:'document'})).submission?.status==='done');const uncertain=(await call(app,'files.list',{id:'one'})).documents.changes[0];assert.equal(uncertain.state,'unknown');assert.equal(uncertain.scopeConfirmed,false);assert.equal(documents.starts,1);
+  documents.valid=true;const verified=(await call(app,'files.list',{id:'one'})).documents.changes[0];assert.equal(verified.state,'completed');assert.equal(verified.diff.available,true);assert.equal(verified.diff.text,'-before\n+after');assert.equal(documents.starts,1);
+ }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});

@@ -48,7 +48,7 @@ class FileQueueApplicationTest {
 
  @Test(timeout=240000) fun actualLocalReservationAndUnknownShellSerializeBothOrdersAndQueuedStop(){
   for(order in listOf("local-reserved-first","shell-first","cancel-local")){
-   val run=uuid();val wire=Wire(run);val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode","execution").putExtra("validationRun",run));val store=NativeInputStore(context,NativeInputBridge.namespace("execution",run))
+   val run=uuid();val wire=Wire(run);val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode","execution").putExtra("validationRun",run));val store=NativeInputStore(context,NativeInputBridge.namespace("execution",run)).withLeaseWait(1000)
    activeRun=run;activeOrder=order;trace("scenario.begin")
    try{
     wire.ready();for(id in listOf("local","shell","pure","read"))wire.call("create",JSONObject().put("creationId",id))

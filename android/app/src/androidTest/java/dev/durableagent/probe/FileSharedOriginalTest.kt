@@ -65,6 +65,7 @@ class FileSharedOriginalTest {
   val store=NativeInputStore(context,NativeInputBridge.namespace("execution",run)).withLeaseWait(1000)
   val documents=NativeDocumentStore(context,NativeDocumentBridge.namespace("execution",run),NativeInputBridge.namespace("execution",run))
   var operation:String?=null
+  fun queryOriginal(stage:String):JSONObject{trace("$stage.before",operation);return try{documents.query(operation!!).also{trace("$stage.after.${it.optString("state")}",operation)}}catch(error:NativeDocumentException){trace("$stage.failed",operation,error.code);throw IllegalStateException("Original query $stage failed: ${error.code}",error)}}
   try{
    wire.ready();for(id in listOf("document","shell","pure"))wire.call("create",JSONObject().put("creationId",id))
    val resource=documents.select(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
@@ -75,17 +76,17 @@ class FileSharedOriginalTest {
    fixtureControl("hold-readback");wire.call("send",JSONObject().put("intentId",docIntent))
    until(15000){val actual=fixtureControl("read");actual.getInt("writeOpens")==before.getInt("writeOpens")+1&&String(android.util.Base64.decode(actual.getString("base64"),android.util.Base64.DEFAULT),Charsets.UTF_8)==content}
    val changes=wire.call("files.list",target("document")).getJSONObject("documents").getJSONArray("changes");assertEquals(1,changes.length());val held=changes.getJSONObject(0);operation=held.getString("operationId")
-   val nativeHeld=documents.query(operation!!);assertEquals("running",nativeHeld.getString("state"));assertFalse(nativeHeld.getBoolean("scopeConfirmed"))
+   val nativeHeld=queryOriginal("shared.held-query");assertEquals("running",nativeHeld.getString("state"));assertFalse(nativeHeld.getBoolean("scopeConfirmed"))
    wire.call("send",JSONObject().put("intentId",shellIntent));until(10000){execution(wire,"shell")?.optString("state")=="queued"};val queued=execution(wire,"shell")!!
    wire.call("send",JSONObject().put("intentId",pureIntent));completed(wire,pureIntent);assertTrue(texts(wire,"pure").contains("FILE-PURE-PASS"))
-   assertEquals("running",documents.query(operation!!).getString("state"));assertFalse(documents.query(operation!!).getBoolean("scopeConfirmed"));assertEquals("queued",execution(wire,"shell")!!.getString("state"))
+   val afterPure=queryOriginal("shared.after-pure-query");assertEquals("running",afterPure.getString("state"));assertFalse(afterPure.getBoolean("scopeConfirmed"));assertEquals("queued",execution(wire,"shell")!!.getString("state"))
    assertEquals(content,String(android.util.Base64.decode(fixtureControl("read").getString("base64"),android.util.Base64.DEFAULT),Charsets.UTF_8))
    fixtureControl("release");completed(wire,docIntent);completed(wire,shellIntent)
    val final=fixtureControl("read");val actual=android.util.Base64.decode(final.getString("base64"),android.util.Base64.DEFAULT);assertEquals(content+"shell-$run\n",String(actual,Charsets.UTF_8));assertEquals(before.getInt("writeOpens")+1,final.getInt("writeOpens"))
-   val original=documents.query(operation!!);assertEquals("completed",original.getString("state"));assertTrue(original.getBoolean("scopeConfirmed"));val shell=execution(wire,"shell")!!;assertEquals("completed",shell.getString("state"));assertEquals(0,shell.getInt("exitCode"));assertTrue(shell.getBoolean("scopeConfirmed"))
+   val original=queryOriginal("shared.final-query");assertEquals("completed",original.getString("state"));assertTrue(original.getBoolean("scopeConfirmed"));val shell=execution(wire,"shell")!!;assertEquals("completed",shell.getString("state"));assertEquals(0,shell.getInt("exitCode"));assertTrue(shell.getBoolean("scopeConfirmed"))
    instrumentation.sendStatus(0,Bundle().apply{putString("sharedOriginalEvidence",JSONObject().put("run",run).put("pathVerifiedByRoot",path).put("resource",resource).put("beforeDigest",opened.getString("contentDigest")).put("held",nativeHeld).put("queuedShell",queued).put("pureToolContinued",true).put("originalReceipt",original).put("shell",shell).put("actualBase64",final.getString("base64")).put("actualSha256",NativeInputStore.sha256(actual)).put("providerWriteOpens",final.getInt("writeOpens")).toString())})
   }finally{
-   runCatching{fixtureControl("release")};if(operation!=null)runCatching{val receipt=documents.query(operation!!);trace("shared.finally.scope."+receipt.optString("state"))}
+   runCatching{fixtureControl("release")};if(operation!=null)runCatching{val receipt=queryOriginal("shared.finally-query");trace("shared.finally.scope."+receipt.optString("state"),operation)}
    page.close();documents.close();store.close();try{wire.closeHost()}finally{wire.close()}
   }
  }

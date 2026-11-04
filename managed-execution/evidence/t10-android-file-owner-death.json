@@ -1,0 +1,36 @@
+{
+  "artifact": {
+    "app": "ecb489f2fda34c763b0c8bc5d8491de1d21cc80a81efbe0c1f99c6736750e452",
+    "test": "1b54684ec60794aab802e7688e3966e7e64bea78b1ac56e46ddab5289a690a39"
+  },
+  "result": "PASS 1/1 in 14.511s",
+  "evidence": {
+    "run": "13d02da7-302b-4253-8913-0aee3cbf6be1",
+    "beforePid": 32491,
+    "afterPid": 32574,
+    "boundary": {
+      "stage": "execution-before-result",
+      "pid": 32491
+    },
+    "original": {
+      "operationId": "b3198672-abb1-4116-bd57-d0e1f13c99f1",
+      "bindingId": "b627f1c0-c232-4505-a90d-a8fc2e78b051",
+      "executionId": "47a0f42e-f87d-4460-8d99-15870e221764",
+      "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-13d02da7-302b-4253-8913-0aee3cbf6be1/queue.txt",
+      "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+      "original": true,
+      "state": "completed",
+      "scopeConfirmed": true,
+      "diff": {
+        "available": true,
+        "text": "--- before\n+++ after\n@@ -0,0 +1 @@\n+local\n"
+      }
+    },
+    "read": {
+      "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-13d02da7-302b-4253-8913-0aee3cbf6be1/queue.txt",
+      "text": "local\n",
+      "sha256": "efb83f2a277e9f49b38efd505f5cbb93885e721b6bd16b788937c9396174c006"
+    },
+    "sameIntentAddedExecutions": 0
+  }
+}
