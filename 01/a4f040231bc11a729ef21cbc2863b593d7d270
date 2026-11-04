@@ -1,0 +1,31 @@
+runtime/src/file-conformance.ts
+  s_467dcb949b5b60::t_7b6e4f712469ff 1-48
+runtime/src/execution-conformance.ts
+  s_467dcb949b5b60::t_7b6e4f712469ff 8,25,29
+runtime/src/execution-validation.ts
+  s_467dcb949b5b60::t_7b6e4f712469ff 3,23
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_67d465e7ad4c81 393,402
+  s_467dcb949b5b60::t_c1c5876c46c2d8 403
+android/app/src/androidTest/java/dev/durableagent/probe/FileApplicationTest.kt
+  s_467dcb949b5b60::t_cca12027b8fa12 45-46,69
+  s_467dcb949b5b60::t_5b6c841c8a4bb4 1-44,47-68,70-76
+managed-execution/evidence/t10-uthash-install.json
+  s_467dcb949b5b60::t_b61083602b4824 1-109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "01a4f040231bc11a729ef21cbc2863b593d7d270",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
