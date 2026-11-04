@@ -86,14 +86,18 @@ class AgentActivity:Activity() {
             }}}
             @JavascriptInterface fun writeCredential(json:String){runOnUiThread {if(webView===view&&!destroyed&&json.length<=120000&&view.url?.substringBefore('#')=="https://appassets.androidplatform.net/assets/ui/index.html")client?.writeCredential(json)}}
         },"DurableNative")
-        // Android 16 edge-to-edge keeps the window behind the IME. Give the WebView
-        // the remaining measured area; CSS dvh alone cannot observe the covered region.
+        // Own occluded window geometry here, including initial/replacement WebViews.
+        // Older WebViews do not reliably expose system bars through CSS safe areas.
         val frame=FrameLayout(this).apply{setBackgroundColor(android.graphics.Color.rgb(37,37,40))}
         frame.addView(view,FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT))
         frame.setOnApplyWindowInsetsListener{container,insets->
-            val bottom=if(insets.isVisible(WindowInsets.Type.ime()))insets.getInsets(WindowInsets.Type.ime()).bottom else 0
-            if(container.paddingBottom!=bottom)container.setPadding(0,0,0,bottom)
-            insets
+            val system=WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout()
+            val bars=insets.getInsets(system)
+            val ime=if(insets.isVisible(WindowInsets.Type.ime()))insets.getInsets(WindowInsets.Type.ime()).bottom else 0
+            container.setPadding(bars.left,bars.top,bars.right,maxOf(bars.bottom,ime))
+            // Keep one owner: do not ask CSS/newer WebViews to apply these again.
+            // M133 reads the cutout object directly, so clear it as well as its type.
+            WindowInsets.Builder(insets).setInsets(system or WindowInsets.Type.ime(),android.graphics.Insets.NONE).setDisplayCutout(null).build()
         }
         setContentView(frame);frame.requestApplyInsets();view.loadUrl("https://appassets.androidplatform.net/assets/ui/index.html")
     }

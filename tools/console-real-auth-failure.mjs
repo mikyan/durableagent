@@ -16,8 +16,7 @@ const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function until(read,label,timeout=60000){const end=Date.now()+timeout;let last;while(Date.now()<end){try{last=await read();if(last)return last;}catch(error){last=String(error);}await pause(100);}throw Error(`${label}: ${JSON.stringify(last)}`);}
 let socket,port;const evidence={run,mode:'models',started:new Date().toISOString(),scope:'Real bundled React/native vault/SDK request to actual MiMo endpoint using only a deliberately invalid synthetic key. One explicit send; visible Chinese guidance and navigation preserve original intent/history.'};
 try{
- // Finish only the caller's idle Activity task. A fresh Activity also avoids the
- // debug domain-switch path, whose new WebView currently loses system insets.
+ // Finish only the caller's idle Activity task for this isolated configuration.
  adb('shell','am','start','-W','-f','0x10008000','-n',`${pkg}/.AgentActivity`,'--es','validationMode','models','--es','validationRun',run);
  const pid=await until(()=>adb('shell','pidof',pkg),'UI PID');assert.match(pid,/^\d+$/);evidence.uiPid=pid;
  await until(()=>adb('shell','cat','/proc/net/unix').includes(`webview_devtools_remote_${pid}`),'WebView socket');
@@ -32,7 +31,7 @@ try{
   await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});if(!e)return;const r=e.getBoundingClientRect();if(r.top<0||r.bottom>innerHeight)e.scrollIntoView({block:'center',inline:'nearest'});})()`);
   let previous,stable=0;
   const rect=await until(async()=>{const value=await evaluate(`(()=>{const e=document.querySelector(${JSON.stringify(selector)});if(!e||e.disabled)return null;const r=e.getBoundingClientRect(),s=getComputedStyle(e),x=r.left+r.width/2,y=r.top+r.height/2,hit=document.elementFromPoint(x,y);return r.width>0&&r.height>0&&s.visibility!=='hidden'&&r.top>=0&&r.bottom<=innerHeight&&(hit===e||e.contains(hit))?{x,y}:null})()`);stable=value&&previous&&Math.abs(value.x-previous.x)<.25&&Math.abs(value.y-previous.y)<.25?stable+1:0;previous=value;if(stable>=3)return value;await pause(150);return null;},'Visible enabled control '+selector);
-  const scale=await evaluate('devicePixelRatio');adb('shell','input','tap',String(Math.round(rect.x*scale)),String(Math.round(rect.y*scale)));await pause(300);
+  const scale=await evaluate('devicePixelRatio'),current=(await(await fetch(`http://127.0.0.1:${port}/json/list`)).json()).find(row=>row.id===target.id),origin=JSON.parse(current.description);assert.ok(Number.isFinite(origin.screenX)&&Number.isFinite(origin.screenY),'Observed native WebView origin');adb('shell','input','tap',String(Math.round(origin.screenX+rect.x*scale)),String(Math.round(origin.screenY+rect.y*scale)));await pause(300);
  }
  async function fill(selector,value){await click(selector);assert.equal(await evaluate(`document.querySelector(${JSON.stringify(selector)}).value`),'','Expected fresh input');await command('Input.insertText',{text:value});adb('shell','input','keyevent','4');await pause(300);}
  async function request(method,payload={}){return evaluate(`(async()=>{const key='auth-observe-'+crypto.randomUUID();return await new Promise((resolve,reject)=>{const old=window.__durableReceive,timer=setTimeout(()=>{window.__durableReceive=old;reject(Error('Public observation timeout'))},15000);window.__durableReceive=value=>{old?.(value);if(value.requestId===key){clearTimeout(timer);window.__durableReceive=old;value.ok?resolve(value.value):reject(Error(JSON.stringify(value.error)))}};window.DurableNative.postMessage(JSON.stringify({protocol:1,connectionId:key,requestId:key,method:${JSON.stringify(method)},payload:${JSON.stringify(payload)}}))})})()`);}

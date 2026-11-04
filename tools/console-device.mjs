@@ -25,6 +25,7 @@ try{
  socket.addEventListener('message',({data})=>{const value=JSON.parse(data),call=pending.get(value.id);if(!call)return;pending.delete(value.id);clearTimeout(call.timer);value.error?call.reject(Error(JSON.stringify(value.error))):call.resolve(value.result);});
  const command=(method,params={})=>new Promise((resolve,reject)=>{const id=++sequence,timer=setTimeout(()=>{pending.delete(id);reject(Error('CDP timeout: '+method));},20000);pending.set(id,{resolve,reject,timer});socket.send(JSON.stringify({id,method,params}));});
  const evaluate=async(expression)=>{const value=await command('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});if(value.exceptionDetails)throw Error(JSON.stringify(value.exceptionDetails));return value.result.value;};
+ const nativeOrigin=async()=>{const target=(await(await fetch('http://127.0.0.1:'+port+'/json/list')).json()).find(row=>row.id===page.id);const bounds=JSON.parse(target.description);assert.ok(Number.isFinite(bounds.screenX)&&Number.isFinite(bounds.screenY),'Observed native WebView origin');return bounds;};
  async function click(selector){
   // IME and responsive layout may move a control after focus. Tap only a stable,
   // unobscured target; never retry a send automatically after the tap.
@@ -34,13 +35,13 @@ try{
    stable=value&&previous&&Math.abs(value.x-previous.x)<.25&&Math.abs(value.y-previous.y)<.25?stable+1:0;previous=value;
    if(stable>=3)return value;await wait(200);return null;
   },'stable visible control '+selector);
-  const scale=await evaluate('devicePixelRatio');adb('shell','input','tap',String(Math.round(rect.x*scale)),String(Math.round(rect.y*scale)));await wait(500);
+  const scale=await evaluate('devicePixelRatio'),origin=await nativeOrigin();adb('shell','input','tap',String(Math.round(origin.screenX+rect.x*scale)),String(Math.round(origin.screenY+rect.y*scale)));await wait(500);
  }
  for(const step of plan.steps){
   let value;
   if(step.when&&!await evaluate(step.when)){evidence.steps.push({step,skipped:true});continue;}
   if(step.back){adb('shell','input','keyevent','4');await wait(700);}
-  if(step.swipe){const scale=await evaluate('devicePixelRatio');const [x1,y1,x2,y2,time=350]=step.swipe;adb('shell','input','swipe',...[x1,y1,x2,y2].map(value=>String(Math.round(value*scale))),String(time));await wait(500);}
+  if(step.swipe){const scale=await evaluate('devicePixelRatio'),origin=await nativeOrigin();const [x1,y1,x2,y2,time=350]=step.swipe;adb('shell','input','swipe',...[x1,y1,x2,y2].map((value,index)=>String(Math.round((index%2?origin.screenY:origin.screenX)+value*scale))),String(time));await wait(500);}
   if(step.wait)value=await until(()=>evaluate(step.wait),step.label||step.wait,step.timeout);
   if(step.click)await click(step.click);
   if(step.fill!==undefined){await click(step.selector||'[data-testid=message-input]');await command('Input.insertText',{text:step.fill});}
@@ -52,6 +53,8 @@ try{
    await wait(900);
    await writeFile(join(output,step.shot+'.png'),execFileSync(adbPath,['-s',serial,'exec-out','screencap','-p'],{timeout:30000,maxBuffer:16*1024*1024}));
    value=await evaluate('({width:innerWidth,height:innerHeight,dpr:devicePixelRatio,title:document.querySelector("h1")?.textContent,active:localStorage.getItem("durableagent.ui.selectedConversation"),draft:document.querySelector("[data-testid=draft-status]")?.dataset.state,controls:[...document.querySelectorAll(".composer button,.panel-heading button,.topbar button")].filter(e=>e.getBoundingClientRect().width>0).map(e=>({label:e.getAttribute("aria-label")||e.textContent,disabled:e.disabled,rect:JSON.parse(JSON.stringify(e.getBoundingClientRect()))}))})');
+   value.nativeView=await nativeOrigin();
+   value.metadata=await evaluate('[...document.querySelectorAll(".draft-status,.context-pill")].map(e=>({label:e.textContent,rect:e.getBoundingClientRect().toJSON()}))');
   }
   evidence.steps.push({step,value});
   if(step.assert!==undefined)assert.deepEqual(value,step.assert,step.label||'public UI assertion');
