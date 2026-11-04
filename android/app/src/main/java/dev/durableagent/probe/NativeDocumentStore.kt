@@ -51,6 +51,9 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         return JSONObject().put("resources",JSONArray(records.map(::current)))
     }
     fun describe(resourceId:String):JSONObject = current(resource(resourceId))
+    fun open(resourceId:String):JSONObject = fail("DOCUMENT_READER_UNAVAILABLE","原文件 reader 尚不可用。")
+    fun readReader(readerId:String,offset:Long,maxBytes:Int):JSONObject = fail("DOCUMENT_READER_LOST","原文件 reader 已失效。")
+    fun closeRead(readerId:String):JSONObject = fail("DOCUMENT_READER_LOST","原文件 reader 已失效。")
     fun read(resourceId:String,offset:Long,maxBytes:Int):JSONObject {
         if(offset !in 0..MAX_CONTENT||maxBytes !in 1..32768)fail("DOCUMENT_INVALID","原文件读取范围无效。")
         val record=resource(resourceId);val uri=Uri.parse(record.getString("uri"));requireGrant(uri,READ)

@@ -34,6 +34,32 @@ class NativeDocumentTest {
     }
     private fun until(label:String,timeout:Long=150000,check:()->Boolean){val end=SystemClock.elapsedRealtime()+timeout;while(!check()){assertTrue(label,SystemClock.elapsedRealtime()<end);Thread.sleep(50)}}
     private fun evidence(value:JSONObject)=instrument.sendStatus(0,Bundle().apply{putString("documentEvidence",value.toString())})
+    @Test(timeout=30000) fun retainedReaderStaysOnOriginalObjectAfterProviderReplacement(){
+        assumeTrue(InstrumentationRegistry.getArguments().getString("retainedGrant")=="true")
+        val fixture=control("reset");assertNotEquals(android.os.Process.myUid(),fixture.getInt("providerUid"))
+        val uri=android.net.Uri.parse("content://$FIXTURE.documents/document/original")
+        val grant=context.contentResolver.persistedUriPermissions.firstOrNull{it.uri==uri}
+        assertTrue("Requires an actual previous system-picker persisted grant",grant?.isReadPermission==true&&grant.isWritePermission)
+        NativeDocumentStore(context,"document-reader-"+UUID.randomUUID()).use{store->
+            val resource=store.select(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            val id=resource.getString("resourceId");val opened=store.open(id);val reader=opened.getString("readerId")
+            assertEquals(9,opened.getInt("byteLength"))
+            assertArrayEquals(expected.copyOfRange(0,4),Base64.decode(store.readReader(reader,0,4).getString("base64"),Base64.DEFAULT))
+            control("replace")
+            assertArrayEquals(byteArrayOf(78,69,87,10),Base64.decode(control("read").getString("base64"),Base64.DEFAULT))
+            val tail=store.readReader(reader,4,32768)
+            assertTrue(tail.getBoolean("eof"));assertEquals(5,tail.getInt("bytesRead"))
+            assertArrayEquals(expected.copyOfRange(4,9),Base64.decode(tail.getString("base64"),Base64.DEFAULT))
+            val final=store.closeRead(reader)
+            assertTrue(final.getBoolean("unchanged"));assertEquals(opened.getString("contentDigest"),final.getString("currentDigest"))
+            try{store.readReader(reader,0,10);fail("A lost reader must not silently reopen the URI")}
+            catch(error:NativeDocumentException){assertEquals("DOCUMENT_READER_LOST",error.code)}
+            val replacement=store.open(id);assertNotEquals(opened.getString("contentDigest"),replacement.getString("contentDigest"))
+            assertArrayEquals(byteArrayOf(78,69,87,10),Base64.decode(store.readReader(replacement.getString("readerId"),0,10).getString("base64"),Base64.DEFAULT))
+            assertTrue(store.closeRead(replacement.getString("readerId")).getBoolean("unchanged"))
+            evidence(JSONObject().put("stage","retained-reader-original-inode").put("oldDigest",opened.getString("contentDigest")).put("newDigest",replacement.getString("contentDigest")).put("providerUid",fixture.getInt("providerUid")))
+        }
+    }
     @Test(timeout=240000) fun actualSystemPickerRetainsOriginalCapabilityAndBinaryBytesAcrossReopen(){
         assumeTrue(InstrumentationRegistry.getArguments().getString("systemPicker")=="true")
         val fixture=control("reset");control("revoke");assertNotEquals(android.os.Process.myUid(),fixture.getInt("providerUid"))

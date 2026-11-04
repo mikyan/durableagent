@@ -15,6 +15,7 @@ public final class ControlReceiver extends BroadcastReceiver {
             JSONObject value=new JSONObject().put("providerUid",Process.myUid());
             switch(operation){
                 case "reset":Fixture.reset(context);break;
+                case "replace":Fixture.replace(context);break;
                 case "revoke":context.revokeUriPermission(target,Uri.parse("content://"+Fixture.AUTHORITY+"/document/original"),Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);break;
                 case "read":value.put("base64",Base64.encodeToString(Files.readAllBytes(Fixture.original(context).toPath()),Base64.NO_WRAP));break;
                 default:throw new IllegalArgumentException("Unknown control");
