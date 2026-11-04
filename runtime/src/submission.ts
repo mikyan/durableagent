@@ -1,7 +1,7 @@
 import {BACKGROUND_CONTEXT as context} from '@earendil-works/chord/context';
 import {defineDocFamily,type Harness,type ConversationId,type SubmissionId,type Tx} from '@earendil-works/pi-durable';
 import type {Models} from '@earendil-works/pi-ai/models';
-import {randomUUID} from 'node:crypto';
+import {randomUUID,createHash} from 'node:crypto';
 import {checkRouteSource} from './routing.js';
 import {InputError,materializeFrozenInput} from './input.js';
 import type {FrozenInputAccess} from './input-protocol.js';
@@ -63,6 +63,8 @@ export class Submissions {
     const content=await materializeFrozenInput(inputs,intent.inputToken,intent.id,model);
     const release=this.options.pause();
     try {
+      // The original native intent remains a holder even if this cross-owner handoff is interrupted.
+      await inputs.retainFrozen?.(`sdk-admission:${createHash('sha256').update(intentId).digest('hex')}`,intent.inputToken);
       await authority.markDeliveryUnknown(intentId);
       await this.options.boundary?.('before-sdk-commit',intent);
       await harness.commit(async tx=>{

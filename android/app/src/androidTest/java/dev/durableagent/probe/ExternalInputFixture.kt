@@ -19,7 +19,7 @@ object ExternalInputFixture {
     fun control(context: Context, operation: String, document: String = "text"): JSONObject {
         val result = CompletableFuture<JSONObject>()
         context.sendOrderedBroadcast(Intent().setComponent(ComponentName(PACKAGE, "$PACKAGE.ControlReceiver"))
-            .putExtra("operation", operation).putExtra("document", document), null,
+            .putExtra("operation", operation).putExtra("document", document).putExtra("targetPackage",context.packageName), null,
             object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
                     try {

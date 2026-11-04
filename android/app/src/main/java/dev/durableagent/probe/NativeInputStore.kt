@@ -299,7 +299,14 @@ class NativeInputStore(
             val converted = NativeAttachmentPreparation.prepare(original, mime, task.capability)
             signal.throwIfCanceled()
             if (!staging.parentFile!!.mkdirs() && !staging.parentFile!!.isDirectory) fail("INPUT_STORAGE_FAILED", "无法建立本地准备目录。")
-            FileOutputStream(staging).use { it.write(converted.bytes); it.fd.sync() }
+            try {
+                boundary("content.beforeWrite")
+                FileOutputStream(staging).use { it.write(converted.bytes); it.fd.sync() }
+            } catch(error:Exception) {
+                if(error is android.system.ErrnoException&&error.errno==OsConstants.ENOSPC || error.cause is android.system.ErrnoException&&(error.cause as android.system.ErrnoException).errno==OsConstants.ENOSPC)
+                    fail("INPUT_CONTENT_CAPACITY","输入内容存储空间不足，未确认准备完成；草稿和已有固定输入仍保留。")
+                fail("INPUT_CONTENT_WRITE_FAILED","输入内容写入未完成；草稿和已有固定输入仍保留，请检查可用空间后重试。")
+            }
             boundary("object.synced")
             val objectId = UUID.randomUUID().toString()
             val representation = converted.representation.put("objectId", objectId).put("sha256", sha256(converted.bytes)).put("byteLength", converted.bytes.size)
@@ -422,29 +429,43 @@ class NativeInputStore(
     fun discard(token: String, operationId: String): JSONObject {
         validateId(token); validateId(operationId)
         return locked { db, _ -> operation(db, operationId, JSONObject().put("method", "discard").put("token", token)) {
-            if (NativeSubmissionRecords.holds(db, token)) fail("INPUT_IN_USE", "发送意图仍持有此固定输入，尚未释放恢复材料。")
+            if (NativeSubmissionRecords.holds(db, token) || NativeContentRetention.heldToken(db, token)) fail("INPUT_IN_USE", "发送或历史仍持有此固定输入，尚未释放恢复材料。")
             db.execSQL("DELETE FROM frozen_objects WHERE token=?", arrayOf(token)); db.execSQL("DELETE FROM frozen WHERE token=?", arrayOf(token)); JSONObject()
         } }
     }
 
-    /** Pin publication and final deletion share this OS lease. User source URIs are never deleted. */
-    fun gc(): JSONObject = locked { db, directory ->
-        val protected = mutableSetOf<String>()
-        db.rawQuery("SELECT object_id FROM frozen_objects", null).use { while (it.moveToNext()) protected.add(it.getString(0)) }
-        db.rawQuery("SELECT id FROM drafts", null).use { rows -> while (rows.moveToNext()) for (id in selectedIds(db, rows.getString(0))) {
-            db.rawQuery("SELECT object_id FROM selections WHERE id=?", arrayOf(id)).use { if (it.moveToFirst() && !it.isNull(0)) protected.add(it.getString(0)) }
-        } }
-        var reclaimed = 0
-        for (file in File(directory, "objects").listFiles() ?: emptyArray()) {
-            if (file.name !in protected && file.isFile) {
-                if (!file.delete()) fail("INPUT_STORAGE_FAILED", "未能回收无引用材料，已停止清理。")
-                transaction(db) { db.execSQL("DELETE FROM objects WHERE id=?", arrayOf(file.name)) }; reclaimed++
-            }
+    /** Trusted cross-owner publication: commit this hold before publishing an SDK/effect reference. */
+    fun retainFrozen(ownerId: String, token: String): JSONObject = locked { db, directory -> transaction(db) {
+        validateId(ownerId);validateId(token)
+        val value=frozen(db,token);val representations=value.getJSONArray("representations")
+        NativeContentRetention.retainToken(db,ownerId,token,value.getString("digest"))
+        for(index in 0 until representations.length()) {
+            val representation=representations.getJSONObject(index)
+            NativeContentRetention.retain(db,directory,ownerId,representation.getString("objectId"),representation.getString("sha256"),token)
         }
+        // Token hold and any content holds commit together, including text-only inputs.
+        JSONObject().put("ownerId",ownerId).put("token",token).put("committed",true)
+    } }
+    fun retainContent(ownerId:String,objectId:String,fingerprint:String):JSONObject = locked {db,directory->transaction(db){
+        validateId(ownerId);NativeContentRetention.retain(db,directory,ownerId,objectId,fingerprint)
+        JSONObject().put("committed",true)
+    }}
+    fun readRetainedContent(ownerId:String,objectId:String):ByteArray = locked {db,directory->NativeContentRetention.read(db,directory,ownerId,objectId)}
+    fun scanCleanup():JSONObject = locked {db,directory->NativeContentRetention.scan(db,directory)}
+    fun reclaim(candidate:JSONObject):JSONObject = locked {db,directory->NativeContentRetention.reclaim(db,directory,candidate,boundary)}
+    /** Scan is only a candidate set. Each final reclaim rechecks durable owners under the lease. */
+    fun gc(): JSONObject {
+        val scan=scanCleanup();val candidates=scan.getJSONArray("candidates");var reclaimed=0
+        boundary("retention.scanned")
+        for(index in 0 until candidates.length())if(reclaim(candidates.getJSONObject(index)).getString("state")=="reclaimed")reclaimed++
+        locked { db, directory ->
         val jobs = mutableSetOf<String>()
         db.rawQuery("SELECT job FROM selections WHERE job IS NOT NULL", null).use { while (it.moveToNext()) jobs.add(it.getString(0)) }
-        for (file in File(directory, "staging").listFiles() ?: emptyArray()) if (file.name !in jobs && file.isFile) file.delete()
-        JSONObject().put("reclaimed", reclaimed).put("protected", protected.size)
+        for (file in File(directory, "staging").listFiles() ?: emptyArray()) if (file.name !in jobs && file.isFile) {
+            StorageDomainLease.acquire(File(File(directory,"jobs"),file.name))?.use { file.delete() }
+        }
+        }
+        return JSONObject().put("reclaimed", reclaimed).put("protected", scan.getInt("protected"))
     }
 
     private fun finishSelection(id: String, selectionId: String, job: String, selection: JSONObject, hash: String?, operationId: String): JSONObject = locked { db, _ -> transaction(db) {
@@ -583,7 +604,7 @@ class NativeInputStore(
             val lease = StorageDomainLease.acquire(directory) ?: fail("INPUT_STORAGE_BUSY", "草稿存储正在提交，请稍后重试。")
             lease.use {
                 syncDirectory(directory.parentFile!!)
-                val current = helper ?: InputDatabase(context, File(directory, "input.sqlite").absolutePath, maximumDatabaseBytes).also { helper = it }
+                val current = helper ?: InputDatabase(context, File(directory, "input.sqlite").absolutePath, maximumDatabaseBytes,boundary).also { helper = it }
                 action(current.writableDatabase, directory)
             }
         } catch (error: NativeInputException) { throw error }
@@ -593,7 +614,7 @@ class NativeInputStore(
 
     override fun close() = synchronized(monitor) { sourceAdmissions.values.toList().forEach { it.close() }; helper?.close(); helper = null; closed = true }
 
-    private class InputDatabase(context: Context, path: String, private val maximumBytes: Long?) : SQLiteOpenHelper(context, path, null, 4,
+    private class InputDatabase(context: Context, path: String, private val maximumBytes: Long?,private val boundary:(String)->Unit) : SQLiteOpenHelper(context, path, null, 6,
         DatabaseErrorHandler { throw NativeInputException("INPUT_STORAGE_CORRUPT", "草稿数据库损坏，已保留原库和材料。") }) {
         init { setWriteAheadLoggingEnabled(true) }
         override fun onConfigure(db: SQLiteDatabase) {
@@ -612,6 +633,7 @@ class NativeInputStore(
             createSelectionIndex(db)
             NativeSubmissionRecords.createSchema(db)
             NativeSubmissionRecords.createLocationSchema(db)
+            NativeContentRetention.createSchema(db)
         }
         override fun onOpen(db: SQLiteDatabase) {
             if (maximumBytes != null) {
@@ -626,10 +648,16 @@ class NativeInputStore(
             db.execSQL("CREATE TABLE selection_operations(operation_id TEXT PRIMARY KEY,draft_id TEXT NOT NULL,revision INTEGER NOT NULL,kind TEXT NOT NULL,uri TEXT NOT NULL)")
         }
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            if (oldVersion !in 1..3 || newVersion != 4) fail("INPUT_INCOMPATIBLE", "草稿数据库版本不兼容，已保留现有数据。")
+            if (oldVersion !in 1..4 || newVersion != 6) fail("INPUT_INCOMPATIBLE", "草稿数据库版本不兼容，已保留现有数据。")
+            try {
+            boundary("migration.before")
             if (oldVersion == 1) createSelectionIndex(db)
             if (oldVersion < 3) NativeSubmissionRecords.createSchema(db)
-            NativeSubmissionRecords.createLocationSchema(db)
+            if(oldVersion < 4) NativeSubmissionRecords.createLocationSchema(db)
+            NativeContentRetention.createSchema(db)
+            boundary("migration.prepared")
+            } catch(error:NativeInputException) {throw error}
+            catch(_:Exception) {fail("INPUT_MIGRATION_FAILED","草稿和控制记录迁移未完成，已保留原库与材料；运行保持关闭，请用兼容版本重试。")}
         }
         override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) { fail("INPUT_INCOMPATIBLE", "草稿数据库来自更新版本，已保留现有数据。") }
     }

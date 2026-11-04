@@ -44,6 +44,11 @@ export default function ModelSettings({controller,state}:{controller:Conversatio
     {state.modelsError&&<p className="settings-error" role="alert">{state.modelsError}</p>}
     {state.modelsNotice&&<p className="settings-notice" role="status">{state.modelsNotice}</p>}
     {!supported&&<p className="settings-error">当前运行宿主未提供模型设置。</p>}
+    <section className="settings-section" data-testid="local-data-policy"><h2>本机数据</h2>
+      <p className="settings-hint">在当前安装内，会话历史、草稿和仍需引用的输入材料不按时间自动过期。应用升级会保留这些记录；容量不足或版本不兼容时会报告失败并保留原数据。</p>
+      <p className="settings-hint">私有工作数据不参加本应用支持的系统云备份和设备迁移。卸载、清除应用数据、丢失设备或换机后可能无法找回；不承诺系统自动恢复。此规则不控制 Termux、用户原文件或任意厂商搬家工具。</p>
+      <p className="settings-hint">压缩模型上下文不会彻底删除会话历史。首版不提供单会话历史物理删除或安全擦除。</p>
+    </section>
     <section className="settings-section"><h2>模型选择</h2><p className="settings-hint">默认值仅用于新会话；既有会话保留各自的选择。</p>
       <ModelPicker label="新会话默认模型" button="设为新会话默认模型" testId="default-model" current={configuration?.defaultModel} connections={configuration?.connections??[]} disabled={disabled} onApply={selection=>controller.setDefaultModel(selection)}/>
       {current&&<><ModelPicker label="当前会话模型" button="应用到当前会话" testId="conversation-model" current={current.model} connections={configuration?.connections??[]} disabled={disabled} onApply={selection=>controller.selectConversationModel(selection)}/><p className="settings-hint">当前会话：{current.title}。改变选择不会中断或重发已发出的请求。</p></>}

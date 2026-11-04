@@ -80,7 +80,7 @@ class InputTestDocumentsProvider : DocumentsProvider() {
             .add(DocumentsContract.Document.COLUMN_FLAGS, 0)
     }
     companion object {
-        const val AUTHORITY = "dev.durableagent.probe.input-fixtures"
+        val AUTHORITY = BuildConfig.APPLICATION_ID + ".input-fixtures"
         private val ROOT_COLUMNS = arrayOf(DocumentsContract.Root.COLUMN_ROOT_ID, DocumentsContract.Root.COLUMN_DOCUMENT_ID, DocumentsContract.Root.COLUMN_TITLE, DocumentsContract.Root.COLUMN_FLAGS, DocumentsContract.Root.COLUMN_MIME_TYPES)
         private val DOCUMENT_COLUMNS = arrayOf(DocumentsContract.Document.COLUMN_DOCUMENT_ID, DocumentsContract.Document.COLUMN_DISPLAY_NAME, DocumentsContract.Document.COLUMN_MIME_TYPE, DocumentsContract.Document.COLUMN_SIZE, DocumentsContract.Document.COLUMN_FLAGS)
     }

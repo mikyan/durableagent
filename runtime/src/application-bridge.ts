@@ -32,7 +32,7 @@ export async function install(mode:string) {
   const nativeInputs=host.__nativeInputs;delete host.__nativeInputs;
   const nativeExecution=host.__nativeExecution;delete host.__nativeExecution;
   const inputInvoke=(method:string,...args:string[])=>{const response=JSON.parse(nativeInputs[method](...args));if(!response.ok)throw new InputError(response.error.code,response.error.message);return response.value;};
-  const inputs:ApplicationInputs|undefined=nativeInputs?{rememberConversation:(conversation,capability)=>{inputInvoke('rememberConversationJson',JSON.stringify(conversation),JSON.stringify(capability??null));},readFrozen:async token=>inputInvoke('readFrozenJson',token),readObject:async(token,objectId)=>Buffer.from(inputInvoke('readObjectBase64',token,objectId),'base64')}:undefined;
+  const inputs:ApplicationInputs|undefined=nativeInputs?{rememberConversation:(conversation,capability)=>{inputInvoke('rememberConversationJson',JSON.stringify(conversation),JSON.stringify(capability??null));},readFrozen:async token=>inputInvoke('readFrozenJson',token),readObject:async(token,objectId)=>Buffer.from(inputInvoke('readObjectBase64',token,objectId),'base64'),retainFrozen:async(ownerId,token)=>{inputInvoke('retainFrozenJson',ownerId,token);}}:undefined;
   const locationEdits=nativeInputs?{beginLocationEdit:async(operationId:string)=>inputInvoke('beginLocationEditJson',operationId),readLocationEdit:async()=>inputInvoke('readLocationEditJson'),finishLocationEdit:async(operationId:string,contexts:unknown[])=>{inputInvoke('finishLocationEditJson',operationId,JSON.stringify(contexts));}}:undefined;
   const sends:SendAuthority|undefined=nativeInputs?{readSend:async id=>inputInvoke('readSendJson',id),listSends:async options=>inputInvoke('listSendsJson',JSON.stringify(options??{})),markDeliveryUnknown:async id=>inputInvoke('markDeliveryUnknownJson',id),confirmAdmission:async(id,receipt)=>inputInvoke('confirmAdmissionJson',id,JSON.stringify(receipt)),readControl:async id=>inputInvoke('readControlJson',id),pendingStops:async()=>inputInvoke('pendingStopsJson'),confirmAbort:async(id,barrier)=>inputInvoke('confirmAbortJson',id,JSON.stringify(barrier))}:undefined;
   let configuration:{models:Models;workspacePath:string;initialModel?:ModelSelection}={models:createModels(),workspacePath:join(host.__applicationRoot,'workspace')};
@@ -70,6 +70,14 @@ export async function install(mode:string) {
     if(metrics.submissionPolicyState==='running')return;metrics.submissionPolicyState='running';metrics.submissionPolicyCases=[];
     void(async()=>{const directory=join(host.__applicationRoot,'submission-policy-temp');await mkdir(directory,{recursive:true});const policy=await import(new URL('../validation/submission-policy.mjs',import.meta.url).href);await policy.runSubmissionPolicyChecks((result:unknown)=>(metrics.submissionPolicyCases as unknown[]).push(result),{tempRoot:directory});metrics.submissionPolicyState='passed';})().catch(error=>{metrics.submissionPolicyState='failed';metrics.submissionPolicyError=String(error.message??error);metrics.submissionPolicyDiagnostic=error.diagnostic;});
   };
+  if(mode==='fixture')host.__appRunRetentionPolicy=()=>{
+    if(metrics.retentionPolicyState==='running')return;metrics.retentionPolicyState='running';metrics.retentionPolicyCases=[];
+    void(async()=>{const directory=join(host.__applicationRoot,'retention-policy-temp');await mkdir(directory,{recursive:true});const policy=await import(new URL('../validation/retention-policy.mjs',import.meta.url).href);await policy.runRetentionPolicyChecks((result:unknown)=>(metrics.retentionPolicyCases as unknown[]).push(result),{tempRoot:directory});metrics.retentionPolicyState='passed';})().catch(error=>{metrics.retentionPolicyState='failed';metrics.retentionPolicyError=String(error.message??error);});
+  };
+  if(mode==='fixture')host.__appSeedFutureRetention=()=>{
+    if(metrics.retentionFutureState)return;metrics.retentionFutureState='seeding';
+    void(async()=>{await app.close();const fixture=await import(new URL('../validation/retention-seed.mjs',import.meta.url).href);await fixture.seedFutureRecord(path);metrics.retentionFutureState='seeded';})().catch(error=>{metrics.retentionFutureState='failed';metrics.retentionFutureError=String(error.message??error);});
+  };
   if(mode==='models-fixture')host.__appRunInputPolicy=()=>{
     if(metrics.inputPolicyState==='running')return;
     metrics.inputPolicyState='running';metrics.inputPolicyCases=[];
@@ -97,5 +105,6 @@ export async function install(mode:string) {
   host.__takeAppEvents=()=>JSON.stringify(events.splice(0));
   host.__appStatus=()=>JSON.stringify({...app.status(),metrics});
   host.__appClose=()=>{void app.close().then(()=>{host.__appClosed=true;}).catch(error=>{host.__appFailure=String(error);});};
-  await app.start();
+  try {await app.start();}
+  catch(error){if(!app.status().readOnly)throw error;}
 }
