@@ -1,0 +1,43 @@
+docs/evidence/t12/README.md
+  s_467dcb949b5b60::t_4c62047cce83c2 87-96,113
+docs/evidence/t12/LOG-SHA256.json
+  s_467dcb949b5b60::t_d8ccf13731f7f6 29-48,184-218
+docs/evidence/t12/t12-final-joint-build01.log
+  s_467dcb949b5b60::t_7ea71c2d721637 1-196
+docs/evidence/t12/t12-final-joint-helper-pins.json
+  s_467dcb949b5b60::t_d11b186a278dfe 1-58
+docs/evidence/t12/t12-final-joint01-artifacts.json
+  s_467dcb949b5b60::t_fb606a92a4ebca 1-11
+docs/evidence/t12/t12-final-joint01-root-inspection.json
+  s_467dcb949b5b60::t_6b8579decc3cfb 1-399
+docs/evidence/t12/t12-notification01-background.json
+  s_467dcb949b5b60::t_3f9dd29b0150f3 1-185
+docs/evidence/t12/t12-notification01-baseline.json
+  s_467dcb949b5b60::t_509e3f98ee2b4e 1-60
+docs/evidence/t12/t12-notification01-credential-audit.json
+  s_467dcb949b5b60::t_6b20697cfc0f33 1-19
+docs/evidence/t12/t12-notification01-external-completion.json
+  s_467dcb949b5b60::t_755789aea5c172 1-157
+docs/evidence/t12/t12-notification01-physical-tap.json
+  s_467dcb949b5b60::t_37e87f5189c4cd 1-19
+docs/evidence/t12/t12-notification01-prepare.json
+  s_467dcb949b5b60::t_642fe013f19ed5 1-75
+docs/evidence/t12/t12-notification01-target.json
+  s_467dcb949b5b60::t_7194be6f413bd8 1-195
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "fa5769f490f8ac26fbdd2fd06a5eb19cade47dd3",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
