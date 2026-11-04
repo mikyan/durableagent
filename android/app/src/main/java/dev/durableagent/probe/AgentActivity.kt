@@ -29,7 +29,7 @@ class AgentActivity:Activity() {
         if(debug)WebView.setWebContentsDebuggingEnabled(true)
         val mode=if(debug)intent.getStringExtra("validationMode")?:"product" else "product"
         val run=if(debug)intent.getStringExtra("validationRun") else null
-        inputs=NativeInputBridge(this,NativeInputBridge.namespace(mode,run)){json->if(webView===view&&!destroyed)view.evaluateJavascript("window.__durableReceive?.(${json})",null)}
+        inputs=NativeInputBridge(this,NativeInputBridge.namespace(mode,run),mode,run){json->if(webView===view&&!destroyed)view.evaluateJavascript("window.__durableReceive?.(${json})",null)}
         execution=NativeExecutionBridge(this){json->if(webView===view&&!destroyed)view.evaluateJavascript("window.__durableReceive?.(${json})",null)}
         documents=NativeDocumentBridge(this,NativeDocumentBridge.namespace(mode,run)){json->if(webView===view&&!destroyed)view.evaluateJavascript("window.__durableReceive?.($json)",null)}
         client=if(mode=="input-only")null else ApplicationClient(this,mode,run){what,json ->
@@ -79,6 +79,6 @@ class AgentActivity:Activity() {
         setContentView(layout)
     }
     override fun onActivityResult(requestCode:Int,resultCode:Int,data:Intent?){if(documents?.selected(requestCode,resultCode,data)!=true&&inputs?.selected(requestCode,resultCode,data)!=true)super.onActivityResult(requestCode,resultCode,data)}
-    override fun onRequestPermissionsResult(requestCode:Int,permissions:Array<out String>,grantResults:IntArray){if(execution?.permissionResult(requestCode,permissions,grantResults)!=true)super.onRequestPermissionsResult(requestCode,permissions,grantResults)}
+    override fun onRequestPermissionsResult(requestCode:Int,permissions:Array<out String>,grantResults:IntArray){if(inputs?.notificationPermissionResult(requestCode)!=true&&execution?.permissionResult(requestCode,permissions,grantResults)!=true)super.onRequestPermissionsResult(requestCode,permissions,grantResults)}
     override fun onDestroy(){destroyed=true;client?.disconnect();inputs?.close();inputs=null;execution?.close();execution=null;documents?.close();documents=null;webView?.let{it.removeJavascriptInterface("DurableNative");it.destroy()};webView=null;super.onDestroy()}
 }

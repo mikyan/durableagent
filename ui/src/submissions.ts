@@ -1,4 +1,4 @@
-import {DEFAULT_QUEUE,type CreateSend,type NativeAdmissionAck,type NativeControl,type NativeSendIntent,type RequestStop,type SendIntentPage,type SendStatus,type SubmissionContext} from '../../runtime/src/submission-protocol';
+import {DEFAULT_QUEUE,type CreateSend,type NativeAdmissionAck,type NativeControl,type NativeStopStatus,type NativeSendIntent,type RequestStop,type SendIntentPage,type SendStatus,type SubmissionContext} from '../../runtime/src/submission-protocol';
 import type {FrozenInput,NativeDraft} from '../../runtime/src/input-protocol';
 import {ApplicationClient,ApplicationFailure} from './client';
 
@@ -13,10 +13,11 @@ export class SubmissionCoordinator {
   private pages=new Map<string,{next?:string;loading:boolean;error?:string}>();
   private refreshing=new Map<string,Promise<void>>();
   private controls=new Map<string,NativeControl>();
+  private stopStatuses=new Map<string,{sequence:number;value:NativeStopStatus}>();
   private actionVersions=new Map<string,number>();
   private stops=new Map<string,StopView>();
   constructor(private readonly client:()=>ApplicationClient|undefined,private readonly ready:()=>boolean,private readonly changed:()=>void,private readonly acknowledged:(ack:NativeAdmissionAck,editEpoch?:number)=>Promise<void>){}
-  view(id:string){return {items:[...this.records.values()].filter(record=>record.view.id===id).map(record=>({...record.view})).sort((a,b)=>b.createdAt-a.createdAt),...this.pages.get(id),control:this.controls.get(id),stopping:this.stops.get(id)?.pending??false,stopError:this.stops.get(id)?.error,stopRuntime:this.stops.get(id)?.runtime};}
+  view(id:string){return {items:[...this.records.values()].filter(record=>record.view.id===id).map(record=>({...record.view})).sort((a,b)=>b.createdAt-a.createdAt),...this.pages.get(id),control:this.controls.get(id),stopStatus:this.stopStatuses.get(id)?.value,stopping:this.stops.get(id)?.pending??false,stopError:this.stops.get(id)?.error,stopRuntime:this.stops.get(id)?.runtime};}
   actionVersion(id:string){return this.actionVersions.get(id)??0;}
   private checkAction(id:string,version:number){if(version!==this.actionVersion(id))throw new ApplicationFailure('SEND_STOPPED','此次发送已被后来的停止操作拦下。需要继续时请明确新发送。');}
   private notify(){if(this.alive)this.changed();}
@@ -93,7 +94,8 @@ export class SubmissionCoordinator {
     const pending=(async()=>{
       const reads:Promise<void>[]=[
         this.request<SendIntentPage>('input.listSends',{id,limit:30,...(cursor?{cursor}:{})}).then(page=>{if(!current())return;if(!Array.isArray(page?.intents))throw Error('原生发送目录不可用。');for(const intent of page.intents)this.adopt(intent);this.pages.set(id,{...this.pages.get(id),loading:true,next:page.next});this.notify();}),
-        this.request<NativeControl>('input.readControl',{id}).then(control=>{if(current()&&control.version>=(this.controls.get(id)?.version??-1)){this.controls.set(id,control);this.notify();}})
+        this.request<NativeControl>('input.readControl',{id}).then(control=>{if(current()&&control.version>=(this.controls.get(id)?.version??-1)){this.controls.set(id,control);this.notify();}}),
+        this.request<NativeStopStatus>('input.stopStatus',{id}).then(value=>{if(current()&&sequence>=(this.stopStatuses.get(id)?.sequence??-1)&&value.control.version>=(this.controls.get(id)?.version??-1)){this.stopStatuses.set(id,{sequence,value});this.controls.set(id,value.control);this.notify();}})
       ];
       if(this.ready())reads.push(this.request<{items:SendStatus[];next?:string}>('sendList',{id,limit:30,...(cursor?{cursor}:{})}).then(async page=>{if(!current())return;if(!Array.isArray(page?.items))throw Error('SDK 接纳状态尚未取得。');for(const status of page.items){if(!current())return;await this.applyStatus(status,sequence);}}));
       const results=await Promise.allSettled(reads);

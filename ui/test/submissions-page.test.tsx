@@ -10,6 +10,19 @@ import type {SubmissionProgress} from '../../runtime/src/submission-protocol';
 import type {UiState} from '../src/controller';
 import {SendStates} from '../src/extensions/submissions';
 
+it('keeps external uncertainty visible after SDK abort and confirms completion only with native proof',()=>{
+  const controller={refreshSubmissions:async()=>{}} as unknown as ConversationController;
+  const control={id:'one',version:1,generation:1,stoppedThrough:1};
+  const state={submissions:{items:[],control,stopping:false,stopStatus:{control,phase:'external-unconfirmed',externalPending:1,externalUnknown:1}}} as unknown as UiState;
+  try{
+    const {rerender}=render(<SendStates controller={controller} state={state}/>);
+    expect(screen.getByTestId('stop-status').textContent).toContain('外部结果待核验');
+    expect(screen.getByTestId('stop-status').textContent).not.toContain('停止完成');
+    rerender(<SendStates controller={controller} state={{...state,submissions:{...state.submissions!,stopStatus:{control,phase:'stopped',externalPending:0,externalUnknown:0}}} as UiState}/>);
+    expect(screen.getByTestId('stop-status').textContent).toContain('停止完成');
+  }finally{cleanup();}
+});
+
 it('allows an explicit queued send and distinguishes input settlement from the conversation still running',async()=>{
   const native=new InputPlatform();const summary:ConversationSummary={id:'one',title:'仍在执行的会话',model:{provider:'fixture',modelId:'one',name:'模型'},workspaceId:'default',projectId:null,createdAt:1,phase:'running'};native.rememberConversation(summary);
   let progress:SubmissionProgress['status']='queued';const requests:ApplicationRequest[]=[];

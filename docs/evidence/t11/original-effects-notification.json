@@ -1,0 +1,39 @@
+{
+  "authority": "Actual persisted Termux executor receipts and independent original-file observation; read-only. Other fixture was explicitly cleaned up after target-scope assertion.",
+  "observations": [
+    {
+      "executionId": "1ac5b4f0-6471-455c-93ec-333d88399d78",
+      "state": "stopped",
+      "scopeConfirmed": true,
+      "cancelRequested": true,
+      "exitCode": -15,
+      "requestDigest": "efe3ced4d5802f3db391644bdc874f198af47d38d4dbb1cdc00a3c6eb4fa502e",
+      "productId": "target",
+      "controlGeneration": 1,
+      "lateEffect": {
+        "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t09-13a2b0e2-a10b-4791-be9b-f512be4d54d7-cancel",
+        "exists": false
+      }
+    },
+    {
+      "executionId": "a32559f9-a105-492d-8fee-97709cfa0786",
+      "state": "stopped",
+      "scopeConfirmed": true,
+      "cancelRequested": true,
+      "exitCode": -15,
+      "requestDigest": "339f28542ad09e84e6b8a9caa58ca7929616a7cc6eb90415d624b82f3a10d8d8",
+      "productId": "other",
+      "controlGeneration": 1
+    },
+    {
+      "executionId": "9842b615-cd87-483d-af79-be90680feead",
+      "state": "completed",
+      "scopeConfirmed": true,
+      "cancelRequested": null,
+      "exitCode": 0,
+      "requestDigest": "94f080a7723d4dd5ce0921548d04bea0f32a1941075b631903e47816174b338b",
+      "productId": "target",
+      "controlGeneration": 2
+    }
+  ]
+}

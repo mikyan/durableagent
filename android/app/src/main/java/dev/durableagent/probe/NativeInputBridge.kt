@@ -8,7 +8,7 @@ import java.util.concurrent.RejectedExecutionException
 import java.util.concurrent.atomic.AtomicInteger
 
 /** Same public envelope, independently routed before any Node/Binder owner queue. */
-class NativeInputBridge(private val activity:Activity,namespace:String,private val deliver:(String)->Unit):AutoCloseable {
+class NativeInputBridge(private val activity:Activity,namespace:String,private val mode:String="product",private val run:String?=null,private val deliver:(String)->Unit):AutoCloseable {
     private val store=NativeInputStore(activity,namespace)
     private val access=NativeInputAccess(store)
     private val writes=Executors.newSingleThreadExecutor()
@@ -16,11 +16,23 @@ class NativeInputBridge(private val activity:Activity,namespace:String,private v
     private val active=AtomicInteger(0)
     @Volatile private var closed=false
     private var selection:JSONObject?=null
+    private var notificationProduct:String?=null
     fun accept(encoded:String):Boolean {
         val request=try{JSONObject(encoded)}catch(_:Exception){return false}
         val method=request.optString("method")
         if(!method.startsWith("input."))return false
         if(request.optInt("protocol")!=1){reply(request,error("PROTOCOL_MISMATCH","界面与原生输入版本不兼容。"));return true}
+        if(method=="input.stopNotification"){
+            execute(request,false,action={result{store.readControl(request.getJSONObject("payload").getString("id"))}},done={encoded->
+                val result=JSONObject(encoded);if(!result.optBoolean("ok")){reply(request,encoded);return@execute}
+                val control=result.getJSONObject("value");notificationProduct=control.getString("id")
+                NativeStopController.publish(activity.applicationContext,mode,run,control)
+                val enabled=activity.getSystemService(android.app.NotificationManager::class.java).areNotificationsEnabled()
+                if(!enabled){if(activity.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)!=android.content.pm.PackageManager.PERMISSION_GRANTED)activity.requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),NOTIFICATIONS)
+                    else activity.startActivity(Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(android.provider.Settings.EXTRA_APP_PACKAGE,activity.packageName))}
+                reply(request,JSONObject().put("ok",true).put("value",JSONObject().put("enabled",enabled).put("requested",!enabled)).toString())
+            });return true
+        }
         if(method=="input.select"){
             if(selection!=null){reply(request,error("INPUT_PICKER_OPEN","附件选择器已打开，请完成或取消当前选择。"));return true}
             val kind=request.optJSONObject("payload")?.optString("kind")
@@ -37,7 +49,11 @@ class NativeInputBridge(private val activity:Activity,namespace:String,private v
             return true
         }
         execute(request,method in setOf("input.read","input.prepare","input.freeze"),action={
-            access.requestJson(method,(request.optJSONObject("payload")?:JSONObject()).toString())
+            val payload=request.optJSONObject("payload")?:JSONObject()
+            if(method=="input.stop")result{NativeStopController.request(activity.applicationContext,mode,run,payload)}
+            else access.requestJson(method,payload.toString()).also{encoded->
+                if(method=="input.readControl"){val response=JSONObject(encoded);if(response.optBoolean("ok"))NativeStopController.publish(activity.applicationContext,mode,run,response.getJSONObject("value"))}
+            }
         })
         return true
     }
@@ -91,7 +107,12 @@ class NativeInputBridge(private val activity:Activity,namespace:String,private v
         deliver(value.toString())
     }
     override fun close(){closed=true;selection=null;writes.shutdown();sources.shutdown();if(active.get()==0)store.close()}
-    companion object {const val PICK_DOCUMENT=4606
+    fun notificationPermissionResult(requestCode:Int):Boolean{
+        if(requestCode!=NOTIFICATIONS)return false;val id=notificationProduct?:return true
+        if(!closed)try{writes.execute{runCatching{NativeStopController.publish(activity.applicationContext,mode,run,store.readControl(id))}}}catch(_:RejectedExecutionException){}
+        return true
+    }
+    companion object {const val PICK_DOCUMENT=4606;const val NOTIFICATIONS=4611
         fun namespace(mode:String,run:String?):String {
             if(mode=="product")return "input-v1"
             require(run?.matches(Regex("[a-zA-Z0-9-]{1,80}"))==true)

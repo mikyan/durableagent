@@ -11,6 +11,7 @@ export function executionValidation(run:string,requested:()=>void){
   EXEC_FAILURE:{command:"printf 'expected failure\\n' >&2; exit 7"},
   EXEC_LARGE:{command:"python -c \"import sys; sys.stdout.buffer.write(('line-世界\\n'*100000).encode()); sys.stdout.buffer.flush()\""},
   EXEC_CANCEL:{command:`printf 'ready-to-cancel\\n'; sleep 30; printf 'too-late\\n' >> '${prefix}-cancel'`},
+  EXEC_UNRELATED:{command:"printf 'unrelated-running\\n'; sleep 30; printf 'unrelated-finished\\n'"},
   EXEC_VERIFY_CANCEL:{command:`if test ! -e '${prefix}-cancel'; then printf 'cancel-effect-absent\\n'; else exit 99; fi`},
   EXEC_RECONNECT:{command:`printf 'before-disconnect\\n'; sleep 2; printf 'after-reconnect\\n'; printf 'one\\n' >> '${prefix}-reconnect'`},
   EXEC_TIMEOUT:{command:`sleep 30; printf 'too-late\\n' >> '${prefix}-timeout'`,timeout:0.2},

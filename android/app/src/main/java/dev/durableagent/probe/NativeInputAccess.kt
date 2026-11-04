@@ -33,6 +33,7 @@ class NativeInputAccess(private val store: NativeInputStore) : AutoCloseable {
             "input.readSend" -> store.readSend(payload.getString("intentId"))
             "input.listSends" -> store.listSends(payload)
             "input.readControl" -> store.readControl(id())
+            "input.stopStatus" -> store.stopStatus(id())
             "input.stop" -> store.requestStop(payload)
             else -> throw NativeInputException("INPUT_UNKNOWN_ACTION", "未登记的原生输入操作。")
         }
@@ -82,6 +83,12 @@ class NativeInputAccess(private val store: NativeInputStore) : AutoCloseable {
 
     @V8Function
     fun confirmAbortJson(id: String, barrierJson: String): String = result { store.confirmAbort(id, JSONObject(barrierJson)) }
+
+    /** Fixed-core effects only. These annotated methods are never installed in the WebView bridge. */
+    @V8Function fun registerEffectJson(value:String):String=result{store.registerEffect(JSONObject(value))}
+    @V8Function fun adoptEffectJson(value:String):String=result{store.adoptEffect(JSONObject(value))}
+    @V8Function fun requireEffectJson(operationId:String):String=result{store.requireEffect(operationId)}
+    @V8Function fun recordEffectEvidenceJson(operationId:String,value:String):String=result{store.recordEffectEvidence(operationId,JSONObject(value))}
 
     /** Never bind to WebView. The actual SDK inline image is constructed only on explicit send. */
     @V8Function
