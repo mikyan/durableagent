@@ -8,7 +8,7 @@ import type {ExecutionChannel} from './execution-channel.js';
 import type {FilePosition,WriteScope} from './workspace-coordination.js';
 import type {FileEffectAuthority,FileEffectIdentity,FileEffectEvidence,FileExecutionIdentity} from './file-effect-protocol.js';
 
-export type FileExecutionEffect={scope:WriteScope;fileOperationId:string;beforePrepare:(execution:FileExecutionIdentity)=>Promise<void>};
+export type FileExecutionEffect={scope:WriteScope;fileOperationId:string;remember:(execution:FileExecutionIdentity)=>Promise<void>;beforePrepare:(execution:FileExecutionIdentity)=>Promise<void>};
 export type FileMutationMode='write'|'append'|'truncate'|'flush'|'rename';
 export type FileMutationOptions={size?:number;destination?:string};
 type Fixed={operationId:string;path:string;mode?:FileMutationMode;options?:FileMutationOptions;contentDigest?:string;totalBytes?:number;data?:string;namespace:string;bindingId:string;productId:string;sdkConversationId:number;argv:string[];position:FilePosition};
@@ -49,10 +49,8 @@ export class FileWrites{
    if(fixed.path!==absolute||(fixed.mode??'write')!==mode||!same(fixed.options??{},options)||contentIdentity(fixed).digest!==sha(bytes)||contentIdentity(fixed).size!==bytes.length||fixed.bindingId!==binding.id||fixed.productId!==binding.controlProductId||fixed.sdkConversationId!==api.conversationId)throw unknown(absolute);
    if(stored.result?.state==='completed'&&stored.proof?.scopeConfirmed&&stored.result.after?.sha256===expectedIdentity(fixed,stored.plan).digest&&stored.result.after?.size===expectedIdentity(fixed,stored.plan).size){if(this.effects&&stored.native){this.checkNative(await this.effects.adopt(copy(stored.native)),stored.native);this.checkNativeProof(await this.effects.record(stored.native.operationId,copy(stored.proof)),stored.native,stored.proof);}return {ok:true,value:undefined};}
    if(bytes.length>32768){let offset=0;while(offset<bytes.length){context.abortSignal?.throwIfAborted();const chunk=bytes.subarray(offset,offset+32768),reply=await this.call('file.stage',{digest:contentIdentity(fixed).digest,totalBytes:bytes.length,offset,data:chunk.toString('base64')},absolute);if(reply.namespace!==fixed.namespace||reply.digest!==contentIdentity(fixed).digest||reply.totalBytes!==bytes.length||!Number.isSafeInteger(reply.nextOffset)||reply.nextOffset<offset+chunk.length||reply.nextOffset>bytes.length||reply.sealed!==(reply.nextOffset===bytes.length))throw unknown(absolute);offset=reply.nextOffset;}}
-   const outcome=await run(fixed.argv,{scope:mode==='rename'?{domain:'device-files',kind:'environment'}:{domain:'device-files',kind:'paths',positions:[fixed.position]},fileOperationId:fixed.operationId,beforePrepare:async execution=>{
-    if(execution.context.productId!==fixed.productId||execution.context.sdkConversationId!==fixed.sdkConversationId)throw unknown(absolute);
-    const native:FileEffectIdentity={operationId:fixed.operationId,kind:'file',source:'termux',namespace:fixed.namespace,...execution.context,requestDigest:sha(Buffer.from(JSON.stringify(canonical({fixed,control:execution.context}))))};
-    await api.commit(async tx=>{const intent=await tx.doc(Intent,key,null);if(!same(intent.fixed,fixed)||intent.native&&!same(intent.native,native))throw unknown(absolute);intent.native=copy(native);intent.executionId=execution.executionId;intent.executionDigest=execution.requestDigest;},context,{persistence:{kind:'immediate'}});
+   const outcome=await run(fixed.argv,{scope:mode==='rename'?{domain:'device-files',kind:'environment'}:{domain:'device-files',kind:'paths',positions:[fixed.position]},fileOperationId:fixed.operationId,remember:async execution=>{await this.remember(fixed.operationId,execution);},beforePrepare:async execution=>{
+    const native=await this.remember(fixed.operationId,execution);
     if(this.effects){this.checkNative(await this.effects.register(native),native);this.checkNative(await this.effects.require(native.operationId),native);}
     const mutation=mode!=='write'&&mode!=='append';
     const plan=await this.call(mutation?'file.prepareMutation':bytes.length>32768?'file.prepareStagedWrite':'file.prepareWrite',{operationId:fixed.operationId,path:fixed.path,...(mutation?{kind:mode,options}:{mode,...(bytes.length>32768?{digest:contentIdentity(fixed).digest,totalBytes:bytes.length}:{data})})},absolute);
@@ -71,6 +69,12 @@ export class FileWrites{
    return {ok:true,value:undefined};
   }catch(error){return {ok:false,error:context.abortSignal?.aborted?new FileError('aborted','文件写入等待已停止；已开始的效果仍按回执核验',absolute):error instanceof FileError?error:unknown(absolute)};}
  }
+ async remember(operationId:string,execution:FileExecutionIdentity):Promise<FileEffectIdentity>{
+  const entry=(await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items[operationId],stored=entry?await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT):undefined;if(!stored?.fixed)throw Error('FILE_STORAGE_INCONSISTENT');const fixed=copy(stored.fixed);
+  if(execution.context.productId!==fixed.productId||execution.context.sdkConversationId!==fixed.sdkConversationId)throw unknown(fixed.path);
+  const native:FileEffectIdentity={operationId,kind:'file',source:'termux',namespace:fixed.namespace,...execution.context,requestDigest:sha(Buffer.from(JSON.stringify(canonical({fixed,control:execution.context}))))};
+  await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,entry!.key,null);if(!same(intent.fixed,fixed)||intent.native&&!same(intent.native,native)||intent.executionId&&intent.executionId!==execution.executionId||intent.executionDigest&&intent.executionDigest!==execution.requestDigest)throw unknown(fixed.path);intent.native=copy(native);intent.executionId=execution.executionId;intent.executionDigest=execution.requestDigest;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});return native;
+ }
  private checkResult(result:any,fixed:Fixed,plan:Record<string,any>){if(result?.operationId!==fixed.operationId||result.namespace!==fixed.namespace||result.requestDigest!==plan.requestDigest||!['prepared','applying','completed','not_started','unknown'].includes(result.state))throw unknown(fixed.path);if(fixed.mode==='rename'&&result.state==='completed'&&(typeof plan.destination!=='string'||result.destination!==plan.destination))throw unknown(fixed.path);if(result.diff?.available&&(typeof result.diff.text!=='string'||Buffer.byteLength(result.diff.text)>16384))throw unknown(fixed.path);}
  private async saveResult(key:string,fixed:Fixed,result:Record<string,any>){await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,key,null);if(!same(intent.fixed,fixed))throw unknown(fixed.path);if(intent.result?.state==='completed')return;intent.result=copy(result);},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});}
  private checkNative(value:Record<string,any>,identity:FileEffectIdentity){if(!value||Object.entries(identity).some(([key,expected])=>value[key]!==expected))throw Error('FILE_NATIVE_IDENTITY_MISMATCH');}
@@ -86,7 +90,7 @@ export class FileWrites{
  async evidence(operationId:string,execution:Record<string,any>):Promise<{state:string;scopeConfirmed:boolean}>{
   const entry=(await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items[operationId],stored=entry?await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT):undefined;
   if(!stored?.fixed)throw Error('FILE_STORAGE_INCONSISTENT');
-  if(execution.state==='not_started'&&execution.neverStarted===true&&execution.scopeConfirmed===true)return this.publishProof(entry!.key,stored,execution,{state:'not_started',scopeConfirmed:true});
+  if(execution.state==='not_started'&&execution.neverStarted===true&&execution.scopeConfirmed===true){await this.saveResult(entry!.key,stored.fixed,{state:'not_started',original:true,path:stored.fixed.path,diff:{available:false,reason:'not_started'}});return this.publishProof(entry!.key,stored,execution,{state:'not_started',scopeConfirmed:true});}
   if(!execution.scopeConfirmed||!['completed','stopped','not_started'].includes(execution.state))return this.publishProof(entry!.key,stored,execution,{state:execution.state,scopeConfirmed:false});
   if(!stored.plan)return this.publishProof(entry!.key,stored,execution,{state:'unknown',scopeConfirmed:false});const fixed=copy(stored.fixed);let result=await this.call('file.writeResult',{operationId},fixed.path);this.checkResult(result,fixed,stored.plan);
   const expected=expectedIdentity(fixed,stored.plan);

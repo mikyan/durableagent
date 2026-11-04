@@ -39,6 +39,8 @@ export class ManagedExecution implements EffectAuthority {
  private namespace='unverified:termux';
  private tail:Promise<unknown>=Promise.resolve();
  private closedOwners=new Set<string>();
+ // Only this live invocation owns the pre-acceptance handoff. Never persisted as proof or used to release a writer.
+ private readonly dispatching=new Set<string>();
  private writes?:WorkspaceCoordinator;
  private readonly fileWrites:FileWrites;
  private readonly documents?:ManagedDocuments;
@@ -113,7 +115,7 @@ export class ManagedExecution implements EffectAuthority {
   const receipt=this.receipt(await this.options.channel.request('cancel',{executionId:request.executionId,reason:'user'}),request);
   // A native/SDK stop can retire the invocation. Execution facts outlive that task.
   await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,key,null),index=await tx.doc(Index);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_INTENT_MISMATCH','停止身份不一致');if(intent.receipt&&Number(receipt.sequence??0)<Number(intent.receipt.sequence??0))return;intent.receipt=copy(receipt);index.items[request.executionId].state=receipt.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});
-  if(receipt.state==='not_started'&&receipt.neverStarted===true&&receipt.scopeConfirmed===true)await this.writes?.cancelQueued(request.executionId);
+  if(receipt.state==='not_started'&&receipt.neverStarted===true&&receipt.scopeConfirmed===true){const stored=await this.owner().snapshot(Intent,key,BACKGROUND_CONTEXT);if(stored?.fileOperationId){await this.fileWrites.remember(stored.fileOperationId,{executionId:request.executionId,requestDigest:hash(request),context:{productId:request.context.productId,controlGeneration:request.context.controlGeneration,sdkConversationId:request.context.sdkConversationId}});await this.fileWrites.evidence(stored.fileOperationId,receipt);}await this.writes?.cancelQueued(request.executionId);}
  }
  private async reconcile(){
   await this.fileWrites.recoverNative();
@@ -125,7 +127,7 @@ export class ManagedExecution implements EffectAuthority {
    const saved=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);
    if(!saved?.request)return failure('EXECUTION_STORAGE_INCONSISTENT','执行索引缺少持久意图，运行保持关闭');
    const request=copy(saved.request);await this.options.channel.rememberIntent?.(request);let receipt:Receipt;
-   if(reservations.get(executionId)?.state==='queued')continue;
+   if(reservations.get(executionId)?.state==='queued'||this.dispatching.has(executionId))continue;
    try{receipt=this.receipt(await this.options.channel.request('query',{executionId}),request);if(receipt.reason==='NO_RECEIPT')throw Error('Acceptance not yet confirmed');}
    catch{receipt={...saved.receipt,protocol:1,executionId,namespace:request.context.namespace,context:request.context,state:'unknown',reason:'CLIENT_CONFIRMATION_LOST',source:'application'};}
    await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,entry.key,null),index=await tx.doc(Index);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_STORAGE_INCONSISTENT','执行意图在核验时改变');if(terminal.has(intent.receipt?.state??''))return;if(receipt.source!=='application'&&intent.receipt&&Number(receipt.sequence??0)<Number(intent.receipt.sequence??0))return;intent.receipt=copy(receipt);index.items[executionId].state=receipt.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});
@@ -152,17 +154,20 @@ export class ManagedExecution implements EffectAuthority {
     if(control.pendingAbort||control.generation<=control.stoppedThrough||context.abortSignal?.aborted)return failure('EXECUTION_STOPPED','控制代次已停止');
     const request:Request={executionId:randomUUID(),context:{productId:binding.controlProductId,sdkConversationId:api.conversationId,taskId:api.taskId,callId:api.callId,bindingId:binding.id,locationVersion:binding.location.version,controlGeneration:control.generation,namespace:identity.namespace},...fixed};
     intent.request=copy(request);intent.writeScope=copy(writeScope);if(fileEffect)intent.fileOperationId=fileEffect.fileOperationId;intent.workspaceIdentity=initialIdentity;workspaceIdentity=initialIdentity;index.items[request.executionId]={key,productId:binding.controlProductId,bindingId:binding.id,namespace:identity.namespace,state:'intent'};return request;
-   },context,{persistence:{kind:'immediate'}});});
+   },context,{persistence:{kind:'immediate'}}).then(request=>{if(!saved?.request)this.dispatching.add(request.executionId);return request;});});
    fixedRequest=request;
+   await fileEffect?.remember({executionId:request.executionId,requestDigest:hash(request),context:{productId:request.context.productId,controlGeneration:request.context.controlGeneration,sdkConversationId:request.context.sdkConversationId}});
    onAbort=()=>{cancelWait??=this.cancelRecorded(key,request);void cancelWait.catch(()=>{});};
    context.abortSignal?.addEventListener('abort',onAbort,{once:true});
    if(context.abortSignal?.aborted)onAbort();
    await this.options.boundary?.('intent-persisted',copy(request));
    await this.policy(request,api,context);
    for(;;){const reservation=await this.writes!.reserve(this.writeClaim(request,writeScope));if(reservation.state==='cancelled')return failure('EXECUTION_STOPPED','排队的写入已取消');if(reservation.state!=='queued')break;await this.policy(request,api,context);await this.writes!.refresh();await new Promise(resolve=>setTimeout(resolve,20));}
+   if(fileEffect)await this.options.boundary?.('file-reserved',copy(request));
    let receipt=this.receipt(await this.options.channel.request('query',{executionId:request.executionId}),request);
    if(receipt.state==='unknown'&&receipt.reason==='NO_RECEIPT'){try{await fileEffect?.beforePrepare({executionId:request.executionId,requestDigest:hash(request),context:{productId:request.context.productId,controlGeneration:request.context.controlGeneration,sdkConversationId:request.context.sdkConversationId}});}catch(error){await this.cancelRecorded(key,request);throw error;}receipt=this.receipt(await this.options.channel.request('prepare',request),request);}
    await this.save(api,key,request,receipt);
+   this.dispatching.delete(request.executionId);
    await this.options.boundary?.('accepted',copy(request));
    if(receipt.state==='accepted_not_started'){
     await this.policy(request,api,context);
@@ -198,7 +203,7 @@ export class ManagedExecution implements EffectAuthority {
    if(cancelWait)try{await cancelWait;}catch{}
    if(fixedRequest){const request=fixedRequest;try{await api.commit(async tx=>{const intent=await tx.doc(Intent,key,null),index=await tx.doc(Index);if(intent.request&&same(intent.request,request)&&!terminal.has(intent.receipt?.state??'')){intent.receipt={...intent.receipt,protocol:1,executionId:request.executionId,namespace:request.context.namespace,context:request.context,state:'unknown',reason:'CLIENT_CONFIRMATION_LOST',source:'application'};index.items[request.executionId].state='unknown';}},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});}catch{/* A killed invocation cannot commit. Its durable intent remains pending for startup reconciliation. */}}
    return {ok:false,error:new ExecutionError('unknown',error instanceof ManagedExecutionError?error.message:'执行连接未确认结果，保留原身份等待核验')};
-  }finally{if(onAbort)context.abortSignal?.removeEventListener('abort',onAbort);}
+  }finally{if(fixedRequest)this.dispatching.delete(fixedRequest.executionId);if(onAbort)context.abortSignal?.removeEventListener('abort',onAbort);}
  }
  async cleanup(binding:AdoptedBinding,context:Context){return this.serial(async()=>{
   context.abortSignal?.throwIfAborted();this.closedOwners.add(binding.id+':'+binding.sdkConversationId);

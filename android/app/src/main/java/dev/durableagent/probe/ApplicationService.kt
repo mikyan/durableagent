@@ -74,6 +74,8 @@ class ApplicationService:Service() {
                 51->if(debug)reply?.let {node?.getExecutor("globalThis.__appExtensionRoute?.(${JSONObject.quote(text)})")?.executeVoid();send(it,51,status())}
                 52->if(debug)node?.getExecutor("globalThis.__appRunExtensionPolicy?.()")?.executeVoid()
                 56->if(debug)node?.getExecutor("globalThis.__appRunStopPolicy?.()")?.executeVoid()
+                57->if(debug)reply?.let {node?.getExecutor("globalThis.__appExecutionTool?.(${JSONObject.quote(text)})")?.executeVoid();send(it,57,status())}
+                58->if(debug)reply?.let {node?.getExecutor("globalThis.__appFileGate?.(${JSONObject.quote(text)})")?.executeVoid();send(it,58,status())}
                 53->if(debug)node?.getExecutor("globalThis.__appRunRetentionPolicy?.()")?.executeVoid()
                 54->if(debug)node?.getExecutor("globalThis.__appSeedFutureRetention?.()")?.executeVoid()
                 40->if(debug)node?.getExecutor("globalThis.__appRunSubmissionPolicy?.()")?.executeVoid()

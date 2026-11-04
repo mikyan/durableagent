@@ -19,6 +19,13 @@ export function fileConformanceTool(execution:ManagedExecution){return execution
  execute:async({run,caseName},api,context)=>{
   if(!/^[a-zA-Z0-9-]{1,80}$/.test(run)||!api.env)throw Error('Invalid file fixture');
   const env=api.env,root=`.durableagent-t10-${run}`,path=`${root}/nested/original.bin`;
+  if(caseName==='pure')return {output:[{type:'text',text:'FILE-PURE-PASS'}]};
+  if(caseName==='queue-append'){
+   const target=`${root}/queue.txt`;getOrThrow(await env.appendFile(target,'local\n',context));return {output:[{type:'text',text:'FILE-QUEUE-LOCAL-PASS:'+JSON.stringify({path:getOrThrow(await env.canonicalPath(target,context))})}]};
+  }
+  if(caseName==='queue-read'){
+   const target=`${root}/queue.txt`,data=getOrThrow(await env.readBinaryFile(target,context));return {output:[{type:'text',text:'FILE-QUEUE-READ:'+JSON.stringify({path:getOrThrow(await env.canonicalPath(target,context)),text:Buffer.from(data).toString('utf8'),sha256:sha(data)})}]};
+  }
   if(caseName==='dependency'){
    const artifact='/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-uthash-install02/lookup';
    const bytes=getOrThrow(await env.readBinaryFile(artifact,context));assert.equal(bytes.length,11656);assert.equal(sha(bytes),'e9b291013974011a54775a99e1eb1f7178425c12fd6919f44128abea08b1906b');
