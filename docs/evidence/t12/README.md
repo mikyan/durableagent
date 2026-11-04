@@ -113,3 +113,9 @@ T15 `75ab2ae` 已合入生产源码 `a8ee9c0`，fixture-only `342c1b7` 增加观
 - 联合 T15 的真实通知目标已通过；新增全量审查问题待修复及独立复核。
 - T13 已验收并合入；T12 自身最终联合构建、正确 LF helper 字节／源码／打包对应核验和独立合并审查仍待完成。
 - T17 OEM 矩阵；本文模拟器与分批验证不替代 Galaxy S23／Xiaomi 厂商行为。
+
+## 宿主重开后重新发布同一唤醒
+
+全量审查提出的 restoreRunning 缺口已由实际 Android JobScheduler／公开 Application 验证：[同一固定测试 RED](t12-wake-reopen-red01-device.log) 15.590 秒。先用自有 jobId 冲突让一次实际离线发送的 wake 持久但发布失败，正常关闭旧宿主并确认 Service 消失；移除冲突后建立不同 instance 的新宿主，仍无法重新发布相同 wake。没有第二次发送或模型请求。根因是 restoreRunning 把持久计划预置为 lastWake，而持久化不等于系统发布成功。最小修复只取消此预置，缓存仍仅在 schedule 成功后更新。
+
+[同一测试 APK GREEN](t12-wake-reopen-green01-device.log) 7.332 秒，run `c0c6d0f0-118d-40f9-99e5-0f757e0967ed`，原 admission 保持、new owner、实际 jobId 1999245591、modelRequests 0，finally 停止自己的输入并恢复网络。RED [冻结值](t12-wake-reopen-red01-artifacts.json) main C233；GREEN [冻结值](t12-wake-reopen-green01-artifacts.json) main `02bb43d457f41baeda26eba3c569caa140b6f2f108d5a071ac4adc4630e78a6d`；两者 test 均 `add94483522761419b900b300c3fdac6008f9f809e9357106498a46ed2e69f5a`，断言未改。命令为实际网络关闭后 `am instrument -w -e class dev.durableagent.probe.RecoveryJobApplicationTest#aReopenedOwnerRepublishesItsPersistedWakeWithoutAnotherInput -e actualNetworkOffline true dev.durableagent.probe.test/androidx.test.runner.AndroidJUnitRunner`，结束恢复 Wi-Fi／移动数据。该显式宿主重开测试不冒称进程自然死亡；先前无 instrumentation 的产品生命周期证据仍按原候选限定。最终 native 修改之后还需跑已有 Job lifetime 回归。

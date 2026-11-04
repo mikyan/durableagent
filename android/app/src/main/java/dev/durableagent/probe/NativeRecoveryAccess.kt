@@ -27,7 +27,8 @@ class NativeRecoveryAccess(private val service:ApplicationService,private val mo
     init{service.registerReceiver(receiver,IntentFilter().apply{addAction(Intent.ACTION_TIME_CHANGED);addAction(Intent.ACTION_USER_UNLOCKED)},Context.RECEIVER_NOT_EXPORTED)}
     /** Called before bundle unpack on a legally started host; no model/effect permission is inferred. */
     fun restoreRunning(){
-        val wake=store.readWake();lastWake=wake.toString();due=if(wake.has("at"))wake.getLong("at")else null
+        // Persisted intent is not proof that this owner published an Android job.
+        val wake=store.readWake();due=if(wake.has("at"))wake.getLong("at")else null
         if(!wake.optBoolean("active")&&!wake.has("at")){pendingWork=false;return}
         val projection=store.readProjection().put("restoring",true)
         NativeRecoveryNotifications.running(service,mode,run,projection)?.let{publishForeground(it)}
