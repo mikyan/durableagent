@@ -29,14 +29,24 @@ def agent():
 def journals_absent():
  command='test ! -e '+database+'-journal && test ! -e '+database+'-wal && test ! -e '+database+'-shm'
  return call('shell','run-as',package,'sh','-c',"'"+command+"'",check=False).returncode==0
+def primary_user_conditions(trust,users):
+ assert re.search(r'^Current user:\s*0\s*$',users,re.M),'Current Android user must be primary user 0'
+ user=re.search(r'^  UserInfo\{0:[^\n]*isPrimary=true\s*\n(?P<body>.*?)(?=^  UserInfo\{|\Z)',users,re.M|re.S)
+ assert user,'Primary user 0 block not recognized'
+ state=re.search(r'^\s+State:\s*(\w+)\s*$',user['body'],re.M)
+ assert state,'Primary user 0 running state unavailable'
+ rows=[line for line in trust.splitlines() if re.search(r'^\s*User .*\(id=0,.*\(current\):',line)]
+ assert len(rows)==1,'Exactly one current primary trust record required'
+ locked=re.search(r'\bdeviceLocked=(true|false|1|0)\b',rows[0])
+ assert locked,'Current primary deviceLocked flag unavailable'
+ return {'userId':0,'userState':state[1],'userUnlocked':state[1]=='RUNNING_UNLOCKED','lockedDetected':locked[1] in ('true','1')}
 def capture_state():
  package_dump=text('shell','dumpsys','package',package)
  user_line=next((line.strip() for line in package_dump.splitlines() if re.search(r'User 0:',line)),None)
  assert user_line and re.search(r'\bstopped=(true|false)\b',user_line), 'Actual package stopped state not recognized'
  trust=text('shell','dumpsys','trust')
- locked=bool(re.search(r'\bdeviceLocked=true\b',trust))
- # Keep raw system evidence for root to verify current user and keyguard scope.
- return {'at':now(),'agentPid':agent(),'packageUserState':user_line,'stopped':'stopped=true' in user_line,'lockedDetected':locked},trust
+ users=text('shell','dumpsys','user')
+ return {'at':now(),'agentPid':agent(),'packageUserState':user_line,'stopped':'stopped=true' in user_line,**primary_user_conditions(trust,users)},trust,users
 def stable_snapshot(index):
  if agent() or not journals_absent():return None
  first=call('exec-out','run-as',package,'cat',database,check=False)
@@ -64,19 +74,23 @@ report={'product':product,'run':prepared['run'],'startedAt':now(),'observerStart
 end=time.monotonic()+args.wait;index=0
 try:
  while True:
-  state,trust=capture_state();index+=1
+  state,trust,users=capture_state();index+=1
+  assert state['userUnlocked'],'External completion observation requires actual primary user RUNNING_UNLOCKED'
   if args.require_locked:assert state['lockedDetected'],'Actual dumpsys trust did not establish locked state; root must inspect device evidence'
   if args.stopped_interval:assert state['stopped'] and not state['agentPid'],'Force-stop interval lost stopped state or acquired an agent process'
   snapshot=stable_snapshot(index) if not state['agentPid'] else None
   state['nativeSnapshot']=snapshot;report['observations'].append(state)
   if snapshot and snapshot['completion']:
    assert not args.stopped_interval,'Original offline work completed during force-stop interval'
+   after,trust,users=capture_state();assert not after['agentPid'] and after['userUnlocked'],'Owner/user state changed after stable completion copy'
+   if args.require_locked:assert after['lockedDetected'],'Primary device became unlocked before completion proof ended'
+   state['afterSnapshot']=after
    # Capture system records without executing any PendingIntent. A full notification
    # matching the original product is corroboration; the native DB proves completion.
    (destination/'notification.txt').write_text(text('shell','dumpsys','notification','--noredact'),encoding='utf-8')
    (destination/'pending-intents.txt').write_text(text('shell','dumpsys','activity','intents'),encoding='utf-8')
    (destination/'trust.txt').write_text(trust,encoding='utf-8')
-   (destination/'users.txt').write_text(text('shell','dumpsys','user'),encoding='utf-8')
+   (destination/'users.txt').write_text(users,encoding='utf-8')
    report.update(completed=True,observedAt=now(),nativeSnapshot=snapshot,ownerAbsentBeforeAndAfterCopy=True)
    break
   if time.monotonic()>=end:
