@@ -1,0 +1,43 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentTest:
+INSTRUMENTATION_STATUS: test=revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"actual-grant-revoked","platformHeldFdStillReadable":true,"applicationPolicy":"reject-further-original-reads-after-current-uri-grant-revocation"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Application original capability must reject reads after current URI grant revocation
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.NativeDocumentTest.revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader$lambda$1$0$denied(NativeDocumentTest.kt:52)
+	at dev.durableagent.probe.NativeDocumentTest.revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader(NativeDocumentTest.kt:56)
+
+INSTRUMENTATION_STATUS: stream=
+Error in revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader(dev.durableagent.probe.NativeDocumentTest):
+java.lang.AssertionError: Application original capability must reject reads after current URI grant revocation
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.NativeDocumentTest.revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader$lambda$1$0$denied(NativeDocumentTest.kt:52)
+	at dev.durableagent.probe.NativeDocumentTest.revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader(NativeDocumentTest.kt:56)
+
+INSTRUMENTATION_STATUS: test=revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.207
+There was 1 failure:
+1) revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader(dev.durableagent.probe.NativeDocumentTest)
+java.lang.AssertionError: Application original capability must reject reads after current URI grant revocation
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.NativeDocumentTest.revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader$lambda$1$0$denied(NativeDocumentTest.kt:52)
+	at dev.durableagent.probe.NativeDocumentTest.revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader(NativeDocumentTest.kt:56)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

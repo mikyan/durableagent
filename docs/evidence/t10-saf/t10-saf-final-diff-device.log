@@ -1,0 +1,27 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentTest:
+INSTRUMENTATION_STATUS: test=originalTextChangesExposeCanonicalBoundedDiffFromActualBytes
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"actual-text-diff-before-protocol-check","receipt":{"operationId":"small-99b06d25-5ede-41a0-bb06-eeb000c1f798","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","productId":"chat","controlGeneration":1,"sdkConversationId":101,"expectedDigest":"21998928836741932680bb7ef8fb3fe2d8709b5afdf896752642d10595f9a610","contentDigest":"7f8b1dfc466b6249f06cbe55c9174df2578e7754da793fded244ef5cba2a38f1","byteLength":8,"protocol":1,"requestDigest":"9c490050571b2c3329710c22779c62ab16952294f98ee9647cbace4d11855c24","namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","kind":"file","source":"saf","original":true,"uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","displayName":"original.bin","nativeControlNamespace":"input-document-99b06d25-5ede-41a0-bb06-eeb000c1f798","state":"completed","scopeConfirmed":true,"sequence":3,"stagedOffset":8,"sealed":true,"diff":{"state":"available","available":true,"format":"whole-file-lines","text":"--- original\n+++ updated\n-NEW\n-\n+changed\n+"},"verifiedDigest":"7f8b1dfc466b6249f06cbe55c9174df2578e7754da793fded244ef5cba2a38f1"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"actual-text-diff-bounded","small":{"operationId":"small-99b06d25-5ede-41a0-bb06-eeb000c1f798","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","productId":"chat","controlGeneration":1,"sdkConversationId":101,"expectedDigest":"21998928836741932680bb7ef8fb3fe2d8709b5afdf896752642d10595f9a610","contentDigest":"7f8b1dfc466b6249f06cbe55c9174df2578e7754da793fded244ef5cba2a38f1","byteLength":8,"protocol":1,"requestDigest":"9c490050571b2c3329710c22779c62ab16952294f98ee9647cbace4d11855c24","namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","kind":"file","source":"saf","original":true,"uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","displayName":"original.bin","nativeControlNamespace":"input-document-99b06d25-5ede-41a0-bb06-eeb000c1f798","state":"completed","scopeConfirmed":true,"sequence":3,"stagedOffset":8,"sealed":true,"diff":{"state":"available","available":true,"format":"whole-file-lines","text":"--- original\n+++ updated\n-NEW\n-\n+changed\n+"},"verifiedDigest":"7f8b1dfc466b6249f06cbe55c9174df2578e7754da793fded244ef5cba2a38f1"},"large":{"operationId":"large-99b06d25-5ede-41a0-bb06-eeb000c1f798","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","productId":"chat","controlGeneration":1,"sdkConversationId":101,"expectedDigest":"7f8b1dfc466b6249f06cbe55c9174df2578e7754da793fded244ef5cba2a38f1","contentDigest":"841fb2dbdc6be49db3c9df02b4c04bd5a859c6d36acb9b6fca930c28e6e86748","byteLength":17000,"protocol":1,"requestDigest":"c44f05e4f22e6c56895825733cc06a82d2a4cda74ac1845ad89e51b0fc2ab7f5","namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","kind":"file","source":"saf","original":true,"uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","displayName":"original.bin","nativeControlNamespace":"input-document-99b06d25-5ede-41a0-bb06-eeb000c1f798","state":"completed","scopeConfirmed":true,"sequence":3,"stagedOffset":17000,"sealed":true,"diff":{"state":"unavailable","available":false,"reason":"text_budget"},"verifiedDigest":"841fb2dbdc6be49db3c9df02b4c04bd5a859c6d36acb9b6fca930c28e6e86748"},"providerUid":10227}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=originalTextChangesExposeCanonicalBoundedDiffFromActualBytes
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.638
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

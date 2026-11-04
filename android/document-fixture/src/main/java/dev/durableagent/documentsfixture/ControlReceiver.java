@@ -16,6 +16,18 @@ public final class ControlReceiver extends BroadcastReceiver {
                 case "reset":Fixture.reset(context);break;
                 case "create-shared":value.put("shared",Fixture.createShared(context));break;
                 case "replace":Fixture.replace(context);break;
+                case "move-away":
+                    if(Fixture.shared(context)!=null)throw new IllegalArgumentException("Private fixture required");
+                    java.nio.file.Files.move(Fixture.original(context).toPath(),new java.io.File(context.getFilesDir(),"retired.bin").toPath(),java.nio.file.StandardCopyOption.REPLACE_EXISTING);break;
+                case "restore-moved":
+                    if(Fixture.shared(context)!=null)throw new IllegalArgumentException("Private fixture required");
+                    boolean restore=!Fixture.original(context).exists();
+                    if(restore)java.nio.file.Files.move(new java.io.File(context.getFilesDir(),"retired.bin").toPath(),Fixture.original(context).toPath());
+                    value.put("restoredMoved",restore).put("base64",Base64.encodeToString(Fixture.read(context),Base64.NO_WRAP));break;
+                case "fault-pipe":case "fault-unavailable":case "fault-readonly":
+                    if(Fixture.shared(context)!=null)throw new IllegalArgumentException("Private fixture required");
+                    context.getSharedPreferences("state",0).edit().putString("fault",operation).commit();break;
+                case "fault-clear":context.getSharedPreferences("state",0).edit().remove("fault").commit();break;
                 case "hold-readback":context.getSharedPreferences("state",0).edit().putBoolean("holdReadback",true).putBoolean("writeSeen",false).putLong("readbackMillis",30000).commit();break;
                 case "hold-readback-long":context.getSharedPreferences("state",0).edit().putBoolean("holdReadback",true).putBoolean("writeSeen",false).putLong("readbackMillis",120000).commit();break;
                 case "release":context.getSharedPreferences("state",0).edit().putBoolean("holdReadback",false).commit();break;

@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentTest:
+INSTRUMENTATION_STATUS: test=cancellationProvesNoStartOnlyBeforeOriginalIoAndKeepsActiveScopeUnconfirmed
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"queued-no-start-active-unconfirmed","queued":{"operationId":"queued-4a75d06a-02f0-4389-9936-94a86baf413c","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","productId":"chat","controlGeneration":1,"sdkConversationId":101,"expectedDigest":"5e35cac2eb75e5fc0f7e77c775cd8104e5d2674a619d4c01781ef1c9533c7b14","contentDigest":"7f8b1dfc466b6249f06cbe55c9174df2578e7754da793fded244ef5cba2a38f1","byteLength":8,"protocol":1,"requestDigest":"2fc4bd776d490e4a80f79d030fa41407fa1fdf83e39229c71c7ff15b95ea578d","namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","kind":"file","source":"saf","original":true,"uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","displayName":"original.bin","nativeControlNamespace":"input-document-4a75d06a-02f0-4389-9936-94a86baf413c","state":"not_started","scopeConfirmed":true,"sequence":2,"stagedOffset":8,"sealed":true,"diff":{"state":"unavailable","available":false,"reason":"not_completed"},"reason":"DOCUMENT_CANCELLED_BEFORE_START"},"activeWhileHeld":{"operationId":"active-4a75d06a-02f0-4389-9936-94a86baf413c","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","productId":"chat","controlGeneration":1,"sdkConversationId":101,"expectedDigest":"5e35cac2eb75e5fc0f7e77c775cd8104e5d2674a619d4c01781ef1c9533c7b14","contentDigest":"7f8b1dfc466b6249f06cbe55c9174df2578e7754da793fded244ef5cba2a38f1","byteLength":8,"protocol":1,"requestDigest":"2493fd0014ee75b52acc3450b39e27410b69bfa26329fc82630ed482429e2a47","namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","kind":"file","source":"saf","original":true,"uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","displayName":"original.bin","nativeControlNamespace":"input-document-4a75d06a-02f0-4389-9936-94a86baf413c","state":"stop_requested","scopeConfirmed":false,"sequence":3,"stagedOffset":8,"sealed":true,"diff":{"state":"unavailable","available":false,"reason":"not_completed"},"reason":"DOCUMENT_CANCEL_UNCONFIRMED"},"afterActualReadback":{"operationId":"active-4a75d06a-02f0-4389-9936-94a86baf413c","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","productId":"chat","controlGeneration":1,"sdkConversationId":101,"expectedDigest":"5e35cac2eb75e5fc0f7e77c775cd8104e5d2674a619d4c01781ef1c9533c7b14","contentDigest":"7f8b1dfc466b6249f06cbe55c9174df2578e7754da793fded244ef5cba2a38f1","byteLength":8,"protocol":1,"requestDigest":"2493fd0014ee75b52acc3450b39e27410b69bfa26329fc82630ed482429e2a47","namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","kind":"file","source":"saf","original":true,"uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","displayName":"original.bin","nativeControlNamespace":"input-document-4a75d06a-02f0-4389-9936-94a86baf413c","state":"completed","scopeConfirmed":true,"sequence":4,"stagedOffset":8,"sealed":true,"diff":{"state":"unavailable","available":false,"reason":"binary"},"verifiedDigest":"7f8b1dfc466b6249f06cbe55c9174df2578e7754da793fded244ef5cba2a38f1"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=cancellationProvesNoStartOnlyBeforeOriginalIoAndKeepsActiveScopeUnconfirmed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.697
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

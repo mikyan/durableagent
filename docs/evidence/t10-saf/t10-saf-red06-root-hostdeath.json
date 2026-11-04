@@ -1,0 +1,9 @@
+{
+  "run": "t10-native-death-20261104-01",
+  "action": "force-stop only dedicated SAF writer after original-modified marker",
+  "writerPidBefore": 14614,
+  "writerAbsentAfter": true,
+  "providerPidBefore": "14631",
+  "providerPidAfter": "14631",
+  "capturedAt": "2026-11-04T07:20:11.9481455Z"
+}

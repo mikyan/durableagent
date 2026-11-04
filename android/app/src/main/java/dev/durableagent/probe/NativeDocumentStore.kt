@@ -397,6 +397,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     private fun metadataLease(directory:File):StorageDomainLease {
         // A UI observation and the agent can briefly contend on the same durable ledger.
         // Wait only before admission: never replay a transaction, staging or Provider I/O.
+        if(!directory.isDirectory&&!directory.mkdirs())fail("DOCUMENT_STORAGE_FAILED","原文件记录位置不可用，已有内容已保留。")
         val deadline=SystemClock.elapsedRealtime()+1500
         while(true){
             StorageDomainLease.acquire(directory)?.let{return it}

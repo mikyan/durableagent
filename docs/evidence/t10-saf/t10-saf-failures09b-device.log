@@ -1,0 +1,27 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentFailureTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentFailureTest:
+INSTRUMENTATION_STATUS: test=actualProviderFailuresAndChangedOriginalNeverBecomeCachedSuccess
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"synthetic-moved-original-restoration","observation":{"providerUid":10227,"restoredMoved":false,"base64":"U0FGAAr\/QUJD"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"actual-provider-failures-no-write","providerUid":10227,"unsupported":{"operationId":"unsupported-4c4c3bca-690c-496d-a05f-a63c3954c8a5","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","productId":"chat","controlGeneration":1,"sdkConversationId":101,"expectedDigest":"5e35cac2eb75e5fc0f7e77c775cd8104e5d2674a619d4c01781ef1c9533c7b14","contentDigest":"7feb2a5212827f3cf67b9973cf44de9f1c57807ee4c920ff809325aed13d9b96","byteLength":19,"protocol":1,"requestDigest":"ef599c9487a22af2a3d74faa7ef2f89fc546fa0e5c5dae03ae5da3ccf7de718b","namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","kind":"file","source":"saf","original":true,"uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","displayName":"original.bin","nativeControlNamespace":"input-document-4c4c3bca-690c-496d-a05f-a63c3954c8a5","state":"not_started","scopeConfirmed":true,"sequence":2,"stagedOffset":19,"sealed":true,"diff":{"state":"unavailable","available":false,"reason":"not_completed"},"reason":"DOCUMENT_UNSUPPORTED"},"stale":{"operationId":"stale-4c4c3bca-690c-496d-a05f-a63c3954c8a5","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","productId":"chat","controlGeneration":1,"sdkConversationId":101,"expectedDigest":"5e35cac2eb75e5fc0f7e77c775cd8104e5d2674a619d4c01781ef1c9533c7b14","contentDigest":"7feb2a5212827f3cf67b9973cf44de9f1c57807ee4c920ff809325aed13d9b96","byteLength":19,"protocol":1,"requestDigest":"f6d7abe0a50cc08127c78cd3dfd2a696c2c5607c155673740c9ad4e3c9de5ce2","namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","kind":"file","source":"saf","original":true,"uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","displayName":"original.bin","nativeControlNamespace":"input-document-4c4c3bca-690c-496d-a05f-a63c3954c8a5","state":"not_started","scopeConfirmed":true,"sequence":2,"stagedOffset":19,"sealed":true,"diff":{"state":"unavailable","available":false,"reason":"not_completed"},"reason":"DOCUMENT_PRECONDITION_CONFLICT"},"writeOpens":0}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentFailureTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualProviderFailuresAndChangedOriginalNeverBecomeCachedSuccess
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.762
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1
