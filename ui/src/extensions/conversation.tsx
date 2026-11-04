@@ -96,7 +96,7 @@ export default function ConversationPage({controller,state}:{controller:Conversa
       <button className={`nav-item ${extensionsPage?'selected':''}`} data-testid="open-extensions" onClick={()=>{setNavigation(false);setDetails(false);controller.openExtensions();}}><Icon name="grid"/>扩展与时间线</button>
       <div className="section-caption">会话</div>
       <div className="conversation-list">
-        {conversations.map(conversation=><button className={`nav-item ${state.activeId===conversation.id?'selected':''}`} key={conversation.id} onClick={()=>open(conversation.id)} disabled={!ready&&!state.inputReady}><Icon name="chat"/><span>{conversation.title}</span></button>)}
+        {conversations.map(conversation=><button className={`nav-item ${state.activeId===conversation.id?'selected':''}`} key={conversation.id} onClick={()=>open(conversation.id)} disabled={!ready&&!state.status.readOnly&&!state.inputReady}><Icon name="chat"/><span>{conversation.title}</span></button>)}
         {!conversations.length&&<p className="nav-empty">还没有会话</p>}
       </div>
       <div className="nav-foot"><span className={`dot ${ready?'ready':''}`}/>{ready?'运行宿主已连接':'等待运行宿主'}</div>
@@ -113,12 +113,12 @@ export default function ConversationPage({controller,state}:{controller:Conversa
         <button className="primary-button" data-testid="create-conversation" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>{state.pending?'正在创建…':'新建会话'}</button>
         {hasModels&&state.models&&!state.models.defaultModel&&<p className="setup-model-hint">尚未选择默认模型。<button className="text-button" onClick={models}>设置模型与连接</button></p>}
         <section className="recent"><div className="section-caption">最近会话 <span>{conversations.length}</span></div>
-          {conversations.length?conversations.map(conversation=><button className="recent-row" data-testid="conversation-item" data-conversation-id={conversation.id} key={conversation.id} onClick={()=>open(conversation.id)} disabled={!ready&&!state.inputReady}><span className="recent-icon"><Icon name="chat"/></span><span className="recent-copy"><strong>{conversation.title}</strong><small>{conversation.model.name} · {conversation.phase?phases[conversation.phase]:'历史待连接'}</small></span><span className="chevron" aria-hidden="true">›</span></button>):<p className="empty-state">新建会话后，已保存的记录会出现在这里。</p>}
+          {conversations.length?conversations.map(conversation=><button className="recent-row" data-testid="conversation-item" data-conversation-id={conversation.id} key={conversation.id} onClick={()=>open(conversation.id)} disabled={!ready&&!state.status.readOnly&&!state.inputReady}><span className="recent-icon"><Icon name="chat"/></span><span className="recent-copy"><strong>{conversation.title}</strong><small>{conversation.model.name} · {conversation.phase?phases[conversation.phase]:'历史待连接'}</small></span><span className="chevron" aria-hidden="true">›</span></button>):<p className="empty-state">新建会话后，已保存的记录会出现在这里。</p>}
         </section>
       </div>:<>
         <div className="thread-scroll" ref={scroll} onScroll={()=>{const element=scroll.current;if(element)follow.current=element.scrollHeight-element.scrollTop-element.clientHeight<100;}}>
           <div className="thread" aria-label="会话消息">
-            {!ready&&<p className="empty-state">草稿可在本地编辑保存。会话历史等待运行宿主连接。</p>}
+            {state.status.readOnly?<p className="empty-state">保留历史以只读方式展示，运行和新发送已关闭。</p>:!ready&&<p className="empty-state">草稿可在本地编辑保存。会话历史等待运行宿主连接。</p>}
             {state.next&&<button className="history-button" onClick={()=>void older()} disabled={state.loading}>{state.loading?'正在读取…':'查看更早的消息'}</button>}
             {state.loading&&!state.conversation&&<p className="empty-state" role="status">正在读取已保存的会话…</p>}
             {!state.loading&&state.conversation&&!state.history.length&&!state.conversation.progress&&<div className="chat-empty"><span>π</span><h2>有什么想一起解决？</h2><p>发送第一条消息，开始这次会话。</p></div>}

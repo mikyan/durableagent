@@ -1,0 +1,5 @@
+Backup Manager now disabled
+Selected transport com.google.android.gms/.backup.migrate.service.D2dTransport (formerly com.android.localtransport/.LocalTransport)
+Initializing transports: {com.google.android.gms/.backup.migrate.service.D2dTransport}
+Initialization result: -1000
+Backup Manager now enabled

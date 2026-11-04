@@ -22,16 +22,20 @@ import {Projects,ProjectError,type LocationAdapter,type EffectAuthority,type Pro
 import {PROJECTS_EXTENSION,type LocationEditAuthority} from './project-protocol.js';
 import {DispatchGate} from './dispatch-gate.js';
 import {ManagedExecution,ManagedExecutionError,EXECUTION_EXTENSION} from './managed-execution.js';
+import {storageFailure} from './storage-failure.js';
+import {verifyApplicationStorage} from './storage-format.js';
+import {RetainedHistory} from './retained-history.js';
 
-import {Configuration,Products,type ProductRecord} from './application-records.js';
+import {Configuration,Products,validateConfiguration,type ProductRecord} from './application-records.js';
 const ModelConfiguration=defineDoc({kind:'app.model-configuration',version:1,scope:'session',initial:():StoredModels=>({version:0,defaultModel:null,connections:[]}),checkpointWhen:()=>false});
 class DuplicateCreation extends Error {constructor(readonly productId:string){super('Creation already committed');}}
 class ActionError extends Error {constructor(readonly code:string,message:string){super(message);}}
 const settings:HarnessSettings={progress:{partialIntervalMs:1,outputIntervalMs:1,persistWithinMs:1000},retry:{enabled:false,maxRetries:0,baseDelayMs:1}};
 export type ApplicationInputs=FrozenInputAccess&{rememberConversation(conversation:InputConversation,capability?:InputCapability):void};
-export type ApplicationOptions={execution?:ManagedExecution;routes?:RouteAuthority;extensions?:readonly ExtensionDescriptor[];agentFactories?:AgentFactories;path:string;models:Models;connections?:ModelConnections;inputs?:ApplicationInputs;sends?:SendAuthority;submissionBoundary?:(stage:SubmissionBoundary,intent:import('./submission-protocol.js').NativeSendIntent)=>void|Promise<void>;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;projectBoundary?:(stage:ProjectBoundary)=>void|Promise<void>;registry?:ReturnType<typeof createRegistry>;effects?:EffectAuthority;locationEdits?:LocationEditAuthority;locations?:LocationAdapter;storageFactory?:()=>Promise<Storage>};
+export type ApplicationOptions={storageFormats?:Readonly<Record<string,import('./storage-format.js').ApplicationRecordFormat>>;execution?:ManagedExecution;routes?:RouteAuthority;extensions?:readonly ExtensionDescriptor[];agentFactories?:AgentFactories;path:string;models:Models;connections?:ModelConnections;inputs?:ApplicationInputs;sends?:SendAuthority;submissionBoundary?:(stage:SubmissionBoundary,intent:import('./submission-protocol.js').NativeSendIntent)=>void|Promise<void>;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;projectBoundary?:(stage:ProjectBoundary)=>void|Promise<void>;registry?:ReturnType<typeof createRegistry>;effects?:EffectAuthority;locationEdits?:LocationEditAuthority;locations?:LocationAdapter;storageFactory?:()=>Promise<Storage>};
 export class Application {
   private harness?:Harness;
+  private retained?:RetainedHistory;
   private registry=createRegistry();
   private installedExtensions=new Map<string,string>();
   private routing?:Routing;
@@ -58,11 +62,12 @@ export class Application {
     if(this.closing)return this.closing.then(()=>this.start());
     if(this.starting)return this.starting;
     if(this.harness)return Promise.resolve();
-    this.state={...this.state,phase:'opening',reason:undefined};
-    this.starting=this.open().catch(async error=>{this.state={...this.state,phase:'failed',reason:this.safeError(error)};await this.harness?.close(context);this.harness=undefined;throw error;}).finally(()=>{this.starting=undefined;});
+    this.state={...this.state,phase:'opening',reason:undefined,failure:undefined,readOnly:undefined};
+    this.starting=this.open().catch(async error=>{this.state={...this.state,phase:'failed',reason:this.safeError(error),failure:storageFailure(error),readOnly:!!this.retained};await this.harness?.close(context);this.harness=undefined;throw error;}).finally(()=>{this.starting=undefined;});
     return this.starting;
   }
   private async open() {
+    await this.retained?.close();this.retained=undefined;
     this.dispatch=new DispatchGate();
     this.registry=createRegistry();for(const contribution of this.options.registry?.snapshot().installed()??[])this.registry.install(contribution);
     this.options.execution?.install(this.registry);
@@ -72,15 +77,17 @@ export class Application {
     if(!this.options.inputs||!this.options.sends)throw new ActionError('INPUT_UNAVAILABLE','原生输入与停止存储尚不可用，运行保持关闭');
     const storage=this.options.storageFactory?await this.options.storageFactory():(await openOwnedStorage(this.options.path,this.options.secret)).storage;
     try {
+      await verifyApplicationStorage(storage,this.options.storageFormats);
       this.harness=await Harness.open(storage,{models:()=>this.dispatch.models(this.options.models),settings:()=>this.runtimeSettings(),registry:this.registry,conversationCreated:inheritBinding,...(this.options.locations?{env:target=>bindingEnvironment(target,this.options.locations)}:{})},context);
-    }catch(error){await storage.close(context);throw error;}
+    }catch(error){if(storageFailure(error)?.code==='STORAGE_VERSION_UNSUPPORTED')this.retained=await RetainedHistory.open(storage);if(!this.retained)await storage.close(context);throw error;}
     this.options.execution?.attach(this.harness);
-    void this.harness.closed.then(result=>{if(result.kind==='failed')this.state={...this.state,phase:'failed',reason:this.safeError(result.error)};});
+    void this.harness.closed.then(result=>{if(result.kind==='failed')this.state={...this.state,phase:'failed',reason:this.safeError(result.error),failure:storageFailure(result.error)};});
     this.harness.observeCommits({advance:publication=>{this.storedSeq=publication.seq;},end:()=>{}});
     this.state={...this.state,phase:'configuring'};
     await this.options.loadConfiguration?.();
     this.defaultModel=await this.harness.commit(async tx=>{
       const configuration=await tx.doc(Configuration);
+      validateConfiguration(configuration);
       if(!configuration.initialized){configuration.defaultModel=this.options.initialModel??null;configuration.workspace={id:'default',path:this.options.workspacePath};configuration.initialized=true;}
       this.workspace={...configuration.workspace};
       return configuration.defaultModel?{...configuration.defaultModel}:null;
@@ -118,13 +125,14 @@ export class Application {
     }
     return value;
   }
-  private safeError(error:unknown) {const message=error instanceof Error?error.message:String(error);return this.options.secret?message.replaceAll(this.options.secret,'[REDACTED]'):message;}
+  private safeError(error:unknown) {const storage=storageFailure(error);if(storage)return storage.message;const message=error instanceof Error?error.message:String(error);return this.options.secret?message.replaceAll(this.options.secret,'[REDACTED]'):message;}
   private text(payload:Record<string,unknown>,key:string,max=100000) {const value=payload[key];if(typeof value!=='string'||!value.trim()||value.length>max)throw new ActionError('INVALID_ARGUMENT',`${key} 无效`);return value;}
   async request(request:ApplicationRequest,emit:(event:ApplicationEnvelope)=>void=()=>{}):Promise<ApplicationResponse> {
     const base={type:'response' as const,protocol:1 as const,connectionId:request.connectionId,requestId:request.requestId};
     try {
       if(request.protocol!==1)throw new ActionError('PROTOCOL_MISMATCH','界面与运行宿主版本不兼容');
       if(request.method==='status')return {...base,ok:true,value:this.status()};
+      if(this.retained){const payload=request.payload??{};if(request.method==='list')return {...base,ok:true,value:this.retained.list()};if(request.method==='history')return {...base,ok:true,value:await this.retained.history(this.text(payload,'id'),payload.cursor,payload.limit)};if(request.method==='open')return {...base,ok:true,value:await this.retained.snapshot(this.text(payload,'id'))};}
       const harness=this.ready(),payload=request.payload??{};
       if(request.method!=='stop'&&!this.actions.has(request.method))throw new ActionError('UNKNOWN_ACTION','未登记的应用操作');
       let value:unknown;
@@ -189,7 +197,7 @@ export class Application {
         default:throw new ActionError('UNKNOWN_ACTION','不支持的应用操作');
       }
       return {...base,ok:true,value};
-    }catch(error){return {...base,ok:false,error:{code:error instanceof ActionError||error instanceof ModelConfigurationError||error instanceof InputError||error instanceof SubmissionError||error instanceof ProjectError||error instanceof ManagedExecutionError?error.code:'ACTION_FAILED',message:this.safeError(error)}};}
+    }catch(error){return {...base,ok:false,error:{code:error instanceof ActionError||error instanceof ModelConfigurationError||error instanceof InputError||error instanceof SubmissionError||error instanceof ProjectError||error instanceof ManagedExecutionError?error.code:storageFailure(error)?.code??'ACTION_FAILED',message:this.safeError(error)}};}
   }
   private async extensionCatalog(id?:string):Promise<ExtensionCatalog>{
     const selected=id?(await (await this.ready().conversation((await this.product(id)).sdkId as ConversationId,context))!.agent(context)).extensions.map(item=>item.name):undefined;
@@ -276,6 +284,7 @@ export class Application {
       const watches=[...this.subscriptions.values()];this.subscriptions.clear();for(const entry of watches)await entry.watch.stop();
       let auditError:unknown;try{if(this.options.secret)await auditStorageSecret(this.options.path,this.options.secret);}catch(error){auditError=error;}
       await this.harness?.close(context);this.harness=undefined;
+      await this.retained?.close();this.retained=undefined;
       if(this.options.secret)await auditStorageSecret(this.options.path,this.options.secret);if(auditError)throw auditError;
     })().finally(()=>{this.closing=undefined;});
   }

@@ -9,6 +9,28 @@ import {App} from '../src/App';
 
 afterEach(cleanup);
 
+it('opens compatible retained history even when native drafts are unavailable and keeps sending closed',async()=>{
+  const requests:ApplicationRequest[]=[];
+  const conversation:ConversationSummary={id:'retained-readonly',title:'保留的历史',model:{provider:'',modelId:'',name:'保留记录（只读）'},workspaceId:'default',projectId:null,createdAt:1,phase:'waiting'};
+  const entry={id:'kept-entry',role:'user' as const,text:'唯一保留的历史原文',persisted:true as const};
+  const controller=new ConversationController(()=>{
+    const client=new ApplicationClient({postMessage:json=>{
+      const request:ApplicationRequest=JSON.parse(json);requests.push(request);
+      if(request.method.startsWith('input.')){queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:false,error:{code:'INPUT_UNAVAILABLE',message:'原生草稿暂不可用'}}));return;}
+      const value=request.method==='status'?{phase:'failed',readOnly:true,reason:'版本不兼容，运行已关闭',extensions:['conversation']}:request.method==='list'?{conversations:[conversation]}:request.method==='history'?{items:[entry]}:{id:conversation.id,revision:1,conversation,entries:[entry],phase:'waiting',storedSeq:null};
+      queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value}));
+    }});return client;
+  });
+  try {
+    render(<App controller={controller}/>);
+    const row=await screen.findByTestId('conversation-item');expect((row as HTMLButtonElement).disabled).toBe(false);fireEvent.click(row);
+    expect(await screen.findByText(entry.text)).toBeTruthy();
+    expect((screen.getByRole('button',{name:'发送消息'}) as HTMLButtonElement).disabled).toBe(true);
+    expect(requests.some(request=>['send','subscribe','create'].includes(request.method))).toBe(false);
+    expect(screen.queryByText('草稿可在本地编辑保存。会话历史等待运行宿主连接。')).toBeNull();
+  }finally{controller.dispose();}
+});
+
 it('creates a real wire conversation and distinguishes progress from committed messages across reconnect',async()=>{
   const native=new InputPlatform();
   const requests:ApplicationRequest[]=[];

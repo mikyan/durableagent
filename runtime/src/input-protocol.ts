@@ -1,6 +1,6 @@
 // Shared data only. Native input storage stays usable without the Agent JS owner.
 export const INPUT_PROTOCOL=1;
-export const INPUT_EXTENSION={id:'input',actions:['input.list','input.read','input.inspect','input.save','input.clear','input.select','input.prepare','input.freeze','input.discard']} as const;
+export const INPUT_EXTENSION={id:'input',actions:['input.list','input.read','input.inspect','input.save','input.clear','input.select','input.prepare','input.freeze','input.discard','input.maintain']} as const;
 export type InputMethod=typeof INPUT_EXTENSION.actions[number]|import('./submission-protocol.js').NativeSendMethod;
 /** Conservative application budgets, not advertised device/Provider maxima. */
 export const INPUT_BUDGETS={draftCharacters:100000,attachments:4,sourceImageBytes:16*1024*1024,sourcePixels:24*1024*1024,textBytes:256*1024,imageWidth:1024,imageHeight:1024,imageBytes:1536*1024,totalBase64Bytes:8*1024*1024,requestBytes:10*1024*1024} as const;
@@ -11,7 +11,7 @@ export type NativeDraft={id:string;revision:number;stateVersion:number;text:stri
 export type InputConversation={id:string;title:string;model:{provider:string;modelId:string;name:string};submissionContext?:import('./submission-protocol.js').SubmissionContext};
 export type FrozenInput={token:string;id:string;revision:number;text:string;representations:InputRepresentation[];digest:string};
 /** Trusted host-only adapter; never exported to the WebView. Bytes remain native until explicit send. */
-export interface FrozenInputAccess {readFrozen(token:string):Promise<FrozenInput>;readObject(token:string,objectId:string):Promise<Uint8Array>}
+export interface FrozenInputAccess {readFrozen(token:string):Promise<FrozenInput>;readObject(token:string,objectId:string):Promise<Uint8Array>;retainFrozen?(ownerId:string,token:string):Promise<void>}
 /**
  * Same ApplicationRequest/Response envelope, routed before the Node queue.
  * list {} -> {conversations:InputConversation[]}; read {id} -> NativeDraft (revalidates source access).
@@ -22,5 +22,6 @@ export interface FrozenInputAccess {readFrozen(token:string):Promise<FrozenInput
  * prepare {id,selectionId,operationId} -> NativeDraft. No network; only supported, bounded formats.
  * freeze {id,expectedRevision,operationId} -> FrozenInput. Exact bytes are pinned; not SDK admission.
  * discard {token,operationId} -> {}. Explicit release only; never delete a user source.
+ * maintain {} -> {reclaimed,protected}. Conditional native cleanup; history/intents/unknown effects stay retained.
  * Conflicts/errors leave the existing confirmed draft intact. UI flush is a barrier over save receipts.
  */

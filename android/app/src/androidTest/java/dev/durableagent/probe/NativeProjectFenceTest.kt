@@ -176,7 +176,7 @@ class NativeProjectFenceTest {
         }
         val path = File(File(context.noBackupFilesDir, namespace), "input.sqlite")
         SQLiteDatabase.openDatabase(path.absolutePath, null, SQLiteDatabase.OPEN_READWRITE).use { db ->
-            db.beginTransaction(); try { db.execSQL("DROP TABLE native_location_edit"); db.execSQL("PRAGMA user_version=3"); db.setTransactionSuccessful() } finally { db.endTransaction() }
+            db.beginTransaction(); try { db.execSQL("DROP TABLE native_location_edit");db.execSQL("DROP TABLE frozen_holds");db.execSQL("DROP TABLE content_holds");db.execSQL("DROP TABLE content_quarantine");db.execSQL("DROP TABLE native_effects");db.execSQL("DROP TABLE native_effect_catalogue"); db.execSQL("PRAGMA user_version=3"); db.setTransactionSuccessful() } finally { db.endTransaction() }
         }
         NativeInputStore(context, namespace).use { store ->
             assertNull(store.readLocationEdit()); assertEquals(intent.toString(), store.readSend("old-intent").toString())
@@ -185,6 +185,6 @@ class NativeProjectFenceTest {
             expectCode("INPUT_IN_USE") { store.discard(fixed.getString("token"), "cannot-discard") }
             store.beginLocationEdit("new-edit"); assertEquals("new-edit", store.readLocationEdit()!!.getString("operationId"))
         }
-        SQLiteDatabase.openDatabase(path.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { assertEquals(4, it.version) }
+        SQLiteDatabase.openDatabase(path.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { assertEquals(7, it.version) }
     }
 }

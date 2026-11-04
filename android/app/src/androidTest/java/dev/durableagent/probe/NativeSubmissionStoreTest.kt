@@ -255,6 +255,7 @@ class NativeSubmissionStoreTest {
                 db.execSQL("DROP TABLE native_send_intents"); db.execSQL("DROP TABLE native_submission_actions"); db.execSQL("DROP TABLE native_controls")
                 db.execSQL("DROP TABLE native_location_edit")
                 db.execSQL("DROP TABLE native_effects");db.execSQL("DROP TABLE native_effect_catalogue")
+                db.execSQL("DROP TABLE frozen_holds");db.execSQL("DROP TABLE content_holds");db.execSQL("DROP TABLE content_quarantine")
                 val conversation = db.rawQuery("SELECT data FROM conversations WHERE id='chat'", null).use { assertTrue(it.moveToFirst()); JSONObject(it.getString(0)) }
                 conversation.remove("submissionContext"); previous.remove("submissionContext")
                 db.execSQL("UPDATE conversations SET data=? WHERE id='chat'", arrayOf(conversation.toString()))
@@ -280,6 +281,6 @@ class NativeSubmissionStoreTest {
             val created = store.createSend(request(fixed.getString("token")))
             assertEquals(2L, created.getLong("inputRevision")); assertEquals("pending", created.getString("delivery"))
         }
-        SQLiteDatabase.openDatabase(path.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { db -> assertEquals(5, db.version) }
+        SQLiteDatabase.openDatabase(path.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { db -> assertEquals(7, db.version) }
     }
 }

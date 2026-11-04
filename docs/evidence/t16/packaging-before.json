@@ -1,0 +1,9 @@
+{
+  "candidate": "04",
+  "apkSha256": "05cd56ef77118cec27c1bb8e1849d8a5b633fdddf992d685b7624f5a9b764108",
+  "bridgeSha256": "78d144444d84426ac2f7a4f4d5d12db291112fcc58aefae42e00312889398f31",
+  "hasFutureSeedEntry": false,
+  "hasSharedPolicyEntry": true,
+  "hasSeedFixture": true,
+  "conclusion": "stale compiled bridge; both native read-only attempts failed before seeding and before reopen"
+}

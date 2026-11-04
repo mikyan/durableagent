@@ -66,12 +66,12 @@ export class ConversationController {
       const status=await client.request<ApplicationStatus>('status');
       if(epoch!==this.epoch)return;
       this.publish({status});
-      if(status.phase!=='ready')return;
+      if(status.phase!=='ready'&&!status.readOnly)return;
       const {conversations}=await client.request<{conversations:ConversationSummary[]}>('list');
       if(epoch!==this.epoch)return;
       this.publish({conversations});
-      if(status.extensions.includes(MODELS_EXTENSION.id))await this.loadModels();
-      if(status.extensions.includes(PROJECTS_EXTENSION.id))await this.loadProjects();
+      if(status.phase==='ready'&&status.extensions.includes(MODELS_EXTENSION.id))await this.loadModels();
+      if(status.phase==='ready'&&status.extensions.includes(PROJECTS_EXTENSION.id))await this.loadProjects();
       const selected=this.state.activeId??this.preferences?.get('selectedConversation');
       if(selected&&conversations.some(conversation=>conversation.id===selected))await this.open(selected);
     }catch(error){if(epoch===this.epoch)this.publish({status:{phase:'failed',reason:this.reason(error),extensions:[]},error:this.reason(error)});}
@@ -107,10 +107,11 @@ export class ConversationController {
     void this.refreshSubmissions();
     void this.loadProjects();
     try {
-      if(this.state.status.phase!=='ready'){await draftRead;return;}
+      if(this.state.status.phase!=='ready'&&!this.state.status.readOnly){await draftRead;return;}
       const [conversation,page]=await Promise.all([client.request<ConversationSnapshot>('open',{id}),client.request<HistoryPage>('history',{id,limit:30})]);
       if(!current())return;
       this.publish({conversation,history:mergeMessages(page.items,conversation.entries),next:page.next});
+      if(this.state.status.readOnly){await draftRead;return;}
       const subscription=await client.subscribe(id,snapshot=>{
         if(!current())return;
         this.publish({conversation:snapshot,history:mergeMessages(this.state.history,snapshot.entries),conversations:this.state.conversations.map(item=>item.id===id?snapshot.conversation:item)});

@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="com.termux.permission.RUN_COMMAND"/>
     <queries><package android:name="com.termux"/></queries>
-    <application android:label="DurableAgent" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules">
+    <application android:label="DurableAgent" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules" android:backupAgent=".PrivateDataBackupAgent" android:fullBackupOnly="true">
         <activity android:name=".AgentActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
         <activity android:name=".ProbeActivity" android:exported="false"/>
         <service android:name=".ApplicationService" android:process=":agent" android:exported="false" android:stopWithTask="false"/>

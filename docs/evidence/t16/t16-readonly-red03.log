@@ -1,0 +1,41 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RetentionApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RetentionApplicationTest:
+INSTRUMENTATION_STATUS: test=incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RetentionApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Native bridge must keep compatible retained history accessible: {"phase":"failed","reason":"APP_FORMAT_UNSUPPORTED","instance":"0b955f85-5178-401d-bb28-ee509b297c3e","pid":9870,"domainOwned":false,"nativeOwners":0}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RetentionApplicationTest.incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(RetentionApplicationTest.kt:58)
+
+INSTRUMENTATION_STATUS: stream=
+Error in incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(dev.durableagent.probe.RetentionApplicationTest):
+java.lang.AssertionError: Native bridge must keep compatible retained history accessible: {"phase":"failed","reason":"APP_FORMAT_UNSUPPORTED","instance":"0b955f85-5178-401d-bb28-ee509b297c3e","pid":9870,"domainOwned":false,"nativeOwners":0}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RetentionApplicationTest.incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(RetentionApplicationTest.kt:58)
+
+INSTRUMENTATION_STATUS: test=incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 11.734
+There was 1 failure:
+1) incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(dev.durableagent.probe.RetentionApplicationTest)
+java.lang.AssertionError: Native bridge must keep compatible retained history accessible: {"phase":"failed","reason":"APP_FORMAT_UNSUPPORTED","instance":"0b955f85-5178-401d-bb28-ee509b297c3e","pid":9870,"domainOwned":false,"nativeOwners":0}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RetentionApplicationTest.incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(RetentionApplicationTest.kt:58)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

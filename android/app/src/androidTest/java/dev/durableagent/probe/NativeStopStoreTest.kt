@@ -69,8 +69,21 @@ class NativeStopStoreTest {
         NativeInputStore(context,namespace).use{store->seed(store,"chat");barrier=store.requestStop(JSONObject().put("id","chat").put("actionId","old-stop").put("expectedControlVersion",0)).getJSONObject("pendingAbort");store.confirmAbort("chat",barrier)}
         // An exact pre-effect-catalogue v4 fixture, in this test's dedicated database only.
         val path=java.io.File(java.io.File(context.noBackupFilesDir,namespace),"input.sqlite")
-        android.database.sqlite.SQLiteDatabase.openDatabase(path.absolutePath,null,android.database.sqlite.SQLiteDatabase.OPEN_READWRITE).use{db->db.beginTransaction();try{db.execSQL("DROP TABLE native_effects");db.execSQL("DROP TABLE IF EXISTS native_effect_catalogue");db.version=4;db.setTransactionSuccessful()}finally{db.endTransaction()}}
+        android.database.sqlite.SQLiteDatabase.openDatabase(path.absolutePath,null,android.database.sqlite.SQLiteDatabase.OPEN_READWRITE).use{db->db.beginTransaction();try{db.execSQL("DROP TABLE native_effects");db.execSQL("DROP TABLE native_effect_catalogue");db.execSQL("DROP TABLE frozen_holds");db.execSQL("DROP TABLE content_holds");db.execSQL("DROP TABLE content_quarantine");db.version=4;db.setTransactionSuccessful()}finally{db.endTransaction()}}
         NativeInputStore(context,namespace).use{store->assertEquals(1L,store.readControl("chat").getLong("stoppedThrough"));assertFalse(store.readControl("chat").has("pendingAbort"));assertEquals("external-unconfirmed",store.stopStatus("chat").getString("phase"));expectCode("EXECUTION_STOPPED"){store.registerEffect(effect("late"))}}
+    }
+    @Test fun publishedV6UpgradeRetainsTextOnlyHoldsAndStopWhileAddingUnverifiedEffectCatalogue(){
+        val namespace="stop-${UUID.randomUUID()}";lateinit var fixed:JSONObject;lateinit var control:JSONObject
+        NativeInputStore(context,namespace).use{store->seed(store,"chat");store.save("chat",0,"save","retained input 世界",emptyList());fixed=store.freeze("chat",1,"freeze");store.retainFrozen("sdk-existing-history",fixed.getString("token"));control=store.requestStop(JSONObject().put("id","chat").put("actionId","stop").put("expectedControlVersion",0));store.confirmAbort("chat",control.getJSONObject("pendingAbort"))}
+        val path=java.io.File(java.io.File(context.noBackupFilesDir,namespace),"input.sqlite")
+        android.database.sqlite.SQLiteDatabase.openDatabase(path.absolutePath,null,android.database.sqlite.SQLiteDatabase.OPEN_READWRITE).use{db->db.beginTransaction();try{db.execSQL("DROP TABLE native_effects");db.execSQL("DROP TABLE native_effect_catalogue");db.version=6;db.setTransactionSuccessful()}finally{db.endTransaction()}}
+        NativeInputStore(context,namespace,boundary={if(it=="migration.prepared")throw IllegalStateException("Synthetic migration failure")}).use{store->expectCode("INPUT_MIGRATION_FAILED"){store.stopStatus("chat")}}
+        android.database.sqlite.SQLiteDatabase.openDatabase(path.absolutePath,null,android.database.sqlite.SQLiteDatabase.OPEN_READONLY).use{assertEquals(6,it.version)}
+        NativeInputStore(context,namespace).use{store->
+            assertEquals("external-unconfirmed",store.stopStatus("chat").getString("phase"));assertEquals(1L,store.readControl("chat").getLong("stoppedThrough"));assertEquals(fixed.toString(),store.readFrozen(fixed.getString("token")).toString())
+            expectCode("INPUT_IN_USE"){store.discard(fixed.getString("token"),"discard-held")};store.gc();assertEquals("retained input 世界",store.readFrozen(fixed.getString("token")).getString("text"))
+        }
+        android.database.sqlite.SQLiteDatabase.openDatabase(path.absolutePath,null,android.database.sqlite.SQLiteDatabase.OPEN_READONLY).use{assertEquals(7,it.version)}
     }
     @Test fun trustedHostWaitsOnlyBeforeEnteringNativeActionAndNeverReplaysLostCommitResponse(){
         val namespace="stop-${UUID.randomUUID()}"

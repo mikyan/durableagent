@@ -4,6 +4,24 @@ import {ApplicationClient} from '../src/client';
 import {ConversationController} from '../src/controller';
 import type {ApplicationRequest,ConversationSnapshot,ConversationSummary} from '../../runtime/src/application-protocol';
 
+it('shows retained read-only history after a storage version failure without subscribing or sending',async()=>{
+  const requests:ApplicationRequest[]=[];
+  const conversation:ConversationSummary={id:'retained',title:'Retained',model:{provider:'',modelId:'',name:'只读'},workspaceId:'default',projectId:null,createdAt:1,phase:'waiting'};
+  const entry={id:'1',role:'user' as const,text:'original retained history',persisted:true as const};
+  const controller=new ConversationController(()=>{
+    const client=new ApplicationClient({postMessage:json=>{
+      const request=JSON.parse(json) as ApplicationRequest;requests.push(request);
+      const value=request.method==='status'?{phase:'failed',readOnly:true,reason:'版本不兼容，原数据已保留',extensions:['conversation']}:request.method==='list'?{conversations:[conversation]}:request.method==='input.list'?{conversations:[]}:request.method==='history'?{items:[entry]}:request.method==='input.read'?{id:'retained',revision:0,stateVersion:0,text:'draft remains local',selections:[],committed:true}:{id:'retained',revision:1,conversation,entries:[entry],phase:'waiting',storedSeq:null};
+      queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value}));
+    }});return client;
+  });
+  await controller.connect();await controller.open('retained');
+  expect(controller.snapshot().history.map(item=>item.text)).toEqual(['original retained history']);
+  await controller.send('must not send');await controller.create();
+  expect(requests.some(item=>['subscribe','send','create','input.createSend'].includes(item.method))).toBe(false);
+  controller.dispose();
+});
+
 it('rebuilding the page reacquires the selected conversation without accepting another input',async()=>{
   const native=new InputPlatform();
   const conversations:ConversationSummary[]=[];const inputs:string[]=[];let current:ApplicationClient;
