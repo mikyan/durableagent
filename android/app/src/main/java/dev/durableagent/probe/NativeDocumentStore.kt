@@ -59,7 +59,17 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         return JSONObject().put("resources",JSONArray(records.map(::current)))
     }
     fun describe(resourceId:String):JSONObject = current(resource(resourceId))
-    fun cancel(request:JSONObject):JSONObject = fail("DOCUMENT_CANCEL_UNAVAILABLE","原文件取消尚不可用。")
+    fun cancel(request:JSONObject):JSONObject {
+        val id=operationId(request);val requested=digest(request,"requestDigest")
+        return locked{db->
+            val row=operation(db,id);if(row.getString("requestDigest")!=requested)conflict()
+            when(row.getString("state")){
+                "accepted_not_started"->transition(db,row,"not_started",true,"DOCUMENT_CANCELLED_BEFORE_START")
+                "running"->transition(db,row,"stop_requested",false,"DOCUMENT_CANCEL_UNCONFIRMED")
+                else->row
+            }
+        }
+    }
     fun prepare(request:JSONObject):JSONObject {
         val plan=plan(request);val operationId=plan.getString("operationId")
         val digest=NativeInputStore.sha256(plan.toString().toByteArray(Charsets.UTF_8))
