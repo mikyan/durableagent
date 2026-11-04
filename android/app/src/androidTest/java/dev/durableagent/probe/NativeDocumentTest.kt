@@ -34,6 +34,39 @@ class NativeDocumentTest {
     }
     private fun until(label:String,timeout:Long=150000,check:()->Boolean){val end=SystemClock.elapsedRealtime()+timeout;while(!check()){assertTrue(label,SystemClock.elapsedRealtime()<end);Thread.sleep(50)}}
     private fun evidence(value:JSONObject)=instrument.sendStatus(0,Bundle().apply{putString("documentEvidence",value.toString())})
+    @Test(timeout=30000) fun originalTextChangesExposeCanonicalBoundedDiffFromActualBytes(){
+        assumeTrue(InstrumentationRegistry.getArguments().getString("retainedGrant")=="true")
+        val fixture=control("reset");assertNotEquals(android.os.Process.myUid(),fixture.getInt("providerUid"));control("replace")
+        val uri=android.net.Uri.parse("content://$FIXTURE.documents/document/original")
+        val grant=context.contentResolver.persistedUriPermissions.firstOrNull{it.uri==uri}
+        assertTrue("Requires actual previous system-picker grant",grant?.isReadPermission==true&&grant.isWritePermission)
+        val run=UUID.randomUUID().toString();val namespace="document-diff-$run";val inputs="input-document-$run"
+        NativeInputStore(context,inputs).use{store->store.rememberConversation(JSONObject().put("id","chat").put("title","Synthetic actual text diff")
+            .put("model",JSONObject().put("provider","fixture").put("modelId","test").put("name","Synthetic document"))
+            .put("submissionContext",JSONObject().put("sdkConversationId",101).put("associationVersion",1).put("location",JSONObject().put("workspaceId","default").put("version",1).put("identity","synthetic-directory"))),
+            JSONObject().put("version","document-fixture-1").put("provider","fixture").put("modelId","test").put("source","validation").put("input",org.json.JSONArray(listOf("text"))).put("limits",JSONObject()).put("applicationPolicy",JSONObject()))}
+        NativeDocumentStore(context,namespace,inputs).use{store->
+            val selected=store.select(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            fun write(id:String,before:ByteArray,after:ByteArray):JSONObject {
+                val prepared=store.prepare(JSONObject().put("operationId",id).put("resourceId",selected.getString("resourceId")).put("productId","chat").put("controlGeneration",1).put("sdkConversationId",101)
+                    .put("expectedDigest",NativeInputStore.sha256(before)).put("contentDigest",NativeInputStore.sha256(after)).put("byteLength",after.size))
+                store.stage(JSONObject().put("operationId",id).put("offset",0).put("base64",Base64.encodeToString(after,Base64.NO_WRAP)))
+                val receipt=store.start(JSONObject().put("operationId",id).put("requestDigest",prepared.getString("requestDigest")))
+                assertEquals("completed",receipt.getString("state"));assertTrue(receipt.getBoolean("scopeConfirmed"))
+                assertArrayEquals(after,Base64.decode(control("read").getString("base64"),Base64.DEFAULT))
+                return receipt
+            }
+            val changed="changed\n".toByteArray()
+            val small=write("small-$run","NEW\n".toByteArray(),changed);val difference=small.getJSONObject("diff")
+            evidence(JSONObject().put("stage","actual-text-diff-before-protocol-check").put("receipt",small))
+            assertTrue("Available diff requires canonical boolean",difference.getBoolean("available"))
+            assertEquals("--- original\n+++ updated\n-NEW\n-\n+changed\n+",difference.getString("text"))
+            val large=write("large-$run",changed,"x".repeat(17000).toByteArray());val bounded=large.getJSONObject("diff")
+            assertFalse(bounded.getBoolean("available"));assertEquals("text_budget",bounded.getString("reason"));assertFalse(bounded.has("text"))
+            assertEquals(small.toString(),store.query("small-$run").toString())
+            evidence(JSONObject().put("stage","actual-text-diff-bounded").put("small",small).put("large",large).put("providerUid",fixture.getInt("providerUid")))
+        }
+    }
     @Test(timeout=30000) fun revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader(){
         assumeTrue(InstrumentationRegistry.getArguments().getString("retainedGrant")=="true")
         val fixture=control("reset");assertNotEquals(android.os.Process.myUid(),fixture.getInt("providerUid"))
