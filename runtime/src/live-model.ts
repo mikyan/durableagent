@@ -4,7 +4,7 @@ import type { ProbeState } from './probe.js';
 
 // Explicit opt-in validation path. The key is applied only after validating the
 // final HTTPS destination; no real credential enters serializable SDK options.
-export function liveModels(secret:string, publish:(patch:Partial<ProbeState>)=>void,configuration:{forceEcho?:boolean}={}) {
+export function liveModels(secret:string, publish:(patch:Partial<ProbeState>)=>void,configuration:{forceEcho?:boolean;forceTool?:()=>string|undefined}={}) {
   if(secret.length<12)throw new Error('Live validation credential unavailable');
   const provider=xiaomiTokenPlanCnProvider();
   const model='mimo-v2.6-flash';
@@ -38,9 +38,9 @@ export function liveModels(secret:string, publish:(patch:Partial<ProbeState>)=>v
     }),{status:response.status,statusText:response.statusText,headers:response.headers});
   };
   let calls=0;
-  const options=(original:any)=>({
+  const options=(original:any,modelContext:any)=>({
     ...original,fetch:checkedFetch,maxRetries:0,maxRetryDelayMs:0,timeoutMs:45000,maxTokens:1024,reasoning:'off',samplingParams:{thinking:{type:'disabled'}},
-    toolChoice:++calls===1&&configuration.forceEcho!==false?{type:'function',function:{name:'echo'}}:'none',
+    toolChoice:configuration.forceTool?.()&&modelContext.messages.at(-1)?.role==='user'?{type:'function',function:{name:configuration.forceTool()}}:++calls===1&&configuration.forceEcho!==false?{type:'function',function:{name:'echo'}}:'none',
     onProviderStreamEvent(event:any) {
       for(const choice of event?.choices??[]) {
         if(choice.finish_reason)publish({providerFinished:true});
@@ -53,7 +53,7 @@ export function liveModels(secret:string, publish:(patch:Partial<ProbeState>)=>v
   const models=createModels();
   const configured:Provider<'openai-completions'>={...provider,
     auth:{apiKey:{name:'Validation transport credential',resolve:async()=>({auth:{apiKey:'validation-transport-only'}})}},
-    stream:(m,c,o)=>provider.stream(m,c,options(o)),streamSimple:(m,c,o)=>provider.streamSimple(m,c,options(o))
+    stream:(m,c,o)=>provider.stream(m,c,options(o,c)),streamSimple:(m,c,o)=>provider.streamSimple(m,c,options(o,c))
   };
   models.setProvider(configured);
   if(!models.getModel(provider.id,model))throw new Error('Pinned SDK model catalog missing MiMo validation model');

@@ -1,0 +1,199 @@
+
+> @durableagent/runtime-probe@0.1.0 pretest
+> npm run build
+
+
+> @durableagent/runtime-probe@0.1.0 build
+> tsc
+
+
+> @durableagent/runtime-probe@0.1.0 test
+> node --test test/*.test.mjs
+
+(node:2684) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ two product conversations have independent durable history and stable retried creation (711.2576ms)
+✔ configuration gates every scheduling entry while real SDK open uses valid synchronous bootstrap settings (125.3214ms)
+✔ unsubscribe detaches UI only; full snapshot reconnect restores completed durable history (354.5672ms)
+✔ history paging recovers entries older than the live window without mixing conversations (6852.9451ms)
+✔ explicit stop aborts the active model while retaining accepted input (126.692ms)
+✔ start during close waits for the prior writable Session to release ownership (88.2956ms)
+✔ failed atomic creation closes the application gate and retry after reopen finds no half conversation (109.893ms)
+✔ SDK conversations without explicit product registration never enter the product list (85.7176ms)
+✔ actual SDK retry and terminal provider error project waiting and failed states (424.1036ms)
+✔ disconnect and unsubscribe invalidate a subscription whose attachment is still pending (281.0622ms)
+✔ a fatal SQLite error tells attached UI the run failed instead of leaving a stale status (71.8366ms)
+✔ newer persisted configuration refuses startup and preserves its original data (65.9375ms)
+✔ a due persisted retry stays dormant until reopened configuration is ready (762.1567ms)
+✔ a pause immediately after stream request fences the actual model invocation (4.5434ms)
+✔ a abort immediately after stream request fences the actual model invocation (0.7528ms)
+✔ concurrent dispatches share one control check and cannot repeatedly block one another (0.6589ms)
+(node:16028) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ capabilities derive from the fixed SDK catalog, use byte-specific budgets, and never resolve credentials (2.3095ms)
+✔ fixed input verifies ownership, every object and digest before SDK content; changed capabilities never alter a token (1.2055ms)
+✔ explicit fixed-image send reaches real SDK encoding, persists image-only history, and reopening never sends (671.96ms)
+✔ actual serialized SDK requests enforce escaped JSON, history image counts and selected-model limits before decrypt or transport (10.36ms)
+✔ oversized accumulated context is refused before entering the real SDK provider encoder (42.6971ms)
+(node:7600) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ ordinary generation retry prepares the current model and request-time credential (1960.8326ms)
+✔ close: held generation resumes its fixed or newly prepared route with one durable input (864.3699ms)
+✔ kill: held generation resumes its fixed or newly prepared route with one durable input (2053.7359ms)
+✔ deferred poll process death: unchanged keeps the original handle or fails without a replacement start (2089.6485ms)
+✔ deferred poll process death: rotated keeps the original handle or fails without a replacement start (3365.9995ms)
+✔ deferred poll process death: disabled keeps the original handle or fails without a replacement start (3379.6855ms)
+✔ selected compaction retries and orderly resumes its selected model after current selection changes (1976.1704ms)
+✔ overdue work remains behind the configuration loading gate on reopen (2400.959ms)
+✔ secret persistence detector has a positive control before relying on clean DB and WAL scans (2.8185ms)
+(node:32880) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ public configuration is durable; defaults and current models are separate; queries never decrypt (708.4575ms)
+✔ configuration COMMIT failure preserves old durable version and blocks scheduling until reopen (153.416ms)
+✔ rotation or disable before final admission sends nothing; disabling after send does not cancel it (233.5101ms)
+✔ an old deferred response never becomes a replacement request after credential rotation (309.5767ms)
+✔ actual HTTP redirects cannot forward credentials or prompt body to another destination (32.1619ms)
+✔ credential/options overrides are rejected; revoke never uses ambient environment credentials (1.1424ms)
+✔ a post-commit publication failure gates dispatch and reopen loads the durable generation (164.0992ms)
+✔ an in-flight reflected old credential is sanitized even after rotation, including live WAL and events (220.6036ms)
+✔ serialized SDK stream settings reject credentials and arbitrary nested options before opening storage (222.4413ms)
+✔ JSON escaped credential reflection is removed after decoding, before SDK progress and persistence (384.0811ms)
+✔ a credential rotated after deferred compatibility check is rejected again at final fetch admission (13.1579ms)
+✔ escaped credential property names in parsed tool arguments never enter SDK results or SQLite (325.4259ms)
+✔ disable published during final metadata wait blocks dispatch at the final synchronous boundary (15.9306ms)
+(node:7316) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ a conversation streams Chinese text through the real SDK and reconnects to its state (436.5081ms)
+✔ stop aborts a hanging model read and close allows a fresh single owner (29.8451ms)
+✔ close during initialization never revives the session (2.0079ms)
+✔ tool arguments survive byte-split SSE and real pi-schema coercion (365.2739ms)
+✔ invalid tool arguments are rejected by the SDK before execution (373.1516ms)
+✔ the loaded module exercises required Node primitives and sqlite (1.3829ms)
+(node:42064) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ shared project and workspace metadata survives reopen; renaming does not change position or copy project authority (275.0498ms)
+✔ pending native intent and real SDK work block location edits; rejection never becomes a delayed edit and rename remains ordinary metadata (218.0821ms)
+✔ actual SDK environment uses the adopted location through queued followups and a new explicit binding after release (1034.4675ms)
+✔ canonical alias and unknown managed effects hold shared locations until explicit evidence release (283.0118ms)
+✔ task-owned internal conversations keep their binding after terminal owners, stay hidden, and later internal input still uses it (780.9452ms)
+✔ project association publication updates an already attached conversation observer and retains newer native expectations (170.8473ms)
+✔ committed edit with missing native publication is repaired by exact operation replay without leaving a stuck native fence (164.209ms)
+✔ actual SDK COMMIT response uncertainty leaves native edit fenced; reopen publishes whichever complete configuration committed without applying an old proposal (315.669ms)
+✔ T07 accepted binding migrates its provable location for environment use without changing its receipt or reissuing input (323.1807ms)
+✔ actual provider parser invokes the bound location witness tool; access revocation remains visible and never invokes a fallback environment (838.2372ms)
+✔ native intent creation and a location edit have explicit opposite orderings, while independent draft saves and stop stay durable (276.923ms)
+✔ a fresh conversation can select another project while another conversation uses the common default; shared relocation still refuses (215.9245ms)
+✔ a fork keeps the history source location but inherits the actual task owner control domain, without product registration (603.2527ms)
+(node:42340) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ reserves ID 1 for the immutable root conversation (83.9426ms)
+✔ receives a durable commit once before resolving, and never a refused one (76.9404ms)
+✔ commits mixed table writes atomically and rolls all of them back on failure (77.7531ms)
+✔ detaches retained writes and every returned record (46.0533ms)
+✔ detaches prototype-like JSON keys without changing object prototypes (46.1963ms)
+✔ indexes entries committed out of ID order (43.6188ms)
+✔ continues an entry cursor below its last item after a newer commit (48.4798ms)
+✔ paginates conversations by opaque cursor in ascending ID order (46.2538ms)
+✔ filters and pages conversations by durable owner edges (47.386ms)
+✔ scans deep fork history newest-first through every ancestor cap (73.9714ms)
+✔ scans tables in either ID order and continues a cursor in its order (67.6091ms)
+✔ replaces complete task records and pages filtered task scans (70.8159ms)
+✔ stores owners and scans waiting and completing tasks by status (78.3828ms)
+✔ stores and scans sleeping tasks by status (54.6504ms)
+✔ indexes request IDs per conversation and replaces complete submission records (46.267ms)
+✔ stores passive write submissions without input-only lifecycle states (35.6019ms)
+✔ stores continue submissions, which have no entry and are never queued (47.2254ms)
+✔ reconstructs rewindable documents and preserves half-open incarnations (48.6416ms)
+✔ streams long document tails across root replacement deltas (295.0306ms)
+✔ copies stored document bases independently and rejects ambiguous sources (68.825ms)
+✔ uses bases for version transitions and rejects historical reads of current-only documents (63.3553ms)
+✔ indexes logical addresses and exact-scope scans independently (58.8073ms)
+✔ keeps document lifecycle failures atomic and gives create-plus-retire an empty lifetime (64.8592ms)
+✔ refuses a creation and a change of one document in one commit, in either order (58.0463ms)
+✔ rolls back record tables and secondary indexes when a document command fails (84.0691ms)
+✔ keeps indexed string identities lossless (77.2657ms)
+✔ keeps one global record ID namespace and rejects exhausted ID minting (66.2923ms)
+✔ commits batches in order, each with its seq, checked against the earlier ones (59.0318ms)
+✔ stores the batches before the first one refused, and none after it (67.1727ms)
+✔ refuses a later batch its own malformed actions fail, keeping the batches before it (63.7225ms)
+✔ resolves a batched copy against the state the earlier batches left (64.1079ms)
+✔ rejects every operation after close (71.9592ms)
+storageDiagnostics {"booleanBinding":{"accepted":false,"error":"TypeError: Provided value cannot be bound to SQLite parameter 1."}}
+✔ STRICT, JSON, partial indexes, UPSERT and all parameter types use the real engine (49.1074ms)
+✔ runCounted excludes trigger writes; transaction queue isolates reads, writes and other transactions (61.1699ms)
+✔ transaction callback preserves the actual error and durable outcome (33.058ms)
+✔ transaction commit-before preserves the actual error and durable outcome (33.2969ms)
+✔ transaction rollback preserves the actual error and durable outcome (37.4654ms)
+✔ transaction commit-after preserves the actual error and durable outcome (52.1615ms)
+✔ SDK batches: apply fault, receipts and reopen agree (68.2173ms)
+✔ SDK batches: check fault, receipts and reopen agree (62.4985ms)
+✔ SDK batches: commit-before fault, receipts and reopen agree (54.946ms)
+✔ SDK batches: commit-after fault, receipts and reopen agree (64.2031ms)
+✔ SDK batches: receive fault, receipts and reopen agree (55.7278ms)
+✔ schema 1 to 2 preserves records, failed migration rolls back, newer schema blocks without reset (79.3008ms)
+✔ application metadata and SDK entry commit atomically; incompatible document version preserves old content (69.928ms)
+✔ an uncertain commit fails the Session permanently and reopening inspects its stable ID without replay (61.6544ms)
+✔ dependent commit flushes deferred progress and durable entries cannot be deferred (60.1571ms)
+✔ credential audit catches a synthetic marker in live WAL before close checkpoints it (85.1683ms)
+✔ process termination at before inspects the same stable records on reopen (249.7691ms)
+✔ process termination at during inspects the same stable records on reopen (240.808ms)
+✔ process termination at after inspects the same stable records on reopen (241.1164ms)
+✔ process termination at confirmed inspects the same stable records on reopen (220.9029ms)
+✔ process termination at deferred inspects the same stable records on reopen (238.8884ms)
+✔ process termination at migration inspects the same stable records on reopen (301.8973ms)
+✔ real SDK conversation reopens its same persisted transcript without another model request (452.4313ms)
+✔ one canonical domain admits one owner until real storage close, then reopens durable records (35.4272ms)
+(node:35824) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ explicit native intent alone drives atomic SDK admission; lost ACK reconciles the same identity and preserves later draft (678.0956ms)
+✔ same content is a new user action; accepted identity mismatch cannot reuse its SDK request or binding (602.4992ms)
+✔ failure after submit rolls back submission map and binding; durable commit response loss recovers only original acceptance (353.7204ms)
+✔ a native stop committed during SDK admission prevents dispatch, survives reopen, and only a new explicit generation may proceed (485.8521ms)
+✔ a conflicting native receipt is a visible inconsistency, never a fresh or silently acknowledged submission (387.3542ms)
+✔ missing SDK map or binding is reported without repair or redelivery of a native acknowledged intent (820.3671ms)
+✖ unaccepted changed location refuses; accepted replay keeps original binding after the current location changes (347.4135ms)
+✔ persisted due work and old stop stay behind the native control startup barrier, including abort implicit resume (811.3953ms)
+✔ native stops at either ACK edge are checked by actual dispatch, not only by the earlier admission snapshot (349.0522ms)
+✔ two durable conversations dispatch concurrently without control-check starvation or mixed history (397.066ms)
+✖ actual SQL COMMIT failures retain an uncertain native intent; reopen inspects a whole accepted or absent transaction (467.0991ms)
+✔ real SDK queued, placed and settled input remain distinct while afterRun keeps the conversation active (491.4855ms)
+✔ a missing native authority never opens a writable SDK runtime or dispatches legacy stored work (0.7951ms)
+ℹ tests 131
+ℹ suites 0
+ℹ pass 129
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18228.7271
+
+✖ failing tests:
+
+test at validation\submission-policy.mjs:3:87
+✖ unaccepted changed location refuses; accepted replay keeps original binding after the current location changes (347.4135ms)
+  AssertionError [ERR_ASSERTION]: Expected "actual" not to be strictly deep-equal to:
+
+  {
+    associationVersion: 1,
+    location: {
+      identity: '8f50b565e59e9d290e5e288090e34fc52a0b7ab2a461bfc6c14579d9b7547584',
+      version: 1,
+      workspaceId: 'default'
+    },
+    sdkConversationId: 5
+  }
+
+      at TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t08-projects/durableagent/runtime/validation/submission-policy.mjs:61:1051)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { sdkConversationId: 5, associationVersion: 1, location: { workspaceId: 'default', version: 1, identity: '8f50b565e59e9d290e5e288090e34fc52a0b7ab2a461bfc6c14579d9b7547584' } },
+    expected: { sdkConversationId: 5, associationVersion: 1, location: { workspaceId: 'default', version: 1, identity: '8f50b565e59e9d290e5e288090e34fc52a0b7ab2a461bfc6c14579d9b7547584' } },
+    operator: 'notDeepStrictEqual',
+    diff: 'simple'
+  }
+
+test at validation\submission-policy.mjs:3:87
+✖ actual SQL COMMIT failures retain an uncertain native intent; reopen inspects a whole accepted or absent transaction (467.0991ms)
+  [Error: EBUSY: resource busy or locked, unlink 'C:\Users\AI_BA\AppData\Local\Temp\admission-EjIgFP\sdk.sqlite'] { errno: -4082, code: 'EBUSY', syscall: 'unlink', path: 'C:\\Users\\AI_BA\\AppData\\Local\\Temp\\admission-EjIgFP\\sdk.sqlite' }

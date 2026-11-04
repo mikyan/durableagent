@@ -4,9 +4,10 @@ import {MODELS_EXTENSION,type ConnectionProtocol,type CredentialInfo,type ModelC
 import type {InputConversation} from '../../runtime/src/input-protocol';
 import {DraftCoordinator,type DraftView} from './drafts';
 import {SubmissionCoordinator} from './submissions';
+import {PROJECTS_EXTENSION,type ProjectCatalog,type ProjectMethod} from '../../runtime/src/project-protocol';
 
 export interface SelectionPreferences {get(key:string):string|null;set(key:string,value:string):void}
-export type UiState={status:ApplicationStatus;conversations:ConversationSummary[];inputConversations:InputConversation[];inputReady:boolean;inputError?:string;draft?:DraftView;submissions?:ReturnType<SubmissionCoordinator['view']>;activeId?:string;conversation?:ConversationSnapshot;history:HistoryMessage[];next?:string;loading:boolean;pending:boolean;error?:string;page:'conversation'|'models';models?:ModelConfiguration;modelsLoading:boolean;modelsPending:boolean;modelsError?:string;modelsNotice?:string};
+export type UiState={status:ApplicationStatus;conversations:ConversationSummary[];inputConversations:InputConversation[];inputReady:boolean;inputError?:string;draft?:DraftView;submissions?:ReturnType<SubmissionCoordinator['view']>;activeId?:string;conversation?:ConversationSnapshot;history:HistoryMessage[];next?:string;loading:boolean;pending:boolean;error?:string;page:'conversation'|'models'|'projects';models?:ModelConfiguration;modelsLoading:boolean;modelsPending:boolean;modelsError?:string;modelsNotice?:string;projects?:ProjectCatalog;projectsLoading?:boolean;projectsPending?:boolean;projectsUnconfirmed?:boolean;projectsError?:string;projectsNotice?:string};
 export type ConnectionInput={name:string;protocol:ConnectionProtocol;endpoint:string;modelId?:string};
 export type ModelReference={provider:string;modelId:string};
 const mergeMessages=(older:HistoryMessage[],current:HistoryMessage[])=>[...new Map([...older,...current].map(message=>[message.id,message])).values()].sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true}));
@@ -22,6 +23,8 @@ export class ConversationController {
   private creationId?:string;
   private checking?:Promise<void>;
   private connectionCreation?:{fingerprint:string;id:string};
+  private projectRead=0;
+  private projectOperation?:{method:Exclude<ProjectMethod,'projects.get'>;payload:Record<string,unknown>};
   private readonly drafts=new DraftCoordinator(()=>this.client,()=>this.publish({draft:this.state.activeId?this.drafts.view(this.state.activeId):undefined}));
   private readonly submissions=new SubmissionCoordinator(()=>this.client,()=>this.state.status.phase==='ready',()=>this.publish({submissions:this.state.activeId?this.submissions.view(this.state.activeId):undefined}),(ack,editEpoch)=>this.drafts.confirmAdmission(ack,editEpoch));
   private sendPoll?:ReturnType<typeof setTimeout>;
@@ -32,7 +35,7 @@ export class ConversationController {
   async connect() {
     ++this.epoch;clearTimeout(this.sendPoll);this.submissions.disconnect();this.subscription?.unsubscribe();this.subscription=undefined;this.client?.dispose();this.checking=undefined;
     const client=this.connectClient();this.client=client;
-    this.publish({status:{phase:'opening',extensions:[]},pending:false,modelsPending:false,modelsLoading:false,error:undefined});
+    this.publish({status:{phase:'opening',extensions:[]},pending:false,modelsPending:false,modelsLoading:false,projectsPending:false,projectsLoading:false,projectsUnconfirmed:!!this.projectOperation,error:undefined});
     await Promise.all([this.refresh(),this.refreshInputs()]);
   }
   private async refreshInputs(){
@@ -63,6 +66,7 @@ export class ConversationController {
       if(epoch!==this.epoch)return;
       this.publish({conversations});
       if(status.extensions.includes(MODELS_EXTENSION.id))await this.loadModels();
+      if(status.extensions.includes(PROJECTS_EXTENSION.id))await this.loadProjects();
       const selected=this.state.activeId??this.preferences?.get('selectedConversation');
       if(selected&&conversations.some(conversation=>conversation.id===selected))await this.open(selected);
     }catch(error){if(epoch===this.epoch)this.publish({status:{phase:'failed',reason:this.reason(error),extensions:[]},error:this.reason(error)});}
@@ -95,6 +99,7 @@ export class ConversationController {
     const current=()=>epoch===this.epoch&&opening===this.opening;
     const draftRead=this.drafts.read(id).catch(error=>{if(current())this.publish({inputError:this.reason(error)});});
     void this.refreshSubmissions();
+    void this.loadProjects();
     try {
       if(this.state.status.phase!=='ready'){await draftRead;return;}
       const [conversation,page]=await Promise.all([client.request<ConversationSnapshot>('open',{id}),client.request<HistoryPage>('history',{id,limit:30})]);
@@ -114,7 +119,7 @@ export class ConversationController {
     if(navigation!==this.navigation)return;
     this.opening++;this.subscription?.unsubscribe();this.subscription=undefined;
     this.preferences?.set('selectedConversation','');
-    clearTimeout(this.sendPoll);this.publish({page:'conversation',activeId:undefined,draft:undefined,submissions:undefined,conversation:undefined,history:[],next:undefined,loading:false,error:undefined});
+    clearTimeout(this.sendPoll);this.publish({page:'conversation',activeId:undefined,draft:undefined,submissions:undefined,conversation:undefined,history:[],next:undefined,loading:false,error:undefined});void this.loadProjects();
   }
   editDraft(text:string){if(this.state.activeId)this.drafts.edit(this.state.activeId,text);}
   removeAttachment(selectionId:string){if(this.state.activeId)this.drafts.remove(this.state.activeId,selectionId);}
@@ -173,6 +178,57 @@ export class ConversationController {
   }
   async openModels(){this.publish({page:'models',modelsNotice:undefined});await this.loadModels();}
   leaveModels(){this.publish({page:'conversation',modelsError:undefined,modelsNotice:undefined});}
+  async openProjects(){this.publish({page:'projects',projectsNotice:undefined});await this.loadProjects();}
+  leaveProjects(){this.publish({page:'conversation',projectsNotice:undefined});}
+  async loadProjects(){
+    const client=this.client,epoch=this.epoch,id=this.state.activeId;
+    if(!client||this.state.projectsPending||this.state.status.phase!=='ready'||!this.state.status.extensions.includes(PROJECTS_EXTENSION.id))return;
+    const read=++this.projectRead;this.publish({projectsLoading:true});
+    try{
+      const projects=await client.request<ProjectCatalog>('projects.get',id?{id}:{});
+      if(epoch!==this.epoch||read!==this.projectRead||id!==this.state.activeId)return;
+      if(projects.version>=(this.state.projects?.version??-1))this.publish({projects});
+    }catch(error){if(epoch===this.epoch&&read===this.projectRead)this.publish({projectsError:this.reason(error)});}
+    finally{if(epoch===this.epoch&&read===this.projectRead)this.publish({projectsLoading:false});}
+  }
+  createProject(input:{name:string;workspaceId:string}){return this.changeProjects('projects.create',{id:crypto.randomUUID(),...input});}
+  renameProject(id:string,name:string){return this.changeProjects('projects.rename',{id,name});}
+  createWorkspace(input:{name:string;path:string}){return this.changeProjects('workspaces.create',{id:crypto.randomUUID(),...input});}
+  updateWorkspace(id:string,input:{name?:string;path?:string}){return this.changeProjects('workspaces.update',{id,...input});}
+  selectProject(projectId:string|null){const id=this.state.activeId;return id?this.changeProjects('projects.select',{id,projectId}):Promise.resolve(false);}
+  private async changeProjects(method:Exclude<ProjectMethod,'projects.get'>,payload:Record<string,unknown>){
+    if(!this.state.projects||this.state.projectsPending||this.state.projectsLoading||this.state.projectsUnconfirmed||this.state.status.phase!=='ready')return false;
+    this.projectOperation={method,payload:{...payload,operationId:crypto.randomUUID(),expectedVersion:this.state.projects.version}};
+    return this.runProjectOperation();
+  }
+  retryProjectChange(){return this.state.projectsUnconfirmed?this.runProjectOperation():Promise.resolve(false);}
+  private async runProjectOperation(){
+    const client=this.client,operation=this.projectOperation,epoch=this.epoch;
+    if(!client||!operation||this.state.projectsPending||this.state.status.phase!=='ready')return false;
+    ++this.projectRead;this.publish({projectsLoading:false,projectsPending:true,projectsError:undefined,projectsNotice:undefined});
+    try{
+      const projects=await client.request<ProjectCatalog>(operation.method,operation.payload);
+      if(epoch!==this.epoch)return false;
+      this.projectOperation=undefined;this.publish({projects,projectsUnconfirmed:false,projectsNotice:'修改已保存。现有执行仍遵守已采用的位置。'});
+      // A confirmed mutation stays confirmed even if reacquiring its views fails.
+      try{
+        const id=this.state.activeId;
+        const current=await client.request<ProjectCatalog>('projects.get',id?{id}:{});
+        if(epoch===this.epoch&&id===this.state.activeId&&current.version>=projects.version)this.publish({projects:current});
+        const listing=await client.request<{conversations:ConversationSummary[]}>('list');
+        if(epoch===this.epoch)this.publish({conversations:listing.conversations});
+        if(id){const snapshot=await client.request<ConversationSnapshot>('open',{id});if(epoch===this.epoch&&id===this.state.activeId&&snapshot.revision>=(this.state.conversation?.revision??-1))this.publish({conversation:snapshot,history:mergeMessages(this.state.history,snapshot.entries)});await this.refreshDraft();}
+      }catch(error){if(epoch===this.epoch)this.publish({projectsError:'修改已保存，最新界面读取未完成：'+this.reason(error)});}
+      return true;
+    }catch(error){
+      if(epoch===this.epoch){
+        const unknown=!!this.projectOperation&&error instanceof ApplicationFailure&&['RESPONSE_TIMEOUT','CONNECTION_CLOSED','HOST_UNAVAILABLE'].includes(error.code);
+        if(!unknown)this.projectOperation=undefined;
+        this.publish({projectsUnconfirmed:unknown,projectsError:this.reason(error)+(unknown?' 请核验这次修改；不要另建相同操作。':'')});
+      }
+      return false;
+    }finally{if(epoch===this.epoch)this.publish({projectsPending:false});}
+  }
   async loadModels() {
     const client=this.client,epoch=this.epoch;
     if(!client||this.state.modelsLoading||this.state.modelsPending||this.state.status.phase!=='ready'||!this.state.status.extensions.includes(MODELS_EXTENSION.id))return;

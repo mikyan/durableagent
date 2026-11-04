@@ -46,8 +46,10 @@ class NativeInputStore(
             val previous = db.rawQuery("SELECT data,capability FROM conversations WHERE id=?", arrayOf(id)).use {
                 if (it.moveToFirst()) Pair(it.getString(0), if (it.isNull(1)) null else it.getString(1)) else null
             }
-            val submissionContext = conversation.optJSONObject("submissionContext")
-                ?: previous?.first?.let(::JSONObject)?.optJSONObject("submissionContext")
+            val previousContext = previous?.first?.let(::JSONObject)?.optJSONObject("submissionContext")
+            val suppliedContext = conversation.optJSONObject("submissionContext")
+            val submissionContext = if (NativeSubmissionRecords.readLocationEdit(db) != null || suppliedContext == null) previousContext
+                else NativeSubmissionRecords.chooseContext(previousContext, suppliedContext, false)
             if (submissionContext != null) safe.put("submissionContext", NativeSubmissionRecords.context(submissionContext))
             db.execSQL("INSERT INTO conversations(id,data,capability) VALUES(?,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data,capability=excluded.capability",
                 arrayOf(id, safe.toString(), capability?.toString()))
@@ -364,6 +366,17 @@ class NativeInputStore(
     }
 
     fun readFrozen(token: String): JSONObject { validateId(token); return locked { db, _ -> frozen(db, token) } }
+    fun readLocationEdit(): JSONObject? = locked { db, _ -> NativeSubmissionRecords.readLocationEdit(db) }
+    fun beginLocationEdit(operationId: String): JSONObject = locked { db, _ -> transaction(db) {
+        NativeSubmissionRecords.beginLocationEdit(db, operationId).also { boundary("location.edit.begin.beforeCommit") }
+    } }.also { boundary("location.edit.begin.afterCommit") }
+    fun finishLocationEdit(operationId: String, contexts: JSONArray) {
+        locked { db, _ -> transaction(db) {
+            NativeSubmissionRecords.finishLocationEdit(db, operationId, contexts, boundary)
+            boundary("location.edit.finish.beforeCommit")
+        } }
+        boundary("location.edit.finish.afterCommit")
+    }
     fun createSend(request: JSONObject): JSONObject = locked { db, _ -> transaction(db) {
         NativeSubmissionRecords.create(db, request) { frozen(db, it) }.also { boundary("send.intent.beforeCommit") }
     } }.also { boundary("send.intent.afterCommit") }
@@ -566,7 +579,7 @@ class NativeInputStore(
 
     override fun close() = synchronized(monitor) { sourceAdmissions.values.toList().forEach { it.close() }; helper?.close(); helper = null; closed = true }
 
-    private class InputDatabase(context: Context, path: String, private val maximumBytes: Long?) : SQLiteOpenHelper(context, path, null, 3,
+    private class InputDatabase(context: Context, path: String, private val maximumBytes: Long?) : SQLiteOpenHelper(context, path, null, 4,
         DatabaseErrorHandler { throw NativeInputException("INPUT_STORAGE_CORRUPT", "草稿数据库损坏，已保留原库和材料。") }) {
         init { setWriteAheadLoggingEnabled(true) }
         override fun onConfigure(db: SQLiteDatabase) {
@@ -584,6 +597,7 @@ class NativeInputStore(
             db.execSQL("CREATE TABLE operations(id TEXT PRIMARY KEY,payload_hash TEXT NOT NULL,reply TEXT NOT NULL)")
             createSelectionIndex(db)
             NativeSubmissionRecords.createSchema(db)
+            NativeSubmissionRecords.createLocationSchema(db)
         }
         override fun onOpen(db: SQLiteDatabase) {
             if (maximumBytes != null) {
@@ -598,9 +612,10 @@ class NativeInputStore(
             db.execSQL("CREATE TABLE selection_operations(operation_id TEXT PRIMARY KEY,draft_id TEXT NOT NULL,revision INTEGER NOT NULL,kind TEXT NOT NULL,uri TEXT NOT NULL)")
         }
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            if (oldVersion !in 1..2 || newVersion != 3) fail("INPUT_INCOMPATIBLE", "草稿数据库版本不兼容，已保留现有数据。")
+            if (oldVersion !in 1..3 || newVersion != 4) fail("INPUT_INCOMPATIBLE", "草稿数据库版本不兼容，已保留现有数据。")
             if (oldVersion == 1) createSelectionIndex(db)
-            NativeSubmissionRecords.createSchema(db)
+            if (oldVersion < 3) NativeSubmissionRecords.createSchema(db)
+            NativeSubmissionRecords.createLocationSchema(db)
         }
         override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) { fail("INPUT_INCOMPATIBLE", "草稿数据库来自更新版本，已保留现有数据。") }
     }

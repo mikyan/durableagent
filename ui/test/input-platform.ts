@@ -2,6 +2,7 @@ import {createHash} from 'node:crypto';
 import type {ApplicationRequest,ApplicationResponse} from '../../runtime/src/application-protocol';
 import type {FrozenInput,InputConversation,NativeDraft} from '../../runtime/src/input-protocol';
 import {DEFAULT_QUEUE,type AdmissionReceipt,type CreateSend,type NativeAdmissionAck,type NativeControl,type NativeSendIntent,type SendStatus,type StopBarrier} from '../../runtime/src/submission-protocol';
+import type {SubmissionContext} from '../../runtime/src/submission-protocol';
 
 // The Android storage/SAF boundary only. Product UI, client and controller are real.
 export class InputPlatform {
@@ -12,7 +13,15 @@ export class InputPlatform {
   requests:ApplicationRequest[]=[];
   intents=new Map<string,NativeSendIntent>();
   controls=new Map<string,NativeControl>();
-  rememberConversation=(conversation:InputConversation)=>{this.conversations.set(conversation.id,{...conversation,submissionContext:conversation.submissionContext??{sdkConversationId:this.conversations.size+1,associationVersion:1,location:{workspaceId:'default',version:1,identity:'fixture-workspace'}}});};
+  private locationEdit:{operationId:string}|null=null;
+  rememberConversation=(conversation:InputConversation)=>{
+    const value={...conversation,submissionContext:conversation.submissionContext??this.conversations.get(conversation.id)?.submissionContext??{sdkConversationId:this.conversations.size+1,associationVersion:1,location:{workspaceId:'default',version:1,identity:'fixture-workspace'}}};
+    this.conversations.set(conversation.id,value);const draft=this.drafts.get(conversation.id);
+    if(draft&&JSON.stringify(draft.submissionContext)!==JSON.stringify(value.submissionContext))this.drafts.set(conversation.id,{...draft,submissionContext:value.submissionContext,stateVersion:draft.stateVersion+1});
+  };
+  beginLocationEdit=async(operationId:string)=>{if(this.locationEdit&&this.locationEdit.operationId!==operationId)throw Object.assign(Error('位置修改尚未完成'),{code:'LOCATION_EDIT_PENDING'});this.locationEdit={operationId};return {...this.locationEdit};};
+  readLocationEdit=async()=>this.locationEdit?{...this.locationEdit}:null;
+  finishLocationEdit=async(operationId:string,contexts:{id:string;context:SubmissionContext}[])=>{if(this.locationEdit?.operationId!==operationId)throw Error('位置修改身份不匹配');for(const item of contexts){const conversation=this.conversations.get(item.id);if(!conversation)throw Error('Unknown conversation');this.rememberConversation({...conversation,submissionContext:item.context});}this.locationEdit=null;};
   readControl=async(id:string)=>structuredClone(this.control(id));
   private control(id:string){this.read(id);return this.controls.get(id)??{id,version:0,generation:1,stoppedThrough:0};}
   readSend=async(intentId:string)=>{const intent=this.intents.get(intentId);if(!intent)throw Object.assign(Error('发送意图不存在'),{code:'SEND_NOT_FOUND'});return structuredClone(intent);};
@@ -57,6 +66,7 @@ export class InputPlatform {
     if(request.method==='input.read'||request.method==='input.inspect')return previous;
     if(request.method==='input.createSend'){
       const value=p as CreateSend,existing=this.intents.get(value.actionId);if(existing)return structuredClone(existing);
+      if(this.locationEdit)throw Object.assign(Error('位置修改尚未完成'),{code:'LOCATION_EDIT_PENDING'});
       const frozen=this.frozen.get(value.inputToken),control=this.control(id);if(!frozen||frozen.id!==id)throw Error('固定输入关联错误');
       if(control.version!==value.expectedControlVersion)throw Object.assign(Error('控制状态已变更'),{code:'CONTROL_CONFLICT'});
       const generation=Math.max(control.generation,control.stoppedThrough+1);this.controls.set(id,{...control,generation,version:control.version+1});

@@ -247,12 +247,13 @@ class NativeSubmissionStoreTest {
         NativeInputStore(context, namespace).use { store ->
             seed(store); fixed = attachment(store); previous = store.inspect("chat")
         }
-        // Exact v2 application tables remain; remove only the new v3 authority tables before upgrade.
+        // Exact v2 application tables remain; remove later authority/fence tables before upgrade.
         val path = File(File(context.noBackupFilesDir, namespace), "input.sqlite")
         SQLiteDatabase.openDatabase(path.absolutePath, null, SQLiteDatabase.OPEN_READWRITE).use { db ->
             db.beginTransaction()
             try {
                 db.execSQL("DROP TABLE native_send_intents"); db.execSQL("DROP TABLE native_submission_actions"); db.execSQL("DROP TABLE native_controls")
+                db.execSQL("DROP TABLE native_location_edit")
                 val conversation = db.rawQuery("SELECT data FROM conversations WHERE id='chat'", null).use { assertTrue(it.moveToFirst()); JSONObject(it.getString(0)) }
                 conversation.remove("submissionContext"); previous.remove("submissionContext")
                 db.execSQL("UPDATE conversations SET data=? WHERE id='chat'", arrayOf(conversation.toString()))
@@ -278,6 +279,6 @@ class NativeSubmissionStoreTest {
             val created = store.createSend(request(fixed.getString("token")))
             assertEquals(2L, created.getLong("inputRevision")); assertEquals("pending", created.getString("delivery"))
         }
-        SQLiteDatabase.openDatabase(path.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { db -> assertEquals(3, db.version) }
+        SQLiteDatabase.openDatabase(path.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { db -> assertEquals(4, db.version) }
     }
 }

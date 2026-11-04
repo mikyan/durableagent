@@ -39,7 +39,7 @@ The current source contains **12 methods**: nine store tests and three crash tes
 - The durable stop fence cancels old generations without rewriting every historical intent. Only a new explicit action advances a stopped generation; an unresolved prior SDK abort remains a barrier. Confirming an older stop cannot clear a newer barrier. A late valid ACK records acceptance while retaining cancellation.
 - Pending, uncertain, acknowledged and cancelled intents retain their frozen object pins. Explicit discard rejects an input still held by an intent, and cleanup preserves its exact bytes. ACK is not evidence that all downstream effects have completed, so this module does not automatically release those recovery objects.
 - Actual native transactions reject injected storage failures without publishing a partial intent, ACK or stop. A malformed existing control record remains on disk and raises `INPUT_STORAGE_CORRUPT`; it is not replaced with a default open control. The generic UI method surface cannot forge ACKs or confirm an SDK abort.
-- The schema migration case uses a dedicated SQLite v2-schema fixture with real draft/object/operation data, then exercises the actual helper upgrade to v3. Migration preserves old material and creates no send. A migrated conversation requires trusted publication of its SDK association before creating an intent.
+- The schema migration case uses a dedicated SQLite v2-schema fixture with real draft/object/operation data, then exercises the actual helper upgrade to the current schema 4. Migration preserves old material and creates no send. A migrated conversation requires trusted publication of its SDK association before creating an intent.
 
 `NativeSubmissionCrashTest` observes and then kills the real separate debug process `:submission_fault_probe` at six native barriers: before/after intent commit, before/after ACK commit, and before/after stop commit. Recovery checks the last committed fact, same-action replay and preservation of later drafts. The emitted `nativeSubmissionCrashEvidence` records each observed barrier. The intent and ACK barriers cover four of T07's six **cross-database admission** windows; the two SDK commit windows belong to the runtime/application suite. The extra two native stop barriers must not be counted as SDK commit evidence. Native receipt fixtures alone do not prove unique SDK submission or a real provider request.
 
@@ -122,3 +122,52 @@ This standalone debug helper starts a fresh fixture run with an initial package 
 Use the same ADB resolution and output rules as the draft helper above. This helper accepts fixture mode only and does not provision credentials. Real MiMo ACK-loss recovery and exact request deltas are covered by `SubmissionApplicationTest.realMimoLostAckReconcilesWithoutAnotherCloudRequest`, with `realProvider=true` and an encrypted validation capsule. That test performs two explicit user actions, and verifies same-intent reconciliation adds no request. `recreateActivity=false` may omit the Activity recreation step on a locked device; evidence records that omission, and it supplies no recreation acceptance.
 
 The React instrumentation observer uses only `listSends`, `inspect` and `readSend` against the native store. On `INPUT_STORAGE_BUSY` it retries that observation for at most two seconds and records counts; it does not retry mutations or swallow another error code. A native write failure remains a product failure. These two React fixtures have only text and no preparation jobs; in general `inspect` may perform interrupted-preparation maintenance, so it is not an assertion that every native inspect is free of writes.
+
+
+## Projects and adopted positions (T08)
+
+The complete product fixture uses the same native send intent and SDK admission
+path as T07. After installing the full APK pair, run:
+
+```powershell
+adb -s $device shell am instrument -w -r -e class 'dev.durableagent.probe.ProjectApplicationTest' -e realProvider true dev.durableagent.probe.test/androidx.test.runner.AndroidJUnitRunner
+```
+
+This is three methods: sixteen shared real SDK/SQLite policy callbacks, the actual
+React project flow with fixture transport and a fresh host reopen, and the opt-in
+real MiMo flow. The latter requires an encrypted validation capsule and makes two
+explicit inputs, each using the debug `location_witness` tool followed by an answer
+(four requests total). The witness only observes the adopted environment; it
+performs no filesystem or shell access. Activity recreation is enabled by default;
+`recreateActivity=false` records its omission. A real-provider test reconnects to
+the same host; only the fixture case claims fresh-host zero-request reopen.
+
+The native location fence matrix is independent of Node and model credentials:
+
+```powershell
+adb -s $device shell am instrument -w -r -e class 'dev.durableagent.probe.NativeProjectFenceTest,dev.durableagent.probe.NativeProjectFenceCrashTest,dev.durableagent.probe.NativeSubmissionStoreTest' dev.durableagent.probe.test/androidx.test.runner.AndroidJUnitRunner
+```
+
+Its seventeen methods cover complete trusted context publication, old snapshot
+ordering, native intent/edit orderings, continued drafts/stops/ACKs, v2/v3→4
+migration and four actual separate-process kill windows around begin/finish
+COMMIT. The current fence table singleton is required; malformed or missing state
+fails closed. Generic WebView input actions cannot forge fence finish or SDK ACK.
+The native-only artifact used for early tests omits UI/runtime assets and must not
+be used to launch the product Activity. See [T08 evidence](../docs/evidence/t08/README.md)
+for exact candidates and results, and [runtime policy](../runtime/PROJECTS.md) for
+canonical recovery, lifetime checks and T09/T10 integration limits.
+
+T08 test observers retry only `INPUT_STORAGE_BUSY` for the explicit public query
+allowlist (`sendStatus`, `open`, `list`, `history`, `projects.get`) for at most two
+seconds, with recorded counts. They never retry send or configuration mutations.
+`open` may publish current native metadata; this is not a claim that every query
+has no maintenance writes. Whole-run completion is observed separately from SDK
+submission settlement before model-request/tool-witness assertions.
+
+The project fixture deliberately creates its first pending intent through the
+independent native authority. Before its second UI send, it waits for the exact
+local text to be saved. If that external ACK advanced the draft revision, the
+test clicks the real “保留本地内容并重试” control once, verifies the unchanged text
+and confirmed save, then sends once. `recoveredDraftConflict` records which path
+occurred; the four-request, two-witness and reopen checks remain mandatory.
