@@ -1,0 +1,11 @@
+{
+  "head": "374d74df91a4c6ae6e8acb8e8bd5f0598cc9c93c",
+  "purpose": "T12 final source 374d74d: retained executor existing-only autostart, authenticated readiness under saturation, accepted T13/T15, review repairs; native GREEN pending. Fixed 3D99 test from RED03 must be used for autostart GREEN.",
+  "artifacts": {
+    "app.apk": "1623ac04a17e3934173c16d527c611733b52e82251a2bc7bd1895df7c19ad526",
+    "execution-capabilities.json": "91821135dc2ccc267edaf3fb5789cce0341d3ddd5a11642e7836e82a85b3f7a8",
+    "execution-setup.txt": "1bb16dabab6935e208d5774343c6f7935376c59a40d1ca26055d9ac9befb24f9",
+    "test.apk": "3d99bb4cdb82b76cf328919025ab6ab96d4577ba5442b2d90d3f8bb518ecc938"
+  },
+  "sources": 416
+}

@@ -1,0 +1,23 @@
+
+dev.durableagent.probe.ExecutionTransportTest:INSTRUMENTATION_STATUS: automaticExecutorBefore={"original":{"protocol":1,"executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","processEpoch":"4b9dd68f-743f-4e16-8be0-4dc942433d96","namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace"},"fault":{"killedOwnedListenerPid":12712,"listenerAbsentBeforeRequest":true},"explicitConnectCalled":false}
+INSTRUMENTATION_STATUS_CODE: 0
+
+Error in actualOrdinaryOperationRestartsPairedExecutorWithoutExplicitConnect(dev.durableagent.probe.ExecutionTransportTest):
+java.lang.AssertionError: Ordinary request must reopen the paired executor without Connect: {"ok":false,"error":{"code":"CONNECTION_UNCONFIRMED","message":"执行通道未完成请求（CONNECTION_UNCONFIRMED）"}}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExecutionTransportTest.actualOrdinaryOperationRestartsPairedExecutorWithoutExplicitConnect(ExecutionTransportTest.kt:108)
+
+
+Time: 0.246
+There was 1 failure:
+1) actualOrdinaryOperationRestartsPairedExecutorWithoutExplicitConnect(dev.durableagent.probe.ExecutionTransportTest)
+java.lang.AssertionError: Ordinary request must reopen the paired executor without Connect: {"ok":false,"error":{"code":"CONNECTION_UNCONFIRMED","message":"执行通道未完成请求（CONNECTION_UNCONFIRMED）"}}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExecutionTransportTest.actualOrdinaryOperationRestartsPairedExecutorWithoutExplicitConnect(ExecutionTransportTest.kt:108)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

@@ -1,0 +1,16 @@
+{
+  "kind": "post-run reconstruction from owner-reported run provenance; not a contemporaneous snapshot",
+  "testLog": "t12-review-fixes-runtime02.log",
+  "sourceAtRun": "0e207f2 plus execution-channel 40s deadline and its virtual-clock tests, later committed in d1e994e",
+  "reconstructionHead": "374d74df91a4c6ae6e8acb8e8bd5f0598cc9c93c",
+  "runtimeSourceHashes": {
+    "src/canonical.ts": "fa7e2ccc93e79cc0872a8ee1de3a2e321e705eb24c7bc8063a9b3add8df45cf3",
+    "src/file-writes.ts": "f438d97a6f23d4b6ddd2762af86f14c12f95e6a2f52074d1c3352f6b9194786a",
+    "src/managed-execution.ts": "252bb96643f3ea49103cf797f7192ab7bc1634daf08d603e20300d7f0a8943f9",
+    "src/projects.ts": "2c196d817be36e69a4d938a93a34806f1eb3c43cc6e889750195660c0e139407",
+    "src/submission.ts": "770058ab8f62d1025fe4b994ad6d27b88d4cd87708b137d7cd779c9569f669e4",
+    "src/application.ts": "afe8504de620a749cfd93d85d70bac8edab9c9a62d4191801119cb7c1a495748",
+    "src/execution-channel.ts": "5933d7df2be26fe2646138ce302f37db22a12677619ea80eac46693ad931222b"
+  },
+  "logRetainedSha256": "3a44301aa0d52e180fc381d6f1e370b910b5d63515400ea4164e2a5d0a56ad5f"
+}

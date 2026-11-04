@@ -137,3 +137,24 @@ SDK 1.5.0 没有支持的 built-in retry deadline override，因此该门禁等�
 实际 overflow 压缩路径还产生了 [显示 RED](t12-retry-after-compaction-red01.log)：SDK 已移除 live.generation，但 blocking child 仍在限流等待。使用公开 child checkpoint 的 attempt／until 后 [GREEN](t12-retry-after-compaction-green01.log) 1.558 秒；通过普通两次发送、真实 SDK context overflow 和 compaction HTTP 请求触发，未写入 SDK 内部状态。第二次已准备的压缩 attempt 为 2，外部 HTTP 仍只有 seed／overflow／首次 compaction 共 3 个。独立原固定 6 秒诊断也 [GREEN](v1-review-retry-after-fixed6s-green.log)：120 秒期限内请求保持 1、phase waiting。独立聚焦审查于 `da85f5f` 关闭该项。
 
 源码 `ebf9676` [完整 runtime](t12-review-fixes-runtime01.log) 271/271；其后补压缩用例、纯 canonical 提取 `0e207f2`、native channel 40 秒单次调用预算后 [完整 runtime](t12-review-fixes-runtime02.log) 272/272，28.620 秒。canonical 仅将四份同义递归对象键排序提为同一纯函数，现有 identity／receipt 回归验证行为不变。各项合成传输用于可控限流及并发边界；前文真实 MiMo 与 Android 证据按各自候选保留，不将这些 host 测试冒称新的真实 API 限流实测。
+
+
+## 已配对执行器自动重开与保留的取消通道
+
+自动重开修复来源 `d1e994e`，连接占满修复与夹具收敛来源 `374d74d`。此前普通 native `ping`／query／工具入口只使用保存的 socket，监听器退出后须手动 Connect。新的原生入口先在输入库 lease 之外验证保留的 client、pin、executorId、ledgerEpoch；仅明确的 TCP connection absent 可以通过固定 RUN_COMMAND 启动 `serve-existing`。10 秒绝对 readiness 期限覆盖首次 ping、可中断锁获取和启动后的轮询，关闭／中断会阻止后续原操作。未知 TLS／身份错误仍 fail closed。原始操作只发一次，未知回应绝不通过连接恢复重发。Node 单次调用预算为 40 秒，native stop sweep 45 秒。
+
+`serve-existing` 与 worker 通过 SQLite `mode=rw` 打开既有账本，要求原目录、writes.lock、v1 schema 和完整两项身份存在；不运行建表／补身份／bootstrap。明确配对入口保留原行为。三个 existing-only 合同先 [RED](t12-existing-executor-red01.log)，后 [GREEN](t12-existing-executor-green02.log)，覆盖保留身份和取消墓碑、缺失账本不得创建、损坏 schema／identity 不修补。Windows 上这些是 SQLite／文件构造合同；真正 Linux worker／TLS／文件效果另由下面的 Termux 全套验证。
+
+实际 Android 首次 [RED01](t12-autostart-red01-device.log) 0.469 秒，仅杀死精确固定 argv 匹配的自有 listener PID 6290，socket 确认消失后普通请求失败。为使最终测试同时识别旧 `serve` 和新 `serve-existing`，一次正常 Termux 脚本只恢复旧固定 `serve` 为 PID 12712，未调用 Connect／bootstrap；[恢复记录](t12-observe-old-listener01-result.log) 证明五张账本表逻辑摘要与 pairing 文件前后相同。随后 [RED02](t12-autostart-red02-device.log) 是新测试调用 Kotlin 默认参数 ABI 导致的 NoSuchMethodError，发生在杀进程之前，不算行为 RED。恢复兼容的两参数 overload 后，[固定最终测试 RED03](t12-autostart-red03-device.log) 0.246 秒，精确杀死 PID 12712、独立确认 listener absent、普通请求仍 CONNECTION_UNCONFIRMED。三次失败均保留；RED03 的 test SHA 为 `3d99bb4cdb82b76cf328919025ab6ab96d4577ba5442b2d90d3f8bb518ecc938`，后续 GREEN 必须使用同一字节。
+
+独立审查还指出 readiness ping 竞争普通四个任务槽会挡住保留的取消通道。真实 Termux／mTLS [RED](t12-observe-transport-red01-result.log) 0.706 秒：四个 hold 已占满，echo 拒绝后 ping 无成功 value。最小修改在完整 client／hello／session 认证之后、ordinary/control admission 之前回复固定 ping，仍受全局 12 socket 上限约束；同一测试字节 `6bb54c99124b7d93baf78a6c7f9800b537ce6cfa275cc0858e073ea2e08fc353` [GREEN](t12-observe-transport-green01-result.log) 0.893 秒，后面的 query、cancel 及取消耗时断言均执行通过。不按任意远端 CHANNEL_BUSY 字符串推定身份有效。
+
+候选八份 Python 的真实 Termux 全套首次 [full01](t12-observe-python-full01-result.log) 45 项／18.387 秒，两个失败均为预期 unknown 的死亡窗口测试被通用 tearDown 拒绝。生产行为断言已通过，未因此修改生产逻辑。夹具仅在这两项全部断言通过后标记 exact executionId；tearDown 必须发现未确认集合与显式集合完全相等且全部 unknown 才允许保留，不删除原件，也不声称 scopeConfirmed。其他意外 unknown 仍失败。[full02](t12-observe-python-full02-result.log) 45/45、19.989 秒，含真实 SQLite／mTLS／子进程／SIGKILL／原件写入／重复身份不重复效果及不可变源码能力。full01、full02 的四个预期未知目录均保留；不将保留解释为已完成清理。
+
+`374d74df91a4c6ae6e8acb8e8bd5f0598cc9c93c` 的 [最终构建与 lint](t12-autostart-final-build02.log) 通过，八份 Python 与 HEAD blob 完全一致且为 LF，[安装资源合同](t12-autostart-assets01.log) 通过。冻结目录 `D:/durableagent-validation/t12-autostart-final02`，[包清单](t12-autostart-final02-artifacts.json) main `1623ac04a17e3934173c16d527c611733b52e82251a2bc7bd1895df7c19ad526`，test 仍为同一 `3d99bb4c…`。[包检查](t12-autostart-final02-apk-inspection.json) 74 runtime 模块、11 UI、238 源码对应项及原生 pin／16 KiB alignment／setup 均通过；416 是冻结器较广的源码清单，不与包检查计数混同。
+
+受控升级只替换我们部署的 runner `be8b68ec…` → `a65ecba8be5119b414ecfdc4b1d514b02515e95b89daac8a197f37983eb15111`，transport `c20f4ef5…` → `16f7ece1f961ad3920343c19b19e63658f9590ef0c594a2fb03cbb0fb243d9cc`；file helper `13467b5d…` 不变。新 capability 摘要 `91821135…` 与 setup `1bb16dab…` 是该有意源码升级结果，不能继续沿用旧 pin。具体原件备份与账本／配对／原文件树前后核对见 [升级清单](t12-helper-upgrade01-manifest.json)。实际升级及最终原生 GREEN 在清单审查后单独记录，此处构建不代表已经在设备运行。
+
+可复查命令：在新的自有 probe 中通过实际 Termux terminal 运行 `python -m unittest test_executor test_transport test_production_wire test_file_service test_local_capabilities -v`；包安装后运行 `am instrument -w -e class dev.durableagent.probe.ExecutionTransportTest#actualOrdinaryOperationRestartsPairedExecutorWithoutExplicitConnect -e executionProduction true dev.durableagent.probe.test/androidx.test.runner.AndroidJUnitRunner`。实际 native GREEN、原件一次效果及三项 wake/Job 回归仍待记录。
+
+升级首次 [preflight](t12-observe-helper-upgrade01-result.log) 被已有非终态 receipt 的保护条件拦下，发生在 before.json、原件备份和任何 staging／替换之前；原 helper／账本／配对未改。根代理继续只读盘点具体身份和状态，再决定是否按原控制收敛；不通过改表、忽略未知效果或重复启动旧批次绕过该保护。
