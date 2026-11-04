@@ -1,0 +1,97 @@
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_be22df23626483 14
+runtime/src/file-writes.ts
+  s_467dcb949b5b60::t_5d418d7d19196a 42,56,62-69
+  s_467dcb949b5b60::t_021042e0c31e66 1-41,43-55,57-61,70-77
+runtime/src/application.ts
+  s_467dcb949b5b60::t_be22df23626483 133
+managed-execution/test_file_service.py
+  s_467dcb949b5b60::t_3aa5c5e42e193f 48-50,53-57,59-63
+  s_467dcb949b5b60::t_f9d9da5af5d2c1 2,64-94
+  s_467dcb949b5b60::t_74c8a119460302 5
+  s_467dcb949b5b60::t_ec23b00b822dcf 47,51-52,58
+  s_467dcb949b5b60::t_8e20bb8fb9163b 1,3-4,6-46,95-211
+managed-execution/FILE-VALIDATION.md
+  s_467dcb949b5b60::t_f6a3ac611cd251 1-35
+runtime/src/workspace-coordination.ts
+  s_467dcb949b5b60::t_92aef3a211af04 14-21
+  s_467dcb949b5b60::t_35144a7e077e12 30
+  s_467dcb949b5b60::t_f8afa54d458558 3-8,22-25,48
+  s_467dcb949b5b60::t_c1c7e08821c0e2 1-2,9-13,26-29,31-40,42-46
+  s_467dcb949b5b60::t_532f24103e94ff 41,47
+runtime/src/managed-files.ts
+  s_467dcb949b5b60::t_81f1e8611e39a3 16-21
+  s_467dcb949b5b60::t_c698100199d5d4 1,4-5,13-15,33,63-64
+  s_467dcb949b5b60::t_63ded5b23379d5 2,6-12,22-32,34-51,59-62
+  s_467dcb949b5b60::t_a5b9c5014d24bc 3,52-58
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_901842ecf75d34 25,27,162-176,178-179
+  s_467dcb949b5b60::t_48fe2c0b311227 180-198
+  s_467dcb949b5b60::t_d25d2959913459 177
+  s_467dcb949b5b60::t_12ae8ee3e07a51 220-223,225-231,233-239,241-242
+  s_467dcb949b5b60::t_7559111c956b46 124-125
+  s_467dcb949b5b60::t_e5c087c4bc8776 224,232,240
+  s_467dcb949b5b60::t_71606becbfff06 199-219
+managed-execution/file_service.py
+  s_467dcb949b5b60::t_cc55e9d679eafa 34-39,209-213,250-251
+  s_467dcb949b5b60::t_138b204b3d2d2f 216-217,279-300
+  s_467dcb949b5b60::t_7294afa8734b7e 137,140-144,147,151,177,188-189
+  s_467dcb949b5b60::t_f9d9da5af5d2c1 127,169-171
+  s_467dcb949b5b60::t_5ceca861f466b3 4-6,8-9,11-12,20-22,47-126,128-136,138-139,145-146,148-150,152-168,172-176,178-187,190-191,193,195,214-215,222-226,271-278,318-354,378-383
+  s_467dcb949b5b60::t_1c361771b87079 232-237
+  s_467dcb949b5b60::t_84c851fb3033ea 201,218-221,301-317
+  s_467dcb949b5b60::t_f59556730e7fed 1,16,23,192,194,199-200,372-373
+  s_467dcb949b5b60::t_764e547bcb9f98 2-3,7,10,13-15,17-19,24-33,40-46,196-198,202-208,227-231,238-249,252-270,355-371,374-377
+runtime/test/workspace-coordination.test.mjs
+  s_467dcb949b5b60::t_e29122f065544b 29-44
+  s_467dcb949b5b60::t_074e3b78630cc9 45-56
+  s_467dcb949b5b60::t_f8afa54d458558 1-28
+tools/execution_setup_installer.py
+  s_467dcb949b5b60::t_be3c756e0ba29b 27-28,100-101,116,128,130,135
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_be22df23626483 2,12-13,15,20,40,43,51,56-57,59,68,110,115,124,127,132,140,142,193-194,235-236
+  s_467dcb949b5b60::t_2ba50c51742217 39,52-55,58,100,106,112
+  s_467dcb949b5b60::t_81f1e8611e39a3 11,69-74,219,231-234,237
+  s_467dcb949b5b60::t_856d92914f8290 192
+  s_467dcb949b5b60::t_a61c01a5817bca 216
+tools/test_execution_setup.py
+  s_467dcb949b5b60::t_568ab5372465c3 15-30
+ui/src/execution.ts
+  s_467dcb949b5b60::t_134da44ca218bb 3,6
+tools/test_execution_asset.py
+  s_467dcb949b5b60::t_568ab5372465c3 22
+android/app/build.gradle.kts
+  s_467dcb949b5b60::t_be3c756e0ba29b 38
+ui/test/execution-controller.test.ts
+  s_467dcb949b5b60::t_49526ace1adcba 6-15
+managed-execution/durable_executor.py
+  s_467dcb949b5b60::t_87582ca889ac9f 21,182-183,621
+  s_467dcb949b5b60::t_5ceca861f466b3 173
+android/app/src/main/java/dev/durableagent/probe/ExecutionFileMethods.kt
+  s_467dcb949b5b60::t_be22df23626483 1-4
+runtime/test/managed-files.test.mjs
+  s_467dcb949b5b60::t_c698100199d5d4 1-23
+  s_467dcb949b5b60::t_88cd8e8175cb68 24-41
+tools/build_execution_setup.py
+  s_467dcb949b5b60::t_be3c756e0ba29b 13
+android/app/src/main/java/dev/durableagent/probe/ExecutionAccess.kt
+  s_467dcb949b5b60::t_87582ca889ac9f 124
+ui/src/extensions/execution.tsx
+  s_467dcb949b5b60::t_134da44ca218bb 5-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "b1ea504761b33ec4598ab92afbe96b807d19e967",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
