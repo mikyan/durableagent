@@ -67,6 +67,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         return JSONObject().put("resources",values).put("nextCursor",if(count<records.size)last else JSONObject.NULL)
     }
     fun describe(resourceId:String):JSONObject = current(resource(resourceId))
+    fun verify(operationId:String):JSONObject = fail("DOCUMENT_VERIFY_UNAVAILABLE","原文件独立核验尚不可用。")
     fun cancel(request:JSONObject):JSONObject {
         val id=operationId(request);val requested=digest(request,"requestDigest")
         return locked{db->
