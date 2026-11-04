@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualMimoOriginalReadAndWriteNeedIndependentPolicyGrants
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: dataSaverExecutionEvidence={"case":"real-mimo-original-independent-grants","run":"5ffd39db-4588-487e-bd77-2697170da4c2","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","oldDigest":"5d61aabaeb507849b317218d2466b5cf19db9354cbd5fd3c5b7b6f5349e58d00","newDigest":"d4c7453e72f1ffd68d4a02055d5527ca25e96449c7bbb445e36a53cfc07c50ad","readPolicy":{"executionId":"92cbd55c-3777-4ee7-a7d3-b83906589c55","requestDigest":"2ac053ded7fd3ff4880cb487ddb142751bc1ea2fda17c93b7114629135fac77e","finalDigest":"2ac053ded7fd3ff4880cb487ddb142751bc1ea2fda17c93b7114629135fac77e","operationKind":"provider-read","productId":"policy-chat","controlGeneration":1,"namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","classification":"unknown","summary":"原文件 read：content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","grantPeriod":null,"phase":"waiting","period":3,"reason":"metered"},"writePolicy":{"executionId":"7cca2ecd-6eed-4bdc-b0f4-47c1b93af565","requestDigest":"f79c28c695ce2427ab1c296f567eaf333f996058898228ec74bcaa3f0fe9f5d8","finalDigest":"f79c28c695ce2427ab1c296f567eaf333f996058898228ec74bcaa3f0fe9f5d8","operationKind":"provider-write","productId":"policy-chat","controlGeneration":1,"namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","classification":"unknown","summary":"原文件 write：content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","grantPeriod":null,"phase":"waiting","period":3,"reason":"metered"},"requests":4,"hostReopened":false,"reopenRequests":null,"localContinuedWhileProviderWaited":false}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualMimoOriginalReadAndWriteNeedIndependentPolicyGrants
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 21.354
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

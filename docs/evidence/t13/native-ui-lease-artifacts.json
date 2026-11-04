@@ -1,0 +1,11 @@
+{
+  "head": "64f7ad4d73f4a95519fa9591c4cffab6e05c008e",
+  "purpose": "Bounded native UI worker lease acquisition before first operation; same E51 test as actual RED",
+  "artifacts": {
+    "app.apk": "c5ddd4356cc07bca0a65302508584124209f6d52d3c9b046a6a1d0d2120222de",
+    "execution-capabilities.json": "10d7375d4565a83647d278efdea74cd71fe280896609987d12bb19a1e7302b1b",
+    "execution-setup.txt": "bccdfe9de7ff1179542aef37e7bc1bdf448ba7df6fcd6806368e84ee83e103b2",
+    "test.apk": "e51e1a1fc6a98def231e36a713d6b21ed74cd7454aec366f6195c23400690a99"
+  },
+  "sources": 371
+}

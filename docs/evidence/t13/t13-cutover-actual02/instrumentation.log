@@ -1,0 +1,46 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: T13_EXECUTION_WAIT_METERED={"run":"b54c3476-66ac-4cfb-af7d-b8c11e54b2ef","executionId":"c2fc89d6-4555-4a19-ac92-96bde76b5861","busyStartedElapsed":29414942}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Whole original download scope confirms stopped while JS is busy
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay(DataSaverExecutionTest.kt:71)
+
+INSTRUMENTATION_STATUS: stream=
+Error in actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay(dev.durableagent.probe.DataSaverExecutionTest):
+java.lang.AssertionError: Whole original download scope confirms stopped while JS is busy
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay(DataSaverExecutionTest.kt:71)
+
+INSTRUMENTATION_STATUS: test=actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 39.173
+There was 1 failure:
+1) actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay(dev.durableagent.probe.DataSaverExecutionTest)
+java.lang.AssertionError: Whole original download scope confirms stopped while JS is busy
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay(DataSaverExecutionTest.kt:71)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

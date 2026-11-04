@@ -49,7 +49,7 @@ class AgentActivity:Activity() {
         val run=if(debug)intent.getStringExtra("validationRun") else null
         inputs=NativeInputBridge(this,NativeInputBridge.namespace(mode,run),mode,run){json->if(webView===view&&!destroyed)view.evaluateJavascript("window.__durableReceive?.(${json})",null)}
         execution=NativeExecutionBridge(this){json->if(webView===view&&!destroyed)view.evaluateJavascript("window.__durableReceive?.(${json})",null)}
-        documents=NativeDocumentBridge(this,NativeDocumentBridge.namespace(mode,run)){json->if(webView===view&&!destroyed)view.evaluateJavascript("window.__durableReceive?.($json)",null)}
+        documents=NativeDocumentBridge(this,NativeDocumentBridge.namespace(mode,run),NativeInputBridge.namespace(mode,run)){json->if(webView===view&&!destroyed)view.evaluateJavascript("window.__durableReceive?.($json)",null)}
         client=if(mode=="input-only")null else ApplicationClient(this,mode,run){what,json ->
             if(webView!==view||destroyed)return@ApplicationClient
             if(what==10)view.evaluateJavascript("window.__durableReceive?.(${json})",null)

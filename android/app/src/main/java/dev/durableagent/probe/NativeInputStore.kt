@@ -34,16 +34,16 @@ class NativeInputStore(
     private val context = context.applicationContext
     private var helper: InputDatabase? = null
     private var closed = false
-    private var leaseWaitMs = 0L
+    @Volatile private var leaseWaitMs = 0L
     private val sourceAdmissions = ConcurrentHashMap<String, SourceAdmission>()
     private val sources = NativeAttachmentSource(this.context.contentResolver)
     init { require(namespace.matches(Regex("[a-zA-Z0-9._-]{1,100}"))) }
 
-    /** Trusted synchronous host calls may wait for a short native transaction before entering
-     * their action. This never retries an action, a COMMIT, or a response; UI stores stay fail-fast. */
+    /** Native workers may wait for a short transaction before entering their action.
+     * This never retries an action, COMMIT or response; callers default to fail-fast. */
     fun withLeaseWait(milliseconds: Long): NativeInputStore = apply {
         require(milliseconds in 0..2000)
-        synchronized(monitor) { leaseWaitMs = milliseconds }
+        leaseWaitMs = milliseconds
     }
 
     /** Trusted host publication, not a UI action. Known conversation identities survive Node loss. */

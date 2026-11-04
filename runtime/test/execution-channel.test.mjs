@@ -56,3 +56,10 @@ test('caller deadline reports unknown without resubmitting or issuing remote can
   await assert.rejects(channel.request('start',{executionId:'stable-one'}),error=>error.code==='EXECUTION_WAIT_UNKNOWN');
   assert.deepEqual(methods,['start']);assert.ok(polls>1);
 });
+
+
+test('an event-loop pause cannot discard an already-completed native result or replay its operation',async t=>{
+ let clock=0,begins=0,polls=0;t.mock.method(performance,'now',()=>clock);
+ const channel=new NativeExecutionChannel({beginJson(){begins++;return JSON.stringify({ok:true,value:{operationId:'fixed-native'}});},pollJson(id){assert.equal(id,'fixed-native');polls++;if(polls===1){queueMicrotask(()=>{clock=15000;});return JSON.stringify({ok:true,value:{pending:true}});}return JSON.stringify({ok:true,value:{pending:false,result:{ok:true,value:{executionId:'original',state:'stopped',cancelReason:'network_policy'}}}});}});
+ const receipt=await channel.request('query',{executionId:'original'});assert.equal(receipt.cancelReason,'network_policy');assert.equal(begins,1);assert.equal(polls,2);
+});

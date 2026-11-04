@@ -1,0 +1,69 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverAccessTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverAccessTest:
+INSTRUMENTATION_STATUS: test=finalNativeFenceRechecksFactsAndUserStopAfterExactPreparedGrant
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverAccessTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=org.junit.ComparisonFailure: User stop must not be displayed as an available temporary grant expected:<[result-unverifi]ed> but was:<[allow]ed>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at dev.durableagent.probe.DataSaverAccessTest.finalNativeFenceRechecksFactsAndUserStopAfterExactPreparedGrant(DataSaverAccessTest.kt:43)
+
+INSTRUMENTATION_STATUS: stream=
+Error in finalNativeFenceRechecksFactsAndUserStopAfterExactPreparedGrant(dev.durableagent.probe.DataSaverAccessTest):
+org.junit.ComparisonFailure: User stop must not be displayed as an available temporary grant expected:<[result-unverifi]ed> but was:<[allow]ed>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at dev.durableagent.probe.DataSaverAccessTest.finalNativeFenceRechecksFactsAndUserStopAfterExactPreparedGrant(DataSaverAccessTest.kt:43)
+
+INSTRUMENTATION_STATUS: test=finalNativeFenceRechecksFactsAndUserStopAfterExactPreparedGrant
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverStoreTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverStoreTest:
+INSTRUMENTATION_STATUS: test=newestWaitingOperationsAreVisibleAndOlderPagesKeepTheirStableBoundary
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverStoreTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=org.junit.ComparisonFailure: expected:<ordered-0[24]> but was:<ordered-0[00]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.DataSaverStoreTest.newestWaitingOperationsAreVisibleAndOlderPagesKeepTheirStableBoundary(DataSaverStoreTest.kt:28)
+
+INSTRUMENTATION_STATUS: stream=
+Error in newestWaitingOperationsAreVisibleAndOlderPagesKeepTheirStableBoundary(dev.durableagent.probe.DataSaverStoreTest):
+org.junit.ComparisonFailure: expected:<ordered-0[24]> but was:<ordered-0[00]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.DataSaverStoreTest.newestWaitingOperationsAreVisibleAndOlderPagesKeepTheirStableBoundary(DataSaverStoreTest.kt:28)
+
+INSTRUMENTATION_STATUS: test=newestWaitingOperationsAreVisibleAndOlderPagesKeepTheirStableBoundary
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.835
+There were 2 failures:
+1) finalNativeFenceRechecksFactsAndUserStopAfterExactPreparedGrant(dev.durableagent.probe.DataSaverAccessTest)
+org.junit.ComparisonFailure: User stop must not be displayed as an available temporary grant expected:<[result-unverifi]ed> but was:<[allow]ed>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at dev.durableagent.probe.DataSaverAccessTest.finalNativeFenceRechecksFactsAndUserStopAfterExactPreparedGrant(DataSaverAccessTest.kt:43)
+2) newestWaitingOperationsAreVisibleAndOlderPagesKeepTheirStableBoundary(dev.durableagent.probe.DataSaverStoreTest)
+org.junit.ComparisonFailure: expected:<ordered-0[24]> but was:<ordered-0[00]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.DataSaverStoreTest.newestWaitingOperationsAreVisibleAndOlderPagesKeepTheirStableBoundary(DataSaverStoreTest.kt:28)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1

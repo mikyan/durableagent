@@ -46,7 +46,7 @@ it('queries the native original independently and never turns matching bytes int
  const state:UiState={...controller.snapshot(),activeId:'one',status:{phase:'ready',extensions:['managed-execution']}};
  try{render(<ExecutionPanel controller={controller} state={state}/>);fireEvent.click(screen.getByRole('button',{name:'查看文件变更'}));await screen.findByText(uri);
   fireEvent.click(screen.getByRole('button',{name:'直接核验原件状态'}));await screen.findByText('原生状态已核验');
-  fireEvent.click(screen.getByRole('button',{name:'只读核验原件内容'}));await screen.findByText('当前内容与本次写入相符；执行范围仍未确认。');expect(screen.queryByText('原件修改已核验')).toBeNull();
+  fireEvent.click(screen.getByRole('button',{name:'只读核验原件内容'}));await screen.findByText('本次观察的内容与本次写入相符；执行范围仍未确认。');expect(screen.queryByText('原件修改已核验')).toBeNull();
   mismatch=true;fireEvent.click(screen.getByRole('button',{name:'直接核验原件状态'}));await screen.findByRole('alert');expect(screen.getByText('原件结果待核验')).toBeTruthy();
   expect(requests.map(value=>value.method)).toEqual(['files.list','document.query','document.verify','document.query']);expect(requests.slice(1).every(value=>JSON.stringify(value.payload)===JSON.stringify({operationId:'native-write'}))).toBe(true);
  }finally{cleanup();controller.dispose();client.dispose();}

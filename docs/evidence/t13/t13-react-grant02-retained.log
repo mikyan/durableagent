@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.FileNativeObservationTest:
+INSTRUMENTATION_STATUS: test=inspectRetainedSdkHistoryWithoutOpeningHarness
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: retainedFileHistoryObservation={"files":[],"tasks":[],"tasksLimited":false,"submissions":[],"submissionsLimited":false,"documentOperationIds":[],"executionIds":[],"run":"f522a4ef-b126-4bff-b9ca-fa4371cffd25","harnessNotOpened":true,"modelTransportNotInstalled":true,"conversations":[{"id":"32335b62-e78b-45f4-b3e9-1c91b1f33fed","entries":[],"more":false}],"nativeDocumentQueries":[],"nativeExecutionQueries":[]}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inspectRetainedSdkHistoryWithoutOpeningHarness
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 1.126
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

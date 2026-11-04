@@ -1,0 +1,11 @@
+{
+  "head": "64f7ad4d73f4a95519fa9591c4cffab6e05c008e",
+  "purpose": "Native public projection preserves explicit predispatch evidence; UI screenshots await visual-state and draw callbacks",
+  "artifacts": {
+    "app.apk": "fedf063ccde1492599b24bb8a489f80f5486f7b9a286a66272446e9a79aa0849",
+    "execution-capabilities.json": "10d7375d4565a83647d278efdea74cd71fe280896609987d12bb19a1e7302b1b",
+    "execution-setup.txt": "bccdfe9de7ff1179542aef37e7bc1bdf448ba7df6fcd6806368e84ee83e103b2",
+    "test.apk": "1819107ddbb005626d31808a9f55bf0d3bb09e1ab69038ad5c1cd422759c5574"
+  },
+  "sources": 371
+}

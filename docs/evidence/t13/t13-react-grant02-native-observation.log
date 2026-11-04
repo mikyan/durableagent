@@ -1,0 +1,31 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.FileNativeObservationTest:
+INSTRUMENTATION_STATUS: test=inspectExistingNativeDraftsWithoutOpeningOwner
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: nativeFileObservation={"run":"f522a4ef-b126-4bff-b9ca-fa4371cffd25","mode":"execution","interface":"input.list","value":{"conversations":[{"id":"32335b62-e78b-45f4-b3e9-1c91b1f33fed","title":"新会话","model":{"provider":"fixture","modelId":"conversation","name":"验证模型"},"submissionContext":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"}}}]},"elapsedMs":0,"ownerNotOpened":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: nativeFileObservation={"run":"f522a4ef-b126-4bff-b9ca-fa4371cffd25","mode":"execution","interface":"input.inspect","id":"32335b62-e78b-45f4-b3e9-1c91b1f33fed","value":{"id":"32335b62-e78b-45f4-b3e9-1c91b1f33fed","revision":1,"text":"EXEC_SUCCESS","selections":[],"committed":true,"stateVersion":1,"capability":{"provider":"fixture","modelId":"conversation","input":["text"],"source":"validation","limits":{},"applicationPolicy":{"draftCharacters":100000,"attachments":4,"sourceImageBytes":16777216,"sourcePixels":25165824,"textBytes":262144,"imageWidth":1024,"imageHeight":1024,"imageBytes":1572864,"totalBase64Bytes":8388608,"requestBytes":10485760},"version":"d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"},"submissionContext":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"}}},"elapsedMs":72,"ownerNotOpened":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: nativeFileObservation={"run":"f522a4ef-b126-4bff-b9ca-fa4371cffd25","mode":"execution","interface":"input.readControl","id":"32335b62-e78b-45f4-b3e9-1c91b1f33fed","value":{"id":"32335b62-e78b-45f4-b3e9-1c91b1f33fed","version":0,"generation":1,"stoppedThrough":0},"elapsedMs":9,"ownerNotOpened":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: nativeFileObservation={"run":"f522a4ef-b126-4bff-b9ca-fa4371cffd25","mode":"execution","interface":"input.listSends","id":"32335b62-e78b-45f4-b3e9-1c91b1f33fed","value":{"intents":[]},"elapsedMs":27,"ownerNotOpened":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inspectExistingNativeDraftsWithoutOpeningOwner
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.495
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

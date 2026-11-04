@@ -57,14 +57,17 @@ export class NativeExecutionChannel implements ExecutionChannel {
       const begun=decode(this.native.beginJson(method,payloadJson));
       if(!keys(begun,['operationId'])||typeof begun.operationId!=='string'||!/^[A-Za-z0-9-]{1,128}$/.test(begun.operationId))return protocol();
       const operationId=begun.operationId;
-      while(performance.now()<deadline){
+      for(;;){
+        // Native transport has its own bounded request. After an owner-thread
+        // pause, collect a completed result before judging the caller deadline.
+        // The same operation is polled; prepare/start is never replayed.
         const reply=decode(this.native.pollJson(operationId));
         if(typeof reply.pending!=='boolean')return protocol();
         if(!reply.pending){if(!keys(reply,['pending','result']))return protocol();return unwrap(reply.result);}
         if(!keys(reply,['pending']))return protocol();
+        if(performance.now()>=deadline)throw new ExecutionChannelError('EXECUTION_WAIT_UNKNOWN');
         await new Promise<void>(resolve=>setTimeout(resolve,20));
       }
-      throw new ExecutionChannelError('EXECUTION_WAIT_UNKNOWN');
     }catch(error){if(error instanceof ExecutionChannelError)throw error;throw new ExecutionChannelError('NATIVE_CHANNEL_UNCONFIRMED');}
   }
 }

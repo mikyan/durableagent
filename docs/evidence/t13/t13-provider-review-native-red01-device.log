@@ -1,0 +1,71 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverProviderTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverProviderTest:
+INSTRUMENTATION_STATUS: test=aDeniedCloseStillReleasesTheOriginalReaderDescriptor
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverProviderTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Policy refusal must close the removed reader, not leak its original FD expected:<0> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at dev.durableagent.probe.DataSaverProviderTest.aDeniedCloseStillReleasesTheOriginalReaderDescriptor(DataSaverProviderTest.kt:162)
+
+INSTRUMENTATION_STATUS: stream=
+Error in aDeniedCloseStillReleasesTheOriginalReaderDescriptor(dev.durableagent.probe.DataSaverProviderTest):
+java.lang.AssertionError: Policy refusal must close the removed reader, not leak its original FD expected:<0> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at dev.durableagent.probe.DataSaverProviderTest.aDeniedCloseStillReleasesTheOriginalReaderDescriptor(DataSaverProviderTest.kt:162)
+
+INSTRUMENTATION_STATUS: test=aDeniedCloseStillReleasesTheOriginalReaderDescriptor
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverProviderTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=originalVerificationWaitsForItsOwnObservationGrantAndDoesNotGrantAWrite
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverProviderTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=org.junit.ComparisonFailure: Policy waiting is not a Provider availability failure expected:<[waiting]> but was:<[unavailable]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at dev.durableagent.probe.DataSaverProviderTest.originalVerificationWaitsForItsOwnObservationGrantAndDoesNotGrantAWrite(DataSaverProviderTest.kt:175)
+
+INSTRUMENTATION_STATUS: stream=
+Error in originalVerificationWaitsForItsOwnObservationGrantAndDoesNotGrantAWrite(dev.durableagent.probe.DataSaverProviderTest):
+org.junit.ComparisonFailure: Policy waiting is not a Provider availability failure expected:<[waiting]> but was:<[unavailable]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at dev.durableagent.probe.DataSaverProviderTest.originalVerificationWaitsForItsOwnObservationGrantAndDoesNotGrantAWrite(DataSaverProviderTest.kt:175)
+
+INSTRUMENTATION_STATUS: test=originalVerificationWaitsForItsOwnObservationGrantAndDoesNotGrantAWrite
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 4.539
+There were 2 failures:
+1) aDeniedCloseStillReleasesTheOriginalReaderDescriptor(dev.durableagent.probe.DataSaverProviderTest)
+java.lang.AssertionError: Policy refusal must close the removed reader, not leak its original FD expected:<0> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at dev.durableagent.probe.DataSaverProviderTest.aDeniedCloseStillReleasesTheOriginalReaderDescriptor(DataSaverProviderTest.kt:162)
+2) originalVerificationWaitsForItsOwnObservationGrantAndDoesNotGrantAWrite(dev.durableagent.probe.DataSaverProviderTest)
+org.junit.ComparisonFailure: Policy waiting is not a Provider availability failure expected:<[waiting]> but was:<[unavailable]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at dev.durableagent.probe.DataSaverProviderTest.originalVerificationWaitsForItsOwnObservationGrantAndDoesNotGrantAWrite(DataSaverProviderTest.kt:175)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1

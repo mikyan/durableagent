@@ -8,7 +8,7 @@ import {InputPlatform} from './input-platform';
 import type {ApplicationRequest,ConversationSnapshot,ConversationSummary,HistoryMessage} from '../../runtime/src/application-protocol';
 
 afterEach(cleanup);
-function consoleFixture(){
+function consoleFixture(withDataSaver=false){
  const native=new InputPlatform(),requests:ApplicationRequest[]=[];
  const conversations:ConversationSummary[]=[
   {id:'one',title:'原件处理',model:{provider:'fixture',modelId:'one',name:'测试模型'},workspaceId:'default',projectId:null,createdAt:1,phase:'done'},
@@ -18,6 +18,8 @@ function consoleFixture(){
  const histories:Record<string,HistoryMessage[]>={one:[{id:'11',role:'user',text:'核对原始文件',persisted:true},{id:'12',role:'assistant',text:'已核对本次原件内容。',persisted:true}],two:[]};
  const preferences=new Map<string,string>();
  const failures:Record<string,string>={},older:Record<string,HistoryMessage[]>={};
+ const policySettings={enabled:true,version:1,period:3,restricted:true,reason:'metered',network:{identity:'fixture',known:true,metered:true,blocked:false}};
+ const policyOperation={executionId:'fixed-operation',requestDigest:'a'.repeat(64),finalDigest:'b'.repeat(64),productId:'one',controlGeneration:1,namespace:'termux:fixture',classification:'unknown',summary:'本会话固定执行',period:3,phase:'waiting',reason:'metered',grantPeriod:null as number|null};
  const controller=new ConversationController(()=>{
   const client=new ApplicationClient({postMessage:json=>{
    const request:ApplicationRequest=JSON.parse(json);requests.push(request);
@@ -26,7 +28,9 @@ function consoleFixture(){
    if(request.method.startsWith('input.')){void native.handle(request).then(response=>client.receive(response));return;}
    const id=String(request.payload?.id??'one'),row=conversations.find(value=>value.id===id)!;
    const snapshot:ConversationSnapshot={id,conversation:row,revision:1,entries:histories[id]??[],phase:failures[id]?'failed':row?.phase??'idle',reason:failures[id],storedSeq:1};
-   const value=request.method==='status'?{phase:'ready',extensions:['conversation']}:
+   if(request.method==='dataSaver.grant'){policyOperation.phase='granted';policyOperation.grantPeriod=3;}
+   const value=request.method==='status'?{phase:'ready',extensions:['conversation',...(withDataSaver?['data-saver']:[])]}:
+    request.method==='dataSaver.get'?policySettings:request.method==='dataSaver.operations'?{operations:id==='one'?[policyOperation]:[],nextCursor:null}:request.method==='dataSaver.grant'?policyOperation:
     request.method==='list'?{conversations}:request.method==='history'?(request.payload?.cursor?{items:older[id]??[]}:{items:histories[id]??[],next:older[id]?'previous':undefined}):
     request.method==='extensions.get'?{items:[{descriptor:{id:'timeline',title:'会话时间线'},ui:{state:'packaged'},agent:{state:'not-provided'}}]}:
     request.method==='files.list'?{changes:[],nextCursor:null,untrackedExecutions:[],untrackedLimited:false}:
@@ -36,6 +40,23 @@ function consoleFixture(){
  },{get:key=>preferences.get(key)??null,set:(key,value)=>{preferences.set(key,value);}});
  return {controller,native,requests,conversations,histories,preferences,failures,older};
 }
+
+it('reaches the current conversation Data Saver wait from Console and grants only that execution without sending the draft',async()=>{
+ const f=consoleFixture(true);f.native.drafts.set('one',{id:'one',revision:1,stateVersion:1,text:'保留未发送草稿',committed:true,selections:[]});
+ try{
+  render(<App controller={f.controller}/>);fireEvent.click((await screen.findAllByTestId('conversation-item'))[0]);
+  const entry=await screen.findByRole('button',{name:'省流等待 · 查看'});
+  expect(screen.queryByLabelText('省流模式')).toBeNull();fireEvent.click(entry);
+  expect(await screen.findByRole('heading',{name:'设置',level:1})).toBeTruthy();
+  expect((screen.getByLabelText('省流模式') as HTMLInputElement).checked).toBe(true);
+  fireEvent.click(screen.getByRole('button',{name:'仅放行这一次执行'}));await screen.findByText('临时放行中');
+  expect(f.requests.find(row=>row.method==='dataSaver.grant')?.payload).toEqual({id:'one',executionId:'fixed-operation',requestDigest:'a'.repeat(64),finalDigest:'b'.repeat(64),period:3});
+  fireEvent.click(screen.getByRole('button',{name:'返回会话'}));
+  await waitFor(()=>expect((screen.getByRole('textbox',{name:'消息'}) as HTMLTextAreaElement).value).toBe('保留未发送草稿'));
+  expect(screen.getByText('已核对本次原件内容。')).toBeTruthy();expect(screen.getByText(/上下文约 271/)).toBeTruthy();
+  expect(f.requests.some(row=>['send','dataSaver.configure'].includes(row.method))).toBe(false);
+ }finally{f.controller.dispose();}
+});
 
 it('navigates between an independent home, conversation list, tools and settings without executing a command',async()=>{
  const f=consoleFixture();

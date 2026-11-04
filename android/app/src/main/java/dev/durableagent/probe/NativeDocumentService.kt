@@ -44,11 +44,14 @@ class NativeDocumentService(context:Context,namespace:String,inputNamespace:Stri
     private fun perform(method:String,payload:JSONObject):JSONObject=when(method){
         "list"->store.list(if(payload.has("cursor"))text(payload,"cursor")else null)
         "describe"->store.describe(text(payload,"resourceId"))
+        "observeRead"->store.observeRead(payload)
+        "readSnapshot"->store.readSnapshot(payload)
         "open"->store.open(text(payload,"resourceId"))
         "read"->store.readReader(text(payload,"readerId"),integer(payload,"offset"),integer(payload,"maxBytes").also{if(it !in 1..32768)fail("DOCUMENT_INVALID","原文件读取范围无效。")}.toInt())
         "closeRead"->store.closeRead(text(payload,"readerId"))
         "prepare"->store.prepare(payload)
         "stage"->store.stage(payload)
+        "writePolicy"->store.writePolicy(payload)
         "start"->store.start(payload)
         "query"->store.query(text(payload,"operationId"))
         "verify"->store.verify(text(payload,"operationId"))
@@ -75,7 +78,7 @@ class NativeDocumentService(context:Context,namespace:String,inputNamespace:Stri
         Thread({try{ordinary.awaitTermination(Long.MAX_VALUE,TimeUnit.NANOSECONDS);control.awaitTermination(Long.MAX_VALUE,TimeUnit.NANOSECONDS)}finally{store.close()}},"OriginalDocumentClose").apply{isDaemon=true;start()}
     }
     companion object {
-        private val METHODS=setOf("list","describe","open","read","closeRead","prepare","stage","start","query","cancel","verify")
+        private val METHODS=setOf("list","describe","open","read","closeRead","prepare","stage","start","query","cancel","verify","observeRead","readSnapshot","writePolicy")
         private fun fail(code:String,message:String):Nothing=throw NativeDocumentException(code,message)
         private fun pool(threads:Int,capacity:Int,name:String)=ThreadPoolExecutor(threads,threads,0,TimeUnit.MILLISECONDS,ArrayBlockingQueue(capacity),{task->Thread(task,name).apply{isDaemon=true}},ThreadPoolExecutor.AbortPolicy())
     }

@@ -95,6 +95,7 @@
 @media(max-height:560px){.navigation{padding-top:calc(12px + env(safe-area-inset-top))}}
 
 .settings-section>button{margin:8px 10px 0 0;min-height:44px}
+.context-pill .data-saver-entry{background:transparent;color:var(--blue);font:inherit;padding:0;white-space:nowrap;text-decoration:underline}
 
 /* A landscape keyboard can leave only ~120 CSS pixels. Keep input controls
    and their metadata together; additional input status remains scrollable. */

@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.FileNativeObservationTest:
+INSTRUMENTATION_STATUS: test=inspectRetainedSdkHistoryWithoutOpeningHarness
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: retainedFileHistoryObservation={"files":[],"tasks":[{"id":17,"conversationId":5,"kind":"pi.generation","abortRequested":false,"background":false,"startedAt":1793793383632,"endedAt":1793793384145,"status":"terminal","outcome":{"status":"completed","result":{"entryId":19}},"input":"{}"},{"id":20,"conversationId":5,"kind":"pi.tool","owner":17,"abortRequested":false,"background":false,"startedAt":1793793384089,"endedAt":1793793384134,"status":"terminal","outcome":{"status":"failed","error":{"message":"Tool bash threw"},"result":{"kind":"model","entryId":21}},"input":"{\"kind\":\"model\",\"assistant\":19,\"callId\":\"location-1\"}"},{"id":22,"conversationId":5,"kind":"pi.generation","abortRequested":false,"background":false,"startedAt":1793793384149,"endedAt":1793793384341,"status":"terminal","outcome":{"status":"completed","result":{"entryId":23}},"input":"{}"}],"tasksLimited":false,"submissions":[{"conversationId":5,"requestId":"953b6e0b-fe25-439a-a68b-ccf58025b123","type":"input","status":"done","entry":15,"id":16,"answer":23}],"submissionsLimited":false,"documentOperationIds":[],"executionIds":[],"run":"e155dc45-1cf4-4312-90dd-c1fd2501798c","harnessNotOpened":true,"modelTransportNotInstalled":true,"conversations":[{"id":"a992d38d-e2de-4cb8-9b3d-8921aa8f6d0b","entries":[{"id":"15","role":"user","text":"EXEC_SUCCESS","truncated":false},{"id":"21","role":"tool","text":"<harness>\n[error] 执行连接未确认结果，保留原身份等待核验\n<\/harness>","truncated":false},{"id":"23","role":"assistant","text":"你好🌍","truncated":false}],"more":false}],"nativeDocumentQueries":[],"nativeExecutionQueries":[]}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inspectRetainedSdkHistoryWithoutOpeningHarness
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.571
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1
