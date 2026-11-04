@@ -1,0 +1,130 @@
+ui/test/submissions-page.test.tsx
+  s_467dcb949b5b60::t_4a0f4e959ba1e6 13-25
+runtime/src/submission.ts
+  s_467dcb949b5b60::t_8809d24ce05089 100
+  s_467dcb949b5b60::t_e3819d1705e892 7,99
+  s_467dcb949b5b60::t_8dd2d4a2229c7b 22
+android/app/src/main/java/dev/durableagent/probe/NativeInputAccess.kt
+  s_467dcb949b5b60::t_e8303f8be433e4 83-88
+  s_467dcb949b5b60::t_3162d0fb329732 35
+ui/src/controller.ts
+  s_467dcb949b5b60::t_003f5c4cca6cb1 175-179
+android/app/src/androidTest/java/dev/durableagent/probe/StopExecutionTest.kt
+  s_467dcb949b5b60::t_dd1584857af77b 55
+  s_467dcb949b5b60::t_2c444ace069a33 1-54,56-102
+runtime/src/stop.ts
+  s_467dcb949b5b60::t_e3819d1705e892 1-25
+android/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_aac1a18541dd0f 3-4,11
+ui/src/extensions/submissions.tsx
+  s_467dcb949b5b60::t_0cb3184f9df69a 27
+  s_467dcb949b5b60::t_3162d0fb329732 28-29,32
+android/app/src/androidTest/java/dev/durableagent/probe/NativeSubmissionStoreTest.kt
+  s_467dcb949b5b60::t_44580e98b8324e 257,283
+runtime/src/submission-protocol.ts
+  s_467dcb949b5b60::t_003f5c4cca6cb1 6
+  s_467dcb949b5b60::t_3162d0fb329732 13
+android/app/src/main/java/dev/durableagent/probe/ExecutionAccess.kt
+  s_467dcb949b5b60::t_6b9abb41e60446 22,27,31,64
+  s_467dcb949b5b60::t_d92ac268a998c8 65-70,132
+  s_467dcb949b5b60::t_9189ea8931ac98 14,23-26,28-30,32
+android/app/src/main/java/dev/durableagent/probe/NativeStopController.kt
+  s_467dcb949b5b60::t_911d489d87413b 1-3,9-12,38
+  s_467dcb949b5b60::t_26e38091cf2864 24-26
+  s_467dcb949b5b60::t_aac1a18541dd0f 4-8,13-23,27-37
+ui/test/input-platform.ts
+  s_467dcb949b5b60::t_8d4cf68c482c78 57
+  s_467dcb949b5b60::t_003f5c4cca6cb1 63
+runtime/test/stop.test.mjs
+  s_467dcb949b5b60::t_091b9f4664069d 1-3
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_467dcb949b5b60::t_003f5c4cca6cb1 79
+  s_467dcb949b5b60::t_0cb3184f9df69a 31
+runtime/src/execution-channel.ts
+  s_467dcb949b5b60::t_8dd2d4a2229c7b 3-4,12-13,50-51
+android/app/src/main/java/dev/durableagent/probe/NativeStopTrace.kt
+  s_467dcb949b5b60::t_3fc575d1eb86fa 1-15
+android/app/src/main/java/dev/durableagent/probe/NativeInputBridge.kt
+  s_467dcb949b5b60::t_0cb3184f9df69a 11,52-56
+  s_467dcb949b5b60::t_003f5c4cca6cb1 19,25-35,110-115
+android/app/src/main/java/dev/durableagent/probe/NativeStopSweep.kt
+  s_467dcb949b5b60::t_e228dded4391c9 1-3,5-7,28
+  s_467dcb949b5b60::t_bb9ec1bc78950b 10-11,13-14,16-18,20,22-27
+  s_467dcb949b5b60::t_80f2371491ede3 4,8-9,12,15,19,21
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_bbd671620d1fb9 32,96,102-106,112-126,266
+  s_467dcb949b5b60::t_6b9abb41e60446 142
+  s_467dcb949b5b60::t_3fc575d1eb86fa 97,100,108
+  s_467dcb949b5b60::t_9189ea8931ac98 144
+  s_467dcb949b5b60::t_44580e98b8324e 75
+  s_467dcb949b5b60::t_4821d66f8cd9ef 31,33-36,49,91,95,98-99,101,107,109-111,127-128,200,214,267
+android/app/src/main/java/dev/durableagent/probe/NativeStopService.kt
+  s_467dcb949b5b60::t_0cb3184f9df69a 28-31,62,69
+  s_467dcb949b5b60::t_aac1a18541dd0f 1-21,23-27,32-35,37,39-40,42-51,56-59,61,63-65,68,71-76
+  s_467dcb949b5b60::t_80f2371491ede3 36,52-54,60
+  s_467dcb949b5b60::t_e8303f8be433e4 41
+  s_467dcb949b5b60::t_3fc575d1eb86fa 22,38,55,66-67,70
+android/app/src/androidTest/java/dev/durableagent/probe/StopApplicationTest.kt
+  s_467dcb949b5b60::t_e1b1cfa67aa85f 47-49,51,57-58,60-67,81
+  s_467dcb949b5b60::t_44580e98b8324e 41-46
+  s_467dcb949b5b60::t_20b1910af806e1 1-40,50,52-56,59,68-80,82,84-85
+  s_467dcb949b5b60::t_13509c198f26d6 83
+android/app/src/androidTest/java/dev/durableagent/probe/NativeStopStoreTest.kt
+  s_467dcb949b5b60::t_67da53d4ff7b83 37-52
+  s_467dcb949b5b60::t_0aac8a1f73aa8e 15
+  s_467dcb949b5b60::t_846fa0d2531c5e 75-76,82-84,86-92,94
+  s_467dcb949b5b60::t_6627e3dc848d03 1-14,16-36,95
+  s_467dcb949b5b60::t_e14e403c42b77a 77-81,85,93
+  s_467dcb949b5b60::t_e228dded4391c9 53-66
+  s_467dcb949b5b60::t_e3fc378d894bbe 67-74
+ui/src/submissions.ts
+  s_467dcb949b5b60::t_3162d0fb329732 1,16,20,97-98
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_44580e98b8324e 73-76
+runtime/validation/stop-policy.mjs
+  s_467dcb949b5b60::t_091b9f4664069d 1-34
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_d2eb9a46a21f81 136
+android/app/src/main/java/dev/durableagent/probe/NativeInputStore.kt
+  s_467dcb949b5b60::t_6b9abb41e60446 11,37,42-48,601-607
+  s_467dcb949b5b60::t_9189ea8931ac98 421,658
+  s_467dcb949b5b60::t_26e38091cf2864 76
+  s_467dcb949b5b60::t_e2e69104f13e82 414,417-418,420,620,639,654,657
+  s_467dcb949b5b60::t_0341b87b0ff744 419
+  s_467dcb949b5b60::t_d92ac268a998c8 415-416
+android/app/src/main/java/dev/durableagent/probe/NativeStopRecords.kt
+  s_467dcb949b5b60::t_d92ac268a998c8 24,27
+  s_467dcb949b5b60::t_56cec7428e22f0 39
+  s_467dcb949b5b60::t_9189ea8931ac98 9-10,59,61
+  s_467dcb949b5b60::t_e2e69104f13e82 1-8,11-23,25-26,28-38,40-58,60,62-63
+android/app/src/main/java/dev/durableagent/probe/NativeExecutionFence.kt
+  s_467dcb949b5b60::t_d92ac268a998c8 1-7,9-44
+  s_467dcb949b5b60::t_9189ea8931ac98 8
+runtime/src/application.ts
+  s_467dcb949b5b60::t_d92ac268a998c8 94
+  s_467dcb949b5b60::t_dff20f3e431fe7 91
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_8dd2d4a2229c7b 74,85,91
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_b020fc492e810e 44-61
+ui/test/app.test.tsx
+  s_467dcb949b5b60::t_fc78c749a4ef55 62-64
+runtime/src/execution-validation.ts
+  s_467dcb949b5b60::t_1fa84249cd31d2 14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "5a244dea250a2bbfd55fa782dd94f9b301ccc000",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
