@@ -106,6 +106,29 @@ it('an explicit picker cancellation permits a fresh operation of a different kin
   finally{drafts.dispose();client.dispose();}
 });
 
+it('automatically saves edits made while a cancelled picker held the draft',async()=>{
+  vi.useFakeTimers();const platform=new InputPlatform();platform.rememberConversation(summary);
+  let cancel:(()=>void)|undefined;const requests:ApplicationRequest[]=[];
+  const client=new ApplicationClient({postMessage:encoded=>{
+    const request:ApplicationRequest=JSON.parse(encoded);requests.push(request);
+    if(request.method==='input.select')cancel=()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:false,error:{code:'INPUT_PICKER_CANCELLED',message:'已取消选择'}});
+    else void platform.handle(request).then(value=>client.receive(value));
+  }});
+  const drafts=new DraftCoordinator(()=>client,()=>{}),reopened=new DraftCoordinator(()=>client,()=>{});
+  try{
+    await drafts.read('one');drafts.edit('one','已保存的原草稿');await drafts.flush('one');
+    const selection=drafts.select('one','camera');const cancelled=expect(selection).rejects.toMatchObject({code:'INPUT_PICKER_CANCELLED'});
+    while(!cancel)await Promise.resolve();
+    drafts.edit('one','选择器打开期间继续编辑的草稿 🌍');await vi.advanceTimersByTimeAsync(1100);
+    expect(drafts.view('one')).toMatchObject({status:'pending',busy:true});
+    expect(platform.read('one').text).toBe('已保存的原草稿');
+    cancel();await cancelled;await vi.advanceTimersByTimeAsync(2000);
+    expect(drafts.view('one')).toMatchObject({status:'saved',busy:false,error:undefined,text:'选择器打开期间继续编辑的草稿 🌍',selections:[]});
+    expect(await reopened.read('one')).toMatchObject({status:'saved',text:'选择器打开期间继续编辑的草稿 🌍',selections:[]});
+    expect(requests.some(request=>request.method==='send'||request.method==='input.createSend')).toBe(false);
+  }finally{drafts.dispose();reopened.dispose();client.dispose();}
+});
+
 it('a confirmed selection operation found by read resolves a lost picker receipt before another explicit selection',async()=>{
   const platform=new InputPlatform();platform.rememberConversation(summary);const picks:ApplicationRequest[]=[];
   const client=new ApplicationClient({postMessage:encoded=>{const r:ApplicationRequest=JSON.parse(encoded);if(r.method==='input.select'){

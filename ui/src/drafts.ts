@@ -120,12 +120,16 @@ export class DraftCoordinator {
         if(value.stateVersion>=r.saved.stateVersion){r.saved=value;r.selections=value.selections;r.savedEpoch=selection.editEpoch;if(r.editEpoch===selection.editEpoch){r.text=value.text;r.status='saved';}else r.status='pending';}
       }catch(error){if(error instanceof ApplicationFailure&&error.code==='INPUT_PICKER_CANCELLED'){r.selectionRetry=undefined;r.error=undefined;throw error;}this.fail(r,error);throw error;}
     })();r.writer=writer;
-    try{await writer;}finally{r.busy=false;if(r.writer===writer)r.writer=undefined;this.notify();}
+    try{await writer;}finally{
+      r.busy=false;if(r.writer===writer)r.writer=undefined;this.notify();
+      // Autosaves waiting on a cancelled picker reject too. Resume pending edits
+      // after releasing that writer, while preserving the cancellation result.
+      if(r.status==='pending')void this.flush(id).catch(()=>{});
+    }
     for(const selection of r.selections)if(!before.has(selection.id)){
       if(selection.preparation.state==='selected')void this.prepare(id,selection.id).catch(()=>{});
       else if(selection.preparation.state==='preparing'){this.automaticPreparations.add(`${id}:${selection.id}`);this.poll(id,[selection.id]);}
     }
-    if(r.status==='pending')void this.flush(id).catch(()=>{});
   }
   async prepare(id:string,selectionId:string){
     const r=this.records.get(id),key=`${id}:${selectionId}`;
