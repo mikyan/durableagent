@@ -1,0 +1,193 @@
+android/app/src/androidTest/java/dev/durableagent/probe/NativeProjectFenceTest.kt
+  s_467dcb949b5b60::t_908f19466f4418 179,188
+android/app/src/androidTest/java/dev/durableagent/probe/NativeRetentionMigrationTest.kt
+  s_467dcb949b5b60::t_0dbbc8db22cfa9 31
+android/app/src/androidTest/java/dev/durableagent/probe/NativeStopServiceTest.kt
+  s_467dcb949b5b60::t_2bfe89afe36bdd 1-41
+android/app/src/androidTest/java/dev/durableagent/probe/NativeStopStoreTest.kt
+  s_467dcb949b5b60::t_47969b2819b406 1-108
+android/app/src/androidTest/java/dev/durableagent/probe/NativeSubmissionStoreTest.kt
+  s_467dcb949b5b60::t_a1c13ddfd89dbf 257,284
+android/app/src/androidTest/java/dev/durableagent/probe/StopApplicationTest.kt
+  s_467dcb949b5b60::t_5fbcb8e98bbfd5 1-90
+android/app/src/androidTest/java/dev/durableagent/probe/StopExecutionTest.kt
+  s_467dcb949b5b60::t_201b843f5abccc 1-107
+android/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_6a9f1f0f5f8270 3-4,11
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_02628d5be6437c::t_d2c3038dc29cc0 32,82
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_3bd6fc629b2676 31-37,50,76,94,98-135,150,152,160,210,224,276-277
+android/app/src/main/java/dev/durableagent/probe/ExecutionAccess.kt
+  s_467dcb949b5b60::t_fd22e2915e4fe1 14,22-32,64-70,132
+android/app/src/main/java/dev/durableagent/probe/NativeExecutionFence.kt
+  s_467dcb949b5b60::t_92b0359ff0d18d 1-44
+android/app/src/main/java/dev/durableagent/probe/NativeInputAccess.kt
+  s_467dcb949b5b60::t_81a9cf29e706c0 36,87-92
+android/app/src/main/java/dev/durableagent/probe/NativeInputBridge.kt
+  s_467dcb949b5b60::t_5b6a83d5ae7c1e 11,19,25-35,52-56,110-115
+android/app/src/main/java/dev/durableagent/probe/NativeInputStore.kt
+  s_467dcb949b5b60::t_298499d755a02f 11,37,42-48,76,421-428,622-628,641,660,676-677,683-684
+android/app/src/main/java/dev/durableagent/probe/NativeStopController.kt
+  s_467dcb949b5b60::t_fdf0f2c95d7bb3 1-38
+android/app/src/main/java/dev/durableagent/probe/NativeStopRecords.kt
+  s_467dcb949b5b60::t_0fe14b168d05b8 1-63
+android/app/src/main/java/dev/durableagent/probe/NativeStopService.kt
+  s_467dcb949b5b60::t_3bc779a3787ef2 1-105
+android/app/src/main/java/dev/durableagent/probe/NativeStopSweep.kt
+  s_467dcb949b5b60::t_1761bcb5993f07 1-28
+android/app/src/main/java/dev/durableagent/probe/NativeStopTrace.kt
+  s_467dcb949b5b60::t_6b561edbd4652d 1-15
+docs/evidence/t11/README.md
+  s_467dcb949b5b60::t_44809d5d08f79a 1-199
+docs/evidence/t11/artifacts.json
+  s_467dcb949b5b60::t_4a17e7a14033dd 1-11
+docs/evidence/t11/final-apk-inspection.json
+  s_467dcb949b5b60::t_01ff100b821088 1-306
+docs/evidence/t11/original-effects-notification.json
+  s_467dcb949b5b60::t_d5f91436775870 1-39
+docs/evidence/t11/original-effects-real-mimo.json
+  s_467dcb949b5b60::t_cb18f175e511bf 1-49
+docs/evidence/t11/retained-log-hashes.json
+  s_467dcb949b5b60::t_19c129e66b46ff 1-142
+docs/evidence/t11/scoped-development-gate-review.md
+  s_467dcb949b5b60::t_5eea8b584ee8a1 1-129
+docs/evidence/t11/source-hashes.json
+  s_467dcb949b5b60::t_1c864f485bc272 1-158
+docs/evidence/t11/t11-bootstrap-red01.log
+  s_467dcb949b5b60::t_47a2511d1df852 1-58
+docs/evidence/t11/t11-busy-diagnostic01.log
+  s_467dcb949b5b60::t_b953e00c9a49ca 1-47
+docs/evidence/t11/t11-busy-green01.log
+  s_467dcb949b5b60::t_ac348cdb0d8991 1-53
+docs/evidence/t11/t11-busy-green02.log
+  s_467dcb949b5b60::t_9f8e1a6da0c398 1-53
+docs/evidence/t11/t11-busy-identity01.log
+  s_467dcb949b5b60::t_06cdf00e3bc42c 1-27
+docs/evidence/t11/t11-busy-lease-green01.log
+  s_467dcb949b5b60::t_409ecc97a30f67 1-45
+docs/evidence/t11/t11-busy-red01.log
+  s_467dcb949b5b60::t_40777aad017faf 1-56
+docs/evidence/t11/t11-busy-red02.log
+  s_467dcb949b5b60::t_e87a95cc63d411 1-44
+docs/evidence/t11/t11-busy-writer-green01.log
+  s_467dcb949b5b60::t_cbb855a0e1d711 1-97
+docs/evidence/t11/t11-busy-writer-red01.log
+  s_467dcb949b5b60::t_17484e9a16eb80 1-47
+docs/evidence/t11/t11-final-build-lint.log
+  s_467dcb949b5b60::t_7506b57f8a4449 1-104
+docs/evidence/t11/t11-full01-credential-audit.json
+  s_467dcb949b5b60::t_5783deb70af88a 1-19
+docs/evidence/t11/t11-full01-native.log
+  s_467dcb949b5b60::t_ae9098fa74885b 1-387
+docs/evidence/t11/t11-full01-notification.log
+  s_467dcb949b5b60::t_e58a930a314ecb 1-44
+docs/evidence/t11/t11-full01-real-mimo.log
+  s_467dcb949b5b60::t_454d63b0b21aec 1-25
+docs/evidence/t11/t11-full02-credential-audit.json
+  s_467dcb949b5b60::t_1899cdca7df504 1-19
+docs/evidence/t11/t11-full02-notification.log
+  s_467dcb949b5b60::t_2fdb9bcadab33a 1-25
+docs/evidence/t11/t11-full02-real-mimo.log
+  s_467dcb949b5b60::t_bc1cd60db72bfa 1-25
+docs/evidence/t11/t11-host-runtime-full.log
+  s_467dcb949b5b60::t_26e8f999555f7c 1-222
+docs/evidence/t11/t11-host-ui-full.log
+  s_467dcb949b5b60::t_cf6c07ff3ff2c2 1-20
+docs/evidence/t11/t11-native-green01.log
+  s_467dcb949b5b60::t_404a64170161c2 1-35
+docs/evidence/t11/t11-native-green02.log
+  s_467dcb949b5b60::t_3b2a8dd992ec3a 1-23
+docs/evidence/t11/t11-native-green03.log
+  s_467dcb949b5b60::t_04aaddbf29d0c4 1-37
+docs/evidence/t11/t11-native-green04.log
+  s_467dcb949b5b60::t_3c360732b8784e 1-51
+docs/evidence/t11/t11-native-lease-green01.log
+  s_467dcb949b5b60::t_8989e1616ec900 1-41
+docs/evidence/t11/t11-native-lease-green02.log
+  s_467dcb949b5b60::t_fa8c3b85102135 1-23
+docs/evidence/t11/t11-native-red01.log
+  s_467dcb949b5b60::t_39401ea5c07e69 1-47
+docs/evidence/t11/t11-native-red02.log
+  s_467dcb949b5b60::t_d6da3872dc9e36 1-32
+docs/evidence/t11/t11-native-red03.log
+  s_467dcb949b5b60::t_0b24c6db2d1548 1-41
+docs/evidence/t11/t11-native-red04.log
+  s_467dcb949b5b60::t_ad7d16d2bc8ed8 1-47
+docs/evidence/t11/t11-native-upgrade-green01.log
+  s_467dcb949b5b60::t_3d26edc60815a7 1-23
+docs/evidence/t11/t11-native-upgrade-red01.log
+  s_467dcb949b5b60::t_e0c3732ab8ce95 1-41
+docs/evidence/t11/t11-notification-diagnostic01.log
+  s_467dcb949b5b60::t_47595d1fec8ae8 1-59
+docs/evidence/t11/t11-second-stop-green01-device.log
+  s_467dcb949b5b60::t_094147f7c6e201 1-25
+docs/evidence/t11/t11-second-stop-red02-device.log
+  s_467dcb949b5b60::t_432b899bebfa55 1-59
+docs/specs/v1/README.md
+  s_467dcb949b5b60::t_b454e5986911b2 3,37-40
+docs/specs/v1/tickets/11-stop-fencing.md
+  s_467dcb949b5b60::t_44f68a67c69d50 9-21
+runtime/STOP.md
+  s_467dcb949b5b60::t_692f7eff0da6c5 1-25
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_12ef8d22902797 73-76
+runtime/src/application.ts
+  s_467dcb949b5b60::t_5b1af5452fc130 98,101
+runtime/src/execution-channel.ts
+  s_467dcb949b5b60::t_698c659f956d19 3-4,12-13,50-51
+runtime/src/execution-validation.ts
+  s_467dcb949b5b60::t_da3130b00dc8ea 14
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_7fee1804003657 74,85,91
+runtime/src/stop.ts
+  s_467dcb949b5b60::t_ef77b9d8220071 1-25
+runtime/src/submission-protocol.ts
+  s_467dcb949b5b60::t_2f768f05d9616b 6,13
+runtime/src/submission.ts
+  s_467dcb949b5b60::t_97457b93a8777c 7,22,101-102
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_d5df2da0b1831a 44-61
+runtime/test/stop.test.mjs
+  s_467dcb949b5b60::t_683e12d5934db3 1-3
+runtime/validation/stop-policy.mjs
+  s_467dcb949b5b60::t_49f086598e975c 1-34
+ui/src/controller.ts
+  s_467dcb949b5b60::t_56db5938d9b4c2 176-180
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_4a885f2b3796cf 136
+ui/src/extensions/submissions.tsx
+  s_467dcb949b5b60::t_1a3df95ce149b9 27-29,32
+ui/src/submissions.ts
+  s_467dcb949b5b60::t_7342ae66ff512f 1,16,20,97-98
+ui/test/app.test.tsx
+  s_467dcb949b5b60::t_1ef241f09f4c87 84-86
+ui/test/input-platform.ts
+  s_467dcb949b5b60::t_dbdc31183a2326 57,63
+ui/test/submissions-page.test.tsx
+  s_467dcb949b5b60::t_35f442c19c26a0 13-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "16ca0b08d50e4c791008fee1d7ff07a475fe71fc",
+  "prompts": {},
+  "sessions": {
+    "s_02628d5be6437c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a168af-9f40-7a22-a99e-1b040a5ad083",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
