@@ -9,7 +9,7 @@ import org.json.JSONObject
 import java.util.concurrent.atomic.AtomicLong
 
 /** Trusted host capability; Android callbacks only invalidate current facts. */
-class NativeRecoveryAccess(private val service:Service,private val mode:String,private val run:String?):AutoCloseable {
+class NativeRecoveryAccess(private val service:ApplicationService,private val mode:String,private val run:String?):AutoCloseable {
     private val store=NativeRecoveryStore(service,NativeInputBridge.namespace(mode,run))
     private val changes=AtomicLong(1)
     private val network=AndroidDataSaverNetwork(service){changes.incrementAndGet()}

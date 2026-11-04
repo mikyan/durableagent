@@ -43,6 +43,17 @@ test('a durable SDK retry uses the same epoch after close and repeated early hos
   assert.equal(requests,2);assert.equal((await call(app,'history',{id:'chat'})).items.filter(entry=>entry.role==='user').length,1);
  }finally{await app.close();await rm(directory,{recursive:true,force:true});}
 });
+
+test('a temporarily unavailable native wake record is republished before the same due SDK retry resumes',async()=>{
+ const directory=await mkdtemp(join(tmpdir(),'recovery-wake-authority-'));let now=Date.now(),requests=0,available=false,rejected=0;const published=[];
+ const host=platform();host.now=()=>now;host.publishWake=async wake=>{if(wake.at!==undefined&&!available){rejected++;throw Object.assign(Error('Wake authority busy'),{code:'HOST_RECOVERY_UNAVAILABLE'});}published.push({...wake});};
+ const app=new Application({path:join(directory,'app.sqlite'),...validationConfiguration({failFirst:1,requested:()=>requests++}),recovery:host,bootstrapSettings:()=>({retry:{enabled:true,maxRetries:1,baseDelayMs:1000}})});
+ try{
+  await app.start();await call(app,'create',{creationId:'chat'});await call(app,'send',{id:'chat',text:'one input across wake record unavailability',actionId:'original'});await until(()=>rejected>0,'Native wake write initially unavailable');
+  const at=(await call(app,'open',{id:'chat'})).recovery.nextAt;assert.equal(requests,1);assert.ok(!published.some(wake=>wake.at===at));
+  available=true;now=at+1;await app.wake();await app.wake();await until(async()=>(await call(app,'open',{id:'chat'})).phase==='done','Same due retry after native metadata recovers');assert.equal(requests,2);assert.ok(published.some(wake=>wake.at===at));assert.equal((await call(app,'history',{id:'chat'})).items.filter(entry=>entry.role==='user').length,1);
+ }finally{available=true;await app.close();await rm(directory,{recursive:true,force:true});}
+});
 test('first unlock is checked before SDK bootstrap and a saved stop stays stopped after network recovery',async()=>{
  const directory=await mkdtemp(join(tmpdir(),'durable-unlock-'));let getters=0,requests=0;const host=platform({network:'offline',userUnlocked:false});
  const app=new Application({path:join(directory,'app.sqlite'),...validationConfiguration({requested:()=>requests++}),recovery:host,bootstrapSettings:()=>{getters++;return {retry:{enabled:false,maxRetries:0}};}});
