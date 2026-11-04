@@ -1,0 +1,24 @@
+runtime/test/fixtures/recovery-crash-host.mjs
+  s_467dcb949b5b60::t_2496163221c51c 5,9,13-14
+runtime/test/fixtures/recovery-deferred-provider.mjs
+  s_467dcb949b5b60::t_2496163221c51c 1-13
+runtime/test/recovery-crash.test.mjs
+  s_467dcb949b5b60::t_2496163221c51c 10,44-54
+  s_467dcb949b5b60::t_116adc1c2f178c 55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "ac22a64d84e0eabf000477657d3966562ff45a92",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
