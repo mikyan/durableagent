@@ -1,0 +1,466 @@
+docs/evidence/t13/t13-provider-projection-green-build.log
+  s_467dcb949b5b60::t_24f6370e8c200e 1-101
+runtime/src/document-writes.ts
+  s_467dcb949b5b60::t_c1f248ad804877 49,51-57,83-84
+  s_467dcb949b5b60::t_1d7b0041817543 60
+  s_467dcb949b5b60::t_70a3df92cf321c 5,35,48,50,58,61,63-65,82,85-88,99-100,134
+  s_467dcb949b5b60::t_ccecd6f939569d 62
+  s_467dcb949b5b60::t_f8ff6cdd40bc33 89,93,98,101-109
+  s_467dcb949b5b60::t_0eb8b3eea92d1e 59,94-97
+  s_467dcb949b5b60::t_7fa062da258c5d 22,90-92
+docs/evidence/t13/t13-react-grant07-network-after.log
+  s_467dcb949b5b60::t_391a4d601a4a42 1-2
+android/app/src/androidTest/java/dev/durableagent/probe/DataSaverAccessTest.kt
+  s_467dcb949b5b60::t_cc9f7c60772012 20-30
+runtime/INPUTS.md
+  s_467dcb949b5b60::t_b5e70cf0438ae9 7-8
+  s_467dcb949b5b60::t_f96e82f4a6974c 5-6
+runtime/DATA_SAVER.md
+  s_467dcb949b5b60::t_c7400c76c130d0 1-26,33-93,101-121,126-127,137-145
+  s_467dcb949b5b60::t_cb6047242d5324 27-32
+  s_467dcb949b5b60::t_64462bc703fe5d 94-100,128-129
+  s_467dcb949b5b60::t_727178e9f437ce 122-125,130-136
+docs/evidence/t13/t13-react-grant07-device.log
+  s_467dcb949b5b60::t_391a4d601a4a42 1-25
+android/app/src/androidTest/java/dev/durableagent/probe/DataSaverProviderTest.kt
+  s_467dcb949b5b60::t_dc38fcd545abf7 89-103
+  s_467dcb949b5b60::t_71fd2d49349b75 104-140
+  s_467dcb949b5b60::t_866218d83d609c 73,75,81,141-167
+  s_467dcb949b5b60::t_abe8f7c054e93c 15-31
+  s_467dcb949b5b60::t_9af3a28a24a4ef 1-14,32-65,201
+  s_467dcb949b5b60::t_e2718a6a23f487 67-68,71,80,86-87,168-200
+  s_467dcb949b5b60::t_136f6fa7ae0bb2 66,69-70,72,74,76-79,82-85,88
+ui/src/extensions/documents.tsx
+  s_467dcb949b5b60::t_bb22784a2ce153 10,33-40,44,47
+docs/evidence/t13/evidence-hashes.json
+  s_467dcb949b5b60::t_1a930e944e9929 26-28,41,46-49,69-76,78-80,349-352,358-361,505-508,510-518,527,532-533,585-588
+  s_467dcb949b5b60::t_74324f9923a1ef 50-52,57,61-64,502-504,509,581-584,589-592
+  s_467dcb949b5b60::t_3d1317f63a9dea 58-60,65,81-96,98-101,105-120,122-124,129-149,481-500
+  s_467dcb949b5b60::t_15d0c205419565 14-16,25
+  s_467dcb949b5b60::t_8d0249371c57a5 6-9,17-24,29,34-40,42-45,53-56,102-104,125-128,161-168,170-189,354-357,519-526,528-531,534-537,573-580,602
+  s_467dcb949b5b60::t_04960342093ffc 30-33
+  s_467dcb949b5b60::t_6c01ccf25865be 286-317,478-480,501
+  s_467dcb949b5b60::t_88be24a17c5eef 1-5,10-13,66-68,77,97,121,150-160,169,190-285,318-348,353,362-477,538-572,593-601
+docs/evidence/t13/t13-react-grant02-device.log
+  s_467dcb949b5b60::t_eec67be3de5dbc 1-47
+docs/evidence/t13/t13-policy-final-runtime.log
+  s_467dcb949b5b60::t_7b8543e9cb59fc 1-302
+ui/test/execution-page.test.tsx
+  s_467dcb949b5b60::t_6895bd4737c03e 49
+android/app/src/main/java/dev/durableagent/probe/NativeDataSaverStore.kt
+  s_467dcb949b5b60::t_f0e186d39f5261 48
+  s_467dcb949b5b60::t_1084c79ef08d66 46-47,49-69,72-78,100,169-170
+  s_467dcb949b5b60::t_72c3028d5efa36 164-168,171
+  s_467dcb949b5b60::t_15e880b561e595 70-71
+android/app/src/main/java/dev/durableagent/probe/NativeProviderPolicy.kt
+  s_467dcb949b5b60::t_023db551e41adc 36
+  s_467dcb949b5b60::t_5ab4047db772f3 47-48,55-63,65-68
+  s_467dcb949b5b60::t_d7b541365a4bab 8
+  s_467dcb949b5b60::t_15e880b561e595 51,64
+  s_467dcb949b5b60::t_c79222ff4a7455 14-29,40
+  s_467dcb949b5b60::t_e35694876efb25 52
+  s_467dcb949b5b60::t_0b894a4e758fcb 1-7,9-13,30-35,37-39,41-46,49-50,53-54,69-72
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_467dcb949b5b60::t_bb22784a2ce153 34
+android/app/src/main/java/dev/durableagent/probe/NativeInputStore.kt
+  s_467dcb949b5b60::t_12fc86e87a7af8 42-43
+  s_467dcb949b5b60::t_68146ca10bc298 37,46
+runtime/test/data-saver-documents.test.mjs
+  s_467dcb949b5b60::t_927842f3a21e97 15,17,25
+  s_467dcb949b5b60::t_05a990258ab1bb 1-14,16,18-24,26-36
+  s_467dcb949b5b60::t_07c3d3e5ba69f4 75-94
+  s_467dcb949b5b60::t_5c0c4bad6cd01a 37-38,40-44,46-55,73
+  s_467dcb949b5b60::t_e12bb07a708e24 39,45,56-57,59-64,66-72
+  s_467dcb949b5b60::t_3f580169515286 58,65
+  s_467dcb949b5b60::t_3f1ca117b91d99 74,95-111
+  s_467dcb949b5b60::t_9ed3c961b7c895 112-130
+runtime/src/storage-format.ts
+  s_467dcb949b5b60::t_235a0ce3341af0 20
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentStore.kt
+  s_467dcb949b5b60::t_64bccdb7c95f62 70-74,246-249
+  s_467dcb949b5b60::t_023db551e41adc 98-134
+  s_467dcb949b5b60::t_15e880b561e595 193,241-245,250-253,255-256,278,311,313,440
+  s_467dcb949b5b60::t_62031ffd96ac9b 32,254
+  s_467dcb949b5b60::t_31bbaad26a9545 144-155,157-174,431
+  s_467dcb949b5b60::t_fa3884f9a37c87 50,55,63,69,75-97,135-143
+  s_467dcb949b5b60::t_5ab4047db772f3 291,401,418,446,469,489-490
+docs/evidence/t13/native-ui-lease-artifacts.json
+  s_467dcb949b5b60::t_bddff208cb1514 1-11
+android/app/src/main/java/dev/durableagent/probe/NativeInputBridge.kt
+  s_467dcb949b5b60::t_12fc86e87a7af8 12-14
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_cfab9bcbede473 33,55
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_235a0ce3341af0 14,50,64,82,281,314
+  s_467dcb949b5b60::t_70a3df92cf321c 56
+docs/evidence/t13/t13-react-grant07-network-before.log
+  s_467dcb949b5b60::t_391a4d601a4a42 1-2
+docs/evidence/t13/t13-policy-read-snapshot-green.log
+  s_467dcb949b5b60::t_7b8543e9cb59fc 1-20
+android/app/src/main/java/dev/durableagent/probe/ExecutionAccess.kt
+  s_467dcb949b5b60::t_1c794dfe452ab3 72
+docs/evidence/t13/t13-react-grant07-network-metered.log
+  s_467dcb949b5b60::t_391a4d601a4a42 1-2
+docs/evidence/t13/native-ui-config-artifacts.json
+  s_467dcb949b5b60::t_e64514f3c643f7 1-11
+runtime/src/document-reads.ts
+  s_467dcb949b5b60::t_a4bb41c16a2a80 34-44
+  s_467dcb949b5b60::t_235a0ce3341af0 1-27,30-33,45-47
+  s_467dcb949b5b60::t_5b0c420157c9ef 29
+  s_467dcb949b5b60::t_5870408036fe93 28
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentService.kt
+  s_467dcb949b5b60::t_15e880b561e595 54,81
+  s_467dcb949b5b60::t_023db551e41adc 47-48
+runtime/src/execution-validation.ts
+  s_467dcb949b5b60::t_9efbec3854e957 10
+  s_467dcb949b5b60::t_e54caa7ceceaa7 18
+  s_467dcb949b5b60::t_cfab9bcbede473 29
+docs/evidence/t13/t13-ui-config-green-build.log
+  s_467dcb949b5b60::t_e64514f3c643f7 1-101
+runtime/src/managed-documents.ts
+  s_467dcb949b5b60::t_bb22784a2ce153 17
+  s_467dcb949b5b60::t_235a0ce3341af0 23-24
+docs/evidence/t13/t13-ui-lease-green-build.log
+  s_467dcb949b5b60::t_bddff208cb1514 1-70
+docs/evidence/t13/t13-policy-final-ui.log
+  s_467dcb949b5b60::t_7b8543e9cb59fc 1-32
+docs/evidence/t13/README.md
+  s_467dcb949b5b60::t_131f2f090f1b28 271-273,276-279,314-315
+  s_467dcb949b5b60::t_86ab0591dc7b61 35,256-270
+  s_467dcb949b5b60::t_fc0f6745014bbe 37,122-123,138-152,208-212,247-252,254-255,316-318
+  s_467dcb949b5b60::t_b33bd0532f7021 131
+  s_467dcb949b5b60::t_f056f33a07cce7 36,233-236,245-246,274-275,280-294,310-313
+  s_467dcb949b5b60::t_21d394d24ce5dc 183-197,224,229
+  s_467dcb949b5b60::t_9f8318cbc91e3e 198-207,295-297
+  s_467dcb949b5b60::t_7cc35769218e77 230-232
+  s_467dcb949b5b60::t_9285894d3b4d87 329,334-337,360-361
+  s_467dcb949b5b60::t_4cd9911bbcf3b2 1-34,39-121,124-130,132-137,153-182,213-223,225-228,237-244,338,358-359
+  s_467dcb949b5b60::t_b5e70cf0438ae9 38,253,298-309,319-328,330-333,350
+  s_467dcb949b5b60::t_e88549cca0eddb 339-349,351-357
+android/app/src/main/java/dev/durableagent/probe/NativeDataSaverSweep.kt
+  s_467dcb949b5b60::t_15e880b561e595 15-19
+ui/src/extensions/file-changes.tsx
+  s_467dcb949b5b60::t_45dbab5e58683a 27-28,32,38-42,45,49,51-53,62
+android/app/src/main/java/dev/durableagent/probe/NativeDataSaverAccess.kt
+  s_467dcb949b5b60::t_1c794dfe452ab3 21,23,55-60
+  s_467dcb949b5b60::t_023db551e41adc 47-48
+runtime/validation/execution-peer.mjs
+  s_467dcb949b5b60::t_541cceac732751 10,12
+runtime/test/data-saver.test.mjs
+  s_467dcb949b5b60::t_541cceac732751 143-151
+android/app/src/androidTest/java/dev/durableagent/probe/InputApplicationTest.kt
+  s_467dcb949b5b60::t_aa5585fe4728ed 141-178
+  s_467dcb949b5b60::t_a1b02c18b33822 113-140
+runtime/src/document-protocol.ts
+  s_467dcb949b5b60::t_146d9a73058162 2
+  s_467dcb949b5b60::t_bb22784a2ce153 3
+ui/test/document-policy.test.tsx
+  s_467dcb949b5b60::t_12dc11e686b3bc 1-4,6-10,12-14,27-28
+  s_467dcb949b5b60::t_25e09a0d77f56e 11
+  s_467dcb949b5b60::t_bf0eb10957c29b 5,15-26
+docs/evidence/t13/native-projection-artifacts.json
+  s_467dcb949b5b60::t_24f6370e8c200e 1-11
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentBridge.kt
+  s_467dcb949b5b60::t_1091d9684c1fd2 21,37
+  s_467dcb949b5b60::t_bb22784a2ce153 12-13,38
+android/app/src/androidTest/java/dev/durableagent/probe/DataSaverExecutionTest.kt
+  s_467dcb949b5b60::t_95d1956bac12a2 49-50,57-58,64,70,112
+  s_467dcb949b5b60::t_fba6fa4163ec46 48,51-56,59-63,65-69
+  s_467dcb949b5b60::t_72c3028d5efa36 71-79,103,109,111
+  s_467dcb949b5b60::t_cfab9bcbede473 177-185,187-193,195-206,210-211
+  s_467dcb949b5b60::t_97a260e4449ee4 83,88-89,100-101
+  s_467dcb949b5b60::t_1ece9758954847 40-43,152-176
+  s_467dcb949b5b60::t_62b07482e472c9 186,194,209
+  s_467dcb949b5b60::t_f7dcc001b697f7 46-47,80-82,84-87,102,106-108,114
+  s_467dcb949b5b60::t_c5ec9692f33f3f 207
+  s_467dcb949b5b60::t_edf5eaf8a4fec5 91-99
+  s_467dcb949b5b60::t_239042f287fc1a 90,104-105,110,113
+  s_467dcb949b5b60::t_1b9d51224bf756 208
+  s_467dcb949b5b60::t_d966abe37a51a0 146
+docs/evidence/t13/REPRODUCE.md
+  s_467dcb949b5b60::t_bdd9df025f171a 1-96
+docs/evidence/t13/artifacts.json
+  s_467dcb949b5b60::t_6bf7fbaa925e7b 1-11
+docs/evidence/t13/fed-independent-original-read.json
+  s_467dcb949b5b60::t_8e7cb43d185739 1
+docs/evidence/t13/final-apk-inspection.json
+  s_467dcb949b5b60::t_591cf144b4db36 1-374
+docs/evidence/t13/independent-original-read.json
+  s_467dcb949b5b60::t_f8e3a24b736fbb 1
+docs/evidence/t13/native-fixes-review.md
+  s_467dcb949b5b60::t_cfb2a40127e213 1-22
+docs/evidence/t13/native-projection-apk-inspection.json
+  s_467dcb949b5b60::t_739364eec74bf4 1-374
+docs/evidence/t13/native-ui-config-apk-inspection.json
+  s_467dcb949b5b60::t_3facf7d0e74190 1-374
+docs/evidence/t13/native-ui-config-source-hashes.json
+  s_467dcb949b5b60::t_ba12200c6bd0ff 1-373
+docs/evidence/t13/native-ui-configuration-review.md
+  s_467dcb949b5b60::t_aa27d9e59716d6 1-29
+docs/evidence/t13/native-ui-lease-apk-inspection.json
+  s_467dcb949b5b60::t_3cce80e64883aa 1-374
+docs/evidence/t13/second-review-artifacts.json
+  s_467dcb949b5b60::t_20e3f5d871c2d1 1-11
+docs/evidence/t13/second-review-fixes-review.md
+  s_467dcb949b5b60::t_b89b2767d71df7 1-39
+docs/evidence/t13/source-hashes.json
+  s_467dcb949b5b60::t_4d3ed81fc780b2 1-373
+docs/evidence/t13/t13-c5-final-sdk-device.log
+  s_467dcb949b5b60::t_21e83d0912f409 1-50
+docs/evidence/t13/t13-c5-final-sdk-original-after.json
+  s_467dcb949b5b60::t_d95ef0cbb0b8f9 1-6
+docs/evidence/t13/t13-c5-final-sdk-retained.log
+  s_467dcb949b5b60::t_812a05fc3ec248 1-25
+docs/evidence/t13/t13-cutover-actual01-retained-observation.log
+  s_467dcb949b5b60::t_a67b2fa8c41d99 1-25
+docs/evidence/t13/t13-cutover-actual01/after.json
+  s_467dcb949b5b60::t_5ad599991e0a8b 1
+docs/evidence/t13/t13-cutover-actual01/before.json
+  s_467dcb949b5b60::t_2307f7193f28ac 1
+docs/evidence/t13/t13-cutover-actual01/events.json
+  s_467dcb949b5b60::t_3e807f6b065936 1-90
+docs/evidence/t13/t13-cutover-actual01/instrumentation.log
+  s_467dcb949b5b60::t_37ea6dce3165f1 1-51
+docs/evidence/t13/t13-cutover-actual01/server.log
+  s_467dcb949b5b60::t_5bb74c915afed5 1-2
+docs/evidence/t13/t13-cutover-actual02-retained-observation.log
+  s_467dcb949b5b60::t_0dc8d35ebf31e0 1-25
+docs/evidence/t13/t13-cutover-actual02/after.json
+  s_467dcb949b5b60::t_2531f788114ff8 1
+docs/evidence/t13/t13-cutover-actual02/before.json
+  s_467dcb949b5b60::t_0dd40ba076cf3d 1
+docs/evidence/t13/t13-cutover-actual02/events.json
+  s_467dcb949b5b60::t_7a7014e6685747 1-31
+docs/evidence/t13/t13-cutover-actual02/instrumentation.log
+  s_467dcb949b5b60::t_dc7c7afc926b6f 1-46
+docs/evidence/t13/t13-cutover-actual02/server.log
+  s_467dcb949b5b60::t_47a8ca95243cc2 1-2
+docs/evidence/t13/t13-cutover-actual03/after.json
+  s_467dcb949b5b60::t_d0e5a880dcc67d 1
+docs/evidence/t13/t13-cutover-actual03/before.json
+  s_467dcb949b5b60::t_2c1bb585a77fb2 1
+docs/evidence/t13/t13-cutover-actual03/events.json
+  s_467dcb949b5b60::t_ba17cc92a46964 1-107
+docs/evidence/t13/t13-cutover-actual03/instrumentation.log
+  s_467dcb949b5b60::t_dfd668a1e2fbde 1-29
+docs/evidence/t13/t13-cutover-actual03/server.log
+  s_467dcb949b5b60::t_76b9ddb0ffd9ab 1-2
+docs/evidence/t13/t13-execution-second-metered-device.log
+  s_467dcb949b5b60::t_51d97b4b65e13f 1-25
+docs/evidence/t13/t13-execution-second-real-credential-audit.json
+  s_467dcb949b5b60::t_26b62c2966a360 1-19
+docs/evidence/t13/t13-execution-second-real-mimo-device.log
+  s_467dcb949b5b60::t_a849555a10727b 1-25
+docs/evidence/t13/t13-fed-final-credential-audit.json
+  s_467dcb949b5b60::t_6e3ed0bf4d4eca 1-19
+docs/evidence/t13/t13-fed-final-real-device.log
+  s_467dcb949b5b60::t_9d7bedf1a78e24 1-25
+docs/evidence/t13/t13-fed-final-real-network-after.log
+  s_467dcb949b5b60::t_7424cde8a01dbb 1-2
+docs/evidence/t13/t13-fed-final-real-network-metered.log
+  s_467dcb949b5b60::t_48246cd12f7de7 1-2
+docs/evidence/t13/t13-fed-final-sdk-device.log
+  s_467dcb949b5b60::t_edcf29f8b55e7f 1-25
+docs/evidence/t13/t13-fed-final-sdk-network-after.log
+  s_467dcb949b5b60::t_d7c556ffbe1e16 1-2
+docs/evidence/t13/t13-fed-final-sdk-network-metered.log
+  s_467dcb949b5b60::t_be05971a6efdc6 1-2
+docs/evidence/t13/t13-file-rpc-green01-device.log
+  s_467dcb949b5b60::t_c2cc5c4ce1c503 1-23
+docs/evidence/t13/t13-file-rpc-red01-device.log
+  s_467dcb949b5b60::t_c6ee46f1a72720 1-32
+docs/evidence/t13/t13-final-fence-green01-device.log
+  s_467dcb949b5b60::t_f4d4608fef2dfa 1-23
+docs/evidence/t13/t13-final-fence-red01-device.log
+  s_467dcb949b5b60::t_e69e702c96c4a3 1-32
+docs/evidence/t13/t13-interruption-green01-device.log
+  s_467dcb949b5b60::t_922a8b8797c579 1-79
+docs/evidence/t13/t13-interruption-red01-device.log
+  s_467dcb949b5b60::t_3809b7e2e915d7 1-32
+docs/evidence/t13/t13-local-native-green01-device.log
+  s_467dcb949b5b60::t_e24345b5525d82 1-23
+docs/evidence/t13/t13-local-native-red01-device.log
+  s_467dcb949b5b60::t_4a37a55f68c946 1-41
+docs/evidence/t13/t13-local-product-first-device.log
+  s_467dcb949b5b60::t_b8db2b4c4b6cb2 1-47
+docs/evidence/t13/t13-local-product-first-retained-observation.log
+  s_467dcb949b5b60::t_fc1cfdd3629b16 1-25
+docs/evidence/t13/t13-local-product-second-device.log
+  s_467dcb949b5b60::t_1d4dcfe71ea7d3 1-25
+docs/evidence/t13/t13-native-green01-device.log
+  s_467dcb949b5b60::t_565c06fe1328cf 1-23
+docs/evidence/t13/t13-native-green03-regression.log
+  s_467dcb949b5b60::t_368712ba3c7c27 1-51
+docs/evidence/t13/t13-native-green03-same-test.log
+  s_467dcb949b5b60::t_87e4c20f2b086a 1-23
+docs/evidence/t13/t13-native-red01-device.log
+  s_467dcb949b5b60::t_0c3c775f865c5e 1-32
+docs/evidence/t13/t13-native-red03-device.log
+  s_467dcb949b5b60::t_486d249a332d57 1-41
+docs/evidence/t13/t13-network-green01-device.log
+  s_467dcb949b5b60::t_40390ad8535825 1-23
+docs/evidence/t13/t13-network-green01-events.log
+  s_467dcb949b5b60::t_116addc6269d98 1-4
+docs/evidence/t13/t13-network-green01-policy-after.log
+  s_467dcb949b5b60::t_ac96984e154d3b 1-2
+docs/evidence/t13/t13-network-green01-policy-before.log
+  s_467dcb949b5b60::t_9cf7be8abb73cf 1-2
+docs/evidence/t13/t13-network-green01-root-actions.log
+  s_467dcb949b5b60::t_c98a58281e4145 1-4
+docs/evidence/t13/t13-network-red01-device.log
+  s_467dcb949b5b60::t_d0ce5419a8ff2f 1-44
+docs/evidence/t13/t13-period-green01-device.log
+  s_467dcb949b5b60::t_577012db478583 1-93
+docs/evidence/t13/t13-period-red01-device.log
+  s_467dcb949b5b60::t_772f7e8ee14094 1-41
+docs/evidence/t13/t13-policy-after-dispatch-green.log
+  s_467dcb949b5b60::t_167ef380b43177 1-19
+docs/evidence/t13/t13-policy-after-dispatch-red.log
+  s_467dcb949b5b60::t_c1abae3148e3dc 1-30
+docs/evidence/t13/t13-policy-final-android-build.log
+  s_467dcb949b5b60::t_0a3ff73ceb59d7 1-135
+docs/evidence/t13/t13-policy-read-snapshot-red.log
+  s_467dcb949b5b60::t_3c7f010f2b6496 1-30
+docs/evidence/t13/t13-policy-start-inrepo-red.log
+  s_467dcb949b5b60::t_8fb325db50df13 1-30
+docs/evidence/t13/t13-projection-green01-device.log
+  s_467dcb949b5b60::t_8f3907c09032fd 1-38
+docs/evidence/t13/t13-projection-red01-device.log
+  s_467dcb949b5b60::t_d5c6fc0f3105cc 1-69
+docs/evidence/t13/t13-provider-ack-green02-device.log
+  s_467dcb949b5b60::t_81f452d48e069d 1-23
+docs/evidence/t13/t13-provider-green01-device.log
+  s_467dcb949b5b60::t_765ab0fcbbb66b 1-23
+docs/evidence/t13/t13-provider-history-fixture02-device.log
+  s_467dcb949b5b60::t_5cd3f38ca50ce0 1-44
+docs/evidence/t13/t13-provider-history-fixture03-device.log
+  s_467dcb949b5b60::t_bac6aca9f78083 1-25
+docs/evidence/t13/t13-provider-orphan-green02-device.log
+  s_467dcb949b5b60::t_daab1dfb8602ea 1-23
+docs/evidence/t13/t13-provider-orphan-red01-device.log
+  s_467dcb949b5b60::t_1f8bd490dae8c2 1-38
+docs/evidence/t13/t13-provider-projection-green01-device.log
+  s_467dcb949b5b60::t_b71eaeb80d2f5d 1-23
+docs/evidence/t13/t13-provider-projection-red01-device.log
+  s_467dcb949b5b60::t_4c2562a4860cb6 1-44
+docs/evidence/t13/t13-provider-read-green01-device.log
+  s_467dcb949b5b60::t_c899e06cf50b39 1-23
+docs/evidence/t13/t13-provider-read-red01-device.log
+  s_467dcb949b5b60::t_9b7646adcb81c7 1-32
+docs/evidence/t13/t13-provider-real02-credential-audit.json
+  s_467dcb949b5b60::t_75aa6e7ddbad72 1-19
+docs/evidence/t13/t13-provider-real02-device.log
+  s_467dcb949b5b60::t_942871b8273b62 1-25
+docs/evidence/t13/t13-provider-red01-device.log
+  s_467dcb949b5b60::t_ee40af58006df0 1-32
+docs/evidence/t13/t13-provider-review-native-green01-device.log
+  s_467dcb949b5b60::t_925e3598a8f0e3 1-37
+docs/evidence/t13/t13-provider-review-native-red01-device.log
+  s_467dcb949b5b60::t_69e68622b80b3e 1-71
+docs/evidence/t13/t13-provider-review-real-credential-audit.json
+  s_467dcb949b5b60::t_79ec246b135a58 1-19
+docs/evidence/t13/t13-provider-review-real-device.log
+  s_467dcb949b5b60::t_4b2a40f84a8ba0 1-25
+docs/evidence/t13/t13-provider-review-sdk-device.log
+  s_467dcb949b5b60::t_e2345f3db86908 1-25
+docs/evidence/t13/t13-provider-review-sdk-network-after.log
+  s_467dcb949b5b60::t_16faa26040e359 1-2
+docs/evidence/t13/t13-provider-review-sdk-network-before.log
+  s_467dcb949b5b60::t_a9afc53a154797 1-2
+docs/evidence/t13/t13-provider-review-sdk-network-metered.log
+  s_467dcb949b5b60::t_56516a2296270a 1-2
+docs/evidence/t13/t13-provider-routing-red01-device.log
+  s_467dcb949b5b60::t_a431eabf76e8a4 1-44
+docs/evidence/t13/t13-provider-sdk-first-device.log
+  s_467dcb949b5b60::t_be7d01b389a4f6 1-50
+docs/evidence/t13/t13-provider-sdk-first-policy-observation.json
+  s_467dcb949b5b60::t_efcc1d32bbbf76 1-206
+docs/evidence/t13/t13-provider-sdk-first-retained-observation.log
+  s_467dcb949b5b60::t_ace08efb25b1da 1-25
+docs/evidence/t13/t13-provider-sdk-second-device.log
+  s_467dcb949b5b60::t_beffa11cf24c55 1-44
+docs/evidence/t13/t13-provider-selection-green01-device.log
+  s_467dcb949b5b60::t_4a07d23474e95a 1-23
+docs/evidence/t13/t13-provider-selection-red01-device.log
+  s_467dcb949b5b60::t_7a68c74ed862fc 1-41
+docs/evidence/t13/t13-provider-staged-sequence-green.log
+  s_467dcb949b5b60::t_887359bada156c 1-15
+docs/evidence/t13/t13-provider-staged-sequence-red.log
+  s_467dcb949b5b60::t_bf9a1153f0ce2a 1-30
+docs/evidence/t13/t13-provider-write-ack-green.log
+  s_467dcb949b5b60::t_6dcad67fe8e7b9 1-14
+docs/evidence/t13/t13-provider-write-ack-red.log
+  s_467dcb949b5b60::t_2c5e17a8518407 1-46
+docs/evidence/t13/t13-provider-write-first-device.log
+  s_467dcb949b5b60::t_989f2ddb6d3d75 1-37
+docs/evidence/t13/t13-provider-write-red01-device.log
+  s_467dcb949b5b60::t_d8ea81bbbf44e1 1-41
+docs/evidence/t13/t13-public-green01-device.log
+  s_467dcb949b5b60::t_4eeb60d7af09bf 1-25
+docs/evidence/t13/t13-public-red01-device.log
+  s_467dcb949b5b60::t_338952de02e312 1-47
+docs/evidence/t13/t13-python-local03-termux.log
+  s_467dcb949b5b60::t_42a74b894b1a04 1-11
+docs/evidence/t13/t13-react-grant02-native-observation.log
+  s_467dcb949b5b60::t_4bcaa46452c5f0 1-31
+docs/evidence/t13/t13-react-grant02-retained.log
+  s_467dcb949b5b60::t_2964fef428609d 1-25
+docs/evidence/t13/t13-react-grant04-device.log
+  s_467dcb949b5b60::t_8aee5d75554830 1-49
+docs/evidence/t13/t13-react-grant04-retained.log
+  s_467dcb949b5b60::t_67a0969a581e57 1-25
+docs/evidence/t13/t13-react-grant05-device.log
+  s_467dcb949b5b60::t_df359e91a3537c 1-61
+docs/evidence/t13/t13-react-grant06-device.log
+  s_467dcb949b5b60::t_26a37f174790c1 1-49
+docs/evidence/t13/t13-react-grant08-device.log
+  s_467dcb949b5b60::t_1b8726c05589bc 1-49
+docs/evidence/t13/t13-react-grant08-network-after.log
+  s_467dcb949b5b60::t_f09d290ef9fde2 1-2
+docs/evidence/t13/t13-react-grant08-network-metered.log
+  s_467dcb949b5b60::t_3defe97641d7fb 1-2
+docs/evidence/t13/t13-review-final-lint.log
+  s_467dcb949b5b60::t_a8c0c6b95fed48 1-43
+docs/evidence/t13/t13-review-final-runtime.log
+  s_467dcb949b5b60::t_e3b833f7467209 1-299
+docs/evidence/t13/t13-review-final-ui.log
+  s_467dcb949b5b60::t_09428908c36f5c 1-32
+docs/evidence/t13/t13-review-owner-host-green.log
+  s_467dcb949b5b60::t_eb62b959fa1dce 1-17
+docs/evidence/t13/t13-review-owner-host-inrepo-red.log
+  s_467dcb949b5b60::t_c4d209553cee52 1-46
+docs/evidence/t13/t13-storage-loss-green01-device.log
+  s_467dcb949b5b60::t_d19af62c89635e 1-65
+docs/evidence/t13/t13-storage-loss-red01-device.log
+  s_467dcb949b5b60::t_ca545fdc2fa5aa 1-41
+docs/evidence/t13/t13-sweep-green01-device.log
+  s_467dcb949b5b60::t_0806840bdbcc39 1-23
+docs/evidence/t13/t13-sweep-red01-device.log
+  s_467dcb949b5b60::t_64d430d82f2ac6 1-47
+docs/evidence/t13/t13-ui-config-red01-device.log
+  s_467dcb949b5b60::t_17f4721ba339cc 1-38
+docs/evidence/t13/t13-ui-lease-green01-device.log
+  s_467dcb949b5b60::t_2b8f43a01855c5 1-25
+docs/evidence/t13/t13-ui-lease-red01-device.log
+  s_467dcb949b5b60::t_72d5ed7762d7d6 1-38
+docs/evidence/t13/t13-verify-ui-green.log
+  s_467dcb949b5b60::t_f0a3b30485ffde 1-9
+docs/evidence/t13/t13-verify-ui-red.log
+  s_467dcb949b5b60::t_59e5857d6974b2 1-187
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "8c6c06045b1eb99d2b4904aa0a4a543a52152807",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
