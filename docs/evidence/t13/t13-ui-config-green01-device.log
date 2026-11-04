@@ -1,0 +1,41 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.InputApplicationTest:
+INSTRUMENTATION_STATUS: test=configuringNewUiBridgeDoesNotWaitForAnotherStoreLease
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputEvidence={"case":"native-ui-configuration","result":{"run":"e17532ba-1d7f-4c66-9dca-7d3428ef2fa9","mainThreadConstructionMs":1,"oldReadWaitingAtConstruction":true,"sdkOwnerOpened":false}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=configuringNewUiBridgeDoesNotWaitForAnotherStoreLease
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=publicInputFreezeWaitsForShortNativeLeaseWithoutRetryingTheAction
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputEvidence={"case":"native-ui-lease-acquisition","result":{"run":"4a48451f-73f8-42ed-8064-db9b4b0e43e1","freezeRequests":1,"freezeResponses":1,"freezeElapsedMs":200,"unreleasedLeaseFailureMs":1048,"sdkOwnerOpened":false,"modelRequests":0,"sendIntents":0}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=publicInputFreezeWaitsForShortNativeLeaseWithoutRetryingTheAction
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 8.932
+
+OK (2 tests)
+
+
+INSTRUMENTATION_CODE: -1

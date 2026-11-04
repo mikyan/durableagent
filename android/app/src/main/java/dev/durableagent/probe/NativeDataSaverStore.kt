@@ -43,6 +43,39 @@ class NativeDataSaverStore(private val context:Context,private val namespace:Str
         }
         refresh(db,network);operationView(db,id,network)
     }
+    fun registerProvider(id:String,descriptor:JSONObject,network:DataSaverNetwork):JSONObject=transaction(network){db,network->
+        validateId(id);val kind=descriptor.optString("kind")
+        if(kind !in setOf("metadata","read","write","verify")||descriptor.toString().toByteArray(Charsets.UTF_8).size>8000||!descriptor.optString("documentNamespace").matches(Regex("[A-Za-z0-9._-]{1,100}"))||!descriptor.optString("uri").startsWith("content://")||descriptor.optString("uri").length>4096)fail("DATA_SAVER_INVALID","原文件观察的固定范围无效。")
+        val digest=NativeInputStore.sha256(NativeExecutionFence.canonical(descriptor).toByteArray(Charsets.UTF_8));val old=operation(db,id)
+        if(old!=null&&(old.optString("requestDigest")!=digest||old.optString("operationKind")!="provider-"+kind))fail("DATA_SAVER_IDENTITY_CONFLICT","原文件观察身份已绑定其他范围。")
+        if(old==null){
+            val owner=descriptor.optJSONObject("owner")
+            val value=JSONObject().put("executionId",id).put("requestDigest",digest).put("finalDigest",digest).put("operationKind","provider-"+kind)
+                .put("productId",owner?.getString("productId")?:JSONObject.NULL).put("controlGeneration",owner?.getLong("controlGeneration")?:JSONObject.NULL)
+                .put("namespace","saf:"+NativeInputStore.sha256(descriptor.getString("uri").toByteArray(Charsets.UTF_8))).put("classification","unknown")
+                .put("summary","原文件 "+kind+"："+descriptor.getString("uri").take(400)).put("grantPeriod",JSONObject.NULL).put("providerRequest",JSONObject(descriptor.toString()))
+            db.execSQL("INSERT INTO operations(id,data) VALUES(?,?)",arrayOf(id,value.toString()))
+        }
+        refresh(db,network);operationView(db,id,network)
+    }
+    fun providerRecord(id:String,network:DataSaverNetwork):JSONObject=transaction(network){db,network->
+        refresh(db,network);val value=operation(db,id)?:fail("DATA_SAVER_NOT_FOUND","原文件观察不存在。")
+        if(!value.has("providerRequest"))fail("DATA_SAVER_IDENTITY_CONFLICT","此身份不是原文件观察。")
+        value
+    }
+    fun completeProvider(id:String,result:JSONObject,network:DataSaverNetwork):JSONObject=transaction(network){db,network->
+        val value=operation(db,id)?:fail("DATA_SAVER_NOT_FOUND","原文件观察不存在。")
+        if(!value.has("providerRequest")||!value.optBoolean("dispatched")||result.toString().toByteArray(Charsets.UTF_8).size>60000)fail("DATA_SAVER_INVALID","原文件观察结果无法保存。")
+        if(value.has("providerResult"))return@transaction value.getJSONObject("providerResult")
+        val state=if(value.getJSONObject("providerRequest").getString("kind")=="write")result.optString("state").takeIf{it in setOf("completed","stopped","not_started")&&result.optBoolean("scopeConfirmed")}?:fail("DATA_SAVER_RESULT_UNVERIFIED","原文件写入结果未确认。")else "completed"
+        value.put("providerResult",JSONObject(result.toString())).put("state",state).put("terminal",true).put("scopeConfirmed",true)
+        saveOperation(db,value);refresh(db,network);JSONObject(result.toString())
+    }
+    fun failProvider(id:String,network:DataSaverNetwork):Unit=transaction(network){db,network->
+        val value=operation(db,id)?:fail("DATA_SAVER_NOT_FOUND","原文件观察不存在。")
+        if(!value.optBoolean("terminal")){value.put("state","unknown").put("providerUnconfirmed",true);saveOperation(db,value)}
+        refresh(db,network)
+    }
     fun decision(executionId:String,network:DataSaverNetwork):JSONObject=transaction(network){db,network->refresh(db,network);operationView(db,executionId,network)}
     fun operations(productId:String,cursor:String?,network:DataSaverNetwork):JSONObject=transaction(network){db,network->
         refresh(db,network)
@@ -64,7 +97,7 @@ class NativeDataSaverStore(private val context:Context,private val namespace:Str
         if(current.optBoolean("policyInterrupted"))return@transaction Denied("DATA_SAVER_INTERRUPTED","网络变化后的原执行不能自动重跑。")
         if(current.getString("phase")=="terminal")return@transaction Denied("DATA_SAVER_TERMINAL","原执行已经结束，不能再次启动。")
         if(current.getString("phase") !in setOf("allowed","granted"))return@transaction Denied("DATA_SAVER_WAIT","省流等待：尚未满足本次固定执行的网络条件。")
-        current.put("dispatched",true);saveOperation(db,current);Accepted(operationView(db,executionId,network))
+        val stored=operation(db,executionId)!!;stored.put("dispatched",true);saveOperation(db,stored);Accepted(operationView(db,executionId,network))
     })
     fun claimAffected(network:DataSaverNetwork,after:String=""):JSONObject=transaction(network){db,network->
         refresh(db,network);invalidateRunning(db,network)
@@ -128,8 +161,14 @@ class NativeDataSaverStore(private val context:Context,private val namespace:Str
     private fun saveOperation(db:SQLiteDatabase,value:JSONObject){db.execSQL("UPDATE operations SET data=? WHERE id=?",arrayOf(value.toString(),value.getString("executionId")))}
     private fun operationView(db:SQLiteDatabase,id:String,network:DataSaverNetwork):JSONObject{
         val value=operation(db,id)?:fail("DATA_SAVER_NOT_FOUND","固定执行不存在。")
-        val policy=view(db,network);val phase=when{value.optBoolean("terminal")->"terminal";value.optBoolean("policyInterrupted")->"result-unverified";(!policy.getBoolean("restricted")||value.optString("classification")=="controlled-local")->"allowed";granted(value,policy)->"granted";else->"waiting"}
-        return value.put("phase",phase).put("period",policy.getLong("period")).put("reason",policy.getString("reason"))
+        // Published v1 rows omit this field until requireStart durably sets true.
+        // Project that known native-ledger default explicitly; callers must not
+        // guess that an absent or malformed transport field means no dispatch.
+        val dispatched=if(!value.has("dispatched"))false else value.opt("dispatched") as? Boolean
+            ?:fail("DATA_SAVER_STORAGE_FAILED","省流派发记录无法核验，保留记录且不下发受控操作。")
+        val policy=view(db,network);val phase=when{value.optBoolean("terminal")->"terminal";value.optBoolean("policyInterrupted")||value.optBoolean("providerUnconfirmed")->"result-unverified";(!policy.getBoolean("restricted")||value.optString("classification")=="controlled-local")->"allowed";granted(value,policy)->"granted";else->"waiting"}
+        value.remove("providerRequest");value.remove("providerResult");value.remove("localCapability")
+        return value.put("dispatched",dispatched).put("phase",phase).put("period",policy.getLong("period")).put("reason",policy.getString("reason"))
     }
     private fun granted(value:JSONObject,policy:JSONObject)=value.optLong("grantPeriod",-1)==policy.getLong("period")&&!value.isNull("finalDigest")&&value.optString("grantFinalDigest")==value.getString("finalDigest")
     private fun invalidateRunning(db:SQLiteDatabase,network:DataSaverNetwork){

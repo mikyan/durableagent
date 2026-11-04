@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualLocalFilesAndFixedBashContinueWhileAnotherConversationWaitsForPolicy
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: dataSaverExecutionEvidence={"case":"actual-controlled-local-and-policy-writer-order","run":"2a8c3dab-45c7-47a6-aef0-b96dabe99884","outcomes":[{"input":"FILE_QUEUE_SETUP","tool":"FILE-QUEUE-SETUP:{\"path\":\"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-2a8c3dab-45c7-47a6-aef0-b96dabe99884\/queue.txt\",\"bytes\":0}"},{"input":"FILE_QUEUE_LOCAL","tool":"FILE-QUEUE-LOCAL-PASS:{\"path\":\"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-2a8c3dab-45c7-47a6-aef0-b96dabe99884\/queue.txt\"}"},{"input":"FILE_QUEUE_READ","tool":"FILE-QUEUE-READ:{\"path\":\"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-2a8c3dab-45c7-47a6-aef0-b96dabe99884\/queue.txt\",\"text\":\"local\\n\",\"sha256\":\"efb83f2a277e9f49b38efd505f5cbb93885e721b6bd16b788937c9396174c006\"}"},{"input":"EXEC_LOCAL_PWD","tool":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\n"}],"localOperations":[{"executionId":"68c4d985-191a-4e2b-8595-d0608bd8e071","requestDigest":"c9933afdf5eb38b99483048bfd1be999a6b28f338531be8db64e6ec5d97fb79e","productId":"local-chat","controlGeneration":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","classification":"controlled-local","summary":"{\"kind\":\"shell\",\"script\":\"builtin pwd -P\"}","grantPeriod":null,"finalDigest":"0964215421c3739c2ec933dd0d30dab35ddd42dde6ca37df409644205347d649","sequence":5,"state":"completed","scopeConfirmed":true,"terminal":true,"dispatched":true,"phase":"terminal","period":2,"reason":"metered"},{"executionId":"f4a494c6-2b59-4d84-92b3-67a1727211f4","requestDigest":"b68bc283f10858a979de8f16a112b2f5195f2dd1c6f51e764dceffdcec93e60d","productId":"local-chat","controlGeneration":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","classification":"controlled-local","summary":"{\"kind\":\"argv\",\"argv\":[\"\\\/data\\\/data\\\/com.termux\\\/files\\\/usr\\\/bin\\\/python\",\"\\\/data\\\/data\\\/com.termux\\\/files\\\/home\\\/.local\\\/share\\\/durableagent-execution\\\/file_service.py\",\"apply\",\"\\\/data\\\/data\\\/com.termux\\\/files\\\/home\\\/.local\\\/share\\\/durableagent-execution\\\/file-capabilities\",\"5ae9a8cf-fd00-475c-a7b3-fa41d99219ed\"]}","grantPeriod":null,"finalDigest":"b8289a7f336b84edb44a205477ae4c6f5417c83d74863d3b72b4eb602558564c","sequence":4,"state":"completed","scopeConfirmed":true,"terminal":true,"dispatched":true,"phase":"terminal","period":2,"reason":"metered"},{"executionId":"dbb699c0-7b3b-4251-87a6-79d042736dbc","requestDigest":"f1bb61864d2d6e71a6cb3c926e79666114a185311f7a5b117b47d924cab430d8","productId":"local-chat","controlGeneration":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","classification":"controlled-local","summary":"{\"kind\":\"argv\",\"argv\":[\"\\\/data\\\/data\\\/com.termux\\\/files\\\/usr\\\/bin\\\/python\",\"\\\/data\\\/data\\\/com.termux\\\/files\\\/home\\\/.local\\\/share\\\/durableagent-execution\\\/file_service.py\",\"apply\",\"\\\/data\\\/data\\\/com.termux\\\/files\\\/home\\\/.local\\\/share\\\/durableagent-execution\\\/file-capabilities\",\"6e8765ec-9e23-40b3-a75f-8036a02d41b3\"]}","grantPeriod":null,"finalDigest":"530e8664fc2cafc559907b45c3157572cc218d40b32ae0cba32687adc7c83665","sequence":4,"state":"completed","scopeConfirmed":true,"terminal":true,"dispatched":true,"phase":"terminal","period":2,"reason":"metered"}],"unknownExecutionId":"8978a35d-2a96-4f22-aec8-50bf33e2b8e6","temporaryGrants":0,"modelRequests":9}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualLocalFilesAndFixedBashContinueWhileAnotherConversationWaitsForPolicy
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 37.909
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

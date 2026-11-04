@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: dataSaverExecutionEvidence={"case":"actual-react-single-grant","run":"e3edc622-6981-4b89-b874-ff616f768a86","productId":"d1bb9edd-53e0-4107-9e2a-42deb86d3e7d","firstExecutionId":"799d2fdd-134a-458a-a7b0-7c0e213eb004","nextExecutionId":"f55f16b3-0b73-4b26-870f-a8a20de0e0de","globalEnabled":true,"modelRequests":3,"grantInput":"instrumentation-pointer","firstVisible":{"visible":true,"width":412,"x":76.7648811340332,"y":293.47619915008545},"nextVisible":{"visible":true,"width":412,"x":76.7648811340332,"y":222.4285764694214},"beforeScreenshot":"files\/validation-ui\/t13-e3edc622-6981-4b89-b874-ff616f768a86-waiting.png","afterScreenshot":"files\/validation-ui\/t13-e3edc622-6981-4b89-b874-ff616f768a86-next-waiting.png"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 13.401
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

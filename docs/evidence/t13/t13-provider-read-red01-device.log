@@ -1,0 +1,32 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverProviderTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverProviderTest:
+INSTRUMENTATION_STATUS: test=aProviderReadRequiresItsOwnGrantAndReopenUsesOnlyTheFixedSnapshot
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverProviderTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=dev.durableagent.probe.NativeInputException: 原文件固定读取尚未就绪。
+
+INSTRUMENTATION_STATUS: stream=
+Error in aProviderReadRequiresItsOwnGrantAndReopenUsesOnlyTheFixedSnapshot(dev.durableagent.probe.DataSaverProviderTest):
+dev.durableagent.probe.NativeInputException: 原文件固定读取尚未就绪。
+
+INSTRUMENTATION_STATUS: test=aProviderReadRequiresItsOwnGrantAndReopenUsesOnlyTheFixedSnapshot
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 3.47
+There was 1 failure:
+1) aProviderReadRequiresItsOwnGrantAndReopenUsesOnlyTheFixedSnapshot(dev.durableagent.probe.DataSaverProviderTest)
+dev.durableagent.probe.NativeInputException: 原文件固定读取尚未就绪。
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

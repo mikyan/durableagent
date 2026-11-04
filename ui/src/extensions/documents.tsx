@@ -7,7 +7,7 @@ function resource(value:OriginalResource):OriginalResource {
  if(!value||value.protocol!==1||value.original!==true||value.source!=='saf'||!/^[a-f0-9]{64}$/.test(value.resourceId)||value.namespace!=='saf:'+value.resourceId||typeof value.uri!=='string'||!value.uri.startsWith('content://')||typeof value.displayName!=='string'||typeof value.mimeType!=='string'||!['available','permission_required','not_found','unavailable'].includes(value.availability)||!value.grant||[value.grant.read,value.grant.write,value.grant.persistedRead,value.grant.persistedWrite].some(flag=>typeof flag!=='boolean'))throw Error('原文件身份或当前授权尚未确认。');
  return value;
 }
-const access=(row:OriginalResource)=>row.availability!=='available'?(row.reason??'原文件当前不可用。'):row.grant.write?'当前可读写原件':'当前仅可读取原件';
+const access=(row:OriginalResource)=>row.freshness&&row.freshness!=='not-observed'?'上次观察的原件状态（当前系统授权另行核验）':row.availability!=='available'?(row.reason??'原文件当前不可用。'):row.grant.write?'当前可读写原件':'当前仅可读取原件';
 
 /** Native selection/observation works independently from the model's event loop. */
 export function DocumentsPanel({client}:{client?:TimelineClient}) {
@@ -30,13 +30,21 @@ export function DocumentsPanel({client}:{client?:TimelineClient}) {
   }catch(reason){if(generation===epoch.current)setError(reason instanceof Error?reason.message:'原文件选择未确认，请刷新当前授权。');}
   finally{if(generation===epoch.current){active.current=false;setBusy(false);}}
  }
+ async function observe(row:OriginalResource,resume=false){
+  if(!client||active.current)return;const generation=epoch.current;active.current=true;setBusy(true);setError(undefined);
+  try{const pending=row.observation;if(resume&&!pending)throw Error('原文件观察身份尚未确认。');
+   const value=resource(await client.request<OriginalResource>(resume?'document.resumeObservation':'document.describe',resume?{resourceId:row.resourceId,operationId:pending!.executionId,requestDigest:pending!.requestDigest,period:pending!.period}:{resourceId:row.resourceId}));
+   if(generation!==epoch.current)return;setRows(previous=>previous.map(item=>item.resourceId===value.resourceId?value:item));
+  }catch(reason){if(generation===epoch.current)setError(reason instanceof Error?reason.message:'原文件观察尚未确认。');}
+  finally{if(generation===epoch.current){active.current=false;setBusy(false);}}
+ }
  return <details className="original-documents" onToggle={event=>{if(event.currentTarget.open&&!loaded)void load();}}>
   <summary>原文件{rows.length?` · ${rows.length} 项已显示`:''}</summary>
   <div className="original-document-body"><p>选择要处理的真实文件。后续修改会写回原件；文件内容在会话工具读取时才进入模型。</p>
-   <div className="original-document-actions"><button type="button" data-testid="select-original-document" disabled={!client||busy} onClick={()=>void select()}>选择原文件</button><button type="button" disabled={!client||busy} onClick={()=>void load()}>刷新授权</button></div>
+   <div className="original-document-actions"><button type="button" data-testid="select-original-document" disabled={!client||busy} onClick={()=>void select()}>选择原文件</button><button type="button" disabled={!client||busy} onClick={()=>void load()}>刷新已选列表</button></div>
    {busy&&<p role="status">正在核验原件，或等待系统文件选择…</p>}{error&&<p role="alert">{error}</p>}{notice&&<p role="status">{notice}</p>}
    {loaded&&!rows.length&&!busy&&<p>尚未选择原文件。</p>}
-   {rows.map(row=><article key={row.resourceId} data-testid="original-document"><strong>{row.displayName}</strong><span className="original-document-badge">原件</span><p>{access(row)}</p><code title="提供者中的真实位置">{row.uri}</code><small>{row.mimeType}{typeof row.byteLength==='number'?` · ${row.byteLength} 字节`:''}{row.grant.read&&!row.grant.persistedRead?' · 读取授权未长期保留，重开后可能需重新选择':''}{row.grant.write&&!row.grant.persistedWrite?' · 写入授权未长期保留':''}</small></article>)}
+   {rows.map(row=><article key={row.resourceId} data-testid="original-document"><strong>{row.displayName}</strong><span className="original-document-badge">原件</span><p>{access(row)}</p>{row.observation?.phase==='waiting'&&<><p>省流等待：此提供者可能联网，仅放行当前 URI 的这一次观察；不会授权后续读取或写入。</p><button type="button" disabled={busy} onClick={()=>void observe(row,true)}>仅放行这次原文件观察</button></>}{row.observation?.phase==='result-unverified'&&<p>网络变化后结果待核验，未重复访问原件。</p>}<button type="button" disabled={busy} onClick={()=>void observe(row)}>重新观察原件状态</button><code title="提供者中的真实位置">{row.uri}</code><small>{row.mimeType}{typeof row.byteLength==='number'?` · ${row.byteLength} 字节`:''}{row.grant.read&&!row.grant.persistedRead?' · 读取授权未长期保留，重开后可能需重新选择':''}{row.grant.write&&!row.grant.persistedWrite?' · 写入授权未长期保留':''}</small></article>)}
    {cursor&&rows.length<200&&<button type="button" disabled={busy} onClick={()=>void load(true)}>更多已选原件</button>}
    {cursor&&rows.length>=200&&<p>此处最多显示 200 项；记录和原件仍保留。</p>}
   </div>

@@ -24,23 +24,33 @@ function documentReceipt(value:any,row:Change):Change {
  return next;
 }
 function verificationLabel(value:any,confirmed:boolean):string {
+ if(value?.status==='waiting'){verificationObservation(value.observation);return '省流等待：此提供者可能联网，本次只读核验需要单独放行。';}
+ if(value?.status==='result-unverified')return '原件核验结果待确认，未重复访问提供者；已有写入状态保持不变。';
  if(!value||!Number.isSafeInteger(value.observedAt)||value.observedAt<0)throw Error('原件只读核验格式无法确认。');
  if(value.status==='read'){
   if(!digest(value.currentDigest)||!Number.isSafeInteger(value.byteLength)||value.byteLength<0||typeof value.matchesExpected!=='boolean'||typeof value.matchesContent!=='boolean')throw Error('原件只读核验格式无法确认。');
-  return value.matchesContent?(confirmed?'当前内容与本次写入相符。':'当前内容与本次写入相符；执行范围仍未确认。'):value.matchesExpected?'当前内容与写入前的内容相符。':'当前内容已发生变化。';
+  return value.matchesContent?(confirmed?'本次观察的内容与本次写入相符。':'本次观察的内容与本次写入相符；执行范围仍未确认。'):value.matchesExpected?'本次观察的内容与写入前的内容相符。':'本次观察的内容已发生变化。';
  }
  if(value.status==='changed_during_read')return '核验过程中原件发生变化，未得到稳定内容。';
  if(value.status==='unavailable')return '当前无法读取原件；已有执行状态保持不变。';
  throw Error('原件只读核验格式无法确认。');
 }
+type VerificationObservation={executionId:string;requestDigest:string;period:number;phase:'waiting'};
+function verificationObservation(value:any):VerificationObservation {
+ if(!value||!id(value.executionId)||!digest(value.requestDigest)||!Number.isSafeInteger(value.period)||value.period<0||value.phase!=='waiting')throw Error('原件核验的省流身份无法确认。');
+ return value;
+}
 function ChangeRow({row,controller}:{row:Change;controller:ConversationController}){
  const [native,setNative]=useState<Change>(),[busy,setBusy]=useState(false),[notice,setNotice]=useState<string>(),[error,setError]=useState<string>();
+ const [observation,setObservation]=useState<VerificationObservation>();
  const alive=useRef(true);useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
  const current=native&&native.requestDigest===row.requestDigest&&(terminal(native)||Number(native.sequence)>=Number(row.sequence))?native:row;
  const capable=digest(row.resourceId)&&digest(row.requestDigest)&&row.namespace==='saf:'+row.resourceId&&Number.isSafeInteger(row.sequence)&&row.path.startsWith('content://');
- async function inspect(method:'document.query'|'document.verify'){
+ async function inspect(method:'document.query'|'document.verify'|'document.resumeVerification'){
   if(busy||!controller.extensionClient||!capable)return;setBusy(true);setError(undefined);setNotice(undefined);
-  try{const value=await controller.extensionClient.request<any>(method,{operationId:row.operationId});const next=documentReceipt(value,current);const label=method==='document.verify'?verificationLabel(value.verification,next.scopeConfirmed):'原生状态已核验';if(alive.current){setNative(next);setNotice(label);}}
+  try{if(method==='document.resumeVerification'&&!observation)throw Error('原件核验身份尚未确认。');
+   const payload={operationId:row.operationId,...(method==='document.resumeVerification'?{observationId:observation!.executionId,requestDigest:observation!.requestDigest,period:observation!.period}:{})};
+   const value=await controller.extensionClient.request<any>(method,payload);const next=documentReceipt(value,current);const label=method!=='document.query'?verificationLabel(value.verification,next.scopeConfirmed):'原生状态已核验';if(alive.current){setNative(next);setNotice(label);if(method!=='document.query')setObservation(value.verification?.status==='waiting'?verificationObservation(value.verification.observation):undefined);}}
   catch(reason){if(alive.current)setError(reason instanceof Error?reason.message:'尚未得到原生核验结果。');}finally{if(alive.current)setBusy(false);}
  }
  return <li>
@@ -49,6 +59,7 @@ function ChangeRow({row,controller}:{row:Change;controller:ConversationControlle
   <details><summary>查看操作关联</summary><code>文件操作：{current.operationId}</code><code>执行：{current.executionId??'尚未登记执行'}</code><code>位置关联：{current.bindingId}</code></details>
   {current.diff.available?<pre className="file-diff">{current.diff.text||'内容未变化'}</pre>:<p>{reasons[current.diff.reason??'']??'本次文本差异不可得'}</p>}
   {capable&&<div className="execution-actions"><button type="button" disabled={busy} onClick={()=>void inspect('document.query')}>直接核验原件状态</button><button type="button" disabled={busy} onClick={()=>void inspect('document.verify')}>只读核验原件内容</button></div>}
+  {observation&&<div><p>仅访问当前原件完成这一次固定观察；不会授权写入，也不会把相同内容当作执行范围已结束。</p><button type="button" disabled={busy} onClick={()=>void inspect('document.resumeVerification')}>仅放行这次只读核验</button></div>}
   {notice&&<p role="status">{notice}</p>}{error&&<p role="alert">{error}</p>}
  </li>;
 }

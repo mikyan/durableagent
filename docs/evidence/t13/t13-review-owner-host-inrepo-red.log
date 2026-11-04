@@ -1,0 +1,46 @@
+(node:76844) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ an original write waits before occupying the shared writer and exact grant resumes the same native plan (DATA_SAVER_BUSY) (480.011ms)
+✖ a native queue refusal before start admission retries only the same fixed original write (10169.1562ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10919.8176
+
+✖ failing tests:
+
+test at test\data-saver-documents.test.mjs:39:64
+✖ an original write waits before occupying the shared writer and exact grant resumes the same native plan (DATA_SAVER_BUSY) (480.011ms)
+  AssertionError [ERR_ASSERTION]: A pre-start policy wait cannot fail the tool and generate a model continuation
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t13-data-saver/durableagent/runtime/test/data-saver-documents.test.mjs:53:10)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test\data-saver-documents.test.mjs:58:1
+✖ a native queue refusal before start admission retries only the same fixed original write (10169.1562ms)
+  AssertionError [ERR_ASSERTION]: Document policy behavior did not settle
+      at until (file:///C:/Users/AI_BA/.codex/worktrees/t13-data-saver/durableagent/runtime/test/data-saver-documents.test.mjs:13:88)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t13-data-saver/durableagent/runtime/test/data-saver-documents.test.mjs:71:162)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

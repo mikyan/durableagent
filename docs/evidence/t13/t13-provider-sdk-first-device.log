@@ -1,0 +1,50 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualSdkOriginalReadAndWriteNeedIndependentPolicyGrants
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: <harness>
+[error] 原件写入结果尚未核验；保留原操作身份，不自动重写
+</harness>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.originalFlow(DataSaverExecutionTest.kt:137)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualSdkOriginalReadAndWriteNeedIndependentPolicyGrants(DataSaverExecutionTest.kt:109)
+
+INSTRUMENTATION_STATUS: stream=
+Error in actualSdkOriginalReadAndWriteNeedIndependentPolicyGrants(dev.durableagent.probe.DataSaverExecutionTest):
+java.lang.AssertionError: <harness>
+[error] 原件写入结果尚未核验；保留原操作身份，不自动重写
+</harness>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.originalFlow(DataSaverExecutionTest.kt:137)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualSdkOriginalReadAndWriteNeedIndependentPolicyGrants(DataSaverExecutionTest.kt:109)
+
+INSTRUMENTATION_STATUS: test=actualSdkOriginalReadAndWriteNeedIndependentPolicyGrants
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 32.574
+There was 1 failure:
+1) actualSdkOriginalReadAndWriteNeedIndependentPolicyGrants(dev.durableagent.probe.DataSaverExecutionTest)
+java.lang.AssertionError: <harness>
+[error] 原件写入结果尚未核验；保留原操作身份，不自动重写
+</harness>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.originalFlow(DataSaverExecutionTest.kt:137)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualSdkOriginalReadAndWriteNeedIndependentPolicyGrants(DataSaverExecutionTest.kt:109)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

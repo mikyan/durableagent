@@ -18,8 +18,9 @@ class NativeDataSaverAccess private constructor(private val context:Context,priv
         if(proof==null||implementation.optInt("version")!=1)return false
         if(proof.optString("kind") !in setOf("physical-cwd-v1","file-apply-v1"))return false
         if(proof.optString("kind")=="file-apply-v1"&&proof.opt("isolatedPython")!=true)return false
-        return listOf("runnerSha256","helperSha256").all{val expected=implementation.optString(it);expected.matches(Regex("[a-f0-9]{64}"))&&proof.optString(it)==expected}
+        return matchesImplementation(proof)
     }
+    private fun matchesImplementation(proof:JSONObject):Boolean=implementation.optInt("version")==1&&listOf("runnerSha256","helperSha256").all{val expected=implementation.optString(it);expected.matches(Regex("[a-f0-9]{64}"))&&proof.optString(it)==expected}
     @V8Function fun requestJson(method:String,payloadJson:String):String=try {
         val value=JSONObject(payloadJson)
         val result=when(method){
@@ -41,16 +42,22 @@ class NativeDataSaverAccess private constructor(private val context:Context,priv
             }
             "grant"->{
                 val id=value.getString("executionId")
-                NativeInputStore(context,namespace).withLeaseWait(1000).use{it.requireEffect(id)}
                 val original=store.decision(id,current())
                 if(original.optString("finalDigest")!=value.getString("finalDigest"))throw NativeInputException("DATA_SAVER_IDENTITY_CONFLICT","许可的最终执行内容不一致。")
-                store.grant(id,value.getString("requestDigest"),value.getLong("period"),current())
+                if(original.optString("operationKind").startsWith("provider-"))NativeProviderPolicy(context,namespace,current).use{it.grant(id,value.getString("requestDigest"),value.getLong("period"))}
+                else {NativeInputStore(context,namespace).withLeaseWait(1000).use{it.requireEffect(id)};store.grant(id,value.getString("requestDigest"),value.getLong("period"),current())}
             }
             else->throw NativeInputException("DATA_SAVER_UNAVAILABLE","省流执行核验尚未就绪。")
         }
         JSONObject().put("ok",true).put("value",result).toString()
     }catch(error:NativeInputException){JSONObject().put("ok",false).put("error",JSONObject().put("code",error.code).put("message",error.message)).toString()}
     catch(_:Exception){JSONObject().put("ok",false).put("error",JSONObject().put("code","DATA_SAVER_UNAVAILABLE").put("message","省流事实无法核验，受控操作暂不开始。")).toString()}
+    fun requireLocalFiles(identity:JSONObject){
+        val policy=store.query(current());if(!policy.getBoolean("restricted"))return
+        val proof=identity.optJSONObject("localCapabilities")
+        if(identity.optInt("protocol")!=1||identity.optString("namespace")!="termux:"+identity.optString("executorId")||proof?.optInt("version")!=1||!matchesImplementation(proof))
+            throw NativeInputException("DATA_SAVER_CAPABILITY_UNVERIFIED","受限网络下尚未核验执行端本地文件实现，请先更新并连接受管执行环境。")
+    }
     fun remember(request:JSONObject)=store.register(request,current())
     private fun controlProjection(value:JSONObject,known:JSONObject?=null):JSONObject {
         // This is a current read projection, not a terminal proof or a new policy cancellation.

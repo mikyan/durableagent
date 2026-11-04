@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverApplicationTest:
+INSTRUMENTATION_STATUS: test=publicSettingUsesNativeFactsAndSurvivesFreshSdkOwnerWithoutRequests
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: dataSaverEvidence={"case":"public-native-setting-reopen","setting":{"enabled":true,"version":1,"period":2,"network":{"identity":"1:445787328525","known":true,"metered":false,"blocked":false},"restricted":false,"reason":"unrestricted"},"requests":0,"freshOwner":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=publicSettingUsesNativeFactsAndSurvivesFreshSdkOwnerWithoutRequests
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 7.021
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

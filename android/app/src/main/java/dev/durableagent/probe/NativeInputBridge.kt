@@ -9,7 +9,9 @@ import java.util.concurrent.atomic.AtomicInteger
 
 /** Same public envelope, independently routed before any Node/Binder owner queue. */
 class NativeInputBridge(private val activity:Activity,namespace:String,private val mode:String="product",private val run:String?=null,private val deliver:(String)->Unit):AutoCloseable {
-    private val store=NativeInputStore(activity,namespace)
+    // Native workers may wait briefly before acquiring a competing owner's
+    // metadata lease. The request body/transaction is still executed only once.
+    private val store=NativeInputStore(activity,namespace).withLeaseWait(1000)
     private val access=NativeInputAccess(store)
     private val writes=Executors.newSingleThreadExecutor()
     private val sources=Executors.newFixedThreadPool(2)

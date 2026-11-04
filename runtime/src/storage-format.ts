@@ -17,6 +17,7 @@ export const APPLICATION_RECORD_FORMATS:Readonly<Record<string,ApplicationRecord
  'app.managed-file-intent':{version:1,scope:'session'},
  'app.managed-file-index':{version:1,scope:'session'},
  'app.managed-document-intent':{version:1,scope:'session'},
+ 'app.document-observation':{version:1,scope:'session'},
  'app.managed-document-index':{version:1,scope:'session'},
 };
 /** Definition-free public reads verify even dormant records before Harness.open can reconcile work.

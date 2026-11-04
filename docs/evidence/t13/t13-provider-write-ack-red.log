@@ -1,0 +1,46 @@
+(node:69012) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ a confirmed original write survives policy receipt loss (start response lost) without another write (410.842ms)
+✖ a confirmed original write survives policy receipt loss (pending SDK receipt) without another write (10204.4955ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10914.7965
+
+✖ failing tests:
+
+test at test\data-saver-documents.test.mjs:58:40
+✖ a confirmed original write survives policy receipt loss (start response lost) without another write (410.842ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /原件写入已核验/. Input:
+  
+  '<harness>\n[error] 原件写入结果尚未核验；保留原操作身份，不自动重写\n</harness>'
+  
+      at TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t13-data-saver/durableagent/runtime/test/data-saver-documents.test.mjs:72:91)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<harness>\n[error] 原件写入结果尚未核验；保留原操作身份，不自动重写\n</harness>',
+    expected: /原件写入已核验/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at test\data-saver-documents.test.mjs:58:40
+✖ a confirmed original write survives policy receipt loss (pending SDK receipt) without another write (10204.4955ms)
+  AssertionError [ERR_ASSERTION]: Document policy behavior did not settle
+      at until (file:///C:/Users/AI_BA/.codex/worktrees/t13-data-saver/durableagent/runtime/test/data-saver-documents.test.mjs:13:88)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t13-data-saver/durableagent/runtime/test/data-saver-documents.test.mjs:71:190)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

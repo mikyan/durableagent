@@ -9,8 +9,8 @@ import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
 /** Picker and observations only. The page cannot dispatch original file mutations. */
-class NativeDocumentBridge(private val activity:Activity,namespace:String,private val deliver:(String)->Unit):AutoCloseable {
-    private val store=NativeDocumentStore(activity,namespace)
+class NativeDocumentBridge(private val activity:Activity,namespace:String,inputNamespace:String="input-v1",private val deliver:(String)->Unit):AutoCloseable {
+    private val store=NativeDocumentStore(activity,namespace,inputNamespace)
     private val worker=pool(2,8,"DocumentObservation")
     private val control=pool(1,8,"DocumentReceipt")
     private var selection:JSONObject?=null
@@ -18,7 +18,7 @@ class NativeDocumentBridge(private val activity:Activity,namespace:String,privat
     fun accept(encoded:String):Boolean {
         val request=try{JSONObject(encoded)}catch(_:Exception){return false}
         val method=request.optString("method")
-        if(method !in setOf("document.select","document.list","document.describe","document.query","document.verify"))return false
+        if(method !in setOf("document.select","document.list","document.describe","document.query","document.verify","document.resumeObservation","document.resumeVerification"))return false
         if(encoded.toByteArray(Charsets.UTF_8).size>60000||request.optString("connectionId").length !in 1..128||request.optString("requestId").length !in 1..128){reply(request,failure("DOCUMENT_INVALID","原文件请求格式无效。"));return true}
         if(request.optInt("protocol")!=1){reply(request,failure("PROTOCOL_MISMATCH","界面与原文件能力版本不兼容。"));return true}
         if(method=="document.select"){
@@ -34,6 +34,8 @@ class NativeDocumentBridge(private val activity:Activity,namespace:String,privat
                 "document.list"->store.list(if(payload.has("cursor"))payload.getString("cursor")else null)
                 "document.query"->store.query(payload.getString("operationId"))
                 "document.verify"->store.verify(payload.getString("operationId"))
+                "document.resumeVerification"->store.resumeVerification(payload.getString("operationId"),payload.getString("observationId"),payload.getString("requestDigest"),payload.getLong("period"))
+                "document.resumeObservation"->store.resumeObservation(payload.getString("resourceId"),payload.getString("operationId"),payload.getString("requestDigest"),payload.getLong("period"))
                 else->store.describe(payload.getString("resourceId"))
             }
         }

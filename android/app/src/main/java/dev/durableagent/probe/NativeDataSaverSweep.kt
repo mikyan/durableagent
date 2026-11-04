@@ -12,7 +12,11 @@ class NativeDataSaverSweep(private val store:NativeDataSaverStore,private val cu
             val page=store.claimAffected(current(),cursor);val rows=page.getJSONArray("operations")
             for(index in 0 until rows.length()){
                 if(Thread.currentThread().isInterrupted)break
-                val row=store.beginPolicyCancellation(rows.getJSONObject(index).getString("executionId"),current())?:continue
+                val candidate=rows.getJSONObject(index)
+                // Provider I/O is not an executor process. It may still be blocked inside
+                // another UID; retain uncertainty and let its own final receipt settle.
+                if(candidate.optString("operationKind").startsWith("provider-")){store.failProvider(candidate.getString("executionId"),current());continue}
+                val row=store.beginPolicyCancellation(candidate.getString("executionId"),current())?:continue
                 attempted++
                 try {
                     val observed=store.observe(cancel(row),current());if(observed.optBoolean("terminal"))confirmed++

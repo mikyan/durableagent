@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.FileNativeObservationTest:
+INSTRUMENTATION_STATUS: test=inspectRetainedSdkHistoryWithoutOpeningHarness
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: retainedFileHistoryObservation={"files":[],"tasks":[{"id":17,"conversationId":5,"kind":"pi.generation","abortRequested":false,"background":false,"startedAt":1793785015725,"status":"waiting","checkpoint":"{\"phase\":\"tools\",\"assistant\":19,\"tools\":[20],\"pending\":[]}","input":"{}"},{"id":20,"conversationId":5,"kind":"pi.tool","owner":17,"abortRequested":false,"background":false,"startedAt":1793785016687,"status":"running","checkpoint":"{\"phase\":\"execute\",\"arguments\":{\"command\":\"printf 'Termux SDK 世界\\\\n'; printf 'stderr-marker\\\\n' >&2; printf 'one\\\\n' >> '.durableagent-t09-2263f4b3-3dd8-4aaa-b496-6fe68a5dc0c1-success'\"},\"replay\":\"safe\"}","input":"{\"kind\":\"model\",\"assistant\":19,\"callId\":\"location-1\"}"},{"id":36,"conversationId":24,"kind":"pi.generation","abortRequested":false,"background":false,"startedAt":1793785018030,"endedAt":1793785018549,"status":"terminal","outcome":{"status":"completed","result":{"entryId":38}},"input":"{}"},{"id":39,"conversationId":24,"kind":"pi.tool","owner":36,"abortRequested":false,"background":false,"startedAt":1793785018237,"endedAt":1793785018518,"status":"terminal","outcome":{"status":"failed","error":{"message":"Tool file_contract threw"},"result":{"kind":"model","entryId":40}},"input":"{\"kind\":\"model\",\"assistant\":38,\"callId\":\"location-2\"}"},{"id":41,"conversationId":24,"kind":"pi.generation","abortRequested":false,"background":false,"startedAt":1793785018568,"endedAt":1793785018839,"status":"terminal","outcome":{"status":"completed","result":{"entryId":42}},"input":"{}"}],"tasksLimited":false,"submissions":[{"conversationId":5,"requestId":"9235ec49-b244-42b5-abe9-3666a16d802f","type":"input","status":"placed","entry":15,"id":16},{"conversationId":24,"requestId":"9e99fd7c-5ab4-4af1-990f-666ce187a37f","type":"input","status":"done","entry":34,"id":35,"answer":42}],"submissionsLimited":false,"documentOperationIds":[],"executionIds":["02c2c6e2-fa27-4530-9616-ad33bdba1b14"],"run":"2263f4b3-3dd8-4aaa-b496-6fe68a5dc0c1","harnessNotOpened":true,"modelTransportNotInstalled":true,"conversations":[{"id":"policy-chat","entries":[{"id":"15","role":"user","text":"EXEC_SUCCESS","truncated":false}],"more":false},{"id":"local-chat","entries":[{"id":"34","role":"user","text":"FILE_QUEUE_SETUP","truncated":false},{"id":"40","role":"tool","text":"<harness>\n[error] 文件操作未取得完整、匹配的回执\n<\/harness>","truncated":false},{"id":"42","role":"assistant","text":"你好🌍","truncated":false}],"more":false}],"nativeDocumentQueries":[],"nativeExecutionQueries":[{"executionId":"02c2c6e2-fa27-4530-9616-ad33bdba1b14","response":{"ok":true,"value":{"captureIncomplete":false,"context":{"bindingId":"1cbb9b68-cb7b-4ab4-b34f-46817a0d2ae9","callId":"location-1","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"policy-chat","sdkConversationId":5,"taskId":20},"createdAt":1793785017330,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"02c2c6e2-fa27-4530-9616-ad33bdba1b14","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","finalDigest":"e7fd56a6d4c830c7a289a8f95f741c3c3f666aef1f50b75fc3fb01c01c17e2bd","ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","localCapabilities":{"helperSha256":"13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1","runnerSha256":"be8b68ec5e9e204b2995a7546d3c372fea7e08775a9e19b1ff711515bee884ff","version":1},"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":0,"outputCursor":0,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/02c2c6e2-fa27-4530-9616-ad33bdba1b14.raw","protocol":1,"requestDigest":"97b9f33f9ec6eb1dea8bcbdefb3342a54c2bf7aa899ab9e79779be45dceff0f1","sequence":1,"state":"accepted_not_started"}}}]}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inspectRetainedSdkHistoryWithoutOpeningHarness
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 1.13
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1
