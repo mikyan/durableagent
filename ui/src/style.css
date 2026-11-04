@@ -93,3 +93,5 @@
 .navigation>*{flex-shrink:0}
 .navigation .conversation-list{min-height:90px;flex-shrink:1}
 @media(max-height:560px){.navigation{padding-top:calc(12px + env(safe-area-inset-top))}}
+
+.settings-section>button{margin:8px 10px 0 0;min-height:44px}
