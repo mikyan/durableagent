@@ -1,0 +1,40 @@
+runtime/src/application.ts
+  s_467dcb949b5b60::t_52a9e4e5a12def 65,68,144,148-149
+runtime/validation/submission-authority.mjs
+  s_467dcb949b5b60::t_19991ebc4dd4b7 40
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryNotifications.kt
+  s_467dcb949b5b60::t_b56b4f432dcb02 43-44,62-66,70-71
+docs/specs/v1/tickets/12-automatic-resume.md
+  s_467dcb949b5b60::t_385e43c8d82337 36
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryAccess.kt
+  s_467dcb949b5b60::t_b56b4f432dcb02 29-36,63
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_b56b4f432dcb02 158,162
+runtime/test/recovery.test.mjs
+  s_467dcb949b5b60::t_19991ebc4dd4b7 65-68,71
+runtime/test/recovery-crash.test.mjs
+  s_467dcb949b5b60::t_52a9e4e5a12def 7,14
+  s_467dcb949b5b60::t_43a1d0680fefd3 1-6,8-13,15-42
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryBridge.kt
+  s_467dcb949b5b60::t_b56b4f432dcb02 22-23,26
+runtime/test/fixtures/recovery-crash-host.mjs
+  s_467dcb949b5b60::t_43a1d0680fefd3 1-14
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryStore.kt
+  s_467dcb949b5b60::t_b56b4f432dcb02 50,54-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "54a5f7e69d0287c1e21a7cc8a75835d594ba9e4d",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
