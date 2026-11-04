@@ -13,6 +13,7 @@ function presentation(item:SendView,stoppedThrough:number,abortPending:boolean){
     if(accepted&&!interrupted)return {stage:'stop-pending',label:'已接纳 · 已请求停止',detail:'停止请求已保存，等待会话中断核验。这次发送不会重新投递。'};
     return {stage:'stopped',label:accepted?'已接纳 · 会话中断已确认':'已停止投递',detail:'这次发送不会因界面恢复重新投递。继续工作需要明确的新发送。'};
   }
+  if(!accepted&&item.intent?.sourceCancelled)return {stage:'stopped',label:'已停止投递',detail:'来源操作已停止；尚未接纳的转交不会因恢复重新投递。'};
   if(progress?.status==='placed')return {stage:'placed',label:'已放入消息记录',detail:'此状态不单独证明模型已经采用该输入。'};
   if(progress?.status==='queued')return {stage:'queued',label:'已接纳 · 排队中',detail:'排队不表示模型已读取；等待会话安排。'};
   if(accepted)return {stage:'accepted',label:'已接纳',detail:'接纳已确认，输入后续状态等待核验。'};

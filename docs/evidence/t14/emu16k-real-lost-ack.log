@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ExtensionApplicationTest:
+INSTRUMENTATION_STATUS: test=realMimoExplicitToolTransferPreservesDraft
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: extensionEvidence={"case":"real-mimo-tool-route","result":{"source":"d34d873a-6c33-420f-a528-fe3ebe130cd4","target":"685ad19d-ec16-4a4f-9226-c38120185a16","intent":{"protocol":1,"intentId":"tool-route-27","actionId":"tool-route-27","id":"685ad19d-ec16-4a4f-9226-c38120185a16","inputToken":"25be5a28-9f28-4115-a347-d5133b928971","inputRevision":0,"inputDigest":"cd44a2eb107a9ffc5440bd99bbdd3dbad049fa534f1e16a232e7a9a406877782","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"7cf0ceb00966c9a227c3a4c1ff3acc72f38f366d84f2a1b25804cc8eaf1db081"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"source":{"id":"d34d873a-6c33-420f-a528-fe3ebe130cd4","sdkConversationId":12,"controlGeneration":1,"taskId":27},"createdAt":1793761883038,"preview":{"text":"请仅回复转交标记 T14-dd5fcd2f","attachmentCount":0},"stateVersion":2,"delivery":"uncertain","cancelled":false},"receipt":{"protocol":1,"intentId":"tool-route-27","id":"685ad19d-ec16-4a4f-9226-c38120185a16","inputToken":"25be5a28-9f28-4115-a347-d5133b928971","inputRevision":0,"inputDigest":"cd44a2eb107a9ffc5440bd99bbdd3dbad049fa534f1e16a232e7a9a406877782","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"7cf0ceb00966c9a227c3a4c1ff3acc72f38f366d84f2a1b25804cc8eaf1db081"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"bindingId":"54b16be1-00c6-4b0b-af32-181b72392839","submissionId":32,"source":{"id":"d34d873a-6c33-420f-a528-fe3ebe130cd4","sdkConversationId":12,"controlGeneration":1,"taskId":27}},"targetHistory":[{"id":"31","role":"user","text":"请仅回复转交标记 T14-dd5fcd2f","persisted":true},{"id":"37","role":"assistant","text":"T14-dd5fcd2f","persisted":true}],"targetDraftPreserved":true,"sourceHistoryContainsTargetDraft":false,"serializedModelRequestContainsTargetDraft":false,"ackLossInjected":true,"explicitCloudRequests":3,"ackReconcileAddedRequests":0,"reopenAddedRequests":0,"activityRecreated":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoExplicitToolTransferPreservesDraft
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 41.787
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

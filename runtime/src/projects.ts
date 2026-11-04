@@ -5,7 +5,7 @@ import {Configuration,Products,type ProductRecord} from './application-records.j
 import type {ProjectCatalog,ProjectRecord,WorkspaceRecord,PositionState,LocationEditAuthority} from './project-protocol.js';
 import {ExecutionBinding,type LocationAdapter} from './project-bindings.js';
 export type {LocationAdapter} from './project-bindings.js';
-import {Admission,Binding,CurrentBinding} from './submission.js';
+import {Admission,Binding,CurrentBinding,receiptMatchesIntent} from './submission.js';
 import type {SendAuthority,SubmissionContext} from './submission-protocol.js';
 export type ProjectBoundary='fenced'|'changed'|'committed'|'published';
 export type EffectSnapshot={known:boolean;pendingBindingIds:string[]};
@@ -47,7 +47,24 @@ export class Projects {
   const targets=workspaceIds.map(id=>positions.get(id));
   const related=(workspaceId:string,identity?:string|null)=>workspaceIds.includes(workspaceId)||targets.some(target=>!target?.identity||!identity||target.identity===identity);
   for(const p of Object.values(products.items))if(related(p.workspaceId,positions.get(p.workspaceId)?.identity))ids.add(p.id);
-  let cursor:string|undefined;do{const page=await this.options.sends.listSends({cursor,limit:50});for(const intent of page.intents){if(intent.cancelled||!ids.has(intent.id))continue;const admission=await tx.doc(Admission,intent.intentId,null);if(!admission?.receipt)throw new ProjectError('LOCATION_BUSY','尚有可能投递的发送意图，不能修改位置');const record=await tx.submissionByRequest(intent.context.sdkConversationId as ConversationId,intent.intentId);if(!record||record.id!==admission.receipt.submissionId)throw new ProjectError('ADMISSION_INCONSISTENT','接纳关联无法核验，保留原位置');if(record.status==='queued'||record.status==='placed')throw new ProjectError('LOCATION_BUSY','已接纳的输入尚未结算，不能修改位置');}cursor=page.next;}while(cursor);
+  let cursor:string|undefined;do{const page=await this.options.sends.listSends({cursor,limit:50});for(const intent of page.intents){
+   if(intent.cancelled||!ids.has(intent.id))continue;
+   const admission=await tx.doc(Admission,intent.intentId,null),receipt=admission?.receipt;
+   const record=await tx.submissionByRequest(intent.context.sdkConversationId as ConversationId,intent.intentId);
+   if(!receipt){
+    if(intent.receipt||intent.delivery==='acknowledged'||record)throw new ProjectError('ADMISSION_INCONSISTENT','接纳记录存在分歧，保留原位置');
+    if(intent.source&&intent.sourceCancelled){
+     const origin=intent.source,control=await this.options.sends.readControl(origin.id);
+     if(products.items[origin.id]?.sdkId!==origin.sdkConversationId||control.stoppedThrough<origin.controlGeneration)throw new ProjectError('ADMISSION_INCONSISTENT','来源停止范围无法核验，保留原位置');
+     // The same SDK transaction proves absence; the durable source fence forbids future admission.
+     continue;
+    }
+    throw new ProjectError('LOCATION_BUSY','尚有可能投递的发送意图，不能修改位置');
+   }
+   const binding=await tx.doc(Binding,receipt.bindingId,null),same=(a:unknown,b:unknown)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));
+   if(!receiptMatchesIntent(intent,receipt)||intent.receipt&&!same(intent.receipt,receipt)||binding.id!==receipt.bindingId||!same(binding.context,receipt.context)||!record||record.id!==receipt.submissionId||record.type!=='input'||record.conversationId!==receipt.context.sdkConversationId||record.requestId!==intent.intentId)throw new ProjectError('ADMISSION_INCONSISTENT','接纳关联无法核验，保留原位置');
+   if(record.status==='queued'||record.status==='placed')throw new ProjectError('LOCATION_BUSY','已接纳的输入尚未结算，不能修改位置');
+  }cursor=page.next;}while(cursor);
   for(const {id,control}of await this.options.sends.pendingStops())if(ids.has(id)&&control.pendingAbort)throw new ProjectError('LOCATION_BUSY','停止范围尚未核清，不能修改位置');
   // A ledger receipt outlives current pointers and even a retired conversation.
   for(const bindingId of effects.pendingBindingIds){const binding=await tx.doc(Binding,bindingId,null);if(!binding.id||!binding.context||!binding.location)throw new ProjectError('LOCATION_UNKNOWN','未决受管效果的位置绑定无法核验');if(ids.has(binding.sourceProductId??'')||related(binding.context.location.workspaceId,binding.actualIdentity))throw new ProjectError('LOCATION_BUSY','仍有未确认的受管效果，不能修改位置');}

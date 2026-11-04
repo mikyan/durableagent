@@ -37,7 +37,8 @@ export class SubmissionCoordinator {
       record.sdkSequence=Math.max(record.sdkSequence,sequence);record.view={...record.view,status,error:undefined};this.notify();
     }
     // An older status projection can still carry the only proven native draft clear.
-    if(status.accepted&&status.acknowledgement){await this.acknowledged(status.acknowledgement,record.editEpoch);record.draftReconciled=true;}
+    if(status.intent.source){record.draftReconciled=true;return;}
+    if(status.accepted&&status.acknowledgement&&'draft' in status.acknowledgement){await this.acknowledged(status.acknowledgement,record.editEpoch);record.draftReconciled=true;}
     else if(status.accepted&&status.intent.delivery==='acknowledged'&&!record.draftReconciled){
       const epoch=this.generation,draft=await this.request<NativeDraft>('input.inspect',{id:status.intent.id});
       if(epoch!==this.generation)return;
@@ -77,7 +78,7 @@ export class SubmissionCoordinator {
       // Status is read-only. An existing SDK receipt still needs the same-intent
       // admission path to repair a lost native ACK, even after a stop fence.
       if(!status.accepted){
-        if(status.intent.cancelled||(this.controls.get(record.view.id)?.stoppedThrough??0)>=status.intent.controlGeneration)return false;
+        if(status.intent.cancelled||status.intent.sourceCancelled||(this.controls.get(record.view.id)?.stoppedThrough??0)>=status.intent.controlGeneration)return false;
         this.checkAction(record.view.id,actionVersion);
       }
       sequence=++this.sequence;status=await this.request<SendStatus>('send',{intentId});

@@ -11,11 +11,11 @@ export type HistoryMessage={id:string;role:'user'|'assistant'|'tool'|'system';te
 export type HistoryPage={items:HistoryMessage[];next?:string};
 export type ConversationSnapshot={id:string;revision:number;conversation:ConversationSummary;entries:HistoryMessage[];progress?:{text:string;persisted:false};phase:ConversationPhase;storedSeq:number|null;reason?:string};
 export type ApplicationStatus={phase:ApplicationPhase;reason?:string;extensions:string[]};
-export type ApplicationMethod='status'|'list'|'create'|'open'|'history'|'send'|'stop'|'subscribe'|'unsubscribe'|import('./project-protocol.js').ProjectMethod|import('./model-protocol.js').ModelConfigurationMethod|import('./input-protocol.js').InputMethod|import('./submission-protocol.js').SendMethod;
+export type ApplicationMethod=import('./extension-protocol.js').ExtensionMethod|import('./routing-protocol.js').RoutingMethod|'status'|'list'|'create'|'open'|'history'|'send'|'stop'|'subscribe'|'unsubscribe'|import('./project-protocol.js').ProjectMethod|import('./model-protocol.js').ModelConfigurationMethod|import('./input-protocol.js').InputMethod|import('./submission-protocol.js').SendMethod;
 export type ApplicationRequest={protocol:number;connectionId:string;requestId:string;method:ApplicationMethod;payload?:Record<string,unknown>};
 export type ApplicationError={code:string;message:string};
 export type ApplicationResponse={type:'response';protocol:1;connectionId:string;requestId:string;ok:true;value:unknown}|{type:'response';protocol:1;connectionId:string;requestId:string;ok:false;error:ApplicationError};
-export type ApplicationEvent={type:'conversation';protocol:1;connectionId:string;subscriptionId:string;snapshot:ConversationSnapshot};
+export type ApplicationEvent={type:'subscription-error';protocol:1;connectionId:string;subscriptionId:string;error:ApplicationError}|{type:'conversation';protocol:1;connectionId:string;subscriptionId:string;snapshot:ConversationSnapshot};
 export type ApplicationEnvelope=ApplicationResponse|ApplicationEvent;
 /**
  * Native bridge: window.DurableNative.postMessage(JSON.stringify(request)).

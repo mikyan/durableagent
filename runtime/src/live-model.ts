@@ -4,13 +4,14 @@ import type { ProbeState } from './probe.js';
 
 // Explicit opt-in validation path. The key is applied only after validating the
 // final HTTPS destination; no real credential enters serializable SDK options.
-export function liveModels(secret:string, publish:(patch:Partial<ProbeState>)=>void,configuration:{forceEcho?:boolean;forceTool?:()=>string|undefined}={}) {
+export function liveModels(secret:string, publish:(patch:Partial<ProbeState>)=>void,configuration:{forceEcho?:boolean;forceTool?:()=>string|undefined;observeRequest?:(body:string)=>void}={}) {
   if(secret.length<12)throw new Error('Live validation credential unavailable');
   const provider=xiaomiTokenPlanCnProvider();
   const model='mimo-v2.6-flash';
   let requests=0,textDeltas=0,toolDeltas=0;
   const checkedFetch:typeof fetch=async(input,init)=>{
     const request=new Request(input,init);
+    if(configuration.observeRequest)configuration.observeRequest(await request.clone().text());
     if(request.url!=='https://token-plan-cn.xiaomimimo.com/v1/chat/completions'||request.method!=='POST')throw new Error('Live validation destination rejected');
     if(++requests>4)throw new Error('Live validation request budget exceeded');
     const requestId=requests;

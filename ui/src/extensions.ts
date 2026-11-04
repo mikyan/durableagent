@@ -1,9 +1,11 @@
-import {CONVERSATION_EXTENSION} from '../../runtime/src/application-protocol';
-import {MODELS_EXTENSION} from '../../runtime/src/model-protocol';
-import {PROJECTS_EXTENSION} from '../../runtime/src/project-protocol';
-// Each side loads its own implementation for this shared data-only identity.
-export const builtInUiExtensions={
-  [CONVERSATION_EXTENSION.id]:{descriptor:CONVERSATION_EXTENSION,load:()=>import('./extensions/conversation')},
-  [MODELS_EXTENSION.id]:{descriptor:MODELS_EXTENSION,load:()=>import('./extensions/models')},
-  [PROJECTS_EXTENSION.id]:{descriptor:PROJECTS_EXTENSION,load:()=>import('./extensions/projects')}
-} as const;
+import type {ComponentType} from 'react';
+import {BUNDLED_EXTENSIONS,validateDescriptors,type ExtensionDescriptor} from '../../runtime/src/extension-protocol';
+export type UiEntry={descriptor:ExtensionDescriptor;load:()=>Promise<{default:ComponentType<any>}>};
+const entries:Record<string,UiEntry['load']>={conversation:()=>import('./extensions/conversation'),models:()=>import('./extensions/models'),projects:()=>import('./extensions/projects'),timeline:()=>import('./extensions/timeline')};
+// The one data manifest links two independent build graphs. This table imports no Agent code.
+export function assembleUiExtensions(descriptors:readonly ExtensionDescriptor[],loaders:typeof entries){
+ validateDescriptors(descriptors);const result:Record<string,UiEntry>={};
+ for(const descriptor of descriptors){if(!descriptor.ui)continue;const load=Object.hasOwn(loaders,descriptor.ui)?loaders[descriptor.ui]:undefined;if(!load)throw Error(`扩展 ${descriptor.id} 缺少界面入口`);Object.defineProperty(result,descriptor.id,{value:{descriptor,load},enumerable:true});}
+ return result;
+}
+export const builtInUiExtensions=assembleUiExtensions(BUNDLED_EXTENSIONS,entries);

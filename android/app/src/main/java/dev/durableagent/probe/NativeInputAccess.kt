@@ -57,6 +57,10 @@ class NativeInputAccess(private val store: NativeInputStore) : AutoCloseable {
     @V8Function
     fun readSendJson(intentId: String): String = result { store.readSend(intentId) }
 
+    /** Not a WebView/native input action; the fixed runtime routing seam owns this capability. */
+    @V8Function
+    fun createRouteJson(requestJson: String): String = result { store.createRoute(JSONObject(requestJson)) }
+
     @V8Function
     fun listSendsJson(optionsJson: String): String = result { store.listSends(JSONObject(optionsJson)) }
 

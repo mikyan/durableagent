@@ -1,14 +1,15 @@
 // Only the model HTTP boundary is replaced. Pi AI still loads its lazy provider,
 // parses SSE, decodes UTF-8 and assembles deltas using the published packages.
-export type FixtureOptions={hang?:boolean;toolName?:()=>string|undefined;tool?:boolean;invalidTool?:boolean;failFirst?:number};
+export type FixtureOptions={hang?:boolean;observeRequest?:(body:string)=>void;toolName?:()=>string|undefined;toolArguments?:()=>Record<string,unknown>;tool?:boolean;invalidTool?:boolean;failFirst?:number};
 export function fixtureTransport(options:FixtureOptions & {requested:()=>void; aborted:()=>void}): typeof fetch {
   let requests=0;
   return async (_input, init) => {
+    if(options.observeRequest)options.observeRequest(await new Request(_input,init).text());
     const chosen=options.toolName?.();const witness=chosen&&JSON.parse(await new Request(_input,init).text()).messages?.at(-1)?.role==='user'?chosen:undefined;const tool=!!witness||options.tool&&requests===0;requests++;
     options.requested();
     if(requests<=(options.failFirst??0))return new Response('Injected provider unavailable',{status:503});
     const encoder = new TextEncoder();
-    const deltas = witness?[{tool_calls:[{index:0,id:'location-'+requests,type:'function',function:{name:witness,arguments:'{}'}}]}]:tool ? [
+    const deltas = witness?[{tool_calls:[{index:0,id:'location-'+requests,type:'function',function:{name:witness,arguments:JSON.stringify(options.toolArguments?.()??{})}}]}]:tool ? [
       {tool_calls:[{index:0,id:'tool-1',type:'function',function:{name:'echo',arguments:'{"city":"北'}}]},
       {tool_calls:[{index:0,function:{arguments:'京🌍","count":'}}]},
       {tool_calls:[{index:0,function:{arguments:options.invalidTool?'"many"}':'"2"}'}}]}

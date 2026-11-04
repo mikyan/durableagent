@@ -2,6 +2,7 @@ import {BACKGROUND_CONTEXT as context} from '@earendil-works/chord/context';
 import {defineDocFamily,type Harness,type ConversationId,type SubmissionId,type Tx} from '@earendil-works/pi-durable';
 import type {Models} from '@earendil-works/pi-ai/models';
 import {randomUUID} from 'node:crypto';
+import {checkRouteSource} from './routing.js';
 import {InputError,materializeFrozenInput} from './input.js';
 import type {FrozenInputAccess} from './input-protocol.js';
 import type {AdmissionReceipt,NativeSendIntent,SendAuthority,SendStatus,SubmissionContext} from './submission-protocol.js';
@@ -12,6 +13,10 @@ export const Binding=defineDocFamily({kind:'app.submission-binding',version:1,sc
 export const CurrentBinding=defineDocFamily({kind:'app.current-submission-binding',version:1,scope:'session',family:true,initial:(_:null)=>({id:null as string|null}),checkpointWhen:()=>false});
 const canonical=(value:any):any=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
 const equal=(a:unknown,b:unknown)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));
+export function receiptMatchesIntent(intent:NativeSendIntent,receipt:AdmissionReceipt){
+ const expected={protocol:1,intentId:intent.intentId,id:intent.id,inputToken:intent.inputToken,inputRevision:intent.inputRevision,inputDigest:intent.inputDigest,context:intent.context,queue:intent.queue,controlGeneration:intent.controlGeneration,...(intent.source?{source:intent.source}:{})};
+ return equal(expected,{protocol:receipt.protocol,intentId:receipt.intentId,id:receipt.id,inputToken:receipt.inputToken,inputRevision:receipt.inputRevision,inputDigest:receipt.inputDigest,context:receipt.context,queue:receipt.queue,controlGeneration:receipt.controlGeneration,...(receipt.source?{source:receipt.source}:{})});
+}
 export type SubmissionBoundary='before-sdk-commit'|'after-sdk-submit'|'after-sdk-commit'|'before-native-ack'|'after-native-ack';
 type Options={harness:Harness;authority:SendAuthority;inputs:FrozenInputAccess;models:Models;available?:(provider:string,modelId:string)=>Promise<boolean>;resolve:(tx:Tx,id:string)=>Promise<SubmissionContext>;adopt?:(tx:Tx,id:string,bindingId:string)=>Promise<void>;ready:()=>void;pause:()=>()=>void;boundary?:(stage:SubmissionBoundary,intent:NativeSendIntent)=>void|Promise<void>};
 /** One application admission seam. SDK remains the sole submission/inbox/scheduling authority. */
@@ -20,8 +25,7 @@ export class Submissions {
   constructor(private readonly options:Options){}
   coordinate<T>(run:()=>Promise<T>):Promise<T>{const result=this.tail.then(run,run);this.tail=result.catch(()=>{});return result;}
   private checkReceipt(intent:NativeSendIntent,receipt:AdmissionReceipt){
-    const expected={protocol:1,intentId:intent.intentId,id:intent.id,inputToken:intent.inputToken,inputRevision:intent.inputRevision,inputDigest:intent.inputDigest,context:intent.context,queue:intent.queue,controlGeneration:intent.controlGeneration};
-    if(!equal(expected,{protocol:receipt.protocol,intentId:receipt.intentId,id:receipt.id,inputToken:receipt.inputToken,inputRevision:receipt.inputRevision,inputDigest:receipt.inputDigest,context:receipt.context,queue:receipt.queue,controlGeneration:receipt.controlGeneration}))throw new SubmissionError('INTENT_MISMATCH','发送身份、内容或位置与已接纳记录不一致');
+    if(!receiptMatchesIntent(intent,receipt))throw new SubmissionError('INTENT_MISMATCH','发送身份、内容或位置与已接纳记录不一致');
   }
   async status(intentId:string):Promise<SendStatus>{
     const {harness,authority}=this.options,intent=await authority.readSend(intentId),receipt=(await harness.snapshot(Admission,intentId,context))?.receipt??undefined;
@@ -44,6 +48,7 @@ export class Submissions {
     const {harness,authority,inputs,models}=this.options;this.options.ready();
     const found=await this.status(intentId);if(found.accepted)return this.acknowledge(found);
     const intent=found.intent;
+    if(intent.source)await checkRouteSource(authority,intent.source);
     if(intent.protocol!==1||intent.intentId!==intent.actionId||intent.queue.whenBusy!=='followUp'||intent.queue.whenIdle!=='start')throw new SubmissionError('INTENT_INVALID','发送记录格式无效');
     await this.stops();this.options.ready();
     const control=await authority.readControl(intent.id);
@@ -69,12 +74,14 @@ export class Submissions {
         if(await tx.submissionByRequest(actual.sdkConversationId as ConversationId,intentId))throw new SubmissionError('ADMISSION_INCONSISTENT','SDK 已有同身份记录但缺少可核验接纳映射');
         const latest=await authority.readControl(intent.id);this.options.ready();
         if(latest.pendingAbort||latest.generation!==intent.controlGeneration||latest.stoppedThrough>=intent.controlGeneration)throw new SubmissionError('SEND_STOPPED','停止事实已改变，本次输入未接纳');
+        if(intent.source){const source=await this.options.resolve(tx,intent.source.id);if(source.sdkConversationId!==intent.source.sdkConversationId)throw new SubmissionError('SOURCE_MISMATCH','来源会话身份已改变');await checkRouteSource(authority,intent.source);}
         await this.options.adopt?.(tx,intent.id,bindingId);
         // submit must precede all table writes. All app documents/table reads are above it.
         const submissionId=await conversation.submit(tx,{type:'input',requestId:intentId,content,whenBusy:'followUp'});
         current.id=bindingId;binding.id=bindingId;binding.context=actual;
-        admission.receipt={protocol:1,intentId,id:intent.id,inputToken:intent.inputToken,inputRevision:intent.inputRevision,inputDigest:intent.inputDigest,context:actual,queue:intent.queue,controlGeneration:intent.controlGeneration,bindingId,submissionId};
+        admission.receipt={protocol:1,intentId,id:intent.id,inputToken:intent.inputToken,inputRevision:intent.inputRevision,inputDigest:intent.inputDigest,context:actual,queue:intent.queue,controlGeneration:intent.controlGeneration,bindingId,submissionId,...(intent.source?{source:intent.source}:{})};
         await this.options.boundary?.('after-sdk-submit',intent);
+        if(intent.source)await checkRouteSource(authority,intent.source);
       },context);
       await this.options.boundary?.('after-sdk-commit',intent);
       // Stop can commit in the independent native DB while the SDK commit is in flight.

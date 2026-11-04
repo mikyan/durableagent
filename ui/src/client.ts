@@ -10,7 +10,7 @@ export class ApplicationClient {
   readonly connectionId=crypto.randomUUID();
   private pending=new Map<string,{resolve:(value:unknown)=>void;reject:(error:Error)=>void;timer:ReturnType<typeof setTimeout>}>();
   private disposed=false;
-  private subscriptions=new Map<string,{id:string;revision:number;listener:(snapshot:ConversationSnapshot)=>void}>();
+  private subscriptions=new Map<string,{id:string;revision:number;listener:(snapshot:ConversationSnapshot)=>void;failed?:(error:Error)=>void}>();
   constructor(private readonly port:NativePort|undefined,private readonly timeoutMs=20000) {}
   request<T=unknown>(method:ApplicationMethod,payload?:Record<string,unknown>,timeoutMs=this.timeoutMs):Promise<T> {
     if(this.disposed)return Promise.reject(new ApplicationFailure('CONNECTION_CLOSED','连接已关闭，请重新连接。'));
@@ -37,6 +37,7 @@ export class ApplicationClient {
   }
   receive(envelope:ApplicationEnvelope) {
     if(this.disposed||envelope.connectionId!==this.connectionId)return;
+    if(envelope.type==='subscription-error'){if(envelope.protocol===APPLICATION_PROTOCOL)this.subscriptions.get(envelope.subscriptionId)?.failed?.(new ApplicationFailure(envelope.error.code,envelope.error.message));return;}
     if(envelope.type==='conversation') {
       if(envelope.protocol===APPLICATION_PROTOCOL)this.adopt(envelope.subscriptionId,envelope.snapshot);
       return;
@@ -48,9 +49,9 @@ export class ApplicationClient {
     else if(envelope.ok)pending.resolve(envelope.value);
     else pending.reject(new ApplicationFailure(envelope.error.code,envelope.error.message));
   }
-  async subscribe(id:string,listener:(snapshot:ConversationSnapshot)=>void) {
+  async subscribe(id:string,listener:(snapshot:ConversationSnapshot)=>void,failed?:(error:Error)=>void) {
     const subscriptionId=crypto.randomUUID();
-    this.subscriptions.set(subscriptionId,{id,revision:-1,listener});
+    this.subscriptions.set(subscriptionId,{id,revision:-1,listener,failed});
     try {
       const snapshot=await this.request<ConversationSnapshot>('subscribe',{id,subscriptionId});
       this.adopt(subscriptionId,snapshot);

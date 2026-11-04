@@ -1,0 +1,216 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRoutingTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeRoutingTest:
+INSTRUMENTATION_STATUS: test=sourceAndTargetControlsLocationAndPayloadAreCheckedBeforeAnyRouteIsStored
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRoutingTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=sourceAndTargetControlsLocationAndPayloadAreCheckedBeforeAnyRouteIsStored
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRoutingTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRoutingTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalStateException: Synthetic response loss
+	at dev.durableagent.probe.NativeRoutingTest.nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput$lambda$1(NativeRoutingTest.kt:79)
+	at dev.durableagent.probe.NativeRoutingTest.$r8$lambda$s3-3CGxhtjQMsMhOCTf_0E6ufSU(Unknown Source:0)
+	at dev.durableagent.probe.NativeRoutingTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.NativeInputStore.createRoute(NativeInputStore.kt:395)
+	at dev.durableagent.probe.NativeRoutingTest.nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput$lambda$2$0(NativeRoutingTest.kt:80)
+	at dev.durableagent.probe.NativeRoutingTest.$r8$lambda$DHXkuISVuxieiYdPcXki0q_dX2A(Unknown Source:0)
+	at dev.durableagent.probe.NativeRoutingTest$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.NativeRoutingTest.rejected(NativeRoutingTest.kt:29)
+	at dev.durableagent.probe.NativeRoutingTest.nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput(NativeRoutingTest.kt:80)
+
+INSTRUMENTATION_STATUS: stream=
+Error in nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput(dev.durableagent.probe.NativeRoutingTest):
+java.lang.IllegalStateException: Synthetic response loss
+	at dev.durableagent.probe.NativeRoutingTest.nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput$lambda$1(NativeRoutingTest.kt:79)
+	at dev.durableagent.probe.NativeRoutingTest.$r8$lambda$s3-3CGxhtjQMsMhOCTf_0E6ufSU(Unknown Source:0)
+	at dev.durableagent.probe.NativeRoutingTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.NativeInputStore.createRoute(NativeInputStore.kt:395)
+	at dev.durableagent.probe.NativeRoutingTest.nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput$lambda$2$0(NativeRoutingTest.kt:80)
+	at dev.durableagent.probe.NativeRoutingTest.$r8$lambda$DHXkuISVuxieiYdPcXki0q_dX2A(Unknown Source:0)
+	at dev.durableagent.probe.NativeRoutingTest$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.NativeRoutingTest.rejected(NativeRoutingTest.kt:29)
+	at dev.durableagent.probe.NativeRoutingTest.nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput(NativeRoutingTest.kt:80)
+
+INSTRUMENTATION_STATUS: test=nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRoutingTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=routeIsIndependentFixedInputAndAckNeverClearsEvenAnIdenticalTargetDraft
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRoutingTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=routeIsIndependentFixedInputAndAckNeverClearsEvenAnIdenticalTargetDraft
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRoutingCrashTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeRoutingCrashTest:
+INSTRUMENTATION_STATUS: test=realProcessDeathAcrossRouteAndAckCommitsPreservesDraftAndIdentity
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: nativeRoutingCrashEvidence={"stage":"route.intent.beforeCommit","separateProcessKilled":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: nativeRoutingCrashEvidence={"stage":"route.intent.afterCommit","separateProcessKilled":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: nativeRoutingCrashEvidence={"stage":"send.ack.beforeCommit","separateProcessKilled":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: nativeRoutingCrashEvidence={"stage":"send.ack.afterCommit","separateProcessKilled":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRoutingCrashTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realProcessDeathAcrossRouteAndAckCommitsPreservesDraftAndIdentity
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ExtensionApplicationTest:
+INSTRUMENTATION_STATUS: test=realReactTimelinePagesAndUnmountDoesNotStopRunningConversation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Extension state timeout: React ready
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExtensionApplicationTest.until(ExtensionApplicationTest.kt:29)
+	at dev.durableagent.probe.ExtensionApplicationTest.until$default(ExtensionApplicationTest.kt:29)
+	at dev.durableagent.probe.ExtensionApplicationTest.ready(ExtensionApplicationTest.kt:45)
+	at dev.durableagent.probe.ExtensionApplicationTest.realReactTimelinePagesAndUnmountDoesNotStopRunningConversation(ExtensionApplicationTest.kt:61)
+
+INSTRUMENTATION_STATUS: stream=
+Error in realReactTimelinePagesAndUnmountDoesNotStopRunningConversation(dev.durableagent.probe.ExtensionApplicationTest):
+java.lang.AssertionError: Extension state timeout: React ready
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExtensionApplicationTest.until(ExtensionApplicationTest.kt:29)
+	at dev.durableagent.probe.ExtensionApplicationTest.until$default(ExtensionApplicationTest.kt:29)
+	at dev.durableagent.probe.ExtensionApplicationTest.ready(ExtensionApplicationTest.kt:45)
+	at dev.durableagent.probe.ExtensionApplicationTest.realReactTimelinePagesAndUnmountDoesNotStopRunningConversation(ExtensionApplicationTest.kt:61)
+
+INSTRUMENTATION_STATUS: test=realReactTimelinePagesAndUnmountDoesNotStopRunningConversation
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=actualSdkRouteCommitAcrossOwnerProcessDeath
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: extensionEvidence={"case":"route-sdk-before","result":{"halted":{"stage":"sdk-before","pid":31476},"reopened":{"phase":"ready","extensions":["projects","conversation","input","submission"],"metrics":{"modelRequests":1},"instance":"7174ba1a-f971-4d08-b91e-6edd8e79c616","pid":31595,"domainOwned":true,"nativeOwners":1},"status":{"intent":{"protocol":1,"intentId":"232d77d3-70e7-43e7-9a9a-b6347950cd1f","actionId":"232d77d3-70e7-43e7-9a9a-b6347950cd1f","id":"target","inputToken":"124cbfae-04eb-4b90-b614-88aa017b9678","inputRevision":0,"inputDigest":"c5a4a21d1538e1f14bf344f07b1a870c94b230b3fd812238b2d467aa13a06e7d","context":{"sdkConversationId":12,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"83869a943aa891aad7a7bc3cb98fcbca72c905d92de08b66d6dc1223d99217b4"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"source":{"id":"source","sdkConversationId":5,"controlGeneration":1},"createdAt":1793760592175,"preview":{"text":"独立转交的固定输入","attachmentCount":0},"stateVersion":3,"delivery":"acknowledged","cancelled":false,"receipt":{"protocol":1,"intentId":"232d77d3-70e7-43e7-9a9a-b6347950cd1f","id":"target","inputToken":"124cbfae-04eb-4b90-b614-88aa017b9678","inputRevision":0,"inputDigest":"c5a4a21d1538e1f14bf344f07b1a870c94b230b3fd812238b2d467aa13a06e7d","context":{"sdkConversationId":12,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"83869a943aa891aad7a7bc3cb98fcbca72c905d92de08b66d6dc1223d99217b4"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"bindingId":"4601b5f2-0794-4798-8fc0-50a50f6eacf4","submissionId":24,"source":{"id":"source","sdkConversationId":5,"controlGeneration":1}}},"accepted":true,"receipt":{"protocol":1,"intentId":"232d77d3-70e7-43e7-9a9a-b6347950cd1f","id":"target","inputToken":"124cbfae-04eb-4b90-b614-88aa017b9678","inputRevision":0,"inputDigest":"c5a4a21d1538e1f14bf344f07b1a870c94b230b3fd812238b2d467aa13a06e7d","context":{"sdkConversationId":12,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"83869a943aa891aad7a7bc3cb98fcbca72c905d92de08b66d6dc1223d99217b4"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"bindingId":"4601b5f2-0794-4798-8fc0-50a50f6eacf4","submissionId":24,"source":{"id":"source","sdkConversationId":5,"controlGeneration":1}},"submission":{"status":"done","entryId":"23","answerEntryId":"27"}},"history":[{"id":"23","role":"user","text":"独立转交的固定输入","persisted":true},{"id":"27","role":"assistant","text":"你好🌍","persisted":true}],"uniqueInput":true,"sourceGenerationRetained":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: extensionEvidence={"case":"route-sdk-after","result":{"halted":{"stage":"sdk-after","pid":31595},"reopened":{"phase":"ready","extensions":["projects","conversation","input","submission"],"metrics":{"modelRequests":1},"instance":"231e4b62-e5a2-4aef-a0bf-b4464a2e1a7c","pid":31625,"domainOwned":true,"nativeOwners":1},"status":{"intent":{"protocol":1,"intentId":"af49ae54-63f6-4746-8ea9-fea913c2007f","actionId":"af49ae54-63f6-4746-8ea9-fea913c2007f","id":"target","inputToken":"fff372ec-795e-4fda-b01c-6ff7e4bdee5d","inputRevision":0,"inputDigest":"c5a4a21d1538e1f14bf344f07b1a870c94b230b3fd812238b2d467aa13a06e7d","context":{"sdkConversationId":12,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"12d1f3da190a79bb3bbb823789cf512a65170c79a3102b82c33509d30ffdc1f2"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"source":{"id":"source","sdkConversationId":5,"controlGeneration":1},"createdAt":1793760595837,"preview":{"text":"独立转交的固定输入","attachmentCount":0},"stateVersion":3,"delivery":"acknowledged","cancelled":false,"receipt":{"protocol":1,"intentId":"af49ae54-63f6-4746-8ea9-fea913c2007f","id":"target","inputToken":"fff372ec-795e-4fda-b01c-6ff7e4bdee5d","inputRevision":0,"inputDigest":"c5a4a21d1538e1f14bf344f07b1a870c94b230b3fd812238b2d467aa13a06e7d","context":{"sdkConversationId":12,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"12d1f3da190a79bb3bbb823789cf512a65170c79a3102b82c33509d30ffdc1f2"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"bindingId":"b0b0c7e9-3855-47fe-b14c-2d17c7e236ac","submissionId":23,"source":{"id":"source","sdkConversationId":5,"controlGeneration":1}}},"accepted":true,"receipt":{"protocol":1,"intentId":"af49ae54-63f6-4746-8ea9-fea913c2007f","id":"target","inputToken":"fff372ec-795e-4fda-b01c-6ff7e4bdee5d","inputRevision":0,"inputDigest":"c5a4a21d1538e1f14bf344f07b1a870c94b230b3fd812238b2d467aa13a06e7d","context":{"sdkConversationId":12,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"12d1f3da190a79bb3bbb823789cf512a65170c79a3102b82c33509d30ffdc1f2"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"bindingId":"b0b0c7e9-3855-47fe-b14c-2d17c7e236ac","submissionId":23,"source":{"id":"source","sdkConversationId":5,"controlGeneration":1}},"submission":{"status":"done","entryId":"22","answerEntryId":"27"}},"history":[{"id":"22","role":"user","text":"独立转交的固定输入","persisted":true},{"id":"27","role":"assistant","text":"你好🌍","persisted":true}],"uniqueInput":true,"sourceGenerationRetained":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualSdkRouteCommitAcrossOwnerProcessDeath
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realReactToolTransferAndAckReconciliation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: extensionEvidence={"case":"react-tool-route","result":{"source":"6b460338-33a5-42d9-a71d-fbf6139e55b1","target":"f92356d0-ed60-4a7b-9c43-82493eac5bfe","intent":{"protocol":1,"intentId":"tool-route-27","actionId":"tool-route-27","id":"f92356d0-ed60-4a7b-9c43-82493eac5bfe","inputToken":"6abaf933-f857-4117-a4e8-1893bf27ad07","inputRevision":0,"inputDigest":"d7b346618f87ed4771ec8e8850f52a495277556b788ab3df92d3dff9b0e0a128","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"07cc811207ddfe123c5c767a89eec30df893ff74691656219a0b9870286f9216"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"source":{"id":"6b460338-33a5-42d9-a71d-fbf6139e55b1","sdkConversationId":12,"controlGeneration":1,"taskId":27},"createdAt":1793760603485,"preview":{"text":"请仅回复转交标记 T14-040439ad","attachmentCount":0},"stateVersion":2,"delivery":"uncertain","cancelled":false},"receipt":{"protocol":1,"intentId":"tool-route-27","id":"f92356d0-ed60-4a7b-9c43-82493eac5bfe","inputToken":"6abaf933-f857-4117-a4e8-1893bf27ad07","inputRevision":0,"inputDigest":"d7b346618f87ed4771ec8e8850f52a495277556b788ab3df92d3dff9b0e0a128","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"07cc811207ddfe123c5c767a89eec30df893ff74691656219a0b9870286f9216"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"bindingId":"f376d3c9-8b6d-4fa0-b4cb-c21877da0077","submissionId":32,"source":{"id":"6b460338-33a5-42d9-a71d-fbf6139e55b1","sdkConversationId":12,"controlGeneration":1,"taskId":27}},"targetHistory":[{"id":"31","role":"user","text":"请仅回复转交标记 T14-040439ad","persisted":true},{"id":"37","role":"assistant","text":"你好🌍","persisted":true}],"targetDraftPreserved":true,"explicitCloudRequests":3,"ackReconcileAddedRequests":0,"reopenAddedRequests":0,"activityRecreated":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realReactToolTransferAndAckReconciliation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realMimoExplicitToolTransferPreservesDraft
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: extensionEvidence={"case":"real-mimo-tool-route","result":{"source":"53dc0660-cafa-4712-8707-cc126ad11809","target":"53650101-8368-42b5-852f-6bf7c2d288ac","intent":{"protocol":1,"intentId":"tool-route-27","actionId":"tool-route-27","id":"53650101-8368-42b5-852f-6bf7c2d288ac","inputToken":"2632786d-5920-4e0e-90d7-c9da33373c8d","inputRevision":0,"inputDigest":"4a4072655a81ec2e7230dbb4a5298d3f889122559032e71d9a1b0e0ccc2d7d94","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"0403b6abe5c6a986ce98fafdd3250eaaa2503dcc8c63b55f3f0a7c3666715e5a"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"source":{"id":"53dc0660-cafa-4712-8707-cc126ad11809","sdkConversationId":12,"controlGeneration":1,"taskId":27},"createdAt":1793760637432,"preview":{"text":"请仅回复转交标记 T14-7155d0dd","attachmentCount":0},"stateVersion":2,"delivery":"uncertain","cancelled":false},"receipt":{"protocol":1,"intentId":"tool-route-27","id":"53650101-8368-42b5-852f-6bf7c2d288ac","inputToken":"2632786d-5920-4e0e-90d7-c9da33373c8d","inputRevision":0,"inputDigest":"4a4072655a81ec2e7230dbb4a5298d3f889122559032e71d9a1b0e0ccc2d7d94","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"0403b6abe5c6a986ce98fafdd3250eaaa2503dcc8c63b55f3f0a7c3666715e5a"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"bindingId":"ea564e35-664e-4d3d-a2da-ad32095b605e","submissionId":32,"source":{"id":"53dc0660-cafa-4712-8707-cc126ad11809","sdkConversationId":12,"controlGeneration":1,"taskId":27}},"targetHistory":[{"id":"31","role":"user","text":"请仅回复转交标记 T14-7155d0dd","persisted":true},{"id":"38","role":"assistant","text":"T14-7155d0dd","persisted":true}],"targetDraftPreserved":true,"explicitCloudRequests":3,"ackReconcileAddedRequests":0,"reopenAddedRequests":0,"activityRecreated":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=8
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoExplicitToolTransferPreservesDraft
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=actualAndroidRegistryAndRoutingPolicies
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: extensionEvidence={"case":"shared-extension-policy","result":{"phase":"ready","extensions":["projects","conversation","input","submission"],"metrics":{"extensionPolicyState":"passed","extensionPolicyCases":[{"name":"explicit stable-target transfer preserves target drafts and replays one durable submission after reopen","passed":true},{"name":"source stop before target commit rolls back, while stop after commit preserves the accepted independent target and original receipt","passed":true},{"name":"actual SDK routing tool derives its source, submits explicit content once and leaves ordinary input in its own conversation","passed":true},{"name":"catalog distinguishes UI-only, Agent-only and both-sided contributions; initialization failure remains diagnosable","passed":true},{"name":"stable target discovery, creation idempotency, missing target, stopped controls and stale location fail through public routing","passed":true},{"name":"lost native route ACK reconciles the same SDK input while preserving a newer target draft","passed":true},{"name":"actual model Agent tools reuse public configuration and current-model selection without decrypting query credentials","passed":true},{"name":"UI-only packages need no Agent placeholder; both identities are validated before SDK installation","passed":true},{"name":"actual SDK selection order owns intentional tools and sections overrides; duplicate tasks fail in the SDK","passed":true},{"name":"SDK uninstall neither cancels an acquired tool call nor disposes its owner resource","passed":true}]},"instance":"2951a0bf-de01-4e3e-84ca-45bed11700ca","pid":31625,"domainOwned":true,"nativeOwners":1}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=9
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=9
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualAndroidRegistryAndRoutingPolicies
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 166.708
+There were 2 failures:
+1) nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput(dev.durableagent.probe.NativeRoutingTest)
+java.lang.IllegalStateException: Synthetic response loss
+	at dev.durableagent.probe.NativeRoutingTest.nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput$lambda$1(NativeRoutingTest.kt:79)
+	at dev.durableagent.probe.NativeRoutingTest.$r8$lambda$s3-3CGxhtjQMsMhOCTf_0E6ufSU(Unknown Source:0)
+	at dev.durableagent.probe.NativeRoutingTest$$ExternalSyntheticLambda0.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.NativeInputStore.createRoute(NativeInputStore.kt:395)
+	at dev.durableagent.probe.NativeRoutingTest.nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput$lambda$2$0(NativeRoutingTest.kt:80)
+	at dev.durableagent.probe.NativeRoutingTest.$r8$lambda$DHXkuISVuxieiYdPcXki0q_dX2A(Unknown Source:0)
+	at dev.durableagent.probe.NativeRoutingTest$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.NativeRoutingTest.rejected(NativeRoutingTest.kt:29)
+	at dev.durableagent.probe.NativeRoutingTest.nativeCommitAndReceiptLossRetainOnlyCommittedIndependentInput(NativeRoutingTest.kt:80)
+2) realReactTimelinePagesAndUnmountDoesNotStopRunningConversation(dev.durableagent.probe.ExtensionApplicationTest)
+java.lang.AssertionError: Extension state timeout: React ready
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExtensionApplicationTest.until(ExtensionApplicationTest.kt:29)
+	at dev.durableagent.probe.ExtensionApplicationTest.until$default(ExtensionApplicationTest.kt:29)
+	at dev.durableagent.probe.ExtensionApplicationTest.ready(ExtensionApplicationTest.kt:45)
+	at dev.durableagent.probe.ExtensionApplicationTest.realReactTimelinePagesAndUnmountDoesNotStopRunningConversation(ExtensionApplicationTest.kt:61)
+
+FAILURES!!!
+Tests run: 9,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1
