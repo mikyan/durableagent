@@ -20,6 +20,10 @@ export function fileConformanceTool(execution:ManagedExecution){return execution
   if(!/^[a-zA-Z0-9-]{1,80}$/.test(run)||!api.env)throw Error('Invalid file fixture');
   const env=api.env,root=`.durableagent-t10-${run}`,path=`${root}/nested/original.bin`;
   if(caseName==='pure')return {output:[{type:'text',text:'FILE-PURE-PASS'}]};
+  if(caseName==='queue-setup'){
+   const target=`${root}/queue.txt`;assert.equal(getOrThrow(await env.exists(target,context)),false,'queue setup requires a new fixture original');
+   getOrThrow(await env.writeFile(target,new Uint8Array(),context));return {output:[{type:'text',text:'FILE-QUEUE-SETUP:'+JSON.stringify({path:getOrThrow(await env.canonicalPath(target,context)),bytes:getOrThrow(await env.readBinaryFile(target,context)).length})}]};
+  }
   if(caseName==='queue-append'){
    const target=`${root}/queue.txt`;getOrThrow(await env.appendFile(target,'local\n',context));return {output:[{type:'text',text:'FILE-QUEUE-LOCAL-PASS:'+JSON.stringify({path:getOrThrow(await env.canonicalPath(target,context))})}]};
   }

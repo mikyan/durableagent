@@ -47,12 +47,17 @@ class FileQueueApplicationTest {
  private fun completed(wire:Wire,intentId:String){until{wire.call("sendStatus",JSONObject().put("intentId",intentId)).optJSONObject("submission")?.optString("status")=="done"}}
 
  @Test(timeout=240000) fun actualLocalReservationAndUnknownShellSerializeBothOrdersAndQueuedStop(){
-  for(order in listOf("local-reserved-first","shell-first","cancel-local")){
+  val selected=InstrumentationRegistry.getArguments().getString("fileQueueOrder");val orders=listOf("local-reserved-first","shell-first","cancel-local");require(selected==null||selected in orders)
+  for(order in orders.filter{selected==null||it==selected}){
    val run=uuid();val wire=Wire(run);val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode","execution").putExtra("validationRun",run));val store=NativeInputStore(context,NativeInputBridge.namespace("execution",run)).withLeaseWait(1000)
    activeRun=run;activeOrder=order;trace("scenario.begin")
    try{
-    wire.ready();for(id in listOf("local","shell","pure","read"))wire.call("create",JSONObject().put("creationId",id))
+    wire.ready();for(id in listOf("local","shell","pure","read","setup"))wire.call("create",JSONObject().put("creationId",id))
     val localFirst=order=="local-reserved-first";val first=if(localFirst)"local" else "shell";val second=if(localFirst)"shell" else "local"
+    // The waiting append fixes its object identity before joining the queue. Establish
+    // the new fixture original first so shell's later append cannot replace a missing
+    // path with a new inode. Never recompute an already-persisted local write plan.
+    if(!localFirst){val setup=prepare(store,"setup","FILE_QUEUE_SETUP");wire.call("send",JSONObject().put("intentId",setup));completed(wire,setup);val original=JSONObject(texts(wire,"setup").last{it.startsWith("FILE-QUEUE-SETUP:")}.removePrefix("FILE-QUEUE-SETUP:"));assertEquals(0,original.getInt("bytes"));trace("stable-original.setup-complete")}
     if(localFirst)wire.control(58,"arm")
     val firstIntent=prepare(store,first,if(localFirst)"FILE_QUEUE_LOCAL" else "FILE_QUEUE_SHELL");wire.call("send",JSONObject().put("intentId",firstIntent))
     if(localFirst)until{wire.control(12).optJSONObject("metrics")?.optJSONObject("executionWriteGate")?.optString("state")=="held"}
@@ -71,7 +76,7 @@ class FileQueueApplicationTest {
     val read=prepare(store,"read","FILE_QUEUE_READ");wire.call("send",JSONObject().put("intentId",read));completed(wire,read)
     val observed=JSONObject(texts(wire,"read").last{it.startsWith("FILE-QUEUE-READ:")}.removePrefix("FILE-QUEUE-READ:"));assertEquals(if(localFirst)"local\nshell\n" else if(order=="cancel-local")"shell\n" else "shell\nlocal\n",observed.getString("text"))
     val local=execution(wire,"local")!!;val shell=execution(wire,"shell")!!;assertEquals(if(order=="cancel-local")"not_started" else "completed",local.getString("state"));assertEquals("completed",shell.getString("state"))
-    instrumentation.sendStatus(0,Bundle().apply{putString("fileQueueEvidence",JSONObject().put("run",run).put("order",order).put("waiting",waiting).put("local",local).put("shell",shell).put("original",observed).put("pureToolContinued",true).put("localGateWasBeforeExternalPrepare",localFirst).toString())})
+    instrumentation.sendStatus(0,Bundle().apply{putString("fileQueueEvidence",JSONObject().put("run",run).put("order",order).put("waiting",waiting).put("local",local).put("shell",shell).put("original",observed).put("pureToolContinued",true).put("stableOriginalCreatedBeforeRace",!localFirst).put("localGateWasBeforeExternalPrepare",localFirst).toString())})
    }finally{runCatching{wire.control(58,"release")};page.close();store.close();try{wire.closeHost()}finally{wire.close()}}
   }
  }
