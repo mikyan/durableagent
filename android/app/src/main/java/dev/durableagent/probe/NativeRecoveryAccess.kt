@@ -56,7 +56,9 @@ class NativeRecoveryAccess(private val service:ApplicationService,private val mo
     @V8Function fun probeJson(workId:String):String=result{store.probe(workId,System.currentTimeMillis())}
     @V8Function fun wakeJson(json:String):String=result{
         val wake=store.wake(JSONObject(json));due=if(wake.has("at"))wake.getLong("at")else null
-        val encoded=wake.toString();if(encoded!=lastWake){lastWake=encoded;fired=null;NativeRecoveryJobs.schedule(service,mode,run,wake,!network.current().known)}
+        // Cache only a successful platform publication. A rejected schedule must
+        // remain retryable with the identical durable wake and input identity.
+        val encoded=wake.toString();if(encoded!=lastWake){NativeRecoveryJobs.schedule(service,mode,run,wake,!network.current().known);lastWake=encoded;fired=null}
         JSONObject()
     }
     @V8Function fun projectionJson(json:String):String=result{
