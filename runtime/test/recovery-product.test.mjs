@@ -8,6 +8,7 @@ import {ModelConnections} from '../dist/model-connections.js';
 import {ManagedExecution} from '../dist/managed-execution.js';
 import {SqliteSendAuthority} from '../validation/submission-authority.mjs';
 import {PersistentExecutionPeer} from '../validation/execution-peer.mjs';
+import {inspectProductRecovery} from '../validation/recovery-product-preflight.mjs';
 const until=async condition=>{const end=Date.now()+5000;while(!await condition()){assert.ok(Date.now()<end,'Product input did not settle');await new Promise(resolve=>setTimeout(resolve,10));}};
 const call=async(app,method,payload={})=>{const response=await app.request({protocol:1,connectionId:'product-tools',requestId:crypto.randomUUID(),method,payload});assert.ok(response.ok,JSON.stringify(response));return response.value;};
 
@@ -24,5 +25,6 @@ test('product ModelConnections offers real registered tool schemas and reports o
   await call(app,'create',{creationId:'chat'});await native.create('chat','prompt-private: actually execute the requested tool','original');await call(app,'send',{intentId:'original'});await until(async()=>(await call(app,'sendStatus',{intentId:'original'})).submission?.status==='done');
   assert.equal(bodies.length,2);const names=bodies[0].tools.map(tool=>tool.function.name);for(const name of ['bash','read','write'])assert.ok(names.includes(name),name+' must be exposed in the final product HTTP request');assert.equal(bodies[0].tools.find(tool=>tool.function.name==='bash').function.parameters.properties.command.type,'string');assert.equal(bodies[0].tool_choice,undefined,'Product tool choice is not forced by the fixture');
   assert.deepEqual(receipts[0].requestTools,{names,choice:'default'});assert.ok(!JSON.stringify(receipts).includes('prompt-private'));assert.ok(!JSON.stringify(receipts).includes('synthetic-provider-secret'));assert.equal((await call(app,'execution.list',{id:'chat'})).executions.length,1);
+  await app.close();const preflight=await inspectProductRecovery(join(directory,'sdk.sqlite'));assert.equal(preflight.databaseReadOnly,true);assert.equal(preflight.activeTaskCount,0);assert.equal(preflight.productCount,1);assert.equal(preflight.defaultModel.provider,'mimo');assert.equal(preflight.connections[0].id,'mimo');assert.ok(!JSON.stringify(preflight).includes('prompt-private'));
  }finally{await app?.close();peer.close();native.close();await rm(directory,{recursive:true,force:true});}
 });
