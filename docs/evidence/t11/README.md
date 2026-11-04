@@ -73,6 +73,14 @@ did not stop generation 2. The recorded 9037 ms spans the whole scenario after
 notification delivery, not merely native acknowledgement or the rebuild deadline.
 The unrelated fixture was subsequently stopped by a separate explicit cleanup.
 
+Root separately inspected the actual persisted Termux receipts and original files
+through its own read-only terminal probe after both Full02 scenarios:
+[notification observations](original-effects-notification.json) and
+[real MiMo observations](original-effects-real-mimo.json). The old delayed-effect
+files were absent and the new-generation verifiers completed with exit 0. These
+observations preserve the notification witness's later explicit cleanup as a
+separate event from its uncancelled state at the target-stop assertion.
+
 [Full02 real MiMo](t11-full02-real-mimo.log): **1/1 passed**, zero skipped,
 42.384 seconds, following the earlier [Full01 live pass](t11-full01-real-mimo.log)
 of 22.685 seconds. MiMo made one request that invoked an actual supervised Termux
