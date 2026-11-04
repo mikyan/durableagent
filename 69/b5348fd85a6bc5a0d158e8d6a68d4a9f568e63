@@ -1,0 +1,33 @@
+managed-execution/evidence/t10-android-file-owner-death.json
+  s_467dcb949b5b60::t_497aef25f515bc 1-36
+android/app/src/androidTest/java/dev/durableagent/probe/FileNativeObservationTest.kt
+  s_467dcb949b5b60::t_8f6fd789c0a73d 27,38-47
+  s_467dcb949b5b60::t_5651f70d9bc19f 10-13,18-26,28-37,48-51
+android/app/src/androidTest/java/dev/durableagent/probe/FileQueueApplicationTest.kt
+  s_467dcb949b5b60::t_2ff1b77963a4f4 51
+runtime/src/document-writes.ts
+  s_467dcb949b5b60::t_e156613b8509f9 22-28,70
+  s_467dcb949b5b60::t_c966946cdde831 40
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_d68c9bd536d31f 469-484
+android/app/src/androidTest/java/dev/durableagent/probe/FileSharedOriginalTest.kt
+  s_467dcb949b5b60::t_2ff1b77963a4f4 68,79,82,86,89
+managed-execution/FILE-VALIDATION.md
+  s_467dcb949b5b60::t_497aef25f515bc 66-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "69b5348fd85a6bc5a0d158e8d6a68d4a9f568e63",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
