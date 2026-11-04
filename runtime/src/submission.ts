@@ -109,5 +109,12 @@ export class Submissions {
   /** Reached by every actual model invocation, including SDK retry/deferred/compaction paths. */
   checkDispatch(){return this.coordinate(async()=>{this.options.ready();if(!(await this.options.authority.pendingStops()).length)return;const release=this.options.pause();try{await this.stops();}finally{release();}});}
   /** Startup: only persisted explicit intents, never draft text. Read-only projection does not call this. */
-  recover(){return this.coordinate(async()=>{const release=this.options.pause();try{await this.stops();}finally{release();}let cursor:string|undefined;do{const page=await this.options.authority.listSends({cursor,limit:50});for(const intent of page.intents){if(intent.delivery==='acknowledged'||intent.cancelled)continue;try{await this.admit(intent.intentId);}catch(error){if(!(error instanceof SubmissionError)&&!(error instanceof InputError))throw error;}}cursor=page.next;}while(cursor);});}
+  recover(){return this.coordinate(async()=>{
+    const release=this.options.pause();try{await this.stops();}finally{release();}
+    // Native/UI pages are latest-first by durable sequence, not wall-clock time.
+    // Read all pages before reversing so a page boundary cannot reorder sends.
+    const pending:string[]=[];let cursor:string|undefined;
+    do{const page=await this.options.authority.listSends({cursor,limit:50});for(const intent of page.intents)if(intent.delivery!=='acknowledged'&&!intent.cancelled)pending.push(intent.intentId);cursor=page.next;}while(cursor);
+    for(const intentId of pending.reverse())try{await this.admit(intentId);}catch(error){if(!(error instanceof SubmissionError)&&!(error instanceof InputError))throw error;}
+  });}
 }

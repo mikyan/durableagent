@@ -1,0 +1,42 @@
+(node:93864) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ explicit native intent alone drives atomic SDK admission; lost ACK reconciles the same identity and preserves later draft (440.0128ms)
+✔ same content is a new user action; accepted identity mismatch cannot reuse its SDK request or binding (511.3224ms)
+✔ failure after submit rolls back submission map and binding; durable commit response loss recovers only original acceptance (298.3251ms)
+✔ a native stop committed during SDK admission prevents dispatch, survives reopen, and only a new explicit generation may proceed (345.0432ms)
+✔ a conflicting native receipt is a visible inconsistency, never a fresh or silently acknowledged submission (300.8579ms)
+✔ missing SDK map or binding is reported without repair or redelivery of a native acknowledged intent (629.4199ms)
+✔ unaccepted changed location refuses; accepted replay keeps original binding after the current location changes (323.857ms)
+✔ persisted due work and old stop stay behind the native control startup barrier, including abort implicit resume (827.0426ms)
+✔ native stops at either ACK edge are checked by actual dispatch, not only by the earlier admission snapshot (253.0735ms)
+✔ two durable conversations dispatch concurrently without control-check starvation or mixed history (327.9208ms)
+✔ actual SQL COMMIT failures retain an uncertain native intent; reopen inspects a whole accepted or absent transaction (656.1468ms)
+✔ real SDK queued, placed and settled input remain distinct while afterRun keeps the conversation active (489.5243ms)
+✔ a missing native authority never opens a writable SDK runtime or dispatches legacy stored work (1.4588ms)
+✔ startup preserves the original explicit send order across 2 pending intents (538.4146ms)
+✖ startup preserves the original explicit send order across 52 pending intents (11202.4753ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 14
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17376.8894
+
+✖ failing tests:
+
+test at validation\submission-policy.mjs:3:87
+✖ startup preserves the original explicit send order across 52 pending intents (11202.4753ms)
+  AssertionError [ERR_ASSERTION]: Public state timed out
+      at until (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/validation/submission-policy.mjs:21:78)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/validation/submission-policy.mjs:98:3)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

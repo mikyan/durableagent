@@ -1,0 +1,25 @@
+(node:79920) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ explicit native intent alone drives atomic SDK admission; lost ACK reconciles the same identity and preserves later draft (431.4913ms)
+✔ same content is a new user action; accepted identity mismatch cannot reuse its SDK request or binding (514.1721ms)
+✔ failure after submit rolls back submission map and binding; durable commit response loss recovers only original acceptance (294.8491ms)
+✔ a native stop committed during SDK admission prevents dispatch, survives reopen, and only a new explicit generation may proceed (362.8205ms)
+✔ a conflicting native receipt is a visible inconsistency, never a fresh or silently acknowledged submission (280.5809ms)
+✔ missing SDK map or binding is reported without repair or redelivery of a native acknowledged intent (635.2685ms)
+✔ unaccepted changed location refuses; accepted replay keeps original binding after the current location changes (317.9999ms)
+✔ persisted due work and old stop stay behind the native control startup barrier, including abort implicit resume (839.5306ms)
+✔ native stops at either ACK edge are checked by actual dispatch, not only by the earlier admission snapshot (278.1772ms)
+✔ two durable conversations dispatch concurrently without control-check starvation or mixed history (338.6356ms)
+✔ actual SQL COMMIT failures retain an uncertain native intent; reopen inspects a whole accepted or absent transaction (721.7984ms)
+✔ real SDK queued, placed and settled input remain distinct while afterRun keeps the conversation active (513.136ms)
+✔ a missing native authority never opens a writable SDK runtime or dispatches legacy stored work (1.6022ms)
+✔ startup preserves the original explicit send order across 2 pending intents (557.075ms)
+✔ startup preserves the original explicit send order across 52 pending intents (1164.1027ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7480.1862

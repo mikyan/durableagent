@@ -119,3 +119,9 @@ T15 `75ab2ae` 已合入生产源码 `a8ee9c0`，fixture-only `342c1b7` 增加观
 全量审查提出的 restoreRunning 缺口已由实际 Android JobScheduler／公开 Application 验证：[同一固定测试 RED](t12-wake-reopen-red01-device.log) 15.590 秒。先用自有 jobId 冲突让一次实际离线发送的 wake 持久但发布失败，正常关闭旧宿主并确认 Service 消失；移除冲突后建立不同 instance 的新宿主，仍无法重新发布相同 wake。没有第二次发送或模型请求。根因是 restoreRunning 把持久计划预置为 lastWake，而持久化不等于系统发布成功。最小修复只取消此预置，缓存仍仅在 schedule 成功后更新。
 
 [同一测试 APK GREEN](t12-wake-reopen-green01-device.log) 7.332 秒，run `c0c6d0f0-118d-40f9-99e5-0f757e0967ed`，原 admission 保持、new owner、实际 jobId 1999245591、modelRequests 0，finally 停止自己的输入并恢复网络。RED [冻结值](t12-wake-reopen-red01-artifacts.json) main C233；GREEN [冻结值](t12-wake-reopen-green01-artifacts.json) main `02bb43d457f41baeda26eba3c569caa140b6f2f108d5a071ac4adc4630e78a6d`；两者 test 均 `add94483522761419b900b300c3fdac6008f9f809e9357106498a46ed2e69f5a`，断言未改。命令为实际网络关闭后 `am instrument -w -e class dev.durableagent.probe.RecoveryJobApplicationTest#aReopenedOwnerRepublishesItsPersistedWakeWithoutAnotherInput -e actualNetworkOffline true dev.durableagent.probe.test/androidx.test.runner.AndroidJUnitRunner`，结束恢复 Wi-Fi／移动数据。该显式宿主重开测试不冒称进程自然死亡；先前无 instrumentation 的产品生命周期证据仍按原候选限定。最终 native 修改之后还需跑已有 Job lifetime 回归。
+
+## 多条待发送意图的原顺序
+
+独立审查发现 native/UI 的 latest-first 分页被直接用于恢复，导致两个明确输入变成 SECOND、FIRST。公开真实 SDK／SQLite 回归先 [RED](t12-pending-order-red01.log)，覆盖两条及 52 条；初版修复后两条通过，但 52 条实际生成超过原 10 秒测试预算，见 [原失败](t12-pending-order-green01.log)。最终回归改为两个有效输入之间夹 50 条已停止的另一会话输入，既真实跨页又验证停止 fence；同一最终测试在原生产源码再次 [RED](t12-pending-order-red02.log)，两个用例均准确得到倒序。修复收集全部页的未接纳身份，再按原生 durable sequence 反向处理，逐项仍重新读取身份与停止事实；没有按可能相等／倒退的 createdAt 排序，UI 仍 latest-first。
+
+[整个 submission suite GREEN](t12-pending-order-green02.log) 15/15，7.480 秒；两条原输入顺序正确，跨页取消输入没有历史，完成再重开 receipt 不变。独立固定诊断也 [GREEN](v1-review-pending-order-regression-green.log)。首个脚本写入用了错误 cwd，因此根本没有注册新测试，[空选择器输出](t12-pending-order-fixture-path-error.log) 保留且不算 RED/GREEN。这些是受控模型传输下的真实 SDK／SQLite 公开接口结果，并非 Android 实际进程杀死。
