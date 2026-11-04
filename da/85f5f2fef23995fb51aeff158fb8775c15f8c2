@@ -1,0 +1,22 @@
+runtime/src/application.ts
+  s_467dcb949b5b60::t_c033d78955ab20 324,326,329
+runtime/test/retry-after.test.mjs
+  s_467dcb949b5b60::t_c033d78955ab20 17-18,20,101-109
+  s_467dcb949b5b60::t_cf587952ab3ce5 110-111
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "da85f5f2fef23995fb51aeff158fb8775c15f8c2",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
