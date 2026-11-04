@@ -1,6 +1,6 @@
 # T09 验证记录
 
-当前仍在收尾验证，尚未宣布整票完成。实际设备操作由根代理串行执行；实现代理没有并行使用 ADB。以下明确区分实际通过、历史失败与待验收项。
+T09 已完成本文限定的开发验证和独立复核，源码已合入已验收的 T14；由根代理安排最终 integration 合并与工单状态。实际设备操作由根代理串行执行；实现代理没有并行使用 ADB。以下明确区分实际通过、历史失败与后续范围。
 
 [设备公开证据摘录](evidence/android-development.json) 保存原日志 SHA-256、测试结果及公开 Interface 的结构化证据，未复制凭据或设备标识。根代理保留对应完整日志和冻结产物。
 
@@ -15,10 +15,16 @@
 | production02 | `74C51AAAB52B9A963608706A967501FA7E8A4FBA403CEEF00F100BB1EFFA8BC0` | 真实 React／SDK／Termux 六场景 |
 | production03 | `327D00BE1CE244B79AC1690A47F4DCDC0182EE2BF1A093C1F783D7D753C9E444` | 独立原生控制、SDK conformance 与恢复扩展 |
 | production04 | `96BECAA1BE6BF78AF9E4974FEE0CF46385FF735C396FF765840BA99E156D9AE8` | 最终资源预算与同环境完整输出读取 |
+| production05 | `350F25858B78EB0A5A06D0497EEC6B722D1284AE608F1FC6CA54FADF5531B935` | T14 合并；扩展／真实 MiMo 通过，六场景的第六次模型派发失败保留 |
+| production06 | `5C2D9FC445439E1CE590C0F9E47B2A97A17E95475834E5EF5A9B39F8A9C4FF91` | 如实区分派发异常与取消；相同六场景完整通过 |
 
 02 完整矩阵采用只修正测试路径比较的测试 APK `61F13CC8D7E39B760FA49030E9015CC05C253BC3648FEE34F5116918E9734E4F`。03 原测试 APK 为 `650327C86062CF656C8D5442FA0B1B2CAE7E900B126C090C7CFADAE656861B6D`。二者使用的执行端源码为 `42DC6866D388484E9726C42256E822D8D880B8B38F2273B39AE124EB9000AD73`，传输源码为 `C20F4EF5BD53BEA4CAF01BD00C9276790FA2DF1640A2896663EAC662FFD691E8`，完整初始化资产为 `423EFD8F8ED407E843D2AC1A80ADB6409E9A0C7E89FF03A8623F5AA2167564C1`。
 
 04 测试 APK 为 `2480A5D8751EF3ACE65EA2E8BEB7CDE469A568373D4CD390FD7AD86C5BC7938C`，执行端源码为 `71689C55DF8735939A1E7B2BCB98A0746FF8F91A8241B0BF463F4293F8C5A7D4`，初始化资产为 `0A533399F3D1982344DE9E544922EB3B1BB43D6DBD8D778D439C8B4CA5C53327`，传输源码不变。升级前根代理持有写入 gate，确认 29 条公开回执全部终态，以 pidfd 仅停止核验过身份的自身 daemon；停止前后公开快照摘要一致，未清理账本或配对。
+
+05 测试 APK 为 `6D1EA6C091C7D3E356314BD0920B47C8FA6241BB9D2523D98DC806278255F436`；Python、传输、安装器和初始化资产与 04 完全一致。构建源码为 `f4ba097`，逐一匹配独立 reviewer 记录的九个接线文件哈希；[最终候选映射](evidence/final-candidate.json) 保存产物、源码和主机检查摘要。
+
+06 实际六场景使用测试 APK `36A563432820AFF14026DEFD3BE1BB31A7F60693F63F25F8D938AECC9296C853`。最终测试 APK `D13B688D98E148F8F8CB4895A76C8B39FD050D6C3DB58B3931163AF57C825865` 只修正只读观察测试的原生控制路由，该观察实际通过；六场景方法未变。最终源码 `a2fdca7` 包含 `46fe4e7`；06 的执行端、UI 和初始化资产仍与 05 相同，未增加重试或修改 fixture sleep／断言。
 
 ## 已实际通过
 
@@ -34,6 +40,8 @@
 - **主机真实 SDK：** runtime 全套 157/157、17.744 秒；其中 ManagedExecution 17 项使用实际 SDK、独立原生／SDK SQLite 和外部传输测试接缝，四窗口使用真正 Node 子进程 SIGKILL 与真实文件效果。另有 UI 62 项与完整 TypeScript／Vite／Android 构建通过。主机测试不替代跨 UID 的实际 Termux 证明。
 - **最终资源预算：** GREEN13 实际执行端 21/21、18.377 秒；同源传输三项与增强生产 CLI wire 一项共 4/4、3.025 秒。原先只有 raw 字节额度，实际细碎输出与超大继承环境两项先 RED；现在每执行／全局块数与最终参数 JSON 同时有界。真实子进程逐字节输出并等待公开读取后的确认，验证小预算停止、重开后的全局额度、未出现延迟效果；原 1.2 MB 与 16 MiB 配额测试保留。
 - **04 实际升级及完整引用：** 根代理核对 APK 的 43 个 runtime、10 个 UI、129 个源码文件与初始化资产；再次从应用实际复制、Termux 粘贴运行，源哈希与 manifest 符合 04，同一配对直接连接成功。`actualCompleteRawOutputIsReadThroughTheSameEnvironment` 实际 1/1、19.577 秒：真实 SDK 命令产生 1,200,000 bytes，再通过同一 ExecutionEnv 的 raw 引用逐页读取、核 SHA，并与预期逐字节比较。
+- **合并后的实际组合：** 05 的扩展策略（12 个共享 case）及 bootstrap close 两项通过，真实 MiMo 执行另项 1/1、12.96 秒，仍是两次请求／一个 Bash 工具／精确 stdout。06 保持原六场景命令和断言，完整 1/1、48.817 秒；大输出仍为 1.2 MB／74 页，宿主重开新增模型请求为零。根代理随后独立核验 [真实文件效果](evidence/final-owned-effects.json)：成功与重连文件各精确四字节 `one\n`，取消与超时延迟效果仍不存在。
+- **派发失败分类：** 实际 SDK／SQLite 独立差分验证确认：注入同一控制读取错误时，旧版本误报 aborted，新版本持久保存 error 和安全错误码；两者均没有调用模型、只有一个用户条目、提交为 unanswered，重开也不重发。最终 runtime 全套 **171/171**（18.027 秒），UI 保持同源 **73/73**；[独立分类复核](evidence/dispatch-failure-review.md) 与 [差分结果](evidence/dispatch-classification-review.json) 单独记录。
 
 ## 保留的失败与修正
 
@@ -42,9 +50,18 @@
 3. 持续输出曾令 SQLite 读取／取消写入饥饿：一次数据库锁等待 5 秒，一次取消耗时 3.468 秒，超过原 2 秒阈值。健康查询改用 WAL 读，写者在 SQLite 前排队取得跨进程 flock；保持原断言，连续五次与全套回归通过。
 4. 接纳前强杀留下空 raw 文件，阻断同 ID 恢复；改为持久接纳后由 worker 分配。启动前 cwd 路径置换与原缺失目录后来出现也曾错误执行；现固定实际目录身份并使用已核验 fd。
 5. 02 首轮会话矩阵失败是测试将 `JSONObject.toString()` 中被转义的斜线与原始输出路径比较。只读公开诊断 1/1、0 新模型请求证明三个已完成场景的内容、回执与路径正确。测试改为比较公开 `entries[].text`，产品代码未为此改变；原失败日志保留。
+6. 独立复核用真实 UI Client／Coordinator 重现：旧原生 running 行掩盖应用随后观察到的失联 unknown，界面没有呈现待核验状态。修正为显示当前失联事实，同时保留确认终态、拒绝较旧远端序号与迟到列表覆盖。原外部反例先 RED；`fd9b5a8` 与合并工作树均独立复验 GREEN，未把过去 running 当作当前确认。
+7. 05 的六场景测试在第六次输入后超时。公开只读观察证明：前五个执行均已取得确认终态，第六个输入已经接纳且原生 ACK，但尚无第六个执行身份，SDK 为 unanswered／model_error；原生 control 的 generation=1、stoppedThrough=0，没有已保存的停止。旧 DispatchGate 把所有异常统一变成“运行已停止”，原始触发码已丢失，不能追溯认定为 BUSY 或声称根因已修复。现在只有实际 AbortSignal 才表示取消，其余异常按运行前检查／模型调用与有界安全码报告；没有自动重试 submit、模型或命令。06 原样矩阵通过是新的实际结果，不覆盖 05 的失败。短暂控制存储争用是可重现候选机制，后续恢复策略仍须独立证明。
+8. 扩展只读诊断时，测试曾把原生 `input.readControl` 发给核心 ApplicationClient，返回 UNKNOWN_ACTION。仅修正测试为同 namespace 的公开 NativeInputStore 读取，核心 sendList 保持原入口；实际 1/1、3.131 秒，零新增模型请求。未新增产品旁路，也未改变原失败会话。
 
-## 待收尾
+## 独立复核与合并
 
-实际执行矩阵已完成，尚待独立审查与合入最新 integration。曾对 03 的旧测试 APK 指定新增 raw selector，返回 `OK (0 tests)`，明确不计通过；以上 04 才是该用例的实际证明。
+独立 [SDK／Interface 审查](evidence/sdk-interface-review.md) 与 [原生／Python 审查](evidence/native-python-review.md) 没有剩余源码阻断项；已复验上述 UI 反例及 lost-start unknown 防换身份、同宿主公开核验恢复、采用位置和 SDK 会话范围清理。该结论限定于已记录的开发范围，不替代最终二进制验证或首版全分支审查。审查原文保留其冻结时点；其中 04 raw 与合并待办由本文后续实际证据更新。
+
+`f4ba097` 已合入 integration `46fe4e7`，保留 T14 扩展注册与跨会话接纳、sourceCancelled 的完整核验、T09 未决控制归属、原生控制 43／51／52 以及 bootstrap close latch。每次打开先复制贡献注册表，再安装固定核心执行与应用扩展，避免重开污染调用方注册表。合并后完整 runtime **169/169**（18.632 秒）、完整 UI **73/73**（6.48 秒）、TypeScript 和 Vite 构建通过；独立 reviewer 逐项复核了八处合并接线和 UI 修正。
+
+## 范围边界
+
+原有实际执行矩阵、独立源码审查、最新 integration 合并和组合 APK 定点设备回归已完成。Python 和初始化资产未变，因此没有重复已通过的资源预算与 04 raw 矩阵。曾对 03 的旧测试 APK 指定新增 raw selector，返回 `OK (0 tests)`，明确不计通过；以上 04 才是该用例的实际证明。
 
 已知平台边界继续有效：Android/OEM 可冻结监督者与命令；墙钟等待结束、回调、连接关闭或 PID 消失都不能单独证明效果已停止。S23 最终 OEM 矩阵、用户锁屏／开机体验以及 pinned x86 Termux 的 16 KiB bootstrap 问题保留给 T17；不能用本轮 4 KiB 开发验证覆盖它们。
