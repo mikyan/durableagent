@@ -32,6 +32,8 @@ class NativeDocumentFailureTest {
     private fun failure(code:String,action:()->Unit){try{action();fail("Expected explicit $code") }catch(error:NativeDocumentException){assertEquals(code,error.code)}}
     @Test(timeout=45000) fun actualProviderFailuresAndChangedOriginalNeverBecomeCachedSuccess(){
         assumeTrue(InstrumentationRegistry.getArguments().getString("retainedGrant")=="true")
+        val restored=control("restore-moved")
+        instrument.sendStatus(0,Bundle().apply{putString("documentEvidence",JSONObject().put("stage","synthetic-moved-original-restoration").put("observation",restored).toString())})
         val initial=control("reset");assertNotEquals(Process.myUid(),initial.getInt("providerUid"))
         val grant=context.contentResolver.persistedUriPermissions.firstOrNull{it.uri==uri}
         assertTrue("Requires a genuine prior picker grant",grant?.isReadPermission==true&&grant.isWritePermission)
@@ -44,7 +46,9 @@ class NativeDocumentFailureTest {
             val selected=store.select(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION);val id=selected.getString("resourceId")
             try{
                 control("move-away")
-                assertEquals("not_found",store.describe(id).getString("availability"));failure("DOCUMENT_NOT_FOUND"){store.open(id)}
+                // Android folds queryDocument's FileNotFoundException into a null cursor.
+                // Metadata alone cannot establish why it is absent; opening the URI can.
+                assertEquals("unavailable",store.describe(id).getString("availability"));failure("DOCUMENT_NOT_FOUND"){store.open(id)}
                 control("reset");control("fault-unavailable")
                 assertEquals("unavailable",store.describe(id).getString("availability"));failure("DOCUMENT_UNAVAILABLE"){store.open(id)}
                 control("fault-pipe");failure("DOCUMENT_UNSUPPORTED"){store.open(id)}
@@ -64,7 +68,7 @@ class NativeDocumentFailureTest {
                 assertEquals(0,control("read").getInt("writeOpens"));assertArrayEquals("NEW\n".toByteArray(),Base64.decode(control("read").getString("base64"),Base64.DEFAULT))
                 assertEquals(conflict.toString(),store.start(stale).toString())
                 instrument.sendStatus(0,Bundle().apply{putString("documentEvidence",JSONObject().put("stage","actual-provider-failures-no-write").put("providerUid",initial.getInt("providerUid")).put("unsupported",rejected).put("stale",conflict).put("writeOpens",0).toString())})
-            }finally{control("fault-clear")}
+            }finally{control("fault-clear");control("restore-moved")}
         }
     }
 }
