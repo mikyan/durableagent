@@ -24,6 +24,7 @@ class ApplicationService:Service() {
     private var closing=false
     private var credentials:NativeCredentialAccess?=null
     private var inputs:NativeInputAccess?=null
+    private var execution:ExecutionAccess?=null
     private val busyStarted=AtomicLong(0)
     private val busyEnded=AtomicLong(0)
     private val submissionProbe=SubmissionValidationProbe()
@@ -91,6 +92,8 @@ class ApplicationService:Service() {
             runtime.createV8ValueObject().use {access->access.bind(credentials!!);runtime.globalObject.set("__nativeCredentials",access)}
             inputs=NativeInputAccess(NativeInputStore(this,NativeInputBridge.namespace(mode,run)))
             runtime.createV8ValueObject().use {access->access.bind(inputs!!);runtime.globalObject.set("__nativeInputs",access)}
+            execution=ExecutionAccess(this)
+            runtime.createV8ValueObject().use {access->access.bind(execution!!);runtime.globalObject.set("__nativeExecution",access)}
             if(mode=="real"){
                 val clear=ValidationCredential.consume(this)
                 try{runtime.globalObject.set("__validationKey",String(clear,Charsets.UTF_8).trim())}finally{clear.fill(0)}
@@ -204,6 +207,6 @@ class ApplicationService:Service() {
     }
     private fun status()=JSONObject(phase).put("instance",instance).put("pid",Process.myPid()).put("domainOwned",lease!=null).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).toString()
     private fun fail(error:Throwable){phase=JSONObject().put("phase","failed").put("reason",error.message?:error.javaClass.simpleName).toString();release()}
-    private fun release(){node?.close();node=null;credentials=null;inputs?.close();inputs=null;lease?.close();lease=null;closing=false;pending.clear()}
+    private fun release(){node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;lease?.close();lease=null;closing=false;pending.clear()}
     override fun onDestroy(){owner.post {release();thread.quitSafely()};super.onDestroy()}
 }
