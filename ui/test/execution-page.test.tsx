@@ -62,4 +62,3 @@ it('retains a verified native document terminal through stale application and na
   sequence=2;fireEvent.click(screen.getByRole('button',{name:'直接核验原件状态'}));await screen.findByRole('alert');expect(screen.getByText('原件修改已核验')).toBeTruthy();expect(screen.queryByText('原件结果待核验')).toBeNull();
  }finally{cleanup();controller.dispose();client.dispose();}
 });
-
