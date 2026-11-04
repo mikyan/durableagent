@@ -1,0 +1,19 @@
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentStore.kt
+  s_467dcb949b5b60::t_283257d75c184e 62-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "58c970487e6c751c3ace4eda56d86c8508cdd099",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
