@@ -1,0 +1,39 @@
+docs/evidence/t15/raw/t15-real-auth02.log
+  s_467dcb949b5b60::t_ffe763679f7ee5 1
+docs/evidence/t15/ARTIFACTS-candidate15.json
+  s_467dcb949b5b60::t_f0a9d7c58d5afb 2,37-49
+docs/evidence/t15/raw/t15-real-auth02.json
+  s_467dcb949b5b60::t_ffe763679f7ee5 1-172
+docs/evidence/t15/CANDIDATE15.md
+  s_467dcb949b5b60::t_895d7ed4fe91ee 23,27
+  s_467dcb949b5b60::t_79b4d93c87ef63 24-26,28,50
+tools/console-real-auth-failure.mjs
+  s_467dcb949b5b60::t_8aa7db2c753ce9 19-21,32
+  s_467dcb949b5b60::t_1ccf3a8026b3c4 1-18,22-31,33-71
+docs/evidence/t15/raw/t15-auth02-restored.json
+  s_467dcb949b5b60::t_ffe763679f7ee5 1-15
+docs/evidence/t15/raw/t15-domain-insets-after-recreate.json
+  s_467dcb949b5b60::t_4f51a98455672a 1-137
+docs/evidence/t15/raw/t15-domain-insets-before.json
+  s_467dcb949b5b60::t_468a1c6f54f858 1-137
+docs/evidence/t15/raw/t15-real-auth01.json
+  s_467dcb949b5b60::t_4c5b5cfe6ca024 1-9
+docs/evidence/t15/raw/t15-real-auth01.log
+  s_467dcb949b5b60::t_5c71d57768d8c7 1-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "52e1f7550d02a7a1470453df5711b2a0b2136538",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
