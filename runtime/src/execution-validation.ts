@@ -1,5 +1,6 @@
 import {validationConfiguration} from './application-validation.js';
 import {EXECUTION_CONFORMANCE_NAMES} from './execution-conformance.js';
+import {FILE_CONFORMANCE_NAMES} from './file-conformance.js';
 
 /** Debug host mode only. A bounded deterministic model drives the actual SDK/Termux boundary. */
 export function executionValidation(run:string,requested:()=>void){
@@ -19,5 +20,5 @@ export function executionValidation(run:string,requested:()=>void){
   EXEC_CONFORMANCE_CLEANUP:{command:`for i in 0 1 2 3; do rmdir -- '${prefix}-conformance/'$i || exit; done; rmdir -- '${prefix}-conformance'; printf 'conformance-directories-removed\\n'`},
  };
  const text=(input:unknown)=>typeof input==='string'?input:Array.isArray(input)?input.map(part=>part?.text??'').join(''):'';
- return validationConfiguration({requested,toolName:input=>text(input).trim()==='EXEC_RAW_OUTPUT'||/^EXEC_CONFORMANCE_[0-3]$/.test(text(input).trim())?'execution_conformance':'bash',toolArguments:input=>{const name=text(input).trim();if(name==='EXEC_RAW_OUTPUT')return {caseName:'raw-output'};if(/^EXEC_CONFORMANCE_[0-3]$/.test(name))return {caseName:EXECUTION_CONFORMANCE_NAMES[Number(name.at(-1))]};const value=cases[name];if(!value)throw Error('Unknown execution validation case');return value;}});
+ return validationConfiguration({requested,toolName:input=>{const name=text(input).trim();return ['FILE_ROUNDTRIP','FILE_DEPENDENCY'].includes(name)?'file_contract':name==='EXEC_RAW_OUTPUT'||/^(EXEC|FILE)_CONFORMANCE_[0-3]$/.test(name)?'execution_conformance':'bash';},toolArguments:input=>{const name=text(input).trim();if(name==='FILE_ROUNDTRIP'||name==='FILE_DEPENDENCY')return {run,caseName:name==='FILE_ROUNDTRIP'?'roundtrip':'dependency'};if(/^FILE_CONFORMANCE_[0-3]$/.test(name))return {caseName:FILE_CONFORMANCE_NAMES[Number(name.at(-1))]};if(name==='EXEC_RAW_OUTPUT')return {caseName:'raw-output'};if(/^EXEC_CONFORMANCE_[0-3]$/.test(name))return {caseName:EXECUTION_CONFORMANCE_NAMES[Number(name.at(-1))]};const value=cases[name];if(!value)throw Error('Unknown execution validation case');return value;}});
 }
