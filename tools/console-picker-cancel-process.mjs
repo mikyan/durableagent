@@ -44,7 +44,7 @@ try{
  const pickerComponent=resolver.split(/\r?\n/).find(line=>/^[\w.]+\/[\w.$]+$/.test(line));assert.ok(pickerComponent,'System document picker resolves');const pickerPackage=pickerComponent.split('/')[0];assert.notEqual(pickerPackage,pkg);evidence.pickerComponent=pickerComponent;
  await click('[data-testid=add-attachment]');await until(()=>page.evaluate("[...document.querySelectorAll('[role=menuitem]')].some(e=>e.textContent==='选择文件')"),'File menu');
  await page.evaluate("[...document.querySelectorAll('[role=menuitem]')].find(e=>e.textContent==='选择文件').click()");
- const focused=()=>adb('shell','dumpsys','window','windows').split('\n').find(line=>line.includes('mCurrentFocus='))??'';
+ const focused=()=>adb('shell','dumpsys','window').split('\n').find(line=>line.includes('mCurrentFocus='))??'';
  evidence.pickerFocus=await until(()=>{const value=focused();return value.includes(`${pickerPackage}/`)&&value;},'Actual external picker foreground');
  await screenshot('picker');await edit(edited);
  // A real timer on the retained WebView runs after its ordinary debounce/max-save timers.
