@@ -1,0 +1,26 @@
+{
+  "device": "Galaxy S23 SM-S9110",
+  "mainApkSha256": "e7cf5a6ddff4bc435f513fc727e2ac1f12b93801aefb6570fb8e4457b650bfc0",
+  "currentAndroidUser": 0,
+  "initialObservationAt": "2026-11-04T16:07:28.000Z",
+  "initialVisibleError": "Application storage already owned",
+  "action": "One actual Android tap on visible reconnect button; no sends/force-stop/reset",
+  "afterReconnectAt": "2026-11-04T16:09:27.245Z",
+  "afterReconnectError": "Application storage already owned",
+  "createConversationDisabled": true,
+  "nativeWriterConflictCause": "Unresolved; retained failed native state is not proof of a currently held lock",
+  "managedSetupStarted": false,
+  "followingDeviceObservation": "ADB connection absent before further startup diagnosis",
+  "sourceObservations": [
+    {
+      "name": "t17-s23-ui-setup02.json",
+      "bytes": 3333,
+      "sha256": "97dea816ba67cc23fea7ec324eb31bda2eae68e028ece30ac7fa18aa6974a8a1"
+    },
+    {
+      "name": "t17-s23-ui-reconnect02.json",
+      "bytes": 7125,
+      "sha256": "1af0a93720561e44748c021c716049dca8fbfbcb216e6736ff34c67e27b1e2ae"
+    }
+  ]
+}

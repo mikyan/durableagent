@@ -1,0 +1,8 @@
+{
+  "base": "dfe6a3a008e7ce9081a362c8d834e7e5ac87dfa0",
+  "productionChanges": null,
+  "targetMain": "e7cf5a6ddff4bc435f513fc727e2ac1f12b93801aefb6570fb8e4457b650bfc0",
+  "test": "b17a6e21f77c6a341e87173e27cd7780be9839dde8379251a4be92251640be7b",
+  "testSource": "2f769dd07c2e998b409c3707ffd732cbe22907d5e294182ef75dd24b22c2eeeb",
+  "observerSource": "26e24a9b57da7505f329ebfced1bd7fc8bc81611e877d99b846e6bc313d73483"
+}

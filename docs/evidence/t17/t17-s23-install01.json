@@ -1,0 +1,20 @@
+{
+  "device": "Galaxy S23 SM-S9110",
+  "serialStored": false,
+  "method": "adb install -r preserves existing app data; no uninstall fallback",
+  "artifacts": [
+    {
+      "file": "app.apk",
+      "sha256": "e7cf5a6ddff4bc435f513fc727e2ac1f12b93801aefb6570fb8e4457b650bfc0",
+      "exitCode": 0,
+      "output": "Performing Streamed Install\r\nSuccess"
+    },
+    {
+      "file": "test.apk",
+      "sha256": "3d99bb4cdb82b76cf328919025ab6ab96d4577ba5442b2d90d3f8bb518ecc938",
+      "exitCode": 0,
+      "output": "Performing Streamed Install\r\nSuccess"
+    }
+  ],
+  "capturedAt": "2026-11-04T16:03:18.136618+00:00"
+}

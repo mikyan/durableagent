@@ -1,0 +1,209 @@
+{
+  "plan": {
+    "name": "t17-force-stop-ui10",
+    "steps": [
+      {
+        "swipe": [
+          280,
+          340,
+          280,
+          220,
+          350
+        ]
+      },
+      {
+        "click": "[data-testid=execution-row] button"
+      },
+      {
+        "wait": "!document.querySelector('.execution-error') && document.querySelector('[data-testid=execution-row]')?.dataset.state === 'completed'",
+        "timeout": 15000
+      },
+      {
+        "evaluate": "({notice:document.querySelector('.execution-notice')?.innerText,error:document.querySelector('.execution-error')?.innerText,rows:[...document.querySelectorAll('[data-testid=execution-row]')].map(e=>({id:e.querySelector('code')?.innerText,state:e.dataset.state,text:e.innerText}))})"
+      },
+      {
+        "shot": "original-execution-after-explicit-termux-reopen"
+      }
+    ]
+  },
+  "started": "2026-11-04T16:28:48.773Z",
+  "pid": "21093",
+  "steps": [
+    {
+      "step": {
+        "swipe": [
+          280,
+          340,
+          280,
+          220,
+          350
+        ]
+      }
+    },
+    {
+      "step": {
+        "click": "[data-testid=execution-row] button"
+      }
+    },
+    {
+      "step": {
+        "wait": "!document.querySelector('.execution-error') && document.querySelector('[data-testid=execution-row]')?.dataset.state === 'completed'",
+        "timeout": 15000
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "evaluate": "({notice:document.querySelector('.execution-notice')?.innerText,error:document.querySelector('.execution-error')?.innerText,rows:[...document.querySelectorAll('[data-testid=execution-row]')].map(e=>({id:e.querySelector('code')?.innerText,state:e.dataset.state,text:e.innerText}))})"
+      },
+      "value": {
+        "rows": [
+          {
+            "id": "58877da0-1f84-465b-a529-2ec0b1be24ca",
+            "state": "completed",
+            "text": "已结束\n退出码 0\n58877da0-1f84-465b-a529-2ec0b1be24ca\n核验状态"
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "shot": "original-execution-after-explicit-termux-reopen"
+      },
+      "value": {
+        "width": 412,
+        "height": 840,
+        "dpr": 2.625,
+        "title": "新会话",
+        "active": "real-recovery-4e7e1556-f574-499f-9c26-bb71cb9f2df6",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 20,
+              "y": 19,
+              "width": 46,
+              "height": 46,
+              "top": 19,
+              "right": 66,
+              "bottom": 65,
+              "left": 20
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 346.1845397949219,
+              "y": 19,
+              "width": 46,
+              "height": 46,
+              "top": 19,
+              "right": 392.1845397949219,
+              "bottom": 65,
+              "left": 346.1845397949219
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 25.761905670166016,
+              "y": 686.2142944335938,
+              "width": 38,
+              "height": 38,
+              "top": 686.2142944335938,
+              "right": 63.761905670166016,
+              "bottom": 724.2142944335938,
+              "left": 25.761905670166016
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 71.76190948486328,
+              "y": 689.2142944335938,
+              "width": 28,
+              "height": 38,
+              "top": 689.2142944335938,
+              "right": 99.76190948486328,
+              "bottom": 727.2142944335938,
+              "left": 71.76190948486328
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": true,
+            "rect": {
+              "x": 342.4285888671875,
+              "y": 683.2142944335938,
+              "width": 44,
+              "height": 44,
+              "top": 683.2142944335938,
+              "right": 386.4285888671875,
+              "bottom": 727.2142944335938,
+              "left": 342.4285888671875
+            }
+          },
+          {
+            "label": "关闭辅助区域",
+            "disabled": false,
+            "rect": {
+              "x": 329.4226379394531,
+              "y": 28.761905670166016,
+              "width": 56.00595474243164,
+              "height": 39.52381134033203,
+              "top": 28.761905670166016,
+              "right": 385.42859268188477,
+              "bottom": 68.28571701049805,
+              "left": 329.4226379394531
+            }
+          }
+        ],
+        "nativeView": {
+          "attached": true,
+          "empty": false,
+          "height": 2205,
+          "never_attached": false,
+          "screenX": 0,
+          "screenY": 132,
+          "visible": true,
+          "width": 1080
+        },
+        "metadata": [
+          {
+            "label": "草稿已保存",
+            "rect": {
+              "x": 16,
+              "y": 743.9761962890625,
+              "width": 380.19049072265625,
+              "height": 16.5,
+              "top": 743.9761962890625,
+              "right": 396.19049072265625,
+              "bottom": 760.4761962890625,
+              "left": 16
+            }
+          },
+          {
+            "label": "省流已关上下文约 666+ tokenMiMo-V2.6-FlashYOLO默认工作区",
+            "rect": {
+              "x": 16,
+              "y": 770.4761962890625,
+              "width": 380.19049072265625,
+              "height": 54.52381134033203,
+              "top": 770.4761962890625,
+              "right": 396.19049072265625,
+              "bottom": 825.0000076293945,
+              "left": 16
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true,
+  "completed": "2026-11-04T16:28:52.656Z"
+}

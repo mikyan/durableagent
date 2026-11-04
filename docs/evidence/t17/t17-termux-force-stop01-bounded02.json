@@ -1,0 +1,11 @@
+{
+  "ObservedAfterSeconds": 57.3,
+  "PackageLines": [
+    "User 0: ceDataInode=557923 deDataInode=401809 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+    "User 0:",
+    "User 0:"
+  ],
+  "AppPids": [],
+  "OriginalExecutionUnchanged": "58877da0-1f84-465b-a529-2ec0b1be24ca",
+  "AutomaticBypassObserved": false
+}

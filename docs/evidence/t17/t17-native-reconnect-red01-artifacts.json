@@ -1,0 +1,16 @@
+{
+  "capturedAt": "2026-11-04T16:34:09.179369+00:00",
+  "provenance": "Documentation checkpoint reconstructed after the run from approved frozen APK and source; not a contemporaneous pre-run manifest.",
+  "targetMainSha256": "e7cf5a6ddff4bc435f513fc727e2ac1f12b93801aefb6570fb8e4457b650bfc0",
+  "sourceCommit": null,
+  "files": {
+    "test.apk": {
+      "bytes": 4341964,
+      "sha256": "7feb882175f1eed0e25e31370ac5dfd6972bbcddeacc6f2eaf107ed9635ace65"
+    },
+    "HostReconnectApplicationTest.kt": {
+      "bytes": 7404,
+      "sha256": "ffd46f3a2b120381b2640c81c349c7aabb573bf1f67143d1228fa784461230ed"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "capturedAt": "2026-11-04T16:00:45.262842+00:00",
+  "afterFailureCleanup": true,
+  "ownerAbsent": true,
+  "identicalDoubleRead": true,
+  "sidecars": {
+    "-wal": "absent",
+    "-shm": "absent",
+    "-journal": "absent"
+  },
+  "bytes": 24576,
+  "sha256": "4fc88d055d9748069d477ec5800d2c64b07ac9cdc196b20179a9a78ceaed7035",
+  "policy": [
+    {
+      "id": 1,
+      "enabled": 0,
+      "version": 0,
+      "period": 15,
+      "network": "{\"identity\":\"4:484442034189\",\"known\":true,\"metered\":false,\"blocked\":false}"
+    }
+  ],
+  "targetOperation": {
+    "executionId": "c1e28e08-a72b-4fe9-8391-c18764505264",
+    "requestDigest": "79d3010451ffe3e6420b27f3895da808c2f9fb9d09afec84ae0384cf1f740554",
+    "productId": "real-recovery-695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9",
+    "controlGeneration": 1,
+    "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+    "classification": "unknown",
+    "summary": "{\"kind\":\"shell\",\"script\":\"test ! -e '\\/data\\/data\\/com.termux\\/files\\/home\\/.local\\/share\\/durableagent-execution\\/workspace\\/.durableagent-t12-695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9.txt' || exit 71; printf 'part-one\\\\n' > '\\/data\\/data\\/com.termux\\/files\\/home\\/.local\\/share\\/durableagent-execution\\/workspace\\/.durableagent-t12-695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9.txt'; printf 'T12_PART_ONE\\\\n'; sleep 18; printf 'part-two\\\\n' >> '\\/data\\/data\\/com.termux\\/files\\/home\\/.local\\/share\\/durableagent-execution\\/w",
+    "grantPeriod": null,
+    "finalDigest": "0bcf2e9cc574129aeed49d4b9eb8b7b7ea13a7c3e47ae966fc612c1ad320308a",
+    "localCapability": null,
+    "sequence": 6,
+    "state": "completed",
+    "scopeConfirmed": true,
+    "terminal": true,
+    "dispatched": true
+  }
+}

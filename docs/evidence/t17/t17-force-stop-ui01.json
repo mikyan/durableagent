@@ -1,0 +1,208 @@
+{
+  "plan": {
+    "name": "t17-force-stop-ui01",
+    "steps": [
+      {
+        "wait": "document.body.innerText.includes('part-two')",
+        "timeout": 45000
+      },
+      {
+        "evaluate": "({text:document.body.innerText,buttons:[...document.querySelectorAll('button')].filter(e=>e.getBoundingClientRect().width>0).map(e=>({text:e.innerText,label:e.getAttribute('aria-label'),html:e.outerHTML.slice(0,180)}))})"
+      },
+      {
+        "shot": "completed-original-before-termux-stop"
+      }
+    ]
+  },
+  "started": "2026-11-04T16:20:19.022Z",
+  "pid": "21093",
+  "steps": [
+    {
+      "step": {
+        "wait": "document.body.innerText.includes('part-two')",
+        "timeout": 45000
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "evaluate": "({text:document.body.innerText,buttons:[...document.querySelectorAll('button')].filter(e=>e.getBoundingClientRect().width>0).map(e=>({text:e.innerText,label:e.getAttribute('aria-label'),html:e.outerHTML.slice(0,180)}))})"
+      },
+      "value": {
+        "text": "新会话\n本次输入 ↑\n请实际执行文件操作，不要预测输出，也不要直接回复预期文本。这是已授权的恢复验证，新文件尚不存在。你必须首先调用已提供的 bash 工具执行下面完整命令一次，并等待实际工具结果；没有工具结果就不能声称完\n×\n你\n已保存\n请实际执行文件操作，不要预测输出，也不要直接回复预期文本。这是已授权的恢复验证，新文件尚不存在。你必须首先调用已提供的 bash 工具执行下面完整命令一次，并等待实际工具结果；没有工具结果就不能声称完成。不要增添命令，不要调用 read、write 或其他工具，不要重复命令。\n<command>\ntest ! -e '/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t12-4e7e1556-f574-499f-9c26-bb71cb9f2df6.txt' || exit 71; printf 'part-one\\n' > '/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t12-4e7e1556-f574-499f-9c26-bb71cb9f2df6.txt'; printf 'T12_PART_ONE\\n'; sleep 18; printf 'part-two\\n' >> '/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t12-4e7e1556-f574-499f-9c26-bb71cb9f2df6.txt'; cat '/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t12-4e7e1556-f574-499f-9c26-bb71cb9f2df6.txt'\n</command>\n工具真实完成后，依据实际输出原样报告文件最后两行。\n工具\n已保存\nT12_PART_ONE\npart-one\npart-two\n\nπ\nAgent\n已保存\n工具实际输出如下：\n\n```\nT12_PART_ONE\npart-one\npart-two\n```\n\n文件最后两行是：\n\n```\npart-one\npart-two\n```\n回复已保存\n发送状态\n刷新发送状态\n输入已结算\n04:13 PM\n\n请实际执行文件操作，不要预测输出，也不要直接回复预期文本。这是已授权的恢复验证，新文件尚不存在。你必须首先调用已提供的 bash 工具执行下面完整命令一次，并等待实际工具结果；没有工具结果就不能声称完成。不要增添命令，不要调用 read、write 或其他工具，不要重复命令。 <command> test ! -e '/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.…\n\n不代表整个会话或外部操作全部结束。\n\n草稿已保存\n省流已关\n上下文约 666+ token\nMiMo-V2.6-Flash\nYOLO\n默认工作区",
+        "buttons": [
+          {
+            "text": "",
+            "label": "打开会话列表",
+            "html": "<button class=\"round-button menu-button\" aria-label=\"打开会话列表\" aria-expanded=\"false\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"rou"
+          },
+          {
+            "text": "",
+            "label": "新建会话",
+            "html": "<button class=\"round-button\" data-testid=\"create-conversation\" aria-label=\"新建会话\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round"
+          },
+          {
+            "text": "本次输入 ↑\n请实际执行文件操作，不要预测输出，也不要直接回复预期文本。这是已授权的恢复验证，新文件尚不存在。你必须首先调用已提供的 bash 工具执行下面完整命令一次，并等待实际工具结果；没有工具结果就不能声称完",
+            "label": "回到本次输入",
+            "html": "<button class=\"question-jump\" aria-label=\"回到本次输入\"><small>本次输入 ↑</small><span>请实际执行文件操作，不要预测输出，也不要直接回复预期文本。这是已授权的恢复验证，新文件尚不存在。你必须首先调用已提供的 bash 工具执行下面完整命令一次，并等待实际工具结果；没有工具结果就不能声称完</s"
+          },
+          {
+            "text": "×",
+            "label": "关闭输入浮条",
+            "html": "<button class=\"question-dismiss\" aria-label=\"关闭输入浮条\">×</button>"
+          },
+          {
+            "text": "刷新发送状态",
+            "label": null,
+            "html": "<button class=\"text-button\" data-testid=\"refresh-submissions\">刷新发送状态</button>"
+          },
+          {
+            "text": "",
+            "label": "会话详情",
+            "html": "<button type=\"button\" class=\"plain-icon detail-button\" aria-label=\"会话详情\" aria-expanded=\"false\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-"
+          },
+          {
+            "text": "",
+            "label": "添加附件",
+            "html": "<button type=\"button\" class=\"plain-icon attachment-button\" data-testid=\"add-attachment\" aria-label=\"添加附件\" aria-expanded=\"false\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"current"
+          },
+          {
+            "text": "",
+            "label": "发送消息",
+            "html": "<button type=\"submit\" class=\"send-button\" data-testid=\"send-message\" aria-label=\"发送消息\" disabled=\"\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" str"
+          },
+          {
+            "text": "省流已关",
+            "label": null,
+            "html": "<button type=\"button\" class=\"data-saver-entry\">省流已关</button>"
+          }
+        ]
+      }
+    },
+    {
+      "step": {
+        "shot": "completed-original-before-termux-stop"
+      },
+      "value": {
+        "width": 412,
+        "height": 840,
+        "dpr": 2.625,
+        "title": "新会话",
+        "active": "real-recovery-4e7e1556-f574-499f-9c26-bb71cb9f2df6",
+        "draft": "saved",
+        "controls": [
+          {
+            "label": "打开会话列表",
+            "disabled": false,
+            "rect": {
+              "x": 20,
+              "y": 19,
+              "width": 46,
+              "height": 46,
+              "top": 19,
+              "right": 66,
+              "bottom": 65,
+              "left": 20
+            }
+          },
+          {
+            "label": "新建会话",
+            "disabled": false,
+            "rect": {
+              "x": 346.1845397949219,
+              "y": 19,
+              "width": 46,
+              "height": 46,
+              "top": 19,
+              "right": 392.1845397949219,
+              "bottom": 65,
+              "left": 346.1845397949219
+            }
+          },
+          {
+            "label": "会话详情",
+            "disabled": false,
+            "rect": {
+              "x": 25.761905670166016,
+              "y": 686.2142944335938,
+              "width": 38,
+              "height": 38,
+              "top": 686.2142944335938,
+              "right": 63.761905670166016,
+              "bottom": 724.2142944335938,
+              "left": 25.761905670166016
+            }
+          },
+          {
+            "label": "添加附件",
+            "disabled": false,
+            "rect": {
+              "x": 71.76190948486328,
+              "y": 689.2142944335938,
+              "width": 28,
+              "height": 38,
+              "top": 689.2142944335938,
+              "right": 99.76190948486328,
+              "bottom": 727.2142944335938,
+              "left": 71.76190948486328
+            }
+          },
+          {
+            "label": "发送消息",
+            "disabled": true,
+            "rect": {
+              "x": 342.4285888671875,
+              "y": 683.2142944335938,
+              "width": 44,
+              "height": 44,
+              "top": 683.2142944335938,
+              "right": 386.4285888671875,
+              "bottom": 727.2142944335938,
+              "left": 342.4285888671875
+            }
+          }
+        ],
+        "nativeView": {
+          "attached": true,
+          "empty": false,
+          "height": 2205,
+          "never_attached": false,
+          "screenX": 0,
+          "screenY": 132,
+          "visible": true,
+          "width": 1080
+        },
+        "metadata": [
+          {
+            "label": "草稿已保存",
+            "rect": {
+              "x": 16,
+              "y": 743.9761962890625,
+              "width": 380.19049072265625,
+              "height": 16.5,
+              "top": 743.9761962890625,
+              "right": 396.19049072265625,
+              "bottom": 760.4761962890625,
+              "left": 16
+            }
+          },
+          {
+            "label": "省流已关上下文约 666+ tokenMiMo-V2.6-FlashYOLO默认工作区",
+            "rect": {
+              "x": 16,
+              "y": 770.4761962890625,
+              "width": 380.19049072265625,
+              "height": 54.52381134033203,
+              "top": 770.4761962890625,
+              "right": 396.19049072265625,
+              "bottom": 825.0000076293945,
+              "left": 16
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true,
+  "completed": "2026-11-04T16:20:25.290Z"
+}

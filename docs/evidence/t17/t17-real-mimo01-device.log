@@ -1,0 +1,53 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryRealApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RecoveryRealApplicationTest:
+INSTRUMENTATION_STATUS: test=realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: realRequestStructure={"run":"695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9","product":"real-recovery-695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9","tools":{"names":["bash","read","write","document_list","document_read","document_write","model_configuration","model_select_current","conversation_list","conversation_status","conversation_create","conversation_transfer"],"choice":"default"},"credentialGeneration":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: realRecoveryCheckpoint={"run":"695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9","product":"real-recovery-695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t12-695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9.txt","executionId":"c1e28e08-a72b-4fe9-8391-c18764505264","beforePid":17152,"beforeRequests":1,"partial":"part-one\n"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: realRecoveryFailure={"run":"695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9","product":"real-recovery-695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t12-695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9.txt","error":"AssertionError"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryRealApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Unbound product owner durably finishes before any client reconnects
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.until(RecoveryRealApplicationTest.kt:30)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.until$default(RecoveryRealApplicationTest.kt:30)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential(RecoveryRealApplicationTest.kt:87)
+
+INSTRUMENTATION_STATUS: stream=
+Error in realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential(dev.durableagent.probe.RecoveryRealApplicationTest):
+java.lang.AssertionError: Unbound product owner durably finishes before any client reconnects
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.until(RecoveryRealApplicationTest.kt:30)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.until$default(RecoveryRealApplicationTest.kt:30)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential(RecoveryRealApplicationTest.kt:87)
+
+INSTRUMENTATION_STATUS: test=realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 148.548
+There was 1 failure:
+1) realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential(dev.durableagent.probe.RecoveryRealApplicationTest)
+java.lang.AssertionError: Unbound product owner durably finishes before any client reconnects
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.until(RecoveryRealApplicationTest.kt:30)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.until$default(RecoveryRealApplicationTest.kt:30)
+	at dev.durableagent.probe.RecoveryRealApplicationTest.realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential(RecoveryRealApplicationTest.kt:87)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

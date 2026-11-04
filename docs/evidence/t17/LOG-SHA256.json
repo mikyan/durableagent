@@ -1,0 +1,200 @@
+{
+  "note": "Git text normalization may change CRLF to LF. retainedLocalSha256 covers the original local evidence copy; gitBlobSha256 covers the Git-normalized evidence content verified before commit. Markdown records and this manifest are tracked by Git.",
+  "files": [
+    {
+      "file": "completed-original-before-termux-stop.png",
+      "retainedLocalSha256": "3333d155b31f8affcf294decc498c352401a64d8e20c3202b9427f5e977316c4",
+      "gitBlobSha256": "3333d155b31f8affcf294decc498c352401a64d8e20c3202b9427f5e977316c4"
+    },
+    {
+      "file": "original-execution-after-explicit-termux-reopen.png",
+      "retainedLocalSha256": "87f0fb34711336d76931e57eb625597f542e5e0e319b6d182e8219fb50c2f5d9",
+      "gitBlobSha256": "87f0fb34711336d76931e57eb625597f542e5e0e319b6d182e8219fb50c2f5d9"
+    },
+    {
+      "file": "t17-app-signature01.log",
+      "retainedLocalSha256": "b748b36a26919170702d9739e9cc88fb849413bd51de0aadfa010bb968359b06",
+      "gitBlobSha256": "b4cb42c51d794b96070e7dd6d4430aed058923cee8014af2388d1b07fb45fa31"
+    },
+    {
+      "file": "t17-final-network01-after.json",
+      "retainedLocalSha256": "11af41f7f5239ba0700e57ff1706665d1221f3bfcdc9c117247b538a26459e8e",
+      "gitBlobSha256": "11af41f7f5239ba0700e57ff1706665d1221f3bfcdc9c117247b538a26459e8e"
+    },
+    {
+      "file": "t17-final-network01-before.json",
+      "retainedLocalSha256": "11af41f7f5239ba0700e57ff1706665d1221f3bfcdc9c117247b538a26459e8e",
+      "gitBlobSha256": "11af41f7f5239ba0700e57ff1706665d1221f3bfcdc9c117247b538a26459e8e"
+    },
+    {
+      "file": "t17-final-network01-events.json",
+      "retainedLocalSha256": "e8ffc88fa6d07f75deadebcdfccb550d2441ca65e8ef83053f8574a254493c40",
+      "gitBlobSha256": "43ccc7ff5b860b95d8c963e8f98815c9a1666ea061440798f6492c1dce594b77"
+    },
+    {
+      "file": "t17-final-network01-instrumentation.log",
+      "retainedLocalSha256": "1e42afe83c6767311c891116d9b1164a8918b0a1e32c1965252a0678ea67b9aa",
+      "gitBlobSha256": "a79de6970d5ef628f203a4540c32eb5aa03ae2fabf2e8d4142651a954c1cf16e"
+    },
+    {
+      "file": "t17-final-network01-server.log",
+      "retainedLocalSha256": "6d578f15829a74c6b60ef8d3920c8c93568e5c8d411775a69e67ac6b19b2d3fc",
+      "gitBlobSha256": "971125b5d2cdd3c24f3a3ccb3545db01fa343a268ec9bd928f09e603d505b066"
+    },
+    {
+      "file": "t17-final-stop01-device.log",
+      "retainedLocalSha256": "9253ab9ca44b385d7036da9352e72afe0178999674bc021f49af254ffb9819ed",
+      "gitBlobSha256": "c3914576bc93db80e869f38990e312a8931804528c0a6dac86277ce0744b1212"
+    },
+    {
+      "file": "t17-force-stop-ui01.json",
+      "retainedLocalSha256": "9af930fed0619416a6d15d4205df23c09c7b41954a744319e9188fa25d70aedd",
+      "gitBlobSha256": "9af930fed0619416a6d15d4205df23c09c7b41954a744319e9188fa25d70aedd"
+    },
+    {
+      "file": "t17-force-stop-ui08.json",
+      "retainedLocalSha256": "1fc53c101df7f1e9b10060824bfaf8c59cdcade754e1812d82b45e262660b6dd",
+      "gitBlobSha256": "1fc53c101df7f1e9b10060824bfaf8c59cdcade754e1812d82b45e262660b6dd"
+    },
+    {
+      "file": "t17-force-stop-ui09.json",
+      "retainedLocalSha256": "3235891e3fad238016253aad7e6f6b4c82a16f8e633b70d06e62113dc554cf94",
+      "gitBlobSha256": "3235891e3fad238016253aad7e6f6b4c82a16f8e633b70d06e62113dc554cf94"
+    },
+    {
+      "file": "t17-force-stop-ui10.json",
+      "retainedLocalSha256": "712b0828795b5949231838f6d4da1ff153dc635a4f7de8948b390df0a6da678d",
+      "gitBlobSha256": "712b0828795b5949231838f6d4da1ff153dc635a4f7de8948b390df0a6da678d"
+    },
+    {
+      "file": "t17-native-reconnect-red01-artifacts.json",
+      "retainedLocalSha256": "42e516a0d7907c22a0a0b6e5c7944e3b1e4c873ca10a166da670b183f074c68a",
+      "gitBlobSha256": "42e516a0d7907c22a0a0b6e5c7944e3b1e4c873ca10a166da670b183f074c68a"
+    },
+    {
+      "file": "t17-native-reconnect-red01-device.log",
+      "retainedLocalSha256": "99315fc733d4c57b3b8723dd5d1cff8cd3d58211f100078cd282f52055dac104",
+      "gitBlobSha256": "92ba4a50d3897e30e9a01cf3ceec51d556aceaf7eea79c851d13aabdeb1b115e"
+    },
+    {
+      "file": "t17-observer-green01-root-artifacts.json",
+      "retainedLocalSha256": "e16648dcde717bd90de3a141bc425d247745636a9121e2d5dc66f86636b0ca20",
+      "gitBlobSha256": "42069cc40717021b2b5012a13d1303b502dc56dc0205f2bb800f1413258418fa"
+    },
+    {
+      "file": "t17-physical-status01.json",
+      "retainedLocalSha256": "0c73f8d29c21990f35fe2c8e731abbafbc16ccaf129f26b2d3815b9f24679952",
+      "gitBlobSha256": "af9acf5d90660d3b5493a5c588e18391db5c3eb67b8221380ad9059471e7a270"
+    },
+    {
+      "file": "t17-preflight01.json",
+      "retainedLocalSha256": "a8bf789c8a0189b643e08d906dba79213be56c4c2a899d7e058fd63f1d3941f5",
+      "gitBlobSha256": "266bd2ba15f107798f53cf86a0231621a328ae86751c881c2c54c65b2829116e"
+    },
+    {
+      "file": "t17-real-mimo01-credential-audit.json",
+      "retainedLocalSha256": "b2dff130f8603ba1ba8f4d044d6dd7a4a7cfc19002806c6d9f8c64d2ace14522",
+      "gitBlobSha256": "b2dff130f8603ba1ba8f4d044d6dd7a4a7cfc19002806c6d9f8c64d2ace14522"
+    },
+    {
+      "file": "t17-real-mimo01-device.log",
+      "retainedLocalSha256": "b69a88d645544fb8359e413130e3bc90423426d51bfa7602b33828200990c819",
+      "gitBlobSha256": "ab0e6dc1d122f9c7b26443ce6bfa820bea5b76a8f4b48aa7eedfad913f6aa338"
+    },
+    {
+      "file": "t17-real-mimo01-observation-summary.json",
+      "retainedLocalSha256": "851afb4bc402339a7d846cb4b37732db51ca3ca4b00112a0be0225d0736c7334",
+      "gitBlobSha256": "d8bcbf1824cda32b9baad7586ae5a47ad4be8e09d726a820ad9e253997abc193"
+    },
+    {
+      "file": "t17-real-mimo01-policy-observation.json",
+      "retainedLocalSha256": "f33e757a39af68f68247ad89702d4a39df9258226d0900028418ed28a5900d8f",
+      "gitBlobSha256": "de5f5396effbae0cc01f1563669a9490ffe875f3ffd98a40146955f25a735fe1"
+    },
+    {
+      "file": "t17-real-mimo01-termux-read.log",
+      "retainedLocalSha256": "75ed36622a2ade3692737dac4b43b23d54de08161bfb4853e080e7e8e912972e",
+      "gitBlobSha256": "81cdc2cd13005bda1d353a663b93cd99e5e156ac32ce63601e1183ba26036101"
+    },
+    {
+      "file": "t17-real-mimo02-artifacts.json",
+      "retainedLocalSha256": "23eb84d5fed1c33755e4033bb7f5994d3061b7c3e90a6e4c3e982ece73602632",
+      "gitBlobSha256": "07c67f6a7fe24038d1baaba122840032e4c1b0dc6671025317d69b0b3e3e4291"
+    },
+    {
+      "file": "t17-real-mimo02-credential-audit.json",
+      "retainedLocalSha256": "56dcefe6b80ef9f4dc44741fc0b848548eca239f8ee73447c1f9a2135ae5f27f",
+      "gitBlobSha256": "56dcefe6b80ef9f4dc44741fc0b848548eca239f8ee73447c1f9a2135ae5f27f"
+    },
+    {
+      "file": "t17-real-mimo02-diagnostic-device.log",
+      "retainedLocalSha256": "59bef646815c6c370e71b5c26f860849d6f6bf77d1692385aa3bc5e3a221e20a",
+      "gitBlobSha256": "8383c41cd3fa74d1a84445d443c9cd3497174e29035f21d48ed913a4d886ad85"
+    },
+    {
+      "file": "t17-real-mimo02-termux-read.log",
+      "retainedLocalSha256": "d521a8db50fa0a74655b64e9bddaa8d6a852250cb3c28bd10a57ec6c0dfcf6e1",
+      "gitBlobSha256": "f88227cc84c7931bd7ee43cd516a81a3db9213c8fb3912d81f70dd4445e58037"
+    },
+    {
+      "file": "t17-real-mimo03-credential-audit.json",
+      "retainedLocalSha256": "9898736040071ae4bc7afa91011eb11cb1ccd22fce115fd9ea32b6aa1b578dbf",
+      "gitBlobSha256": "9898736040071ae4bc7afa91011eb11cb1ccd22fce115fd9ea32b6aa1b578dbf"
+    },
+    {
+      "file": "t17-real-mimo03-diagnostic-device.log",
+      "retainedLocalSha256": "72e55a48c6cfa22091fef0599c4adc2558a6fbd5af16ce0fe8b06c3812b8dc42",
+      "gitBlobSha256": "60c261a411fac47223883022fb0bb8067cd89540e6ca96f652ef22178a062b21"
+    },
+    {
+      "file": "t17-real-mimo03-termux-read.log",
+      "retainedLocalSha256": "7637c6079425f597258f6f1763254fc19c90a4170050daa33b469ec3cb782f2a",
+      "gitBlobSha256": "9fe6b7b9b19514a9893900f164d4b7339a5c9e35720f85b2fe1c0dcc0fb55bb5"
+    },
+    {
+      "file": "t17-s23-install01.json",
+      "retainedLocalSha256": "4ab69924fb679ce3480ba677a326ab533ea9c4441b8bc05144beb080d7f46317",
+      "gitBlobSha256": "86a6f0f114324c2c01534965bda799e33ccb07a412937b83df3b0e22809e7d20"
+    },
+    {
+      "file": "t17-s23-prerequisites-summary.json",
+      "retainedLocalSha256": "992c66272dafad6ebca77b7aace5be9d61483d09702aa1166e72696622f1cd42",
+      "gitBlobSha256": "926b8aa1411d491a3b0d52718dfe0886430e56662deb2bb1cb40b488534c29bd"
+    },
+    {
+      "file": "t17-s23-readonly-preflight.json",
+      "retainedLocalSha256": "664fa9e5f6f7e42d7d86c947f5c490a21d6ea5033458065f38a4969071d85536",
+      "gitBlobSha256": "6f354fb5ea12a12c83f75eb3b428a0d786973f81cd5f9ccd6ff6b00bfff75a76"
+    },
+    {
+      "file": "t17-s23-visible-startup-observation.json",
+      "retainedLocalSha256": "bac6d0dbb013b02038519ba859fe1d753da859e84803f0b4401cecbde0f65529",
+      "gitBlobSha256": "74d2b99ae49e5e5754fe4c7390a0cb16ec5d29f630136e081323daed84096981"
+    },
+    {
+      "file": "t17-termux-force-stop-after01.log",
+      "retainedLocalSha256": "037d228f428ca11969fa856bcd6040ea54fc65c21c41fe483796ac3bc411b4ee",
+      "gitBlobSha256": "a70a61190f79f1ca6210af5ab820f5811b7c70365df2fddbb1656c06d8990e10"
+    },
+    {
+      "file": "t17-termux-force-stop-preflight02.log",
+      "retainedLocalSha256": "2136e842e43cedca3e6e0c73b687481fb79a192cdf5b590d63a6df50d38c8da5",
+      "gitBlobSha256": "5b082d82374fc0199190f193f55d968544ffc2562b7d53022bfc4f243ce0bb28"
+    },
+    {
+      "file": "t17-termux-force-stop-summary.json",
+      "retainedLocalSha256": "666af929e25e6bde82652942d82d3c4f63affc30efc0ae59aa40f8c1015ff375",
+      "gitBlobSha256": "64d41382c79949a0398fd48d1870f7b3f5de9f5270e4151ea65740cad06c9587"
+    },
+    {
+      "file": "t17-termux-force-stop01-bounded02.json",
+      "retainedLocalSha256": "5d9db37cf55b688e06c04ee0fdc06cfb9f028baf018ccd73c47bf1035ea8f808",
+      "gitBlobSha256": "dee1715896e02dca31ae974bd128404412d2561db9277bf29d538123923b3bd4"
+    },
+    {
+      "file": "visible-termux-force-stop-message.png",
+      "retainedLocalSha256": "97fe66100f21986d7d55d6db751daf3056be8007290b98227f8d73f13c155b97",
+      "gitBlobSha256": "97fe66100f21986d7d55d6db751daf3056be8007290b98227f8d73f13c155b97"
+    }
+  ]
+}
