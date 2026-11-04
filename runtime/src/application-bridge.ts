@@ -70,6 +70,10 @@ export async function install(mode:string) {
     if(metrics.submissionPolicyState==='running')return;metrics.submissionPolicyState='running';metrics.submissionPolicyCases=[];
     void(async()=>{const directory=join(host.__applicationRoot,'submission-policy-temp');await mkdir(directory,{recursive:true});const policy=await import(new URL('../validation/submission-policy.mjs',import.meta.url).href);await policy.runSubmissionPolicyChecks((result:unknown)=>(metrics.submissionPolicyCases as unknown[]).push(result),{tempRoot:directory});metrics.submissionPolicyState='passed';})().catch(error=>{metrics.submissionPolicyState='failed';metrics.submissionPolicyError=String(error.message??error);metrics.submissionPolicyDiagnostic=error.diagnostic;});
   };
+  if(mode==='fixture')host.__appRunStopPolicy=()=>{
+    if(metrics.stopPolicyState==='running')return;metrics.stopPolicyState='running';metrics.stopPolicyCases=[];
+    void(async()=>{const directory=join(host.__applicationRoot,'stop-policy-temp');await mkdir(directory,{recursive:true});const policy=await import(new URL('../validation/stop-policy.mjs',import.meta.url).href);await policy.runStopPolicyChecks((result:unknown)=>(metrics.stopPolicyCases as unknown[]).push(result),{tempRoot:directory});metrics.stopPolicyState='passed';})().catch(error=>{metrics.stopPolicyState='failed';metrics.stopPolicyError=String(error.message??error);});
+  };
   if(mode==='models-fixture')host.__appRunInputPolicy=()=>{
     if(metrics.inputPolicyState==='running')return;
     metrics.inputPolicyState='running';metrics.inputPolicyCases=[];

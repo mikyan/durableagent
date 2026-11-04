@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.UserManager
 import android.os.CancellationSignal
+import android.os.SystemClock
 import android.net.Uri
 import android.system.Os
 import android.system.OsConstants
@@ -33,9 +34,17 @@ class NativeInputStore(
     private val context = context.applicationContext
     private var helper: InputDatabase? = null
     private var closed = false
+    private var leaseWaitMs = 0L
     private val sourceAdmissions = ConcurrentHashMap<String, SourceAdmission>()
     private val sources = NativeAttachmentSource(this.context.contentResolver)
     init { require(namespace.matches(Regex("[a-zA-Z0-9._-]{1,100}"))) }
+
+    /** Trusted synchronous host calls may wait for a short native transaction before entering
+     * their action. This never retries an action, a COMMIT, or a response; UI stores stay fail-fast. */
+    fun withLeaseWait(milliseconds: Long): NativeInputStore = apply {
+        require(milliseconds in 0..2000)
+        synchronized(monitor) { leaseWaitMs = milliseconds }
+    }
 
     /** Trusted host publication, not a UI action. Known conversation identities survive Node loss. */
     fun rememberConversation(conversation: JSONObject, capability: JSONObject? = null) {
@@ -64,6 +73,7 @@ class NativeInputStore(
         db.rawQuery("SELECT data FROM conversations ORDER BY id", null).use { cursor -> while (cursor.moveToNext()) values.put(JSONObject(cursor.getString(0))) }
         JSONObject().put("conversations", values)
     }
+    fun conversationTitle(id:String):String { validateId(id);return locked { db,_ -> db.rawQuery("SELECT data FROM conversations WHERE id=?",arrayOf(id)).use{rows->if(!rows.moveToFirst())throw NativeInputException("INPUT_UNKNOWN_CONVERSATION","会话尚未登记。");JSONObject(rows.getString(0)).getString("title")} } }
 
     /** Cheap durable projection for in-flight preparation; explicit read() revalidates sources. */
     fun inspect(id: String): JSONObject {
@@ -401,6 +411,14 @@ class NativeInputStore(
         NativeSubmissionRecords.stop(db, request).also { boundary("send.stop.beforeCommit") }
     } }.also { boundary("send.stop.afterCommit") }
     fun pendingStops(): JSONArray = locked { db, _ -> NativeSubmissionRecords.pendingStops(db) }
+    fun registerEffect(request:JSONObject):JSONObject = locked { db,_ -> transaction(db) { NativeStopRecords.register(db,request) } }
+    /** Verified old receipt discovery adds cancellation evidence, never grants permission to start. */
+    fun adoptEffect(request:JSONObject):JSONObject = locked { db,_ -> transaction(db) { NativeStopRecords.register(db,request,true) } }
+    fun requireEffect(operationId:String):JSONObject = locked { db,_ -> NativeStopRecords.require(db,operationId) }
+    fun recordEffectEvidence(operationId:String,evidence:JSONObject):JSONObject = locked { db,_ -> transaction(db) { NativeStopRecords.evidence(db,operationId,evidence) } }
+    @JvmOverloads fun stoppedEffects(after:String?=null):JSONArray = locked { db,_ -> NativeStopRecords.stopped(db,after) }
+    fun stopStatus(id:String):JSONObject = locked { db,_ -> NativeStopRecords.status(db,id) }
+    fun effectRecovery(complete:Boolean) { locked { db,_ -> transaction(db) { NativeStopRecords.recovery(db,complete) } } }
     fun confirmAbort(id: String, barrier: JSONObject): JSONObject = locked { db, _ -> transaction(db) { NativeSubmissionRecords.confirmAbort(db, id, barrier) } }
     fun markDeliveryUnknown(intentId: String): JSONObject = locked { db, _ -> transaction(db) { NativeSubmissionRecords.markUnknown(db, intentId) } }
     fun confirmAdmission(intentId: String, receipt: JSONObject): JSONObject = locked { db, _ -> transaction(db) {
@@ -580,7 +598,13 @@ class NativeInputStore(
             if (!context.getSystemService(UserManager::class.java).isUserUnlocked) fail("INPUT_WAITING_UNLOCK", "请在开机后先解锁一次设备。")
             if (context.isDeviceProtectedStorage) fail("INPUT_STORAGE_FAILED", "草稿必须保存在私有凭据加密存储中。")
             val directory = File(context.noBackupFilesDir, namespace)
-            val lease = StorageDomainLease.acquire(directory) ?: fail("INPUT_STORAGE_BUSY", "草稿存储正在提交，请稍后重试。")
+            val deadline = SystemClock.elapsedRealtime() + leaseWaitMs
+            var lease = StorageDomainLease.acquire(directory)
+            while (lease == null && SystemClock.elapsedRealtime() < deadline) {
+                Thread.sleep(minOf(10, deadline - SystemClock.elapsedRealtime()).coerceAtLeast(1))
+                lease = StorageDomainLease.acquire(directory)
+            }
+            if (lease == null) fail("INPUT_STORAGE_BUSY", "草稿存储正在提交，请稍后重试。")
             lease.use {
                 syncDirectory(directory.parentFile!!)
                 val current = helper ?: InputDatabase(context, File(directory, "input.sqlite").absolutePath, maximumDatabaseBytes).also { helper = it }
@@ -593,7 +617,7 @@ class NativeInputStore(
 
     override fun close() = synchronized(monitor) { sourceAdmissions.values.toList().forEach { it.close() }; helper?.close(); helper = null; closed = true }
 
-    private class InputDatabase(context: Context, path: String, private val maximumBytes: Long?) : SQLiteOpenHelper(context, path, null, 4,
+    private class InputDatabase(context: Context, path: String, private val maximumBytes: Long?) : SQLiteOpenHelper(context, path, null, 5,
         DatabaseErrorHandler { throw NativeInputException("INPUT_STORAGE_CORRUPT", "草稿数据库损坏，已保留原库和材料。") }) {
         init { setWriteAheadLoggingEnabled(true) }
         override fun onConfigure(db: SQLiteDatabase) {
@@ -612,6 +636,7 @@ class NativeInputStore(
             createSelectionIndex(db)
             NativeSubmissionRecords.createSchema(db)
             NativeSubmissionRecords.createLocationSchema(db)
+            NativeStopRecords.createSchema(db)
         }
         override fun onOpen(db: SQLiteDatabase) {
             if (maximumBytes != null) {
@@ -626,10 +651,11 @@ class NativeInputStore(
             db.execSQL("CREATE TABLE selection_operations(operation_id TEXT PRIMARY KEY,draft_id TEXT NOT NULL,revision INTEGER NOT NULL,kind TEXT NOT NULL,uri TEXT NOT NULL)")
         }
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            if (oldVersion !in 1..3 || newVersion != 4) fail("INPUT_INCOMPATIBLE", "草稿数据库版本不兼容，已保留现有数据。")
+            if (oldVersion !in 1..4 || newVersion != 5) fail("INPUT_INCOMPATIBLE", "草稿数据库版本不兼容，已保留现有数据。")
             if (oldVersion == 1) createSelectionIndex(db)
             if (oldVersion < 3) NativeSubmissionRecords.createSchema(db)
-            NativeSubmissionRecords.createLocationSchema(db)
+            if(oldVersion<4) NativeSubmissionRecords.createLocationSchema(db)
+            NativeStopRecords.createSchema(db,false)
         }
         override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) { fail("INPUT_INCOMPATIBLE", "草稿数据库来自更新版本，已保留现有数据。") }
     }

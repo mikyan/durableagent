@@ -28,6 +28,12 @@ class ApplicationService:Service() {
     private var execution:ExecutionAccess?=null
     private val busyStarted=AtomicLong(0)
     private val busyEnded=AtomicLong(0)
+    private val ownerProgress=AtomicLong(0)
+    private val acceptedStops=java.util.concurrent.ConcurrentHashMap.newKeySet<String>()
+    @Volatile private var ownerReady=false
+    @Volatile private var inputNamespace:String?=null
+    private val emergency=java.util.concurrent.Executors.newSingleThreadExecutor()
+    private val main=Handler(Looper.getMainLooper())
     private val submissionProbe=SubmissionValidationProbe()
     private val peers=mutableMapOf<String,Messenger>()
     private val pending=mutableListOf<String>()
@@ -40,6 +46,7 @@ class ApplicationService:Service() {
         // Android recycles Message after this callback: capture values now.
         val what=message.what;val text=message.data.getString("json")?:"";val reply=message.replyTo
         val transfer=message.data.getString("transfer")?:"";val index=message.data.getInt("index");val count=message.data.getInt("count")
+        if(what==55){urgentStop(text);return@Handler true}
         if(debug&&what==35){
             val value=JSONObject().put("pid",Process.myPid()).put("started",busyStarted.get()).put("ended",busyEnded.get()).put("observedAt",SystemClock.elapsedRealtime())
             try{reply?.send(Message.obtain(null,35).apply{data=Bundle().apply{putString("json",value.toString())}})}catch(_:RemoteException){}
@@ -65,6 +72,7 @@ class ApplicationService:Service() {
                 43->if(debug)reply?.let {node?.getExecutor("globalThis.__appExecutionFault?.(${JSONObject.quote(text)})")?.executeVoid();send(it,43,status())}
                 51->if(debug)reply?.let {node?.getExecutor("globalThis.__appExtensionRoute?.(${JSONObject.quote(text)})")?.executeVoid();send(it,51,status())}
                 52->if(debug)node?.getExecutor("globalThis.__appRunExtensionPolicy?.()")?.executeVoid()
+                56->if(debug)node?.getExecutor("globalThis.__appRunStopPolicy?.()")?.executeVoid()
                 40->if(debug)node?.getExecutor("globalThis.__appRunSubmissionPolicy?.()")?.executeVoid()
                 34->if(debug&&node!=null){
                     val duration=(text.toLongOrNull()?:10000).coerceIn(2500,15000)
@@ -80,8 +88,43 @@ class ApplicationService:Service() {
     override fun onStartCommand(intent:Intent?,flags:Int,startId:Int):Int {
         val mode=if(debug)intent?.getStringExtra("validationMode")?:"product" else "product"
         val run=if(debug)intent?.getStringExtra("validationRun") else null
+        if(inputNamespace==null)inputNamespace=runCatching{NativeInputBridge.namespace(mode,run)}.getOrNull()
         owner.post {if(node==null&&!closing)open(mode,run)}
         return START_NOT_STICKY
+    }
+    /** The Binder thread remains responsive while Node is busy. Only a persisted matching barrier can arm this watchdog. */
+    private fun urgentStop(text:String,deadline:Long=SystemClock.elapsedRealtime()+20000){
+        NativeStopTrace.event(this,"host.stop.received")
+        val request=runCatching{JSONObject(text)}.getOrNull()?:return
+        val namespace=request.optString("namespace");val product=request.optString("id");val stopId=request.optString("stopId")
+        if(namespace!=inputNamespace||text.length>2048){NativeStopTrace.event(this,"host.stop.scope-mismatch");return}
+        emergency.execute{
+            fun pending():Boolean?=try{NativeInputStore(this,namespace).use{it.readControl(product).optJSONObject("pendingAbort")?.optString("stopId")==stopId}}catch(error:Exception){NativeStopTrace.failure(this,"host.stop.read-failed",error);if(error is NativeInputException&&error.code=="INPUT_STORAGE_BUSY")null else false}
+            val present=pending()
+            if(present==null){if(SystemClock.elapsedRealtime()<deadline)main.postDelayed({urgentStop(text,deadline)},50);return@execute}
+            if(!present){NativeStopTrace.event(this,"host.stop.not-pending");return@execute}
+            if(!acceptedStops.add(stopId))return@execute
+            val checkpoint=ownerProgress.get();val responsiveBefore=ownerReady
+            NativeStopTrace.event(this,"host.stop.validated",JSONObject().put("ownerReady",responsiveBefore).put("progress",checkpoint))
+            owner.post{
+                if(namespace==inputNamespace)pending.add(JSONObject().put("protocol",1).put("connectionId","native-stop").put("requestId",stopId).put("method","stop").put("payload",JSONObject().put("id",product).put("stopId",stopId)).toString())
+            }
+            if(responsiveBefore){
+                lateinit var watchdog:Runnable
+                watchdog=Runnable{emergency.execute{
+                    NativeStopTrace.event(this,"host.watchdog.check",JSONObject().put("ownerReady",ownerReady).put("before",checkpoint).put("now",ownerProgress.get()))
+                    if(namespace==inputNamespace&&ownerReady&&ownerProgress.get()==checkpoint){
+                        when(pending()){
+                            true->{// Only this application's own Node host; never a remote PID/PGID or a command name.
+                                NativeStopTrace.event(this,"host.watchdog.rebuild");Process.killProcess(Process.myPid())}
+                            null->if(SystemClock.elapsedRealtime()<deadline)main.postDelayed(watchdog,50)
+                            false->Unit
+                        }
+                    }
+                }}
+                main.postDelayed(watchdog,2500)
+            }
+        }
     }
     private fun open(mode:String,run:String?) {
         try {
@@ -96,9 +139,9 @@ class ApplicationService:Service() {
             if(debug&&mode!="product")runtime.createV8ValueObject().use{probe->probe.bind(submissionProbe);runtime.globalObject.set("__submissionValidation",probe)}
             credentials=NativeCredentialAccess(CredentialVault(this,if(mode=="product")"credentials-v1" else "cv-$run"))
             runtime.createV8ValueObject().use {access->access.bind(credentials!!);runtime.globalObject.set("__nativeCredentials",access)}
-            inputs=NativeInputAccess(NativeInputStore(this,NativeInputBridge.namespace(mode,run)))
+            inputs=NativeInputAccess(NativeInputStore(this,NativeInputBridge.namespace(mode,run)).withLeaseWait(1000))
             runtime.createV8ValueObject().use {access->access.bind(inputs!!);runtime.globalObject.set("__nativeInputs",access)}
-            execution=ExecutionAccess(this)
+            execution=ExecutionAccess(this,NativeInputBridge.namespace(mode,run),mode in setOf("product","execution","execution-real"))
             runtime.createV8ValueObject().use {access->access.bind(execution!!);runtime.globalObject.set("__nativeExecution",access)}
             if(mode=="real"||mode=="execution-real"||mode=="extensions-real"){
                 val clear=ValidationCredential.consume(this)
@@ -154,6 +197,7 @@ class ApplicationService:Service() {
         val runtime=node?:return
         try {
             runtime.await(V8AwaitMode.RunNoWait)
+            ownerProgress.incrementAndGet()
             val failure=runtime.getExecutor("globalThis.__appFailure||''").executeString()
             if(failure.isNotEmpty())error(failure)
             // The debug close can arrive after native creation but before the asynchronous
@@ -167,6 +211,7 @@ class ApplicationService:Service() {
                 val events=JSONArray(runtime.getExecutor("globalThis.__takeAppEvents()").executeString())
                 for(i in 0 until events.length()){val event=events.getJSONObject(i);peers[event.optString("connectionId")]?.let {send(it,10,event.toString())}}
                 phase=runtime.getExecutor("globalThis.__appStatus()").executeString()
+                ownerReady=JSONObject(phase).optString("phase")=="ready"
                 if(runtime.getExecutor("globalThis.__appClosed===true").executeBoolean()){release();return}
             }
             owner.postDelayed(this,5)
@@ -218,6 +263,6 @@ class ApplicationService:Service() {
     }
     private fun status()=JSONObject(phase).put("instance",instance).put("pid",Process.myPid()).put("domainOwned",lease!=null).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).toString()
     private fun fail(error:Throwable){phase=JSONObject().put("phase","failed").put("reason",error.message?:error.javaClass.simpleName).toString();release()}
-    private fun release(){node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
-    override fun onDestroy(){owner.post {release();thread.quitSafely()};super.onDestroy()}
+    private fun release(){acceptedStops.clear();ownerReady=false;inputNamespace=null;node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
+    override fun onDestroy(){emergency.shutdownNow();main.removeCallbacksAndMessages(null);owner.post {release();thread.quitSafely()};super.onDestroy()}
 }

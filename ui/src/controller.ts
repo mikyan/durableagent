@@ -172,6 +172,11 @@ export class ConversationController {
     if(!client||!id)return;
     await this.submissions.stop(id);this.pollSubmissions(id);
   }
+  async enableStopNotification(){
+    const client=this.client,id=this.state.activeId,epoch=this.epoch;if(!client||!id)return;
+    try{const result=await client.request<{enabled:boolean;requested:boolean}>('input.stopNotification',{id});if(epoch===this.epoch)this.publish({error:result.enabled?undefined:'系统停止入口需要通知权限；请按系统提示开启后再次检查。'});}
+    catch(error){if(epoch===this.epoch)this.publish({error:this.reason(error)});}
+  }
   async refreshSubmissions(cursor?:string){const id=this.state.activeId;if(id)await this.submissions.refresh(id,cursor);}
   async retrySubmission(intentId:string){await this.submissions.retry(intentId);if(this.state.activeId)this.pollSubmissions(this.state.activeId);}
   private pollSubmissions(id:string){

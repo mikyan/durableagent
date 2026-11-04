@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
 /** Trusted native host boundary. Never bind this object to WebView. Network waits never occupy Node. */
-class ExecutionAccess(context: Context) : AutoCloseable {
+class ExecutionAccess(context: Context,private val inputNamespace:String?=null,recoverCatalogue:Boolean=false) : AutoCloseable {
     private val context = context.applicationContext
     private data class Operation(val control: Boolean, var result: JSONObject? = null, var completedAt: Long = 0)
     private val operations = mutableMapOf<String, Operation>()
@@ -19,6 +19,17 @@ class ExecutionAccess(context: Context) : AutoCloseable {
     // Reserved capacity and a separate socket ensure output waits cannot occupy cancellation's worker.
     private val control = pool(1,4,"ExecutionControl")
     private var closed = false
+    init{if(recoverCatalogue&&inputNamespace!=null)NativeInputStore(this.context,inputNamespace).withLeaseWait(1000).use{it.effectRecovery(false)}}
+
+    @V8Function fun rememberIntentJson(payloadJson:String):String=envelope{
+        if(payloadJson.toByteArray(Charsets.UTF_8).size>60000)throw ExecutionChannelException("FRAME_LIMIT")
+        val namespace=inputNamespace?:throw ExecutionChannelException("CONTROL_UNAVAILABLE")
+        NativeInputStore(context,namespace).withLeaseWait(1000).use{NativeExecutionFence(it).remember(JSONObject(payloadJson));JSONObject()}
+    }
+    @V8Function fun recoveryCompleteJson():String=envelope{
+        val namespace=inputNamespace?:throw ExecutionChannelException("CONTROL_UNAVAILABLE")
+        NativeInputStore(context,namespace).withLeaseWait(1000).use{it.effectRecovery(true);JSONObject()}
+    }
 
     @V8Function fun beginJson(method: String, payloadJson: String): String = begin(method,payloadJson,false)
     /** Narrow native UI operation, intentionally absent from the Javet/WebView annotation surface. */
@@ -50,7 +61,13 @@ class ExecutionAccess(context: Context) : AutoCloseable {
                         val client=ExecutionTlsClient(identity,peer)
                         if(verifyReceipt) {
                             verifiedCancel(client,peer,payload)
-                        } else client.request(method,payload)
+                        } else if(inputNamespace!=null) NativeInputStore(context,inputNamespace).withLeaseWait(1000).use{store->
+                            val fence=NativeExecutionFence(store);fence.before(method,payload)
+                            client.request(method,payload).also{fence.observe(method,payload,it)}
+                        } else {
+                            if(method in setOf("prepare","start"))throw ExecutionChannelException("CONTROL_UNAVAILABLE")
+                            client.request(method,payload)
+                        }
                     }
                 })
                 synchronized(operations) { operations[id]?.let { it.result=response; it.completedAt=SystemClock.elapsedRealtime() } }
@@ -112,6 +129,7 @@ class ExecutionAccess(context: Context) : AutoCloseable {
     }
     private fun envelope(action: () -> JSONObject): String = try { JSONObject().put("ok",true).put("value",action()).toString() }
     catch (error: ExecutionChannelException) { failed(error.code) }
+    catch (error: NativeInputException) { failed(error.code) }
     catch (_: org.json.JSONException) { failed("INVALID_REQUEST") }
     catch (_: Exception) { failed("OPERATION_FAILED_UNKNOWN") }
     private fun failed(code: String) = JSONObject().put("ok",false).put("error",JSONObject().put("code",code).put("message","执行通道未完成请求（$code）")).toString()

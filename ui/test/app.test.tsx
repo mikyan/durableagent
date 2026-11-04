@@ -59,6 +59,9 @@ it('creates a real wire conversation and distinguishes progress from committed m
   expect(screen.queryByText('生成中 · 尚未保存')).toBeNull();
   expect(screen.getByText('回复已保存')).toBeTruthy();
   fireEvent.click(screen.getByRole('button',{name:'会话详情'}));
+  fireEvent.click(screen.getByRole('button',{name:'系统停止通知'}));
+  await waitFor(()=>expect(requests.filter(request=>String(request.method)==='input.stopNotification')).toHaveLength(1));
+  expect(requests.find(request=>String(request.method)==='input.stopNotification')?.payload?.id).toBe('101');
   fireEvent.click(screen.getByRole('button',{name:'重新连接'}));
   await waitFor(()=>expect(requests.filter(request=>request.method==='subscribe')).toHaveLength(2));
   expect(requests.filter(request=>request.method==='send')).toHaveLength(1);

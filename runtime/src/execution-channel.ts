@@ -1,5 +1,7 @@
 export interface ExecutionChannel {
   request(method:string,payload:Record<string,unknown>):Promise<Record<string,unknown>>;
+  rememberIntent?(payload:Record<string,unknown>):Promise<void>;
+  recoveryComplete?():Promise<void>;
 }
 export class ExecutionChannelError extends Error {
   constructor(readonly code:string){super(`执行通道未确认请求（${code}）`);this.name='ExecutionChannelError';}
@@ -7,6 +9,8 @@ export class ExecutionChannelError extends Error {
 export interface NativeExecutionBoundary {
   beginJson(method:string,payloadJson:string):string;
   pollJson(operationId:string):string;
+  rememberIntentJson?(payloadJson:string):string;
+  recoveryCompleteJson?():string;
 }
 const record=(value:unknown):value is Record<string,unknown>=>typeof value==='object'&&value!==null&&!Array.isArray(value);
 const keys=(value:Record<string,unknown>,expected:string[])=>Object.keys(value).length===expected.length&&expected.every(key=>Object.hasOwn(value,key));
@@ -43,6 +47,8 @@ function encode(payload:unknown):string{
 /** The trusted Javet boundary is injected by the native host, never by a WebView message. */
 export class NativeExecutionChannel implements ExecutionChannel {
   constructor(private readonly native:NativeExecutionBoundary){}
+  async rememberIntent(payload:Record<string,unknown>){if(!this.native.rememberIntentJson)throw new ExecutionChannelError('NATIVE_CONTROL_UNAVAILABLE');decode(this.native.rememberIntentJson(encode(payload)));}
+  async recoveryComplete(){if(!this.native.recoveryCompleteJson)throw new ExecutionChannelError('NATIVE_CONTROL_UNAVAILABLE');decode(this.native.recoveryCompleteJson());}
   async request(method:string,payload:Record<string,unknown>):Promise<Record<string,unknown>> {
     try {
       if(!/^[a-zA-Z][a-zA-Z0-9.]{0,63}$/.test(method))throw new ExecutionChannelError('INVALID_EXECUTION_REQUEST');
