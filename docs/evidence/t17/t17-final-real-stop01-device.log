@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.StopExecutionTest:
+INSTRUMENTATION_STATUS: test=realMimoToolStopHasNoOldFollowupAndExplicitNewInputUsesNewGeneration
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: stopExecutionEvidence={"case":"real-mimo-stop-new-generation","oldRequests":1,"totalRequests":3,"stopped":{"cancelReason":"user","cancelRequested":true,"captureIncomplete":false,"context":{"bindingId":"c7e93b21-11a8-4208-9d3a-d1371d27ebaa","callId":"call_aa24c5c1770c49d1806807ad","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"real-stop","sdkConversationId":5,"taskId":20},"createdAt":1793809876964,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"42a787ee-b8c4-418f-9a86-a39d4d3003ee","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","exitCode":-15,"finalDigest":"f392e137f91fcf335495c0f1f8d5297a623a7c52cbc7a0dd73bf8154f03bf103","finishedAt":1793809878433,"guardianPid":22265,"ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","localCapabilities":{"helperSha256":"13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1","runnerSha256":"a65ecba8be5119b414ecfdc4b1d514b02515e95b89daac8a197f37983eb15111","version":1},"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":12,"outputCursor":1,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/42a787ee-b8c4-418f-9a86-a39d4d3003ee.raw","protocol":1,"rawSha256":"6ac7a8896b5955141b69534ba8259a2c7e2fd58c40a6811cf83699443f406d8f","requestDigest":"9c7bc707dbeac9832e8bbfe29c447660cee72706f0fe1ed40706565051fa45e5","scopeConfirmed":true,"sequence":7,"startRequestedAt":1793809877335,"startedAt":1793809877508,"state":"stopped"},"newReceipt":{"protocol":1,"intentId":"663b4110-4805-4df8-80fb-80846f4306a8","id":"real-stop","inputToken":"3c528121-b973-47a8-8b26-0584fe77642c","inputRevision":3,"inputDigest":"80b1fa36500c2824b43e34cd5f0198455ef8029cb30396979962e5ee179d3162","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":2,"bindingId":"c7e93b21-11a8-4208-9d3a-d1371d27ebaa","submissionId":27},"verifier":{"captureIncomplete":false,"context":{"bindingId":"c7e93b21-11a8-4208-9d3a-d1371d27ebaa","callId":"call_800e6fd78cb547369943bf92","controlGeneration":2,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"real-stop","sdkConversationId":5,"taskId":30},"createdAt":1793809883107,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"e6d8b43f-b36e-416e-8e90-4f1964904637","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","exitCode":0,"finalDigest":"07782122a1801c1da3173379b450877d2743ceeb25ba527d48b7dac653c2818a","finishedAt":1793809884467,"guardianPid":22344,"ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","localCapabilities":{"helperSha256":"13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1","runnerSha256":"a65ecba8be5119b414ecfdc4b1d514b02515e95b89daac8a197f37983eb15111","version":1},"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":18,"outputCursor":1,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/e6d8b43f-b36e-416e-8e90-4f1964904637.raw","protocol":1,"rawSha256":"ccec24842e1d98303b48e0141ff90a0cc7db85f839128e2039b80abe4e168e0e","requestDigest":"17cac6cfb347547412d6ca1b8b45dedc5d6bd644ebc65ab90ca8e5c8b2fedead","scopeConfirmed":true,"sequence":5,"startRequestedAt":1793809883342,"startedAt":1793809884443,"state":"completed"},"oldFollowupRequests":0}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoToolStopHasNoOldFollowupAndExplicitNewInputUsesNewGeneration
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 21.245
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

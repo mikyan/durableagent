@@ -42,6 +42,21 @@
       "gitBlobSha256": "971125b5d2cdd3c24f3a3ccb3545db01fa343a268ec9bd928f09e603d505b066"
     },
     {
+      "file": "t17-final-real-stop01-credential-audit.json",
+      "retainedLocalSha256": "d228dee9564b4b882b94e2697e0b0fd1cdf7748e21ca041c73c2c7d8f9c493a6",
+      "gitBlobSha256": "d228dee9564b4b882b94e2697e0b0fd1cdf7748e21ca041c73c2c7d8f9c493a6"
+    },
+    {
+      "file": "t17-final-real-stop01-device.log",
+      "retainedLocalSha256": "844b666783ea0c9067274562d97763f628bba0b43862bf29002bb4376e1d9782",
+      "gitBlobSha256": "8dfd7a29bda3325263422bbe4361f13418a2e0fa47ea02e9fc4d884e2ec1bae5"
+    },
+    {
+      "file": "t17-final-real-stop01-termux-observation.log",
+      "retainedLocalSha256": "08e049f6fe0b7f746eb670d3e8fd15bc718bd3afc550b75b1755c2f58ad17bab",
+      "gitBlobSha256": "b329d51a7bd61e535f1643c9693a36def6e903a8843b8ad92a59e7e7c68b2a5e"
+    },
+    {
       "file": "t17-final-stop01-device.log",
       "retainedLocalSha256": "9253ab9ca44b385d7036da9352e72afe0178999674bc021f49af254ffb9819ed",
       "gitBlobSha256": "c3914576bc93db80e869f38990e312a8931804528c0a6dac86277ce0744b1212"
@@ -150,6 +165,21 @@
       "file": "t17-real-mimo03-termux-read.log",
       "retainedLocalSha256": "7637c6079425f597258f6f1763254fc19c90a4170050daa33b469ec3cb782f2a",
       "gitBlobSha256": "9fe6b7b9b19514a9893900f164d4b7339a5c9e35720f85b2fe1c0dcc0fb55bb5"
+    },
+    {
+      "file": "t17-real-mimo04-credential-audit.json",
+      "retainedLocalSha256": "d7d1327bc2648a35939dd93ba7d691e19f2f218631f65388ef6f6bd81f884dd1",
+      "gitBlobSha256": "d7d1327bc2648a35939dd93ba7d691e19f2f218631f65388ef6f6bd81f884dd1"
+    },
+    {
+      "file": "t17-real-mimo04-termux-read-launch.json",
+      "retainedLocalSha256": "d331705f155e7d82e7f20d2902c4c0a76b3e1fb6b53467e170f982377ed05854",
+      "gitBlobSha256": "d331705f155e7d82e7f20d2902c4c0a76b3e1fb6b53467e170f982377ed05854"
+    },
+    {
+      "file": "t17-real-mimo04-termux-read.log",
+      "retainedLocalSha256": "8a67721a9631d85789abd5509af8500b4e9559d9a496addc18b0008febbbf3f4",
+      "gitBlobSha256": "a2e6d15abc747faf685e1b7b9bcb757e870fe9e592e19e4da6f951907602cc35"
     },
     {
       "file": "t17-s23-install01.json",

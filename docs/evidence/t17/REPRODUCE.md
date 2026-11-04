@@ -16,6 +16,8 @@ MiMo01 使用 E7CF／3D99；MiMo02 使用主 APK 不变、仅添加测试诊断�
 
 MiMo03、最终停止与最终切网使用 E7CF／C251；[来源记录](t17-observer-green01-root-artifacts.json)在运行后从冻结 APK 和源码副本重建，不能声称预先已有同刻 manifest。C251 修正的是测试观察器，生产代码未变。实际结果、每批原身份和模型边界见 README；这些通过并未解决 MiMo01 的未决失败。
 
+后续真实 MiMo 停止批次使用 E7CF／7FEB；当前产品候选已更新为 DD7，旧批次不能换记为 DD7 通过。DD7／相同 7FEB 的显式重连回归已在暖机通过，首次更新后的初始状态读取失败仍保留。MiMo04 使用 DD7／22FB、实际 `timeoutMs=30000`，1/1、37.467 秒通过且独立原件／审计已补齐。MiMo01 实际工具上限为 30 秒、MiMo02／03 为 60 秒，后两次成功不是等参数复现；无客户端耐久完成等待仍维持原 120 秒。
+
 ## 1. 真实 MiMo、无项目原文件与无 UI 宿主恢复
 
 入口：[RecoveryRealApplicationTest](../../../android/app/src/androidTest/java/dev/durableagent/probe/RecoveryRealApplicationTest.kt)。仅选择这一方法：
@@ -25,6 +27,8 @@ MiMo03、最终停止与最终切网使用 E7CF／C251；[来源记录](t17-obse
 ```
 
 `productUnbound=true` 必须保留：使用正常产品域及已保存连接，不进入测试凭据导入分支。只创建本批新会话与新测试路径，保持原产品默认模型配置；本会话显式选择既有 `recovery-validation`／`mimo-v2.6-flash`。
+
+MiMo04 使用 22FB 测试 APK，并在上述相同 selector 及产品连接参数上额外传入 `-e bashTimeoutSeconds 30 -e recoveryDiagnostic true -e recoveryWaitMs 120000`。杀 owner 前从固定 request 只读核实模型实际选择了 30000 ms、完整命令及回执摘要匹配。模型未遵守时保留失败并停止该测试输入，不篡改请求或重发。来源和实际记录见 [TIMEOUT30](../recovery-diagnostics/TIMEOUT30.md)；观察器不启动模型、SDK Harness 或执行通道。
 
 观察步骤与通过条件：
 
@@ -91,7 +95,7 @@ E7CF 的原生／runtime 与 1623 字节一致，T12 已通过以下两个固定
 
 实际通过批次见[摘要](t17-termux-force-stop-summary.json)，使用 MiMo03 的已完成原 execution，先后 146 条 ledger 计数、配对 SHA 均保持。可见中文说明使用实际 Android 点击普通核验取得；57.3 秒 stopped 观察和明确手开后的恢复分别记录。导航脚本的 selector／滚动区域／DOM 序列化失败保留在执行者本地，不改称产品失败。
 
-## 6. 已知显式重连 RED
+## 6. 显式重连 RED 与 DD7 暖机回归
 
 目标主 APK E7CF，测试 APK 7FEB；[运行后重建摘要](t17-native-reconnect-red01-artifacts.json)固定 APK 与冻结 `HostReconnectApplicationTest.kt` 的源码字节，但源码提交身份尚未记录。入口：
 
@@ -100,6 +104,8 @@ E7CF 的原生／runtime 与 1623 字节一致，T12 已通过以下两个固定
 ```
 
 此方法建立专用 fixture 会话与草稿，持有真实 OS 存储域 lease，确认页面出现 storage-owned 以及持有时重连不替换 owner，再释放 lease 后点击渲染按钮。该 click 由页面 DOM 触发，不是物理 Android 触摸。E7CF 实际在源码第 54 行“释放后重连应 ready”的 10 秒断言失败，整批 17.588 秒、1/1 失败。后续会话／草稿保持及健康 owner 复用断言没有执行通过。该 RED 不请求真实模型或发送业务输入，不清空数据；S23 初次 storage-owned 的实际触发原因仍未知，不能将本夹具当作手机根因证明。
+
+修复后使用 DD7／相同 7FEB、相同测试源码及断言：第一次更新后独立运行在初始五秒 native status 读取超时，尚未触及 lease／重连特性；随后新 UUID 暖机运行 1/1、11.407 秒通过，包括原会话／草稿／零发送和健康 owner 保持。结果与范围见[原生重连记录](../native-reconnect/README.md)，不能把暖机结果写成冷启动或 S23 初始错误已修复。
 
 ## 结果记录与退出
 
