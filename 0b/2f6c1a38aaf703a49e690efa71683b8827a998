@@ -1,0 +1,37 @@
+android/app/src/androidTest/java/dev/durableagent/probe/RecoveryJobApplicationTest.kt
+  s_467dcb949b5b60::t_824a2ae38dda27 42-44,47,60-68,71
+docs/evidence/t12/README.md
+  s_467dcb949b5b60::t_47a7b4d5894542 116-121
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryAccess.kt
+  s_467dcb949b5b60::t_c72b4f88ec76ff 30-31
+docs/evidence/t12/LOG-SHA256.json
+  s_467dcb949b5b60::t_56675b1dcddf7d 414-443
+docs/evidence/t12/t12-wake-reopen-green01-artifacts.json
+  s_467dcb949b5b60::t_71acd79622fecd 1-6
+docs/evidence/t12/t12-wake-reopen-green01-device.log
+  s_467dcb949b5b60::t_0d51438e052b18 1-10
+docs/evidence/t12/t12-wake-reopen-main-build01.log
+  s_467dcb949b5b60::t_73fa900fe2b6cd 1-54
+docs/evidence/t12/t12-wake-reopen-red01-artifacts.json
+  s_467dcb949b5b60::t_7f1504765e058a 1-6
+docs/evidence/t12/t12-wake-reopen-red01-device.log
+  s_467dcb949b5b60::t_faa29833331cfb 1-25
+docs/evidence/t12/t12-wake-reopen-test-build01.log
+  s_467dcb949b5b60::t_75a01cfaf0cc02 1-69
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "0b2f6c1a38aaf703a49e690efa71683b8827a998",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
