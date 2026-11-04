@@ -1,0 +1,34 @@
+ui/src/drafts.ts
+  s_467dcb949b5b60::t_f0b6fc0f41294a 121
+ui/src/extensions/submissions.tsx
+  s_467dcb949b5b60::t_c9ba9566e10593 1,26,32-34
+ui/test/console-page.test.tsx
+  s_467dcb949b5b60::t_67ea7fbdbba756 131,137-139
+  s_467dcb949b5b60::t_f0b6fc0f41294a 185
+ui/src/extensions/question-anchor.tsx
+  s_467dcb949b5b60::t_09cf0243c67a4f 8
+ui/src/style.css
+  s_467dcb949b5b60::t_c9ba9566e10593 74-85
+  s_467dcb949b5b60::t_09cf0243c67a4f 86-89
+  s_467dcb949b5b60::t_94584cedb84ebd 90-95
+tools/console-device.mjs
+  s_467dcb949b5b60::t_4bc58d23557801 29-36
+ui/src/controller.ts
+  s_467dcb949b5b60::t_f0b6fc0f41294a 143
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "439dfeffb58c215bc5c2aded581b45835617fa95",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
