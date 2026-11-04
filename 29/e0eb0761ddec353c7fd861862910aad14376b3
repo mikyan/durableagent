@@ -1,0 +1,51 @@
+android/app/src/androidTest/java/dev/durableagent/probe/FileApplicationTest.kt
+  s_467dcb949b5b60::t_ca3973ab9b562b 43-51,65,71,73,76-77,80
+managed-execution/FILE-VALIDATION.md
+  s_467dcb949b5b60::t_bdb021c97c9a1e 50-58,62,73-74
+runtime/src/file-writes.ts
+  s_467dcb949b5b60::t_7ae1a57e9e779d 11,52-53,72-75,77,93
+  s_467dcb949b5b60::t_c80b8a781ce452 76
+runtime/src/execution-validation.ts
+  s_467dcb949b5b60::t_650fa3632589a2 21,24-25
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionObservationTest.kt
+  s_467dcb949b5b60::t_ac1511f06abb22 31
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_7ae1a57e9e779d 118,159
+  s_467dcb949b5b60::t_4e14ed270b2665 166
+  s_467dcb949b5b60::t_21c5e4de8b26a3 42-43,130,157,170,206
+runtime/src/execution-faults.ts
+  s_467dcb949b5b60::t_6157fd5b65a062 4-10
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_6157fd5b65a062 77-78
+android/app/src/androidTest/java/dev/durableagent/probe/FileQueueApplicationTest.kt
+  s_467dcb949b5b60::t_4e3b80466a5583 1-43,45-67
+  s_467dcb949b5b60::t_666ba243707812 44
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionRecoveryTest.kt
+  s_467dcb949b5b60::t_6e2ae049f23070 58-71
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_6157fd5b65a062 31-32,47,58
+runtime/src/file-conformance.ts
+  s_467dcb949b5b60::t_650fa3632589a2 22-28
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_4e14ed270b2665 426,429-431,434
+  s_467dcb949b5b60::t_57e56acf6668f6 254,257
+  s_467dcb949b5b60::t_99770cdd3838a7 408-409,415,432-433
+android/app/src/androidTest/java/dev/durableagent/probe/FileRealProviderTest.kt
+  s_467dcb949b5b60::t_666ba243707812 1-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "29e0eb0761ddec353c7fd861862910aad14376b3",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
