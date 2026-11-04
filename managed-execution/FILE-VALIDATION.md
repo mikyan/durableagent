@@ -2,6 +2,23 @@
 
 This journal records incremental engineering checks. T10's twelve acceptance criteria are not yet accepted. The T09 execution evidence in `VALIDATION.md` remains distinct.
 
+## Acceptance evidence map
+
+| T10 criterion | Evidence and remaining boundary |
+| --- | --- |
+| 1. Known original changes, identity and bounded real diff | Actual Production01 original-file/UI stages; SAF exact text diff GREEN08; Production05 shared original. Unknown shell scope is explicitly displayed without invented per-file diff. |
+| 2. Default workspace and immutable adopted project location | Accepted T08 binding/guard tests plus actual file contracts in adopted locations. No path migration/fallback is added. |
+| 3. File read → Bash write → same original read | Production01 actual binary roundtrip and canonical path; Production05 real MiMo independently reads actual written bytes with Bash. |
+| 4. Authorized original and independent verification | SAF distinct-UID picker/original-write traces and Production05 Provider/Bash same-object trace. |
+| 5. SAF capabilities and precise failures | Native component read/write/verify/revocation/diff evidence is supplied by the SAF owner; final fault/UI report integration is pending. |
+| 6. File Interface contracts | Actual Python14/14; four unmodified SDK file cases passed across3+1 runs; actual append/truncate/flush/rename/heldFD/directory/watch tracer. Reconnect-overflow behavior additionally uses the public reader/watch contract with controlled transport loss. |
+| 7. Dependency/build/exec and link restrictions | Actual uthash installation/compile/run, private zlib Make build, symlink execution; shared noexec/link limitations recorded independently. |
+| 8. Alias/local/environment common coordination | Real SDK coordinator tests cover canonical/object/ancestor identities, same-device global shell conflicts and fairness; actual shared-original trace proves cross-UID entry coordination. |
+| 9. Both directions, pure work, queued stop | Actual local-reserved-first and actual held-Provider-first pass; shell-first with stable original and queued-local cancellation are pending Production06. |
+| 10. Durable occupation and recovery | Real SDK close/reopen queue/effect tests and actual Production03 file-owner SIGKILL recovery. Unknown evidence cannot expire a claim. |
+| 11. Position edits and external effects | Accepted T08 gates plus real SDK unresolved-original-file relocation rejection and `pendingBindingIds`/`pendingControlProductIds` integration. Other applications are not globally locked. |
+| 12. Original changed before owner result persisted | Actual Production03 owner death, original bytes once and same-intent zero added executions; SAF owner-death verify preserves unknown scope even when bytes match. |
+
 ## Actual Termux batches
 
 These batches run on the existing Android 16 / 4 KiB emulator in the official Termux terminal. Each frozen batch has a SHA-256 manifest, an immutable launch marker, a retained log and an exit-status file. The temporary test executor and target files are separate from the production executor, pairing and accepted command ledger. A fixture that launches a worker confirms its own execution scope through public `list`/`query`/`cancel` before removing its temporary files; an unconfirmed scope retains the directory and fails.
