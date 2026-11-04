@@ -18,6 +18,7 @@
 | 未知外部效果及原生预算暂不可用 | `t12-probe-authority-red02.log` → `green01`，以及 exhausted-stop 日志 | 保留同一工具身份等待，不把未知效果作为可交给模型重发的完成结果；固定工作探测预算不因重开清零 |
 | 主机完整回归 | `t12-runtime-stage62-all.log` 246/246，19.675 秒；`t12-runtime-stage31b-all.log` 247/247，20.078 秒 | 后一批包括 host 唤醒重新发布；不代替 Android 原生发布验证 |
 | 原生相同 wake 重新发布 | 实际系统 RED 1/1，18.565 秒；最小修复 + 同一测试 GREEN 1/1，7.106 秒 | 真实 JobScheduler 的自有 namespace 冲突，清除后同一输入成功发布，0 模型请求；不是 quota 或任意后台启动拒绝的模拟替代 |
+| 首次解锁后再次锁屏／真实离线恢复 | 真实产品 UI 发送一次，外部原生完成核验通过 | 从普通 Activity 开始，整个准备／锁屏恢复／外部观察均无 instrumentation；原输入在锁屏、联网恢复后完成。公开结果核对也通过，但首次验证脚本的单次 Back 清理超时，整段脚本未算全绿 |
 
 ## 真实文件与凭据证据
 
@@ -45,6 +46,12 @@ JobScheduler 的初始缺陷为 `startForeground` 未将只靠作业绑定的 Se
 
 生命周期验证还发现测试设计风险：Android instrumentation 正常开始和结束都可能 force-stop 目标包。未执行的两阶段 instrumentation 生命周期夹具因此删除，冻结 artifact 标记无效；没有把编译成功视为该路径可用。替代方案使用真实 React／CDP 一次发送和正常退出，再用外部只读双快照确认原完成身份，详见 [运行说明](../../../tools/recovery-lifecycle-RUN.md)。这项工具修正不影响先前在同一次 instrumentation 内已观察完成的 bound／unbound 恢复证据，但后者仍保留 instrumentation 运行资格的限制。
 
+实际 later-lock run `6daace13-cf22-42c6-9493-d43e63bbeb0a` 于 12:21:49 UTC 从普通 product 界面完成一次发送；产品 `0d1cd678-787b-46b0-aba1-a20173cc6083`，原 intent `77cbd7d5-cb3d-4292-ab9c-2d228950265d` 已接纳并明确等待实际网络。关闭 CDP、正常退出 Activity 后，同一已启动前台 Service 继续。根代理实际锁屏后恢复网络；没有重开应用、SDK 或 instrumentation 触发继续。
+
+外部观察最初因要求 PID 消失而超时，尽管 Service 已退出但 Android 保留缓存 PID 8394。第二次因要求回滚日志不存在而超时，实际 Android 留下零字节日志。两次 [原始观察的摘要与校验](t12-laterlock01-observer-timeouts.json) 保留；没有修改生产状态来制造成功。修正纯观察条件后，12:29:11 UTC 在 primary user 0 为 RUNNING_UNLOCKED、deviceLocked=true 的前后检查间取得 [稳定原生完成证据](t12-laterlock01-external-completion.json)：双份 36,864 字节数据库一致，SHA-256 `da2bc6af9aac3f696e933b2ca80ed3d711d1a4af152470fe477ee4d01663a92b`，integrity_check=ok，前／中／后回滚日志均 0 字节且无 WAL/SHM，原 product done、完成身份 `answer:28:42`、outbox published=1。Service 始终不存在，缓存进程仍在，未冒称进程死亡或文件锁证明。根代理还观察到对应实际通知与指向原 product 的 PendingIntent，完整系统转储仅本地保留。
+
+其后才真实解锁并打开 UI，只读公开接口确认原 admission、一个用户 entry 38、原 assistant entry 42 的准确 marker、零工具执行。首次只读验证在全部功能断言通过后，因单次 Back 未关闭 Activity 而清理超时，见 [失败记录](t12-laterlock01-verify-cleanup-failed.json)；其中旧脚本的 `passed:true` 只是在清理前赋值，不能当成整段通过。驱动已改为最多三次且仅向本 Activity 聚焦窗口发送 Back，并将完整通过标记移到清理之后。原输入不重新发送；新一轮只读复验仍待记录。此次成功不代表整机重启、force-stop 或 OEM 行为，也不证明完整 HTTP 次数。
+
 ## 候选对应关系
 
 | 源码／用途 | 主应用 SHA-256 | 测试 APK SHA-256 |
@@ -60,7 +67,7 @@ JobScheduler 的初始缺陷为 `startForeground` 未将只靠作业绑定的 Se
 
 ## 未完成的门槛
 
-- 实际断网恢复、整机重启首次解锁、首次解锁后再次锁屏、force-stop 等待用户重新打开；外部真实产品验证脚本已准备，未执行。
+- 整机重启首次解锁、force-stop 等待用户重新打开；外部真实产品验证脚本已准备，尚未执行。再次锁屏的原工作已完成，仍需记录修正清理后的完整只读复验。
 - 通知点击返回正确会话以及完整 Console 接线，须与 T15 联合验证。
 - 尚未验收的 T13 共同恢复接线，须先通过 T13，再合并 T12；不能借 T12 绕过其门槛。
 - 最终联合构建、源码／打包对应核验、独立合并审查，以及 T17 OEM 矩阵。

@@ -32,6 +32,26 @@
       "gitBlobSha256": "816ef6910cfc07d8bab93a19d0270d554c7cd28f84660287c6ba7e6e5b925262"
     },
     {
+      "file": "t12-laterlock01-external-completion.json",
+      "retainedLocalSha256": "417df00e2c30f59146c8611518daeac85fa118e3b5cf8d85e92d990bfa0e5085",
+      "gitBlobSha256": "501417fa2baa6cfbebd2edfbfa577ccdf3102f1cbc221fcdbabc397f82dc155f"
+    },
+    {
+      "file": "t12-laterlock01-observer-timeouts.json",
+      "retainedLocalSha256": "d39311d7862304d9ff72642d5070fd983bd5f2051e888f54fdf72390451e5319",
+      "gitBlobSha256": "41bfcc57c40b2a5ea78b72d8f57e8908e520e2d9dc9db422232a8c80508d2cf5"
+    },
+    {
+      "file": "t12-laterlock01-prepare.json",
+      "retainedLocalSha256": "615c73593d3b832b7a7da9eb12d2f14bbc93ef27d615c34ba25d07897a2896a7",
+      "gitBlobSha256": "615c73593d3b832b7a7da9eb12d2f14bbc93ef27d615c34ba25d07897a2896a7"
+    },
+    {
+      "file": "t12-laterlock01-verify-cleanup-failed.json",
+      "retainedLocalSha256": "50dd269a19d00edb4c3fd230368f8180591494cf8dfe8537095aa84a11075232",
+      "gitBlobSha256": "50dd269a19d00edb4c3fd230368f8180591494cf8dfe8537095aa84a11075232"
+    },
+    {
       "file": "t12-native-green01-device.log",
       "retainedLocalSha256": "2bacfab50c47eae5198bb46bb382f4510c92ce6c5f1a0a071a0e3e27109ffc57",
       "gitBlobSha256": "23a3e285bea65df50f60de24ac6f992f0b01b7ccb6d3e1b17b05d59bc6ae8afa"

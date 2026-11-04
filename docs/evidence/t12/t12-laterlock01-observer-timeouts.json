@@ -1,0 +1,24 @@
+[
+  {
+    "artifact": "t12-laterlock01-observation/result.json",
+    "sha256": "1076e5009b9a46cbb5b3a87a010bafa9eb18e805176fe0cee47db01ba4223613",
+    "product": "0d1cd678-787b-46b0-aba1-a20173cc6083",
+    "startedAt": "2026-11-04T12:21:51.169705+00:00",
+    "observations": 57,
+    "completed": false,
+    "error": "No stable original durable completion observed before deadline; do not open app to turn this into an automatic recovery pass",
+    "reasonForObserverCorrection": "Required process exit instead of actual Service absence",
+    "appWasNotOpenedToResolveObservation": true
+  },
+  {
+    "artifact": "t12-laterlock01-observation02/result.json",
+    "sha256": "ff7f2e65dd90a8085138df9c6ce1a5c0317a0583fad541ef7657b3fd03235079",
+    "product": "0d1cd678-787b-46b0-aba1-a20173cc6083",
+    "startedAt": "2026-11-04T12:26:16.139408+00:00",
+    "observations": 19,
+    "completed": false,
+    "error": "No stable original durable completion observed before deadline; do not open app to turn this into an automatic recovery pass",
+    "reasonForObserverCorrection": "Required journal absence instead of absent or zero-byte rollback journal",
+    "appWasNotOpenedToResolveObservation": true
+  }
+]
