@@ -52,6 +52,7 @@ class RecoveryRealApplicationTest {
         assumeTrue(InstrumentationRegistry.getArguments().getString("realProvider")=="true")
         val arguments=InstrumentationRegistry.getArguments();val unbound=arguments.getString("productUnbound")=="true"
         val diagnostic=arguments.getString("recoveryDiagnostic")=="true";val recoveryWait=arguments.getString("recoveryWaitMs")?.toLong()?.also{require(it in 30000..120000)}?:120000L
+        val constrainedTimeout=arguments.getString("bashTimeoutSeconds")?.toInt()?.also{require(it==30)}
         val mode=if(unbound)"product" else "recovery-product";val run=id();val product="real-recovery-$run";val connection=if(unbound)arguments.getString("productConnection")?:error("Product connection precondition missing")else "recovery-live";val path="/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t12-$run.txt"
         val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode",mode).putExtra("validationRun",run));var wire=Wire(mode,run);var connected=true;var primary:Throwable?=null;var credentialGeneration=1L
         var observedSdkId=0L;var observedExecutionId="";var observedIntentKey=""
@@ -68,7 +69,7 @@ class RecoveryRealApplicationTest {
             wire.call("create",JSONObject().put("creationId",product))
             if(unbound)wire.call("models.select",JSONObject().put("id",product).put("selection",JSONObject().put("provider",connection).put("modelId","mimo-v2.6-flash")))
             val command="test ! -e '$path' || exit 71; printf 'part-one\\n' > '$path'; printf 'T12_PART_ONE\\n'; sleep 18; printf 'part-two\\n' >> '$path'; cat '$path'"
-            val prompt="请实际执行文件操作，不要预测输出，也不要直接回复预期文本。这是已授权的恢复验证，新文件尚不存在。你必须首先调用已提供的 bash 工具执行下面完整命令一次，并等待实际工具结果；没有工具结果就不能声称完成。不要增添命令，不要调用 read、write 或其他工具，不要重复命令。\n<command>\n$command\n</command>\n工具真实完成后，依据实际输出原样报告文件最后两行。"
+            val prompt="请实际执行文件操作，不要预测输出，也不要直接回复预期文本。这是已授权的恢复验证，新文件尚不存在。你必须首先调用已提供的 bash 工具执行下面完整命令一次，并等待实际工具结果；没有工具结果就不能声称完成。不要增添命令，不要调用 read、write 或其他工具，不要重复命令。\n<command>\n$command\n</command>\n工具真实完成后，依据实际输出原样报告文件最后两行。"+(if(constrainedTimeout!=null)"\n首次且唯一的 bash 工具调用必须明确设置 timeout 为数字 30（秒），不要省略，不要使用 60 或其他值。" else "")
             val saved=store.save(product,0,id(),prompt,emptyList());val frozen=store.freeze(product,saved.getLong("revision"),id());val expectation=wire.call("open",JSONObject().put("id",product)).getJSONObject("conversation").getJSONObject("submissionContext")
             val intent=store.createSend(JSONObject().put("id",product).put("actionId",id()).put("inputToken",frozen.getString("token")).put("expectedContext",expectation).put("expectedControlVersion",store.readControl(product).getLong("version")).put("queue",JSONObject().put("whenBusy","followUp").put("whenIdle","start")))
             wire.call("send",JSONObject().put("intentId",intent.getString("intentId")))
@@ -80,6 +81,12 @@ class RecoveryRealApplicationTest {
             }
             val partial=file(observer,path);assertEquals("part-one\n",partial)
             observedSdkId=expectation.getLong("sdkConversationId");observedExecutionId=execution.getString("executionId");val scope=execution.getJSONObject("context");observedIntentKey="${scope.getLong("taskId")}:${scope.getString("callId")}:1"
+            if(constrainedTimeout!=null){
+                val fixed=RecoveryFailureObservation.fixedRequest(context,mode,run,product,observedSdkId,observedExecutionId,observedIntentKey,execution.getString("requestDigest"),command)
+                instrumentation.sendStatus(0,Bundle().apply{putString("fixedExecutionRequest",fixed.put("run",run).put("beforeOwnerDeath",true).toString())})
+                assertTrue("Durable fixed request must match the actual receipt before owner death: $fixed",fixed.optBoolean("readOnly")&&fixed.optBoolean("verified"))
+                assertEquals("Actual MiMo tool parameter must be the requested thirty seconds",30000L,fixed.getLong("timeoutMs"))
+            }
             observation("before-owner-death")
             val before=wire.state()?:error("Missing pre-death state");val pid=before.getInt("pid");assertNotEquals(Process.myPid(),pid);assertTrue(before.getBoolean("domainOwned"));val beforeRequests=before.getJSONObject("metrics").getInt("modelRequests");assertTrue(beforeRequests>0)
             instrumentation.sendStatus(0,Bundle().apply{putString("realRecoveryCheckpoint",JSONObject().put("run",run).put("product",product).put("path",path).put("executionId",execution.getString("executionId")).put("beforePid",pid).put("beforeRequests",beforeRequests).put("partial",partial).toString())})
