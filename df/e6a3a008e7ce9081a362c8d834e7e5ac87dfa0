@@ -1,0 +1,25 @@
+docs/specs/v1/README.md
+  s_467dcb949b5b60::t_4d14e9c5a1d8c1 39
+  s_467dcb949b5b60::t_384f2da4273f4e 3,37
+  s_467dcb949b5b60::t_4397493c939cb9 38
+docs/evidence/t12/README.md
+  s_467dcb949b5b60::t_384f2da4273f4e 3,111,113
+docs/evidence/t12/scoped-development-gate-review.md
+  s_467dcb949b5b60::t_384f2da4273f4e 1-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "dfe6a3a008e7ce9081a362c8d834e7e5ac87dfa0",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
