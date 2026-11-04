@@ -1,0 +1,31 @@
+docs/evidence/t12/t12-runtime-stage31b-all.log
+  s_467dcb949b5b60::t_79fef517b26b2e 1-308
+docs/evidence/t12/t12-product-preflight-configured01-device.log
+  s_467dcb949b5b60::t_79fef517b26b2e 1-25
+docs/evidence/t12/t12-product-unbound01-device.log
+  s_467dcb949b5b60::t_79fef517b26b2e 1-29
+docs/evidence/t12/README.md
+  s_467dcb949b5b60::t_5cc95b6c407f39 3,14,19,31-34,50,57
+docs/evidence/t12/t12-product-unbound01-independent-file.log
+  s_467dcb949b5b60::t_79fef517b26b2e 1
+docs/evidence/t12/LOG-SHA256.json
+  s_467dcb949b5b60::t_2542e26cddcd2f 94-98,104-118,139-143
+docs/evidence/t12/t12-product-setup-postboot01-device.log
+  s_467dcb949b5b60::t_f6ad1f449daff1 1-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "1a68d91e9b4e206b971eb127f58c79dad7d270df",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
