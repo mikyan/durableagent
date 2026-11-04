@@ -58,7 +58,9 @@ class DataSaverExecutionTest {
             }
             val executionId=running.getString("executionId");assertEquals(1,wire.phase("ready").getJSONObject("metrics").getInt("modelRequests"))
             wire.client.control(34,"15000");until("Real JS busy begins",3000){wire.busy().getLong("started")>0};val busy=wire.busy();assertEquals(0L,busy.getLong("ended"))
-            println("T13_EXECUTION_WAIT_METERED "+JSONObject().put("run",run).put("executionId",executionId).put("busyStartedElapsed",busy.getLong("started")))
+            val awaitingMetered=JSONObject().put("run",run).put("executionId",executionId).put("busyStartedElapsed",busy.getLong("started"))
+            println("T13_EXECUTION_WAIT_METERED "+awaitingMetered)
+            instrumentation.sendStatus(0,Bundle().apply{putString("T13_EXECUTION_WAIT_METERED",awaitingMetered.toString())})
             // Root's automated log watcher changes the actual platform setting. No supplied fact.
             until("Root supplies actual metered transition within the busy interval",8000){meteredAt.get()>0&&network.current().metered}
             fun query():JSONObject{
@@ -68,7 +70,9 @@ class DataSaverExecutionTest {
             }
             var stopped=JSONObject();until("Whole original download scope confirms stopped while JS is busy",8000){stopped=query();stopped.optString("state")=="stopped"&&stopped.optBoolean("scopeConfirmed")};val confirmedAt=SystemClock.elapsedRealtime()
             assertEquals("network_policy",stopped.getString("cancelReason"));assertEquals(0L,wire.busy().getLong("ended"));assertEquals(0L,store.readControl("policy-chat").getLong("stoppedThrough"))
-            println("T13_EXECUTION_WAIT_UNMETERED "+JSONObject().put("run",run).put("observedToConfirmedMs",confirmedAt-meteredAt.get()).put("stopped",stopped))
+            val awaitingRestoration=JSONObject().put("run",run).put("observedToConfirmedMs",confirmedAt-meteredAt.get()).put("stopped",stopped)
+            println("T13_EXECUTION_WAIT_UNMETERED "+awaitingRestoration)
+            instrumentation.sendStatus(0,Bundle().apply{putString("T13_EXECUTION_WAIT_UNMETERED",awaitingRestoration.toString())})
             until("Root restores actual unmetered network",60000){val fact=network.current();fact.known&&!fact.metered};until("Original JS busy finishes",20000){wire.busy().getLong("ended")>0}
             wire.phase("ready");val result=wire.execution(executionId)!!;assertEquals("stopped",result.getString("state"));assertEquals(1,wire.phase("ready").getJSONObject("metrics").getInt("modelRequests"));assertEquals(1,wire.policy().length());assertEquals(0L,store.readControl("policy-chat").getLong("stoppedThrough"))
             val control=store.readControl("policy-chat");NativeStopController.request(context,mode,run,JSONObject().put("id","policy-chat").put("actionId",id()).put("expectedControlVersion",control.getLong("version")))
