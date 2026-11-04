@@ -1,0 +1,26 @@
+docs/evidence/t11/README.md
+  s_467dcb949b5b60::t_814309b28f1f8c 76-83
+docs/specs/v1/README.md
+  s_467dcb949b5b60::t_814309b28f1f8c 3,37
+  s_467dcb949b5b60::t_9e3ab0039f7fcc 38
+docs/evidence/t11/original-effects-notification.json
+  s_467dcb949b5b60::t_0f3ae5d87267a1 1-39
+docs/evidence/t11/original-effects-real-mimo.json
+  s_467dcb949b5b60::t_23aa1099cb045f 1-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "4914bb88dbd73a8f4c02673a4ae7f71bc34dd739",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
