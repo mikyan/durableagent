@@ -106,7 +106,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
                 .put("kind","file").put("source","saf").put("original",true).put("uri",original.getString("uri")).put("displayName",original.getString("displayName"))
                 .put("nativeControlNamespace",inputNamespace)
                 .put("state","accepted_not_started").put("scopeConfirmed",false).put("sequence",0).put("stagedOffset",0).put("sealed",plan.getLong("byteLength")==0L)
-                .put("diff",JSONObject().put("state","unavailable").put("reason","not_completed"))
+                .put("diff",unavailableDiff("not_completed"))
             // Native stop indexing precedes an acknowledged document plan. A crash between
             // the two stores leaves an indexed unknown intent, never executable missing bytes.
             NativeInputStore(context,inputNamespace).use{inputs->
@@ -250,7 +250,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     private fun operationId(value:JSONObject)=identifier(value,"operationId")
     private fun digest(value:JSONObject,key:String)=(value.opt(key) as? String)?.takeIf{it.matches(Regex("[a-f0-9]{64}"))}?:fail("DOCUMENT_INVALID","原文件摘要或资源身份无效。")
     private fun integer(value:JSONObject,key:String,min:Long,max:Long):Long {val number=value.opt(key);if(number !is Number||number.toDouble()!=number.toLong().toDouble()||number.toLong() !in min..max)fail("DOCUMENT_INVALID","原文件操作范围无效。");return number.toLong()}
-    private fun operationOrNull(db:SQLiteDatabase,id:String):JSONObject?=db.rawQuery("SELECT record FROM operations WHERE id=?",arrayOf(id)).use{if(it.moveToFirst())JSONObject(it.getString(0))else null}
+    private fun operationOrNull(db:SQLiteDatabase,id:String):JSONObject?=db.rawQuery("SELECT record FROM operations WHERE id=?",arrayOf(id)).use{if(it.moveToFirst())JSONObject(it.getString(0)).also{row->row.put("diff",publicDiff(row.optJSONObject("diff")))}else null}
     private fun operation(db:SQLiteDatabase,id:String)=operationOrNull(db,id)?:fail("DOCUMENT_OPERATION_NOT_FOUND","未找到此原文件操作，未重新执行。")
     private fun saveOperation(db:SQLiteDatabase,row:JSONObject){db.beginTransaction();try{
         val id=row.getString("operationId");val encoded=row.toString()
@@ -268,14 +268,26 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     private fun operationDirectory(id:String)=File(File(File(context.noBackupFilesDir,namespace),"operations"),NativeInputStore.sha256(id.toByteArray(Charsets.UTF_8)))
     private fun hashFile(file:File):String {val hash=MessageDigest.getInstance("SHA-256");FileInputStream(file).use{input->val bytes=ByteArray(32768);while(true){val count=input.read(bytes);if(count<0)break;hash.update(bytes,0,count)}};return hash.digest().joinToString(""){"%02x".format(it)}}
     private fun conflict():Nothing=fail("DOCUMENT_OPERATION_CONFLICT","此操作身份已绑定不同的原件或内容，未覆盖已有记录。")
+    private fun unavailableDiff(reason:String)=JSONObject().put("state","unavailable").put("available",false).put("reason",reason)
+    private fun availableDiff(text:String)=JSONObject().put("state","available").put("available",true).put("format","whole-file-lines").put("text",text)
+    private fun publicDiff(value:JSONObject?):JSONObject {
+        // Earlier v2 receipts used state only. Project their evidence without modifying
+        // append-only history or changing operation identity, sequence or scope proof.
+        val available=value?.opt("available") as? Boolean
+        if(available==true||available==null&&value?.optString("state")=="available"){
+            val text=value?.opt("text") as? String?:return unavailableDiff("invalid_stored_diff")
+            return if(text.toByteArray(Charsets.UTF_8).size<=16384)availableDiff(text)else unavailableDiff("text_budget")
+        }
+        val reason=value?.opt("reason") as? String
+        return unavailableDiff(reason?.takeIf{it.length in 1..160}?:"not_available")
+    }
     private fun diff(before:ByteArray?,after:ByteArray?):JSONObject {
-        val result=JSONObject().put("state","unavailable")
-        if(before==null||after==null)return result.put("reason","text_budget")
+        if(before==null||after==null)return unavailableDiff("text_budget")
         fun text(bytes:ByteArray):String?=try{Charsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT).decode(ByteBuffer.wrap(bytes)).toString().takeUnless{it.contains('\u0000')}}catch(_:Exception){null}
-        val old=text(before)?:return result.put("reason","binary");val updated=text(after)?:return result.put("reason","binary")
+        val old=text(before)?:return unavailableDiff("binary");val updated=text(after)?:return unavailableDiff("binary")
         val unified="--- original\n+++ updated\n"+old.lines().joinToString("\n"){"-$it"}+"\n"+updated.lines().joinToString("\n"){"+$it"}
-        if(unified.toByteArray(Charsets.UTF_8).size>32768)return result.put("reason","text_budget")
-        return JSONObject().put("state","available").put("format","whole-file-lines").put("text",unified)
+        if(unified.toByteArray(Charsets.UTF_8).size>16384)return unavailableDiff("text_budget")
+        return availableDiff(unified)
     }
     fun open(resourceId:String):JSONObject {
         val record=resource(resourceId);val uri=Uri.parse(record.getString("uri"));requireGrant(uri,READ)
