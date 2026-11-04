@@ -18,6 +18,8 @@ import org.json.JSONObject
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.security.MessageDigest
+import java.util.UUID
 
 class NativeDocumentException(val code:String,message:String):RuntimeException(message,null,false,false)
 
@@ -26,7 +28,9 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     private val context=context.applicationContext
     private val resolver=this.context.contentResolver
     private var helper:DocumentDatabase?=null
-    private var closed=false
+    @Volatile private var closed=false
+    private data class Reader(val resourceId:String,val input:ParcelFileDescriptor.AutoCloseInputStream,val digest:String,val length:Long)
+    private val readers=mutableMapOf<String,Reader>()
     init { require(namespace.matches(Regex("[a-zA-Z0-9._-]{1,100}"))) }
     fun select(uri:Uri,resultFlags:Int):JSONObject {
         if(uri.scheme!="content"||!DocumentsContract.isDocumentUri(context,uri))fail("DOCUMENT_INVALID","请选择系统文档提供者中的原文件。")
@@ -51,9 +55,46 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         return JSONObject().put("resources",JSONArray(records.map(::current)))
     }
     fun describe(resourceId:String):JSONObject = current(resource(resourceId))
-    fun open(resourceId:String):JSONObject = fail("DOCUMENT_READER_UNAVAILABLE","原文件 reader 尚不可用。")
-    fun readReader(readerId:String,offset:Long,maxBytes:Int):JSONObject = fail("DOCUMENT_READER_LOST","原文件 reader 已失效。")
-    fun closeRead(readerId:String):JSONObject = fail("DOCUMENT_READER_LOST","原文件 reader 已失效。")
+    fun open(resourceId:String):JSONObject {
+        val record=resource(resourceId);val uri=Uri.parse(record.getString("uri"));requireGrant(uri,READ)
+        return originalIo {
+            val descriptor=resolver.openFileDescriptor(uri,"r")?:fail("DOCUMENT_UNAVAILABLE","文档提供者暂不可用。")
+            val input=ParcelFileDescriptor.AutoCloseInputStream(descriptor)
+            try{
+                val result=hashOriginal(input);val id=UUID.randomUUID().toString()
+                synchronized(readers){
+                    if(closed)fail("DOCUMENT_STORE_CLOSED","原文件记录已关闭，请重新连接。")
+                    if(readers.size>=8)fail("DOCUMENT_READER_LIMIT","打开的原件过多，请先结束已有读取。")
+                    readers[id]=Reader(resourceId,input,result.first,result.second)
+                }
+                JSONObject().put("readerId",id).put("resourceId",resourceId).put("contentDigest",result.first).put("byteLength",result.second)
+            }catch(error:Exception){try{input.close()}catch(_:Exception){};throw error}
+        }
+    }
+    fun readReader(readerId:String,offset:Long,maxBytes:Int):JSONObject {
+        if(offset !in 0..MAX_CONTENT||maxBytes !in 1..32768)fail("DOCUMENT_INVALID","原文件读取范围无效。")
+        val reader=synchronized(readers){readers[readerId]}?:fail("DOCUMENT_READER_LOST","原文件 reader 已失效，请重新开始读取并核验内容。")
+        return synchronized(reader){originalIo{
+            reader.input.channel.position(offset)
+            val bytes=ByteArray(maxBytes);var count=0
+            while(count<bytes.size){val amount=reader.input.read(bytes,count,bytes.size-count);if(amount<0)break;count+=amount}
+            JSONObject().put("offset",offset).put("base64",Base64.encodeToString(bytes.copyOf(count),Base64.NO_WRAP))
+                .put("bytesRead",count).put("eof",offset+count>=reader.input.channel.size())
+        }}
+    }
+    fun closeRead(readerId:String):JSONObject {
+        val reader=synchronized(readers){readers.remove(readerId)}?:fail("DOCUMENT_READER_LOST","原文件 reader 已失效，请重新开始读取并核验内容。")
+        return synchronized(reader){try{originalIo{
+            val result=hashOriginal(reader.input)
+            JSONObject().put("currentDigest",result.first).put("byteLength",result.second).put("unchanged",result.first==reader.digest&&result.second==reader.length)
+        }}finally{reader.input.close()}}
+    }
+    private fun hashOriginal(input:ParcelFileDescriptor.AutoCloseInputStream):Pair<String,Long> {
+        try{input.channel.position(0)}catch(_:IOException){fail("DOCUMENT_UNSUPPORTED","此提供者不支持可定位的原件 reader。")}
+        val digest=MessageDigest.getInstance("SHA-256");val bytes=ByteArray(32768);var length=0L
+        while(true){val count=input.read(bytes);if(count<0)break;length+=count;if(length>MAX_CONTENT)fail("DOCUMENT_BUDGET_EXCEEDED","原文件读取超过 64 MiB，未声称已读取完整内容。");digest.update(bytes,0,count)}
+        return digest.digest().joinToString(""){"%02x".format(it)} to length
+    }
     fun read(resourceId:String,offset:Long,maxBytes:Int):JSONObject {
         if(offset !in 0..MAX_CONTENT||maxBytes !in 1..32768)fail("DOCUMENT_INVALID","原文件读取范围无效。")
         val record=resource(resourceId);val uri=Uri.parse(record.getString("uri"));requireGrant(uri,READ)
@@ -112,7 +153,11 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         catch(error:NativeDocumentException){throw error}
         catch(_:SQLiteException){fail("DOCUMENT_STORAGE_FAILED","原文件记录无法保存或读取，原记录已保留。")}
     }
-    override fun close()=synchronized(monitor){closed=true;helper?.close();helper=null}
+    override fun close(){
+        synchronized(monitor){closed=true;helper?.close();helper=null}
+        val opened=synchronized(readers){readers.values.toList().also{readers.clear()}}
+        opened.forEach{reader->synchronized(reader){try{reader.input.close()}catch(_:Exception){}}}
+    }
     private class DocumentDatabase(context:Context,path:String):SQLiteOpenHelper(context,path,null,1,DatabaseErrorHandler{throw NativeDocumentException("DOCUMENT_STORAGE_CORRUPT","原文件记录损坏，已保留原库。")}){
         init{setWriteAheadLoggingEnabled(true)}
         override fun onConfigure(db:SQLiteDatabase){db.execSQL("PRAGMA synchronous=FULL")}
