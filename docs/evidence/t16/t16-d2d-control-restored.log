@@ -1,0 +1,74 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.backupfixture.BackupChannelTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.backupfixture.BackupChannelTest:
+INSTRUMENTATION_STATUS: test=assertPositiveControlRestored
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.backupfixture.BackupChannelTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.io.FileNotFoundException: /data/user/0/dev.durableagent.backupfixture.control/t16-root-marker: open failed: ENOENT (No such file or directory)
+	at libcore.io.IoBridge.open(IoBridge.java:574)
+	at java.io.FileInputStream.<init>(FileInputStream.java:179)
+	at kotlin.io.FilesKt__FileReadWriteKt.readText(FileReadWrite.kt:135)
+	at kotlin.io.FilesKt__FileReadWriteKt.readText$default(FileReadWrite.kt:135)
+	at dev.durableagent.backupfixture.BackupChannelTest.assertPositiveControlRestored(BackupChannelTest.kt:37)
+	... 32 trimmed
+Caused by: android.system.ErrnoException: open failed: ENOENT (No such file or directory)
+	at libcore.io.Linux.open(Native Method)
+	at libcore.io.ForwardingOs.open(ForwardingOs.java:568)
+	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+	at libcore.io.ForwardingOs.open(ForwardingOs.java:568)
+	at android.app.ActivityThread$AndroidOs.open(ActivityThread.java:8953)
+	at libcore.io.IoBridge.open(IoBridge.java:560)
+	... 37 more
+
+INSTRUMENTATION_STATUS: stream=
+Error in assertPositiveControlRestored(dev.durableagent.backupfixture.BackupChannelTest):
+java.io.FileNotFoundException: /data/user/0/dev.durableagent.backupfixture.control/t16-root-marker: open failed: ENOENT (No such file or directory)
+	at libcore.io.IoBridge.open(IoBridge.java:574)
+	at java.io.FileInputStream.<init>(FileInputStream.java:179)
+	at kotlin.io.FilesKt__FileReadWriteKt.readText(FileReadWrite.kt:135)
+	at kotlin.io.FilesKt__FileReadWriteKt.readText$default(FileReadWrite.kt:135)
+	at dev.durableagent.backupfixture.BackupChannelTest.assertPositiveControlRestored(BackupChannelTest.kt:37)
+	... 32 trimmed
+Caused by: android.system.ErrnoException: open failed: ENOENT (No such file or directory)
+	at libcore.io.Linux.open(Native Method)
+	at libcore.io.ForwardingOs.open(ForwardingOs.java:568)
+	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+	at libcore.io.ForwardingOs.open(ForwardingOs.java:568)
+	at android.app.ActivityThread$AndroidOs.open(ActivityThread.java:8953)
+	at libcore.io.IoBridge.open(IoBridge.java:560)
+	... 37 more
+
+INSTRUMENTATION_STATUS: test=assertPositiveControlRestored
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.034
+There was 1 failure:
+1) assertPositiveControlRestored(dev.durableagent.backupfixture.BackupChannelTest)
+java.io.FileNotFoundException: /data/user/0/dev.durableagent.backupfixture.control/t16-root-marker: open failed: ENOENT (No such file or directory)
+	at libcore.io.IoBridge.open(IoBridge.java:574)
+	at java.io.FileInputStream.<init>(FileInputStream.java:179)
+	at kotlin.io.FilesKt__FileReadWriteKt.readText(FileReadWrite.kt:135)
+	at kotlin.io.FilesKt__FileReadWriteKt.readText$default(FileReadWrite.kt:135)
+	at dev.durableagent.backupfixture.BackupChannelTest.assertPositiveControlRestored(BackupChannelTest.kt:37)
+	... 32 trimmed
+Caused by: android.system.ErrnoException: open failed: ENOENT (No such file or directory)
+	at libcore.io.Linux.open(Native Method)
+	at libcore.io.ForwardingOs.open(ForwardingOs.java:568)
+	at libcore.io.BlockGuardOs.open(BlockGuardOs.java:274)
+	at libcore.io.ForwardingOs.open(ForwardingOs.java:568)
+	at android.app.ActivityThread$AndroidOs.open(ActivityThread.java:8953)
+	at libcore.io.IoBridge.open(IoBridge.java:560)
+	... 37 more
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

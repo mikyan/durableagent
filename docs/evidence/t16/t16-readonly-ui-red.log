@@ -1,0 +1,33 @@
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t16-retention/durableagent/ui
+
+ ❯ test/app.test.tsx (4 tests | 1 failed | 3 skipped) 346ms
+   × opens compatible retained history even when native drafts are unavailable and keeps sending closed 345ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/app.test.tsx > opens compatible retained history even when native drafts are unavailable and keeps sending closed
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ test/app.test.tsx:26:106
+     24|   try {
+     25|     render(<App controller={controller}/>);
+     26|     const row=await screen.findByTestId('conversation-item');expect((r…
+       |                                                                                                          ^
+     27|     expect(await screen.findByText(entry.text)).toBeTruthy();
+     28|     expect((screen.getByRole('button',{name:'发送消息'}) as HTMLButtonElem…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 skipped (4)
+   Start at  13:02:30
+   Duration  2.24s (environment 65%, tests 16%, import 15%, transform 3%)
+

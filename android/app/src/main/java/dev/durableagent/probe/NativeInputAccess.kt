@@ -20,6 +20,7 @@ class NativeInputAccess(private val store: NativeInputStore) : AutoCloseable {
             "input.list" -> store.list()
             "input.read" -> store.read(id())
             "input.inspect" -> store.inspect(id())
+            "input.maintain" -> store.gc()
             "input.save" -> {
                 val ids = payload.getJSONArray("selectionIds")
                 store.save(id(), revision(), operation(), payload.getString("text"), (0 until ids.length()).map(ids::getString))
@@ -44,6 +45,9 @@ class NativeInputAccess(private val store: NativeInputStore) : AutoCloseable {
 
     @V8Function
     fun readFrozenJson(token: String): String = result { store.readFrozen(token) }
+
+    @V8Function
+    fun retainFrozenJson(ownerId:String,token:String):String = result { store.retainFrozen(ownerId,token) }
 
     @V8Function
     fun beginLocationEditJson(operationId: String): String = result { store.beginLocationEdit(operationId) }

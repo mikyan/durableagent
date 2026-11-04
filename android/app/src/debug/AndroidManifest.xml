@@ -5,7 +5,7 @@
         <service android:name=".CredentialLeaseProbeService" android:exported="false" android:process=":credential_lease_probe"/>
         <service android:name=".InputFaultProbeService" android:exported="false" android:process=":input_fault_probe"/>
         <service android:name=".SubmissionFaultProbeService" android:exported="false" android:process=":submission_fault_probe"/>
-        <provider android:name=".InputTestDocumentsProvider" android:authorities="dev.durableagent.probe.input-fixtures" android:exported="true" android:grantUriPermissions="true" android:permission="android.permission.MANAGE_DOCUMENTS">
+        <provider android:name=".InputTestDocumentsProvider" android:authorities="${applicationId}.input-fixtures" android:exported="true" android:grantUriPermissions="true" android:permission="android.permission.MANAGE_DOCUMENTS">
             <intent-filter><action android:name="android.content.action.DOCUMENTS_PROVIDER"/></intent-filter>
         </provider>
     </application>

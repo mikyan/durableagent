@@ -1,0 +1,5 @@
+Scheduling restore: Local disk image
+restoreStarting: 2 packages
+onUpdate: 1 = dev.durableagent.backupfixture.control
+restoreFinished: 0
+done

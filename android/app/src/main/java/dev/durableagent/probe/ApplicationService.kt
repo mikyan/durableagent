@@ -65,6 +65,8 @@ class ApplicationService:Service() {
                 43->if(debug)reply?.let {node?.getExecutor("globalThis.__appExecutionFault?.(${JSONObject.quote(text)})")?.executeVoid();send(it,43,status())}
                 51->if(debug)reply?.let {node?.getExecutor("globalThis.__appExtensionRoute?.(${JSONObject.quote(text)})")?.executeVoid();send(it,51,status())}
                 52->if(debug)node?.getExecutor("globalThis.__appRunExtensionPolicy?.()")?.executeVoid()
+                53->if(debug)node?.getExecutor("globalThis.__appRunRetentionPolicy?.()")?.executeVoid()
+                54->if(debug)node?.getExecutor("globalThis.__appSeedFutureRetention?.()")?.executeVoid()
                 40->if(debug)node?.getExecutor("globalThis.__appRunSubmissionPolicy?.()")?.executeVoid()
                 34->if(debug&&node!=null){
                     val duration=(text.toLongOrNull()?:10000).coerceIn(2500,15000)
@@ -87,6 +89,7 @@ class ApplicationService:Service() {
         try {
             check(mode in setOf("product","fixture","hang","real","models","models-fixture","execution","execution-real","extensions-fixture","extensions-real"))
             check(mode=="product"||run?.matches(Regex("[a-zA-Z0-9-]{1,80}"))==true)
+            check(!File(noBackupFilesDir,"unsupported-restore").exists()) { "检测到不受支持的系统恢复，原数据已保留；运行已关闭，请使用原安装的数据继续核验。" }
             val domain=File(filesDir,if(mode=="product")"application" else "application-validation/$run")
             lease=StorageDomainLease.acquire(domain)?:error("Application storage already owned")
             instance=UUID.randomUUID().toString();phase="{\"phase\":\"opening\"}"
@@ -121,7 +124,8 @@ class ApplicationService:Service() {
                     for(id in ids)detach(id,peer)
                 }},0)
             }
-            if(node==null||JSONObject(phase).optString("phase")=="failed"){
+            val status=JSONObject(phase)
+            if(node==null||status.optString("phase")=="failed"&&!status.optBoolean("readOnly")){
                 send(peer,10,JSONObject().put("type","response").put("protocol",1).put("connectionId",connection).put("requestId",request.optString("requestId")).put("ok",false).put("error",JSONObject().put("code","HOST_NOT_READY").put("message",JSONObject(phase).optString("reason","运行宿主尚未就绪"))).toString());return
             }
             pending.add(text)

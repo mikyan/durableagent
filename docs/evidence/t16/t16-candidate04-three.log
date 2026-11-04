@@ -1,0 +1,91 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RetentionApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RetentionApplicationTest:
+INSTRUMENTATION_STATUS: test=incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RetentionApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Retention host timeout
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RetentionApplicationTest.until(RetentionApplicationTest.kt:24)
+	at dev.durableagent.probe.RetentionApplicationTest.until$default(RetentionApplicationTest.kt:24)
+	at dev.durableagent.probe.RetentionApplicationTest.incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(RetentionApplicationTest.kt:53)
+
+INSTRUMENTATION_STATUS: stream=
+Error in incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(dev.durableagent.probe.RetentionApplicationTest):
+java.lang.AssertionError: Retention host timeout
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RetentionApplicationTest.until(RetentionApplicationTest.kt:24)
+	at dev.durableagent.probe.RetentionApplicationTest.until$default(RetentionApplicationTest.kt:24)
+	at dev.durableagent.probe.RetentionApplicationTest.incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(RetentionApplicationTest.kt:53)
+
+INSTRUMENTATION_STATUS: test=incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RetentionApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=actualAndroidSdkRetentionMigrationCapacityAndReadOnlyPolicy
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: retentionEvidence={"phase":"ready","extensions":["projects","conversation","input","submission"],"metrics":{"retentionPolicyState":"passed","retentionPolicyCases":[{"name":"a typed old configuration read does not publish migration; a failed migration commit leaves old values and history readable","passed":true,"durationMs":511},{"name":"actual SDK compaction and a fork retain original history through SQLite reopen","passed":true,"durationMs":694},{"name":"an unvisited future admission record blocks startup before dispatch and remains readable by its owner","passed":true,"durationMs":402},{"name":"compatible retained history stays readable while an unrelated future record keeps every execution action closed","passed":true,"durationMs":678},{"name":"a malformed current record is not mistaken for an uninitialized installation","passed":true,"durationMs":419},{"name":"actual SDK SQLite capacity failure leaves a saved intent and existing conversation readable on reopen","passed":true,"durationMs":295},{"name":"a newer application record closes dispatch without resetting its data and exposes an actionable storage status","passed":true,"durationMs":400}]},"instance":"63998694-4e41-419f-8430-29e5726af945","pid":8070,"domainOwned":true,"nativeOwners":1,"build":"google\/sdk_gphone64_x86_64\/emu64xa:16\/BE2A.250530.026.F3\/13894323:userdebug\/dev-keys"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RetentionApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualAndroidSdkRetentionMigrationCapacityAndReadOnlyPolicy
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRetentionTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeRetentionTest:
+INSTRUMENTATION_STATUS: test=aTextOnlySdkHandoffRetainsItsFrozenTokenAcrossReopenWithoutANativeIntent
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRetentionTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: SDK-held text-only input must not be discarded
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.NativeRetentionTest.aTextOnlySdkHandoffRetainsItsFrozenTokenAcrossReopenWithoutANativeIntent(NativeRetentionTest.kt:98)
+
+INSTRUMENTATION_STATUS: stream=
+Error in aTextOnlySdkHandoffRetainsItsFrozenTokenAcrossReopenWithoutANativeIntent(dev.durableagent.probe.NativeRetentionTest):
+java.lang.AssertionError: SDK-held text-only input must not be discarded
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.NativeRetentionTest.aTextOnlySdkHandoffRetainsItsFrozenTokenAcrossReopenWithoutANativeIntent(NativeRetentionTest.kt:98)
+
+INSTRUMENTATION_STATUS: test=aTextOnlySdkHandoffRetainsItsFrozenTokenAcrossReopenWithoutANativeIntent
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 107.639
+There were 2 failures:
+1) incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(dev.durableagent.probe.RetentionApplicationTest)
+java.lang.AssertionError: Retention host timeout
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.RetentionApplicationTest.until(RetentionApplicationTest.kt:24)
+	at dev.durableagent.probe.RetentionApplicationTest.until$default(RetentionApplicationTest.kt:24)
+	at dev.durableagent.probe.RetentionApplicationTest.incompatibleRecordReopensThroughNativeBridgeAsReadOnlyHistory(RetentionApplicationTest.kt:53)
+2) aTextOnlySdkHandoffRetainsItsFrozenTokenAcrossReopenWithoutANativeIntent(dev.durableagent.probe.NativeRetentionTest)
+java.lang.AssertionError: SDK-held text-only input must not be discarded
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.NativeRetentionTest.aTextOnlySdkHandoffRetainsItsFrozenTokenAcrossReopenWithoutANativeIntent(NativeRetentionTest.kt:98)
+
+FAILURES!!!
+Tests run: 3,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1

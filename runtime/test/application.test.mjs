@@ -166,7 +166,7 @@ test('a fatal SQLite error reports unavailable observation and failed host witho
 });
 test('newer persisted configuration refuses startup and preserves its original data',async()=>{
   const directory=await mkdtemp(join(tmpdir(),'durable-config-version-')),path=join(directory,'app.sqlite'),config=validationConfiguration();
-  const NewConfiguration=defineDoc({kind:'app.configuration',version:2,scope:'session',initial:()=>({marker:'newer-version-data'}),checkpointWhen:()=>false});
+  const NewConfiguration=defineDoc({kind:'app.configuration',version:3,scope:'session',initial:()=>({marker:'newer-version-data'}),checkpointWhen:()=>false});
   let owner=await openOwnedStorage(path);let seed=await Harness.open(owner.storage,{models:config.models,registry:createRegistry()},context);await seed.commit(async tx=>{await tx.doc(NewConfiguration);},context);await seed.close(context);
   const app=new Application({path,...config});
   try {await assert.rejects(app.start());assert.equal(app.status().phase,'failed');assert.ok(app.status().reason);await app.close();owner=await openOwnedStorage(path);seed=await Harness.open(owner.storage,{models:config.models,registry:createRegistry()},context);assert.equal((await seed.snapshot(NewConfiguration,context)).marker,'newer-version-data');await seed.close(context);}finally{await app.close();await rm(directory,{recursive:true,force:true});}

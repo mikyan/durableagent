@@ -1,0 +1,83 @@
+{
+  "device": "emulator-5584",
+  "scope": "LocalTransport synthetic packages only; root used only for archive observation",
+  "packages": [
+    {
+      "package": "dev.durableagent.backupfixture.control",
+      "archivePresent": true,
+      "bytes": 12800,
+      "sha256": "8e9fd5e32d2a76e6551533128ddb181a94761f1ec017a768911dfda6dab4d957",
+      "encoding": "raw",
+      "entries": [
+        {
+          "name": "apps/dev.durableagent.backupfixture.control/_manifest",
+          "bytes": 1540,
+          "containsSyntheticMarker": false
+        },
+        {
+          "name": "apps/dev.durableagent.backupfixture.control/r/t16-root-marker",
+          "bytes": 62,
+          "containsSyntheticMarker": true
+        },
+        {
+          "name": "apps/dev.durableagent.backupfixture.control/r/app_dxmaker_cache",
+          "bytes": 0,
+          "containsSyntheticMarker": false
+        },
+        {
+          "name": "apps/dev.durableagent.backupfixture.control/d_r/t16-root-marker",
+          "bytes": 69,
+          "containsSyntheticMarker": true
+        },
+        {
+          "name": "apps/dev.durableagent.backupfixture.control/f/application",
+          "bytes": 0,
+          "containsSyntheticMarker": false
+        },
+        {
+          "name": "apps/dev.durableagent.backupfixture.control/f/application/t16-marker",
+          "bytes": 62,
+          "containsSyntheticMarker": true
+        },
+        {
+          "name": "apps/dev.durableagent.backupfixture.control/d_f/t16-marker",
+          "bytes": 69,
+          "containsSyntheticMarker": true
+        },
+        {
+          "name": "apps/dev.durableagent.backupfixture.control/db/t16-marker.sqlite",
+          "bytes": 66,
+          "containsSyntheticMarker": true
+        },
+        {
+          "name": "apps/dev.durableagent.backupfixture.control/d_db/t16-marker.sqlite",
+          "bytes": 73,
+          "containsSyntheticMarker": true
+        },
+        {
+          "name": "apps/dev.durableagent.backupfixture.control/sp/t16-marker.xml",
+          "bytes": 163,
+          "containsSyntheticMarker": true
+        },
+        {
+          "name": "apps/dev.durableagent.backupfixture.control/d_sp/t16-marker.xml",
+          "bytes": 163,
+          "containsSyntheticMarker": true
+        },
+        {
+          "name": "apps/dev.durableagent.backupfixture.control/ef/t16-marker",
+          "bytes": 66,
+          "containsSyntheticMarker": true
+        }
+      ]
+    },
+    {
+      "package": "dev.durableagent.backupfixture.rules",
+      "archivePresent": false
+    },
+    {
+      "package": "dev.durableagent.retention",
+      "archivePresent": false
+    }
+  ]
+}
