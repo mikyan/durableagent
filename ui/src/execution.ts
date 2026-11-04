@@ -18,7 +18,10 @@ export class ExecutionCoordinator {
   private publish(patch:Partial<ExecutionView>){this.state={...this.state,...patch};this.changed();}
   reset(){++this.generation;++this.reads;this.publish({rows:[],conversationId:undefined,nextCursor:undefined,limited:false,loading:false,connecting:false,copying:false,pending:[],connected:false,error:undefined,notice:undefined});}
   select(conversationId?:string){++this.reads;this.publish({rows:[],conversationId,nextCursor:undefined,limited:false,loading:false,pending:[],error:undefined});}
-  private message(error:unknown){return error instanceof ApplicationFailure||error instanceof Error?error.message:'执行状态未确认。';}
+  private message(error:unknown){
+    if(error instanceof ApplicationFailure&&error.code==='TERMUX_FORCE_STOPPED')return 'Termux 已被系统强行停止。请手动打开 Termux 一次，再返回本应用；无需重新初始化。';
+    return error instanceof Error?error.message:'执行状态未确认。';
+  }
   async copySetup(){
     const client=this.client(),generation=this.generation;if(!client||this.state.copying)return;
     this.publish({copying:true,error:undefined});
