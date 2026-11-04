@@ -1,0 +1,18 @@
+I/Termux:TermuxInstaller(24130): Installing Termux bootstrap packages.
+I/Termux:TermuxInstaller(24130): Running Termux bootstrap second stage.
+E/linker  (24245): "/data/data/com.termux/files/usr/lib/libiconv.so" program alignment (4096) cannot be smaller than system page size (16384)
+F/linker  (24245): CANNOT LINK EXECUTABLE "/data/data/com.termux/files/usr/bin/bash": "/data/data/com.termux/files/usr/lib/libiconv.so" program alignment (4096) cannot be smaller than system page size (16384)
+V/TermuxCommand(24130): [24245-stderr] "/data/data/com.termux/files/usr/lib/libiconv.so" program alignment (4096) cannot be smaller than system page size (16384)
+V/TermuxCommand(24130): [24245-stderr] CANNOT LINK EXECUTABLE "/data/data/com.termux/files/usr/bin/bash": "/data/data/com.termux/files/usr/lib/libiconv.so" program alignment (4096) cannot be smaller than system page size (16384)
+E/Termux:TermuxInstaller(24130): (-1) Termux Bootstrap Second Stage Command:
+E/Termux:TermuxInstaller(24130): "/data/data/com.termux/files/usr/lib/libiconv.so" program alignment (4096) cannot be smaller than system page size (16384)
+E/Termux:TermuxInstaller(24130): CANNOT LINK EXECUTABLE "/data/data/com.termux/files/usr/bin/bash": "/data/data/com.termux/files/usr/lib/libiconv.so" program alignment (4096) cannot be smaller than system page size (16384)
+I/Termux:TermuxInstaller(24130): Installing Termux bootstrap packages.
+I/Termux:TermuxInstaller(24130): Running Termux bootstrap second stage.
+E/linker  (24517): "/data/data/com.termux/files/usr/lib/libreadline.so.8.2" program alignment (4096) cannot be smaller than system page size (16384)
+F/linker  (24517): CANNOT LINK EXECUTABLE "/data/data/com.termux/files/usr/bin/bash": "/data/data/com.termux/files/usr/lib/libreadline.so.8.2" program alignment (4096) cannot be smaller than system page size (16384)
+V/TermuxCommand(24130): [24517-stderr] "/data/data/com.termux/files/usr/lib/libreadline.so.8.2" program alignment (4096) cannot be smaller than system page size (16384)
+V/TermuxCommand(24130): [24517-stderr] CANNOT LINK EXECUTABLE "/data/data/com.termux/files/usr/bin/bash": "/data/data/com.termux/files/usr/lib/libreadline.so.8.2" program alignment (4096) cannot be smaller than system page size (16384)
+E/Termux:TermuxInstaller(24130): (-1) Termux Bootstrap Second Stage Command:
+E/Termux:TermuxInstaller(24130): "/data/data/com.termux/files/usr/lib/libreadline.so.8.2" program alignment (4096) cannot be smaller than system page size (16384)
+E/Termux:TermuxInstaller(24130): CANNOT LINK EXECUTABLE "/data/data/com.termux/files/usr/bin/bash": "/data/data/com.termux/files/usr/lib/libreadline.so.8.2" program alignment (4096) cannot be smaller than system page size (16384)

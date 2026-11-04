@@ -1,0 +1,5 @@
+      showing=false
+      secure=true
+      screenState=SCREEN_STATE_ON
+        mIsShowing=false
+        mSimSecure=false

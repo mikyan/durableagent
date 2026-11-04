@@ -1,0 +1,18 @@
+time=1793754744886
+Termux 0.118.3 / 1002; target=28; uid=10216
+APK SHA256=3550e61f4d9eb49b712fd1bd9519dc37085a4d8eb597c57a340f0a64859b7144
+cert=b6da01480eefd5fbf2cd3771b8d1021ec791304bdd6c4bf41d3faabad48ee5e1
+固定发行物校验=true; RUN_COMMAND 系统授权=true
+Inspection(phase=READY, request=null, bootstrap=VERIFIED, externalCalls=VERIFIED, protocol=VERIFIED, evidence=protocol=1
+nonce=9660adbe-ac9c-49df-8f58-0cc537281669
+uid=10216
+instance=2487
+prefix=/data/data/com.termux/files/usr
+shell=5.2.37(1)-release
+tools=ok
+workspace=/data/data/com.termux/files/home/.local/share/durableagent-probe/workspace
+writable=yes
+repo_begin=1
+deb https://packages-cf.termux.dev/apt/termux-main/ stable main
+repo_end=1
+, retryAfterMillis=null)

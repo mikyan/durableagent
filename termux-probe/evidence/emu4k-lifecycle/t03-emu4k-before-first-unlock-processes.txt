@@ -1,0 +1,3 @@
+bootIdChanged=true
+termuxPidBeforeFirstUnlock=
+probePidBeforeFirstUnlock=

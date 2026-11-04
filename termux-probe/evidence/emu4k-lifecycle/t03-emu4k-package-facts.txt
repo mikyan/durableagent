@@ -1,0 +1,5 @@
+    versionCode=1002 minSdk=24 targetSdk=28
+    versionName=0.118.3
+      android.permission.POST_NOTIFICATIONS
+    User 0: ceDataInode=557923 deDataInode=401809 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+        android.permission.POST_NOTIFICATIONS: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]
