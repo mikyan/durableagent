@@ -40,8 +40,17 @@ class FileRealProviderTest {
     until(10000){control(12).getJSONObject("metrics").optString("executionValidationTool")==tool}
     observationPhase="$tool.wait-composer";until(15000){js("document.querySelector('[data-testid=message-input]')?.disabled===false && document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'")=="true"}
     instrumentation.sendStatus(0,Bundle().apply{putString("fileRealInputReady",JSONObject().put("run",run).put("tool",tool).put("composerEnabled",true).put("draftSaved",true).toString())})
-    observationPhase="$tool.draft-input";js("(()=>{const e=document.querySelector('[data-testid=message-input]');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(e,${JSONObject.quote(prompt)});e.dispatchEvent(new Event('input',{bubbles:true}));})()");observationPhase="$tool.wait-saved";until{js("document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'")=="true"&&store.inspect(id).getString("text")==prompt};observationPhase="$tool.click-send";click("[data-testid=send-message]")
-    observationPhase="$tool.wait-tool";var snapshot=JSONObject();until{snapshot=call("open",target);val rows=snapshot.getJSONArray("entries");val tools=(0 until rows.length()).count{rows.getJSONObject(it).optString("role")=="tool"};assertTrue("Unexpected additional model tool",tools<=count);snapshot.optString("phase")=="done"&&tools==count};return snapshot
+    observationPhase="$tool.draft-input";js("(()=>{const e=document.querySelector('[data-testid=message-input]');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(e,${JSONObject.quote(prompt)});e.dispatchEvent(new Event('input',{bubbles:true}));})()");observationPhase="$tool.wait-saved";until{js("document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'")=="true"&&store.inspect(id).getString("text")==prompt};val inputRevision=store.inspect(id).getLong("revision");observationPhase="$tool.click-send";click("[data-testid=send-message]")
+    observationPhase="$tool.wait-tool";var snapshot=JSONObject();until{
+     snapshot=call("open",target)
+     val statuses=call("sendList",target).getJSONArray("items")
+     val current=(0 until statuses.length()).map{statuses.getJSONObject(it)}.firstOrNull{it.getJSONObject("intent").getLong("inputRevision")==inputRevision}
+     val progress=current?.optJSONObject("submission")
+     assertFalse("Submitted input settled without an answer: $current",progress?.optString("status")=="unanswered")
+     assertFalse("Conversation failed: ${snapshot.optString("reason")}",snapshot.optString("phase")=="failed")
+     val rows=snapshot.getJSONArray("entries");val tools=(0 until rows.length()).count{rows.getJSONObject(it).optString("role")=="tool"};assertTrue("Unexpected additional model tool",tools<=count)
+     progress?.optString("status")=="done"&&snapshot.optString("phase")=="done"&&tools==count
+    };return snapshot
    }
    val path=".durableagent-t10-real-$run.txt";val content="MiMo-T10-原件-$run\n"
    send("write","请只调用一次 write 工具，将相对路径 $path 的专用测试原件写为这个 JSON 字符串表示的准确内容（包含末尾换行）：${JSONObject.quote(content)}。不要改其他文件。工具成功后中文确认。",1)
@@ -53,7 +62,7 @@ class FileRealProviderTest {
   }catch(error:Throwable){
    val observed=JSONObject().put("run",run).put("phase",observationPhase).put("id",observationId).put("failure",error.javaClass.simpleName)
    runCatching{observed.put("status",control(12))}
-   runCatching{observed.put("dom",js("JSON.stringify({draft:document.querySelector('[data-testid=draft-status]')?.dataset.state,sendDisabled:document.querySelector('[data-testid=send-message]')?.disabled,text:document.querySelector('[data-testid=message-input]')?.value,alerts:[...document.querySelectorAll('[role=alert]')].map(e=>e.textContent)})"))}
+   runCatching{observed.put("dom",js("JSON.stringify({draft:document.querySelector('[data-testid=draft-status]')?.dataset.state,sendDisabled:document.querySelector('[data-testid=send-message]')?.disabled,text:document.querySelector('[data-testid=message-input]')?.value,conversationPhase:document.querySelector('[data-testid=conversation-status]')?.dataset.phase,conversationStatus:document.querySelector('[data-testid=conversation-status]')?.textContent,submissions:[...document.querySelectorAll('[data-testid=submission-item]')].map(e=>({intentId:e.dataset.intentId,stage:e.dataset.stage,text:e.textContent})),alerts:[...document.querySelectorAll('[role=alert]')].map(e=>e.textContent)})"))}
    observationId?.let{id->runCatching{observed.put("nativeDraft",store.inspect(id))}.onFailure{observed.put("nativeDraftError",(it as? NativeInputException)?.code?:it.javaClass.simpleName)};runCatching{observed.put("nativeSends",store.listSends(JSONObject().put("id",id)))}}
    instrumentation.sendStatus(0,Bundle().apply{putString("fileRealFailureObservation",observed.toString())});throw error
   }finally{page.close();store.close();client.control(20,"close");until(15000){control(12).optString("phase")=="closed"};client.disconnect()}

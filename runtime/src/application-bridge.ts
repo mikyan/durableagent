@@ -44,7 +44,7 @@ export async function install(mode:string) {
   else if(mode==='real'||mode==='execution-real'){
     secret=host.__validationKey;delete host.__validationKey;
     if(!secret)throw new Error('Encrypted validation credential unavailable');
-    const live=liveModels(secret,patch=>Object.assign(metrics,patch),{forceEcho:false,forceTool:()=>mode==='execution-real'?executionTool:projectValidation?.enabled?'location_witness':routeTool(),observeRequest:extensionMode?observeExtensionRequest:undefined});
+    const live=liveModels(secret,patch=>Object.assign(metrics,patch),{forceEcho:false,forceTool:()=>mode==='execution-real'?executionTool:projectValidation?.enabled?'location_witness':routeTool(),observeRequest:extensionMode?observeExtensionRequest:undefined,maxRequests:mode==='execution-real'?6:4});
     configuration={models:live.models,workspacePath:configuration.workspacePath,initialModel:{provider:live.provider,modelId:live.model,name:'MiMo V2.6 Flash'}};
   }else if(mode==='product'||mode==='models'||mode==='models-fixture'){
     const native=host.__nativeCredentials;delete host.__nativeCredentials;
