@@ -16,3 +16,14 @@ test('a finite six-request validation budget permits three tool round trips and 
   assert.equal(requests,6,'over-budget dispatch must never reach the HTTP boundary');
  } finally {globalThis.fetch=original;}
 });
+
+test('validation request budgets reject missing bounds and preserve the four-request default',async()=>{
+ for(const maxRequests of [NaN,Infinity,0,-1,1.5,9])assert.throws(()=>liveModels('synthetic-validation-placeholder',()=>{},{maxRequests}),/Invalid live validation request budget/);
+ const original=globalThis.fetch;let requests=0;
+ globalThis.fetch=fixtureTransport({requested:()=>requests++,aborted:()=>{}});
+ try {
+  const live=liveModels('synthetic-validation-placeholder',()=>{},{forceEcho:false}),model=live.models.getModel(live.provider,live.model);
+  for(let index=0;index<4;index++)assert.equal((await live.models.streamSimple(model,{messages:[{role:'user',content:'validation',timestamp:0}]}).result()).stopReason,'stop');
+  assert.equal((await live.models.streamSimple(model,{messages:[{role:'user',content:'validation',timestamp:0}]}).result()).stopReason,'error');assert.equal(requests,4);
+ } finally {globalThis.fetch=original;}
+});
