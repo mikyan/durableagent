@@ -3,7 +3,6 @@ import android.content.*;
 import android.net.Uri;
 import android.os.Process;
 import android.util.Base64;
-import java.nio.file.Files;
 import org.json.JSONObject;
 /** Synthetic fixture only. It has no access to user documents or product app storage. */
 public final class ControlReceiver extends BroadcastReceiver {
@@ -15,11 +14,12 @@ public final class ControlReceiver extends BroadcastReceiver {
             JSONObject value=new JSONObject().put("providerUid",Process.myUid());
             switch(operation){
                 case "reset":Fixture.reset(context);break;
+                case "create-shared":value.put("shared",Fixture.createShared(context));break;
                 case "replace":Fixture.replace(context);break;
                 case "hold-readback":context.getSharedPreferences("state",0).edit().putBoolean("holdReadback",true).putBoolean("writeSeen",false).commit();break;
                 case "release":context.getSharedPreferences("state",0).edit().putBoolean("holdReadback",false).commit();break;
                 case "revoke":context.revokeUriPermission(target,Uri.parse("content://"+Fixture.AUTHORITY+"/document/original"),Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);break;
-                case "read":value.put("base64",Base64.encodeToString(Files.readAllBytes(Fixture.original(context).toPath()),Base64.NO_WRAP)).put("writeOpens",context.getSharedPreferences("state",0).getInt("writeOpens",0));break;
+                case "read":value.put("base64",Base64.encodeToString(Fixture.read(context),Base64.NO_WRAP)).put("writeOpens",context.getSharedPreferences("state",0).getInt("writeOpens",0));break;
                 default:throw new IllegalArgumentException("Unknown control");
             }
             setResultCode(0);setResultData(value.toString());

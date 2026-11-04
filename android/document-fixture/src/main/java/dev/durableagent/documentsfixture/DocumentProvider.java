@@ -27,15 +27,16 @@ public final class DocumentProvider extends DocumentsProvider {
     private Cursor documents(String[] projection,String id)throws FileNotFoundException{
         MatrixCursor cursor=new MatrixCursor(projection!=null?projection:DOC);
         boolean root=id.equals("root");File file=Fixture.original(getContext());
-        if(!root&&(!id.equals("original")||!file.isFile()))throw new FileNotFoundException("Synthetic original is absent");
+        if(!root&&!id.equals("original"))throw new FileNotFoundException("Synthetic original is absent");
+        long size=root?0:Fixture.size(getContext());
         MatrixCursor.RowBuilder row=cursor.newRow();
         for(String column:cursor.getColumnNames())row.add(column,switch(column){
             case DocumentsContract.Document.COLUMN_DOCUMENT_ID -> id;
             case DocumentsContract.Document.COLUMN_DISPLAY_NAME -> root?"DurableAgent 原文件测试":"original.bin";
             case DocumentsContract.Document.COLUMN_MIME_TYPE -> root?DocumentsContract.Document.MIME_TYPE_DIR:"application/octet-stream";
             case DocumentsContract.Document.COLUMN_FLAGS -> root?0:DocumentsContract.Document.FLAG_SUPPORTS_WRITE;
-            case DocumentsContract.Document.COLUMN_SIZE -> root?0:file.length();
-            case DocumentsContract.Document.COLUMN_LAST_MODIFIED -> root?0:file.lastModified();
+            case DocumentsContract.Document.COLUMN_SIZE -> size;
+            case DocumentsContract.Document.COLUMN_LAST_MODIFIED -> root?0:Fixture.shared(getContext())==null?file.lastModified():null;
             default -> null;
         });
         return cursor;
@@ -54,6 +55,6 @@ public final class DocumentProvider extends DocumentsProvider {
                 try{Thread.sleep(20);}catch(InterruptedException error){Thread.currentThread().interrupt();throw new FileNotFoundException("Synthetic readback interrupted");}
             }
         }
-        return ParcelFileDescriptor.open(Fixture.original(getContext()),ParcelFileDescriptor.parseMode(mode));
+        return Fixture.open(getContext(),mode);
     }
 }

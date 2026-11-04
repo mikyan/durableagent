@@ -149,7 +149,7 @@ class NativeDocumentTest {
     }
     @Test(timeout=240000) fun actualSystemPickerRetainsOriginalCapabilityAndBinaryBytesAcrossReopen(){
         assumeTrue(InstrumentationRegistry.getArguments().getString("systemPicker")=="true")
-        val fixture=control("reset");control("revoke");assertNotEquals(android.os.Process.myUid(),fixture.getInt("providerUid"))
+        val fixture=control(if(InstrumentationRegistry.getArguments().getString("sharedOriginal")=="true")"create-shared" else "reset");control("revoke");assertNotEquals(android.os.Process.myUid(),fixture.getInt("providerUid"))
         assertArrayEquals(expected,Base64.decode(control("read").getString("base64"),Base64.DEFAULT))
         val run=UUID.randomUUID().toString();val namespace=NativeDocumentBridge.namespace("input-only",run)
         val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode","input-only").putExtra("validationRun",run))
@@ -173,7 +173,7 @@ class NativeDocumentTest {
                 assertArrayEquals(expected,Base64.decode(store.read(resourceId,0,32768).getString("base64"),Base64.DEFAULT))
             }
             assertArrayEquals(expected,Base64.decode(control("read").getString("base64"),Base64.DEFAULT))
-            evidence(JSONObject().put("stage","original-retained").put("resource",resource).put("providerUid",fixture.getInt("providerUid")).put("appUid",android.os.Process.myUid()).put("binaryBytes",expected.size))
+            evidence(JSONObject().put("stage","original-retained").put("resource",resource).put("providerUid",fixture.getInt("providerUid")).put("appUid",android.os.Process.myUid()).put("binaryBytes",expected.size).put("shared",fixture.optJSONObject("shared")))
         }finally{page.close()}
     }
     companion object {const val FIXTURE="dev.durableagent.documentsfixture"}
