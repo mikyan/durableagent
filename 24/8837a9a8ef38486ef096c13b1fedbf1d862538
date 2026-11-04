@@ -1,0 +1,21 @@
+runtime/test/execution-continuation.test.mjs
+  s_467dcb949b5b60::t_958e26c5ee1009 1-13
+runtime/src/execution-continuation.ts
+  s_467dcb949b5b60::t_958e26c5ee1009 1-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "248837a9a8ef38486ef096c13b1fedbf1d862538",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
