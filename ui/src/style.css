@@ -62,7 +62,7 @@
 .file-changes button,.documents-panel button,.execution-panel button,.extension-page button{background:var(--floating);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-height:42px;font:inherit}
 .file-changes h3{font-size:14px}
 .file-changes pre{white-space:pre-wrap;overflow-wrap:anywhere;overflow:auto;font-size:12px;line-height:1.65;padding:12px;border-radius:10px;background:#202023;color:var(--text)}
-.file-changes details{color:var(--blue)}
+.file-changes details > summary{color:var(--blue)}
 .file-changes .execution-list code{color:var(--muted)}
 @media(max-width:899px){.auxiliary-panel{top:calc(12px + env(safe-area-inset-top));padding-top:16px}}
 
