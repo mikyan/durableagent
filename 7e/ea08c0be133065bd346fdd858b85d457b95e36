@@ -1,0 +1,25 @@
+android/app/src/androidTest/java/dev/durableagent/probe/RecoveryProductSetupTest.kt
+  s_467dcb949b5b60::t_2a784031f5cf6c 1-44
+runtime/src/recovery.ts
+  s_467dcb949b5b60::t_9bbd703b8dde70 21,25-26
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryAccess.kt
+  s_467dcb949b5b60::t_9bbd703b8dde70 12
+runtime/test/recovery.test.mjs
+  s_467dcb949b5b60::t_4d04135acdad70 46-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "7eea08c0be133065bd346fdd858b85d457b95e36",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
