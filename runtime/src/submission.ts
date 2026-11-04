@@ -7,18 +7,18 @@ import type {FrozenInputAccess} from './input-protocol.js';
 import type {AdmissionReceipt,NativeSendIntent,SendAuthority,SendStatus,SubmissionContext} from './submission-protocol.js';
 
 export class SubmissionError extends Error {constructor(readonly code:string,message:string){super(message);}}
-const Admission=defineDocFamily({kind:'app.admission',version:1,scope:'session',family:true,initial:(_:null)=>({receipt:null as AdmissionReceipt|null}),checkpointWhen:()=>false});
-const Binding=defineDocFamily({kind:'app.submission-binding',version:1,scope:'session',family:true,initial:(_:null)=>({id:null as string|null,context:null as SubmissionContext|null}),checkpointWhen:()=>false});
-const CurrentBinding=defineDocFamily({kind:'app.current-submission-binding',version:1,scope:'session',family:true,initial:(_:null)=>({id:null as string|null}),checkpointWhen:()=>false});
+export const Admission=defineDocFamily({kind:'app.admission',version:1,scope:'session',family:true,initial:(_:null)=>({receipt:null as AdmissionReceipt|null}),checkpointWhen:()=>false});
+export const Binding=defineDocFamily({kind:'app.submission-binding',version:1,scope:'session',family:true,initial:(_:null)=>({id:null as string|null,context:null as SubmissionContext|null,location:null as import('./project-protocol.js').WorkspaceRecord|null,projectId:null as string|null,sourceProductId:null as string|null,actualIdentity:null as string|null}),checkpointWhen:()=>false});
+export const CurrentBinding=defineDocFamily({kind:'app.current-submission-binding',version:1,scope:'session',family:true,initial:(_:null)=>({id:null as string|null}),checkpointWhen:()=>false});
 const canonical=(value:any):any=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
 const equal=(a:unknown,b:unknown)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));
 export type SubmissionBoundary='before-sdk-commit'|'after-sdk-submit'|'after-sdk-commit'|'before-native-ack'|'after-native-ack';
-type Options={harness:Harness;authority:SendAuthority;inputs:FrozenInputAccess;models:Models;available?:(provider:string,modelId:string)=>Promise<boolean>;resolve:(tx:Tx,id:string)=>Promise<SubmissionContext>;ready:()=>void;pause:()=>()=>void;boundary?:(stage:SubmissionBoundary,intent:NativeSendIntent)=>void|Promise<void>};
+type Options={harness:Harness;authority:SendAuthority;inputs:FrozenInputAccess;models:Models;available?:(provider:string,modelId:string)=>Promise<boolean>;resolve:(tx:Tx,id:string)=>Promise<SubmissionContext>;adopt?:(tx:Tx,id:string,bindingId:string)=>Promise<void>;ready:()=>void;pause:()=>()=>void;boundary?:(stage:SubmissionBoundary,intent:NativeSendIntent)=>void|Promise<void>};
 /** One application admission seam. SDK remains the sole submission/inbox/scheduling authority. */
 export class Submissions {
   private tail:Promise<unknown>=Promise.resolve();
   constructor(private readonly options:Options){}
-  private serial<T>(run:()=>Promise<T>):Promise<T>{const result=this.tail.then(run,run);this.tail=result.catch(()=>{});return result;}
+  coordinate<T>(run:()=>Promise<T>):Promise<T>{const result=this.tail.then(run,run);this.tail=result.catch(()=>{});return result;}
   private checkReceipt(intent:NativeSendIntent,receipt:AdmissionReceipt){
     const expected={protocol:1,intentId:intent.intentId,id:intent.id,inputToken:intent.inputToken,inputRevision:intent.inputRevision,inputDigest:intent.inputDigest,context:intent.context,queue:intent.queue,controlGeneration:intent.controlGeneration};
     if(!equal(expected,{protocol:receipt.protocol,intentId:receipt.intentId,id:receipt.id,inputToken:receipt.inputToken,inputRevision:receipt.inputRevision,inputDigest:receipt.inputDigest,context:receipt.context,queue:receipt.queue,controlGeneration:receipt.controlGeneration}))throw new SubmissionError('INTENT_MISMATCH','发送身份、内容或位置与已接纳记录不一致');
@@ -34,7 +34,7 @@ export class Submissions {
     return {intent,accepted:true,receipt,submission:{status:record.status,...(record.entry?{entryId:String(record.entry)}:{}),...(record.answer?{answerEntryId:String(record.answer)}:{}),...(record.reason?{reason:record.reason}:{})}};
   }
   async list(options:{id:string;cursor?:string;limit?:number}){const page=await this.options.authority.listSends(options);return {items:await Promise.all(page.intents.map(item=>this.status(item.intentId))),...(page.next?{next:page.next}:{})};}
-  send(intentId:string){return this.serial(()=>this.admit(intentId));}
+  send(intentId:string){return this.coordinate(()=>this.admit(intentId));}
   private async acknowledge(status:SendStatus):Promise<SendStatus>{
     if(!status.receipt)return status;
     try {await this.options.boundary?.('before-native-ack',status.intent);const acknowledgement=await this.options.authority.confirmAdmission(status.intent.intentId,status.receipt);await this.options.boundary?.('after-native-ack',status.intent);return {...status,intent:acknowledgement.intent,acknowledgement};}
@@ -69,6 +69,7 @@ export class Submissions {
         if(await tx.submissionByRequest(actual.sdkConversationId as ConversationId,intentId))throw new SubmissionError('ADMISSION_INCONSISTENT','SDK 已有同身份记录但缺少可核验接纳映射');
         const latest=await authority.readControl(intent.id);this.options.ready();
         if(latest.pendingAbort||latest.generation!==intent.controlGeneration||latest.stoppedThrough>=intent.controlGeneration)throw new SubmissionError('SEND_STOPPED','停止事实已改变，本次输入未接纳');
+        await this.options.adopt?.(tx,intent.id,bindingId);
         // submit must precede all table writes. All app documents/table reads are above it.
         const submissionId=await conversation.submit(tx,{type:'input',requestId:intentId,content,whenBusy:'followUp'});
         current.id=bindingId;binding.id=bindingId;binding.context=actual;
@@ -86,16 +87,16 @@ export class Submissions {
     for(const {id,control} of await this.options.authority.pendingStops()){
       const barrier=control.pendingAbort;if(!barrier)continue;
       const actual=await this.options.harness.commit(tx=>this.options.resolve(tx,id),context);
-      if(!equal(actual,barrier.context))throw new SubmissionError('STOP_ASSOCIATION_MISMATCH','待停止范围关联无法核验，运行保持关闭');
+      if(actual.sdkConversationId!==barrier.context.sdkConversationId)throw new SubmissionError('STOP_ASSOCIATION_MISMATCH','待停止范围关联无法核验，运行保持关闭');
       await (await this.options.harness.conversation(actual.sdkConversationId as ConversationId,context))!.abort(context,{background:true});
       await this.options.authority.confirmAbort(id,barrier);
     }
   }
-  stop(id:string,stopId:string){return this.serial(async()=>{this.options.ready();const control=await this.options.authority.readControl(id);if(control.pendingAbort?.stopId!==stopId)throw new SubmissionError('STOP_MISMATCH','停止记录已改变，请重新读取');const release=this.options.pause();try{await this.stops();return {control:await this.options.authority.readControl(id),status:'stopped' as const};}finally{release();}});}
+  stop(id:string,stopId:string){return this.coordinate(async()=>{this.options.ready();const control=await this.options.authority.readControl(id);if(control.pendingAbort?.stopId!==stopId)throw new SubmissionError('STOP_MISMATCH','停止记录已改变，请重新读取');const release=this.options.pause();try{await this.stops();return {control:await this.options.authority.readControl(id),status:'stopped' as const};}finally{release();}});}
   /** Native controls must be readable and old abort scopes settled before public readiness. */
-  prepare(){return this.serial(()=>this.stops());}
+  prepare(){return this.coordinate(()=>this.stops());}
   /** Reached by every actual model invocation, including SDK retry/deferred/compaction paths. */
-  checkDispatch(){return this.serial(async()=>{this.options.ready();if(!(await this.options.authority.pendingStops()).length)return;const release=this.options.pause();try{await this.stops();}finally{release();}});}
+  checkDispatch(){return this.coordinate(async()=>{this.options.ready();if(!(await this.options.authority.pendingStops()).length)return;const release=this.options.pause();try{await this.stops();}finally{release();}});}
   /** Startup: only persisted explicit intents, never draft text. Read-only projection does not call this. */
-  recover(){return this.serial(async()=>{const release=this.options.pause();try{await this.stops();}finally{release();}let cursor:string|undefined;do{const page=await this.options.authority.listSends({cursor,limit:50});for(const intent of page.intents){if(intent.delivery==='acknowledged'||intent.cancelled)continue;try{await this.admit(intent.intentId);}catch(error){if(!(error instanceof SubmissionError)&&!(error instanceof InputError))throw error;}}cursor=page.next;}while(cursor);});}
+  recover(){return this.coordinate(async()=>{const release=this.options.pause();try{await this.stops();}finally{release();}let cursor:string|undefined;do{const page=await this.options.authority.listSends({cursor,limit:50});for(const intent of page.intents){if(intent.delivery==='acknowledged'||intent.cancelled)continue;try{await this.admit(intent.intentId);}catch(error){if(!(error instanceof SubmissionError)&&!(error instanceof InputError))throw error;}}cursor=page.next;}while(cursor);});}
 }

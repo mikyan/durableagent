@@ -18,7 +18,8 @@ class SubmissionFaultProbeService : Service() {
                 val namespace = data.getString("namespace")!!
                 require(namespace.matches(Regex("input-test-[a-zA-Z0-9-]+")))
                 val stage = data.getString("stage")!!
-                require(stage in listOf("send.intent.beforeCommit", "send.intent.afterCommit", "send.ack.beforeCommit", "send.ack.afterCommit", "send.stop.beforeCommit", "send.stop.afterCommit"))
+                require(stage in listOf("send.intent.beforeCommit", "send.intent.afterCommit", "send.ack.beforeCommit", "send.ack.afterCommit", "send.stop.beforeCommit", "send.stop.afterCommit",
+                    "location.edit.begin.beforeCommit", "location.edit.begin.afterCommit", "location.edit.finish.beforeCommit", "location.edit.finish.afterCommit"))
                 NativeInputStore(this, namespace, boundary = { actual ->
                     if (actual == stage) {
                         reply(target, JSONObject().put("stage", actual).put("pid", Process.myPid()))
@@ -27,6 +28,8 @@ class SubmissionFaultProbeService : Service() {
                 }).use { store ->
                     val request = JSONObject(data.getString("request")!!)
                     val result = when {
+                        stage.startsWith("location.edit.begin.") -> store.beginLocationEdit(request.getString("operationId"))
+                        stage.startsWith("location.edit.finish.") -> { store.finishLocationEdit(request.getString("operationId"), request.getJSONArray("contexts")); JSONObject.NULL }
                         stage.startsWith("send.intent.") -> store.createSend(request)
                         stage.startsWith("send.ack.") -> store.confirmAdmission(request.getString("intentId"), request.getJSONObject("receipt"))
                         else -> store.requestStop(request)

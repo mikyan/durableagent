@@ -1,6 +1,6 @@
-# 会话、模型设置、原生草稿与可靠发送 UI（T04—T07）
+# 会话、设置、草稿、可靠发送与项目 UI（T04—T08）
 
-React 页面只使用 `runtime/src/application-protocol.ts`、`model-protocol.ts`、`input-protocol.ts`、`submission-protocol.ts` 中的数据协议及共享扩展描述符，登记 ID 不由 UI 与核心分别硬编码。独立 UI 扩展入口为 `src/extensions/conversation.tsx` 和 `src/extensions/models.tsx`；运行宿主的 Agent 入口不进入此构建。页面不持有 SDK、数据库或通用原生调用能力，也没有示例会话或模型传输。API Key 仅经下述原生窄写入接口提交，公开查询不返回 Key。
+React 页面只使用 `runtime/src/application-protocol.ts`、`model-protocol.ts`、`input-protocol.ts`、`submission-protocol.ts`、`project-protocol.ts` 中的数据协议及共享扩展描述符，登记 ID 不由 UI 与核心分别硬编码。独立 UI 扩展入口为 `src/extensions/conversation.tsx`、`src/extensions/models.tsx` 和 `src/extensions/projects.tsx`；运行宿主的 Agent 入口不进入此构建。页面不持有 SDK、数据库或通用原生调用能力，也没有示例会话或模型传输。API Key 仅经下述原生窄写入接口提交，公开查询不返回 Key。
 
 ## 构建与检查
 
@@ -24,6 +24,10 @@ Node 24.14.1 验证通过。React 19.3.1、Vite 8.3.5 等依赖均固定精确�
 “模型与连接”从导航进入，空配置也可添加连接。页面说明聊天、附件与工具结果可能发送到云端，目录模型不等于已通过远端验收。“新会话默认模型”与“当前会话模型”有独立的明确应用按钮；创建连接不会自动保存 Key、选择默认值或改写既有会话。更改目的地需要新连接；停用后仍展示旧定义。配置写入携带读取到的 `expectedVersion`，凭据写入携带独立的 `expectedGeneration`；拒绝或未知结果不会自动重试。相同连接表单的重试保留创建 UUID，修改定义则换用新 UUID。
 
 每次重新连接生成新的 `connectionId`，只接受当前代次的回执和订阅。快照按订阅身份、会话身份、单调 revision 校验；较旧的回执／事件不能覆盖当前状态。初次订阅回执晚于推送时也不会回退。断开只取消 UI 订阅，不请求停止 Agent。页面重建恢复选中的会话并读取当前快照，不重发输入。
+
+“项目与工作区”从导航或会话详情进入。新会话直接使用共同默认工作区；项目名称、工作区名称及路径读取共享目录，页面不复制每会话项目定义。用户可添加工作区记录、创建项目、改名、明确选择当前会话项目或修改工作区目录。填写路径不创建目录、不授权文件访问；界面独立显示 `available`、`unverified`、`missing`、`revoked`、`environment-changed`、`ambiguous` 的真实位置状态及原因，不把配置成功显示为文件环境已验证。位置未核验不禁用聊天。
+
+所有项目写入经同一应用 Interface，携带新 `operationId` 和读取到的目录版本；忙时错误直接呈现，不在 UI 排队。条件解除后的刷新不会再次发出修改；再次点击才形成新操作。丢失写入回执时保留原方法、完整参数与期望版本，暂停其他项目写入，提供“核验这次修改”沿用原身份。已确认的写入即使后续视图读取失败也仍显示已保存。成功后重新读取会话摘要与可信原生草稿上下文，后续发送采用当前关联；历史发送的 binding/receipt 不由页面改写。
 
 启动时并行查询 Agent 状态与独立的原生 `input.list`；处于 `opening`／`configuring` 时每秒检查一次，最多 30 次，并合并尚未返回的查询。`ready` 之后列表和聊天使用显式动作及推送。配置未就绪时不能新建会话；已有原生登记及可信 submissionContext 的会话仍可明确保存发送意图，SDK 接纳等待运行宿主就绪。
 
@@ -78,14 +82,25 @@ Node 24.14.1 验证通过。React 19.3.1、Vite 8.3.5 等依赖均固定精确�
 | `[data-testid="default-model"]` / `default-model-apply` | 新会话默认选择及应用按钮 |
 | `[data-testid="conversation-model"]` / `conversation-model-apply` | 当前会话独立选择及应用按钮 |
 | `[data-testid="connection-toggle"]` / `refresh-models` | 连接启停及公开状态刷新 |
+| `[data-testid="open-project-settings"]` / `detail-project-settings` | 导航／会话详情中的项目入口 |
+| `[data-testid="current-project"]` / `current-workspace` / `current-workspace-path` | 当前会话共享项目名称及配置目录 |
+| `[data-testid="current-position"]` / `data-state` | 当前真实位置状态及原因，不代表目录永久授权 |
+| `[data-testid="conversation-project"]` / `conversation-project-apply` | 项目选择及显式应用；空值表示默认工作区 |
+| `[data-testid="project-name"]` / `project-workspace` / `project-create` | 新项目表单；工作区选项 value 为稳定 ID |
+| `[data-testid="project-card"]` / `data-project-id` / `project-rename` / `project-rename-apply` | 共享项目改名 |
+| `[data-testid="workspace-name"]` / `workspace-path` / `workspace-create` | 新工作区记录表单 |
+| `[data-testid="workspace-card"]` / `data-workspace-id` / `workspace-path-edit` / `workspace-update` | 共享目录修改，原生运行状态决定能否生效 |
+| `[data-testid="refresh-projects"]` / `retry-project-change` | 只读刷新／使用原操作身份核验未知结果 |
 
 菜单、详情、重连和分页还具有中文可访问名称，可使用标准按钮角色定位。用户输入应触发 DOM `input`／`change` 事件，避免只修改 React 管理的 DOM value。
 
 模型下拉项的 DOM value 为 `JSON.stringify([connectionId, modelId])`。设备测试应按连接卡片的真实 ID 定位；凭据正文不能写入测试日志或 DOM 快照。
 
-48 个公共边界测试使用真实 UI client、controller 和 React。`application-real.test.mjs` 将 React DOM 经公开消息协议接到真实 Application、SDK 与 SQLite，覆盖实际扩展登记后按钮可用、新建／发送、关闭核心后重开同一历史，且模型请求不增加；另一个真实核心用例在 SDK 接纳后丢失原生 ACK，继续编辑新草稿，再显式补确认，验证 2 次同 intent send 只有 1 次模型请求，新草稿保留，而同正文新动作产生第 2 次输入。`models-real.test.mjs` 进一步从空配置经 DOM 添加真实模型定义、窄接口保存合成 Key、设置默认值、完成受控模型聊天，再重开 SQLite；设置查询解密次数为零，发送时才解析凭据，保存的中文／emoji 原文完整。原生草稿／发送／凭据边界和模型传输受控，不把桌面 InputPlatform 或内存凭据 fixture 当成 Android SQLite／SAF／加密验收；真实核心测试均通过原生 intent 接入真实 SDK。
+58 个公共边界测试使用真实 UI client、controller 和 React。`application-real.test.mjs` 将 React DOM 经公开消息协议接到真实 Application、SDK 与 SQLite，覆盖实际扩展登记后按钮可用、新建／发送、关闭核心后重开同一历史，且模型请求不增加；另一个真实核心用例在 SDK 接纳后丢失原生 ACK，继续编辑新草稿，再显式补确认，验证 2 次同 intent send 只有 1 次模型请求，新草稿保留，而同正文新动作产生第 2 次输入。`models-real.test.mjs` 进一步从空配置经 DOM 添加真实模型定义、窄接口保存合成 Key、设置默认值、完成受控模型聊天，再重开 SQLite；设置查询解密次数为零，发送时才解析凭据，保存的中文／emoji 原文完整。原生草稿／发送／凭据边界和模型传输受控，不把桌面 InputPlatform 或内存凭据 fixture 当成 Android SQLite／SAF／加密验收；真实核心测试均通过原生 intent 接入真实 SDK。
 
 `npm test` 会先构建运行核心，避免拿旧 dist 进行接线验证。其余测试只模拟外部原生消息传输，覆盖回执关联、旧代次／旧 revision 丢弃、取消订阅不停止、页面重建不重发、配置等待、分页与停止、创建回执丢失后重试、浏览器无宿主、进度与已保存消息区别、长消息折叠与原文展开，以及凭据窄写入／移除、版本回执、拒绝后清空密码且不反射秘密。这些桌面测试不替代 Android IPC、Keystore、CE 或设备验收；对应证据由各票集成验收记录。
 
 
 T06 的公共输入测试覆盖 commit 前待保存、250 ms／1 s、单写合并、丢 ACK 的稳定操作身份、版本冲突显式恢复、旧准备回执、发送／清空期间 ABA、点击发送时的固定边界、选择超时不自动重开、超限正文不截断、恢复读取期间继续编辑、原生离线恢复与切换 flush、保存失败阻断发送、未知接纳保留 pin 且重连不重发，以及附件状态／纯图片历史显示。追加覆盖选择取消后新操作、从读取的 durable operationId 解决选择回执丢失、慢准备请求前后独立状态检查、请求超时后的晚到 ready、90 s／连续失败上限、手动来源刷新和准备中编辑／移除可用。实际 Android 进程重建、存储故障、SAF 访问和材料恢复由 T06 主实现设备套件验证。
+
+T08 追加公开 UI 测试覆盖共享目录／项目的真实表单、未核验位置提示、忙时拒绝后无延迟应用、显式新动作、回执丢失时原参数与操作身份、确认后读取失败的独立状态。`projects-real.test.mjs` 使用真实 Application、SDK 和 SQLite：native pending intent 在 UI idle 时阻止改绑；旧输入结算后只读刷新不修改，明确重试才成功；新输入采用新的 association 与 binding，改名保持绑定，重开保留共享名称、原 receipt 与历史且没有额外模型请求。原生 fence/草稿边界使用 InputPlatform，Android 的独立原生存储与实际工具环境由 ProjectApplicationTest 及主实现套件验证。

@@ -4,7 +4,7 @@
 
 ## Recommendation
 
-**Accept T03 as the development prerequisite for downstream implementation within the explicitly documented tested scope.** User-authorized actual Android emulator lifecycle tests now supplement the ARM64 S23 path. This does not accept T17, Samsung lock/reboot behavior, Xiaomi behavior, arbitrary-command replay, or the failing pinned x86_64 16 KiB bootstrap. T09 still waits for its other prerequisites, including T08.
+**Accept T03 as the development prerequisite for downstream implementation within the explicitly documented tested scope.** User-authorized actual Android emulator lifecycle tests now supplement the ARM64 S23 path. This does not accept T17, Samsung lock/reboot behavior, Xiaomi behavior, arbitrary-command replay, or the failing pinned x86_64 16 KiB bootstrap. T09 also requires T04, which is already accepted; T08 is independent in the dependency graph and can proceed in parallel.
 
 The T03 criteria require actual Android cross-UID execution and a scenario matrix, not every scenario on every target phone. The explicit per-phone first-run/file/recovery/stop acceptance is T17. This supplement uses the real Android package/service/permission/credential lifecycle rather than a same-UID desktop mock. With the user explicitly allowing emulator validation, treating it as implementation-gate evidence is consistent with the ticket; retaining target-phone pending rows is necessary.
 

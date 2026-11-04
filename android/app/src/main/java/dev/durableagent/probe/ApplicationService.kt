@@ -59,6 +59,8 @@ class ApplicationService:Service() {
                 32->if(debug)node?.getExecutor("globalThis.__appRunModelPolicy?.()")?.executeVoid()
                 33->if(debug)node?.getExecutor("globalThis.__appRunInputPolicy?.()")?.executeVoid()
                 36->if(debug)reply?.let {node?.getExecutor("globalThis.__appSubmissionFault?.(${JSONObject.quote(text)})")?.executeVoid();send(it,36,status())}
+                41->if(debug)reply?.let {node?.getExecutor("globalThis.__appProjectWitness?.(${JSONObject.quote(text)})")?.executeVoid();send(it,41,status())}
+                42->if(debug)node?.getExecutor("globalThis.__appRunProjectPolicy?.()")?.executeVoid()
                 40->if(debug)node?.getExecutor("globalThis.__appRunSubmissionPolicy?.()")?.executeVoid()
                 34->if(debug&&node!=null){
                     val duration=(text.toLongOrNull()?:10000).coerceIn(2500,15000)

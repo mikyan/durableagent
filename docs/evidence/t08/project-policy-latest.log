@@ -1,0 +1,29 @@
+(node:29204) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ opt-in live provider forces witness after SDK transcript system/tool declarations and releases choice after its result (599.1462ms)
+(node:4732) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ shared project and workspace metadata survives reopen; renaming does not change position or copy project authority (179.4398ms)
+✔ pending native intent and real SDK work block location edits; rejection never becomes a delayed edit and rename remains ordinary metadata (163.8792ms)
+✔ actual SDK environment uses the adopted location through queued followups and a new explicit binding after release (837.7047ms)
+✔ canonical alias and unknown managed effects hold shared locations until explicit evidence release (181.5814ms)
+✔ task-owned internal conversations keep their binding after terminal owners, stay hidden, and later internal input still uses it (603.9677ms)
+✔ project association publication updates an already attached conversation observer and retains newer native expectations (97.9752ms)
+✔ committed edit with missing native publication is repaired by exact operation replay without leaving a stuck native fence (97.9339ms)
+✔ actual SDK COMMIT response uncertainty leaves native edit fenced; reopen publishes whichever complete configuration committed without applying an old proposal (207.5314ms)
+✔ T07 accepted binding migrates its provable location for environment use without changing its receipt or reissuing input (320.5793ms)
+✔ actual provider parser invokes the bound location witness tool; access revocation remains visible and never invokes a fallback environment (832.8228ms)
+✔ native intent creation and a location edit have explicit opposite orderings, while independent draft saves and stop stay durable (187.2201ms)
+✔ a fresh conversation can select another project while another conversation uses the common default; shared relocation still refuses (159.1078ms)
+✔ a fork keeps the history source location but inherits the actual task owner control domain, without product registration (536.6676ms)
+✔ a late location inspection cannot combine an old actual identity with a newly committed workspace locator (87.0212ms)
+✔ catalog and selection remain from one configuration version when a product read completes after a concurrent selection (99.3167ms)
+✔ operation identities use own receipts, including inherited-object names, and keep exact replay and conflicting payload rules (78.4687ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4883.8324
