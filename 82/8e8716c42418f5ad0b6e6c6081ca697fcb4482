@@ -1,0 +1,35 @@
+android/document-fixture/README.md
+  s_467dcb949b5b60::t_dec24e707f458e 8-42
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/Fixture.java
+  s_467dcb949b5b60::t_40b14776512ae5 3-6,8,14-38,40-51,57
+  s_467dcb949b5b60::t_f98cc740fb0a11 39
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/DocumentProvider.java
+  s_467dcb949b5b60::t_40b14776512ae5 30-31,38,58
+  s_467dcb949b5b60::t_d72acacf660a84 39
+docs/evidence/t10-saf/README.md
+  s_467dcb949b5b60::t_831a5d3a87de69 20,39-40
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/ControlReceiver.java
+  s_467dcb949b5b60::t_40b14776512ae5 17,22
+android/app/src/androidTest/java/dev/durableagent/probe/NativeDocumentTest.kt
+  s_467dcb949b5b60::t_d72acacf660a84 152,176
+docs/evidence/t10-saf/t10-saf-green04-device.log
+  s_467dcb949b5b60::t_22fa75fd9fc323 1-25
+docs/evidence/t10-saf/t10-saf-red04-device.log
+  s_467dcb949b5b60::t_00a363410651dc 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "828e8716c42418f5ad0b6e6c6081ca697fcb4482",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
