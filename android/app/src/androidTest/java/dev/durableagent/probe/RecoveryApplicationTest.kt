@@ -10,6 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.json.JSONObject
 import org.junit.Assert.*
+import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.UUID
@@ -77,5 +78,26 @@ class RecoveryApplicationTest {
                 instrumentation.sendStatus(0,Bundle().apply{putString("recoveryEvidence",JSONObject().put("tag",before.tag).put("postTime",after.postTime).put("state",wire.state()).toString())})
             }finally{page.close();wire.stopHost();wire.close()}
         }
+    }
+    @Test(timeout=180000) fun completedInputStaysVisibleWhenAndroidNotificationDeliveryIsRestricted(){
+        val expected=InstrumentationRegistry.getArguments().getString("notificationVisibility")
+        assumeTrue(expected in setOf("permission-denied","channel-disabled"))
+        assertEquals(expected,NativeRecoveryNotifications.visibility(context))
+        if(expected=="channel-disabled")assertEquals(NotificationManager.IMPORTANCE_NONE,notifications.getNotificationChannel(NativeRecoveryNotifications.COMPLETION_CHANNEL).importance)
+        val mode="recovery-fixture";val run=id();val product="restricted-${id()}";val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode",mode).putExtra("validationRun",run));val wire=Wire(mode,run)
+        NativeInputStore(context,NativeInputBridge.namespace(mode,run)).withLeaseWait(1000).use{store->NativeRecoveryStore(context,NativeInputBridge.namespace(mode,run)).use{recovery->
+            try{
+                wire.ready();val original=send(wire,store,product)
+                until("A denied notification does not cancel the SDK result"){wire.call("sendStatus",JSONObject().put("intentId",original.getString("intentId"))).optJSONObject("submission")?.optString("status")=="done"}
+                var completion=JSONObject();until("Native durable completion retained without a posting attempt"){
+                    try{val values=recovery.readProjection().getJSONArray("completions");if(values.length()==0)false else{completion=values.getJSONObject(0);true}}catch(error:IllegalStateException){if(error.message=="RECOVERY_STORAGE_BUSY")false else throw error}
+                }
+                assertEquals("pending",recovery.pendingCompletion(completion.getString("identity"),product).getString("state"))
+                val tag=NativeInputBridge.namespace(mode,run)+":"+completion.getString("identity");assertTrue(notifications.activeNotifications.none{it.id==18013&&it.tag==tag})
+                val history=wire.call("history",JSONObject().put("id",product)).getJSONArray("items");assertTrue((0 until history.length()).any{history.getJSONObject(it).optString("role")=="assistant"&&history.getJSONObject(it).optString("text").isNotEmpty()})
+                assertEquals(expected,NativeRecoveryNotifications.visibility(context))
+                instrumentation.sendStatus(0,Bundle().apply{putString("restrictedNotificationEvidence",JSONObject().put("visibility",expected).put("run",run).put("product",product).put("completion",completion).put("sdkDone",true).put("systemCompletionPosted",false).toString())})
+            }finally{page.close();wire.stopHost();wire.close()}
+        }}
     }
 }
