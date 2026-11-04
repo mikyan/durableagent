@@ -1,0 +1,25 @@
+docs/evidence/t12/README.md
+  s_467dcb949b5b60::t_3621540fe8672c 19-20,44-47,56-57,63
+docs/evidence/t12/LOG-SHA256.json
+  s_467dcb949b5b60::t_cb1fca1692fb7a 49-58
+docs/evidence/t12/t12-native-wake-green01-device.log
+  s_467dcb949b5b60::t_2012f2842688d0 1-25
+docs/evidence/t12/t12-native-wake-red01-device.log
+  s_467dcb949b5b60::t_ba8c4ab8ae16d6 1-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "970f6728767e271c48b4b6713a16d95d8c856b4e",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
