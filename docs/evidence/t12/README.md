@@ -1,6 +1,6 @@
 # T12 自动恢复开发证据
 
-2026-11-04。开发证据已收敛，最终独立集成验收另记，不能仅据本文关闭 [T12](../../specs/v1/tickets/12-automatic-resume.md)。范围为 Android 16／4 KB x86_64 模拟器、真实 SDK 1.5.0、Android SQLite／Service／JobScheduler／NotificationManager，以及明确标注的真实 MiMo 请求。首次解锁／重启、force-stop 与联合 T15 的实际通知目标均已完成所述范围验证；S23／Xiaomi 厂商行为保留到 T17。分批、不同候选的结果不拼成一次完整全绿。
+2026-11-04。T12 已按[独立限定开发验收及十二项映射](scoped-development-gate-review.md)接受并合入集成分支；[issue](https://github.com/mikyan/durableagent/issues/13) 随完整交付 PR 合并关闭。范围为 Android 16／4 KB x86_64 模拟器、真实 SDK 1.5.0、Android SQLite／Service／JobScheduler／NotificationManager，以及明确标注的真实 MiMo 请求。首次解锁／重启、force-stop 与联合 T15 的实际通知目标均已完成所述范围验证；S23／Xiaomi 厂商行为保留到 T17。分批、不同候选的结果不拼成一次完整全绿。
 
 ## 已观察到的行为
 
@@ -108,9 +108,9 @@ T15 `75ab2ae` 已合入生产源码 `a8ee9c0`，fixture-only `342c1b7` 增加观
 
 大型 APK 与冻结源码保存在根代理的本地验证目录，不加入公开仓库。本文所列日志校验见 [LOG-SHA256.json](LOG-SHA256.json)。构建成功、源码快照或 ELF 检查不能代替该候选的实际设备结果。
 
-## 未完成的门槛
+## 开发接受与后续门槛
 
-- 联合 T13／T15、通知目标及全量审查发现项已完成下述开发修复与验证；最终独立合并审查仍为 T12 的关闭门槛。
+- 联合 T13／T15、通知目标及全量审查发现项已完成下述开发修复与验证；最终[独立合并审查](scoped-development-gate-review.md)通过，T12 的开发依赖解除，issue 仍随完整 PR 合并关闭。
 - 最终联合构建、8 份 LF helper 字节、源码／打包对应与实际 native 最小回归集均已完成；后续 UI 提示候选保留组件完全一致证明，实际 force-stop 提示产品门槛由 T17 执行。
 - T17 OEM 矩阵；本文模拟器与分批验证不替代 Galaxy S23／Xiaomi 厂商行为。
 
