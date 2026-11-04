@@ -9,6 +9,7 @@ import {fixtureTransport} from './transport.js';
 import {mkdir} from 'node:fs/promises';
 import {InputError} from './input.js';
 import type {ApplicationInputs} from './application.js';
+import type {SendAuthority} from './submission-protocol.js';
 const host=globalThis as any;
 // The native owner chooses this mode before loading JS. It is not a UI action.
 export async function install(mode:string) {
@@ -18,6 +19,7 @@ export async function install(mode:string) {
   const nativeInputs=host.__nativeInputs;delete host.__nativeInputs;
   const inputInvoke=(method:string,...args:string[])=>{const response=JSON.parse(nativeInputs[method](...args));if(!response.ok)throw new InputError(response.error.code,response.error.message);return response.value;};
   const inputs:ApplicationInputs|undefined=nativeInputs?{rememberConversation:(conversation,capability)=>{inputInvoke('rememberConversationJson',JSON.stringify(conversation),JSON.stringify(capability??null));},readFrozen:async token=>inputInvoke('readFrozenJson',token),readObject:async(token,objectId)=>Buffer.from(inputInvoke('readObjectBase64',token,objectId),'base64')}:undefined;
+  const sends:SendAuthority|undefined=nativeInputs?{readSend:async id=>inputInvoke('readSendJson',id),listSends:async options=>inputInvoke('listSendsJson',JSON.stringify(options??{})),markDeliveryUnknown:async id=>inputInvoke('markDeliveryUnknownJson',id),confirmAdmission:async(id,receipt)=>inputInvoke('confirmAdmissionJson',id,JSON.stringify(receipt)),readControl:async id=>inputInvoke('readControlJson',id),pendingStops:async()=>inputInvoke('pendingStopsJson'),confirmAbort:async(id,barrier)=>inputInvoke('confirmAbortJson',id,JSON.stringify(barrier))}:undefined;
   let configuration:{models:Models;workspacePath:string;initialModel?:ModelSelection}={models:createModels(),workspacePath:join(host.__applicationRoot,'workspace')};
   if(mode==='fixture'||mode==='hang')configuration=validationConfiguration({hang:mode==='hang',requested:()=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;}});
   else if(mode==='real'){
@@ -33,7 +35,14 @@ export async function install(mode:string) {
   }else throw new Error('Unsupported native application mode');
   // Fixture workspace defaults are replaced by the same stable private domain.
   configuration.workspacePath=join(host.__applicationRoot,'workspace');
-  const app=new Application({path:join(host.__applicationRoot,'application.sqlite'),...configuration,secret,connections,inputs});
+  const path=join(host.__applicationRoot,'application.sqlite');
+  let submissionValidation:any;
+  if(host.__submissionValidation){const native=host.__submissionValidation;delete host.__submissionValidation;const module=await import(new URL('../validation/submission-control.mjs',import.meta.url).href);submissionValidation=module.submissionControl(path,native,metrics,mode==='fixture'||mode==='hang');host.__appSubmissionFault=(value:string)=>submissionValidation.set(value);}
+  const app=new Application({path,...configuration,secret,connections,inputs,sends,...(submissionValidation?{submissionBoundary:submissionValidation.boundary,...(submissionValidation.storageFactory?{storageFactory:submissionValidation.storageFactory}:{})}:{})});
+  if(mode==='fixture')host.__appRunSubmissionPolicy=()=>{
+    if(metrics.submissionPolicyState==='running')return;metrics.submissionPolicyState='running';metrics.submissionPolicyCases=[];
+    void(async()=>{const directory=join(host.__applicationRoot,'submission-policy-temp');await mkdir(directory,{recursive:true});const policy=await import(new URL('../validation/submission-policy.mjs',import.meta.url).href);await policy.runSubmissionPolicyChecks((result:unknown)=>(metrics.submissionPolicyCases as unknown[]).push(result),{tempRoot:directory});metrics.submissionPolicyState='passed';})().catch(error=>{metrics.submissionPolicyState='failed';metrics.submissionPolicyError=String(error.message??error);metrics.submissionPolicyDiagnostic=error.diagnostic;});
+  };
   if(mode==='models-fixture')host.__appRunInputPolicy=()=>{
     if(metrics.inputPolicyState==='running')return;
     metrics.inputPolicyState='running';metrics.inputPolicyCases=[];

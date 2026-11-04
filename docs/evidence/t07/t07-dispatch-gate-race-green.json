@@ -1,0 +1,12 @@
+[
+  {
+    "case": "pause-after-wait-before-stream",
+    "invocationsBeforeRelease": 0,
+    "expected": 0
+  },
+  {
+    "case": "abort-after-wait-before-stream",
+    "invocationsBeforeRelease": 0,
+    "expected": 0
+  }
+]

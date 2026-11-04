@@ -1,6 +1,6 @@
 // Real SDK/SQLite worker. The controlled external Provider makes transport entry and release
 // observable across actual process death; it does not replace the scheduler or persistence.
-import {Application} from '../../dist/application.js';
+import {Application} from '../../validation/application-fixture.mjs';
 import {ModelConnections} from '../../dist/model-connections.js';
 import {createProvider} from '@earendil-works/pi-ai/models';
 import {AssistantMessageEventStream} from '@earendil-works/pi-ai';

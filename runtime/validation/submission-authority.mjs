@@ -1,0 +1,25 @@
+// Test platform adapter. Real SQLite, separate from SDK storage; Android uses NativeInputStore.
+import {DatabaseSync} from 'node:sqlite';
+import {randomUUID} from 'node:crypto';
+import {frozenInputDigest} from '../dist/input.js';
+export class SqliteSendAuthority {
+  constructor(path){this.path=path;this.reopen();}
+  reopen(){if(this.db?.isOpen)return;this.db=new DatabaseSync(this.path);this.db.exec('PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; CREATE TABLE IF NOT EXISTS facts(kind TEXT,id TEXT,value TEXT,PRIMARY KEY(kind,id))');}
+  read(kind,id){const row=this.db.prepare('SELECT value FROM facts WHERE kind=? AND id=?').get(kind,id);return row?JSON.parse(row.value):undefined;}
+  write(kind,id,value){this.db.prepare('INSERT INTO facts VALUES(?,?,?) ON CONFLICT(kind,id) DO UPDATE SET value=excluded.value').run(kind,id,JSON.stringify(value));return structuredClone(value);}
+  rememberConversation(conversation){this.write('conversation',conversation.id,conversation);}
+  async readFrozen(token){const value=this.read('frozen',token);if(!value)throw Error('Missing fixed input');return value;}
+  async readObject(){throw Error('No object adapter in text fixture');}
+  async readControl(id){if(!this.read('conversation',id))throw Error('Unknown native conversation');return this.read('control',id)??{id,version:0,generation:1,stoppedThrough:0};}
+  draft(id){return this.read('draft',id)??{id,revision:0,stateVersion:0,text:'',selections:[],committed:true};}
+  save(id,text){const previous=this.draft(id);return this.write('draft',id,{...previous,revision:previous.revision+1,text});}
+  async create(id,text,actionId=randomUUID(),fixed){const old=this.read('intent',actionId);if(old)return old;const draft=this.save(id,text);const input=fixed??{token:randomUUID(),id,revision:draft.revision,text,representations:[],digest:frozenInputDigest(text,[])};this.write('frozen',input.token,input);const control=await this.readControl(id);if(control.generation<=control.stoppedThrough){control.generation++;control.version++;this.write('control',id,control);}const intent={protocol:1,intentId:actionId,actionId,id,inputToken:input.token,inputRevision:input.revision,inputDigest:input.digest,context:this.read('conversation',id).submissionContext,queue:{whenBusy:'followUp',whenIdle:'start'},controlGeneration:control.generation,createdAt:Date.now(),preview:{text:input.text,attachmentCount:input.representations.length},stateVersion:0,delivery:'pending',cancelled:false};this.beforeIntent?.(intent);return this.write('intent',actionId,intent);}
+  async readSend(id){const value=this.read('intent',id);if(!value)throw Object.assign(Error('发送意图不存在'),{code:'SEND_NOT_FOUND'});return value;}
+  async listSends({id,cursor,limit=30}={}){let values=this.db.prepare("SELECT value FROM facts WHERE kind='intent' ORDER BY rowid").all().map(x=>JSON.parse(x.value)).filter(x=>!id||x.id===id);const start=Number(cursor??0),items=values.slice(start,start+limit);return {intents:items,...(start+items.length<values.length?{next:String(start+items.length)}:{})};}
+  async markDeliveryUnknown(id){const value=await this.readSend(id);if(value.delivery!=='acknowledged'){value.delivery='uncertain';value.stateVersion++;this.write('intent',id,value);}return value;}
+  async confirmAdmission(id,receipt){this.beforeAck?.(id,receipt);this.db.exec('BEGIN IMMEDIATE');try{const value=await this.readSend(id),draft=this.draft(value.id);if(value.receipt&&JSON.stringify(value.receipt)!==JSON.stringify(receipt))throw Error('Receipt mismatch');const cleared=!value.receipt&&draft.revision===value.inputRevision;value.receipt=receipt;value.delivery='acknowledged';value.stateVersion++;if(cleared)this.write('draft',value.id,{...draft,revision:draft.revision+1,text:'',selections:[]});this.write('intent',id,value);this.db.exec('COMMIT');this.afterAck?.(id,receipt);return {intent:value,draftCleared:cleared,draft:this.draft(value.id)};}catch(error){try{this.db.exec('ROLLBACK');}catch{}throw error;}}
+  async stop(id,stopId=randomUUID()){const control=await this.readControl(id);control.version++;control.stoppedThrough=control.generation;control.pendingAbort={stopId,throughGeneration:control.generation,context:this.read('conversation',id).submissionContext};for(const {value}of this.db.prepare("SELECT value FROM facts WHERE kind='intent'").all()){const item=JSON.parse(value);if(item.id===id&&item.controlGeneration<=control.stoppedThrough){item.cancelled=true;this.write('intent',item.intentId,item);}}return this.write('control',id,control);}
+  async pendingStops(){return this.db.prepare("SELECT value FROM facts WHERE kind='control'").all().map(x=>JSON.parse(x.value)).filter(x=>x.pendingAbort).map(control=>({id:control.id,control}));}
+  async confirmAbort(id,barrier){const control=await this.readControl(id);if(JSON.stringify(control.pendingAbort)===JSON.stringify(barrier)){delete control.pendingAbort;control.version++;this.write('control',id,control);}return control;}
+  close(){if(this.db.isOpen)this.db.close();}
+}

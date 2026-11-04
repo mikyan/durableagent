@@ -45,7 +45,10 @@ it('edits a native draft while Agent is unavailable and shows separate source an
     fireEvent.change(input,{target:{value:'Agent 离线时仍可保存'}});
     expect(screen.getByTestId('draft-status').textContent).toContain('待保存');
     await waitFor(()=>expect(screen.getByTestId('draft-status').textContent).toContain('草稿已保存'));
-    expect(native.read('one').text).toBe('Agent 离线时仍可保存');expect((screen.getByRole('button',{name:'发送消息'}) as HTMLButtonElement).disabled).toBe(true);
+    expect(native.read('one').text).toBe('Agent 离线时仍可保存');expect((screen.getByRole('button',{name:'发送消息'}) as HTMLButtonElement).disabled).toBe(false);
+    fireEvent.click(screen.getByRole('button',{name:'发送消息'}));
+    await waitFor(()=>expect(native.intents.size).toBe(1));expect(await screen.findByText('待投递')).toBeTruthy();
+    expect(native.read('one').text).toBe('Agent 离线时仍可保存');
     fireEvent.click(screen.getByRole('button',{name:'添加附件'}));expect(screen.getByRole('menuitem',{name:'选择图片'})).toBeTruthy();expect(screen.getByRole('menuitem',{name:'选择文件'})).toBeTruthy();
     expect(native.requests.some(request=>request.method==='send'||request.method==='create')).toBe(false);
   }finally{cleanup();controller.dispose();}

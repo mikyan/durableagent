@@ -1,4 +1,4 @@
-# Android application and T06 input validation
+# Android application validation
 
 The Android app hosts the bundled React UI and the Pi runtime, while native draft storage remains independent of Node and SDK Storage. Build and device results are tracked by the [ticket index](../docs/specs/v1/README.md); individual targeted test passes do not establish acceptance of a different final APK. The [T06 evidence](../docs/evidence/t06/README.md) records the exact candidate hashes, unified results, earlier failures and platform limits.
 
@@ -22,6 +22,28 @@ The APK pair is:
 - `android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk`
 
 Builds do not operate a device. Before device tests, install this exact pair on an authorized validation device and record its hashes. The instrumentation runner is `dev.durableagent.probe.test/androidx.test.runner.AndroidJUnitRunner`. The debug build provides synthetic source/fault components and WebView debugging; these are validation tools, not product controls.
+
+## Native sending, acknowledgement and stop facts
+
+After installing the exact APK pair, run the T07 native authority matrix:
+
+```powershell
+$device = '<authorized-device>'
+adb -s $device shell am instrument -w -r -e class 'dev.durableagent.probe.NativeSubmissionStoreTest,dev.durableagent.probe.NativeSubmissionCrashTest' dev.durableagent.probe.test/androidx.test.runner.AndroidJUnitRunner
+```
+
+The current source contains **12 methods**: nine store tests and three crash tests. They use actual native SQLite, dedicated `input-test-*` namespaces and the bundled synthetic document provider. They do not start Node or use a model credential. Candidate results, including the separate migration test, must be recorded against the APK actually run; the count here describes the suite rather than a gate result.
+
+- An explicit action binds a stable intent ID to the frozen token, original author revision/digest, product/SDK association, location expectation, queue policy and control generation. Replaying an action returns that intent; explicitly sending the same body with a new action creates a distinct intent. List queries use bounded pages and cursors tied to their conversation filter.
+- Native ACK atomically stores the validated SDK receipt and clears a draft only if its author revision/text and all ordered ready representation identities still match the frozen input. Later edits, author text that changed away and back, and a newly prepared object at the same author revision survive. Replaying an ACK returns the current draft and does not clear it again.
+- The durable stop fence cancels old generations without rewriting every historical intent. Only a new explicit action advances a stopped generation; an unresolved prior SDK abort remains a barrier. Confirming an older stop cannot clear a newer barrier. A late valid ACK records acceptance while retaining cancellation.
+- Pending, uncertain, acknowledged and cancelled intents retain their frozen object pins. Explicit discard rejects an input still held by an intent, and cleanup preserves its exact bytes. ACK is not evidence that all downstream effects have completed, so this module does not automatically release those recovery objects.
+- Actual native transactions reject injected storage failures without publishing a partial intent, ACK or stop. A malformed existing control record remains on disk and raises `INPUT_STORAGE_CORRUPT`; it is not replaced with a default open control. The generic UI method surface cannot forge ACKs or confirm an SDK abort.
+- The schema migration case uses a dedicated SQLite v2-schema fixture with real draft/object/operation data, then exercises the actual helper upgrade to v3. Migration preserves old material and creates no send. A migrated conversation requires trusted publication of its SDK association before creating an intent.
+
+`NativeSubmissionCrashTest` observes and then kills the real separate debug process `:submission_fault_probe` at six native barriers: before/after intent commit, before/after ACK commit, and before/after stop commit. Recovery checks the last committed fact, same-action replay and preservation of later drafts. The emitted `nativeSubmissionCrashEvidence` records each observed barrier. The intent and ACK barriers cover four of T07's six **cross-database admission** windows; the two SDK commit windows belong to the runtime/application suite. The extra two native stop barriers must not be counted as SDK commit evidence. Native receipt fixtures alone do not prove unique SDK submission or a real provider request.
+
+The native input database remains independent of SDK Storage. Native intent/ACK/control commits and SDK admission commits do not form one transaction. Public input actions run through the native bridge before the Node queue; only the trusted host exposes `markDeliveryUnknownJson`, `confirmAdmissionJson` and `confirmAbortJson` to the runtime.
 
 ## Native draft and attachment matrix
 
@@ -87,3 +109,16 @@ The script starts a fresh validation run, creates two real conversations through
 Outputs include a JSON result and available before/after PNGs. A missing/zero viewport or screenshot timeout is recorded as a diagnostic and does not hide a functional assertion failure; it also provides no visual acceptance. The script's empty histories do not measure exact model-request counts—those assertions belong to the instrumentation tests. Keep device identifiers and credentials out of published evidence.
 
 `lastSelectedRestored` is an observation, not a draft durability assertion: the final emulator once reopened on the first conversation instead of the last selected one, while both original saved drafts remained exact. The original failure and same-run recovery reads remain in T06 evidence; the page-selection behavior remains a T15 experience limitation. The helper still requires a new UI PID, the unchanged native PID, and every full draft/saved/empty-history assertion.
+
+
+## Reliable submission: actual UI process loss
+
+```powershell
+node android/scripts/submission-ui-process.mjs "$device" '<output-directory>/submission-ui' fixture
+```
+
+This standalone debug helper starts a fresh fixture run with an initial package force-stop, creates a conversation and sends one synthetic input through the actual React controls. After the original intent is acknowledged and settled, it saves a newer unsent draft, kills only the UI PID, and reopens. It requires a new UI PID, unchanged `:agent` PID, the same intent/receipt and complete history, and the exact new draft text/revision. Its public Interface observer only reads; rejected `INPUT_STORAGE_BUSY` reads have a bounded retry with a recorded count. No observer service binding keeps the host alive. No app data or Termux data is cleared.
+
+Use the same ADB resolution and output rules as the draft helper above. This helper accepts fixture mode only and does not provision credentials. Real MiMo ACK-loss recovery and exact request deltas are covered by `SubmissionApplicationTest.realMimoLostAckReconcilesWithoutAnotherCloudRequest`, with `realProvider=true` and an encrypted validation capsule. That test performs two explicit user actions, and verifies same-intent reconciliation adds no request. `recreateActivity=false` may omit the Activity recreation step on a locked device; evidence records that omission, and it supplies no recreation acceptance.
+
+The React instrumentation observer uses only `listSends`, `inspect` and `readSend` against the native store. On `INPUT_STORAGE_BUSY` it retries that observation for at most two seconds and records counts; it does not retry mutations or swallow another error code. A native write failure remains a product failure. These two React fixtures have only text and no preparation jobs; in general `inspect` may perform interrupted-preparation maintenance, so it is not an assertion that every native inspect is free of writes.

@@ -1,0 +1,9 @@
+# T07 test-observer retry review
+
+Decision: CLEAR for this test-only change. No product change or relaxed acceptance assertion found. Device rerun remains root-owned.
+
+Reviewed `android/app/src/androidTest/java/dev/durableagent/probe/SubmissionApplicationTest.kt` in the T07 worktree. Comparison with the earlier independent source manifest finds this as the only changed reviewed source file. App SHA-256 remains `09F6E531C284A72A72033B2CAC6F985400C24B7A7FEA3E1F7A9680F2E9E706EA`; revised test APK is `10DF909218FBC042D5C7B5F512C21AEBE3073950E8825F829D862CB14F9CC7DC`. `git diff --check` passed.
+
+The private NativeObserver exposes only listSends, inspect and readSend. It retries only NativeInputException code INPUT_STORAGE_BUSY at 25 ms intervals, fails after a 2-second contention budget, and immediately fails other native codes. It records operation-specific contention counts. No save, freeze, createSend, confirmAdmission, stop, SDK send or model call is inside the retry wrapper. Original history, receipt, identity, new-draft revision, cloud request count and Activity recreation assertions remain present. In particular, uncertain native delivery is still asserted before ACK repair, and the explicit repeated SDK send remains outside the observer wrapper.
+
+NativeInputStore emits this BUSY code when acquiring the metadata lease fails before executing the observer action, so retry does not replay a partially successful write. Precise terminology: inspect is a durable state query with existing interrupted-preparation recovery maintenance; it is not universally a database-with-no-writes primitive. These two React cases use text-only drafts with no selection/preparation jobs, so this distinction does not introduce side effects into the tested admission path or invalidate the patch. The root's original two BUSY failures must remain recorded, followed by the revised test artifact's affected-case results; do not relabel the original batch as 38/38.

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {Application} from '../dist/application.js';
+import {Application} from '../validation/application-fixture.mjs';
 import {validationConfiguration} from '../dist/application-validation.js';
 import {faultDatabase} from '../dist/sqlite-checks.js';
 import {SqliteStorage} from '@earendil-works/pi-durable/storage/sqlite';

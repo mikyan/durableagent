@@ -26,6 +26,7 @@ class ApplicationService:Service() {
     private var inputs:NativeInputAccess?=null
     private val busyStarted=AtomicLong(0)
     private val busyEnded=AtomicLong(0)
+    private val submissionProbe=SubmissionValidationProbe()
     private val peers=mutableMapOf<String,Messenger>()
     private val pending=mutableListOf<String>()
     private data class Outgoing(val what:Int,val json:String,val eventKey:String?,val id:String=UUID.randomUUID().toString(),var index:Int=0,var timeout:Runnable?=null) {val count=(json.length+47999)/48000}
@@ -42,6 +43,8 @@ class ApplicationService:Service() {
             try{reply?.send(Message.obtain(null,35).apply{data=Bundle().apply{putString("json",value.toString())}})}catch(_:RemoteException){}
             return@Handler true
         }
+        if(debug&&what==37){try{reply?.send(Message.obtain(null,37).apply{data=Bundle().apply{putString("json",submissionProbe.state().toString())}})}catch(_:RemoteException){};return@Handler true}
+        if(debug&&what==38&&submissionProbe.halted()){Process.killProcess(Process.myPid());return@Handler true}
         owner.post {
             when(what){
                 10->if(reply!=null)accept(text,reply)
@@ -54,6 +57,8 @@ class ApplicationService:Service() {
                 31->if(debug)reply?.let {importValidationCredential(text,it)}
                 32->if(debug)node?.getExecutor("globalThis.__appRunModelPolicy?.()")?.executeVoid()
                 33->if(debug)node?.getExecutor("globalThis.__appRunInputPolicy?.()")?.executeVoid()
+                36->if(debug)reply?.let {node?.getExecutor("globalThis.__appSubmissionFault?.(${JSONObject.quote(text)})")?.executeVoid();send(it,36,status())}
+                40->if(debug)node?.getExecutor("globalThis.__appRunSubmissionPolicy?.()")?.executeVoid()
                 34->if(debug&&node!=null){
                     val duration=(text.toLongOrNull()?:10000).coerceIn(2500,15000)
                     busyEnded.set(0);busyStarted.set(SystemClock.elapsedRealtime())
@@ -81,6 +86,7 @@ class ApplicationService:Service() {
             val root=RuntimeBundle.unpack(this)
             val runtime=V8Host.getNodeI18nInstance().createV8Runtime<NodeRuntime>();node=runtime
             runtime.globalObject.set("__applicationRoot",domain.absolutePath)
+            if(debug&&mode!="product")runtime.createV8ValueObject().use{probe->probe.bind(submissionProbe);runtime.globalObject.set("__submissionValidation",probe)}
             credentials=NativeCredentialAccess(CredentialVault(this,if(mode=="product")"credentials-v1" else "cv-$run"))
             runtime.createV8ValueObject().use {access->access.bind(credentials!!);runtime.globalObject.set("__nativeCredentials",access)}
             inputs=NativeInputAccess(NativeInputStore(this,NativeInputBridge.namespace(mode,run)))

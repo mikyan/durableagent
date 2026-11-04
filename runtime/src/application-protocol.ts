@@ -5,13 +5,13 @@ export const CONVERSATION_EXTENSION={id:'conversation',actions:['list','create',
 export type ApplicationPhase='opening'|'configuring'|'ready'|'failed'|'closed';
 export type ConversationPhase='idle'|'running'|'waiting'|'failed'|'done'|'stopped';
 export type ModelSelection={provider:string;modelId:string;name:string};
-export type ConversationSummary={id:string;title:string;model:ModelSelection;workspaceId:string;projectId:null;createdAt:number;phase:ConversationPhase};
+export type ConversationSummary={id:string;title:string;model:ModelSelection;workspaceId:string;projectId:null;createdAt:number;phase:ConversationPhase;submissionContext?:import('./submission-protocol.js').SubmissionContext};
 export type HistoryAttachment={kind:'image';mimeType:string;sha256:string;byteLength:number};
 export type HistoryMessage={id:string;role:'user'|'assistant'|'tool'|'system';text:string;persisted:true;attachments?:HistoryAttachment[]};
 export type HistoryPage={items:HistoryMessage[];next?:string};
 export type ConversationSnapshot={id:string;revision:number;conversation:ConversationSummary;entries:HistoryMessage[];progress?:{text:string;persisted:false};phase:ConversationPhase;storedSeq:number|null;reason?:string};
 export type ApplicationStatus={phase:ApplicationPhase;reason?:string;extensions:string[]};
-export type ApplicationMethod='status'|'list'|'create'|'open'|'history'|'send'|'stop'|'subscribe'|'unsubscribe'|import('./model-protocol.js').ModelConfigurationMethod|import('./input-protocol.js').InputMethod;
+export type ApplicationMethod='status'|'list'|'create'|'open'|'history'|'send'|'stop'|'subscribe'|'unsubscribe'|import('./model-protocol.js').ModelConfigurationMethod|import('./input-protocol.js').InputMethod|import('./submission-protocol.js').SendMethod;
 export type ApplicationRequest={protocol:number;connectionId:string;requestId:string;method:ApplicationMethod;payload?:Record<string,unknown>};
 export type ApplicationError={code:string;message:string};
 export type ApplicationResponse={type:'response';protocol:1;connectionId:string;requestId:string;ok:true;value:unknown}|{type:'response';protocol:1;connectionId:string;requestId:string;ok:false;error:ApplicationError};
@@ -24,8 +24,8 @@ export type ApplicationEnvelope=ApplicationResponse|ApplicationEvent;
  * status -> ApplicationStatus; list -> {conversations:ConversationSummary[]};
  * create {creationId,title?} -> {conversation:ConversationSummary,storedSeq};
  * open {id} -> ConversationSnapshot; history {id,cursor?,limit?} -> HistoryPage;
- * send {id,text,actionId} -> {submissionId,storedSeq,status:'accepted'};
- * stop {id,actionId} -> {storedSeq,status:'stopped'};
+ * send {intentId} -> SendStatus (see submission-protocol); direct text is not an admission identity.
+ * stop {id,stopId} -> {control,status:'stopped'} after the native stop fact is committed;
  * subscribe {id,subscriptionId} -> ConversationSnapshot, then conversation events;
  * unsubscribe {subscriptionId} -> {}. It never aborts the Agent.
  */

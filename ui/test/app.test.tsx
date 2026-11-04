@@ -32,12 +32,13 @@ it('creates a real wire conversation and distinguishes progress from committed m
         case 'history':value={items:snapshot?.entries??[]};break;
         case 'subscribe':subscription=request;value=snapshot;break;
         case 'send':
-          snapshot={...snapshot!,revision:2,phase:'running',entries:[{id:'102',role:'user',text:native.frozen.get(String(request.payload?.inputToken))!.text,persisted:true}],progress:{text:'这是一段进度',persisted:false},storedSeq:2};
-          value={submissionId:'103',storedSeq:2,status:'accepted'};break;
+          snapshot={...snapshot!,revision:2,phase:'running',entries:[{id:'102',role:'user',text:native.frozen.get(native.intents.get(String(request.payload?.intentId))!.inputToken)!.text,persisted:true}],progress:{text:'这是一段进度',persisted:false},storedSeq:2};
+          void native.fixtureAdmission(String(request.payload?.intentId)).then(value=>{client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value});emit();});return;
+        case 'sendList':
+          void native.listSends(request.payload).then(async page=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value:{items:await Promise.all(page.intents.map(intent=>native.fixtureStatus(intent.intentId)))}}));return;
       }
       queueMicrotask(()=>{
         client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value});
-        if(request.method==='send')emit();
       });
     }});
     return client;
