@@ -43,11 +43,18 @@ export class ConversationController {
   snapshot=()=>this.state;
   observe=(listener:()=>void)=>{this.listeners.add(listener);return()=>{this.listeners.delete(listener);};};
   private publish(patch:Partial<UiState>){this.state={...this.state,...patch};for(const listener of this.listeners)listener();}
-  async connect() {
+  connect(){return this.connectHost(false);}
+  reconnect(){return this.connectHost(true);}
+  private async connectHost(retryNative:boolean) {
     this.dataSaver.reset();this.execution.reset();++this.epoch;clearTimeout(this.sendPoll);this.submissions.disconnect();this.subscription?.unsubscribe();this.subscription=undefined;this.client?.dispose();this.checking=undefined;
     const client=this.connectClient();this.client=client;this.extensionClient={request:client.request.bind(client),subscribe:client.subscribe.bind(client)};
     this.publish({status:{phase:'opening',extensions:[]},pending:false,modelsPending:false,modelsLoading:false,projectsPending:false,projectsLoading:false,projectsUnconfirmed:!!this.projectOperation,error:undefined});
-    await Promise.all([this.refresh(),this.refreshInputs()]);
+    const epoch=this.epoch;
+    const refreshHost=async()=>{try{
+      if(retryNative)await client.request('host.reconnect');
+      if(epoch===this.epoch)await this.refresh();
+    }catch(error){if(epoch===this.epoch)this.publish({status:{phase:'failed',reason:this.reason(error),extensions:[]},error:this.reason(error)});}};
+    await Promise.all([refreshHost(),this.refreshInputs()]);
   }
   private async refreshInputs(){
     const client=this.client,epoch=this.epoch;if(!client)return;

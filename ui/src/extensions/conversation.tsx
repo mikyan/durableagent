@@ -97,7 +97,7 @@ export default function ConversationPage({controller,state}:{controller:Conversa
   const open=(id:string)=>{if(!wide)setNavigation(false);void controller.open(id);};
   const create=()=>{if(!wide)setNavigation(false);void controller.create();};
   const home=()=>{if(!wide)setNavigation(false);void controller.home();};
-  const reconnect=()=>{setDetails(false);void controller.connect();};
+  const reconnect=()=>{setDetails(false);void controller.reconnect();};
   const models=()=>{if(!wide)setNavigation(false);setDetails(false);void controller.openModels();};
   const projects=()=>{if(!wide)setNavigation(false);setDetails(false);void controller.openProjects();};
   const navigate=(page:'conversations'|'tools'|'settings')=>{if(!wide)setNavigation(false);setDetails(false);setAttachments(false);controller.showPage(page);};

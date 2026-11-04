@@ -32,6 +32,8 @@ Root 的 MiMo01 真正调用 MiMo、使用持久凭据和 Termux，E7CF 主 APK 
 
 Root 用相同 E7CF 产品 APK 发起两个全新 UUID 的真实 MiMo 试验，没有重发原输入：MiMo02 / b17 为 1/1、33.706 秒，但观察器失败；MiMo03 / C251 为 1/1、41.216 秒，三库诊断读取均成功，10 秒时工具仍执行、cursor=1，随后收齐两段并完成。两次成功都没有产品改动；原始 MiMo01 间歇性失败仍未解释。完整日志由 root 保留在 `%TEMP%/durableagent-implementation/t17-real-mimo0{2,3}-diagnostic-device.log`，由 T17 单独归档和审计。
 
+后续 Root 只读核对实际 Termux 固定请求发现参数差异：MiMo01 的 `timeoutMs=30000`，MiMo02／03 为 `60000`；三个脚本均 667 字符、实际执行约 18 秒、最终 cursor=2。原始安全记录见 `t17-mimo-selected-timeouts.log`（来源 `%TEMP%/durableagent-implementation/t12-observe-t17-mimo-timeouts01/result.log`）。这不是超时致错的因果证据，但两次成功不能称为相同请求参数的重现。宿主矩阵虽使用 30 秒上限，独立父端约 30 毫秒后完成外部执行，也没有覆盖设备上的 18 秒时长。下一次有界设备诊断须明确约束并在杀 owner 前核实真实请求的 30 秒上限，不重发原失败输入。
+
 冻结主 APK SHA-256：`e7cf5a6ddff4bc435f513fc727e2ac1f12b93801aefb6570fb8e4457b650bfc0`。
 
 测试冻结件位于 `D:/durableagent-validation/`：

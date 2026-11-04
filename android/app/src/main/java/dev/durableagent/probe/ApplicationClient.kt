@@ -42,6 +42,13 @@ class ApplicationClient(private val context:Context,private val mode:String="pro
         if(++attempts<30)main.postDelayed(this,100) else receive(0,"系统暂未允许连接运行宿主。")
     }})}
     fun post(json:String){main.post {if(disposed)return@post;runCatching{connections.add(JSONObject(json).getString("connectionId"));send(10,json)}}}
+    fun reconnect(json:String){main.post {if(disposed)return@post;runCatching{
+        val request=JSONObject(json);connections.add(request.getString("connectionId"))
+        if(!bound){attempts=0;connect()}
+        // The page supplies only the correlated action. Its payload cannot choose
+        // another storage domain or turn this into a submission replay.
+        send(62,JSONObject().put("request",request).put("mode",mode).put("run",run?:JSONObject.NULL).toString())
+    }}}
     fun writeCredential(json:String){main.post {if(disposed)return@post;runCatching{connections.add(JSONObject(json).getString("connectionId"));send(30,json)}}}
     fun control(what:Int,json:String=""){main.post {if(!disposed)send(what,json)}}
     private fun send(what:Int,json:String){val peer=remote;if(peer==null){pending.add(what to json);return}

@@ -1,0 +1,77 @@
+{
+  "base": "32ea1e52e1707c26aef12f04330a63295156496d",
+  "frozenBase": "2942502b49b881322faf21226533b2c5b00a4394",
+  "note": "Bases differ only by accepted T17 evidence. Exact raw workspace bytes are hashed; Git may normalize line endings.",
+  "source": [
+    {
+      "path": "android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt",
+      "sha256": "80c0f4b10f57eab8de7713ed1217c8b0f82e58c962a7b6b07986c53c6e5831e3"
+    },
+    {
+      "path": "android/app/src/main/java/dev/durableagent/probe/ApplicationClient.kt",
+      "sha256": "a2bc1a6e1f8fb3b90024306a3a1b688259a0732ac819b215e4ec44d140afff62"
+    },
+    {
+      "path": "android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt",
+      "sha256": "a1b6abccc3a744929afe2709597f6dbea913290f9c9f72ce0de90ee2077d898a"
+    },
+    {
+      "path": "runtime/src/application-protocol.ts",
+      "sha256": "c71328596950e95ef26c4511be6409a9cfdf9843fa1e959961fe00503cb9b014"
+    },
+    {
+      "path": "ui/src/controller.ts",
+      "sha256": "2d836be97569343df20207b64a4717bff7be186f195b0f1e7530ac0cdd5b85f3"
+    },
+    {
+      "path": "ui/src/extensions/conversation.tsx",
+      "sha256": "b4a36173d6d2f9cc1d4302fbe33c3608f543bad97e9a8926697f73f6b6ca53a6"
+    },
+    {
+      "path": "android/app/src/androidTest/java/dev/durableagent/probe/HostReconnectApplicationTest.kt",
+      "sha256": "ffd46f3a2b120381b2640c81c349c7aabb573bf1f67143d1228fa784461230ed"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "artifacts.json",
+      "sha256": "a8fb00e4944936b5a4da74a3297a79eee79e29a0cc5e099adce6efb1e9a597ea"
+    },
+    {
+      "path": "README.md",
+      "sha256": "52390e54ce280df0aacd69851544c94078a1cc4e2b9583f2aec0ad062fb0181c"
+    },
+    {
+      "path": "t17-native-reconnect-green-build01.log",
+      "sha256": "bb0e9e928f705cf062214ab8ba1880ba5312e6b92d324e214f82cba1d1cc5701"
+    },
+    {
+      "path": "t17-native-reconnect-green-build02.log",
+      "sha256": "a262b1a19e0984da0f24bd2bf5039f22f89305d968cd0bbe19d4003c941aeb16"
+    },
+    {
+      "path": "t17-native-reconnect-green01-device.log",
+      "sha256": "168f81003676d5878feb77d1555ed972a2ab0a39f99b0b387ae393545b949b5d"
+    },
+    {
+      "path": "t17-native-reconnect-green02-warm-device.log",
+      "sha256": "ed1b94ac6014940bad2f1a24bfa6877a276d653ca8970f4930107ddc3ef24c45"
+    },
+    {
+      "path": "t17-native-reconnect-red01-device.log",
+      "sha256": "99315fc733d4c57b3b8723dd5d1cff8cd3d58211f100078cd282f52055dac104"
+    },
+    {
+      "path": "t17-native-reconnect-review.md",
+      "sha256": "d535bdf076f30b9ccad5a2b1c15bb794135cafb19cb58a25a3c57ec6589e7024"
+    },
+    {
+      "path": "t17-native-reconnect-root-inspection.json",
+      "sha256": "d8fff37c06f26be0d4ced41fde2558d2e5c97c2e7e23c868e46ca524a3b3d8e5"
+    },
+    {
+      "path": "t17-native-reconnect-ui01.log",
+      "sha256": "4b54167adba2e58a950e150d13becb0a24e1550111e0b7b62834d498ab226f5c"
+    }
+  ]
+}
