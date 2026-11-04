@@ -28,6 +28,8 @@ SAF 原件写入单独保存原生 immutable receipt，prepare、stage、start/q
 
 占用不会因 SDK idle、断线、lease 时间或进程退出过期。恢复只通过关联的执行/原件证据核验，未知继续阻挡。T08 在配置修改事务中读取 pending binding 与 control-product 证据，拒绝修改仍被任务或未决外部效果使用的位置。其他应用仍可能修改文件；这些应用记录不是跨应用文件锁。
 
+`ExecutionEnv.cleanup()` 关闭本宿主中该 binding 与实际 SDK 会话的所有者，同时核验命令和 SAF 原件操作。关闭后到达的 prepare 回包也不能再 start；取消和查询始终使用原 operationId 与摘要。只有终态且作用域已确认才报告清理完成，已确认未开始的排队原件可释放占用。Provider 仍运行或未知时保留屏障并返回失败；不同 SDK 所有者不受影响。此生命周期关闭不同于 T11 的一次停止/控制代次变化。
+
 ## 公开 Interface 与记录
 
 | Interface | 契约 |

@@ -391,7 +391,37 @@ test('a document write persists its original identity and exposes verified nativ
  }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
 });
 
-for(const [first,stopWaiting] of [['shell',false],['document',false],['shell',true]])test(stopWaiting?'stopping a queued original document durably prevents its Provider start':`the ${first} writer prevents the other UID capability from dispatching until confirmed`,async()=>{
+test('environment cleanup cannot confirm a live original Provider scope and fences later document dispatch for that owner',async()=>{
+ const resourceId='e'.repeat(64),content='after',expectedDigest=createHash('sha256').update('before').digest('hex');
+ class Documents {
+  records=new Map();starts=0;cancellations=[];prepares=0;
+  async request(method,payload){
+   if(method==='prepare'){this.prepares++;const value={...payload,protocol:1,namespace:'saf:'+resourceId,requestDigest:hash(payload),original:true,uri:'content://fixture.documents/document/cleanup',state:'accepted_not_started',scopeConfirmed:false,sequence:1,diff:{available:false,reason:'unconfirmed'}};this.records.set(payload.operationId,value);return structuredClone(value);}
+   const value=this.records.get(payload.operationId);assert.ok(value,'only an existing original operation may be queried/cancelled');
+   if(method==='stage')return {operationId:payload.operationId,nextOffset:payload.offset+Buffer.from(payload.base64,'base64').length,sealed:true};
+   if(method==='start'){this.starts++;Object.assign(value,{state:'running',scopeConfirmed:false,sequence:2});}
+   else if(method==='cancel'){this.cancellations.push(payload.operationId);Object.assign(value,{state:'unknown',scopeConfirmed:false,sequence:3});}
+   else assert.equal(method,'query');
+   return structuredClone(value);
+  }
+ }
+ const dir=await mkdtemp(join(tmpdir(),'managed-document-cleanup-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new ExecutionPeer(),documents=new Documents(),execution=new ManagedExecution({channel:peer,authority:native,documents}),app=new Application({...configuration('document_write',{resourceId,expectedDigest,content}),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution});
+ try {
+  await app.start();await call(app,'create',{creationId:'one'});await native.create('one','write original','first');await call(app,'send',{intentId:'first'});await until(()=>documents.starts===1);
+  const change=(await call(app,'files.list',{id:'one'})).documents.changes[0],receipt=[...documents.records.values()][0];
+  const env=await execution.locations.environment({id:change.bindingId,location:{id:'default',name:'default',version:1,path:configuration().workspacePath,environment:'termux'},projectId:null,sourceProductId:'one',controlProductId:'one',sdkConversationId:receipt.sdkConversationId});
+  await assert.rejects(env.cleanup(BACKGROUND_CONTEXT),undefined,'live Provider scope cannot be reported as cleaned up');
+  assert.ok(documents.cancellations.length>0);assert.ok(documents.cancellations.every(id=>id===change.operationId));
+  const pending=(await call(app,'files.list',{id:'one'})).documents.changes[0];assert.equal(pending.state,'unknown');assert.equal(pending.scopeConfirmed,false);
+  await execution.withSnapshot(async snapshot=>{assert.equal(snapshot.known,false);assert.deepEqual(snapshot.pendingControlProductIds,['one']);});
+  await until(async()=>(await call(app,'sendStatus',{intentId:'first'})).submission?.status==='done');
+  await native.create('one','new document after cleanup','later');await call(app,'send',{intentId:'later'});
+  await until(async()=>documents.prepares>1||(await call(app,'sendStatus',{intentId:'later'})).submission?.status==='done');
+  assert.equal(documents.prepares,1,'a closed environment must not prepare a later Provider write');assert.equal(documents.starts,1);
+ } finally {await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
+for(const [first,stopWaiting] of [['shell',false],['document',false],['shell',true],['shell','cleanup']])test(stopWaiting==='cleanup'?'environment cleanup cancels only its bound queued original and prevents Provider start':stopWaiting?'stopping a queued original document durably prevents its Provider start':`the ${first} writer prevents the other UID capability from dispatching until confirmed`,async()=>{
  const resourceId='c'.repeat(64),content='after',expectedDigest=createHash('sha256').update('before').digest('hex');
  class HeldShell extends ExecutionPeer {hold=true;async request(method,payload){if(method==='query'&&!this.hold){const old=this.records.get(payload.executionId);if(old?.receipt.state==='running')old.receipt={...old.receipt,state:'completed',scopeConfirmed:true,sequence:4};}const value=await super.request(method,payload);if(method==='start'&&this.hold){const row=this.records.get(payload.executionId);row.receipt={...value,state:'running',scopeConfirmed:false};return structuredClone(row.receipt);}return value;}}
  class HeldDocument {plan;starts=0;hold=true;staged=0;async request(method,payload){if(method==='prepare')return this.plan??=( {...payload,protocol:1,namespace:'saf:'+resourceId,requestDigest:hash(payload),original:true,uri:'content://fixture.documents/document/queued',state:'accepted_not_started',scopeConfirmed:false,sequence:1,diff:{available:false,reason:'unconfirmed'}} );if(method==='stage'){this.staged+=Buffer.from(payload.base64,'base64').length;return {operationId:payload.operationId,nextOffset:this.staged,sealed:this.staged===this.plan.byteLength};}if(method==='start'){this.starts++;this.plan={...this.plan,state:'running',scopeConfirmed:false,sequence:2};}if((method==='start'||method==='query')&&this.plan){if(this.plan.state==='running'&&!this.hold)this.plan={...this.plan,state:'completed',scopeConfirmed:true,sequence:3,diff:{available:true,text:'-before\n+after'}};return this.plan;}if(method==='cancel'){this.plan={...this.plan,state:this.plan.state==='accepted_not_started'?'not_started':'unknown',scopeConfirmed:this.plan.state==='accepted_not_started',sequence:4};return this.plan;}throw Error('Unexpected document request');}}
@@ -400,7 +430,14 @@ for(const [first,stopWaiting] of [['shell',false],['document',false],['shell',tr
  try{await app.start();for(const kind of [first,second]){await call(app,'create',{creationId:kind});await native.create(kind,kind,kind);await call(app,'send',{intentId:kind});if(kind===first)await until(()=>first==='shell'?peer.starts===1:documents.starts===1);}
   if(second==='shell')await until(async()=>(await call(app,'execution.list',{id:'shell'})).executions[0]?.state==='queued');else await until(async()=>(await call(app,'files.list',{id:'document'})).documents.changes[0]?.state==='queued');
   assert.equal(peer.starts,first==='shell'?1:0);assert.equal(documents.starts,first==='document'?1:0);assert.equal((await call(app,'status')).phase,'ready');assert.equal((await call(app,'open',{id:first})).conversation.id,first);
-  if(stopWaiting){const stopped=await native.stop('document','stop-document');await call(app,'stop',{id:'document',stopId:stopped.pendingAbort.stopId});assert.equal(documents.starts,0);const change=(await call(app,'files.list',{id:'document'})).documents.changes[0];assert.equal(change.state,'not_started');assert.equal(change.scopeConfirmed,true);await execution.withSnapshot(async snapshot=>assert.deepEqual(snapshot.pendingControlProductIds,['shell']));}
+  if(stopWaiting){
+   if(stopWaiting==='cleanup'){
+    const original=(await call(app,'files.list',{id:'document'})).documents.changes[0],binding={id:original.bindingId,location:{id:'default',name:'default',version:1,path:configuration().workspacePath,environment:'termux'},projectId:null,sourceProductId:'document',controlProductId:'document',sdkConversationId:documents.plan.sdkConversationId};
+    const sibling=await execution.locations.environment({...binding,sdkConversationId:binding.sdkConversationId+1});await sibling.cleanup(BACKGROUND_CONTEXT);assert.equal(documents.plan.state,'accepted_not_started','sharing a binding is not sharing the actual SDK owner');
+    const owner=await execution.locations.environment(binding);await owner.cleanup(BACKGROUND_CONTEXT);
+   }else{const stopped=await native.stop('document','stop-document');await call(app,'stop',{id:'document',stopId:stopped.pendingAbort.stopId});}
+   assert.equal(documents.starts,0);const change=(await call(app,'files.list',{id:'document'})).documents.changes[0];assert.equal(change.state,'not_started');assert.equal(change.scopeConfirmed,true);await execution.withSnapshot(async snapshot=>assert.deepEqual(snapshot.pendingControlProductIds,['shell']));
+  }
   peer.hold=false;documents.hold=false;await until(async()=>(await call(app,'sendStatus',{intentId:stopWaiting?first:second})).submission?.status==='done');assert.equal(peer.starts,1);assert.equal(documents.starts,stopWaiting?0:1);
  }finally{peer.hold=false;documents.hold=false;await app.close();native.close();await rm(dir,{recursive:true,force:true});}
 });

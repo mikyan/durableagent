@@ -1,6 +1,6 @@
-# T10 implementation evidence (in progress)
+# T10 implementation evidence
 
-This journal records incremental engineering checks. T10's twelve acceptance criteria are not yet accepted. The T09 execution evidence in `VALIDATION.md` remains distinct.
+This journal records completed engineering checks and their exact scope. All twelve criteria have evidence below; final frozen-artifact inspection and independent integration acceptance remain pending. The T09 execution evidence in `VALIDATION.md` remains distinct.
 
 ## Acceptance evidence map
 
@@ -108,7 +108,11 @@ SAF final sourceec68ab9 was merged after these candidates. Relative to the previ
 
 ## Remaining work
 
-Independent review is investigating the public environment cleanup boundary for SAF operations; the ticket remains unaccepted until that check and any required repair complete. The actual shared-original in-flight trace, both queue directions, queued stop, file owner death, real model proof, stop isolation and four separate pinned SDK contracts have passed as documented above. Required binary/append/truncate/flush/regular-file-rename/directory-reader/watch capabilities are implemented; standalone directory creation/removal/temp helpers and an edit tool are not advertised and return unsupported where applicable. Production T10 scripts are installed within the documented emulator scope. Final OEM/device acceptance remains a separate T17 gate.
+Independent review reproduced a real SDK cleanup defect: a cleaned environment could still start a SAF original write, and cleanup could overlook an active Provider scope. The correction closes precisely the binding plus actual SDK conversation, rechecks synchronously after the final awaited policy read, and queries/cancels the same persisted document operation. It never prepares a replacement operation to obtain cancellation evidence. Confirmed queued no-start releases its claim; active or unknown Provider scope remains occupied and cleanup rejects. Other SDK owners sharing the binding remain unaffected.
+
+The owner retained the failing live-scope test and four passing cleanup cases. The independent original counterexample now has zero Provider starts and unchanged original bytes; held prepare ACK and different-owner interleavings also pass (three independent public checks in total). These use the real SDK/Application/SQLite with controlled external transport; native Provider cancellation/unknown behavior has separate actual component evidence. [Independent source review and hashes](evidence/t10-independent-gate-review.md), [cleanup and final host check record](evidence/t10-cleanup-checks.json). Final full host checks pass221/221 runtime tests and81/81 UI tests, with no skips or failures. No additional Android scenario was introduced for this correction; final package mapping must include the two rebuilt runtime modules.
+
+The actual shared-original in-flight trace, both queue directions, queued stop, file owner death, real model proof, stop isolation and four separate pinned SDK contracts have passed as documented above. Required binary/append/truncate/flush/regular-file-rename/directory-reader/watch capabilities are implemented; standalone directory creation/removal/temp helpers and an edit tool are not advertised and return unsupported where applicable. Production T10 scripts are installed within the documented emulator scope. Final frozen-artifact inspection and independent integration acceptance remain pending; final OEM/device acceptance remains a separate T17 gate.
 
 ## Actual tool workspace and shared-storage facts
 
@@ -118,6 +122,6 @@ In a new private UUID workspace, actual Make/clang/pkg-config built and linked a
 
 The first shared-directory attempt was denied. After the root agent used normal `termux-setup-storage` and the system permission dialog, a separate Download UUID fixture accepted the copied binary and exact hash readback. `chmod 700` returns zero but the observed mode remains 0660; direct ELF execution fails with EACCES. The actual mount entries contain `noexec`; both shared symbolic and hardlink attempts fail with permission denied. Explicit Bash reading of a shared script passes, which is distinct from direct execution. The private ELF remains unchanged. [Shared capability evidence](evidence/t10-build-shared.json). The production daemon, pairing and accepted ledger were not replaced.
 
-These facts support a private default tool workspace and capability-specific shared-file handling. They do not assert every Provider or device behaves identically, or that arbitrary dependency installers work. Original SAF grants and operations remain a separate pending test axis.
+These facts support a private default tool workspace and capability-specific shared-file handling. They do not assert every Provider or device behaves identically, or that arbitrary dependency installers work. Original SAF grants and operations have the separate component and shared-original evidence above.
 
 Root subsequently demonstrated an actual additive dependency installation: uthash2.4.0 was the sole new package, with zero upgrades/removals. Its20,192-byte trusted repository download and package version were recorded, then actual clang compiled a dedicated source using the new headers. The x86_64 ELF is11,656 bytes, mode0700, SHA256 `e9b291013974011a54775a99e1eb1f7178425c12fd6919f44128abea08b1906b`; inserting ten entries and looking up7 returned49/count10. Source SHA256 `d5bb1eb860e50a4819f0709062ff1d083627fba44e8f58812d78ba8b999685a4`. The first attempt failed its preflight on a misspelled owned script name before any installation; the corrected second attempt passed and both logs remain. [Actual install/build and unchanged pre-upgrade ledger facts](evidence/t10-uthash-install.json). The later Android file tracer independently read these exact original artifacts, as reported above.

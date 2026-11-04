@@ -50,7 +50,7 @@ export class ManagedExecution implements EffectAuthority {
  readonly locations:LocationAdapter;
  constructor(private readonly options:{channel:ExecutionChannel;authority:SendAuthority;fileEffects?:FileEffectAuthority;documents?:ExecutionChannel;boundary?:(stage:string,request:Readonly<Request>)=>void|Promise<void>}){
   this.fileWrites=new FileWrites(options.channel,options.fileEffects);
-  if(options.documents){this.documents=new ManagedDocuments(options.documents);this.documentWrites=new DocumentWrites(options.documents,options.authority);}
+  if(options.documents){this.documents=new ManagedDocuments(options.documents);this.documentWrites=new DocumentWrites(options.documents,options.authority,(bindingId,sdkConversationId)=>this.closedOwners.has(bindingId+':'+sdkConversationId));}
   this.locations={deferInspection:true,inspect:async workspace=>{
    if(workspace.environment!=='termux')return {state:'environment-changed',reason:'此位置不属于当前 Termux 执行环境'};
    try{const value=await options.channel.request('inspectWorkspace',{path:workspace.path});if(value.state!=='available'||typeof value.identity!=='string'||typeof value.namespace!=='string')return {state:'missing',reason:'Termux 中的位置不可用，保留原位置'};this.namespace=value.namespace;return {state:'available',identity:value.identity};}
@@ -209,13 +209,16 @@ export class ManagedExecution implements EffectAuthority {
   context.abortSignal?.throwIfAborted();this.closedOwners.add(binding.id+':'+binding.sdkConversationId);
   for(const watcher of [...this.watchers.get(binding.id+':'+binding.sdkConversationId)??[]])await watcher.stop(BACKGROUND_CONTEXT);
   const entries=Object.values((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{});
-  for(const entry of entries){if(entry.bindingId!==binding.id||terminal.has(entry.state))continue;const saved=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(!saved?.request)return failure('EXECUTION_STORAGE_INCONSISTENT','执行记录缺失，停止范围未确认');const request=copy(saved.request);if(request.context.sdkConversationId!==binding.sdkConversationId)continue;
+  let unconfirmed:unknown;
+  for(const entry of entries){try{if(entry.bindingId!==binding.id||terminal.has(entry.state))continue;const saved=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(!saved?.request)return failure('EXECUTION_STORAGE_INCONSISTENT','执行记录缺失，停止范围未确认');const request=copy(saved.request);if(request.context.sdkConversationId!==binding.sdkConversationId)continue;
    await this.cancelRecorded(entry.key,request);const deadline=performance.now()+5000;
    for(;;){context.abortSignal?.throwIfAborted();const receipt=this.receipt(await this.options.channel.request('query',{executionId:request.executionId}),request);await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,entry.key,null),index=await tx.doc(Index);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_STORAGE_INCONSISTENT','停止身份已改变');if(Number(receipt.sequence??0)<Number(intent.receipt?.sequence??0))return;intent.receipt=copy(receipt);index.items[request.executionId].state=receipt.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});
     if(terminal.has(receipt.state)&&receipt.scopeConfirmed===true)break;
     if(receipt.state==='unknown'||performance.now()>=deadline)return failure('EXECUTION_STOP_UNCONFIRMED','执行范围尚未确认停止，保留未决占用');await new Promise(resolve=>setTimeout(resolve,25));
    }
-  }
+  }catch(error){unconfirmed??=error;}}
+  try{await this.documentWrites?.cleanup(binding,context);}catch(error){unconfirmed??=error;}
+  if(unconfirmed)throw unconfirmed;
  });}
  async list(productId:string,cursor?:unknown){await this.recover();const index=await this.owner().snapshot(Index,BACKGROUND_CONTEXT),entries=Object.entries(index?.items??{}).filter(([,entry])=>entry.productId===productId),executions:Receipt[]=[];const start=cursor===undefined?0:entries.findIndex(([id])=>id===cursor)+1;if(cursor!==undefined&&(!start||typeof cursor!=='string'))return failure('INVALID_ARGUMENT','执行列表位置已失效，请重新读取');const queued=new Set((await this.writes!.list()).filter(value=>value.state==='queued').map(value=>value.operationId));const page=entries.slice(start,start+20);for(const [id,entry] of page){const intent=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(intent?.request&&queued.has(id))executions.push({executionId:id,state:'queued',source:'application',reason:'WRITER_QUEUED',context:copy(intent.request.context),namespace:intent.request.context.namespace,sequence:0});else if(intent?.receipt)executions.push(copy(intent.receipt));}return {executions,nextCursor:start+page.length<entries.length?page.at(-1)![0]:null};}
  async fileChanges(productId:string,cursor?:unknown){await this.recover();const files=await this.fileWrites.list(productId,cursor),untrackedExecutions=[];for(const [executionId,entry]of Object.entries((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{})){if(entry.productId!==productId)continue;const stored=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(stored?.fileOperationId)continue;untrackedExecutions.push({executionId,state:entry.state,diff:{available:false,reason:'unknown_command_scope'}});}return {...files,documents:await this.documentWrites?.list(productId)??{changes:[],limited:false},untrackedExecutions:untrackedExecutions.slice(-20),untrackedLimited:untrackedExecutions.length>20};}

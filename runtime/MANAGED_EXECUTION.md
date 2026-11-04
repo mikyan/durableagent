@@ -22,7 +22,7 @@
 
 `EffectAuthority.withSnapshot()` 在同一个核心串行范围内核验收据，并把真实未决 `pendingBindingIds` 与 `pendingControlProductIds` 交给位置修改事务。unknown 保持 `known=false`。断线、SDK 工具结束或当前位置指针释放，都不自动释放未决外部效果。
 
-`ExecutionEnv.cleanup()` 的范围是该 binding 与实际 SDK 会话的所有者；它阻止本宿主继续为该所有者接纳新命令，并按持久执行身份请求取消。只有终态且 `scopeConfirmed` 才确认完成清理；未知或等待超时保留占用并失败。普通取消只针对一次执行。T11 负责完整会话停止 fence，T10 负责工作区互斥。
+`ExecutionEnv.cleanup()` 的范围是该 binding 与实际 SDK 会话的所有者；它阻止本宿主继续为该所有者接纳新命令及 SAF 原件写入，并按各自持久身份查询和请求取消。清理会分别尝试命令及原件记录；任一作用域未确认都保留占用并失败。只有终态且 `scopeConfirmed` 才确认完成清理；不以 Provider 字节匹配替代作用域证据，也不影响共享 binding 的另一 SDK 所有者。普通取消只针对一次执行。T11 负责完整会话停止 fence，T10 负责工作区互斥。
 
 ## 输出与公开 Interface
 
