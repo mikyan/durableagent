@@ -138,7 +138,7 @@ class ApplicationService:Service() {
     }
     private fun open(mode:String,run:String?) {
         try {
-            check(mode in setOf("product","fixture","hang","real","models","models-fixture","execution","execution-real","extensions-fixture","extensions-real"))
+            check(mode in setOf("product","fixture","console","hang","real","models","models-fixture","execution","execution-real","extensions-fixture","extensions-real"))
             check(mode=="product"||run?.matches(Regex("[a-zA-Z0-9-]{1,80}"))==true)
             check(!File(noBackupFilesDir,"unsupported-restore").exists()) { "检测到不受支持的系统恢复，原数据已保留；运行已关闭，请使用原安装的数据继续核验。" }
             val domain=File(filesDir,if(mode=="product")"application" else "application-validation/$run")

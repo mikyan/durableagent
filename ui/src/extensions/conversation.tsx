@@ -11,6 +11,11 @@ import {ExtensionPage} from '../extension-host';
 import {positionLabels} from '../project-view';
 import {ExecutionPanel} from './execution';
 import {DocumentsPanel} from './documents';
+import {useConversationContext,contextLabel} from './context';
+import {AuxiliaryPanel,useWideLayout} from './auxiliary';
+import {QuestionAnchor} from './question-anchor';
+import {FailureNotice} from './failure-notice';
+import {HistoryNavigator} from './conversation-history';
 
 const ModelSettings=lazy(builtInUiExtensions[MODELS_EXTENSION.id].load);
 const ProjectSettings=lazy(builtInUiExtensions[PROJECTS_EXTENSION.id].load);
@@ -39,12 +44,21 @@ function Icon({name}:{name:'menu'|'plus'|'grid'|'send'|'close'|'home'|'chat'|'st
 }
 
 export default function ConversationPage({controller,state}:{controller:ConversationController;state:UiState}) {
-  const [navigation,setNavigation]=useState(false);
+  const wide=useWideLayout();
+  const [navigation,setNavigation]=useState<boolean>();
+  const navigationOpen=navigation??wide;
+  const [auxiliary,setAuxiliary]=useState<boolean>();
+  const auxiliaryOpen=auxiliary??wide;
   const [details,setDetails]=useState(false);
   const [attachments,setAttachments]=useState(false);
+  const [camera,setCamera]=useState(false);
+  const nativeClient=controller.extensionClient;
+  useEffect(()=>{let active=true;setCamera(false);if(nativeClient)void nativeClient.request<{camera:boolean}>('input.capabilities').then(value=>{if(active)setCamera(value.camera===true);},()=>{});return()=>{active=false;};},[nativeClient]);
+  const [highlighted,setHighlighted]=useState<string>();
   const scroll=useRef<HTMLDivElement>(null),follow=useRef(true),input=useRef<HTMLTextAreaElement>(null);
   const conversations=[...state.conversations,...state.inputConversations.filter(item=>!state.conversations.some(existing=>existing.id===item.id)).map(item=>({...item,phase:undefined,workspaceId:undefined}))];
   const active=state.conversation?.conversation??conversations.find(item=>item.id===state.activeId);
+  const context=useConversationContext(controller,state);
   const draft=state.draft?.text??'';
   const draftReady=!!state.draft;
   const ready=state.status.phase==='ready'&&state.status.extensions.includes(CONVERSATION_EXTENSION.id);
@@ -57,26 +71,32 @@ export default function ConversationPage({controller,state}:{controller:Conversa
   const stoppable=running||state.pending||state.submissions?.items.some(item=>!item.intent?.cancelled&&item.status?.submission?.status!=='done'&&item.status?.submission?.status!=='unanswered')||!!state.submissions?.control?.pendingAbort;
   const sendContext=state.draft?.submissionContext??active?.submissionContext;
   const modelsPage=state.page==='models';
-  const projectsPage=state.page==='projects',extensionsPage=state.page==='extensions',settingsPage=modelsPage||projectsPage||extensionsPage;
+  const projectsPage=state.page==='projects',extensionsPage=state.page==='extensions',toolsPage=state.page==='tools',preferencesPage=state.page==='settings',listPage=state.page==='conversations',settingsPage=state.page!=='conversation';
+  const pageTitle={conversation:'聊天',conversations:'会话列表',models:'模型与连接',projects:'项目与工作区',extensions:'扩展与时间线',tools:'工具',settings:'设置'}[state.page];
   const hasModels=state.status.extensions.includes(MODELS_EXTENSION.id);
   const hasProjects=state.status.extensions.includes(PROJECTS_EXTENSION.id);
   const startupReason=state.status.reason??(state.status.phase==='opening'?'正在连接运行宿主…':state.status.phase==='configuring'?'正在装载配置，请稍候。':state.status.phase==='closed'?'运行宿主已关闭，请重新连接。':state.status.phase==='failed'?'连接未完成，请重新连接。':!ready?'当前运行宿主未提供会话功能。':undefined);
   const reason=state.error??startupReason;
-  useEffect(()=>{follow.current=true;setDetails(false);setAttachments(false);},[state.activeId]);
+  useEffect(()=>{follow.current=true;setDetails(false);setAttachments(false);setHighlighted(undefined);},[state.activeId]);
   useEffect(()=>{
     const element=scroll.current;
     if(element&&follow.current)element.scrollTop=element.scrollHeight;
   },[state.activeId,state.history,state.conversation?.progress?.text]);
   useEffect(()=>{
-    const close=(event:KeyboardEvent)=>{if(event.key==='Escape'){setDetails(false);setNavigation(false);setAttachments(false);}};
+    const close=(event:KeyboardEvent)=>{if(event.key==='Escape'){setDetails(false);setNavigation(false);setAttachments(false);setAuxiliary(false);}};
     window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close);
   },[]);
-  const open=(id:string)=>{setNavigation(false);void controller.open(id);};
-  const create=()=>{setNavigation(false);void controller.create();};
+  const open=(id:string)=>{if(!wide)setNavigation(false);void controller.open(id);};
+  const create=()=>{if(!wide)setNavigation(false);void controller.create();};
   const home=()=>{setNavigation(false);void controller.home();};
   const reconnect=()=>{setDetails(false);void controller.connect();};
   const models=()=>{setNavigation(false);setDetails(false);void controller.openModels();};
   const projects=()=>{setNavigation(false);setDetails(false);void controller.openProjects();};
+  const navigate=(page:'conversations'|'tools'|'settings')=>{setNavigation(false);setDetails(false);setAttachments(false);controller.showPage(page);};
+  function jump(id:string){
+    const target=Array.from(scroll.current?.querySelectorAll<HTMLElement>('[data-message-id]')??[]).find(row=>row.dataset.messageId===id);
+    if(!target)return;follow.current=false;setHighlighted(id);setDetails(false);target.scrollIntoView?.({block:'center',behavior:'auto'});target.focus({preventScroll:true});
+  }
   async function send(event:FormEvent) {
     event.preventDefault();if(state.activeId)await controller.send();
   }
@@ -85,16 +105,19 @@ export default function ConversationPage({controller,state}:{controller:Conversa
     follow.current=false;await controller.loadOlder();
     requestAnimationFrame(()=>{if(element)element.scrollTop+=element.scrollHeight-before;});
   }
-  const choose=(kind:'image'|'file')=>{setAttachments(false);void controller.selectAttachment(kind);};
-  return <div className="application" data-testid="application" data-status={state.status.phase}>
-    {navigation&&<button className="nav-scrim" aria-label="关闭会话列表" onClick={()=>setNavigation(false)}/>}
-    <aside className={`navigation ${navigation?'is-open':''}`} aria-label="会话导航">
+  const choose=(kind:'image'|'file'|'camera')=>{setAttachments(false);void controller.selectAttachment(kind);};
+  return <div className="application" data-testid="application" data-status={state.status.phase} data-nav-open={navigationOpen}>
+    {navigationOpen&&!wide&&<button className="nav-scrim" aria-label="关闭会话列表" onClick={()=>setNavigation(false)}/>}
+    <aside className={`navigation ${navigationOpen?'is-open':''}`} aria-label="会话导航" inert={!navigationOpen}>
       <button className="brand" onClick={home} aria-label="返回首页"><span className="brand-mark">π</span><span>Durable Agent<small>你的本地会话空间</small></span></button>
       <button className={`nav-item ${!state.activeId&&!settingsPage?'selected':''}`} onClick={home}><Icon name="home"/>首页</button>
       <button className="nav-item" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>新建</button>
-      {hasModels&&<button className={`nav-item ${modelsPage?'selected':''}`} data-testid="open-model-settings" onClick={models}><Icon name="grid"/>模型与连接</button>}
-      {hasProjects&&<button className={`nav-item ${projectsPage?'selected':''}`} data-testid="open-project-settings" onClick={projects}><Icon name="grid"/>项目与工作区</button>}
+      <button className={`nav-item ${modelsPage?'selected':''}`} data-testid="open-model-settings" onClick={models}><Icon name="grid"/>模型与连接</button>
+      <button className={`nav-item ${projectsPage?'selected':''}`} data-testid="open-project-settings" onClick={projects}><Icon name="grid"/>项目与工作区</button>
       <button className={`nav-item ${extensionsPage?'selected':''}`} data-testid="open-extensions" onClick={()=>{setNavigation(false);setDetails(false);controller.openExtensions();}}><Icon name="grid"/>扩展与时间线</button>
+      <button className={'nav-item'+(listPage?' selected':'')} onClick={()=>navigate('conversations')}><Icon name="chat"/>会话列表</button>
+      <button className={'nav-item'+(toolsPage?' selected':'')} onClick={()=>navigate('tools')}><Icon name="grid"/>工具</button>
+      <button className={'nav-item'+(preferencesPage?' selected':'')} onClick={()=>navigate('settings')}><Icon name="grid"/>设置</button>
       <div className="section-caption">会话</div>
       <div className="conversation-list">
         {conversations.map(conversation=><button className={`nav-item ${state.activeId===conversation.id?'selected':''}`} key={conversation.id} onClick={()=>open(conversation.id)} disabled={!ready&&!state.status.readOnly&&!state.inputReady}><Icon name="chat"/><span>{conversation.title}</span></button>)}
@@ -104,13 +127,11 @@ export default function ConversationPage({controller,state}:{controller:Conversa
     </aside>
     <main className={`main ${settingsPage?'models-page':state.activeId?'chat-page':'home-page'}`}>
       <header className="topbar">
-        <button className="round-button menu-button" aria-label="打开会话列表" aria-expanded={navigation} onClick={()=>setNavigation(!navigation)}><Icon name="menu"/></button>
-        {settingsPage?<><div className="title-pill"><h1>{modelsPage?'模型与连接':projectsPage?'项目与工作区':'扩展与时间线'}</h1></div><button className="round-button" aria-label="返回会话" onClick={()=>modelsPage?controller.leaveModels():projectsPage?controller.leaveProjects():controller.leaveExtensions()}><Icon name="close"/></button></>:state.activeId?<><div className="title-pill"><span className={`dot phase-${phase}`}/><h1>{active?.title??'正在打开会话'}</h1></div><button className="round-button" data-testid="create-conversation" aria-label="新建会话" disabled={!ready||state.pending} onClick={create}><Icon name="plus"/></button></>:<span className="topbar-label">本地 · 会话</span>}
+        <button className="round-button menu-button" aria-label="打开会话列表" aria-expanded={navigationOpen} onClick={()=>setNavigation(!navigationOpen)}><Icon name="menu"/></button>
+        {settingsPage?<><div className="title-pill"><h1>{pageTitle}</h1></div><button className="round-button" aria-label="返回会话" onClick={()=>controller.showPage('conversation')}><Icon name="close"/></button></>:state.activeId?<><div className="title-pill"><span className={`dot phase-${phase}`}/><h1>{active?.title??'正在打开会话'}</h1></div><button className="round-button" data-testid="create-conversation" aria-label="新建会话" disabled={!ready||state.pending} onClick={create}><Icon name="plus"/></button></>:<span className="topbar-label">本地 · 会话</span>}
       </header>
       {reason&&<div className="connection-notice" role={state.error?'alert':'status'}><span>{reason}</span><button onClick={reconnect}>重新连接</button></div>}
-      {!settingsPage&&<ExecutionPanel controller={controller} state={state}/>}
-      {!settingsPage&&<DocumentsPanel client={controller.extensionClient}/>}
-      {extensionsPage?<ExtensionPage client={controller.extensionClient} conversationId={state.activeId}/>:projectsPage?<Suspense fallback={<p className="empty-state">正在打开项目设置…</p>}><ProjectSettings controller={controller} state={state}/></Suspense>:modelsPage?<Suspense fallback={<p className="empty-state">正在打开模型设置…</p>}><ModelSettings controller={controller} state={state}/></Suspense>:!state.activeId?<div className="home-content">
+      {toolsPage?<div className="settings-scroll" data-testid="tools-page"><div className="settings-content"><p className="cloud-disclosure">命令和原文件使用手机上已配置的执行环境与系统授权。</p><ExecutionPanel controller={controller} state={state}/><DocumentsPanel client={controller.extensionClient}/><button className="secondary-button" onClick={()=>controller.openExtensions()}>查看扩展与时间线</button></div></div>:preferencesPage?<div className="settings-scroll" data-testid="preferences-page"><div className="settings-content"><section className="settings-section"><h2>运行与连接</h2><p>{ready?'运行宿主已连接。':startupReason}</p><button className="secondary-button" onClick={reconnect}>重新连接</button><button className="text-button" onClick={models}>模型与连接设置</button>{state.activeId&&<button className="text-button" onClick={()=>void controller.enableStopNotification()} disabled={!draftReady}>检查本会话系统停止通知</button>}</section><section className="settings-section"><h2>数据与隐私</h2><p>私有会话与草稿不参与系统备份。卸载或清除应用数据后，无法通过本应用恢复。</p><p>原文件与 Termux 的数据由各自位置和应用管理。隐藏页面不会删除历史。</p><p>模型请求会将本次会话采用的聊天、附件内容与工具结果发送给已配置的模型服务。</p></section></div></div>:listPage?<div className="settings-scroll"><div className="settings-content"><button className="primary-button" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>新建会话</button><section className="recent" aria-label="所有会话">{conversations.map(conversation=><button className="recent-row" key={conversation.id} onClick={()=>open(conversation.id)}><span className="recent-icon"><Icon name="chat"/></span><span className="recent-copy"><strong>{conversation.title}</strong><small>{conversation.model.name} · {conversation.phase?phases[conversation.phase]:'历史待连接'}</small></span><span className="chevron" aria-hidden="true">›</span></button>)}{!conversations.length&&<p className="empty-state">还没有会话。</p>}</section></div></div>:extensionsPage?<ExtensionPage client={controller.extensionClient} conversationId={state.activeId}/>:projectsPage?<Suspense fallback={<p className="empty-state">正在打开项目设置…</p>}><ProjectSettings controller={controller} state={state}/></Suspense>:modelsPage?<Suspense fallback={<p className="empty-state">正在打开模型设置…</p>}><ModelSettings controller={controller} state={state}/></Suspense>:!state.activeId?<div className="home-content">
         <div className="home-brand">π</div><p className="eyebrow">DURABLE AGENT</p><h1>从一个问题开始</h1><p className="home-description">独立的会话，同一个工作空间。</p>
         <button className="primary-button" data-testid="create-conversation" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>{state.pending?'正在创建…':'新建会话'}</button>
         {hasModels&&state.models&&!state.models.defaultModel&&<p className="setup-model-hint">尚未选择默认模型。<button className="text-button" onClick={models}>设置模型与连接</button></p>}
@@ -118,27 +139,28 @@ export default function ConversationPage({controller,state}:{controller:Conversa
           {conversations.length?conversations.map(conversation=><button className="recent-row" data-testid="conversation-item" data-conversation-id={conversation.id} key={conversation.id} onClick={()=>open(conversation.id)} disabled={!ready&&!state.status.readOnly&&!state.inputReady}><span className="recent-icon"><Icon name="chat"/></span><span className="recent-copy"><strong>{conversation.title}</strong><small>{conversation.model.name} · {conversation.phase?phases[conversation.phase]:'历史待连接'}</small></span><span className="chevron" aria-hidden="true">›</span></button>):<p className="empty-state">新建会话后，已保存的记录会出现在这里。</p>}
         </section>
       </div>:<>
+        <QuestionAnchor key={state.activeId} viewport={scroll} messages={state.history} onJump={jump}/>
         <div className="thread-scroll" ref={scroll} onScroll={()=>{const element=scroll.current;if(element)follow.current=element.scrollHeight-element.scrollTop-element.clientHeight<100;}}>
           <div className="thread" aria-label="会话消息">
             {state.status.readOnly?<p className="empty-state">保留历史以只读方式展示，运行和新发送已关闭。</p>:!ready&&<p className="empty-state">草稿可在本地编辑保存。会话历史等待运行宿主连接。</p>}
             {state.next&&<button className="history-button" onClick={()=>void older()} disabled={state.loading}>{state.loading?'正在读取…':'查看更早的消息'}</button>}
             {state.loading&&!state.conversation&&<p className="empty-state" role="status">正在读取已保存的会话…</p>}
             {!state.loading&&state.conversation&&!state.history.length&&!state.conversation.progress&&<div className="chat-empty"><span>π</span><h2>有什么想一起解决？</h2><p>发送第一条消息，开始这次会话。</p></div>}
-            {state.history.map(message=><article key={message.id} className={`message role-${message.role}`} data-testid="history-message" data-message-id={message.id}>
+            {state.history.map(message=><article key={message.id} className={`message role-${message.role}`} data-testid="history-message" data-message-id={message.id} tabIndex={-1} data-highlighted={highlighted===message.id}>
               <div className="message-label">{message.role==='user'?'你':message.role==='assistant'?<><span>π</span> Agent</>:message.role==='tool'?'工具':'系统'}<span className="saved-label">已保存</span></div>
               {message.text&&<PersistedMessageText text={message.text}/>}
               {message.attachments?.map((attachment,index)=><div className="history-attachment" data-testid="history-attachment" key={index}><strong>图片附件</strong><span>{attachment.mimeType} · {bytes(attachment.byteLength)}</span><details><summary>内容摘要</summary><code>{attachment.sha256}</code></details></div>)}
             </article>)}
             {state.conversation?.progress&&<article className="message role-assistant progress-message" aria-label="未保存的回复进度"><div className="message-label"><span>π</span> Agent<span className="progress-label">生成中 · 尚未保存</span></div><div className="message-text">{state.conversation.progress.text}<span className="stream-cursor" aria-hidden="true"/></div></article>}
-            <div className={`turn-status phase-${phase}`} data-testid="conversation-status" data-phase={phase} role="status">{!state.conversation?'运行状态待连接':state.conversation.reason??(phase==='done'?'回复已保存':phase==='running'&&!state.conversation?.progress?'正在等待回复…':phases[phase])}</div>
+            <div className={`turn-status phase-${phase}`} data-testid="conversation-status" data-phase={phase} role="status">{phase==='failed'&&state.conversation?.reason?<FailureNotice reason={state.conversation.reason} onModels={models}/>:!state.conversation?'运行状态待连接':state.conversation.reason??(phase==='done'?'回复已保存':phase==='running'&&!state.conversation?.progress?'正在等待回复…':phases[phase])}</div>
           </div>
         </div>
         <div className="composer-area">
           <SendStates controller={controller} state={state}/>
-          {details&&<section className="details-panel" role="dialog" aria-label="会话详情"><div className="panel-heading"><h2>会话详情</h2><button className="plain-icon" aria-label="关闭详情" onClick={()=>setDetails(false)}><Icon name="close"/></button></div><dl><div><dt>模型</dt><dd>{active?.model.name??'正在读取'}</dd></div><div><dt>项目</dt><dd data-testid="detail-project">{project?.name??(location?'未关联项目':'项目待读取')}</dd></div><div><dt>工作区</dt><dd>{workspace}{workspaceRecord&&<code className="workspace-path">{workspaceRecord.path}</code>}{location&&<span className="detail-location" data-testid="detail-position" data-state={location.position.state}>{location.position.reason??positionLabels[location.position.state]}</span>}</dd></div><div><dt>状态</dt><dd>{state.conversation?phases[phase]:'运行状态待连接'}</dd></div><div><dt>历史</dt><dd>标记为“已保存”的消息已提交到存储。</dd></div></dl><div className="detail-actions">{hasProjects&&<button className="secondary-button" data-testid="detail-project-settings" onClick={projects}>选择项目与工作区</button>}<button className="secondary-button" onClick={()=>void controller.enableStopNotification()} disabled={!draftReady}>系统停止通知</button><button className="secondary-button" onClick={reconnect}>重新连接</button><button className="secondary-button" onClick={()=>void controller.stop()} disabled={!draftReady||state.submissions?.stopping}>停止此会话</button></div></section>}
+          {details&&<section className="details-panel" role="dialog" aria-label="会话详情"><div className="panel-heading"><h2>会话详情</h2><button className="plain-icon" aria-label="关闭详情" onClick={()=>setDetails(false)}><Icon name="close"/></button></div><HistoryNavigator controller={controller} state={state} onJump={jump}/><dl><div><dt>上下文</dt><dd>{contextLabel(context)}{context?.modelLimit?' / 模型上限 '+context.modelLimit.toLocaleString()+' token':' / 模型上限不可用'}<p>{context?.note??'正在读取 SDK 当前上下文。'}</p></dd></div><div><dt>YOLO</dt><dd>操作无需应用逐项审批。Android 系统授权、模型凭据与执行环境权限仍须有效。</dd></div><div><dt>模型</dt><dd>{active?.model.name??'正在读取'}</dd></div><div><dt>项目</dt><dd data-testid="detail-project">{project?.name??(location?'未关联项目':'项目待读取')}</dd></div><div><dt>工作区</dt><dd>{workspace}{workspaceRecord&&<code className="workspace-path">{workspaceRecord.path}</code>}{location&&<span className="detail-location" data-testid="detail-position" data-state={location.position.state}>{location.position.reason??positionLabels[location.position.state]}</span>}</dd></div><div><dt>状态</dt><dd>{state.conversation?phases[phase]:'运行状态待连接'}</dd></div><div><dt>历史</dt><dd>标记为“已保存”的消息已提交到存储。</dd></div></dl><div className="detail-actions"><button className="secondary-button" onClick={()=>{setDetails(false);setAuxiliary(true);}}>文件变更与执行</button>{hasProjects&&<button className="secondary-button" data-testid="detail-project-settings" onClick={projects}>选择项目与工作区</button>}<button className="secondary-button" onClick={()=>void controller.enableStopNotification()} disabled={!draftReady}>系统停止通知</button><button className="secondary-button" onClick={reconnect}>重新连接</button><button className="secondary-button" onClick={()=>void controller.stop()} disabled={!draftReady||state.submissions?.stopping}>停止此会话</button></div></section>}
           <DraftAttachments controller={controller} state={state}/>
           {(state.inputError||state.draft?.error)&&<div className="draft-error" role="alert"><span>{state.draft?.error??state.inputError}</span>{state.draft&&<div className="draft-recovery">{state.draft.status==='conflict'?<button type="button" onClick={()=>void controller.recoverDraft(true)}>保留本地内容并重试</button>:<button type="button" onClick={()=>void controller.retryDraft()}>重试保存</button>}<button type="button" onClick={()=>void controller.recoverDraft(false)}>恢复已保存版本</button></div>}</div>}
-          {attachments&&<div className="attachment-menu" role="menu" aria-label="添加附件"><button type="button" role="menuitem" onClick={()=>choose('image')}>选择图片</button><button type="button" role="menuitem" onClick={()=>choose('file')}>选择文件</button><p>仅选择与本地准备，不会自动发送。</p></div>}
+          {attachments&&<div className="attachment-menu" role="menu" aria-label="添加附件">{camera&&<button type="button" role="menuitem" onClick={()=>choose('camera')}>拍照</button>}<button type="button" role="menuitem" onClick={()=>choose('image')}>选择图片</button><button type="button" role="menuitem" onClick={()=>choose('file')}>选择文件</button><p>仅选择与本地准备，不会自动发送。</p></div>}
           <form className="composer" onSubmit={event=>void send(event)}>
             <button type="button" className="plain-icon detail-button" aria-label="会话详情" aria-expanded={details} onClick={()=>setDetails(!details)}><Icon name="grid"/></button>
             <button type="button" className="plain-icon attachment-button" data-testid="add-attachment" aria-label="添加附件" aria-expanded={attachments} onClick={()=>setAttachments(!attachments)} disabled={!draftReady||state.draft?.busy}><Icon name="plus"/></button>
@@ -147,9 +169,10 @@ export default function ConversationPage({controller,state}:{controller:Conversa
             <button type="submit" className="send-button" data-testid="send-message" aria-label="发送消息" disabled={!sendContext||state.pending||!draftReady||state.draft?.busy||state.submissions?.stopping||state.draft?.status==='conflict'||state.draft?.status==='failed'||(!draft.trim()&&!state.draft?.selections.length)||state.draft?.selections.some(item=>item.preparation.state!=='ready')}><Icon name="send"/></button>
           </form>
           <div className="draft-status" data-testid="draft-status" data-state={state.draft?.status??'loading'} role="status">{state.draft?(state.draft.status==='saved'?'草稿已保存':state.draft.status==='pending'?'草稿待保存…':state.draft.status==='conflict'?'草稿存在版本冲突':'草稿保存未确认'):'正在读取原生草稿…'}{state.pending?' · 正在确认操作':''}{draft.length>INPUT_BUDGETS.draftCharacters*.8?` · ${draft.length} / ${INPUT_BUDGETS.draftCharacters} 字符`:''}</div>
-          <div className="context-pill"><span>{active?.model.name??'正在读取模型'}</span><i/><span className={`phase-${phase}`}>{state.conversation?phases[phase]:'历史待连接'}</span><i/><span data-testid="conversation-location">{project?`${project.name} · `:''}{workspace}</span>{location&&location.position.state!=='available'&&<span className="position-warning">{positionLabels[location.position.state]}</span>}</div>
+          <div className="context-pill"><span title={context?.note}>{contextLabel(context)}</span><i/><span>{active?.model.name??'正在读取模型'}</span><i/><span className={`phase-${phase}`}>YOLO</span><i/><span data-testid="conversation-location">{project?`${project.name} · `:''}{workspace}</span>{location&&location.position.state!=='available'&&<span className="position-warning">{positionLabels[location.position.state]}</span>}</div>
         </div>
       </>}
     </main>
+    {state.activeId&&!settingsPage&&(auxiliaryOpen?<AuxiliaryPanel key={state.activeId} controller={controller} state={state} wide={wide} onClose={()=>setAuxiliary(false)}/>:wide&&<button className="auxiliary-reopen" onClick={()=>setAuxiliary(true)}>文件变更</button>)}
   </div>;
 }

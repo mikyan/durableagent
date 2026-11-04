@@ -20,7 +20,23 @@ class AgentActivity:Activity() {
     var webView:WebView?=null
         private set
     private var destroyed=false
-    override fun onCreate(savedInstanceState:Bundle?){super.onCreate(savedInstanceState);openPage()}
+    @Volatile private var pendingTarget:String?=null
+    private fun modeOf(value:Intent)=if((applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE)!=0)value.getStringExtra("validationMode")?:"product" else "product"
+    private fun runOf(value:Intent)=if((applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE)!=0)value.getStringExtra("validationRun") else null
+    private fun targetOf(value:Intent):String?{
+        val id=value.getStringExtra("targetConversationId")?:return null
+        if(!Regex("[-A-Za-z0-9_]{1,128}").matches(id))return null
+        val namespace=runCatching{NativeInputBridge.namespace(modeOf(value),runOf(value))}.getOrNull()?:return null
+        return id.takeIf{value.dataString=="durable-conversation:"+namespace+":"+id}
+    }
+    override fun onNewIntent(value:Intent){
+        super.onNewIntent(value)
+        val changedDomain=modeOf(intent)!=modeOf(value)||runOf(intent)!=runOf(value)
+        intent=value;pendingTarget=targetOf(value)
+        if(changedDomain){openPage();return}
+        pendingTarget?.let{id->webView?.evaluateJavascript("window.__durableOpenConversation?.("+JSONObject.quote(id)+")"){result->if(result=="true"&&pendingTarget==id){pendingTarget=null;intent.removeExtra("targetConversationId")}}}
+    }
+    override fun onCreate(savedInstanceState:Bundle?){super.onCreate(savedInstanceState);pendingTarget=targetOf(intent);openPage()}
     private fun openPage(){
         if(destroyed)return
         client?.disconnect();inputs?.close();execution?.close();documents?.close();webView?.let{it.removeJavascriptInterface("DurableNative");it.destroy()}
@@ -53,6 +69,7 @@ class AgentActivity:Activity() {
             }
         }
         view.addJavascriptInterface(object {
+            @JavascriptInterface fun initialConversationId():String?=pendingTarget.also{pendingTarget=null;runOnUiThread{intent.removeExtra("targetConversationId")}}
             @JavascriptInterface fun postMessage(json:String){runOnUiThread {if(webView===view&&!destroyed){
                 if(json.length>650000)return@runOnUiThread
                 if(view.url?.substringBefore('#')!="https://appassets.androidplatform.net/assets/ui/index.html")return@runOnUiThread

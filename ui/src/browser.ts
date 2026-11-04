@@ -5,9 +5,10 @@ import {ConversationController} from './controller';
 export interface BrowserHost {
   DurableNative?:NativePort;
   __durableReceive?:(envelope:unknown)=>void;
+  __durableOpenConversation?:(id:unknown)=>boolean;
   localStorage:Pick<Storage,'getItem'|'setItem'>;
 }
-declare global {interface Window {DurableNative?:NativePort;__durableReceive?:(envelope:unknown)=>void}}
+declare global {interface Window {DurableNative?:NativePort;__durableReceive?:(envelope:unknown)=>void;__durableOpenConversation?:(id:unknown)=>boolean}}
 
 const object=(value:unknown):value is Record<string,unknown>=>typeof value==='object'&&value!==null&&!Array.isArray(value);
 function envelope(value:unknown):ApplicationEnvelope|undefined {
@@ -26,10 +27,13 @@ function envelope(value:unknown):ApplicationEnvelope|undefined {
 export function createBrowserController(host:BrowserHost) {
   let current:ApplicationClient|undefined;
   host.__durableReceive=value=>{const incoming=envelope(value);if(incoming)current?.receive(incoming);};
-  return new ConversationController(()=>{
+  const controller=new ConversationController(()=>{
     current=new ApplicationClient(host.DurableNative);return current;
   },{
     get:key=>{try{return host.localStorage.getItem(`durableagent.ui.${key}`);}catch{return null;}},
     set:(key,value)=>{try{host.localStorage.setItem(`durableagent.ui.${key}`,value);}catch{/* Selection is optional; the runtime remains authoritative. */}}
   });
+  host.__durableOpenConversation=id=>{if(typeof id!=='string'||!/^[-A-Za-z0-9_]{1,128}$/.test(id))return false;void controller.openTarget(id);return true;};
+  const target=host.DurableNative?.initialConversationId?.();if(target)host.__durableOpenConversation(target);
+  return controller;
 }

@@ -8,7 +8,8 @@ import {PROJECTS_EXTENSION,type ProjectCatalog,type ProjectMethod} from '../../r
 import {ExecutionCoordinator,type ExecutionView} from './execution';
 
 export interface SelectionPreferences {get(key:string):string|null;set(key:string,value:string):void}
-export type UiState={execution?:ExecutionView;status:ApplicationStatus;conversations:ConversationSummary[];inputConversations:InputConversation[];inputReady:boolean;inputError?:string;draft?:DraftView;submissions?:ReturnType<SubmissionCoordinator['view']>;activeId?:string;conversation?:ConversationSnapshot;history:HistoryMessage[];next?:string;loading:boolean;pending:boolean;error?:string;page:'conversation'|'models'|'projects'|'extensions';models?:ModelConfiguration;modelsLoading:boolean;modelsPending:boolean;modelsError?:string;modelsNotice?:string;projects?:ProjectCatalog;projectsLoading?:boolean;projectsPending?:boolean;projectsUnconfirmed?:boolean;projectsError?:string;projectsNotice?:string};
+export type UiPage='conversation'|'conversations'|'models'|'projects'|'extensions'|'tools'|'settings';
+export type UiState={execution?:ExecutionView;status:ApplicationStatus;conversations:ConversationSummary[];inputConversations:InputConversation[];inputReady:boolean;inputError?:string;draft?:DraftView;submissions?:ReturnType<SubmissionCoordinator['view']>;activeId?:string;conversation?:ConversationSnapshot;history:HistoryMessage[];next?:string;loading:boolean;pending:boolean;error?:string;page:UiPage;models?:ModelConfiguration;modelsLoading:boolean;modelsPending:boolean;modelsError?:string;modelsNotice?:string;projects?:ProjectCatalog;projectsLoading?:boolean;projectsPending?:boolean;projectsUnconfirmed?:boolean;projectsError?:string;projectsNotice?:string};
 export type ConnectionInput={name:string;protocol:ConnectionProtocol;endpoint:string;modelId?:string};
 export type ModelReference={provider:string;modelId:string};
 const mergeMessages=(older:HistoryMessage[],current:HistoryMessage[])=>[...new Map([...older,...current].map(message=>[message.id,message])).values()].sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true}));
@@ -21,6 +22,7 @@ export class ConversationController {
   private epoch=0;
   private opening=0;
   private navigation=0;
+  private targetConversation?:string;
   private creationId?:string;
   private checking?:Promise<void>;
   private connectionCreation?:{fingerprint:string;id:string};
@@ -30,6 +32,7 @@ export class ConversationController {
   private readonly submissions=new SubmissionCoordinator(()=>this.client,()=>this.state.status.phase==='ready',()=>this.publish({submissions:this.state.activeId?this.submissions.view(this.state.activeId):undefined}),(ack,editEpoch)=>this.drafts.confirmAdmission(ack,editEpoch));
   readonly execution=new ExecutionCoordinator(()=>this.client,()=>this.publish({execution:this.execution.view()}));
   extensionClient?:import('./extensions/timeline').TimelineClient;
+  showPage(page:UiPage){this.publish({page});}
   openExtensions(){this.publish({page:'extensions'});}
   leaveExtensions(){this.publish({page:'conversation'});}
   private sendPoll?:ReturnType<typeof setTimeout>;
@@ -50,7 +53,7 @@ export class ConversationController {
       if(epoch!==this.epoch)return;
       if(!Array.isArray(result?.conversations))throw Error('原生草稿目录不可用。');
       this.publish({inputConversations:result.conversations,inputReady:true,inputError:undefined});
-      const selected=this.state.activeId??this.preferences?.get('selectedConversation');
+      const selected=this.targetConversation??this.state.activeId??this.preferences?.get('selectedConversation');
       if(selected&&result.conversations.some(item=>item.id===selected)&&this.state.status.phase!=='ready')await this.open(selected);
     }catch(error){if(epoch===this.epoch)this.publish({inputReady:false,inputError:this.reason(error)});}
   }
@@ -72,8 +75,8 @@ export class ConversationController {
       this.publish({conversations});
       if(status.phase==='ready'&&status.extensions.includes(MODELS_EXTENSION.id))await this.loadModels();
       if(status.phase==='ready'&&status.extensions.includes(PROJECTS_EXTENSION.id))await this.loadProjects();
-      const selected=this.state.activeId??this.preferences?.get('selectedConversation');
-      if(selected&&conversations.some(conversation=>conversation.id===selected))await this.open(selected);
+      const selected=this.targetConversation??this.state.activeId??this.preferences?.get('selectedConversation');
+      if(selected&&conversations.some(conversation=>conversation.id===selected)){this.targetConversation=undefined;await this.open(selected);}else this.targetConversation=undefined;
     }catch(error){if(epoch===this.epoch)this.publish({status:{phase:'failed',reason:this.reason(error),extensions:[]},error:this.reason(error)});}
   }
   async create() {
@@ -91,6 +94,12 @@ export class ConversationController {
       await this.open(conversation.id);
     }catch(error){if(epoch===this.epoch)this.publish({error:this.reason(error)});}
     finally{if(epoch===this.epoch)this.publish({pending:false});}
+  }
+  async openTarget(id:string){
+    if(!/^[-A-Za-z0-9_]{1,128}$/.test(id))return;
+    this.targetConversation=id;
+    if(this.state.conversations.some(row=>row.id===id)||this.state.inputConversations.some(row=>row.id===id)){this.targetConversation=undefined;await this.open(id);}
+    else if(this.state.status.phase==='ready')await this.refresh();
   }
   async open(id:string) {
     if(!this.client||!this.state.conversations.some(item=>item.id===id)&&!this.state.inputConversations.some(item=>item.id===id))return;
@@ -131,7 +140,7 @@ export class ConversationController {
   }
   editDraft(text:string){if(this.state.activeId)this.drafts.edit(this.state.activeId,text);}
   removeAttachment(selectionId:string){if(this.state.activeId)this.drafts.remove(this.state.activeId,selectionId);}
-  async selectAttachment(kind:'image'|'file'){const id=this.state.activeId,epoch=this.epoch;if(!id)return;try{await this.drafts.select(id,kind);}catch(error){if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:this.reason(error)});}}
+  async selectAttachment(kind:'image'|'file'|'camera'){const id=this.state.activeId,epoch=this.epoch;if(!id)return;try{await this.drafts.select(id,kind);}catch(error){if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:this.reason(error)});}}
   async prepareAttachment(selectionId:string){if(this.state.activeId)await this.drafts.prepare(this.state.activeId,selectionId);}
   async refreshDraft(){const id=this.state.activeId,epoch=this.epoch;if(!id)return;try{await this.drafts.read(id);if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:undefined});}catch(error){if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:this.reason(error)});}}
   async flushDraft(){if(this.state.activeId)return this.drafts.flush(this.state.activeId);}
