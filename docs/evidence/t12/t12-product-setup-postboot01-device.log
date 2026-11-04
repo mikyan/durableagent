@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryProductSetupTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RecoveryProductSetupTest:
+INSTRUMENTATION_STATUS: test=initializeOnlyAnEmptyProductConfigurationWithoutSendingWork
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: productRecoverySetup={"initialized":true,"connection":"recovery-validation","configurationVersion":2,"defaultModel":{"provider":"recovery-validation","modelId":"mimo-v2.6-flash","name":"MiMo-V2.6-Flash"},"credential":{"connectionId":"recovery-validation","state":"configured","generation":1,"configured":true},"productCount":0,"modelRequests":0}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryProductSetupTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=initializeOnlyAnEmptyProductConfigurationWithoutSendingWork
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 4.325
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

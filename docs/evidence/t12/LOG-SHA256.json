@@ -92,9 +92,29 @@
       "gitBlobSha256": "96356ee296eaedf89481cc3272127ba3e4025e698126e669536018ea8bcba3b8"
     },
     {
+      "file": "t12-product-preflight-configured01-device.log",
+      "retainedLocalSha256": "e80600166ff9edd1effe1918c5d57b7e49fa101c79eecee8c80a02b3ceedd6c3",
+      "gitBlobSha256": "6ca3e65de0ae83f89a4d10a1e47daa7a23aa03ae7f4d351df5b00537f8017897"
+    },
+    {
       "file": "t12-product-preflight62-device.log",
       "retainedLocalSha256": "9c7c109a86adaeb8768b8f8c657bc483deeeedc7593f27714df5ba557abf126b",
       "gitBlobSha256": "5e448e4540652d741dd5325eb591eef91548641b7126146ca528b55c588a2c97"
+    },
+    {
+      "file": "t12-product-setup-postboot01-device.log",
+      "retainedLocalSha256": "7c50a633116a6ae2f41b1675ce9349df38a1f6dd259b503e0068df3ed649f4d6",
+      "gitBlobSha256": "a0c094c95b9acb01c02a89b8f72006629183aadd2a456e6417c854ade0e87e4f"
+    },
+    {
+      "file": "t12-product-unbound01-device.log",
+      "retainedLocalSha256": "0183289e60df9280bdb746c4448ad5b0b745d8f189f3c9e7fde3ff364b2f5b66",
+      "gitBlobSha256": "d1229634f89661f95c903e798a3c86b4831b636dba8af648b60b9e3353ed0b24"
+    },
+    {
+      "file": "t12-product-unbound01-independent-file.log",
+      "retainedLocalSha256": "fa94b14d92d555e9618ed1918623bc955913896d3232d4686407cb1c9e936bf5",
+      "gitBlobSha256": "c0aa75d3a368622fc1a7ae9c8531929d8f678c163b0b839049cc488b52816a16"
     },
     {
       "file": "t12-real-c73-device.log",
@@ -115,6 +135,11 @@
       "file": "t12-real62-independent-file.log",
       "retainedLocalSha256": "7114e17e7e531a573de5c98712d5b522acb4830edd4b0d67efff877ffb883272",
       "gitBlobSha256": "7552591f60a53b55afbf69865dfa3c4d84444b2ce9df1835bfd8aeb2637f26f9"
+    },
+    {
+      "file": "t12-runtime-stage31b-all.log",
+      "retainedLocalSha256": "28f2169920fd5d339e75320da1c8829a313dd5f6fa45f04e47dff05c75bb0582",
+      "gitBlobSha256": "724a9d5e45fd6c99e7e5e46e0855a9ebc37b989d1e5ff6d09d46a32e9b76f11f"
     },
     {
       "file": "t12-runtime-stage62-all.log",
