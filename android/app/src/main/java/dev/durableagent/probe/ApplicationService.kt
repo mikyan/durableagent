@@ -3,6 +3,7 @@ package dev.durableagent.probe
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ApplicationInfo
+import android.content.pm.ServiceInfo
 import android.os.*
 import com.caoccao.javet.enums.V8AwaitMode
 import com.caoccao.javet.interop.NodeRuntime
@@ -103,6 +104,13 @@ class ApplicationService:Service() {
     override fun onStartCommand(intent:Intent?,flags:Int,startId:Int):Int {
         start(intent)
         return if(intent?.getStringExtra("validationMode").let{it==null||it=="product"})START_STICKY else START_NOT_STICKY
+    }
+    // Pinned lint 31.13.2 misses this type, as for NativeStopService. The merged
+    // manifest declares specialUse and its permission; keep the explicit runtime type.
+    @android.annotation.SuppressLint("ForegroundServiceType")
+    internal fun publishRecoveryForeground(notification:android.app.Notification,mode:String,run:String?,retain:Boolean){
+        startForeground(NativeRecoveryNotifications.RUNNING_ID,notification,ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        if(retain)startService(Intent(this,ApplicationService::class.java).putExtra("validationMode",mode).putExtra("validationRun",run))
     }
     private fun start(intent:Intent?){
         if(!getSystemService(UserManager::class.java).isUserUnlocked){phase="{\"phase\":\"failed\",\"reason\":\"等待设备首次解锁；尚未打开会话存储\"}";return}

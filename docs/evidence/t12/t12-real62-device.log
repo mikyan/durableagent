@@ -1,0 +1,29 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryRealApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RecoveryRealApplicationTest:
+INSTRUMENTATION_STATUS: test=realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: realRequestStructure={"run":"e11cbadc-8223-4d56-87ed-0edcce19ee1a","product":"real-recovery-e11cbadc-8223-4d56-87ed-0edcce19ee1a","tools":{"names":["bash","read","write","document_list","document_read","document_write","model_configuration","model_select_current","conversation_list","conversation_status","conversation_create","conversation_transfer"],"choice":"default"},"credentialGeneration":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: realRecoveryCheckpoint={"run":"e11cbadc-8223-4d56-87ed-0edcce19ee1a","product":"real-recovery-e11cbadc-8223-4d56-87ed-0edcce19ee1a","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t12-e11cbadc-8223-4d56-87ed-0edcce19ee1a.txt","executionId":"098b9ee4-965c-419e-8430-ca1a35d7c04f","beforePid":24376,"beforeRequests":1,"partial":"part-one\n"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: realRecoveryEvidence={"run":"e11cbadc-8223-4d56-87ed-0edcce19ee1a","product":"real-recovery-e11cbadc-8223-4d56-87ed-0edcce19ee1a","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t12-e11cbadc-8223-4d56-87ed-0edcce19ee1a.txt","originalExecution":"098b9ee4-965c-419e-8430-ca1a35d7c04f","finalExecution":{"captureIncomplete":false,"context":{"bindingId":"69ce307e-277c-4c54-b9be-822f263e4f05","callId":"call_ff293ee38e284db692c80480","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"real-recovery-e11cbadc-8223-4d56-87ed-0edcce19ee1a","sdkConversationId":6,"taskId":21},"createdAt":1793790319184,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"098b9ee4-965c-419e-8430-ca1a35d7c04f","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","exitCode":0,"finalDigest":"502f4f06f762ba7eb714bd4a48de6c2dadbc9a7e2ea4b4e3523a8bace34be82f","finishedAt":1793790338880,"guardianPid":24454,"ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","localCapabilities":{"helperSha256":"13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1","runnerSha256":"be8b68ec5e9e204b2995a7546d3c372fea7e08775a9e19b1ff711515bee884ff","version":1},"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":31,"outputCursor":2,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/098b9ee4-965c-419e-8430-ca1a35d7c04f.raw","protocol":1,"rawSha256":"09386fd546ac3d10eddade7c5ce66410c040d25b32e328fc1bb39c13aa6ba27a","requestDigest":"4ad487988ce99496b8da774acf40d800f53aeb3f9ffe9af0ab2f9d99829242c2","scopeConfirmed":true,"sequence":6,"startRequestedAt":1793790319730,"startedAt":1793790320621,"state":"completed"},"admission":{"protocol":1,"intentId":"39949bfe-78ef-47b9-b58e-f045c151a01c","id":"real-recovery-e11cbadc-8223-4d56-87ed-0edcce19ee1a","inputToken":"a0fb9613-f6c5-4e39-a07a-3ec99e9c1017","inputRevision":1,"inputDigest":"d3bb610df57eb65546ee2479fac813fcf8bb4261d9a73e4a3c150bdf756643a5","context":{"sdkConversationId":6,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"bindingId":"69ce307e-277c-4c54-b9be-822f263e4f05","submissionId":17},"beforePid":24376,"afterPid":24484,"unboundProduct":false,"recoveredPid":null,"credentialGeneration":1,"beforeRequests":1,"observedAfterRequests":1,"completeRequestCountObserved":true,"partial":"part-one\n","final":"part-one\npart-two\n"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RecoveryRealApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 61.101
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

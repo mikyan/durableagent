@@ -1,0 +1,28 @@
+(node:62424) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ native completion projection comes from settled input and survives reopen without creating another run (5135.262ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5336.6442
+
+✖ failing tests:
+
+test at test\recovery.test.mjs:56:1
+✖ native completion projection comes from settled input and survives reopen without creating another run (5135.262ms)
+  AssertionError [ERR_ASSERTION]: Native settled completion
+      at until (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/recovery.test.mjs:9:97)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/recovery.test.mjs:62:3)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

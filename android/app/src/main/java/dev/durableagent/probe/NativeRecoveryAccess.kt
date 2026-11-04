@@ -2,7 +2,6 @@ package dev.durableagent.probe
 
 import android.app.Service
 import android.content.*
-import android.content.pm.ServiceInfo
 import android.os.UserManager
 import com.caoccao.javet.annotations.V8Function
 import org.json.JSONObject
@@ -34,11 +33,10 @@ class NativeRecoveryAccess(private val service:ApplicationService,private val mo
         NativeRecoveryNotifications.running(service,mode,run,projection)?.let{publishForeground(it)}
     }
     private fun publishForeground(notification:android.app.Notification){try{
-        service.startForeground(NativeRecoveryNotifications.RUNNING_ID,notification,ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
         // startForeground alone does not turn a job-only binding into a started
         // Service. Retain the owner only after Android has accepted foreground
         // execution; startService is still subject to platform eligibility.
-        if(!foreground)service.startService(Intent(service,ApplicationService::class.java).putExtra("validationMode",mode).putExtra("validationRun",run))
+        service.publishRecoveryForeground(notification,mode,run,!foreground)
         foreground=true;startBlocked=false
     }catch(_:RuntimeException){if(!foreground)service.stopForeground(Service.STOP_FOREGROUND_REMOVE);startBlocked=true}}
     fun conditions():JSONObject {
