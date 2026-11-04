@@ -140,3 +140,12 @@ test('real SDK host death after prepared policy restores the same waiting identi
   await until(async()=>(await call(app,'sendStatus',{intentId:'send'})).submission?.status==='done');assert.equal(modelRequests,1);assert.equal(await readFile(join(root,'effects.txt'),'utf8'),record.executionId+'\n');assert.equal((await peer.request('list',{})).executions.length,1);
  }finally{policy.granted=true;await app?.close();native?.close();peer?.close();await rm(root,{recursive:true,force:true});}
 });
+
+
+test('the fixed product Bash capability makes exact pwd -P local with a clean environment and no script analyzer',async()=>{
+ const root=await mkdtemp(join(tmpdir(),'data-saver-local-pwd-')),native=new SqliteSendAuthority(join(root,'native.sqlite')),policy=new PlatformPolicy(),peer=new PersistentExecutionPeer(root);
+ const app=new Application({...executionConfiguration(()=>{},'bash',{command:'pwd -P'}),path:join(root,'sdk.sqlite'),inputs:native,sends:native,dataSaver:policy,execution:new ManagedExecution({channel:peer,authority:native,dataSaver:policy})});
+ try{await app.start();await call(app,'create',{creationId:'conversation'});await native.create('conversation','show physical directory','send');await call(app,'send',{intentId:'send'});await until(()=>[...policy.records.values()][0]?.finalDigest);
+  const request=peer.read([...policy.records.keys()][0]).request;assert.equal(request.command.script,'builtin pwd -P');assert.deepEqual(request.env,{});assert.equal(request.inheritEnv,false);
+ }finally{policy.granted=true;await app.close();native.close();peer.close();await rm(root,{recursive:true,force:true});}
+});

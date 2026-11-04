@@ -1,0 +1,15 @@
+(node:70048) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ an unknown Provider read waits in its original SDK tool and safe reopen reuses the fixed observation (645.2606ms)
+✔ an original write waits before occupying the shared writer and exact grant resumes the same native plan (386.0207ms)
+✔ a confirmed original write survives policy receipt loss (start response lost) without another write (214.0133ms)
+✔ a confirmed original write survives policy receipt loss (pending SDK receipt) without another write (232.3298ms)
+✔ public file observation during policy waiting preserves the staged receipt sequence and original SDK tool (386.3027ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2059.9557

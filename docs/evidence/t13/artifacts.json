@@ -1,0 +1,11 @@
+{
+  "head": "64f7ad4d73f4a95519fa9591c4cffab6e05c008e",
+  "purpose": "Review fixes: native busy and pre-admission distinction, FD cleanup, separately granted original verification",
+  "artifacts": {
+    "app.apk": "b945aaf6c9700732945de12247f8ebe95d185942c8273fe7eca0dd28b269825c",
+    "execution-capabilities.json": "10d7375d4565a83647d278efdea74cd71fe280896609987d12bb19a1e7302b1b",
+    "execution-setup.txt": "bccdfe9de7ff1179542aef37e7bc1bdf448ba7df6fcd6806368e84ee83e103b2",
+    "test.apk": "cd232a8d5739da4c3a1a3c0d8a4304d3470d10652499da3258eb722158a463c7"
+  },
+  "sources": 371
+}

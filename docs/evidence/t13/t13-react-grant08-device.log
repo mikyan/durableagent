@@ -1,0 +1,49 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: dataSaverUiFailure={"run":"7d4587bf-3261-4952-9d49-48996baa2431","productId":"13f2385b-973b-4daa-a847-b8001b325dd6","stage":"first-visible-grant","lastOperations":[{"executionId":"2c473cd1-2715-40f4-910c-466836aba9ef","requestDigest":"9ff7b9d800e6f579e1aa4bb2e33849b66fd2d9c8c3f51b95161dabbe66727893","productId":"13f2385b-973b-4daa-a847-b8001b325dd6","controlGeneration":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","classification":"unknown","summary":"{\"kind\":\"shell\",\"script\":\"printf 'Termux SDK 世界\\\\n'; printf 'stderr-marker\\\\n' >&2; printf 'one\\\\n' >> '.durableagent-t09-7d4587bf-3261-4952-9d49-48996baa2431-success'\"}","grantPeriod":null,"finalDigest":"2dc2b15031901290f895a6c565b8f7795ac33e3f2acee9f442c6d7619da475ee","sequence":1,"state":"accepted_not_started","scopeConfirmed":false,"terminal":false,"dispatched":false,"phase":"waiting","period":2,"reason":"metered"}],"dom":{"alerts":[],"draft":"草稿已保存","policy":"省流 当前网络按流量计费省流模式受限网络上保留模型通信与已核验的本地能力。其他联网或未知行为等待条件恢复，或仅放行所选执行。刷新省流状态省流等待{\"kind\":\"shell\",\"script\":\"printf 'Termux SDK 世界\\\\n'; printf 'stderr-marker\\\\n' >&2; printf 'one\\\\n' >> '.durableagent-t09-7d4587bf-3261-4952-9d49-48996baa2431-success'\"}2c473cd1-2715-40f4-910c-466836aba9ef仅这一次固定执行；重连沿用，停止或本次受限网络期间结束后失效。不会关闭全局省流。仅放行这一次执行","sendDisabled":true,"sendErrors":[],"sends":"发送状态刷新发送状态已放入消息记录12:36 PMEXEC_SUCCESS此状态不单独证明模型已经采用该输入。","status":"正在等待回复…"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Only the clicked identity completes
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.until$default(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(DataSaverExecutionTest.kt:95)
+
+INSTRUMENTATION_STATUS: stream=
+Error in actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(dev.durableagent.probe.DataSaverExecutionTest):
+java.lang.AssertionError: Only the clicked identity completes
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.until$default(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(DataSaverExecutionTest.kt:95)
+
+INSTRUMENTATION_STATUS: test=actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 97.128
+There was 1 failure:
+1) actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(dev.durableagent.probe.DataSaverExecutionTest)
+java.lang.AssertionError: Only the clicked identity completes
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.until$default(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(DataSaverExecutionTest.kt:95)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

@@ -1,0 +1,90 @@
+[
+  {
+    "event": "T13_EXECUTION_WAIT_METERED",
+    "detail": {
+      "run": "1e8006ef-e4d2-4f99-82ac-0f0f270d9979",
+      "executionId": "19ea084b-a8cc-4c52-b3f9-91ea4225ed91",
+      "busyStartedElapsed": 28930569
+    },
+    "hostMonotonic": 60741.6843061
+  },
+  {
+    "event": "network-override",
+    "value": "true",
+    "exitCode": 255,
+    "observed": [
+      "AndroidWifi;true",
+      "AndroidWifi;true"
+    ],
+    "hostMonotonic": 60742.4751869
+  },
+  {
+    "event": "T13_EXECUTION_WAIT_UNMETERED",
+    "detail": {
+      "run": "1e8006ef-e4d2-4f99-82ac-0f0f270d9979",
+      "observedToConfirmedMs": 660,
+      "stopped": {
+        "cancelReason": "network_policy",
+        "cancelRequested": true,
+        "captureIncomplete": false,
+        "context": {
+          "bindingId": "11a40772-657f-4b98-a966-617314893306",
+          "callId": "location-1",
+          "controlGeneration": 1,
+          "locationVersion": 1,
+          "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "productId": "policy-chat",
+          "sdkConversationId": 5,
+          "taskId": 20
+        },
+        "createdAt": 1793783608313,
+        "defaultWorkspace": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace",
+        "executionId": "19ea084b-a8cc-4c52-b3f9-91ea4225ed91",
+        "executorId": "a0578db8-1bd2-4158-8e78-b27216f25c6a",
+        "exitCode": -15,
+        "finalDigest": "babcaf8fa0c280221adf6e0c7ba75aa860f3cd181c1b6c330bf52d70ed934256",
+        "finishedAt": 1793783611481,
+        "guardianPid": 12818,
+        "ledgerEpoch": "c156417c-ec2d-4528-99d1-78d257676c18",
+        "localCapabilities": {
+          "helperSha256": "13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1",
+          "runnerSha256": "be8b68ec5e9e204b2995a7546d3c372fea7e08775a9e19b1ff711515bee884ff",
+          "version": 1
+        },
+        "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+        "outputBytes": 455,
+        "outputCursor": 3,
+        "outputRef": "/data/data/com.termux/files/home/.local/share/durableagent-execution/outputs/19ea084b-a8cc-4c52-b3f9-91ea4225ed91.raw",
+        "protocol": 1,
+        "rawSha256": "3d2bb862eabd9c7fac3f5aaa398fb9c82a78a0bd3391a9adc308fc03fb19b513",
+        "requestDigest": "412967ef6dc158cacc2fb385a6a7722006dfa254f3798e4c148439118861bd6f",
+        "scopeConfirmed": true,
+        "sequence": 8,
+        "startRequestedAt": 1793783608767,
+        "startedAt": 1793783608962,
+        "state": "stopped"
+      }
+    },
+    "hostMonotonic": 60743.1380515
+  },
+  {
+    "event": "network-override",
+    "value": "undefined",
+    "exitCode": 255,
+    "observed": [
+      "AndroidWifi;none",
+      "AndroidWifi;none"
+    ],
+    "hostMonotonic": 60743.5358452
+  },
+  {
+    "event": "network-override",
+    "value": "undefined",
+    "exitCode": 255,
+    "observed": [
+      "AndroidWifi;none",
+      "AndroidWifi;none"
+    ],
+    "hostMonotonic": 60759.6026993
+  }
+]

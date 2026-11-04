@@ -69,6 +69,7 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
                             verifiedCancel(client,peer,payload,expected)
                         } else if(inputNamespace!=null) NativeInputStore(context,inputNamespace).withLeaseWait(1000).use{store->
                             val fence=NativeExecutionFence(store);fence.before(method,payload)
+                            if(method in EXECUTION_FILE_METHODS)dataSaver!!.requireLocalFiles(client.request("list",JSONObject().put("limit",1)))
                             if(method=="prepare")dataSaver!!.remember(payload)
                             if(method=="start"){dataSaver!!.requireStart(payload.getString("executionId"),payload.getString("finalDigest"));fence.before(method,payload)}
                             client.request(method,payload).also{result->

@@ -1,0 +1,206 @@
+{
+  "bytes": 36864,
+  "sha256": "2a9a18bf272496fa431335f8b52dca2e1f01df35fbbdbcce917e7a2b01100fa0",
+  "operations": [
+    {
+      "id": "fbd99d5d-8198-4f65-a5db-12b2d4e617b1",
+      "value": {
+        "executionId": "fbd99d5d-8198-4f65-a5db-12b2d4e617b1",
+        "requestDigest": "3b95e6118dc676f9bc333e018ccd69adf03ec6e9cfc7b8add3ebeabeee85eb62",
+        "finalDigest": "3b95e6118dc676f9bc333e018ccd69adf03ec6e9cfc7b8add3ebeabeee85eb62",
+        "operationKind": "provider-metadata",
+        "productId": null,
+        "controlGeneration": null,
+        "namespace": "saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873",
+        "classification": "unknown",
+        "summary": "\u539f\u6587\u4ef6 metadata\uff1acontent://dev.durableagent.documentsfixture.documents/document/original",
+        "grantPeriod": 2,
+        "providerRequest": {
+          "kind": "metadata",
+          "documentNamespace": "document-aca6ec36-f67a-42b8-a866-7a8515306943",
+          "uri": "content://dev.durableagent.documentsfixture.documents/document/original"
+        },
+        "grantFinalDigest": "3b95e6118dc676f9bc333e018ccd69adf03ec6e9cfc7b8add3ebeabeee85eb62",
+        "dispatched": true,
+        "providerResult": {
+          "protocol": 1,
+          "resourceId": "3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873",
+          "namespace": "saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873",
+          "source": "saf",
+          "original": true,
+          "uri": "content://dev.durableagent.documentsfixture.documents/document/original",
+          "displayName": "original.bin",
+          "mimeType": "application/octet-stream",
+          "providerFlags": 2,
+          "networkAccess": "unknown",
+          "availability": "available",
+          "freshness": "observed",
+          "grant": {
+            "read": true,
+            "write": true,
+            "persistedRead": true,
+            "persistedWrite": true
+          },
+          "observation": {
+            "executionId": "fbd99d5d-8198-4f65-a5db-12b2d4e617b1",
+            "requestDigest": "3b95e6118dc676f9bc333e018ccd69adf03ec6e9cfc7b8add3ebeabeee85eb62",
+            "finalDigest": "3b95e6118dc676f9bc333e018ccd69adf03ec6e9cfc7b8add3ebeabeee85eb62",
+            "operationKind": "provider-metadata",
+            "productId": null,
+            "controlGeneration": null,
+            "namespace": "saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873",
+            "classification": "unknown",
+            "summary": "\u539f\u6587\u4ef6 metadata\uff1acontent://dev.durableagent.documentsfixture.documents/document/original",
+            "grantPeriod": null,
+            "phase": "waiting",
+            "period": 2,
+            "reason": "metered"
+          },
+          "byteLength": 62,
+          "provider": "dev.durableagent.documentsfixture.documents",
+          "observedAt": 1793787736060
+        },
+        "state": "completed",
+        "terminal": true,
+        "scopeConfirmed": true
+      }
+    },
+    {
+      "id": "e76c4871-7163-46e7-98d1-41322c30b385",
+      "value": {
+        "executionId": "e76c4871-7163-46e7-98d1-41322c30b385",
+        "requestDigest": "3191695cbde149d79d191a1b99a9c5e55d6bbb09e92ec3950440a1e3df16b178",
+        "finalDigest": "3191695cbde149d79d191a1b99a9c5e55d6bbb09e92ec3950440a1e3df16b178",
+        "operationKind": "provider-read",
+        "productId": "policy-chat",
+        "controlGeneration": 1,
+        "namespace": "saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873",
+        "classification": "unknown",
+        "summary": "\u539f\u6587\u4ef6 read\uff1acontent://dev.durableagent.documentsfixture.documents/document/original",
+        "grantPeriod": 2,
+        "providerRequest": {
+          "kind": "read",
+          "documentNamespace": "document-aca6ec36-f67a-42b8-a866-7a8515306943",
+          "uri": "content://dev.durableagent.documentsfixture.documents/document/original",
+          "owner": {
+            "productId": "policy-chat",
+            "controlGeneration": 1,
+            "sdkConversationId": 5,
+            "taskId": 20,
+            "callId": "location-1",
+            "bindingId": "859d357d-1b96-4393-b361-5fa7e0bb39a5"
+          }
+        },
+        "grantFinalDigest": "3191695cbde149d79d191a1b99a9c5e55d6bbb09e92ec3950440a1e3df16b178",
+        "dispatched": true,
+        "providerResult": {
+          "snapshotId": "e76c4871-7163-46e7-98d1-41322c30b385",
+          "resource": {
+            "protocol": 1,
+            "resourceId": "3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873",
+            "namespace": "saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873",
+            "source": "saf",
+            "original": true,
+            "uri": "content://dev.durableagent.documentsfixture.documents/document/original",
+            "displayName": "original.bin",
+            "mimeType": "application/octet-stream",
+            "providerFlags": 2,
+            "networkAccess": "unknown",
+            "availability": "available",
+            "freshness": "observed",
+            "grant": {
+              "read": true,
+              "write": true,
+              "persistedRead": true,
+              "persistedWrite": true
+            },
+            "observation": {
+              "executionId": "fbd99d5d-8198-4f65-a5db-12b2d4e617b1",
+              "requestDigest": "3b95e6118dc676f9bc333e018ccd69adf03ec6e9cfc7b8add3ebeabeee85eb62",
+              "finalDigest": "3b95e6118dc676f9bc333e018ccd69adf03ec6e9cfc7b8add3ebeabeee85eb62",
+              "operationKind": "provider-metadata",
+              "productId": null,
+              "controlGeneration": null,
+              "namespace": "saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873",
+              "classification": "unknown",
+              "summary": "\u539f\u6587\u4ef6 metadata\uff1acontent://dev.durableagent.documentsfixture.documents/document/original",
+              "grantPeriod": 2,
+              "grantFinalDigest": "3b95e6118dc676f9bc333e018ccd69adf03ec6e9cfc7b8add3ebeabeee85eb62",
+              "dispatched": true,
+              "state": "completed",
+              "terminal": true,
+              "scopeConfirmed": true,
+              "phase": "terminal",
+              "period": 2,
+              "reason": "metered"
+            },
+            "provider": "dev.durableagent.documentsfixture.documents",
+            "observedAt": 1793787737495,
+            "byteLength": 62
+          },
+          "contentDigest": "6591c8ad5ba96ac3f40211c1e2bfe6b002e4e4345c1370aab0fa61f02115812d",
+          "byteLength": 62,
+          "observedAt": 1793787737495
+        },
+        "state": "completed",
+        "terminal": true,
+        "scopeConfirmed": true
+      }
+    },
+    {
+      "id": "416bf9f8-a4e4-4504-8d9d-e99841c4c7ab",
+      "value": {
+        "executionId": "416bf9f8-a4e4-4504-8d9d-e99841c4c7ab",
+        "requestDigest": "e23c6ae11bce4af077ffefc694abe8bb3c8c867759a0c3ba812db776a9df34b3",
+        "finalDigest": "e23c6ae11bce4af077ffefc694abe8bb3c8c867759a0c3ba812db776a9df34b3",
+        "operationKind": "provider-write",
+        "productId": "policy-chat",
+        "controlGeneration": 1,
+        "namespace": "saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873",
+        "classification": "unknown",
+        "summary": "\u539f\u6587\u4ef6 write\uff1acontent://dev.durableagent.documentsfixture.documents/document/original",
+        "grantPeriod": 2,
+        "providerRequest": {
+          "kind": "write",
+          "documentNamespace": "document-aca6ec36-f67a-42b8-a866-7a8515306943",
+          "uri": "content://dev.durableagent.documentsfixture.documents/document/original",
+          "documentRequestDigest": "a588f4b6aac39b771cf76ddde36e8c94a23b80f07a54546d5cbd44fe0adb80de",
+          "expectedDigest": "6591c8ad5ba96ac3f40211c1e2bfe6b002e4e4345c1370aab0fa61f02115812d",
+          "contentDigest": "9397cdcba692a36acc60dfc7625b4a3b6319017997c5d0305b4ccebc77f7e5fa",
+          "byteLength": 44,
+          "owner": {
+            "productId": "policy-chat",
+            "controlGeneration": 1,
+            "sdkConversationId": 5
+          }
+        },
+        "grantFinalDigest": "e23c6ae11bce4af077ffefc694abe8bb3c8c867759a0c3ba812db776a9df34b3"
+      }
+    },
+    {
+      "id": "75ee7bd3-8d53-4a78-8d7d-a277749ff892",
+      "value": {
+        "executionId": "75ee7bd3-8d53-4a78-8d7d-a277749ff892",
+        "requestDigest": "0bb8d4f0db90d07621c4f382ec1604e06e140a945ec0c4e9861080291b2d0e0c",
+        "productId": "local-chat",
+        "controlGeneration": 1,
+        "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+        "classification": "controlled-local",
+        "summary": "{\"kind\":\"argv\",\"argv\":[\"\\/data\\/data\\/com.termux\\/files\\/usr\\/bin\\/python\",\"\\/data\\/data\\/com.termux\\/files\\/home\\/.local\\/share\\/durableagent-execution\\/file_service.py\",\"apply\",\"\\/data\\/data\\/com.termux\\/files\\/home\\/.local\\/share\\/durableagent-execution\\/file-capabilities\",\"7b7113ac-972b-4c7f-8f65-4ff54394fd77\"]}",
+        "grantPeriod": null,
+        "finalDigest": "a20ed2d66d6c95df6c3736bd112fe2f2b0c2e170a3048f3f7284066c9ffdc145",
+        "localCapability": {
+          "helperSha256": "13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1",
+          "isolatedPython": true,
+          "kind": "file-apply-v1",
+          "runnerSha256": "be8b68ec5e9e204b2995a7546d3c372fea7e08775a9e19b1ff711515bee884ff"
+        },
+        "sequence": 4,
+        "state": "completed",
+        "scopeConfirmed": true,
+        "terminal": true,
+        "dispatched": true
+      }
+    }
+  ]
+}

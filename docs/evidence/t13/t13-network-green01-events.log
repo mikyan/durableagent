@@ -1,0 +1,4 @@
+--------- beginning of main
+11-04 07:02:25.328 14007 14025 I System.out: T13_NETWORK_WAIT_METERED {"identity":"1:432902426637","known":true,"metered":false,"blocked":false}
+11-04 07:03:20.466 14007 14025 I System.out: T13_NETWORK_WAIT_UNMETERED {"identity":"1:437197393933","known":true,"metered":true,"blocked":false}
+11-04 07:03:47.349 14007 14025 I System.out: T13_NETWORK_EVIDENCE {"javascriptOwners":0,"initial":{"identity":"1:432902426637","known":true,"metered":false,"blocked":false},"restricted":{"identity":"1:437197393933","known":true,"metered":true,"blocked":false},"restored":{"identity":"1:441492361229","known":true,"metered":false,"blocked":false},"meteredObservedElapsed":9073503,"restoredObservedElapsed":9100386,"callbackCount":15}

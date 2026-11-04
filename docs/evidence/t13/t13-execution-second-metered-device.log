@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualPreparedTermuxCommandNeedsExactGrantAndUserStopInvalidatesTheNextGrant
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: dataSaverExecutionEvidence={"case":"actual-termux-metered-grant","network":{"identity":"2:445787328525","known":true,"metered":true,"blocked":false},"waiting":{"executionId":"bb3b8aff-55e8-47f7-8cf9-4ba22166b919","requestDigest":"c726e1f677f1261556fff28908704f1ef76bb9bc68428a11fc432e06b1115d49","productId":"policy-chat","controlGeneration":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","classification":"unknown","summary":"{\"kind\":\"shell\",\"script\":\"printf 'Termux SDK 世界\\\\n'; printf 'stderr-marker\\\\n' >&2; printf 'one\\\\n' >> '.durableagent-t09-f64fc614-6ef7-4249-b04a-2be0b56e54ba-success'\"}","grantPeriod":null,"finalDigest":"64f7fa3e7c2703b8c4a7e4fc56b068931db8d76deca40c52f5bec6af210a74d7","sequence":1,"state":"accepted_not_started","scopeConfirmed":false,"terminal":false,"phase":"waiting","period":2,"reason":"metered"},"completed":{"captureIncomplete":false,"context":{"bindingId":"0d087d4a-9b1d-4798-87ae-7394881e25ad","callId":"location-1","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"policy-chat","sdkConversationId":5,"taskId":20},"createdAt":1793780976360,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"bb3b8aff-55e8-47f7-8cf9-4ba22166b919","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","exitCode":0,"finalDigest":"64f7fa3e7c2703b8c4a7e4fc56b068931db8d76deca40c52f5bec6af210a74d7","finishedAt":1793780977237,"guardianPid":10082,"ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":32,"outputCursor":2,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/bb3b8aff-55e8-47f7-8cf9-4ba22166b919.raw","protocol":1,"rawSha256":"979f8ed265c7884abc2cefdea2a1944f3d0e329c5539fef7b441a6db584628d9","requestDigest":"c726e1f677f1261556fff28908704f1ef76bb9bc68428a11fc432e06b1115d49","scopeConfirmed":true,"sequence":6,"startRequestedAt":1793780977023,"startedAt":1793780977150,"state":"completed"},"stoppedNext":{"captureIncomplete":false,"context":{"bindingId":"0d087d4a-9b1d-4798-87ae-7394881e25ad","callId":"location-3","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"policy-chat","sdkConversationId":5,"taskId":31},"createdAt":1793780979112,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"8efd7238-2253-4071-8acd-d2401587f71f","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","finalDigest":"64f7fa3e7c2703b8c4a7e4fc56b068931db8d76deca40c52f5bec6af210a74d7","ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":0,"outputCursor":0,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/8efd7238-2253-4071-8acd-d2401587f71f.raw","protocol":1,"requestDigest":"82214eb35b88164d9c7027e3b2f48126501fa58db160d3ca137c3c8238d53904","sequence":2,"state":"stopped","cancelRequested":true,"cancelReason":"user","scopeConfirmed":true,"neverStarted":true,"finishedAt":1793780979574},"requestsBeforeGrant":1,"totalRequests":3,"globalEnabled":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualPreparedTermuxCommandNeedsExactGrantAndUserStopInvalidatesTheNextGrant
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 19.015
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

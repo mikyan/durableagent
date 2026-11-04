@@ -1,0 +1,49 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: dataSaverUiFailure={"run":"e155dc45-1cf4-4312-90dd-c1fd2501798c","productId":"a992d38d-e2de-4cb8-9b3d-8921aa8f6d0b","stage":"first-policy-visibility","lastOperations":[],"dom":{"alerts":[],"draft":"草稿已保存","policy":"省流 当前网络按流量计费省流模式受限网络上保留模型通信与已核验的本地能力。其他联网或未知行为等待条件恢复，或仅放行所选执行。刷新省流状态","sendDisabled":true,"sendErrors":[],"sends":"发送状态刷新发送状态输入已结算11:56 AMEXEC_SUCCESS不代表整个会话或外部操作全部结束。","status":"回复已保存"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Actual waiting operation and fixed scope are visible
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.until$default(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(DataSaverExecutionTest.kt:74)
+
+INSTRUMENTATION_STATUS: stream=
+Error in actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(dev.durableagent.probe.DataSaverExecutionTest):
+java.lang.AssertionError: Actual waiting operation and fixed scope are visible
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.until$default(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(DataSaverExecutionTest.kt:74)
+
+INSTRUMENTATION_STATUS: test=actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 99.124
+There was 1 failure:
+1) actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(dev.durableagent.probe.DataSaverExecutionTest)
+java.lang.AssertionError: Actual waiting operation and fixed scope are visible
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.until$default(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(DataSaverExecutionTest.kt:74)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

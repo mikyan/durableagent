@@ -30,7 +30,7 @@ export async function install(mode:string) {
   const observeExtensionRequest=(body:string)=>{if(route?.forbiddenDraft&&JSON.stringify(JSON.parse(body)).includes(route.forbiddenDraft))metrics.extensionRequestHasTargetDraft=true;};
   const routeTool=()=>route&&Number(metrics.transportRequests??metrics.modelRequests??0)===route.at?'conversation_transfer':undefined;
   let executionTool='bash';
-  if(mode==='execution-real')host.__appExecutionTool=(value:string)=>{if(!['bash','read','write'].includes(value))throw Error('Invalid real execution tool');executionTool=value;metrics.executionValidationTool=value;};
+  if(mode==='execution-real')host.__appExecutionTool=(value:string)=>{if(!['bash','read','write','document_read','document_write'].includes(value))throw Error('Invalid real execution tool');executionTool=value;metrics.executionValidationTool=value;};
   if(projectValidation)host.__appProjectWitness=(value:string)=>{if(value!=='witness')throw Error('Unknown project validation mode');projectValidation.enable();};
   const nativeInputs=host.__nativeInputs;delete host.__nativeInputs;
   const nativeExecution=host.__nativeExecution;delete host.__nativeExecution;
@@ -52,7 +52,7 @@ export async function install(mode:string) {
   else if(mode==='real'||mode==='execution-real'){
     secret=host.__validationKey;delete host.__validationKey;
     if(!secret)throw new Error('Encrypted validation credential unavailable');
-    const live=liveModels(secret,patch=>Object.assign(metrics,patch),{forceEcho:false,forceTool:()=>mode==='execution-real'?executionTool:projectValidation?.enabled?'location_witness':routeTool(),observeRequest:extensionMode?observeExtensionRequest:undefined,maxRequests:mode==='execution-real'?6:4});
+    const live=liveModels(secret,patch=>Object.assign(metrics,patch),{forceEcho:false,forceTool:()=>mode==='execution-real'?executionTool:projectValidation?.enabled?'location_witness':routeTool(),observeRequest:extensionMode?observeExtensionRequest:undefined,maxRequests:mode==='execution-real'?8:4});
     configuration={models:live.models,workspacePath:configuration.workspacePath,initialModel:{provider:live.provider,modelId:live.model,name:'MiMo V2.6 Flash'}};
   }else if(mode==='product'||mode==='models'||mode==='models-fixture'){
     const native=host.__nativeCredentials;delete host.__nativeCredentials;

@@ -17,6 +17,17 @@ class DataSaverAccessTest {
         if(!response.getBoolean("ok")){val failure=response.getJSONObject("error");throw NativeInputException(failure.getString("code"),failure.getString("message"))}
         return response.getJSONObject("value")
     }
+    @Test fun onlyAuthenticatedFixedFileImplementationBypassesRestrictedPolicy(){
+        val namespace="file-rpc-policy-${UUID.randomUUID()}";var network=DataSaverNetwork("metered",true,true)
+        val expected=context.assets.open("execution-capabilities.json").bufferedReader().use{JSONObject(it.readText())}
+        val identity=JSONObject().put("protocol",1).put("executorId","fixture").put("namespace","termux:fixture").put("localCapabilities",expected)
+        NativeDataSaverAccess(context,namespace,{network},true).use{access->
+            invoke(access,"configure",JSONObject().put("enabled",true).put("expectedVersion",0));access.requireLocalFiles(identity)
+            identity.getJSONObject("localCapabilities").put("helperSha256","0".repeat(64));expectCode("DATA_SAVER_CAPABILITY_UNVERIFIED"){access.requireLocalFiles(identity)}
+            network=DataSaverNetwork("unmetered",true,false);access.requireLocalFiles(identity)
+            network=DataSaverNetwork(null,false,true);expectCode("DATA_SAVER_CAPABILITY_UNVERIFIED"){access.requireLocalFiles(identity)}
+        }
+    }
     @Test fun onlyFixedImplementationProofQualifiesLocalWorkAndUserStopStillWins(){
         val namespace="local-policy-${UUID.randomUUID()}";val network=DataSaverNetwork("synthetic-metered",true,true)
         val owner=JSONObject().put("productId","chat").put("sdkConversationId",101).put("controlGeneration",1).put("namespace","termux:synthetic").put("taskId",201).put("callId","call").put("bindingId","binding").put("locationVersion",1)

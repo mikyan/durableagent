@@ -1,0 +1,11 @@
+test_prepared_local_file_and_supervisor_use_captured_bytes_after_both_source_paths_change (test_local_capabilities.LocalCapabilityContract.test_prepared_local_file_and_supervisor_use_captured_bytes_after_both_source_paths_change) ... T13_LOCAL_SOURCE_EVIDENCE {"executionId": "f2c7a89c-0ada-43b1-9648-8b01dd6dfa43", "localCapability": {"helperSha256": "13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1", "isolatedPython": true, "kind": "file-apply-v1", "runnerSha256": "be8b68ec5e9e204b2995a7546d3c372fea7e08775a9e19b1ff711515bee884ff"}, "finalDigest": "81735ddc906577750a947f1c4d35d456ee4590286687727ee93a83e6a79a523c", "scopeConfirmed": true, "exitCode": 0, "originalBytes": 269, "changedSourceCopies": 2, "repeatedIdentityDidNotRepeat": true}
+ok
+test_only_exact_clean_fixed_local_capabilities_receive_a_final_source_bound_proof (test_executor.ExecutionContract.test_only_exact_clean_fixed_local_capabilities_receive_a_final_source_bound_proof) ... ok
+test_command_starts_once_and_reconnect_reads_same_output (test_executor.ExecutionContract.test_command_starts_once_and_reconnect_reads_same_output) ... ok
+test_cancel_stops_this_execution_and_its_child_while_another_execution_finishes (test_executor.ExecutionContract.test_cancel_stops_this_execution_and_its_child_while_another_execution_finishes) ... ok
+test_network_policy_cancellation_is_durable_and_never_starts_the_prepared_identity (test_executor.ExecutionContract.test_network_policy_cancellation_is_durable_and_never_starts_the_prepared_identity) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 2.741s
+
+OK

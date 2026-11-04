@@ -1,0 +1,30 @@
+(node:79068) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ a native refusal before start admission retries only the same fixed original write (DATA_SAVER_BUSY) (10216.8394ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10502.4959
+
+✖ failing tests:
+
+test at test\data-saver-documents.test.mjs:58:67
+✖ a native refusal before start admission retries only the same fixed original write (DATA_SAVER_BUSY) (10216.8394ms)
+  AssertionError [ERR_ASSERTION]: Document policy behavior did not settle
+      at until (file:///C:/Users/AI_BA/.codex/worktrees/t13-data-saver/durableagent/runtime/test/data-saver-documents.test.mjs:13:88)
+      at runNextTicks (node:internal/process/task_queues:65:5)
+      at process.processTimers (node:internal/timers:538:9)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t13-data-saver/durableagent/runtime/test/data-saver-documents.test.mjs:71:162)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

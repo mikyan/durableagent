@@ -1,0 +1,187 @@
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t13-data-saver/durableagent/ui
+
+ ❯ test/document-policy.test.tsx (2 tests | 1 failed) 1159ms
+   × keeps original scope unconfirmed while explicitly granting only its fixed verification observation 1031ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/document-policy.test.tsx > keeps original scope unconfirmed while explicitly granting only its fixed verification observation
+TestingLibraryElementError: Unable to find role="button" and name "仅放行这次只读核验"
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <section
+      aria-label="文件变更"
+      class="file-changes"
+    >
+      <div
+        class="execution-actions"
+      >
+        <strong>
+          文件变更
+        </strong>
+        <button
+          type="button"
+        >
+          查看文件变更
+        </button>
+      </div>
+      <ul
+        aria-label="本会话文件变更"
+        class="execution-list"
+      >
+        <li>
+          <div
+            class="execution-row-title"
+          >
+            <strong>
+              原件结果待核验
+            </strong>
+            <span>
+              原件
+            </span>
+          </div>
+          <code>
+            content://fixture/document/original
+          </code>
+          <details>
+            <summary>
+              查看操作关联
+            </summary>
+            <code>
+              文件操作：
+              write
+            </code>
+            <code>
+              执行：
+              尚未登记执行
+            </code>
+            <code>
+              位置关联：
+              binding
+            </code>
+          </details>
+          <p>
+            原件变化尚未核验
+          </p>
+          <div
+            class="execution-actions"
+          >
+            <button
+              type="button"
+            >
+              直接核验原件状态
+            </button>
+            <button
+              type="button"
+            >
+              只读核验原件内容
+            </button>
+          </div>
+          <p
+            role="alert"
+          >
+            原件只读核验格式无法确认。
+          </p>
+        </li>
+      </ul>
+    </section>
+  </div>
+</body>
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <section
+      aria-label="文件变更"
+      class="file-changes"
+    >
+      <div
+        class="execution-actions"
+      >
+        <strong>
+          文件变更
+        </strong>
+        <button
+          type="button"
+        >
+          查看文件变更
+        </button>
+      </div>
+      <ul
+        aria-label="本会话文件变更"
+        class="execution-list"
+      >
+        <li>
+          <div
+            class="execution-row-title"
+          >
+            <strong>
+              原件结果待核验
+            </strong>
+            <span>
+              原件
+            </span>
+          </div>
+          <code>
+            content://fixture/document/original
+          </code>
+          <details>
+            <summary>
+              查看操作关联
+            </summary>
+            <code>
+              文件操作：
+              write
+            </code>
+            <code>
+              执行：
+              尚未登记执行
+            </code>
+            <code>
+              位置关联：
+              binding
+            </code>
+          </details>
+          <p>
+            原件变化尚未核验
+          </p>
+          <div
+            class="execution-actions"
+          >
+            <button
+              type="button"
+            >
+              直接核验原件状态
+            </button>
+            <button
+              type="button"
+            >
+              只读核验原件内容
+            </button>
+          </div>
+          <p
+            role="alert"
+          >
+            原件只读核验格式无法确认。
+          </p>
+        </li>
+      </ul>
+    </section>
+  </div>
+</body>
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ test/document-policy.test.tsx:25:32
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  18:47:25
+   Duration  2.96s (environment 48%, tests 41%, import 9%, transform 2%)
+

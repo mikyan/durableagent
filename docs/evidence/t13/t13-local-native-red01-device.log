@@ -1,0 +1,41 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverAccessTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverAccessTest:
+INSTRUMENTATION_STATUS: test=onlyFixedImplementationProofQualifiesLocalWorkAndUserStopStillWins
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverAccessTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=org.junit.ComparisonFailure: expected:<[controlled-local]> but was:<[unknown]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.DataSaverAccessTest.onlyFixedImplementationProofQualifiesLocalWorkAndUserStopStillWins(DataSaverAccessTest.kt:32)
+
+INSTRUMENTATION_STATUS: stream=
+Error in onlyFixedImplementationProofQualifiesLocalWorkAndUserStopStillWins(dev.durableagent.probe.DataSaverAccessTest):
+org.junit.ComparisonFailure: expected:<[controlled-local]> but was:<[unknown]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.DataSaverAccessTest.onlyFixedImplementationProofQualifiesLocalWorkAndUserStopStillWins(DataSaverAccessTest.kt:32)
+
+INSTRUMENTATION_STATUS: test=onlyFixedImplementationProofQualifiesLocalWorkAndUserStopStillWins
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 1.083
+There was 1 failure:
+1) onlyFixedImplementationProofQualifiesLocalWorkAndUserStopStillWins(dev.durableagent.probe.DataSaverAccessTest)
+org.junit.ComparisonFailure: expected:<[controlled-local]> but was:<[unknown]>
+	at org.junit.Assert.assertEquals(Assert.java:117)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.DataSaverAccessTest.onlyFixedImplementationProofQualifiesLocalWorkAndUserStopStillWins(DataSaverAccessTest.kt:32)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

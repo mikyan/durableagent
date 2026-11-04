@@ -1,0 +1,19 @@
+(node:78520) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ an unknown Provider read waits in its original SDK tool and safe reopen reuses the fixed observation (667.53ms)
+✔ an original write waits before occupying the shared writer and exact grant resumes the same native plan (INPUT_STORAGE_BUSY) (394.5633ms)
+✔ an original write waits before occupying the shared writer and exact grant resumes the same native plan (DATA_SAVER_BUSY) (394.583ms)
+✔ a native refusal before start admission retries only the same fixed original write (DOCUMENT_CHANNEL_BUSY) (274.2012ms)
+✔ a native refusal before start admission retries only the same fixed original write (DATA_SAVER_BUSY) (282.4535ms)
+✔ policy storage busy after dispatch waits for the same original result without repeating a write (487.1009ms)
+✔ a confirmed original write survives policy receipt loss (start response lost) without another write (271.1809ms)
+✔ a confirmed original write survives policy receipt loss (pending SDK receipt) without another write (238.7623ms)
+✔ public file observation during policy waiting preserves the staged receipt sequence and original SDK tool (428.7803ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3653.0858
