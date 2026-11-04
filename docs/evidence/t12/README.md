@@ -16,7 +16,8 @@
 | 实际完成渠道关闭 | `62a9dbb` 1/1，9.992 秒 | 通过真实 Android 设置开关将 importance 设为 0；结果仍可查看。恢复为 3，Android 保留 userLockedFields=4 的开关记录，不声称所有元数据完全相同 |
 | 真进程 SIGKILL 与 deferred handle | `t12-deferred-crash-host01.log` 3/3 | 主机 Node 的实际进程故障。两次中断沿用原 handle，总计 1 次创建、2 次 poll；耗尽后 interrupted／一次 cancel，不新建请求。不是 Android deferred Provider 实测 |
 | 未知外部效果及原生预算暂不可用 | `t12-probe-authority-red02.log` → `green01`，以及 exhausted-stop 日志 | 保留同一工具身份等待，不把未知效果作为可交给模型重发的完成结果；固定工作探测预算不因重开清零 |
-| 主机完整回归 | `t12-runtime-stage62-all.log` 246/246，19.675 秒；`t12-runtime-stage31b-all.log` 247/247，20.078 秒 | 后一批包括 host 唤醒重新发布；原生同内容唤醒缓存风险已新增实际系统 RED 夹具，尚待根代理执行 |
+| 主机完整回归 | `t12-runtime-stage62-all.log` 246/246，19.675 秒；`t12-runtime-stage31b-all.log` 247/247，20.078 秒 | 后一批包括 host 唤醒重新发布；不代替 Android 原生发布验证 |
+| 原生相同 wake 重新发布 | 实际系统 RED 1/1，18.565 秒；最小修复 + 同一测试 GREEN 1/1，7.106 秒 | 真实 JobScheduler 的自有 namespace 冲突，清除后同一输入成功发布，0 模型请求；不是 quota 或任意后台启动拒绝的模拟替代 |
 
 ## 真实文件与凭据证据
 
@@ -40,6 +41,10 @@
 
 JobScheduler 的初始缺陷为 `startForeground` 未将只靠作业绑定的 Service 变成 started service，最后解除绑定后运行宿主退出。修复仅在 Android 已接受前台提升后保留 started lifetime；没有制造后台启动豁免。测试的 instrumentation 执行资格也不外推为任意后台或 OEM 准许。
 
+后续实际 JobScheduler RED 确认另一缺陷：原生在系统发布成功前就缓存 `lastWake`。真实自有 namespace 冲突导致 schedule 拒绝后，重试相同 wake 被缓存误判为已发布；清除冲突后 10 秒仍没有正确 job。仅把缓存更新移动到 schedule 成功之后，同一测试通过，保留原 admission，实际 jobId 1721478909、0 模型请求。真实离线条件随后由根代理恢复。
+
+生命周期验证还发现测试设计风险：Android instrumentation 正常开始和结束都可能 force-stop 目标包。未执行的两阶段 instrumentation 生命周期夹具因此删除，冻结 artifact 标记无效；没有把编译成功视为该路径可用。替代方案使用真实 React／CDP 一次发送和正常退出，再用外部只读双快照确认原完成身份，详见 [运行说明](../../../tools/recovery-lifecycle-RUN.md)。这项工具修正不影响先前在同一次 instrumentation 内已观察完成的 bound／unbound 恢复证据，但后者仍保留 instrumentation 运行资格的限制。
+
 ## 候选对应关系
 
 | 源码／用途 | 主应用 SHA-256 | 测试 APK SHA-256 |
@@ -48,13 +53,14 @@ JobScheduler 的初始缺陷为 `startForeground` 未将只靠作业绑定的 Se
 | `aedb8d6` Job GREEN | `4F35EBDDD47E6ED29CBDD9634D9B7FD86D4240752E47420AB573AFE6BE496474` | `F7DC4920FC3D16C9306AB27D655DCD03B9815C86E6406A2ADF5E3C9DFCB69B00`，与 RED 相同 |
 | `62a9dbb` 真实 bound 恢复／受限通知／只读产品预检 | `225AE61F621132A43B24D72E395CBA7E1294B545A48C0C3D46E8BB281F742A13` | `8130DD1A813601B041839457604A981094A0AA388CF0DA37CE5D06625FB91F3F` |
 | 同一 `62a9dbb` 主应用，后续 `b56b9bb` test-only 产品初始配置／无绑定恢复 | 同上 `225AE61…` | `54AAFA20969DC594D38DEF43C0DAEEBAEBDD167A736E25412F81BA0406D050C0`；不声称后来开发主应用修改已在此运行 |
+| `31b2ed8` 原生 wake RED | `065AFF69F8CB5BECA2805BF210E39DD39EB0590810913C1A1F2916471A953B2D` | `3C4C8E842F7A028A5A686865A57A3EE8E3E7C33FAA098BDF9EED81645760C3AC` |
+| `3a0927e` 原生 wake GREEN | `071E1C2DD0C47BDE84FC8D1AEBF80A37C9270863AA995D466CB5EA2EDBA56E2A` | 同一 `3C4C8E…`，未放宽断言 |
 
 大型 APK 与冻结源码保存在根代理的本地验证目录，不加入公开仓库。本文所列日志校验见 [LOG-SHA256.json](LOG-SHA256.json)。构建成功、源码快照或 ELF 检查不能代替该候选的实际设备结果。
 
 ## 未完成的门槛
 
-- 实际断网恢复、整机重启首次解锁、首次解锁后再次锁屏、force-stop 等待用户重新打开；两阶段真实产品夹具已编译，未执行。
-- 原生唤醒发布拒绝后同内容重新发布，使用真实 JobScheduler 自有冲突的夹具已编译；未将主机 GREEN 外推为原生通过。
+- 实际断网恢复、整机重启首次解锁、首次解锁后再次锁屏、force-stop 等待用户重新打开；外部真实产品验证脚本已准备，未执行。
 - 通知点击返回正确会话以及完整 Console 接线，须与 T15 联合验证。
 - 尚未验收的 T13 共同恢复接线，须先通过 T13，再合并 T12；不能借 T12 绕过其门槛。
 - 最终联合构建、源码／打包对应核验、独立合并审查，以及 T17 OEM 矩阵。

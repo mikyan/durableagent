@@ -47,6 +47,16 @@
       "gitBlobSha256": "1dad0ba14c8a0130160826cdef7664f0aeead50ff43689ca9edee60ddbef0bb3"
     },
     {
+      "file": "t12-native-wake-green01-device.log",
+      "retainedLocalSha256": "81e3460852cd11b012493d98a9c3c19f4e22bfaf426da2194378ffd3b3da0bc8",
+      "gitBlobSha256": "ec01f403ac168e4065db7bbd17473c65abb91c67f310cd5f9a3f876e94633f1b"
+    },
+    {
+      "file": "t12-native-wake-red01-device.log",
+      "retainedLocalSha256": "fd43d4b2dc1b3414bc5bced25e195e2684c782baabd8116501dbcd29b11fab31",
+      "gitBlobSha256": "e2175bc19386da29645e6a459767a6bbe5019c20c96ef3766746b213feda0c80"
+    },
+    {
       "file": "t12-notification-channel62-device.log",
       "retainedLocalSha256": "54674da36d2ec5801f9f7f1b25fc77e47f3f25bdd3881f4a1c04663eb7a13d93",
       "gitBlobSha256": "5a21004cc15bdd621a5c7cdf4db33715b6c18a4522b9d7a5bbe54e96711b49db"
