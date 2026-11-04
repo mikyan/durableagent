@@ -24,7 +24,7 @@ import java.util.UUID
 class NativeDocumentException(val code:String,message:String):RuntimeException(message,null,false,false)
 
 /** Original document capabilities, separate from immutable attachment representations. */
-class NativeDocumentStore(context:Context,private val namespace:String="document-v1"):AutoCloseable {
+class NativeDocumentStore(context:Context,private val namespace:String="document-v1",private val inputNamespace:String="input-v1"):AutoCloseable {
     private val context=context.applicationContext
     private val resolver=this.context.contentResolver
     private var helper:DocumentDatabase?=null
@@ -55,6 +55,10 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         return JSONObject().put("resources",JSONArray(records.map(::current)))
     }
     fun describe(resourceId:String):JSONObject = current(resource(resourceId))
+    fun prepare(request:JSONObject):JSONObject = fail("DOCUMENT_WRITE_UNAVAILABLE","原文件写入尚不可用。")
+    fun stage(request:JSONObject):JSONObject = fail("DOCUMENT_WRITE_UNAVAILABLE","原文件写入尚不可用。")
+    fun start(request:JSONObject):JSONObject = fail("DOCUMENT_WRITE_UNAVAILABLE","原文件写入尚不可用。")
+    fun query(operationId:String):JSONObject = fail("DOCUMENT_OPERATION_NOT_FOUND","未找到此原文件操作。")
     fun open(resourceId:String):JSONObject {
         val record=resource(resourceId);val uri=Uri.parse(record.getString("uri"));requireGrant(uri,READ)
         return originalIo {

@@ -34,6 +34,50 @@ class NativeDocumentTest {
     }
     private fun until(label:String,timeout:Long=150000,check:()->Boolean){val end=SystemClock.elapsedRealtime()+timeout;while(!check()){assertTrue(label,SystemClock.elapsedRealtime()<end);Thread.sleep(50)}}
     private fun evidence(value:JSONObject)=instrument.sendStatus(0,Bundle().apply{putString("documentEvidence",value.toString())})
+    @Test(timeout=30000) fun originalWriteHasImmutableIdentityAndIndependentReadbackAfterReopen(){
+        assumeTrue(InstrumentationRegistry.getArguments().getString("retainedGrant")=="true")
+        val fixture=control("reset");assertNotEquals(android.os.Process.myUid(),fixture.getInt("providerUid"))
+        val uri=android.net.Uri.parse("content://$FIXTURE.documents/document/original")
+        val grant=context.contentResolver.persistedUriPermissions.firstOrNull{it.uri==uri}
+        assertTrue("Requires an actual previous system-picker persisted grant",grant?.isReadPermission==true&&grant.isWritePermission)
+        val run=UUID.randomUUID().toString();val namespace="document-write-$run";val inputs="input-document-$run"
+        NativeInputStore(context,inputs).use{store->store.rememberConversation(JSONObject().put("id","chat").put("title","Synthetic original write")
+            .put("model",JSONObject().put("provider","fixture").put("modelId","test").put("name","Synthetic document"))
+            .put("submissionContext",JSONObject().put("sdkConversationId",101).put("associationVersion",1).put("location",JSONObject().put("workspaceId","default").put("version",1).put("identity","synthetic-directory"))),
+            JSONObject().put("version","document-fixture-1").put("provider","fixture").put("modelId","test").put("source","validation").put("input",org.json.JSONArray(listOf("text"))).put("limits",JSONObject()).put("applicationPolicy",JSONObject()))}
+        val changed="changed\n".toByteArray();val operation="write-$run";lateinit var fixed:JSONObject
+        NativeDocumentStore(context,namespace,inputs).use{store->
+            val selected=store.select(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            val resourceId=selected.getString("resourceId");val opened=store.open(resourceId);assertTrue(store.closeRead(opened.getString("readerId")).getBoolean("unchanged"))
+            val plan=JSONObject().put("operationId",operation).put("resourceId",resourceId).put("productId","chat").put("controlGeneration",1).put("sdkConversationId",101)
+                .put("expectedDigest",opened.getString("contentDigest")).put("contentDigest",NativeInputStore.sha256(changed)).put("byteLength",changed.size)
+            val accepted=store.prepare(plan);assertEquals("accepted_not_started",accepted.getString("state"));assertFalse(accepted.getBoolean("scopeConfirmed"))
+            assertTrue(accepted.getString("requestDigest").matches(Regex("[a-f0-9]{64}")))
+            assertEquals(accepted.toString(),store.prepare(plan).toString())
+            try{store.prepare(JSONObject(plan.toString()).put("expectedDigest","0".repeat(64)));fail("Operation identity must be immutable")}
+            catch(error:NativeDocumentException){assertEquals("DOCUMENT_OPERATION_CONFLICT",error.code)}
+            val first=JSONObject().put("operationId",operation).put("offset",0).put("base64",Base64.encodeToString(changed.copyOfRange(0,2),Base64.NO_WRAP))
+            assertEquals(2,store.stage(first).getInt("nextOffset"))
+            val staged=store.stage(JSONObject().put("operationId",operation).put("offset",2).put("base64",Base64.encodeToString(changed.copyOfRange(2,changed.size),Base64.NO_WRAP)))
+            assertEquals(changed.size,staged.getInt("nextOffset"));assertTrue(staged.getBoolean("sealed"))
+            assertTrue(store.stage(first).getBoolean("sealed"))
+            store.start(JSONObject().put("operationId",operation).put("requestDigest",accepted.getString("requestDigest")))
+            until("Original write receipt",10000){store.query(operation).optString("state") in setOf("completed","not_started","unknown")}
+            fixed=store.query(operation)
+            assertEquals("completed",fixed.getString("state"));assertTrue(fixed.getBoolean("scopeConfirmed"));assertTrue(fixed.getBoolean("original"))
+            for(key in listOf("operationId","resourceId","productId","controlGeneration","sdkConversationId","expectedDigest","contentDigest","byteLength"))assertEquals(plan.get(key),fixed.get(key))
+            assertEquals(accepted.getString("requestDigest"),fixed.getString("requestDigest"));assertEquals(selected.getString("namespace"),fixed.getString("namespace"));assertEquals(uri.toString(),fixed.getString("uri"))
+            assertEquals("unavailable",fixed.getJSONObject("diff").getString("state"))
+            assertArrayEquals(changed,Base64.decode(control("read").getString("base64"),Base64.DEFAULT))
+        }
+        NativeDocumentStore(context,namespace,inputs).use{store->
+            assertEquals(fixed.toString(),store.query(operation).toString())
+            control("replace")
+            assertEquals(fixed.toString(),store.start(JSONObject().put("operationId",operation).put("requestDigest",fixed.getString("requestDigest"))).toString())
+            assertArrayEquals(byteArrayOf(78,69,87,10),Base64.decode(control("read").getString("base64"),Base64.DEFAULT))
+            evidence(JSONObject().put("stage","original-write-immutable-reopened").put("receipt",fixed).put("providerUid",fixture.getInt("providerUid")))
+        }
+    }
     @Test(timeout=30000) fun retainedReaderStaysOnOriginalObjectAfterProviderReplacement(){
         assumeTrue(InstrumentationRegistry.getArguments().getString("retainedGrant")=="true")
         val fixture=control("reset");assertNotEquals(android.os.Process.myUid(),fixture.getInt("providerUid"))
