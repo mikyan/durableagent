@@ -1,0 +1,29 @@
+docs/evidence/t12/README.md
+  s_467dcb949b5b60::t_21f5d1f63ef8a7 21,49-54,70
+docs/evidence/t12/t12-laterlock01-observer-timeouts.json
+  s_467dcb949b5b60::t_f80e5dcf4ff2fe 1-24
+docs/evidence/t12/LOG-SHA256.json
+  s_467dcb949b5b60::t_c081abc21c02b0 34-53
+docs/evidence/t12/t12-laterlock01-external-completion.json
+  s_467dcb949b5b60::t_17a4543dd0d247 1-121
+docs/evidence/t12/t12-laterlock01-prepare.json
+  s_467dcb949b5b60::t_496ea24779b5c7 1-57
+docs/evidence/t12/t12-laterlock01-verify-cleanup-failed.json
+  s_467dcb949b5b60::t_f17927ed0e9625 1-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "a38722fb271d450734c36913a334b22798fc1e60",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
