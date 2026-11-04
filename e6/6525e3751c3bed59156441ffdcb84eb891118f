@@ -1,0 +1,103 @@
+android/app/src/main/java/dev/durableagent/probe/ExecutionPairingStore.kt
+  s_467dcb949b5b60::t_fcb2a7e37b0c7f 22,24
+  s_467dcb949b5b60::t_058638f1118222 17
+  s_467dcb949b5b60::t_4a8f325d986ccd 1-16,18-21,23,25-47,49-66
+  s_467dcb949b5b60::t_2eca58fe450346 48
+android/app/src/main/java/dev/durableagent/probe/ExecutionTlsClient.kt
+  s_467dcb949b5b60::t_21e977975bd339 1-25,27-42,44-48,50,52-54,56-61,63-65,71-86,88-103
+  s_467dcb949b5b60::t_0e8e9f117d17e1 55,87
+  s_467dcb949b5b60::t_fcb2a7e37b0c7f 69-70
+  s_467dcb949b5b60::t_d87e09ffe36c75 26,43,49,51,62,66-68
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_467dcb949b5b60::t_475c07436e16e3 18,25,32,48,79-80
+  s_467dcb949b5b60::t_8e3e1ff273e13b 56-57,65
+managed-execution/execution_transport.py
+  s_467dcb949b5b60::t_475c07436e16e3 264
+  s_467dcb949b5b60::t_2d0fe435a7b54c 1-27,29-87,90-144,146-213,220-263,265-269,271-301
+  s_467dcb949b5b60::t_d8080ffc03f09b 28,88-89,145,214-219,270
+android/app/src/main/java/dev/durableagent/probe/NativeExecutionBridge.kt
+  s_467dcb949b5b60::t_475c07436e16e3 1-36,39-88
+  s_467dcb949b5b60::t_8e3e1ff273e13b 37-38
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionTransportTest.kt
+  s_467dcb949b5b60::t_34e6cfacf8de87 68-78
+  s_467dcb949b5b60::t_df0a516fc072fb 1-10,12-17,19-21,23-31,33-36,38,54,97
+  s_467dcb949b5b60::t_d4147553f730ab 87-89
+  s_467dcb949b5b60::t_8132b5fc0149f9 92-96
+  s_467dcb949b5b60::t_500cd03dfc5526 11,39-53
+  s_467dcb949b5b60::t_0e8e9f117d17e1 18,22,37
+  s_467dcb949b5b60::t_2eca58fe450346 55-67
+  s_467dcb949b5b60::t_af375308810a81 79-86,90-91
+  s_467dcb949b5b60::t_ae7239d51a5fb8 32
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionUiTest.kt
+  s_467dcb949b5b60::t_4eb65d0e5caa1a 31-47,52,57
+  s_467dcb949b5b60::t_81575a8ebd606a 1-30,48-51,53-56,58
+.gitignore
+  s_467dcb949b5b60::t_b4071191ca40d1 14-15
+managed-execution/test_transport.py
+  s_467dcb949b5b60::t_c12c2b17e92ed4 38-51
+  s_467dcb949b5b60::t_24de00f0683c44 1-7,15-16,18-37,131-135,159-161
+  s_467dcb949b5b60::t_d8080ffc03f09b 82-83,138
+  s_467dcb949b5b60::t_bbb94792153cac 8-14,17,52-81,84-96,98-130,136-137,139-158,162-176
+  s_467dcb949b5b60::t_8e3e1ff273e13b 97
+android/app/src/main/java/dev/durableagent/probe/ExecutionTermuxGateway.kt
+  s_467dcb949b5b60::t_2571fec6a7862e 1-22,25,27-73,75-109
+  s_467dcb949b5b60::t_058638f1118222 23-24,26
+  s_467dcb949b5b60::t_3b38aafdc6f2a6 74
+runtime/test/execution-channel.test.mjs
+  s_467dcb949b5b60::t_d1138abc11d679 15-51
+  s_467dcb949b5b60::t_0f581f9658567f 1-14
+  s_467dcb949b5b60::t_4eb65d0e5caa1a 52-58
+managed-execution/test_executor.py
+  s_467dcb949b5b60::t_04abc8e0360333 151-168,247
+  s_467dcb949b5b60::t_99950c14870e91 1-3,14-25,27-28,43-46,48-67,100,313-315
+  s_467dcb949b5b60::t_89fbaebf54bf26 4,12-13,71-99
+  s_467dcb949b5b60::t_669f27efe4ae66 10,26,29-42,47
+  s_467dcb949b5b60::t_6c546555bee7cb 116-150
+  s_467dcb949b5b60::t_f5ae6e4d919092 248-268,312
+  s_467dcb949b5b60::t_39e078e72fb0dd 8-9,208-246
+  s_467dcb949b5b60::t_141e524e3d740b 68-70
+  s_467dcb949b5b60::t_6d285c9a8a514d 5-7,169-207
+  s_467dcb949b5b60::t_72afb5e2af6570 11,269-311
+  s_467dcb949b5b60::t_763d5ee56a2597 101-115
+android/app/src/main/java/dev/durableagent/probe/ExecutionIdentity.kt
+  s_467dcb949b5b60::t_21e977975bd339 1-8,11-23,25,27-29,32-33,35-37,40-49,51-69
+  s_467dcb949b5b60::t_058638f1118222 24,30,34
+  s_467dcb949b5b60::t_0e8e9f117d17e1 38-39
+  s_467dcb949b5b60::t_34e6cfacf8de87 9-10,26,31,50
+android/app/src/main/java/dev/durableagent/probe/ExecutionBootstrapReceiver.kt
+  s_467dcb949b5b60::t_2571fec6a7862e 1-37
+managed-execution/durable_executor.py
+  s_467dcb949b5b60::t_d3e249814b69e3 1-503
+android/app/src/main/java/dev/durableagent/probe/ExecutionAccess.kt
+  s_467dcb949b5b60::t_2d0fe435a7b54c 93
+  s_467dcb949b5b60::t_475c07436e16e3 23-29,50-56
+  s_467dcb949b5b60::t_9a69d319c0d028 1-22,30-47,49,57-92,94-96
+  s_467dcb949b5b60::t_058638f1118222 48
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_923a8641b4be06 27,95-96,210
+runtime/src/execution-channel.ts
+  s_467dcb949b5b60::t_8f297230c8bc0a 1-10,42-47,50,54,59-64
+  s_467dcb949b5b60::t_b3514d0d5787f3 11-41,48-49,51-53,55-58
+android/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_2571fec6a7862e 3-4,10
+android/app/src/main/java/dev/durableagent/probe/ExecutionBootstrapStore.kt
+  s_467dcb949b5b60::t_fcb2a7e37b0c7f 25-26
+  s_467dcb949b5b60::t_058638f1118222 9,19-20
+  s_467dcb949b5b60::t_e053b91bd6dc04 1-8,10-18,21-24,27-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "e66525e3751c3bed59156441ffdcb84eb891118f",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
