@@ -23,3 +23,14 @@ it('routes object and JSON envelopes across the native boundary and rejects prev
   expect(controller.snapshot().status.phase).toBe('ready');
   controller.dispose();
 });
+
+it('native browser callback validates and delivers observation errors without replacing conversation facts',async()=>{
+ let subscription:ApplicationRequest|undefined;const failures:Error[]=[];let phase='';
+ const host:BrowserHost={localStorage:{getItem:()=>null,setItem:()=>{}},DurableNative:{postMessage:json=>{const r=JSON.parse(json) as ApplicationRequest;if(r.method==='unsubscribe')return;let value:unknown={};
+ if(r.method==='status')value={phase:'ready',extensions:['conversation']};else if(r.method==='list')value={conversations:[]};else if(r.method==='subscribe'){subscription=r;value={id:'target',revision:1,entries:[],phase:'running',conversation:{id:'target',phase:'running'}};}
+ queueMicrotask(()=>host.__durableReceive?.({type:'response',protocol:1,connectionId:r.connectionId,requestId:r.requestId,ok:true,value}));}}};
+ const controller=createBrowserController(host);await controller.connect();const lease=await controller.extensionClient!.subscribe('target',value=>{phase=value.phase;},error=>failures.push(error));
+ const event={type:'subscription-error',protocol:1,connectionId:subscription!.connectionId,subscriptionId:subscription!.payload!.subscriptionId,error:{code:'OBSERVATION_UNAVAILABLE',message:'观察连接已断开'}};
+ for(const malformed of [{...event,protocol:2},{...event,subscriptionId:1},{...event,connectionId:''},{...event,error:{}},{...event,error:{code:'x',message:2}},{...event,connectionId:'old'}])host.__durableReceive?.(malformed);
+ expect(failures).toHaveLength(0);host.__durableReceive?.(JSON.stringify(event));expect(failures).toHaveLength(1);expect(failures[0].message).toBe('观察连接已断开');expect(phase).toBe('running');expect(controller.snapshot().status.phase).toBe('ready');lease.unsubscribe();controller.dispose();
+});

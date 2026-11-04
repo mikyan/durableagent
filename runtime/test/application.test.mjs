@@ -152,14 +152,16 @@ test('disconnect and unsubscribe invalidate a subscription whose attachment is s
     await call(app,'send',{id:'pending',text:'无旧订阅',actionId:'pending-input'});await until(async()=>(await call(app,'open',{id:'pending'})).phase==='done');assert.deepEqual(events,[]);
   }finally{await app.close();await rm(directory,{recursive:true,force:true});}
 });
-test('a fatal SQLite error tells attached UI the run failed instead of leaving a stale status',async()=>{
+test('a fatal SQLite error reports unavailable observation and failed host without inventing a terminal conversation',async()=>{
   const directory=await mkdtemp(join(tmpdir(),'durable-ui-failure-')),path=join(directory,'app.sqlite');const {db,control}=await faultDatabase(path);const storage=await SqliteStorage.open(db);
   const app=new Application({path,...validationConfiguration(),storageFactory:async()=>storage});
   try {
     await app.start();await call(app,'create',{creationId:'existing'});const events=[];
     await app.request({protocol:1,connectionId:'ui',requestId:'watch',method:'subscribe',payload:{id:'existing',subscriptionId:'s'}},event=>events.push(event));
     control.before=sql=>{if(sql==='COMMIT')throw new Error('Injected disk unavailable');};await assert.rejects(call(app,'create',{creationId:'failure'}));
-    await until(()=>events.some(event=>event.snapshot.phase==='failed'));assert.match(events.at(-1).snapshot.reason,/Injected disk unavailable/);
+    await until(()=>events.some(event=>event.type==='subscription-error'));assert.match(events.at(-1).error.message,/Injected disk unavailable/);
+    assert.equal(events.some(event=>event.type==='conversation'&&['failed','done'].includes(event.snapshot.phase)),false);
+    await until(()=>app.status().phase==='failed');assert.match(app.status().reason,/Injected disk unavailable/);
   }finally{await app.close();await rm(directory,{recursive:true,force:true});}
 });
 test('newer persisted configuration refuses startup and preserves its original data',async()=>{

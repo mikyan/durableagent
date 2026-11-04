@@ -7,6 +7,7 @@ import {builtInUiExtensions} from '../extensions';
 import {INPUT_BUDGETS} from '../../../runtime/src/input-protocol';
 import {DraftAttachments,bytes} from './attachments';
 import {SendStates} from './submissions';
+import {ExtensionPage} from '../extension-host';
 import {positionLabels} from '../project-view';
 
 const ModelSettings=lazy(builtInUiExtensions[MODELS_EXTENSION.id].load);
@@ -54,7 +55,7 @@ export default function ConversationPage({controller,state}:{controller:Conversa
   const stoppable=running||state.pending||state.submissions?.items.some(item=>!item.intent?.cancelled&&item.status?.submission?.status!=='done'&&item.status?.submission?.status!=='unanswered')||!!state.submissions?.control?.pendingAbort;
   const sendContext=state.draft?.submissionContext??active?.submissionContext;
   const modelsPage=state.page==='models';
-  const projectsPage=state.page==='projects',settingsPage=modelsPage||projectsPage;
+  const projectsPage=state.page==='projects',extensionsPage=state.page==='extensions',settingsPage=modelsPage||projectsPage||extensionsPage;
   const hasModels=state.status.extensions.includes(MODELS_EXTENSION.id);
   const hasProjects=state.status.extensions.includes(PROJECTS_EXTENSION.id);
   const startupReason=state.status.reason??(state.status.phase==='opening'?'正在连接运行宿主…':state.status.phase==='configuring'?'正在装载配置，请稍候。':state.status.phase==='closed'?'运行宿主已关闭，请重新连接。':state.status.phase==='failed'?'连接未完成，请重新连接。':!ready?'当前运行宿主未提供会话功能。':undefined);
@@ -91,6 +92,7 @@ export default function ConversationPage({controller,state}:{controller:Conversa
       <button className="nav-item" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>新建</button>
       {hasModels&&<button className={`nav-item ${modelsPage?'selected':''}`} data-testid="open-model-settings" onClick={models}><Icon name="grid"/>模型与连接</button>}
       {hasProjects&&<button className={`nav-item ${projectsPage?'selected':''}`} data-testid="open-project-settings" onClick={projects}><Icon name="grid"/>项目与工作区</button>}
+      <button className={`nav-item ${extensionsPage?'selected':''}`} data-testid="open-extensions" onClick={()=>{setNavigation(false);setDetails(false);controller.openExtensions();}}><Icon name="grid"/>扩展与时间线</button>
       <div className="section-caption">会话</div>
       <div className="conversation-list">
         {conversations.map(conversation=><button className={`nav-item ${state.activeId===conversation.id?'selected':''}`} key={conversation.id} onClick={()=>open(conversation.id)} disabled={!ready&&!state.inputReady}><Icon name="chat"/><span>{conversation.title}</span></button>)}
@@ -101,10 +103,10 @@ export default function ConversationPage({controller,state}:{controller:Conversa
     <main className={`main ${settingsPage?'models-page':state.activeId?'chat-page':'home-page'}`}>
       <header className="topbar">
         <button className="round-button menu-button" aria-label="打开会话列表" aria-expanded={navigation} onClick={()=>setNavigation(!navigation)}><Icon name="menu"/></button>
-        {settingsPage?<><div className="title-pill"><h1>{modelsPage?'模型与连接':'项目与工作区'}</h1></div><button className="round-button" aria-label="返回会话" onClick={()=>modelsPage?controller.leaveModels():controller.leaveProjects()}><Icon name="close"/></button></>:state.activeId?<><div className="title-pill"><span className={`dot phase-${phase}`}/><h1>{active?.title??'正在打开会话'}</h1></div><button className="round-button" data-testid="create-conversation" aria-label="新建会话" disabled={!ready||state.pending} onClick={create}><Icon name="plus"/></button></>:<span className="topbar-label">本地 · 会话</span>}
+        {settingsPage?<><div className="title-pill"><h1>{modelsPage?'模型与连接':projectsPage?'项目与工作区':'扩展与时间线'}</h1></div><button className="round-button" aria-label="返回会话" onClick={()=>modelsPage?controller.leaveModels():projectsPage?controller.leaveProjects():controller.leaveExtensions()}><Icon name="close"/></button></>:state.activeId?<><div className="title-pill"><span className={`dot phase-${phase}`}/><h1>{active?.title??'正在打开会话'}</h1></div><button className="round-button" data-testid="create-conversation" aria-label="新建会话" disabled={!ready||state.pending} onClick={create}><Icon name="plus"/></button></>:<span className="topbar-label">本地 · 会话</span>}
       </header>
       {reason&&<div className="connection-notice" role={state.error?'alert':'status'}><span>{reason}</span><button onClick={reconnect}>重新连接</button></div>}
-      {projectsPage?<Suspense fallback={<p className="empty-state">正在打开项目设置…</p>}><ProjectSettings controller={controller} state={state}/></Suspense>:modelsPage?<Suspense fallback={<p className="empty-state">正在打开模型设置…</p>}><ModelSettings controller={controller} state={state}/></Suspense>:!state.activeId?<div className="home-content">
+      {extensionsPage?<ExtensionPage client={controller.extensionClient} conversationId={state.activeId}/>:projectsPage?<Suspense fallback={<p className="empty-state">正在打开项目设置…</p>}><ProjectSettings controller={controller} state={state}/></Suspense>:modelsPage?<Suspense fallback={<p className="empty-state">正在打开模型设置…</p>}><ModelSettings controller={controller} state={state}/></Suspense>:!state.activeId?<div className="home-content">
         <div className="home-brand">π</div><p className="eyebrow">DURABLE AGENT</p><h1>从一个问题开始</h1><p className="home-description">独立的会话，同一个工作空间。</p>
         <button className="primary-button" data-testid="create-conversation" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>{state.pending?'正在创建…':'新建会话'}</button>
         {hasModels&&state.models&&!state.models.defaultModel&&<p className="setup-model-hint">尚未选择默认模型。<button className="text-button" onClick={models}>设置模型与连接</button></p>}

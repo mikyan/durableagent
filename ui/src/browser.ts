@@ -12,7 +12,8 @@ declare global {interface Window {DurableNative?:NativePort;__durableReceive?:(e
 const object=(value:unknown):value is Record<string,unknown>=>typeof value==='object'&&value!==null&&!Array.isArray(value);
 function envelope(value:unknown):ApplicationEnvelope|undefined {
   if(typeof value==='string'){try{value=JSON.parse(value);}catch{return;}}
-  if(!object(value)||typeof value.connectionId!=='string'||typeof value.protocol!=='number')return;
+  if(!object(value)||typeof value.connectionId!=='string'||!value.connectionId||typeof value.protocol!=='number')return;
+  if(value.type==='subscription-error'&&value.protocol===1&&typeof value.subscriptionId==='string'&&value.subscriptionId&&object(value.error)&&typeof value.error.code==='string'&&value.error.code&&typeof value.error.message==='string')return value as ApplicationEnvelope;
   if(value.type==='response'&&typeof value.requestId==='string'&&typeof value.ok==='boolean') {
     if(value.ok||object(value.error)&&typeof value.error.code==='string'&&typeof value.error.message==='string')return value as ApplicationEnvelope;
   }

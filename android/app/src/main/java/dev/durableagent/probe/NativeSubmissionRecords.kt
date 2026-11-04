@@ -126,6 +126,37 @@ internal object NativeSubmissionRecords {
             project(db, JSONObject(it.getString(0)))
         }
     }
+    fun createRoute(db: SQLiteDatabase, value: JSONObject, freeze: (String, String) -> JSONObject): JSONObject {
+        val actionId = id(value, "actionId"); val productId = id(value, "id"); val content = text(value, "text", 100000)
+        val origin = source(value.getJSONObject("source")); val expected = context(value.getJSONObject("expectedContext"))
+        val version = integer(value, "expectedControlVersion")
+        val immutable = JSONObject().put("source", origin).put("id", productId).put("text", content)
+            .put("expectedContext", expected).put("expectedControlVersion", version)
+        replay(db, actionId, "route", immutable)?.let { return read(db, it.getString("intentId")) }
+        if (readLocationEdit(db) != null) fail("LOCATION_EDIT_PENDING", "位置修改尚未核验，未保存新的转交。")
+        val sourceId = origin.getString("id"); val sourceProduct = product(db, sourceId)
+        if (sourceProduct.optJSONObject("submissionContext")?.optLong("sdkConversationId") != origin.getLong("sdkConversationId")) fail("SOURCE_MISMATCH", "来源会话关联无法核验。")
+        val sourceControl = control(db, sourceId); val generation = origin.getLong("controlGeneration")
+        if (sourceControl.has("pendingAbort") || sourceControl.getLong("generation") != generation || sourceControl.getLong("stoppedThrough") >= generation)
+            fail("SOURCE_STOPPED", "来源操作已停止或控制代次已变化，未创建新的转交。")
+        val actual = product(db, productId).optJSONObject("submissionContext") ?: fail("SUBMISSION_CONTEXT_UNAVAILABLE", "目标会话尚未就绪。")
+        if (context(actual).toString() != expected.toString()) fail("SUBMISSION_CONTEXT_CONFLICT", "目标会话位置预期已变化，未改投。")
+        val targetControl = control(db, productId)
+        if (targetControl.has("pendingAbort") || targetControl.getLong("generation") <= targetControl.getLong("stoppedThrough")) fail("TARGET_STOPPED", "目标正在停止或已停止，不能由其他会话恢复它。")
+        if (targetControl.getLong("version") != version) fail("CONTROL_CONFLICT", "目标控制状态已变化。")
+        val fixed = freeze(productId, content)
+        val intent = JSONObject().put("protocol", 1).put("intentId", actionId).put("actionId", actionId).put("id", productId)
+            .put("inputToken", fixed.getString("token")).put("inputRevision", fixed.getLong("revision")).put("inputDigest", fixed.getString("digest"))
+            .put("context", expected).put("queue", JSONObject().put("whenBusy", "followUp").put("whenIdle", "start"))
+            .put("controlGeneration", targetControl.getLong("generation")).put("source", origin).put("createdAt", System.currentTimeMillis())
+            .put("preview", JSONObject().put("text", preview(content)).put("attachmentCount", 0)).put("stateVersion", 1).put("delivery", "pending").put("cancelled", false)
+        db.execSQL("INSERT INTO native_send_intents(intent_id,action_id,conversation_id,input_token,data) VALUES(?,?,?,?,?)", arrayOf(actionId, actionId, productId, fixed.getString("token"), intent.toString()))
+        remember(db, actionId, "route", immutable, JSONObject().put("intentId", actionId))
+        return intent
+    }
+    private fun source(value: JSONObject): JSONObject = JSONObject().put("id", id(value, "id"))
+        .put("sdkConversationId", integer(value, "sdkConversationId")).put("controlGeneration", integer(value, "controlGeneration", 1))
+        .apply { if (value.has("taskId")) put("taskId", integer(value, "taskId", 1)) }
     fun list(db: SQLiteDatabase, options: JSONObject): JSONObject {
         val productId = if (options.has("id")) id(options, "id").also { product(db, it) } else null
         val limit = if (options.has("limit")) integer(options, "limit", 1).also { if (it > 50) fail("INPUT_INVALID", "每页最多查询 50 条发送意图。") }.toInt() else 30
@@ -163,7 +194,17 @@ internal object NativeSubmissionRecords {
         for (field in listOf("intentId", "id", "inputToken", "inputRevision", "inputDigest", "context", "queue", "controlGeneration")) {
             if (intent.get(field).toString() != receipt.get(field).toString()) fail("INPUT_OPERATION_CONFLICT", "接纳回执与原发送意图不一致，未清除草稿或替换关联。")
         }
+        if (intent.optJSONObject("source")?.let(::source)?.toString() != receipt.optJSONObject("source")?.toString())
+            fail("INPUT_OPERATION_CONFLICT", "接纳回执的转交来源不一致。")
         val productId = intent.getString("id")
+        if (intent.has("source")) {
+            if (intent.has("receipt") && intent.getJSONObject("receipt").toString() != receipt.toString()) fail("INPUT_OPERATION_CONFLICT", "此意图已记录不同的接纳回执。")
+            if (!intent.has("receipt")) {
+                intent.put("receipt", receipt).put("delivery", "acknowledged").put("stateVersion", next(intent, "stateVersion"))
+                save(db, intent)
+            }
+            return JSONObject().put("kind", "route").put("intent", intent).put("draftCleared", false)
+        }
         if (intent.has("receipt")) {
             if (intent.getJSONObject("receipt").toString() != receipt.toString()) fail("INPUT_OPERATION_CONFLICT", "此意图已记录不同的接纳回执。")
             return JSONObject().put("intent", intent).put("draftCleared", false).put("draft", draft(productId))
@@ -194,6 +235,7 @@ internal object NativeSubmissionRecords {
             .put("inputDigest", text(value, "inputDigest", 64)).put("context", context(value.getJSONObject("context")))
             .put("queue", queue(value.getJSONObject("queue"))).put("controlGeneration", integer(value, "controlGeneration", 1))
             .put("bindingId", id(value, "bindingId")).put("submissionId", integer(value, "submissionId"))
+            .apply { if (value.has("source")) put("source", source(value.getJSONObject("source"))) }
     }
     private fun save(db: SQLiteDatabase, intent: JSONObject) { db.execSQL("UPDATE native_send_intents SET data=? WHERE intent_id=?", arrayOf(intent.toString(), intent.getString("intentId"))) }
     private fun next(value: JSONObject, key: String): Long {
@@ -275,8 +317,14 @@ internal object NativeSubmissionRecords {
     }
     /** The durable generation fence cancels arbitrarily many historical intents in one short write. */
     private fun project(db: SQLiteDatabase, intent: JSONObject): JSONObject {
-        if (!intent.getBoolean("cancelled") && intent.getLong("controlGeneration") <= control(db, intent.getString("id")).getLong("stoppedThrough"))
-            intent.put("cancelled", true).put("stateVersion", next(intent, "stateVersion"))
+        val targetStopped = intent.getLong("controlGeneration") <= control(db, intent.getString("id")).getLong("stoppedThrough")
+        if (intent.getBoolean("cancelled") != targetStopped) intent.put("cancelled", targetStopped).put("stateVersion", next(intent, "stateVersion"))
+        val origin = intent.optJSONObject("source")?.let(::source)
+        if (origin != null) {
+            val sourceControl = control(db, origin.getString("id"))
+            val sourceStopped = sourceControl.getLong("stoppedThrough") >= origin.getLong("controlGeneration")
+            if (intent.optBoolean("sourceCancelled") != sourceStopped) intent.put("sourceCancelled", sourceStopped).put("stateVersion", next(intent, "stateVersion"))
+        }
         return intent
     }
     private fun product(db: SQLiteDatabase, productId: String): JSONObject = db.rawQuery("SELECT data FROM conversations WHERE id=?", arrayOf(productId)).use {

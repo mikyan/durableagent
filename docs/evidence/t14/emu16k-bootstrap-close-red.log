@@ -1,0 +1,46 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ExtensionApplicationTest:
+INSTRUMENTATION_STATUS: test=debugCloseDuringBootstrapReleasesDomainBeforeNextValidationRun
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: extensionEvidence={"case":"debug-close-before-ready","result":{"phase":"opening","instance":"0c58a7d2-8a77-4fa8-84f8-392313ace9e1","pid":4390,"domainOwned":true,"nativeOwners":1}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Extension state timeout: close requested during bootstrap
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExtensionApplicationTest.until(ExtensionApplicationTest.kt:29)
+	at dev.durableagent.probe.ExtensionApplicationTest.debugCloseDuringBootstrapReleasesDomainBeforeNextValidationRun(ExtensionApplicationTest.kt:103)
+
+INSTRUMENTATION_STATUS: stream=
+Error in debugCloseDuringBootstrapReleasesDomainBeforeNextValidationRun(dev.durableagent.probe.ExtensionApplicationTest):
+java.lang.AssertionError: Extension state timeout: close requested during bootstrap
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExtensionApplicationTest.until(ExtensionApplicationTest.kt:29)
+	at dev.durableagent.probe.ExtensionApplicationTest.debugCloseDuringBootstrapReleasesDomainBeforeNextValidationRun(ExtensionApplicationTest.kt:103)
+
+INSTRUMENTATION_STATUS: test=debugCloseDuringBootstrapReleasesDomainBeforeNextValidationRun
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 16.276
+There was 1 failure:
+1) debugCloseDuringBootstrapReleasesDomainBeforeNextValidationRun(dev.durableagent.probe.ExtensionApplicationTest)
+java.lang.AssertionError: Extension state timeout: close requested during bootstrap
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExtensionApplicationTest.until(ExtensionApplicationTest.kt:29)
+	at dev.durableagent.probe.ExtensionApplicationTest.debugCloseDuringBootstrapReleasesDomainBeforeNextValidationRun(ExtensionApplicationTest.kt:103)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

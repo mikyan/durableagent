@@ -14,10 +14,15 @@ import type {SendAuthority} from './submission-protocol.js';
 const host=globalThis as any;
 // The native owner chooses this mode before loading JS. It is not a UI action.
 export async function install(mode:string) {
+  const extensionMode=mode.startsWith('extensions-');if(extensionMode)mode=mode.slice('extensions-'.length);
   let secret:string|undefined;
   let connections:ModelConnections|undefined;
   const metrics:Record<string,unknown>={};
-  const projectValidation=mode==='fixture'||mode==='real'?projectWitness(metrics):undefined;
+  const projectValidation=!extensionMode&&(mode==='fixture'||mode==='real')?projectWitness(metrics):undefined;
+  let route:{id:string;text:string;at:number;forbiddenDraft?:string}|undefined;
+  if(extensionMode)host.__appExtensionRoute=(value:string)=>{const input=JSON.parse(value);if(typeof input.id!=='string'||typeof input.text!=='string')throw Error('Invalid extension fixture');route={...input,at:Number(metrics.transportRequests??metrics.modelRequests??0)};metrics.extensionRequestHasTargetDraft=false;};
+  const observeExtensionRequest=(body:string)=>{if(route?.forbiddenDraft&&JSON.stringify(JSON.parse(body)).includes(route.forbiddenDraft))metrics.extensionRequestHasTargetDraft=true;};
+  const routeTool=()=>route&&Number(metrics.transportRequests??metrics.modelRequests??0)===route.at?'conversation_transfer':undefined;
   if(projectValidation)host.__appProjectWitness=(value:string)=>{if(value!=='witness')throw Error('Unknown project validation mode');projectValidation.enable();};
   const nativeInputs=host.__nativeInputs;delete host.__nativeInputs;
   const inputInvoke=(method:string,...args:string[])=>{const response=JSON.parse(nativeInputs[method](...args));if(!response.ok)throw new InputError(response.error.code,response.error.message);return response.value;};
@@ -25,11 +30,11 @@ export async function install(mode:string) {
   const locationEdits=nativeInputs?{beginLocationEdit:async(operationId:string)=>inputInvoke('beginLocationEditJson',operationId),readLocationEdit:async()=>inputInvoke('readLocationEditJson'),finishLocationEdit:async(operationId:string,contexts:unknown[])=>{inputInvoke('finishLocationEditJson',operationId,JSON.stringify(contexts));}}:undefined;
   const sends:SendAuthority|undefined=nativeInputs?{readSend:async id=>inputInvoke('readSendJson',id),listSends:async options=>inputInvoke('listSendsJson',JSON.stringify(options??{})),markDeliveryUnknown:async id=>inputInvoke('markDeliveryUnknownJson',id),confirmAdmission:async(id,receipt)=>inputInvoke('confirmAdmissionJson',id,JSON.stringify(receipt)),readControl:async id=>inputInvoke('readControlJson',id),pendingStops:async()=>inputInvoke('pendingStopsJson'),confirmAbort:async(id,barrier)=>inputInvoke('confirmAbortJson',id,JSON.stringify(barrier))}:undefined;
   let configuration:{models:Models;workspacePath:string;initialModel?:ModelSelection}={models:createModels(),workspacePath:join(host.__applicationRoot,'workspace')};
-  if(mode==='fixture'||mode==='hang')configuration=validationConfiguration({hang:mode==='hang',toolName:()=>projectValidation?.enabled?'location_witness':undefined,requested:()=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;}});
+  if(mode==='fixture'||mode==='hang')configuration=validationConfiguration({hang:mode==='hang',observeRequest:extensionMode?observeExtensionRequest:undefined,toolName:()=>projectValidation?.enabled?'location_witness':routeTool(),toolArguments:()=>route?{id:route.id,text:route.text}:{},requested:()=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;}});
   else if(mode==='real'){
     secret=host.__validationKey;delete host.__validationKey;
     if(!secret)throw new Error('Encrypted validation credential unavailable');
-    const live=liveModels(secret,patch=>Object.assign(metrics,patch),{forceEcho:false,forceTool:()=>projectValidation?.enabled?'location_witness':undefined});
+    const live=liveModels(secret,patch=>Object.assign(metrics,patch),{forceEcho:false,forceTool:()=>projectValidation?.enabled?'location_witness':routeTool(),observeRequest:extensionMode?observeExtensionRequest:undefined});
     configuration={models:live.models,workspacePath:configuration.workspacePath,initialModel:{provider:live.provider,modelId:live.model,name:'MiMo V2.6 Flash'}};
   }else if(mode==='product'||mode==='models'||mode==='models-fixture'){
     const native=host.__nativeCredentials;delete host.__nativeCredentials;
@@ -42,7 +47,11 @@ export async function install(mode:string) {
   const path=join(host.__applicationRoot,'application.sqlite');
   let submissionValidation:any;
   if(host.__submissionValidation){const native=host.__submissionValidation;delete host.__submissionValidation;const module=await import(new URL('../validation/submission-control.mjs',import.meta.url).href);submissionValidation=module.submissionControl(path,native,metrics,mode==='fixture'||mode==='hang');host.__appSubmissionFault=(value:string)=>submissionValidation.set(value);}
-  const app=new Application({path,...configuration,secret,connections,inputs,sends,locationEdits,...(projectValidation?{registry:projectValidation.registry,locations:projectValidation.locations}:{}),...(submissionValidation?{submissionBoundary:submissionValidation.boundary,...(submissionValidation.storageFactory?{storageFactory:submissionValidation.storageFactory}:{})}:{})});
+  const app=new Application({path,...configuration,secret,connections,inputs,sends,locationEdits,routes:nativeInputs?{createRoute:async request=>inputInvoke('createRouteJson',JSON.stringify(request))}:undefined,...(projectValidation?{registry:projectValidation.registry,locations:projectValidation.locations}:{}),...(submissionValidation?{submissionBoundary:submissionValidation.boundary,...(submissionValidation.storageFactory?{storageFactory:submissionValidation.storageFactory}:{})}:{})});
+  if(extensionMode&&mode==='fixture')host.__appRunExtensionPolicy=()=>{
+    if(metrics.extensionPolicyState==='running')return;metrics.extensionPolicyState='running';metrics.extensionPolicyCases=[];
+    void(async()=>{const directory=join(host.__applicationRoot,'extension-policy-temp');await mkdir(directory,{recursive:true});for(const entry of ['extension','registry']){const policy=await import(new URL(`../validation/${entry}-policy.mjs`,import.meta.url).href);await policy[entry==='extension'?'runExtensionPolicyChecks':'runRegistryPolicyChecks']((result:unknown)=>(metrics.extensionPolicyCases as unknown[]).push(result),{tempRoot:directory});}metrics.extensionPolicyState='passed';})().catch(error=>{metrics.extensionPolicyState='failed';metrics.extensionPolicyError=String(error.message??error);metrics.extensionPolicyDiagnostic=error.diagnostic;});
+  };
   if(mode==='fixture')host.__appRunProjectPolicy=()=>{
     if(metrics.projectPolicyState==='running')return;metrics.projectPolicyState='running';metrics.projectPolicyCases=[];
     void(async()=>{const directory=join(host.__applicationRoot,'project-policy-temp');await mkdir(directory,{recursive:true});const policy=await import(new URL('../validation/project-policy.mjs',import.meta.url).href);await policy.runProjectPolicyChecks((result:unknown)=>(metrics.projectPolicyCases as unknown[]).push(result),{tempRoot:directory});metrics.projectPolicyState='passed';})().catch(error=>{metrics.projectPolicyState='failed';metrics.projectPolicyError=String(error.message??error);metrics.projectPolicyDiagnostic=error.diagnostic;});

@@ -1,0 +1,90 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ExtensionApplicationTest:
+INSTRUMENTATION_STATUS: test=actualAndroidRegistryAndRoutingPolicies
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExtensionApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Extension state timeout: host close
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExtensionApplicationTest.until(ExtensionApplicationTest.kt:29)
+	at dev.durableagent.probe.ExtensionApplicationTest.access$until(ExtensionApplicationTest.kt:22)
+	at dev.durableagent.probe.ExtensionApplicationTest$Wire.closeHost(ExtensionApplicationTest.kt:39)
+	at dev.durableagent.probe.ExtensionApplicationTest.cleanup(ExtensionApplicationTest.kt:67)
+	at dev.durableagent.probe.ExtensionApplicationTest.actualAndroidRegistryAndRoutingPolicies(ExtensionApplicationTest.kt:71)
+
+INSTRUMENTATION_STATUS: stream=
+Error in actualAndroidRegistryAndRoutingPolicies(dev.durableagent.probe.ExtensionApplicationTest):
+java.lang.AssertionError: Extension state timeout: host close
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExtensionApplicationTest.until(ExtensionApplicationTest.kt:29)
+	at dev.durableagent.probe.ExtensionApplicationTest.access$until(ExtensionApplicationTest.kt:22)
+	at dev.durableagent.probe.ExtensionApplicationTest$Wire.closeHost(ExtensionApplicationTest.kt:39)
+	at dev.durableagent.probe.ExtensionApplicationTest.cleanup(ExtensionApplicationTest.kt:67)
+	at dev.durableagent.probe.ExtensionApplicationTest.actualAndroidRegistryAndRoutingPolicies(ExtensionApplicationTest.kt:71)
+
+INSTRUMENTATION_STATUS: test=actualAndroidRegistryAndRoutingPolicies
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRoutingTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeRoutingTest:
+INSTRUMENTATION_STATUS: test=sourceAndTargetControlsLocationAndPayloadAreCheckedBeforeAnyRouteIsStored
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRoutingTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=sourceAndTargetControlsLocationAndPayloadAreCheckedBeforeAnyRouteIsStored
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ProjectApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ProjectApplicationTest:
+INSTRUMENTATION_STATUS: test=realReactProjectSelectionSharedRenameAndStableReopen
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ProjectApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=dev.durableagent.probe.NativeInputException: 草稿不存在。
+
+INSTRUMENTATION_STATUS: stream=
+Error in realReactProjectSelectionSharedRenameAndStableReopen(dev.durableagent.probe.ProjectApplicationTest):
+dev.durableagent.probe.NativeInputException: 草稿不存在。
+
+INSTRUMENTATION_STATUS: test=realReactProjectSelectionSharedRenameAndStableReopen
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 36.243
+There were 2 failures:
+1) actualAndroidRegistryAndRoutingPolicies(dev.durableagent.probe.ExtensionApplicationTest)
+java.lang.AssertionError: Extension state timeout: host close
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExtensionApplicationTest.until(ExtensionApplicationTest.kt:29)
+	at dev.durableagent.probe.ExtensionApplicationTest.access$until(ExtensionApplicationTest.kt:22)
+	at dev.durableagent.probe.ExtensionApplicationTest$Wire.closeHost(ExtensionApplicationTest.kt:39)
+	at dev.durableagent.probe.ExtensionApplicationTest.cleanup(ExtensionApplicationTest.kt:67)
+	at dev.durableagent.probe.ExtensionApplicationTest.actualAndroidRegistryAndRoutingPolicies(ExtensionApplicationTest.kt:71)
+2) realReactProjectSelectionSharedRenameAndStableReopen(dev.durableagent.probe.ProjectApplicationTest)
+dev.durableagent.probe.NativeInputException: 草稿不存在。
+
+FAILURES!!!
+Tests run: 3,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1
