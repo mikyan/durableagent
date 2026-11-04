@@ -1,0 +1,22 @@
+android/app/src/androidTest/java/dev/durableagent/probe/RecoveryNotificationWindowTest.kt
+  s_467dcb949b5b60::t_5919e34117bfca 1-22,24-41,43-44,46-54
+  s_467dcb949b5b60::t_1d173661a2c38c 23,42,45
+android/app/src/main/java/dev/durableagent/probe/NativeRecoveryStore.kt
+  s_467dcb949b5b60::t_5919e34117bfca 54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "704605afe6d33aa243a57d40c2b6cc7a9e0eedd1",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
