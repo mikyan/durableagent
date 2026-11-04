@@ -62,9 +62,10 @@ export class Application {
   private waking?:Promise<void>;
   private projecting?:Promise<void>;
   private projectAgain=false;
+  private publicationFailure?:string;
   private workspace={id:'default',path:''};
   constructor(private readonly options:ApplicationOptions) {if(options.dataSaver){this.state.extensions.push(DATA_SAVER_EXTENSION.id);for(const action of DATA_SAVER_EXTENSION.actions)this.actions.add(action);}for(const action of ['extensions.get','routing.list','routing.query','routing.create','routing.send'])this.actions.add(action);if(options.execution){options.locations=options.execution.locations;options.effects=options.execution;this.state.extensions.push(EXECUTION_EXTENSION.id);for(const action of EXECUTION_EXTENSION.actions)this.actions.add(action);}this.state.extensions.push(PROJECTS_EXTENSION.id);for(const action of PROJECTS_EXTENSION.actions)this.actions.add(action);installConversationAgent(extension=>{this.state.extensions.push(extension.id);for(const action of extension.actions)this.actions.add(action);});if(options.connections){this.state.extensions.push(MODELS_EXTENSION.id);for(const action of MODELS_EXTENSION.actions)this.actions.add(action);}if(options.inputs)this.state.extensions.push(INPUT_EXTENSION.id);if(options.sends){this.state.extensions.push(SUBMISSION_EXTENSION.id);for(const action of SUBMISSION_EXTENSION.actions)this.actions.add(action);}}
-  status(){return {...this.state};}
+  status(){return {...this.state,...(this.publicationFailure&&!this.state.reason?{reason:this.publicationFailure}:{})};}
   start():Promise<void> {
     if(this.closing)return this.closing.then(()=>this.start());
     if(this.starting)return this.starting;
@@ -140,11 +141,12 @@ export class Application {
         const view=await this.snapshot(product.id,product);conversations.push({id:product.id,phase:view.phase,...(view.recovery?{recovery:view.recovery}:{})});
         if(view.phase!=='done')continue;
         let cursor:string|undefined,latest:string|undefined;
-        do{const page=await this.submissions!.list({id:product.id,cursor,limit:100});for(const send of page.items)if(send.submission?.status==='done'&&send.submission.answerEntryId)latest=send.submission.answerEntryId;cursor=page.next;}while(cursor);
+        do{const page=await this.submissions!.list({id:product.id,cursor,limit:50});for(const send of page.items){const answer=send.submission?.answerEntryId;if(send.submission?.status==='done'&&answer&&/^\d+$/.test(answer)&&(!latest||BigInt(answer)>BigInt(latest)))latest=answer;}cursor=page.next;}while(cursor);
         if(latest)completions.push({identity:`answer:${product.sdkId}:${latest}`,conversationId:product.id});
       }
       await this.options.recovery!.publishProjection!({conversations,completions});
-    }})().catch(()=>{/* Result remains durable; a later commit/host wake retries native publication. */}).finally(()=>{this.projecting=undefined;});
+      this.publicationFailure=undefined;
+    }})().catch(()=>{this.publicationFailure='运行状态暂未同步到系统；已保存的结果仍可在会话查看。';}).finally(()=>{this.projecting=undefined;});
   }
   private ready() {
     if(this.state.phase!=='ready'||!this.harness)throw new ActionError(this.state.phase==='configuring'?'CONFIG_LOADING':this.state.phase==='failed'?'STORAGE_UNAVAILABLE':'HOST_NOT_READY',this.state.reason??(this.state.phase==='configuring'?'正在装载配置':'运行宿主尚未就绪'));

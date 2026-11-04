@@ -26,6 +26,14 @@ class NativeRecoveryAccess(private val service:Service,private val mode:String,p
         private set
     private val receiver=object:BroadcastReceiver(){override fun onReceive(context:Context,intent:Intent){fired=null;changes.incrementAndGet()}}
     init{service.registerReceiver(receiver,IntentFilter().apply{addAction(Intent.ACTION_TIME_CHANGED);addAction(Intent.ACTION_USER_UNLOCKED)},Context.RECEIVER_NOT_EXPORTED)}
+    /** Called before bundle unpack on a legally started host; no model/effect permission is inferred. */
+    fun restoreRunning(){
+        val wake=store.readWake();lastWake=wake.toString();due=if(wake.has("at"))wake.getLong("at")else null
+        if(!wake.optBoolean("active")&&!wake.has("at")){pendingWork=false;return}
+        val projection=store.readProjection().put("restoring",true)
+        NativeRecoveryNotifications.running(service,mode,run,projection)?.let{publishForeground(it)}
+    }
+    private fun publishForeground(notification:android.app.Notification){try{service.startForeground(NativeRecoveryNotifications.RUNNING_ID,notification,ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);foreground=true;startBlocked=false}catch(_:RuntimeException){startBlocked=true}}
     fun conditions():JSONObject {
         val value=network.current()
         return JSONObject().put("userUnlocked",service.getSystemService(UserManager::class.java).isUserUnlocked)
@@ -52,7 +60,7 @@ class NativeRecoveryAccess(private val service:Service,private val mode:String,p
         pendingWork=rows!=null&&(0 until rows.length()).any{rows.getJSONObject(it).optString("phase") in setOf("running","waiting")}
         if(json!=lastProjection||startBlocked){lastProjection=json
             val notification=NativeRecoveryNotifications.running(service,mode,run,projection)
-            if(notification!=null){try{service.startForeground(NativeRecoveryNotifications.RUNNING_ID,notification,ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);foreground=true;startBlocked=false}catch(_:RuntimeException){startBlocked=true}}
+            if(notification!=null)publishForeground(notification)
             else if(foreground){service.stopForeground(Service.STOP_FOREGROUND_REMOVE);foreground=false}
         }
         store.hostState(JSONObject().put("background",if(startBlocked)"system-blocked" else if(foreground)"running" else "not-requested").put("foreground",foreground))

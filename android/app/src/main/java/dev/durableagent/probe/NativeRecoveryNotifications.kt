@@ -40,7 +40,8 @@ object NativeRecoveryNotifications {
         val active=(0 until rows.length()).map{rows.getJSONObject(it)}.filter{it.optString("phase") in setOf("running","waiting")}
         val first=active.firstOrNull()?:return null
         val id=first.getString("id");val waiting=first.optString("phase")=="waiting"
-        val builder=builder(context,RUNNING_CHANNEL,if(waiting)"会话等待继续" else "会话正在运行",if(active.size>1)"${active.size} 个会话有未完成工作" else "会话 ${id.take(8)} · ${if(waiting)"等待条件恢复" else "正在处理"}")
+        val restoring=projection.optBoolean("restoring")
+        val builder=builder(context,RUNNING_CHANNEL,if(restoring)"正在核验上次工作" else if(waiting)"会话等待继续" else "会话正在运行",if(active.size>1)"${active.size} 个会话有未完成工作" else "会话 ${id.take(8)} · ${if(restoring)"恢复已保存进度" else if(waiting)"等待条件恢复" else "正在处理"}")
             .setOngoing(true).setOnlyAlertOnce(true)
         target(context,mode,run,id)?.let{builder.setContentIntent(it)}
         val namespace=NativeInputBridge.namespace(mode,run)
@@ -58,11 +59,16 @@ object NativeRecoveryNotifications {
         val manager=channels(context);val values=projection.optJSONArray("completions")?:return
         for(index in 0 until values.length()){
             val value=values.getJSONObject(index);val identity=value.getString("identity");val id=value.getString("conversationId")
-            if(store.pendingCompletion(identity,id).getString("state")=="published")continue
+            val delivery=store.pendingCompletion(identity,id).getString("state");val tag=NativeInputBridge.namespace(mode,run)+":"+identity
+            if(delivery=="published")continue
+            // A stable already-visible post is evidence, not an instruction to re-notify.
+            if(manager.activeNotifications.any{it.tag==tag&&it.id==18013}){store.completeNotification(identity);continue}
+            if(delivery!="pending")continue
             if(context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=PackageManager.PERMISSION_GRANTED||!manager.areNotificationsEnabled()||manager.getNotificationChannel(COMPLETION_CHANNEL)?.importance==NotificationManager.IMPORTANCE_NONE)continue
             val builder=builder(context,COMPLETION_CHANNEL,"会话工作已完成","会话 ${id.take(8)} · 点击查看已保存结果").setOnlyAlertOnce(true).setAutoCancel(true)
             target(context,mode,run,id)?.let{builder.setContentIntent(it)}
-            manager.notify(NativeInputBridge.namespace(mode,run)+":"+identity,18013,builder.build())
+            if(!store.claimNotification(identity))continue
+            try{manager.notify(tag,18013,builder.build())}catch(_:RuntimeException){store.notificationFailure("系统拒绝了完成通知投递；结果仍保存在会话中。");continue}
             store.completeNotification(identity)
         }
     }

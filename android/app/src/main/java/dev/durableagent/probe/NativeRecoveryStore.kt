@@ -47,11 +47,14 @@ class NativeRecoveryStore(context:Context,namespace:String):AutoCloseable {
             val prior=db.rawQuery("SELECT conversation_id,published FROM completions WHERE identity=?",arrayOf(identity)).use{if(it.moveToFirst())it.getString(0) to it.getInt(1) else null}
             require(prior==null||prior.first==conversationId){"Completion identity changed conversation"}
             if(prior==null)db.execSQL("INSERT INTO completions(identity,conversation_id,published) VALUES(?,?,0)",arrayOf(identity,conversationId))
-            JSONObject().put("identity",identity).put("conversationId",conversationId).put("state",if(prior?.second==1)"published" else "pending")
+            JSONObject().put("identity",identity).put("conversationId",conversationId).put("state",when(prior?.second){1->"published";2->"attempted";else->"pending"})
         }}
     }
     fun completeNotification(identity:String):Unit {identity(identity);access{db->db.execSQL("UPDATE completions SET published=1 WHERE identity=?",arrayOf(identity))}}
-    fun claimNotification(identity:String):Boolean=error("COMPLETION_ATTEMPT_NOT_IMPLEMENTED")
+    /** One durable system delivery attempt. A host lost after this commit cannot repeat a dismissed alert. */
+    fun claimNotification(identity:String):Boolean {identity(identity);return access{db->transaction(db){db.update("completions",android.content.ContentValues().apply{put("published",2)},"identity=? AND published=0",arrayOf(identity))==1}}}
+    fun notificationFailure(reason:String):Unit=access{put(it,"notification-failure",JSONObject().put("reason",reason.take(120)))}
+    fun notificationState():JSONObject=access{db->JSONObject().put("unconfirmed",db.rawQuery("SELECT COUNT(*) FROM completions WHERE published=2",null).use{it.moveToFirst();it.getLong(0)}).apply{get(db,"notification-failure")?.optString("reason")?.let{put("reason",it)}}}
     private fun identity(value:String){require(value.length in 1..256&&value.none{it.code<32})}
     private fun put(db:SQLiteDatabase,key:String,value:JSONObject){db.execSQL("INSERT INTO metadata(key,data) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET data=excluded.data",arrayOf(key,value.toString()))}
     private fun get(db:SQLiteDatabase,key:String):JSONObject?=db.rawQuery("SELECT data FROM metadata WHERE key=?",arrayOf(key)).use{if(it.moveToFirst())JSONObject(it.getString(0))else null}

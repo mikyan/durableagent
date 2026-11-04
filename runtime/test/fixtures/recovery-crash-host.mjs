@@ -1,0 +1,14 @@
+import {appendFileSync,writeFileSync} from 'node:fs';
+import {join} from 'node:path';
+import {Application} from '../../validation/application-fixture.mjs';
+import {validationConfiguration} from '../../dist/application-validation.js';
+const [directory,mode,restartLimit,maxRetries]=process.argv.slice(2);let app,timer;
+const call=async(method,payload={})=>{const value=await app.request({protocol:1,connectionId:'recovery-child',requestId:crypto.randomUUID(),method,payload});if(!value.ok)throw Error(value.error.message);return value.value;};
+const recovery={conditions:async()=>({network:'available',userUnlocked:true}),subscribe:()=>()=>{},publishWake:async wake=>{clearTimeout(timer);if(wake.at!==undefined)timer=setTimeout(()=>void app.wake(),Math.max(1,wake.at-Date.now()));}};
+app=new Application({path:join(directory,'app.sqlite'),...validationConfiguration({hang:true,requested:()=>{
+ appendFileSync(join(directory,'requests.txt'),'request\n');
+ if(mode==='crash')process.kill(process.pid,'SIGKILL');
+ else setImmediate(()=>void app.close().then(()=>{writeFileSync(join(directory,'closed.txt'),'closed');process.exit(0);}).catch(error=>{process.stderr.write(String(error));process.exit(2);}));
+}}),recovery,bootstrapSettings:()=>({retry:{enabled:Number(maxRetries)>0,maxRetries:Number(maxRetries),baseDelayMs:10},restartLimit:Number(restartLimit)})});
+await app.start();if(!(await call('list')).conversations.length){await call('create',{creationId:'chat'});await call('send',{id:'chat',text:'one durable input across host loss',actionId:'original'});}
+setInterval(()=>{},1000);

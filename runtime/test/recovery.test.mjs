@@ -62,10 +62,13 @@ test('native completion projection comes from settled input and survives reopen 
  try{
   await app.start();await call(app,'create',{creationId:'chat'});await call(app,'send',{id:'chat',text:'complete without an attached UI',actionId:'original'});
   await until(()=>projections.some(value=>value.completions?.length),'Native settled completion');
-  const completion=projections.findLast(value=>value.completions.length).completions[0];assert.equal(completion.conversationId,'chat');assert.ok(completion.identity);
+  const first=projections.findLast(value=>value.completions.length).completions[0];assert.equal(first.conversationId,'chat');assert.ok(first.identity);
+  await call(app,'send',{id:'chat',text:'the next saved input',actionId:'second'});
+  await until(()=>projections.some(value=>value.completions?.some(item=>item.identity!==first.identity)),'Latest completion wins when native lists newest first');
+  const completion=projections.findLast(value=>value.completions.length).completions[0];assert.notEqual(completion.identity,first.identity);
   await app.close();projections.length=0;app=new Application(options);await app.start();await app.wake();
   await until(()=>projections.some(value=>value.completions?.length),'Completion can be reconciled after host loss');
-  assert.deepEqual(projections.findLast(value=>value.completions.length).completions[0],completion);assert.equal(requests,1);
+  assert.deepEqual(projections.findLast(value=>value.completions.length).completions[0],completion);assert.equal(requests,2);
  }finally{await app.close();await rm(directory,{recursive:true,force:true});}
 });
 

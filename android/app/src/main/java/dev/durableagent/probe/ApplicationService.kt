@@ -155,14 +155,15 @@ class ApplicationService:Service() {
             check(actualMode in setOf("product","fixture","hang","real","models","models-fixture","execution","execution-real","extensions-fixture","extensions-real"))
             check(mode=="product"||run?.matches(Regex("[a-zA-Z0-9-]{1,80}"))==true)
             check(!File(noBackupFilesDir,"unsupported-restore").exists()) { "检测到不受支持的系统恢复，原数据已保留；运行已关闭，请使用原安装的数据继续核验。" }
+            NativeInputStore(this,NativeInputBridge.namespace(mode,run)).withLeaseWait(1000).use{it.pendingStops()}
             val domain=File(filesDir,if(mode=="product")"application" else "application-validation/$run")
             lease=StorageDomainLease.acquire(domain)?:error("Application storage already owned")
             instance=UUID.randomUUID().toString();phase="{\"phase\":\"opening\"}"
+            if(mode=="product"||mode.startsWith("recovery-")){recovery=NativeRecoveryAccess(this,mode,run);recovery!!.restoreRunning()}
             val root=RuntimeBundle.unpack(this)
             val runtime=V8Host.getNodeI18nInstance().createV8Runtime<NodeRuntime>();node=runtime
             runtime.globalObject.set("__applicationRoot",domain.absolutePath)
             if(mode=="product"||mode.startsWith("recovery-")){
-                recovery=NativeRecoveryAccess(this,mode,run)
                 runtime.createV8ValueObject().use{access->access.bind(recovery!!);runtime.globalObject.set("__nativeRecovery",access)}
             }
             if(debug&&mode!="product")runtime.createV8ValueObject().use{probe->probe.bind(submissionProbe);runtime.globalObject.set("__submissionValidation",probe)}
