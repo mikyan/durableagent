@@ -2,14 +2,18 @@ package dev.durableagent.probe
 
 import android.app.ActivityManager
 import android.app.job.JobScheduler
+import android.app.job.JobInfo
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.os.SystemClock
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.json.JSONObject
 import org.junit.Assert.*
+import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.UUID
@@ -34,6 +38,32 @@ class RecoveryJobApplicationTest {
         fun ready(){until("Job owner ready"){val value=state();check(value.optString("phase")!="failed"){value.toString()};value.optString("phase")=="ready"}}
         fun closeHost(){client.control(20,"close");until("Owner closes naturally"){state().optString("phase")=="closed"}}
         override fun close(){client.disconnect()}
+    }
+    @Test(timeout=180000) fun anUnavailablePlatformWakeCanBeRepublishedWithoutAnotherInput(){
+        assumeTrue(InstrumentationRegistry.getArguments().getString("actualNetworkOffline")=="true")
+        val mode="recovery-fixture";val run=id();val namespace=NativeInputBridge.namespace(mode,run);val product="wake-$run"
+        val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode",mode).putExtra("validationRun",run));val wire=Wire(mode,run)
+        val jobs=context.getSystemService(JobScheduler::class.java);val jobId=0x40000000 or(namespace.hashCode() and 0x3fffffff);var created=false
+        NativeInputStore(context,namespace).withLeaseWait(1000).use{store->NativeRecoveryStore(context,namespace).use{recovery->try{
+            wire.ready();assertEquals("Root must disable actual device networking", "offline",wire.state().getJSONObject("recovery").getString("network"));assertNull("Never overwrite an existing unrelated system job",jobs.getPendingJob(jobId))
+            wire.call("create",JSONObject().put("creationId",product));created=true;val expected=wire.call("open",JSONObject().put("id",product)).getJSONObject("conversation").getJSONObject("submissionContext")
+            // Actual Android scheduling cannot publish while this owned conflict is present.
+            val conflict=PersistableBundle().apply{putString("namespace","owned-conflict-$run");putString("mode",mode);putString("run",run)}
+            assertEquals(JobScheduler.RESULT_SUCCESS,jobs.schedule(JobInfo.Builder(jobId,ComponentName(context,NativeRecoveryJobService::class.java)).setExtras(conflict).setMinimumLatency(3600000).build()))
+            val saved=store.save(product,0,id(),"one offline input across a rejected wake publication",emptyList());val fixed=store.freeze(product,saved.getLong("revision"),id())
+            val intent=store.createSend(JSONObject().put("id",product).put("actionId",id()).put("inputToken",fixed.getString("token")).put("expectedContext",expected).put("expectedControlVersion",store.readControl(product).getLong("version")).put("queue",JSONObject().put("whenBusy","followUp").put("whenIdle","start")))
+            wire.call("send",JSONObject().put("intentId",intent.getString("intentId")))
+            until("Native wake persisted while the platform publication is unavailable"){try{recovery.readWake().optBoolean("active")&&wire.call("open",JSONObject().put("id",product)).optJSONObject("recovery")?.optString("reason")=="network-offline"}catch(error:IllegalStateException){if(error.message=="RECOVERY_STORAGE_BUSY")false else throw error}}
+            val admission=wire.call("sendStatus",JSONObject().put("intentId",intent.getString("intentId"))).getJSONObject("receipt").toString();assertEquals("owned-conflict-$run",jobs.getPendingJob(jobId)?.extras?.getString("namespace"));assertEquals(0,wire.state().getJSONObject("metrics").optInt("modelRequests"))
+            jobs.cancel(jobId);wire.client.control(61)
+            until("Same pending work republishes its actual Android wake after the conflict clears",10000){jobs.getPendingJob(jobId)?.extras?.getString("namespace")==namespace}
+            assertEquals(admission,wire.call("sendStatus",JSONObject().put("intentId",intent.getString("intentId"))).getJSONObject("receipt").toString());assertEquals(0,wire.state().getJSONObject("metrics").optInt("modelRequests"))
+            instrumentation.sendStatus(0,Bundle().apply{putString("wakeRepublished",JSONObject().put("run",run).put("product",product).put("sameAdmission",true).put("actualJobId",jobId).put("modelRequests",0).toString())})
+        }finally{
+            jobs.getPendingJob(jobId)?.let{if(it.extras.getString("namespace") in setOf(namespace,"owned-conflict-$run"))jobs.cancel(jobId)}
+            if(created){val control=store.readControl(product);if(control.getLong("generation")>control.getLong("stoppedThrough")){NativeStopController.request(context,mode,run,JSONObject().put("id",product).put("actionId",id()).put("expectedControlVersion",control.getLong("version")));until("Own offline fixture stops"){!store.readControl(product).has("pendingAbort")}}}
+            page.close();wire.closeHost();wire.close()
+        }}}
     }
     @Test(timeout=240000) fun legalJobWakeRetainsItsForegroundOwnerAfterTheJobBindingEnds(){
         val mode="recovery-hang";val run=id();val namespace=NativeInputBridge.namespace(mode,run);val product="job-$run"
