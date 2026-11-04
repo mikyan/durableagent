@@ -19,7 +19,18 @@ export class DispatchGate {
     const completed:Record<string,string>={complete:'stream',completeSimple:'streamSimple',fetchDeferred:'streamDeferred'};
     const stream=(method:string,args:any[])=>{
       const output=createAssistantMessageEventStream(),[model,,options]=args;
-      void(async()=>{try{do{await this.wait(options?.signal);await this.verify(options?.signal);}while(this.holds);if(options?.signal?.aborted)throw Error('运行已停止');for await(const event of (models as any)[method](...args))output.push(event);}catch{output.push({type:'error',reason:'aborted',error:{role:'assistant',content:[],api:model.api,provider:model.provider,model:model.id,stopReason:'aborted',errorMessage:'运行已停止',timestamp:Date.now(),usage:{input:0,output:0,cacheRead:0,cacheWrite:0,totalTokens:0,cost:{input:0,output:0,cacheRead:0,cacheWrite:0,total:0}}}});}})();return output;
+      void(async()=>{
+        let stage:'readiness'|'model'='readiness';
+        try{do{await this.wait(options?.signal);await this.verify(options?.signal);}while(this.holds);if(options?.signal?.aborted)throw Error('运行已停止');stage='model';for await(const event of (models as any)[method](...args))output.push(event);}
+        catch(error){
+          const stopped=options?.signal?.aborted===true,reason=stopped?'aborted':'error';
+          // Preserve bounded protocol categories, never arbitrary exception text or credentials.
+          const candidate=(error as {code?:unknown})?.code;
+          const code=typeof candidate==='string'&&/^(?:INPUT|STOP|STORAGE|HOST|CONFIG|SUBMISSION|MODEL)_[A-Z0-9_]{1,48}$/.test(candidate)?candidate:stage==='readiness'?'DISPATCH_CHECK_FAILED':'MODEL_CALL_FAILED';
+          const errorMessage=stopped?'运行已停止':`${stage==='readiness'?'运行前检查':'模型调用'}未完成（${code}）`;
+          output.push({type:'error',reason,error:{role:'assistant',content:[],api:model.api,provider:model.provider,model:model.id,stopReason:reason,errorMessage,timestamp:Date.now(),usage:{input:0,output:0,cacheRead:0,cacheWrite:0,totalTokens:0,cost:{input:0,output:0,cacheRead:0,cacheWrite:0,total:0}}}});
+        }
+      })();return output;
     };
     return new Proxy(models,{get:(target,key)=>{if(typeof key==='string'&&methods.has(key))return(...args:any[])=>stream(key,args);if(typeof key==='string'&&completed[key])return(...args:any[])=>stream(completed[key],args).result();const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value;}});
   }
