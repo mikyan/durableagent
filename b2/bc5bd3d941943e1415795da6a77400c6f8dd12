@@ -1,0 +1,23 @@
+android/app/src/androidTest/java/dev/durableagent/probe/ConsolePickerObservationTest.kt
+  s_467dcb949b5b60::t_d20eab2191ceb6 1-22,24-34,36-40,42-45
+  s_467dcb949b5b60::t_dbc28fdc4db85f 23,35,41
+tools/console-picker-cancel-process.mjs
+  s_467dcb949b5b60::t_dbc28fdc4db85f 67
+  s_467dcb949b5b60::t_d20eab2191ceb6 1-66,68-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "b2bc5bd3d941943e1415795da6a77400c6f8dd12",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
