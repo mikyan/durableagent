@@ -1,0 +1,75 @@
+{
+  "stage": "prepare",
+  "startedAt": "2026-11-04T13:09:34.226Z",
+  "mode": "product",
+  "instrumentationUsed": false,
+  "run": "32c5fdca-a0bd-440f-bc8b-8252777adbbb",
+  "text": "这是恢复验证。只回复 T12-LIFECYCLE-32c5fdca-a0bd-440f-bc8b-8252777adbbb，不调用工具。",
+  "credentialGeneration": 1,
+  "configurationVersion": 2,
+  "product": "f0d5fc78-7070-4194-a5a5-d45778e3e9f1",
+  "explicitSendClicks": 1,
+  "uiSend": {
+    "rows": [
+      {
+        "id": "a9106c9e-4f0a-46fb-8569-0bf063d4e7fb",
+        "stage": "placed",
+        "retryReady": false
+      }
+    ],
+    "confirming": false
+  },
+  "intentId": "a9106c9e-4f0a-46fb-8569-0bf063d4e7fb",
+  "admission": {
+    "protocol": 1,
+    "intentId": "a9106c9e-4f0a-46fb-8569-0bf063d4e7fb",
+    "id": "f0d5fc78-7070-4194-a5a5-d45778e3e9f1",
+    "inputToken": "a94d92aa-df01-4cde-b2b6-1289c4b4fb62",
+    "inputRevision": 1,
+    "inputDigest": "e34d54f88bc7e2ccdad71473ba2c8eaa019b4962f639a8445d15fe9e16a6ac8e",
+    "context": {
+      "sdkConversationId": 57,
+      "associationVersion": 1,
+      "location": {
+        "workspaceId": "default",
+        "version": 1,
+        "identity": "e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"
+      }
+    },
+    "queue": {
+      "whenBusy": "followUp",
+      "whenIdle": "start"
+    },
+    "controlGeneration": 1,
+    "bindingId": "b604dbc1-b1fe-4d68-89f9-acdc37540a24",
+    "submissionId": 68
+  },
+  "waiting": {
+    "phase": "waiting",
+    "reason": "network-offline",
+    "message": "网络不可用，等待恢复后继续"
+  },
+  "history": {
+    "items": [
+      {
+        "id": "67",
+        "role": "user",
+        "text": "这是恢复验证。只回复 T12-LIFECYCLE-32c5fdca-a0bd-440f-bc8b-8252777adbbb，不调用工具。",
+        "persisted": true
+      }
+    ]
+  },
+  "ownerPid": "14721",
+  "activityExit": [
+    {
+      "at": "2026-11-04T13:09:58.326Z",
+      "backNumber": 1,
+      "inputShown": false,
+      "inputViewShown": true
+    }
+  ],
+  "prepared": true,
+  "allUiAndCdpClosed": true,
+  "preparedAt": "2026-11-04T13:09:59.509Z",
+  "httpCountObserved": false
+}

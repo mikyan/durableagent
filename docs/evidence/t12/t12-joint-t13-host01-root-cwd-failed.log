@@ -1,0 +1,193 @@
+(node:88500) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ an unknown Provider read waits in its original SDK tool and safe reopen reuses the fixed observation (available snapshot) (1103.6347ms)
+✔ an unknown Provider read waits in its original SDK tool and safe reopen reuses the fixed observation (DATA_SAVER_BUSY) (693.6195ms)
+✔ an original write waits before occupying the shared writer and exact grant resumes the same native plan (INPUT_STORAGE_BUSY) (568.1658ms)
+✔ an original write waits before occupying the shared writer and exact grant resumes the same native plan (DATA_SAVER_BUSY) (569.1547ms)
+✔ a native refusal before start admission retries only the same fixed original write (DOCUMENT_CHANNEL_BUSY) (437.5256ms)
+✔ a native refusal before start admission retries only the same fixed original write (DATA_SAVER_BUSY) (407.2044ms)
+✔ policy storage busy after dispatch waits for the same original result without repeating a write (575.0799ms)
+✔ a confirmed original write survives policy receipt loss (start response lost) without another write (354.395ms)
+✔ a confirmed original write survives policy receipt loss (pending SDK receipt) without another write (300.6541ms)
+✔ public file observation during policy waiting preserves the staged receipt sequence and original SDK tool (493.6931ms)
+(node:81300) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ the policy binds final beforeTool and prepare mutations for direct SDK calls (857.2443ms)
+✔ the policy binds final beforeTool and prepare mutations for nested SDK calls (430.7442ms)
+✔ an actual SDK command waits before start with one prepared identity while its model communication remains usable (392.2918ms)
+✔ the shared application configuration exposes current native network facts without submitting work (104.677ms)
+✔ network-interrupted effects keep the same pending SDK tool instead of prompting another model action; user stop still settles it (516.9514ms)
+✔ temporary native policy unavailability holds the original invocation without starting or asking the model again (558.0712ms)
+✔ a final native network refusal returns the same prepared execution to policy waiting, without a new model turn (574.3433ms)
+✖ real SDK host death after prepared policy restores the same waiting identity and only the explicit grant starts it (49.8775ms)
+✔ the fixed product Bash capability makes exact pwd -P local with a clean environment and no script analyzer (364.3296ms)
+(node:90988) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ recovery holds an unconfirmed original effect inside the same SDK invocation until matching proof returns (682.2839ms)
+✔ an unavailable native recovery budget keeps an unknown effect pending instead of ending the input (304.8251ms)
+✔ exhausted external probes keep the same input held across reopen and a durable stop cannot revive it (366.5357ms)
+✔ a policy-waiting prepared shell leaves the writer domain available to a controlled local file operation (353.4206ms)
+✔ startup registers an unresolved persisted execution with native stop authority before an offline query or abort confirmation (305.5578ms)
+✔ a real SDK tool stores stable execution context and reaches one external command through the application (222.384ms)
+✔ a fixed shell wrapper gives each exec ordinal its own stable request and preserves argv options (320.099ms)
+✔ empty argv is a confirmed local spawn error with no external acceptance (197.0415ms)
+✔ a pure application tool remains usable before Termux setup without providing executable file capabilities (276.7673ms)
+✔ a lost start receipt persists uncertainty and blocks a later tool identity from bypassing it (394.5463ms)
+✔ public verification in the same host resolves a lost ACK before a later explicit execution (375.878ms)
+✔ an initially unverified binding pins its first real directory identity before acceptance (201.0337ms)
+✔ a confirmed pre-acceptance cancellation settles without requesting nonexistent output (170.8777ms)
+✔ aborting the real SDK invocation sends cancellation for only its durable execution identity (217.4706ms)
+✔ environment cleanup stops only commands owned by its bound SDK conversation and confirms their scope (375.9215ms)
+✔ a pending control owner keeps project association occupied even after its live SDK pointers retire (127.7889ms)
+✔ large split UTF-8 output has a complete raw reference readable through the same execution namespace (1276.4868ms)
+✖ hard death at intent-persisted reconnects the same execution without repeating its effect (49.3269ms)
+✖ hard death at accepted reconnects the same execution without repeating its effect (44.2193ms)
+✖ hard death at output-checkpoint reconnects the same execution without repeating its effect (40.9718ms)
+✖ hard death at before-result reconnects the same execution without repeating its effect (48.7199ms)
+✖ startup verifies pending external evidence before publishing ready or allowing recovered progress (44.5897ms)
+✔ the installed SDK read tool reads the adopted Termux namespace without starting a shell (160.3914ms)
+✔ arbitrary shell commands from two conversations share a durable environment writer queue (320.7839ms)
+✔ stopping a queued writer never starts its command and releases only that waiting reservation (393.0586ms)
+✔ the real SDK write tool persists one file plan and exposes its verified original-file change (200.5103ms)
+✔ an ended helper with unconfirmed original-file effects still occupies its project and writer domain (217.6675ms)
+✔ large SDK binary writes stage bounded chunks before starting one supervised effect (187.6127ms)
+✔ SDK append preserves the existing binary prefix and its completed identity across reopen (210.3736ms)
+✔ SDK truncate, flush and rename use qualified supervised file operations with exact result evidence (296.9394ms)
+✔ a native file-proof ACK that did not persist the proof cannot release its writer occupation (193.8488ms)
+✔ environment cleanup stops its polling readers without waiting for another owner to close (738.5593ms)
+✔ a fixed document read tool reads an authorized original capability without inventing a Termux path (151.3194ms)
+✔ a fixed document list tool discovers authorized originals and current denied grants without reading contents (162.2718ms)
+✔ a document write persists its original identity and exposes verified native change after SDK reopen (167.8594ms)
+✔ environment cleanup cannot confirm a live original Provider scope and fences later document dispatch for that owner (290.8811ms)
+✔ the shell writer prevents the other UID capability from dispatching until confirmed (308.3045ms)
+✔ the document writer prevents the other UID capability from dispatching until confirmed (408.8277ms)
+✔ stopping a queued original document durably prevents its Provider start (368.4086ms)
+✔ environment cleanup cancels only its bound queued original and prevents Provider start (373.6007ms)
+✔ a local writer blocks the other scope while read-only application tools remain usable (484.6562ms)
+✔ a shell writer blocks the other scope while read-only application tools remain usable (477.5532ms)
+✔ a reserved-local writer blocks the other scope while read-only application tools remain usable (455.7666ms)
+✔ a cancel-local writer blocks the other scope while read-only application tools remain usable (409.0169ms)
+✔ lost original-write confirmation survives host reopen and explicit query releases it without writing again (230.8648ms)
+✔ an accepted file helper confirmed stopped before spawn proves no original write and releases its claim (230.5462ms)
+✔ a malformed native original diff cannot be published as a verified document result (179.5381ms)
+(node:48208) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ ordinary generation retry prepares the current model and request-time credential (2119.0645ms)
+✔ close: held generation resumes its fixed or newly prepared route with one durable input (1097.9842ms)
+✔ kill: held generation resumes its fixed or newly prepared route with one durable input (2168.2899ms)
+✔ deferred poll process death: unchanged keeps the original handle or fails without a replacement start (2177.659ms)
+✔ deferred poll process death: rotated keeps the original handle or fails without a replacement start (3549.4903ms)
+✔ deferred poll process death: disabled keeps the original handle or fails without a replacement start (3835.0503ms)
+✔ selected compaction retries and orderly resumes its selected model after current selection changes (2105.7149ms)
+✔ overdue work remains behind the configuration loading gate on reopen (2476.2296ms)
+✔ secret persistence detector has a positive control before relying on clean DB and WAL scans (4.9049ms)
+(node:35076) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual request crashes spend the same SDK retry budget across process generations and end interrupted (1567.6006ms)
+✔ SDK restart_limit wins before another request while normal close does not spend that limit (2772.8009ms)
+✔ actual deferred poll crashes retain the original handle and spend one shared SDK retry budget (858.0703ms)
+(node:89956) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ product ModelConnections offers real registered tool schemas and reports only safe request structure (727.3669ms)
+(node:91060) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ offline model work waits visibly and continues the same saved input when conditions return (783.8571ms)
+✔ a durable SDK retry uses the same epoch after close and repeated early host wake cannot duplicate it (442.1847ms)
+✔ a temporarily unavailable native wake record is republished before the same due SDK retry resumes (372.6085ms)
+✔ first unlock is checked before SDK bootstrap and a saved stop stays stopped after network recovery (222.5708ms)
+✔ native completion projection comes from settled input and survives reopen without creating another run (643.1281ms)
+✔ a reopened deferred response waits for connectivity and polls the original handle without a replacement request (291.6218ms)
+ℹ tests 85
+ℹ suites 0
+ℹ pass 79
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19734.493
+
+✖ failing tests:
+
+test at runtime\test\data-saver.test.mjs:129:1
+✖ real SDK host death after prepared policy restores the same waiting identity and only the explicit grant starts it (49.8775ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\AI_BA\AppData\Local\Temp\data-saver-kill-LLrdYK\prepared-policy.json'
+      at async open (node:internal/fs/promises:640:25)
+      at async readFile (node:internal/fs/promises:1283:14)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/data-saver.test.mjs:134:27)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\AI_BA\\AppData\\Local\\Temp\\data-saver-kill-LLrdYK\\prepared-policy.json'
+  }
+
+test at runtime\test\managed-execution.test.mjs:247:88
+✖ hard death at intent-persisted reconnects the same execution without repeating its effect (49.3269ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\AI_BA\AppData\Local\Temp\managed-execution-kill-1QQQ1O\cut.txt'
+      at async open (node:internal/fs/promises:640:25)
+      at async readFile (node:internal/fs/promises:1283:14)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/managed-execution.test.mjs:249:383)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\AI_BA\\AppData\\Local\\Temp\\managed-execution-kill-1QQQ1O\\cut.txt'
+  }
+
+test at runtime\test\managed-execution.test.mjs:247:88
+✖ hard death at accepted reconnects the same execution without repeating its effect (44.2193ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\AI_BA\AppData\Local\Temp\managed-execution-kill-JQ9zS0\cut.txt'
+      at async open (node:internal/fs/promises:640:25)
+      at async readFile (node:internal/fs/promises:1283:14)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/managed-execution.test.mjs:249:383)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\AI_BA\\AppData\\Local\\Temp\\managed-execution-kill-JQ9zS0\\cut.txt'
+  }
+
+test at runtime\test\managed-execution.test.mjs:247:88
+✖ hard death at output-checkpoint reconnects the same execution without repeating its effect (40.9718ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\AI_BA\AppData\Local\Temp\managed-execution-kill-GmY7De\cut.txt'
+      at async open (node:internal/fs/promises:640:25)
+      at async readFile (node:internal/fs/promises:1283:14)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/managed-execution.test.mjs:249:383)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\AI_BA\\AppData\\Local\\Temp\\managed-execution-kill-GmY7De\\cut.txt'
+  }
+
+test at runtime\test\managed-execution.test.mjs:247:88
+✖ hard death at before-result reconnects the same execution without repeating its effect (48.7199ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\AI_BA\AppData\Local\Temp\managed-execution-kill-9dAyQJ\cut.txt'
+      at async open (node:internal/fs/promises:640:25)
+      at async readFile (node:internal/fs/promises:1283:14)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/managed-execution.test.mjs:249:383)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\AI_BA\\AppData\\Local\\Temp\\managed-execution-kill-9dAyQJ\\cut.txt'
+  }
+
+test at runtime\test\managed-execution.test.mjs:254:1
+✖ startup verifies pending external evidence before publishing ready or allowing recovered progress (44.5897ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\AI_BA\AppData\Local\Temp\managed-execution-startup-kCfrhD\cut.txt'
+      at async open (node:internal/fs/promises:640:25)
+      at async readFile (node:internal/fs/promises:1283:14)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/managed-execution.test.mjs:256:332)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\AI_BA\\AppData\\Local\\Temp\\managed-execution-startup-kCfrhD\\cut.txt'
+  }

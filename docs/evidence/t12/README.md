@@ -1,6 +1,6 @@
 # T12 自动恢复开发证据
 
-2026-11-04。开发仍在进行，不能据此关闭 [T12](../../specs/v1/tickets/12-automatic-resume.md)。范围为 Android 16／4 KB x86_64 模拟器、真实 SDK 1.5.0、Android SQLite／Service／JobScheduler／NotificationManager，以及明确标注的真实 MiMo 请求。首次解锁／重启、force-stop 与通知目标界面尚待实测；S23／Xiaomi 厂商行为保留到 T17。分批、不同候选的结果不拼成一次完整全绿。
+2026-11-04。开发仍在进行，不能据此关闭 [T12](../../specs/v1/tickets/12-automatic-resume.md)。范围为 Android 16／4 KB x86_64 模拟器、真实 SDK 1.5.0、Android SQLite／Service／JobScheduler／NotificationManager，以及明确标注的真实 MiMo 请求。首次解锁／重启与 force-stop 已完成实际验证，通知目标界面尚待 T15 联合验证；S23／Xiaomi 厂商行为保留到 T17。分批、不同候选的结果不拼成一次完整全绿。
 
 ## 已观察到的行为
 
@@ -19,6 +19,8 @@
 | 主机完整回归 | `t12-runtime-stage62-all.log` 246/246，19.675 秒；`t12-runtime-stage31b-all.log` 247/247，20.078 秒 | 后一批包括 host 唤醒重新发布；不代替 Android 原生发布验证 |
 | 原生相同 wake 重新发布 | 实际系统 RED 1/1，18.565 秒；最小修复 + 同一测试 GREEN 1/1，7.106 秒 | 真实 JobScheduler 的自有 namespace 冲突，清除后同一输入成功发布，0 模型请求；不是 quota 或任意后台启动拒绝的模拟替代 |
 | 首次解锁后再次锁屏／真实离线恢复 | 真实产品 UI 发送一次，外部原生完成核验与最终只读复验通过 | 从普通 Activity 开始，整个准备／锁屏恢复／外部观察均无 instrumentation；原输入在锁屏、联网恢复后完成。前两次公开复验的功能断言通过但退出清理失败，保留失败；修正观察脚本后第三次只读复验连同退出通过，没有重发 |
+| 整机重启／真实首次解锁 | 联合 T13 候选 AC63，reboot02 外部完成与公开复验通过 | 原输入离线后实际重启；联网且首次解锁前 user RUNNING_LOCKED、CE 不可读、无 Service／agent。真实 PIN 解锁后系统自行恢复；外部完成证据早于首次重新打开 Activity／SDK。真实 MiMo 文本，无工具，不声称完整 HTTP 次数 |
+| 实际 force-stop／用户重开 | AC63，30 秒 stopped interval、明确重开、外部完成和最终复验均通过 | 真实 force-stop 后联网仍保持 stopped=true、无进程、原工作无完成；只有明确 launcher 重开后继续同一原输入。不是绕过 force-stop 的后台恢复 |
 
 ## 真实文件与凭据证据
 
@@ -56,6 +58,22 @@ JobScheduler 的初始缺陷为 `startForeground` 未将只靠作业绑定的 Se
 
 清理时先一次直接 runtime stop 使用未建立的 stopId，返回 `STOP_MISMATCH`，没有改变原输入；随后读取原 control，经原生 `input.stop` 建立同一会话 generation 1 的停止记录，再用其准确 stopId 确认 runtime stop。[清理结果](t12-reboot01-cleanup02.json) 证明 phase stopped、仍只有原 user entry 53、正常 Back 退出、ApplicationService 不存在，Wi-Fi／移动数据均恢复为 1。该准备失败、诊断及停止均保留，未重新发送，也没有声称执行过重启或 force-stop。
 
+## 联合 T13 的实际重启与 force-stop
+
+已合入验收的 T13 source `2ab45ed380b098d89d70a32b5389caee4c25e3ab` 和 gate record `a0b161c119a3ad0fafd7eb652289ac86f5904e84`，T12 联合候选源码为 `1ad67253cc0fc018c8172b877f46f106405c9554`。无冲突合并后检查了共享恢复／Provider 分支、原生 1 秒动作前 lease wait 与无阻塞配置；没有重复执行发送或把输入重建为新身份。[构建日志](t12-joint-t13-build01.log) 的 main／test assemble 与 lint 通过，0 error／12 warning。相关七个真实 SDK host 测试文件共 85/85，18.656 秒，见 [正确 runtime 工作目录的结果](t12-joint-t13-host02-runtime-cwd.log)。首次从仓库根运行时 79/85，其余 6 项因测试用相对 `validation/...` 子进程路径而 ENOENT；[原失败日志](t12-joint-t13-host01-root-cwd-failed.log) 保留。同一组选项改为规定的 runtime 工作目录后通过，没有改测试或生产实现。
+
+完整命令顺序在 [生命周期运行说明](../../../tools/recovery-lifecycle-RUN.md)。这两次均只安装 main，使用普通产品 React 页面、一次 Create／Send、现有保存的 `recovery-validation`／generation 1／配置 version 2；未运行 instrumentation、未注入新 capsule，也未 force-run job 或发送合成 boot/unlock 广播。原始命令输出以本地 `%TEMP%\durableagent-implementation\t12-reboot02-*` 和 `t12-forcestop01-*` 保留；本文链接的 JSON 为原始记录副本，校验见 LOG-SHA256。
+
+reboot02 的 run 为 `32c5fdca-a0bd-440f-bc8b-8252777adbbb`、product `f0d5fc78-7070-4194-a5a5-d45778e3e9f1`、原 intent `a9106c9e-4f0a-46fb-8569-0bf063d4e7fb`，SDK conversation 57／submission 68／用户 entry 67。[实际离线准备](t12-reboot02-prepare.json) 于 13:09:59 UTC 关闭所有客户端，原 owner PID 14721；重启前唯一 app job 为 product 18012。真实 reboot 后先记录 Android 系统服务尚未就绪的早期读取，再等 `sys.boot_completed=1`。恢复网络后四次、跨度超过 15 秒的 [首次解锁前记录](t12-reboot02-before-first-unlock.json) 均为 user 0 RUNNING_LOCKED、deviceLocked=1、无 Service／agent；加密状态 encrypted/file、CE unlocked users=[]，`adb shell run-as` 读取恢复元数据因 CE 目录不可访问返回 1。两次早期观察器断言错误分别来自 `exec-out` 将错误写 stdout、且未传播退出码，均写入同一记录；从未读到 SQLite 内容，不归为产品失败。
+
+随后依据实际 keyguard 控件输入已有 PIN，user 0 变为 RUNNING_UNLOCKED。没有打开应用或 SDK，外部观察到新 agent PID 2306 自行启动并退出 Service；13:14:53 UTC 已持久完成同一 product，身份 `answer:57:71`、outbox published=1。[外部原件证据](t12-reboot02-external-completion.json) 为两份相同的 36,864 字节恢复库，SHA-256 `00d284b4694b4009bf014473387b9a791707de602da81bf49040c2a531c4b9da`，integrity_check=ok，三次 rollback journal 0 字节／无 WAL/SHM，Service 不存在、cached PID 2306。之后才 [公开只读复验](t12-reboot02-verify.json)：原 admission 相同、只有用户 67、真实 MiMo assistant 71 准确 marker、零执行、正常 Back 退出。不得将这次自然系统调度时间外推为固定恢复时限。
+
+force-stop01 的 run 为 `5b2b1716-4437-49a7-8134-a9c624c6c99e`、product `a1d19357-41ed-487b-a90c-da77950e8482`、intent `f901c34e-119e-43f4-b3b3-ec3d33afb6ad`，SDK conversation 72／submission 83／用户 entry 82。[独立离线准备](t12-forcestop01-prepare.json) 后实际 `am force-stop dev.durableagent.probe`，恢复 Wi-Fi／数据；[30 秒外部区间](t12-forcestop01-stopped-interval.json) 始终 stopped=true、无 agent、无原完成身份，观察者没有启动目标。随后才 [明确 launcher 重开](t12-forcestop01-reopen.json)，原 admission、唯一用户和 marker 答案通过；正常 Back 后 [外部双快照](t12-forcestop01-external-completion.json) 于 13:17:18 UTC 证实 `answer:72:86`／outbox 1，SHA-256 `3fe5ef2062d4998240f86a5904faa30eaae64ff72758e1e0cfa045ea01998e6a`、integrity ok、Service absent／cached PID 5463。[最终只读复验](t12-forcestop01-verify.json) 同样整体通过。Wi-Fi／数据恢复 1，两个 AndroidWifi override 均 none，Activity／Service 退出后归还设备控制权。未改动 Termux；真实 reboot 后执行端 daemon 需通过既有 gateway 恢复，这两次没有工具请求。
+
+根代理在 13:19:02 UTC 对应用 54,121,984 字节及日志 31,656 字节完成 [真实凭据精确匹配审计](t12-reboot-forcestop-credential-audit01.json)：UTF-8／UTF-16LE／UTF-16BE 均零命中，阳性对照通过。审计范围与恢复结果一起保留；没有以“无匹配”代替其他隔离或生命周期保证。
+
+AC63 的 [artifact journal](t12-joint-t13-lifecycle01-artifacts.json) 明确一个打包限制：旧 worktree 中未重新写出的 Python helper 为 CRLF，虽 Git 内容与已验收源码一致、冻结字节也通过对应核验，打包 capability `13af9386…`／setup `cfc66690…` 与已验收 LF 字节的 `10d7375d…`／`bccdfe9d…` 不同。因此此 APK 只用于上述零工具 marker 生命周期，不作本地文件或 helper 资格声明，也没有为迁就它更改设备执行端。现 worktree 已按 HEAD Git blob 精确恢复 LF，[逐文件核验](t12-final-helper-lf-normalization.json) 与 Git 零差异确认后重新生成 capability／setup，完整 hash 已匹配已验收版本；最终联合构建仍须重新冻结及检查。
+
 ## 候选对应关系
 
 | 源码／用途 | 主应用 SHA-256 | 测试 APK SHA-256 |
@@ -66,12 +84,12 @@ JobScheduler 的初始缺陷为 `startForeground` 未将只靠作业绑定的 Se
 | 同一 `62a9dbb` 主应用，后续 `b56b9bb` test-only 产品初始配置／无绑定恢复 | 同上 `225AE61…` | `54AAFA20969DC594D38DEF43C0DAEEBAEBDD167A736E25412F81BA0406D050C0`；不声称后来开发主应用修改已在此运行 |
 | `31b2ed8` 原生 wake RED | `065AFF69F8CB5BECA2805BF210E39DD39EB0590810913C1A1F2916471A953B2D` | `3C4C8E842F7A028A5A686865A57A3EE8E3E7C33FAA098BDF9EED81645760C3AC` |
 | `3a0927e` 原生 wake GREEN | `071E1C2DD0C47BDE84FC8D1AEBF80A37C9270863AA995D466CB5EA2EDBA56E2A` | 同一 `3C4C8E…`，未放宽断言 |
+| `1ad6725` 联合 T13；marker-only reboot／force-stop | `AC63EC62ED95E857CD3869E66113345AF5EC7D22A30B9BE5628315E0C742B9EF` | `340534B2404988E554FBFEE7D424A92EECC911A0FAFADCE382D02501E33D1328`；构建而未在这两项生命周期中运行，helper 打包范围限制见上 |
 
 大型 APK 与冻结源码保存在根代理的本地验证目录，不加入公开仓库。本文所列日志校验见 [LOG-SHA256.json](LOG-SHA256.json)。构建成功、源码快照或 ELF 检查不能代替该候选的实际设备结果。
 
 ## 未完成的门槛
 
-- 整机重启首次解锁、force-stop 等待用户重新打开；外部真实产品验证脚本已准备。首次重启准备因观察脚本误报中止并已停止原输入，整机重启与 force-stop 尚未执行；再次锁屏及最终只读复验已通过。
 - 通知点击返回正确会话以及完整 Console 接线，须与 T15 联合验证。
-- 尚未验收的 T13 共同恢复接线，须先通过 T13，再合并 T12；不能借 T12 绕过其门槛。
-- 最终联合构建、源码／打包对应核验、独立合并审查，以及 T17 OEM 矩阵。
+- T13 已验收并合入；T12 自身最终联合构建、正确 LF helper 字节／源码／打包对应核验和独立合并审查仍待完成。
+- T17 OEM 矩阵；本文模拟器与分批验证不替代 Galaxy S23／Xiaomi 厂商行为。

@@ -22,6 +22,36 @@
       "gitBlobSha256": "f01dea39fd41c8f3f70b9fb3301391fd0bad1dae2aa6d37979065dd53766fb79"
     },
     {
+      "file": "t12-final-helper-lf-normalization.json",
+      "retainedLocalSha256": "06a16609b3eea233544e70fa8ca394af08abc43c301220f37272124dbf6cd4f0",
+      "gitBlobSha256": "7c8265998ca71a2e28dcf0b86b41b094901204488bcde0451c305c1b15bc84c0"
+    },
+    {
+      "file": "t12-forcestop01-external-completion.json",
+      "retainedLocalSha256": "250ea53a7bac4ea14d735d6cdb180a1a30312ea20541c0dc48f3838bb6f5e6ad",
+      "gitBlobSha256": "13246b42ec2b79a5979cfe880ad3acd9abec359cb13a29139d4a4ac07836b310"
+    },
+    {
+      "file": "t12-forcestop01-prepare.json",
+      "retainedLocalSha256": "b4aec0449ee8cc76715f7d621ee0b23b525ccff8dfd012fbbeb383a91aa5113f",
+      "gitBlobSha256": "b4aec0449ee8cc76715f7d621ee0b23b525ccff8dfd012fbbeb383a91aa5113f"
+    },
+    {
+      "file": "t12-forcestop01-reopen.json",
+      "retainedLocalSha256": "55af986f74fa3341bf3feadf0b63b44a62cd2b5f03e32a7b63f56922953624ba",
+      "gitBlobSha256": "55af986f74fa3341bf3feadf0b63b44a62cd2b5f03e32a7b63f56922953624ba"
+    },
+    {
+      "file": "t12-forcestop01-stopped-interval.json",
+      "retainedLocalSha256": "9642c42c394b1bc2472e6490fe2ff4ab1c2404a75c9ae5db7f9f2e24ce3f03fa",
+      "gitBlobSha256": "42613155fa19a0b19e645a0bbcfcc01c3aa5ec045faf5ec4c4f811f204c381b8"
+    },
+    {
+      "file": "t12-forcestop01-verify.json",
+      "retainedLocalSha256": "6e5886dcb0fad59e44655ca8dbd2b205561efbb19f01ffdf2fb45732ddff7233",
+      "gitBlobSha256": "6e5886dcb0fad59e44655ca8dbd2b205561efbb19f01ffdf2fb45732ddff7233"
+    },
+    {
       "file": "t12-job-greenaed-device.log",
       "retainedLocalSha256": "3a88f03a175886cd344863f5345511b5b3caa49d9c696b32a0055983ccf8c032",
       "gitBlobSha256": "539efd34da5a9581ad343d41b72d8be740964b5dc9e76acf1e37afeb9b461c6e"
@@ -30,6 +60,26 @@
       "file": "t12-job-red401-device.log",
       "retainedLocalSha256": "cb2699f2ff31857dd0c07ad7ac19c24b45fc4dc9acbbd8d42cad833cee8a5ce3",
       "gitBlobSha256": "816ef6910cfc07d8bab93a19d0270d554c7cd28f84660287c6ba7e6e5b925262"
+    },
+    {
+      "file": "t12-joint-t13-build01.log",
+      "retainedLocalSha256": "5424ed062ad9c135e22d40a90f41fe3099584139e0517879a5658665b95171da",
+      "gitBlobSha256": "72b1b7b093ee2bdd3177e0579b7f1a22675e5dd91dc1168e5b852c61ab8f757d"
+    },
+    {
+      "file": "t12-joint-t13-host01-root-cwd-failed.log",
+      "retainedLocalSha256": "4ba2fbc602a960d084733717c46d455077e911882314b83b2a1a91f5967386cf",
+      "gitBlobSha256": "119dfa3631aae12deaf7afaa781a32a5ba36ed41de967f402b6afaa701209b25"
+    },
+    {
+      "file": "t12-joint-t13-host02-runtime-cwd.log",
+      "retainedLocalSha256": "c3422e98a4788963a3706f637b8dc5be35d810fc133a7a928239b805837aa918",
+      "gitBlobSha256": "58049e7e7423214ee9f887d7d6bc291193a1076b5966ff3a013400d7b04e52a8"
+    },
+    {
+      "file": "t12-joint-t13-lifecycle01-artifacts.json",
+      "retainedLocalSha256": "7039f6845fa48ed7811c38ff1f19a178995605ff0b6267230f2f428fda692167",
+      "gitBlobSha256": "be35ae8ba378c931cd8ad19999cfc430808846f04fd19ca047955ae5e527c8b8"
     },
     {
       "file": "t12-laterlock01-external-completion.json",
@@ -177,6 +227,11 @@
       "gitBlobSha256": "7552591f60a53b55afbf69865dfa3c4d84444b2ce9df1835bfd8aeb2637f26f9"
     },
     {
+      "file": "t12-reboot-forcestop-credential-audit01.json",
+      "retainedLocalSha256": "7cf9d7c331c7a7c1b7c5568286d64d7f2c76395611707bb2420f7d2b551ddada",
+      "gitBlobSha256": "7cf9d7c331c7a7c1b7c5568286d64d7f2c76395611707bb2420f7d2b551ddada"
+    },
+    {
       "file": "t12-reboot01-cleanup02.json",
       "retainedLocalSha256": "68ecb5003e5c433fac107b61c12d3fec85c4b5a3e0b4855f6d52b34cf437552f",
       "gitBlobSha256": "68ecb5003e5c433fac107b61c12d3fec85c4b5a3e0b4855f6d52b34cf437552f"
@@ -190,6 +245,26 @@
       "file": "t12-reboot01-prepare-failed.json",
       "retainedLocalSha256": "9ce6fcce6aa48c6a9b750564d8ea80a42d2658295f8d7b81b5993a45a69d0bee",
       "gitBlobSha256": "9ce6fcce6aa48c6a9b750564d8ea80a42d2658295f8d7b81b5993a45a69d0bee"
+    },
+    {
+      "file": "t12-reboot02-before-first-unlock.json",
+      "retainedLocalSha256": "5b4e4b42b6b6eba5280a7efb9441059fee771542532e16a29e40ea807cf7df92",
+      "gitBlobSha256": "1228f7825e5c5329edbf4fb4955f57d8c5c48f2b427215e32ece559bb6544a20"
+    },
+    {
+      "file": "t12-reboot02-external-completion.json",
+      "retainedLocalSha256": "5771ed122cac3f5c7403d94b160b8e4beb7681ac467bfac67e9777cc7ba0f1a7",
+      "gitBlobSha256": "68711a62ef08f4471e9eef91fa3a96c9568e16293c131d55ba69da221d77163d"
+    },
+    {
+      "file": "t12-reboot02-prepare.json",
+      "retainedLocalSha256": "89d4ffbb9937af3bed8f914e12f1481b9e7d9dbd815d360966d0beba86596433",
+      "gitBlobSha256": "89d4ffbb9937af3bed8f914e12f1481b9e7d9dbd815d360966d0beba86596433"
+    },
+    {
+      "file": "t12-reboot02-verify.json",
+      "retainedLocalSha256": "6b06c83b750119bf2a15a072f8c572e45ec26e62e181e2b012405d36899724e8",
+      "gitBlobSha256": "6b06c83b750119bf2a15a072f8c572e45ec26e62e181e2b012405d36899724e8"
     },
     {
       "file": "t12-runtime-stage31b-all.log",

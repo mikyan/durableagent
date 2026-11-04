@@ -1,0 +1,554 @@
+{
+  "product": "a1d19357-41ed-487b-a90c-da77950e8482",
+  "run": "5b2b1716-4437-49a7-8134-a9c624c6c99e",
+  "startedAt": "2026-11-04T13:16:01.106948+00:00",
+  "observerStartedTarget": false,
+  "instrumentationUsed": false,
+  "sdkOpened": false,
+  "credentialsResolved": false,
+  "stoppedInterval": true,
+  "observations": [
+    {
+      "at": "2026-11-04T13:16:01.448738+00:00",
+      "agentPid": "",
+      "applicationServiceRegistered": false,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": true,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": {
+        "sha256": "3b9771a0b90ea531a4afd4416a84989c2c2c1c3e421fa01a64de98f8cbd80b3e",
+        "bytes": 36864,
+        "file": "recovery-1.sqlite",
+        "journalStates": [
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          }
+        ],
+        "rollbackJournalClean": true,
+        "identicalCopies": 2,
+        "integrity": "ok",
+        "readOnly": true,
+        "applicationServiceAbsentBeforeAndAfterCopy": true,
+        "completion": null,
+        "outbox": [],
+        "conversation": {
+          "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+          "phase": "waiting",
+          "recovery": {
+            "phase": "waiting",
+            "reason": "network-offline",
+            "message": "网络不可用，等待恢复后继续"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T13:16:04.520159+00:00",
+      "agentPid": "",
+      "applicationServiceRegistered": false,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": true,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": {
+        "sha256": "3b9771a0b90ea531a4afd4416a84989c2c2c1c3e421fa01a64de98f8cbd80b3e",
+        "bytes": 36864,
+        "file": "recovery-2.sqlite",
+        "journalStates": [
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          }
+        ],
+        "rollbackJournalClean": true,
+        "identicalCopies": 2,
+        "integrity": "ok",
+        "readOnly": true,
+        "applicationServiceAbsentBeforeAndAfterCopy": true,
+        "completion": null,
+        "outbox": [],
+        "conversation": {
+          "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+          "phase": "waiting",
+          "recovery": {
+            "phase": "waiting",
+            "reason": "network-offline",
+            "message": "网络不可用，等待恢复后继续"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T13:16:07.869674+00:00",
+      "agentPid": "",
+      "applicationServiceRegistered": false,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": true,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": {
+        "sha256": "3b9771a0b90ea531a4afd4416a84989c2c2c1c3e421fa01a64de98f8cbd80b3e",
+        "bytes": 36864,
+        "file": "recovery-3.sqlite",
+        "journalStates": [
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          }
+        ],
+        "rollbackJournalClean": true,
+        "identicalCopies": 2,
+        "integrity": "ok",
+        "readOnly": true,
+        "applicationServiceAbsentBeforeAndAfterCopy": true,
+        "completion": null,
+        "outbox": [],
+        "conversation": {
+          "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+          "phase": "waiting",
+          "recovery": {
+            "phase": "waiting",
+            "reason": "network-offline",
+            "message": "网络不可用，等待恢复后继续"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T13:16:10.885774+00:00",
+      "agentPid": "",
+      "applicationServiceRegistered": false,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": true,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": {
+        "sha256": "3b9771a0b90ea531a4afd4416a84989c2c2c1c3e421fa01a64de98f8cbd80b3e",
+        "bytes": 36864,
+        "file": "recovery-4.sqlite",
+        "journalStates": [
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          }
+        ],
+        "rollbackJournalClean": true,
+        "identicalCopies": 2,
+        "integrity": "ok",
+        "readOnly": true,
+        "applicationServiceAbsentBeforeAndAfterCopy": true,
+        "completion": null,
+        "outbox": [],
+        "conversation": {
+          "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+          "phase": "waiting",
+          "recovery": {
+            "phase": "waiting",
+            "reason": "network-offline",
+            "message": "网络不可用，等待恢复后继续"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T13:16:13.798223+00:00",
+      "agentPid": "",
+      "applicationServiceRegistered": false,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": true,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": {
+        "sha256": "3b9771a0b90ea531a4afd4416a84989c2c2c1c3e421fa01a64de98f8cbd80b3e",
+        "bytes": 36864,
+        "file": "recovery-5.sqlite",
+        "journalStates": [
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          }
+        ],
+        "rollbackJournalClean": true,
+        "identicalCopies": 2,
+        "integrity": "ok",
+        "readOnly": true,
+        "applicationServiceAbsentBeforeAndAfterCopy": true,
+        "completion": null,
+        "outbox": [],
+        "conversation": {
+          "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+          "phase": "waiting",
+          "recovery": {
+            "phase": "waiting",
+            "reason": "network-offline",
+            "message": "网络不可用，等待恢复后继续"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T13:16:16.790431+00:00",
+      "agentPid": "",
+      "applicationServiceRegistered": false,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": true,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": {
+        "sha256": "3b9771a0b90ea531a4afd4416a84989c2c2c1c3e421fa01a64de98f8cbd80b3e",
+        "bytes": 36864,
+        "file": "recovery-6.sqlite",
+        "journalStates": [
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          }
+        ],
+        "rollbackJournalClean": true,
+        "identicalCopies": 2,
+        "integrity": "ok",
+        "readOnly": true,
+        "applicationServiceAbsentBeforeAndAfterCopy": true,
+        "completion": null,
+        "outbox": [],
+        "conversation": {
+          "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+          "phase": "waiting",
+          "recovery": {
+            "phase": "waiting",
+            "reason": "network-offline",
+            "message": "网络不可用，等待恢复后继续"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T13:16:19.708638+00:00",
+      "agentPid": "",
+      "applicationServiceRegistered": false,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": true,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": {
+        "sha256": "3b9771a0b90ea531a4afd4416a84989c2c2c1c3e421fa01a64de98f8cbd80b3e",
+        "bytes": 36864,
+        "file": "recovery-7.sqlite",
+        "journalStates": [
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          }
+        ],
+        "rollbackJournalClean": true,
+        "identicalCopies": 2,
+        "integrity": "ok",
+        "readOnly": true,
+        "applicationServiceAbsentBeforeAndAfterCopy": true,
+        "completion": null,
+        "outbox": [],
+        "conversation": {
+          "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+          "phase": "waiting",
+          "recovery": {
+            "phase": "waiting",
+            "reason": "network-offline",
+            "message": "网络不可用，等待恢复后继续"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T13:16:22.654162+00:00",
+      "agentPid": "",
+      "applicationServiceRegistered": false,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": true,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": {
+        "sha256": "3b9771a0b90ea531a4afd4416a84989c2c2c1c3e421fa01a64de98f8cbd80b3e",
+        "bytes": 36864,
+        "file": "recovery-8.sqlite",
+        "journalStates": [
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          }
+        ],
+        "rollbackJournalClean": true,
+        "identicalCopies": 2,
+        "integrity": "ok",
+        "readOnly": true,
+        "applicationServiceAbsentBeforeAndAfterCopy": true,
+        "completion": null,
+        "outbox": [],
+        "conversation": {
+          "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+          "phase": "waiting",
+          "recovery": {
+            "phase": "waiting",
+            "reason": "network-offline",
+            "message": "网络不可用，等待恢复后继续"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T13:16:25.716089+00:00",
+      "agentPid": "",
+      "applicationServiceRegistered": false,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": true,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": {
+        "sha256": "3b9771a0b90ea531a4afd4416a84989c2c2c1c3e421fa01a64de98f8cbd80b3e",
+        "bytes": 36864,
+        "file": "recovery-9.sqlite",
+        "journalStates": [
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          }
+        ],
+        "rollbackJournalClean": true,
+        "identicalCopies": 2,
+        "integrity": "ok",
+        "readOnly": true,
+        "applicationServiceAbsentBeforeAndAfterCopy": true,
+        "completion": null,
+        "outbox": [],
+        "conversation": {
+          "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+          "phase": "waiting",
+          "recovery": {
+            "phase": "waiting",
+            "reason": "network-offline",
+            "message": "网络不可用，等待恢复后继续"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T13:16:28.578843+00:00",
+      "agentPid": "",
+      "applicationServiceRegistered": false,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": true,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": {
+        "sha256": "3b9771a0b90ea531a4afd4416a84989c2c2c1c3e421fa01a64de98f8cbd80b3e",
+        "bytes": 36864,
+        "file": "recovery-10.sqlite",
+        "journalStates": [
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          }
+        ],
+        "rollbackJournalClean": true,
+        "identicalCopies": 2,
+        "integrity": "ok",
+        "readOnly": true,
+        "applicationServiceAbsentBeforeAndAfterCopy": true,
+        "completion": null,
+        "outbox": [],
+        "conversation": {
+          "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+          "phase": "waiting",
+          "recovery": {
+            "phase": "waiting",
+            "reason": "network-offline",
+            "message": "网络不可用，等待恢复后继续"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-04T13:16:31.295626+00:00",
+      "agentPid": "",
+      "applicationServiceRegistered": false,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=true notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": true,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": {
+        "sha256": "3b9771a0b90ea531a4afd4416a84989c2c2c1c3e421fa01a64de98f8cbd80b3e",
+        "bytes": 36864,
+        "file": "recovery-11.sqlite",
+        "journalStates": [
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          }
+        ],
+        "rollbackJournalClean": true,
+        "identicalCopies": 2,
+        "integrity": "ok",
+        "readOnly": true,
+        "applicationServiceAbsentBeforeAndAfterCopy": true,
+        "completion": null,
+        "outbox": [],
+        "conversation": {
+          "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+          "phase": "waiting",
+          "recovery": {
+            "phase": "waiting",
+            "reason": "network-offline",
+            "message": "网络不可用，等待恢复后继续"
+          }
+        }
+      }
+    }
+  ],
+  "completed": false,
+  "stoppedIntervalPassed": true,
+  "observedAt": "2026-11-04T13:16:32.337934+00:00"
+}

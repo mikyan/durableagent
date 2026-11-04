@@ -6,7 +6,7 @@ import {join} from 'node:path';
 import assert from 'node:assert/strict';
 
 const [stage,serial,output,preparedPath,proofPath]=process.argv.slice(2);
-assert.ok(['prepare','verify'].includes(stage)&&serial&&output,'stage serial new-output-prefix [prepared-json external-proof-json]');
+assert.ok(['prepare','reopen','verify'].includes(stage)&&serial&&output,'stage serial new-output-prefix [prepared-json external-proof-json]');
 const pkg='dev.durableagent.probe',adbPath=process.env.ADB||join(process.env.LOCALAPPDATA,'Android','Sdk','platform-tools','adb.exe');
 const adb=(...args)=>execFileSync(adbPath,['-s',serial,...args],{encoding:'utf8',timeout:30000,maxBuffer:16*1024*1024}).trim();
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
@@ -55,9 +55,10 @@ async function finishActivity(){
 }
 try{
  let prepared,proof;
- if(stage==='verify'){
+ if(stage==='verify'||stage==='reopen'){
   assert.ok(preparedPath&&proofPath,'Verify requires original prepared and external completed evidence');prepared=JSON.parse(await readFile(preparedPath,'utf8'));proof=JSON.parse(await readFile(proofPath,'utf8'));
-  assert.equal(proof.completed,true);assert.equal(proof.product,prepared.product);assert.equal(proof.run,prepared.run);assert.equal(proof.observerStartedTarget,false);assert.equal(prepared.prepared,true);
+  if(stage==='verify')assert.equal(proof.completed,true);else{assert.equal(proof.stoppedInterval,true);assert.equal(proof.stoppedIntervalPassed,true);assert.equal(proof.completed,false);}
+  assert.equal(proof.product,prepared.product);assert.equal(proof.run,prepared.run);assert.equal(proof.observerStartedTarget,false);assert.equal(prepared.prepared,true);
  }
  assert.equal(activityRecords().length,0,'Root must close earlier Activity before this isolated lifecycle stage');
  adb('shell','am','start','-W','-n',`${pkg}/.AgentActivity`,'--es','validationMode','product');page=await attach();
@@ -91,9 +92,9 @@ try{
   const services=adb('shell','dumpsys','activity','services',pkg);const ownerRecords=services.split(/(?=  \* ServiceRecord\{)/).filter(block=>/^  \* ServiceRecord\{[^\n]*dev\.durableagent\.probe\/\.ApplicationService\b/m.test(block));assert.equal(ownerRecords.length,1);assert.match(ownerRecords[0],/isForeground=true/);assert.match(ownerRecords[0],/startRequested=true/);await writeFile(`${output}-services.txt`,services+'\n',{flag:'wx'});
   Object.assign(evidence,{prepared:true,allUiAndCdpClosed:true,preparedAt:new Date().toISOString(),httpCountObserved:false});
  }else{
-  const status=await request('sendStatus',{intentId:prepared.intentId});assert.equal(status.submission?.status,'done');assert.deepEqual(status.receipt,prepared.admission);
-  const history=await request('history',{id:prepared.product});assert.deepEqual(history.items.filter(row=>row.role==='user').map(row=>row.text),[prepared.text]);const answer=history.items.filter(row=>row.role==='assistant').at(-1);assert.ok(answer?.text.includes(`T12-LIFECYCLE-${prepared.run}`));assert.equal(proof.nativeSnapshot.completion.identity,`answer:${prepared.admission.context.sdkConversationId}:${answer.id}`,'Reopened history retains the externally observed original completion');assert.equal(String(status.submission.answerEntryId),String(answer.id));assert.equal((await request('execution.list',{id:prepared.product})).executions.length,0);
-  Object.assign(evidence,{publicVerificationPassed:true,product:prepared.product,intentId:prepared.intentId,admission:status.receipt,history,externalCompletedAt:proof.observedAt,completeHttpCountObserved:false});
+  const status=stage==='reopen'?await until(async()=>{const value=await request('sendStatus',{intentId:prepared.intentId});return value.submission?.status==='done'&&value;},'Original input after explicit launcher reopen',120000):await request('sendStatus',{intentId:prepared.intentId});assert.equal(status.submission?.status,'done');assert.deepEqual(status.receipt,prepared.admission);
+  const history=await request('history',{id:prepared.product});assert.deepEqual(history.items.filter(row=>row.role==='user').map(row=>row.text),[prepared.text]);const answer=history.items.filter(row=>row.role==='assistant').at(-1);assert.ok(answer?.text.includes(`T12-LIFECYCLE-${prepared.run}`));if(stage==='verify')assert.equal(proof.nativeSnapshot.completion.identity,`answer:${prepared.admission.context.sdkConversationId}:${answer.id}`,'Reopened history retains the externally observed original completion');assert.equal(String(status.submission.answerEntryId),String(answer.id));assert.equal((await request('execution.list',{id:prepared.product})).executions.length,0);
+  Object.assign(evidence,{publicVerificationPassed:true,product:prepared.product,intentId:prepared.intentId,admission:status.receipt,history,...(stage==='verify'?{externalCompletedAt:proof.observedAt}:{explicitUserReopen:true,stoppedIntervalEndedAt:proof.observedAt}),completeHttpCountObserved:false});
   page.close();page=null;await finishActivity();evidence.passed=true;
  }
  await writeFile(`${output}.json`,JSON.stringify(evidence,null,2)+'\n',{flag:'wx'});process.stdout.write(JSON.stringify({stage,product:evidence.product,prepared:evidence.prepared,passed:evidence.passed,evidence:`${output}.json`})+'\n');
