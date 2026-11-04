@@ -321,11 +321,12 @@ export class Application {
     // Read the public task checkpoint: a selected model is for later prepare,
     // while an already-prepared request, deferred poll or compaction stays pinned.
     const task=live?.run?await this.harness?.getTask(live.run.taskId,context):undefined;
+    let blockingCompaction=false;
     let checkpoint=task?.state.status!=='terminal'?(task?.state as any)?.checkpoint:undefined;
-    if(checkpoint?.compacted){const child=await this.harness?.getTask(checkpoint.compacted,context);if(child?.state.status!=='terminal'&&(child?.state as any)?.checkpoint?.model)checkpoint=(child!.state as any).checkpoint;}
+    if(checkpoint?.compacted){const child=await this.harness?.getTask(checkpoint.compacted,context);if(child?.state.status!=='terminal'&&(child?.state as any)?.checkpoint?.model){checkpoint=(child!.state as any).checkpoint;blockingCompaction=true;}}
     const rateProvider=checkpoint?.model?.provider??checkpoint?.poll?.model?.provider??ref.provider;
     const rateAt=this.modelRetryAfter?.until(rateProvider);
-    const rateWait=rateAt!==undefined&&live?.generation?{phase:'waiting' as const,reason:'model-retry' as const,message:'等待模型服务指定的重试时间',nextAt:Math.max(rateAt,retry?.at??0),used:live.generation.attempt,limit:this.runtimeSettings().retry?.maxRetries??3}:undefined;
+    const rateWait=rateAt!==undefined&&(live?.generation||blockingCompaction)?{phase:'waiting' as const,reason:'model-retry' as const,message:'等待模型服务指定的重试时间',nextAt:Math.max(rateAt,retry?.at??0,blockingCompaction?checkpoint.until??0:0),used:blockingCompaction?checkpoint.attempt:live.generation.attempt,limit:this.runtimeSettings().retry?.maxRetries??3}:undefined;
     const recovery=live?.run?(this.recovery?.status(product.id)??rateWait??(retry?{phase:'waiting' as const,reason:'model-retry' as const,message:retry.error,nextAt:retry.at,used:live.generation.attempt,limit:this.runtimeSettings().retry?.maxRetries??3}:deferred?{phase:'waiting' as const,reason:'deferred-poll' as const,message:'等待原模型响应的下一次查询；不会创建新请求',nextAt:deferred.pollAt}:undefined)):undefined;
     const phase=live?.run?(recovery||live.generation?.retry||live.generation?.deferred?'waiting':'running'):live?.runFailure?(live.runFailure.reason==='aborted'?'stopped':'failed'):entries.some(entry=>entry.role==='assistant')?'done':'idle';
     const text=live?.run?this.content(live.generation?.message?.content):'';
