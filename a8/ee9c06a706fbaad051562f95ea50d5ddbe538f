@@ -1,0 +1,442 @@
+docs/evidence/t15/raw/t15-candidate18-build01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-85
+docs/evidence/t15/raw/t15-insets-build05.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-122
+docs/evidence/t15/raw/t15-joint-runtime-suite01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-47
+docs/evidence/t15/raw/t15-insets-layout-joint01-landscape-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-18
+docs/evidence/t15/raw/t15-narrow-green02.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-409
+docs/evidence/t15/raw/t15-window-insets-green05.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-92
+docs/evidence/t15/raw/t15-window-insets-joint01.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-126
+docs/evidence/t15/RUN.md
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-35
+docs/evidence/t15/raw/t15-picker-cancel-edit-green01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-9
+tools/console-picker-cancel-process.mjs
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-77
+docs/evidence/t15/raw/t15-window-insets-origin-red01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1
+tools/console-selection-process.mjs
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-85
+docs/evidence/t15/raw/t15-candidate16-retained-diff01-driver.mjs
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-36
+ui/src/client.ts
+  s_467dcb949b5b60::t_ad04347c3ecd0e 4
+docs/evidence/t15/raw/t15-domain-insets-after-recreate.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-137
+ui/src/browser.ts
+  s_467dcb949b5b60::t_ad04347c3ecd0e 8,11,30,36-38
+ui/src/style.css
+  s_467dcb949b5b60::t_ad04347c3ecd0e 13-112
+docs/evidence/t15/raw/t15-domain-insets-before.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-137
+docs/evidence/t15/raw/t15-candidate16-gateway-device.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-25
+docs/evidence/t15/ARTIFACTS-candidate18.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-75
+docs/evidence/t15/raw/t15-real-auth02.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-172
+docs/evidence/t15/raw/t15-selection-launch-race-system.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-60
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_439afe9396cf92 163
+docs/evidence/t15/raw/t15-insets-layout-joint01-landscape-landscape.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-167
+docs/evidence/t15/raw/t15-picker-cancel-edit-suite01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-32
+docs/evidence/t15/raw/t15-selection-red.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-41
+docs/evidence/t15/raw/t15-tablet-green02.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-863
+docs/evidence/t15/raw/t15-window-insets-green02.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-92
+docs/evidence/t15/raw/t15-window-insets-red01.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-33
+docs/evidence/t15/raw/t15-window-insets-joint01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1
+docs/evidence/t15/README.md
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-68
+tools/console-real-auth-failure.mjs
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-70
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_ad04347c3ecd0e 16-20,49-53,56-59,63,76-77,88,94,97-99,101-107,116-119,123-128,138-139,142,150,157,163,166,170-172,181,185
+docs/evidence/t15/raw/t15-candidate16-grant01-network-after.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-2
+docs/evidence/t15/CANDIDATE17.md
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-11
+ui/src/extensions/conversation-history.tsx
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-21
+docs/evidence/t15/raw/t15-candidate16-retained-diff02-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-92
+docs/evidence/t15/raw/t15-selection-recovered.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-349
+docs/evidence/t15/raw/t15-window-insets-green01.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-93
+docs/evidence/t15/raw/t15-window-insets-green02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-8
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_ad04347c3ecd0e 4,12,15
+ui/src/drafts.ts
+  s_467dcb949b5b60::t_ad04347c3ecd0e 8,109,121,123-128
+docs/evidence/t15/raw/t15-insets-build04.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-150
+docs/evidence/t15/raw/t15-insets-layout-joint01-restored-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-40
+docs/evidence/t15/raw/t15-candidate17-ui-delta.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-7
+docs/evidence/t15/raw/t15-insets-layout01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-28
+docs/evidence/t15/raw/t15-candidate16-retained-diff02-observation.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-1712
+docs/evidence/t15/raw/t15-candidate18-retained-diff04-retained-file-diff.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-1703
+docs/evidence/t15/raw/t15-insets-layout03.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-506
+docs/evidence/t15/raw/t15-insets-layout03.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-9
+docs/evidence/t15/raw/t15-insets-native-owner-review.md
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-72
+docs/evidence/t15/raw/t15-candidate17-retained-diff03-observation.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-1711
+docs/evidence/t15/raw/t15-auth02-restored.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-15
+docs/evidence/t15/raw/t15-candidate16-root-inspection.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-382
+docs/evidence/t15/raw/t15-picker-cancel-device03.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-175
+docs/evidence/t15/raw/t15-window-insets-green03.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-37
+docs/evidence/t15/raw/t15-narrow-final01.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-667
+docs/evidence/t15/raw/t15-insets-build03.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-94
+docs/evidence/t15/raw/t15-candidate16-file-roundtrip01-device.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-37
+docs/evidence/t15/raw/t15-window-insets-red01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-8
+tools/console-window-insets.mjs
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-75
+docs/evidence/t15/ARTIFACTS-candidate17.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-74
+docs/evidence/t15/raw/t15-picker-cancel-device02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-104
+docs/evidence/t15/raw/t15-insets-layout03-portrait-portrait.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-163
+docs/evidence/t15/raw/t15-candidate16-grant01-device.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-65
+docs/evidence/t15/evidence-hashes-candidate17.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-42
+docs/evidence/t15/raw/device-restored.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-16
+docs/evidence/t15/raw/t15-candidate16-retained-diff01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-28
+docs/evidence/t15/raw/t15-picker-cancel-device03-history.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-25
+docs/evidence/t15/raw/t15-picker-cancel-edit-red01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-11
+docs/evidence/t15/raw/t15-candidate16-retained-diff01-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-91
+runtime/src/application.ts
+  s_467dcb949b5b60::t_ad04347c3ecd0e 223,330-349
+docs/evidence/t15/.gitattributes
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-7
+ui/src/extensions/failure-notice.tsx
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-9
+docs/evidence/t15/scoped-development-gate-review.md
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-132
+docs/evidence/t15/raw/t15-insets-layout02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-9
+docs/evidence/t15/ARTIFACTS-candidate15.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-51
+ui/test/console-page.test.tsx
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-222
+docs/evidence/t15/raw/t15-candidate16-independent-file-read.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1
+docs/evidence/t15/raw/t15-candidate17-retained-diff03-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-92
+docs/evidence/t15/raw/t15-insets-layout03-landscape-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-18
+docs/evidence/t15/raw/t15-t13-console-green02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-21
+docs/evidence/t15/raw/t15-t13-console-red01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-414
+docs/evidence/t15/raw/t15-window-insets-native01.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-126
+docs/evidence/t15/raw/t15-real-auth01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-8
+tools/console-retained-file-diff.mjs
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-36
+docs/evidence/t15/raw/t15-joint-restored.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-12
+tools/console-device.mjs
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-64
+docs/evidence/t15/raw/t15-selection-final.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-11
+docs/evidence/t15/raw/t15-picker-cancel-device02-observation.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-44
+docs/evidence/t15/raw/t15-window-insets-origin-red01.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-126
+docs/evidence/t15/raw/t15-console-device04.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-41
+docs/evidence/t15/raw/t15-insets-layout04.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-2
+docs/evidence/t15/raw/t15-picker-cancel-edit-build01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-26
+docs/evidence/t15/raw/t15-selection-final-failed.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-29
+docs/evidence/t15/raw/t15-t13-console-green01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-414
+docs/evidence/t15/raw/t15-window-insets-green04.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-93
+ui/src/extensions/question-anchor.tsx
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-15
+docs/evidence/t15/raw/t15-window-insets-red02.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-92
+ui/src/controller.ts
+  s_467dcb949b5b60::t_ad04347c3ecd0e 13-14,27,38,59,82-83,102-107,149
+docs/evidence/t15/ARTIFACTS-candidate16.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-36
+docs/evidence/t15/raw/t15-insets-ui-suite03.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-32
+docs/evidence/t15/raw/t15-candidate16-retained-diff01-retained-file-diff.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-823
+docs/evidence/t15/raw/t15-ui-suite02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-56
+docs/evidence/t15/raw/t15-candidate17-retained-diff03.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1
+docs/evidence/t15/raw/t15-runtime-suite01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-335
+ui/src/extensions/auxiliary.tsx
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-18
+docs/evidence/t15/raw/t15-rotation-green02.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-325
+docs/evidence/t15/OBSERVER-candidate18.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-9
+docs/evidence/t15/raw/t15-rotation.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-412
+docs/evidence/t15/raw/t15-tablet-final01.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-676
+docs/evidence/t15/raw/t15-joint-ui-suite01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-32
+docs/evidence/t15/raw/t15-real-auth01.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-9
+docs/evidence/t15/raw/t15-window-insets-green01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1
+android/app/src/main/java/dev/durableagent/probe/CameraCaptureProvider.kt
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-45
+docs/evidence/t15/raw/t15-window-insets-green04.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1
+docs/evidence/t15/raw/t15-window-insets-native01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1
+docs/evidence/t15/raw/t15-candidate15-build02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-94
+android/app/src/androidTest/java/dev/durableagent/probe/FileApplicationTest.kt
+  s_467dcb949b5b60::t_ad04347c3ecd0e 69
+docs/evidence/t15/raw/t15-camera-cancel.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-226
+docs/evidence/t15/raw/t15-insets-layout04-portrait-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-26
+docs/evidence/t15/raw/t15-insets-ui-suite02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-32
+docs/evidence/t15/raw/t15-picker-cancel-device01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-9
+docs/evidence/t15/raw/t15-compact-status-green.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-13
+docs/evidence/t15/raw/t15-window-insets-visual01.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-91
+docs/evidence/t15/raw/t15-candidate18-retained-diff04.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1
+docs/evidence/t15/raw/t15-candidate17-retained-diff03-retained-file-diff.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-1703
+runtime/src/input-protocol.ts
+  s_467dcb949b5b60::t_ad04347c3ecd0e 3,21-22
+android/app/src/androidTest/java/dev/durableagent/probe/ConsolePickerObservationTest.kt
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-29
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionUiTest.kt
+  s_467dcb949b5b60::t_ad04347c3ecd0e 22-24
+android/app/src/main/java/dev/durableagent/probe/NativeInputBridge.kt
+  s_467dcb949b5b60::t_ad04347c3ecd0e 22,28,43,50,65,67-71,91-100,108,131
+docs/evidence/t15/raw/t15-insets-layout-joint01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-2
+docs/evidence/t15/raw/t15-insets-layout03-portrait-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-26
+docs/evidence/t15/raw/t15-insets-layout04-restored-restored.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-260
+docs/evidence/t15/raw/t15-candidate15-boot.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-15
+docs/evidence/t15/raw/t15-insets-layout04-landscape-landscape.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-167
+docs/evidence/t15/raw/t15-insets-layout02-portrait-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-26
+docs/evidence/t15/evidence-hashes-candidate16.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-450
+docs/evidence/t15/raw/t15-selection-final02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-9
+docs/evidence/t15/raw/t15-ui-suite03.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-21
+runtime/test/application.test.mjs
+  s_467dcb949b5b60::t_ad04347c3ecd0e 184-198
+docs/evidence/t15/raw/t15-selection-final03.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-41
+docs/evidence/t15/evidence-hashes-candidate18.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-46
+docs/evidence/t15/raw/t15-picker-cancel-device03-observation.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-25
+docs/evidence/t15/raw/t15-camera-admitted.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-233
+docs/evidence/t15/raw/t15-anchor-short-red.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-42
+docs/evidence/t15/raw/t15-window-insets-native02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1
+docs/evidence/t15/raw/t15-joint-build01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-134
+docs/evidence/t15/raw/t15-window-insets-visual01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-8
+android/app/src/androidTest/java/dev/durableagent/probe/DataSaverExecutionTest.kt
+  s_467dcb949b5b60::t_ad04347c3ecd0e 61,66,87-89,103-104,112-117,119
+docs/evidence/t15/raw/t15-insets-layout01-portrait-portrait.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-163
+docs/evidence/t15/raw/t15-phone-final.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-510
+ui/src/extensions/context.ts
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-20
+docs/evidence/t15/raw/t15-insets-layout02.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-185
+docs/evidence/t15/raw/t15-insets-layout-joint01-portrait-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-26
+docs/evidence/t15/ARTIFACTS.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-48
+docs/evidence/t15/raw/t15-candidate17-build01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-85
+docs/evidence/t15/raw/t15-auxiliary-live03.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-409
+docs/evidence/t15/raw/t15-candidate18-root-entry-comparison.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-10
+docs/specs/v1/README.md
+  s_467dcb949b5b60::t_ad04347c3ecd0e 3,37
+  s_467dcb949b5b60::t_ff744a836e3e2e 38
+docs/evidence/t15/raw/t15-picker-cancel-device01.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-10
+runtime/src/transport.ts
+  s_467dcb949b5b60::t_ad04347c3ecd0e 3,16
+tools/console-insets-layout.mjs
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-77
+android/app/src/androidTest/java/dev/durableagent/probe/ConsoleApplicationTest.kt
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-81
+docs/evidence/t15/raw/t15-window-insets-green05.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-8
+docs/evidence/t15/raw/t15-picker-cancel-device03.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1
+docs/evidence/t15/raw/t15-insets-layout02-portrait-portrait.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-163
+docs/evidence/t15/CANDIDATE16.md
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-73
+docs/evidence/t15/raw/t15-camera-launch.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-165
+docs/evidence/t15/raw/t15-candidate15-restored.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-16
+docs/evidence/t15/raw/t15-candidate16-retained-diff01-observation.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-825
+docs/evidence/t15/CANDIDATE18.md
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-15
+docs/evidence/t15/raw/t15-insets-layout03-landscape-landscape.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-139
+docs/evidence/t15/raw/t15-insets-layout04-landscape-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-18
+docs/evidence/t15/raw/t15-insets-layout04.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-822
+docs/evidence/t15/raw/t15-picker-cancel-device02-instrumentation-process-events.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-14
+docs/evidence/t15/raw/t15-insets-build01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-94
+docs/evidence/t15/raw/t15-window-insets-green03.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-8
+docs/evidence/t15/raw/t15-candidate16-retained-diff02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-2
+docs/evidence/t15/raw/t15-compact-status-red.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-120
+docs/evidence/t15/raw/t15-candidate16-independent-file-read.sh
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-12
+docs/evidence/t15/raw/t15-picker-cancel-device02.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-109
+docs/evidence/t15/raw/t15-build14.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-122
+docs/evidence/t15/raw/t15-real-auth02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1
+docs/evidence/t15/raw/t15-auxiliary-live02.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-132
+docs/evidence/t15/raw/t15-selection-final03.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1
+docs/evidence/t15/raw/t15-window-insets-native02.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-126
+docs/evidence/t15/raw/t15-candidate16-retained-diff02-retained-file-diff.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-1704
+docs/evidence/t15/raw/t15-selection-final02-failed.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-29
+docs/evidence/t15/raw/t15-picker-observer-build03.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-72
+docs/evidence/t15/raw/t15-insets-layout-joint01-restored-restored.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-260
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_ad04347c3ecd0e 54
+docs/evidence/t15/raw/t15-candidate18-retained-diff04-observation.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-1711
+docs/evidence/t15/raw/t15-runtime-suite02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-263
+ui/test/drafts.test.ts
+  s_467dcb949b5b60::t_ad04347c3ecd0e 109-131
+ui/test/submissions-page.test.tsx
+  s_467dcb949b5b60::t_ad04347c3ecd0e 16,20
+android/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_ad04347c3ecd0e 9,11-12
+docs/evidence/t15/CANDIDATE15.md
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-50
+docs/evidence/t15/raw/t15-insets-layout-joint01.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-822
+docs/evidence/t15/raw/t15-insets-layout01-portrait-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-26
+docs/evidence/t15/raw/t15-insets-ui-suite01.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-75
+ui/src/extensions/submissions.tsx
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1,11,26,32-35
+docs/evidence/t15/raw/t15-window-insets-red02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-8
+docs/evidence/t15/raw/t15-insets-layout04-restored-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-40
+docs/evidence/t15/raw/t15-candidate18-retained-diff04-plan.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-92
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_467dcb949b5b60::t_ad04347c3ecd0e 8-9,25-41,74,89-102
+docs/evidence/t15/raw/t15-candidate16-grant01-network-metered.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-2
+docs/evidence/t15/raw/t15-insets-layout-joint01-portrait-portrait.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-191
+docs/evidence/t15/raw/t15-insets-layout04-portrait-portrait.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-191
+docs/evidence/t15/raw/t15-candidate17-root-entry-comparison.json
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-21
+docs/evidence/t15/raw/t15-insets-build02.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-94
+docs/evidence/t15/raw/t15-cancel-contract-green.log
+  s_467dcb949b5b60::t_ad04347c3ecd0e 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "a8ee9c06a706fbaad051562f95ea50d5ddbe538f",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
