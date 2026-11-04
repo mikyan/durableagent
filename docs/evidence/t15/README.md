@@ -48,7 +48,7 @@ context.get 调用 SDK 的公开 Conversation.context() 与已解析模型。当
 - [短横屏侧栏下方入口不可达](screenshots/red-short-navigation.png)：整个侧栏可滚动，保留最小会话区。
 - 状态摘要遇到刷新错误时曾覆盖已知的外部停止待核验状态；[RED](raw/t15-compact-status-red.log)后改为保留已知事实并追加“状态读取未确认”。
 - UI 全量曾有 [2 项取消返回约定失败](raw/t15-ui-suite02.log)。保留 DraftCoordinator 的取消结果约定，由页面把取消视为正常操作；[26 项 focused](raw/t15-cancel-contract-green.log)和后续全量通过。不是删除旧断言。
-- 独立预审复现附件选择期间编辑、等待自动保存后再取消，会使草稿一直停在待保存。实际 DraftCoordinator／ApplicationClient 的公开输入协议回归先 [RED](raw/t15-picker-cancel-edit-red01.log)，释放选择器写入等待后继续保存，随后 [GREEN](raw/t15-picker-cancel-edit-green01.log)。测试核对重新读取后的完整文字、原有取消返回约定及没有创建发送意图；完整 UI [91/91](raw/t15-picker-cancel-edit-suite01.log)和[类型检查／构建](raw/t15-picker-cancel-edit-build01.log)通过。此修复晚于候选 14，是主机协议验证，尚无此新代码的 Android 并发编辑／取消实测；不改写此前相机系统取消的范围。
+- 独立预审复现附件选择期间编辑、等待自动保存后再取消，会使草稿一直停在待保存。实际 DraftCoordinator／ApplicationClient 的公开输入协议回归先 [RED](raw/t15-picker-cancel-edit-red01.log)，释放选择器写入等待后继续保存，随后 [GREEN](raw/t15-picker-cancel-edit-green01.log)。测试核对重新读取后的完整文字、原有取消返回约定及没有创建发送意图；完整 UI [91/91](raw/t15-picker-cancel-edit-suite01.log)和[类型检查／构建](raw/t15-picker-cancel-edit-build01.log)通过。[候选 15](CANDIDATE15.md)随后通过真实 Android 文档选择器／系统返回取消、保留 React 并发编辑注入和 UI SIGKILL 重开；[实际记录](raw/t15-picker-cancel-device03.json)、[系统选择器](screenshots/picker-cancel03-picker.png)、[重开后的已保存草稿](screenshots/picker-cancel03-reopened.png)及两个只读观察证明完整草稿和零意图／SDK 提交／任务／历史。此前两次驱动失败分别保留，不改写此前相机系统取消的范围，也不把背景编辑注入称为可物理键入被覆盖的窗口。
 - SIGKILL 的[第一轮](raw/t15-selection-final-failed.json)未能重新启动 UI：[系统日志](raw/t15-selection-launch-race-system.log)显示死进程的旧 Activity 在启动请求后才移除。随后[重开同一原运行域](raw/t15-selection-recovered.json)确认最后选中页与完整草稿；新脚本等待当前任务的 Activity 记录清理再启动。第二轮等待误匹配系统保留的历史旋转来源，原[失败](raw/t15-selection-final02-failed.json)同样保留；最终仅匹配当前任务 Hist 记录。此问题不解释 T06 原失败。
 - 初次 runtime 命令从仓库根目录执行产生 [5 个子夹具路径失败](raw/t15-runtime-suite01.log)，正确目录的结果才是 222/222。早期两次平板计划有并发驱动干扰，未计作验收；当前所列计划串行运行。
 
@@ -61,3 +61,5 @@ context.get 调用 SDK 的公开 Conversation.context() 与已解析模型。当
 ## 固定产物
 
 候选 14 的代码来源为 ce6ac2a；[构建、源码及 APK 摘要](ARTIFACTS.json)与[复现／真实联测说明](RUN.md)已固定。APK 不进入 Git。测试辅助与本目录证据另以文档提交追加，不改变安装包源码。
+
+候选 15 的主 APK 为 b2bc5bd（包含 df31204），实际第三轮测试辅助为 9480a87；[固定摘要](ARTIFACTS-candidate15.json)和[边界／安全联测说明](CANDIDATE15.md)分开列明，生产包未因测试驱动修正而重建。

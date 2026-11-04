@@ -1,0 +1,38 @@
+{
+  "stage": "T15 candidate 15; scoped actual picker regression passed, full ticket pending",
+  "sourceCommit": "b2bc5bd3d941943e1415795da6a77400c6f8dd12",
+  "baseCommit": "b06bfc746e46b5ab59a5f4b4960df44f187316bc",
+  "branch": "codex/t15-console",
+  "productionChange": "df31204: resume pending draft saves after picker cancellation",
+  "uiTests": 91,
+  "uiBuild": "passed",
+  "androidBuild": "t15-candidate15-build02.log: BUILD SUCCESSFUL in 20s",
+  "androidDeviceTests": {
+    "actualFlow": "t15-picker-cancel-device03.json",
+    "nativeReadOnly": "1/1 passed, 0.093s",
+    "sdkNoHarness": "1/1 passed, 0.582s",
+    "firstTwoAttempts": "failed; retained separately",
+    "modelRequestCount": "not observed cumulatively; no SDK tasks/submissions/history"
+  },
+  "artifacts": {
+    "app-debug.apk": {
+      "bytes": 371032339,
+      "sha256": "ae85b7e1d0797f33e379b1e70a786dc052c5ce4cb98c8122e1a480250eabe844"
+    },
+    "app-debug-androidTest.apk": {
+      "bytes": 3976648,
+      "sha256": "7651f308c5829c25b5b60375484380ba541e8fc22d006228ec6c0d157f5d8b08"
+    },
+    "source.zip": {
+      "bytes": 8269321,
+      "sha256": "83169b75875fafea2c3a72ef4c28eac0342c21228f99741b442892ba6eb49e95"
+    }
+  },
+  "observer03": {
+    "sourceCommit": "9480a87212682458a2cd5ca702e5fa401ff2619a",
+    "productionDiffFromMainSource": "empty",
+    "testSha256": "36515131385fe9eaba48b36495c836df8904249dc33c3b8e1482cb2cb3ee4c9a",
+    "sourceZipSha256": "a4e5594cec32a749e978760ac89812c3c7c99d755378c6cf7d7f7a83ceb69ca0",
+    "driverSha256": "f0ba86fa466d8a04af6abb75aeec170ad54e567c91cd45d85c16206c9a9356d8"
+  }
+}

@@ -1,0 +1,104 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /OK \(1 test\)/. Input:
+
+'INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ConsolePickerObservationTest\r\n' +
+  'INSTRUMENTATION_STATUS: current=1\r\n' +
+  'INSTRUMENTATION_STATUS: id=AndroidJUnitRunner\r\n' +
+  'INSTRUMENTATION_STATUS: numtests=1\r\n' +
+  'INSTRUMENTATION_STATUS: stream=\r\n' +
+  'dev.durableagent.probe.ConsolePickerObservationTest:\r\n' +
+  'INSTRUMENTATION_STATUS: test=savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner\r\n' +
+  'INSTRUMENTATION_STATUS_CODE: 1\r\n' +
+  'INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ConsolePickerObservationTest\r\n' +
+  'INSTRUMENTATION_STATUS: current=1\r\n' +
+  'INSTRUMENTATION_STATUS: id=AndroidJUnitRunner\r\n' +
+  'INSTRUMENTATION_STATUS: numtests=1\r\n' +
+  'INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Expected the retained host process expected:<3794> but was:<5231>\r\n' +
+  '\tat org.junit.Assert.fail(Assert.java:89)\r\n' +
+  '\tat org.junit.Assert.failNotEquals(Assert.java:835)\r\n' +
+  '\tat org.junit.Assert.assertEquals(Assert.java:120)\r\n' +
+  '\tat dev.durableagent.probe.ConsolePickerObservationTest.savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(ConsolePickerObservationTest.kt:35)\r\n' +
+  '\r\n' +
+  'INSTRUMENTATION_STATUS: stream=\r\n' +
+  'Error in savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(dev.durableagent.probe.ConsolePickerObservationTest):\r\n' +
+  'java.lang.AssertionError: Expected the retained host process expected:<3794> but was:<5231>\r\n' +
+  '\tat org.junit.Assert.fail(Assert.java:89)\r\n' +
+  '\tat org.junit.Assert.failNotEquals(Assert.java:835)\r\n' +
+  '\tat org.junit.Assert.assertEquals(Assert.java:120)\r\n' +
+  '\tat dev.durableagent.probe.ConsolePickerObservationTest.savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(ConsolePickerObservationTest.kt:35)\r\n' +
+  '\r\n' +
+  'INSTRUMENTATION_STATUS: test=savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner\r\n' +
+  'INSTRUMENTATION_STATUS_CODE: -2\r\n' +
+  'INSTRUMENTATION_RESULT: stream=\r\n' +
+  '\r\n' +
+  'Time: 1.272\r\n' +
+  'There was 1 failure:\r\n' +
+  '1) savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(dev.durableagent.probe.ConsolePickerObservationTest)\r\n' +
+  'java.lang.AssertionError: Expected the retained host process expected:<3794> but was:<5231>\r\n' +
+  '\tat org.junit.Assert.fail(Assert.java:89)\r\n' +
+  '\tat org.junit.Assert.failNotEquals(Assert.java:835)\r\n' +
+  '\tat org.junit.Assert.assertEquals(Assert.java:120)\r\n' +
+  '\tat dev.durableagent.probe.ConsolePickerObservationTest.savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(ConsolePickerObservationTest.kt:35)\r\n' +
+  '\r\n' +
+  'FAILURES!!!\r\n' +
+  'Tests run: 1,  Failures: 1\r\n' +
+  '\r\n' +
+  '\r\n' +
+  'INSTRUMENTATION_CODE: -1'
+
+    at file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-picker-cancel-process.mjs:68:87 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ConsolePickerObservationTest\r\n' +
+    'INSTRUMENTATION_STATUS: current=1\r\n' +
+    'INSTRUMENTATION_STATUS: id=AndroidJUnitRunner\r\n' +
+    'INSTRUMENTATION_STATUS: numtests=1\r\n' +
+    'INSTRUMENTATION_STATUS: stream=\r\n' +
+    'dev.durableagent.probe.ConsolePickerObservationTest:\r\n' +
+    'INSTRUMENTATION_STATUS: test=savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner\r\n' +
+    'INSTRUMENTATION_STATUS_CODE: 1\r\n' +
+    'INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ConsolePickerObservationTest\r\n' +
+    'INSTRUMENTATION_STATUS: current=1\r\n' +
+    'INSTRUMENTATION_STATUS: id=AndroidJUnitRunner\r\n' +
+    'INSTRUMENTATION_STATUS: numtests=1\r\n' +
+    'INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Expected the retained host process expected:<3794> but was:<5231>\r\n' +
+    '\tat org.junit.Assert.fail(Assert.java:89)\r\n' +
+    '\tat org.junit.Assert.failNotEquals(Assert.java:835)\r\n' +
+    '\tat org.junit.Assert.assertEquals(Assert.java:120)\r\n' +
+    '\tat dev.durableagent.probe.ConsolePickerObservationTest.savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(ConsolePickerObservationTest.kt:35)\r\n' +
+    '\r\n' +
+    'INSTRUMENTATION_STATUS: stream=\r\n' +
+    'Error in savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(dev.durableagent.probe.ConsolePickerObservationTest):\r\n' +
+    'java.lang.AssertionError: Expected the retained host process expected:<3794> but was:<5231>\r\n' +
+    '\tat org.junit.Assert.fail(Assert.java:89)\r\n' +
+    '\tat org.junit.Assert.failNotEquals(Assert.java:835)\r\n' +
+    '\tat org.junit.Assert.assertEquals(Assert.java:120)\r\n' +
+    '\tat dev.durableagent.probe.ConsolePickerObservationTest.savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(ConsolePickerObservationTest.kt:35)\r\n' +
+    '\r\n' +
+    'INSTRUMENTATION_STATUS: test=savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner\r\n' +
+    'INSTRUMENTATION_STATUS_CODE: -2\r\n' +
+    'INSTRUMENTATION_RESULT: stream=\r\n' +
+    '\r\n' +
+    'Time: 1.272\r\n' +
+    'There was 1 failure:\r\n' +
+    '1) savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(dev.durableagent.probe.ConsolePickerObservationTest)\r\n' +
+    'java.lang.AssertionError: Expected the retained host process expected:<3794> but was:<5231>\r\n' +
+    '\tat org.junit.Assert.fail(Assert.java:89)\r\n' +
+    '\tat org.junit.Assert.failNotEquals(Assert.java:835)\r\n' +
+    '\tat org.junit.Assert.assertEquals(Assert.java:120)\r\n' +
+    '\tat dev.durableagent.probe.ConsolePickerObservationTest.savedCancelledPickerDraftRemainsUnsentOnTheOriginalOwner(ConsolePickerObservationTest.kt:35)\r\n' +
+    '\r\n' +
+    'FAILURES!!!\r\n' +
+    'Tests run: 1,  Failures: 1\r\n' +
+    '\r\n' +
+    '\r\n' +
+    'INSTRUMENTATION_CODE: -1',
+  expected: /OK \(1 test\)/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.14.1

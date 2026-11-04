@@ -1,0 +1,16 @@
+{
+  "serial": "emulator-5584",
+  "avd": "durableagent-t16-backup",
+  "recordedAt": "2026-11-04T12:25:20.8187106Z",
+  "size": "Physical size: 1080x2400",
+  "density": "Physical density: 420",
+  "fontScale": "1.0",
+  "rotationAuto": "1",
+  "rotation": "0",
+  "imeHardKeyboard": "0",
+  "stayAwake": "7",
+  "appDataCleared": false,
+  "currentMode": "input-only",
+  "currentRun": "9efa51f1-918f-4a85-9d5a-7364e011de0e",
+  "fixtureSent": false
+}

@@ -1,0 +1,15 @@
+{
+  "serial": "emulator-5584",
+  "avd": "durableagent-t16-backup",
+  "coldBootRetainedData": true,
+  "recordedAt": "2026-11-04T12:17:53.7694030Z",
+  "bootCompleted": "1",
+  "pageSize": "4096",
+  "size": "Physical size: 1080x2400",
+  "density": "Physical density: 420",
+  "fontScale": "1.0",
+  "rotationAuto": "1",
+  "rotation": "0",
+  "imeHardKeyboard": "0",
+  "stayAwake": "7"
+}

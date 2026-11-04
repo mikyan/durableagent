@@ -1,0 +1,9 @@
+file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-picker-cancel-process.mjs:15
+async function until(read,label,timeout=45000){const end=Date.now()+timeout;let last;while(Date.now()<end){try{last=await read();if(last)return last;}catch(error){last=String(error);}await pause(100);}throw Error(`${label}: ${JSON.stringify(last)}`);}
+                                                                                                                                                                                                               ^
+
+Error: Actual external picker foreground: false
+    at until (file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-picker-cancel-process.mjs:15:208)
+    at async file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/tools/console-picker-cancel-process.mjs:48:23
+
+Node.js v24.14.1
