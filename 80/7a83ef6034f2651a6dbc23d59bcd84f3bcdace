@@ -1,0 +1,196 @@
+docs/evidence/t07/t07-emu16k-native-first.log
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-23
+docs/evidence/t07/t07-s23-native-first.log
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-23
+docs/evidence/t07/t07-observer-retry-review.md
+  s_467dcb949b5b60::t_dcf5a8adff7c34 1-9
+android/app/src/androidTest/java/dev/durableagent/probe/SubmissionApplicationTest.kt
+  s_467dcb949b5b60::t_ec83c2d9792f05 1-167
+ui/test/submissions-page.test.tsx
+  s_467dcb949b5b60::t_cce5b4abbfeb2e 1-61
+ui/test/submissions.test.ts
+  s_467dcb949b5b60::t_d78b7718d63a75 1-190
+docs/evidence/t07/README.md
+  s_467dcb949b5b60::t_6fc7ca8118548f 19-20
+  s_467dcb949b5b60::t_d748e4428c456e 5,7,24-29
+  s_467dcb949b5b60::t_f70c180cf31aee 1-4,6,8-9,11-14,30-42,44-62
+  s_467dcb949b5b60::t_94db83d24a7261 10,16,21-22
+  s_467dcb949b5b60::t_dcf5a8adff7c34 15,17-18,23,43
+runtime/SUBMISSIONS.md
+  s_467dcb949b5b60::t_0a2268cdd3b653 1-40
+docs/evidence/t07/t07-dispatch-gate-race-green.json
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-12
+docs/evidence/t07/t07-stop-at-ack-race-green.json
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-20
+docs/evidence/t07/t07-public-audit.json
+  s_467dcb949b5b60::t_d748e4428c456e 1-5
+docs/evidence/t07/t07-emu16k-native-third.log
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-176
+docs/evidence/t07/t07-s23-native-third.log
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-176
+docs/evidence/t07/t07-emu16k-credential-audit.json
+  s_467dcb949b5b60::t_d748e4428c456e 1-19
+docs/evidence/t07/t07-dispatch-concurrency-red.json
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-7
+docs/evidence/t07/t07-emu16k-input-regression-candidate.log
+  s_467dcb949b5b60::t_6fc7ca8118548f 1-43
+runtime/validation/submission-policy.mjs
+  s_467dcb949b5b60::t_0a801311141669 1-88
+docs/evidence/t07/t07-emu16k-full-candidate.log
+  s_467dcb949b5b60::t_ca13c4c3d9f534 1-608
+docs/evidence/t07/t07-s23-native-second.log
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-194
+docs/evidence/t07/t07-emu16k-ui-retry-candidate.log
+  s_467dcb949b5b60::t_dcf5a8adff7c34 1-41
+docs/specs/v1/tickets/07-reliable-submission.md
+  s_467dcb949b5b60::t_d748e4428c456e 11-24
+docs/evidence/t07/t07-dispatch-gate-race-red.json
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-12
+docs/evidence/t07/t07-dispatch-concurrency-green.json
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-7
+android/scripts/submission-ui-process.mjs
+  s_467dcb949b5b60::t_ca13c4c3d9f534 1-102
+android/README.md
+  s_467dcb949b5b60::t_dcf5a8adff7c34 124
+  s_467dcb949b5b60::t_ca13c4c3d9f534 1,26-47,112-123
+docs/evidence/t07/t07-emu16k-native-second.log
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-194
+docs/evidence/t07/t07-runtime-final-host.log
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-153
+ui/test/admission-draft.test.ts
+  s_467dcb949b5b60::t_e2580b90458aef 1-76
+docs/evidence/t07/t07-emu16k-ui-process-candidate.json
+  s_467dcb949b5b60::t_ca13c4c3d9f534 1-297
+docs/evidence/t07/t07-stop-at-ack-race-red.json
+  s_467dcb949b5b60::t_0d419bbb54adbe 1-20
+ui/src/submissions.ts
+  s_467dcb949b5b60::t_94f75f5725beea 1-130
+docs/evidence/t07/t07-final-apk-inspection.json
+  s_467dcb949b5b60::t_ca13c4c3d9f534 1-186
+android/app/src/androidTest/java/dev/durableagent/probe/ApplicationTest.kt
+  s_467dcb949b5b60::t_ee767179e31563 24,36
+android/app/src/androidTest/java/dev/durableagent/probe/InputApplicationTest.kt
+  s_467dcb949b5b60::t_08f998f4abc269 48
+android/app/src/androidTest/java/dev/durableagent/probe/ModelSettingsTest.kt
+  s_467dcb949b5b60::t_85b39376f06ffd 28
+android/app/src/androidTest/java/dev/durableagent/probe/NativeSubmissionStoreTest.kt
+  s_467dcb949b5b60::t_57370109311079 1-283
+android/app/src/androidTest/java/dev/durableagent/probe/SubmissionTestDriver.kt
+  s_467dcb949b5b60::t_73d2c30b704e7a 1-28
+android/app/src/debug/AndroidManifest.xml
+  s_467dcb949b5b60::t_28fabe568e0ecd 7
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_4610a07183be1c 29,46-47,60-61,89
+android/app/src/main/java/dev/durableagent/probe/NativeSubmissionRecords.kt
+  s_467dcb949b5b60::t_e7678b3cf0a1bc 1-250
+android/app/src/main/java/dev/durableagent/probe/SubmissionValidationProbe.kt
+  s_467dcb949b5b60::t_1556d22602e066 1-19
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_8251ffdeae8bef 12,22,38-45
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_2d0d4d6d645053 8,14,27-28
+runtime/src/application.ts
+  s_467dcb949b5b60::t_86b8fd68cb069d 12-14,24,39-42,53,55,58,67,71-73,76-77,125-127,129-130,132-134,161,197,211,216
+runtime/src/dispatch-gate.ts
+  s_467dcb949b5b60::t_e7d40a7d72ab01 1-28
+runtime/src/submission.ts
+  s_467dcb949b5b60::t_2949ef05bd9bf9 1-101
+runtime/test/application.test.mjs
+  s_467dcb949b5b60::t_916a3d28da5397 6
+runtime/test/fixtures/model-recovery-worker.mjs
+  s_467dcb949b5b60::t_ea9ff5cced7eec 3
+runtime/test/submission.test.mjs
+  s_467dcb949b5b60::t_b9488b2c82854c 1-3
+runtime/validation/input-policy.mjs
+  s_467dcb949b5b60::t_a6143b8a7e0079 17
+runtime/validation/model-policy.mjs
+  s_467dcb949b5b60::t_60b3e5d62c6130 37
+runtime/validation/submission-control.mjs
+  s_467dcb949b5b60::t_c8cff37ee4ec5d 1-13
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_00f01343b21b69 8,48-49,121-122,129-131
+ui/src/extensions/submissions.tsx
+  s_467dcb949b5b60::t_d81638a8c3d4c8 1-42
+ui/src/style.css
+  s_467dcb949b5b60::t_d5a4b55bca8792 10-11
+ui/test/application-real.test.mjs
+  s_467dcb949b5b60::t_45645c8427b5a2 20,57-90
+android/app/src/androidTest/java/dev/durableagent/probe/NativeSubmissionCrashTest.kt
+  s_5996300bc1a7a2::t_c9734741da5758 1-105
+android/app/src/androidTest/java/dev/durableagent/probe/NativeSubmissionEndToEndTest.kt
+  s_966fc21fefbb66::t_7c98895ee8c23e 1-75
+android/app/src/debug/java/dev/durableagent/probe/SubmissionFaultProbeService.kt
+  s_5996300bc1a7a2::t_9ec0eb3ee956c1 1-43
+android/app/src/main/java/dev/durableagent/probe/NativeInputAccess.kt
+  s_966fc21fefbb66::t_2f6c215353fa0f 30-34,47-67
+android/app/src/main/java/dev/durableagent/probe/NativeInputStore.kt
+  s_966fc21fefbb66::t_5af4303b9ad457 49-51,367-385,398,501,511-514,569,586,601-603
+runtime/src/input-protocol.ts
+  s_4656f38e701a3b::t_ea1ed4a9e3d748 4,10-11
+runtime/src/submission-protocol.ts
+  s_467dcb949b5b60::t_6ef70fc19be8d3 1-52
+runtime/test/dispatch-gate.test.mjs
+  s_5996300bc1a7a2::t_13dda65b960a16 1-14
+runtime/validation/application-fixture.mjs
+  s_966fc21fefbb66::t_f5eec58e7b7787 1-24
+runtime/validation/submission-authority.mjs
+  s_966fc21fefbb66::t_feff59519f58d7 1-25
+ui/README.md
+  s_467dcb949b5b60::t_047d0c3876affb 1,3,28,34-40,64-67,86
+ui/src/controller.ts
+  s_4656f38e701a3b::t_a303115f538d54 6,9,26-27,33,94,97,117,129,132-135,139-141,160-172,233-234
+ui/src/drafts.ts
+  s_4656f38e701a3b::t_be6c0b53d24dde 3,5,8,19,84-89,182-194
+ui/test/app.test.tsx
+  s_4656f38e701a3b::t_c4e9e75cdd6dd5 35-38
+ui/test/controller.test.ts
+  s_4656f38e701a3b::t_39a4fc7301237c 24-28
+ui/test/input-controller.test.ts
+  s_4656f38e701a3b::t_dc31e356e71925 53
+ui/test/input-page.test.tsx
+  s_4656f38e701a3b::t_e29da2555bc7fa 48-51
+ui/test/input-platform.ts
+  s_4656f38e701a3b::t_4ffd9c211f21f5 4,13-38,43,47-50,58-72
+ui/test/models-real.test.mjs
+  s_4656f38e701a3b::t_6f60848de61207 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "807a83ef6034f2651a6dbc23d59bcd84f3bcdace",
+  "prompts": {},
+  "sessions": {
+    "s_4656f38e701a3b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a269-9015-7c23-97f8-527284353fa1",
+        "model": "unknown"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_5996300bc1a7a2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a289-5acd-7910-a35f-55f1a378be00",
+        "model": "unknown"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_966fc21fefbb66": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a22c-f827-7782-9003-b1107f40ca51",
+        "model": "unknown"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
