@@ -74,6 +74,7 @@ class ExecutionContract(unittest.TestCase):
         self.workspace.mkdir()
         self.endpoint = Executor(self.root / "authority")
         self.requests = set()
+        self.expected_unknown = set()
 
     def tearDown(self):
         safe = False
@@ -99,6 +100,11 @@ class ExecutionContract(unittest.TestCase):
                 if not unresolved:
                     safe = True
                     break
+                if {row["executionId"] for row in unresolved} == self.expected_unknown and all(row["state"] == "unknown" for row in unresolved):
+                    # These crash contracts deliberately cannot confirm the effect scope.
+                    # Preserve their ledger and originals; do not manufacture cleanup proof.
+                    print("Expected unknown scopes retained: " + json.dumps(sorted(self.expected_unknown)), flush=True)
+                    return
                 if any(row["state"] == "unknown" for row in unresolved) or time.monotonic() >= deadline:
                     self.fail("fixture scopes unconfirmed; preserved " + str(self.root))
                 time.sleep(0.03)
@@ -312,6 +318,7 @@ class ExecutionContract(unittest.TestCase):
             # The surviving fixture command has a bounded natural lifetime, even in the failing implementation.
             time.sleep(1.2)
         self.assertEqual((self.workspace / "once-effect").read_text(), "once\n")
+        self.expected_unknown.add(request["executionId"])
 
     def test_large_output_reconnects_with_bounded_pages_and_complete_raw_reference(self):
         request = self.request("large-output")
@@ -610,6 +617,7 @@ endpoint.close()
         self.assertEqual(self.endpoint.start(request["executionId"], receipt["finalDigest"])["state"], "unknown")
         self.assertEqual(self.endpoint.prepare(request)["state"], "unknown")
         self.assertFalse((self.workspace / "crash-window-effect").exists())
+        self.expected_unknown.add(request["executionId"])
 
     def test_cancel_before_acceptance_survives_reopen_and_rejects_late_prepare(self):
         request = self.request("cancel-before-accept")

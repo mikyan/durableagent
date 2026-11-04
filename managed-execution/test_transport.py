@@ -94,6 +94,7 @@ class TransportTests(unittest.TestCase):
                     try:
                         self.wait_for(lambda: len(list(root.glob("active-*"))) == 4)
                         self.assertEqual("CHANNEL_BUSY", operation("echo", {})["error"]["code"])
+                        self.assertEqual(IDENTITY["executorId"], operation("ping", {})["value"]["executorId"], "Authenticated readiness must not consume an ordinary task slot")
                         self.assertEqual({"receipt": "probe"}, operation("query", {"receipt": "probe"})["value"])
                         started = time.monotonic()
                         self.assertTrue(operation("cancel", {})["value"]["controlReached"])
