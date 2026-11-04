@@ -1,0 +1,44 @@
+managed-execution/test_executor.py
+  s_467dcb949b5b60::t_031d0b91bb62cb 19-68
+android/app/src/main/java/dev/durableagent/probe/NativeDataSaverMonitor.kt
+  s_467dcb949b5b60::t_fd8f84a8fa3e1f 26
+runtime/src/execution-channel.ts
+  s_467dcb949b5b60::t_fd8f84a8fa3e1f 56-57
+runtime/test/execution-channel.test.mjs
+  s_467dcb949b5b60::t_fd8f84a8fa3e1f 53-55,63
+managed-execution/durable_executor.py
+  s_467dcb949b5b60::t_28bdbcafc78722 187
+  s_467dcb949b5b60::t_269a65e8a29827 147,158-165,168,171,173-184,190-207,210,214-218,689,704,708
+android/app/src/main/java/dev/durableagent/probe/ExecutionAccess.kt
+  s_467dcb949b5b60::t_5c20981f618b36 116
+  s_467dcb949b5b60::t_fd8f84a8fa3e1f 65-66
+  s_467dcb949b5b60::t_d49f5c3f3f2c20 21,67-68,78,85
+android/app/src/main/java/dev/durableagent/probe/ExecutionTermuxGateway.kt
+  s_467dcb949b5b60::t_fd8f84a8fa3e1f 76,84-86,88,90-93,98,101
+  s_467dcb949b5b60::t_5c20981f618b36 89
+  s_467dcb949b5b60::t_d49f5c3f3f2c20 77-83,87,94-97,99-100,130
+android/app/src/main/java/dev/durableagent/probe/ExecutionTlsClient.kt
+  s_467dcb949b5b60::t_fd8f84a8fa3e1f 29,44,49-50,73
+  s_467dcb949b5b60::t_2c8243b2192f49 27-28
+android/app/src/main/java/dev/durableagent/probe/NativeStopService.kt
+  s_467dcb949b5b60::t_fd8f84a8fa3e1f 57
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionTransportTest.kt
+  s_467dcb949b5b60::t_fd8f84a8fa3e1f 84
+  s_467dcb949b5b60::t_689943c75141cd 68-83,85-113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "d1e994e41467f42baa807ff3847701cbee4f0dc7",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
