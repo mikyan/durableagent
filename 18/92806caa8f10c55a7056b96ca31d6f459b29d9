@@ -1,0 +1,68 @@
+managed-execution/test_file_service.py
+  s_467dcb949b5b60::t_7069151640aab6 78-121
+  s_467dcb949b5b60::t_f98743d8df79bc 122-147
+  s_467dcb949b5b60::t_661e37accefa64 148-184
+  s_467dcb949b5b60::t_c24e48d0e6a856 47-77
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_306c88cc518c82 241-243
+  s_467dcb949b5b60::t_478a608616d4e1 232-233
+  s_467dcb949b5b60::t_035477bcb621b2 240
+  s_467dcb949b5b60::t_49c68def49d130 244-247
+  s_467dcb949b5b60::t_6993a23512128b 12,197
+  s_467dcb949b5b60::t_ca88935f085064 234-235
+  s_467dcb949b5b60::t_6c4bf4f65af1af 13,43-44,101,145
+  s_467dcb949b5b60::t_6233009083e7da 98
+runtime/test/managed-files.test.mjs
+  s_467dcb949b5b60::t_ca88935f085064 42-61
+  s_467dcb949b5b60::t_66b2d6905640ed 62-77
+  s_467dcb949b5b60::t_19b63c0518dcde 78-92
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_6c4bf4f65af1af 55
+runtime/src/file-effect-protocol.ts
+  s_467dcb949b5b60::t_651ce24aebf937 1-10
+managed-execution/file_service.py
+  s_467dcb949b5b60::t_cfc658e6f13453 173-174,189,198,453,460-461,470,475-476,479
+  s_467dcb949b5b60::t_2899b60adcd535 23,128-152,187,253-254,257-258,262,362-365,368,371-415,428-429,433-442
+  s_467dcb949b5b60::t_9bb4ffc46a49d5 242-245,273,431,492-545,549,555
+  s_467dcb949b5b60::t_36589a29ccf090 171-172,188,197,199-200,234,255-256,416-427,430,444-445,451,471-474,477
+  s_467dcb949b5b60::t_0a787543fa2e8f 432
+android/app/src/main/java/dev/durableagent/probe/ExecutionFileMethods.kt
+  s_467dcb949b5b60::t_c1116b00f918a0 4
+runtime/src/file-writes.ts
+  s_467dcb949b5b60::t_3be79415fbba7d 23,37,42,50,90,94
+  s_467dcb949b5b60::t_205b8b6472a721 13-14,34
+  s_467dcb949b5b60::t_91d55ee456913d 24,49,63-64,89
+  s_467dcb949b5b60::t_651ce24aebf937 9,11,15,29-31,51-55,58,65-69,74-82,86-88,97
+  s_467dcb949b5b60::t_1c6e0d60d62439 12,43,48,56
+managed-execution/FILE-VALIDATION.md
+  s_467dcb949b5b60::t_5c08c423dc580a 19-22,24,36-38,43-45
+  s_467dcb949b5b60::t_678905d6a86baa 39
+runtime/src/managed-files.ts
+  s_467dcb949b5b60::t_0469f6f98c3799 3,23-41
+  s_467dcb949b5b60::t_8927c26abf9ba1 4,42,54-69,71-72,110
+  s_467dcb949b5b60::t_9af4dc4f320551 43-53,70
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_6a28f78ff41d30 200-219
+  s_467dcb949b5b60::t_47ca471e490462 234-235,238-239
+  s_467dcb949b5b60::t_d1f64f740e9c45 227,251,276
+  s_467dcb949b5b60::t_186e4a9e871e88 266-267,269-275,277-289
+  s_467dcb949b5b60::t_3be79415fbba7d 268
+  s_467dcb949b5b60::t_5a0134948eb98b 290-311
+  s_467dcb949b5b60::t_737faffce8767f 312-331
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "1892806caa8f10c55a7056b96ca31d6f459b29d9",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
