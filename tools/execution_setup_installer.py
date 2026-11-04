@@ -24,7 +24,8 @@ class SetupFault(Exception):
     pass
 
 
-NAMES = {'durable_executor.py', 'execution_transport.py'}
+BASE_NAMES = {'durable_executor.py', 'execution_transport.py'}
+NAMES = BASE_NAMES | {'file_service.py'}
 MANIFEST = 'installation.json'
 
 
@@ -96,7 +97,8 @@ def locks(root):
 
 
 def install(home, scripts):
-    if set(scripts) != NAMES or any(not isinstance(data, bytes) or not data for data in scripts.values()):
+    names = set(scripts)
+    if names not in (BASE_NAMES, NAMES) or any(not isinstance(data, bytes) or not data for data in scripts.values()):
         raise SetupFault('INVALID_PAYLOAD')
     home = Path(home)
     root = home
@@ -111,7 +113,7 @@ def install(home, scripts):
     with locks(root):
         manifest = root / MANIFEST
         safe(manifest)
-        previous = {name: None for name in NAMES}
+        previous = {name: None for name in names}
         if manifest.exists():
             try:
                 record = json.loads(manifest.read_text())
@@ -123,13 +125,14 @@ def install(home, scripts):
                     previous = record['previous']
                 else:
                     raise ValueError()
-                if set(previous) != NAMES or any(value is not None and not re.fullmatch('[a-f0-9]{64}', value) for value in previous.values()):
+                if set(previous) not in (BASE_NAMES, NAMES) or not set(previous) <= names or any(value is not None and not re.fullmatch('[a-f0-9]{64}', value) for value in previous.values()):
                     raise ValueError()
+                previous = {name: previous.get(name) for name in names}
             except (KeyError, ValueError, TypeError):
                 raise SetupFault('MANIFEST_UNRECOGNIZED') from None
         else:
             record = None
-        for name in NAMES:
+        for name in names:
             path = root / name
             safe(path)
             actual = digest(path.read_bytes()) if path.exists() else None

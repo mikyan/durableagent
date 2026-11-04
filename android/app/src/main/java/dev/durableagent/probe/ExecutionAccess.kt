@@ -121,7 +121,7 @@ class ExecutionAccess(context: Context) : AutoCloseable {
         // Abandoning a socket or worker does not acknowledge remote cancellation or stopped effects.
     }
     companion object {
-        private val METHODS=setOf("connect","ping","prepare","start","query","list","readOutput","readRawOutput","cancel","inspectWorkspace")
+        private val METHODS=setOf("connect","ping","prepare","start","query","list","readOutput","readRawOutput","cancel","inspectWorkspace") + EXECUTION_FILE_METHODS
         private fun pool(threads: Int, capacity: Int, name: String) = ThreadPoolExecutor(threads,threads,0,TimeUnit.MILLISECONDS,ArrayBlockingQueue(capacity),{ task -> Thread(task,name).apply { isDaemon=true } },ThreadPoolExecutor.AbortPolicy())
     }
 }

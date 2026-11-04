@@ -2,8 +2,8 @@ import type {ConversationController,UiState} from '../controller';
 import type {ExecutionRow,ExecutionState} from '../execution';
 import '../execution.css';
 
-const labels:Record<ExecutionState,string>={accepted_not_started:'已接纳，尚未开始',starting:'正在开始',running:'正在执行',stop_requested:'取消已请求，等待停止确认',stopped:'已停止',not_started:'未开始',completed:'已结束',unknown:'结果未知，停止未确认'};
-function label(row:ExecutionRow){return row.source==='application'?'未收到执行端确认':labels[row.state];}
+const labels:Record<ExecutionState,string>={queued:'等待其他文件写入结束',accepted_not_started:'已接纳，尚未开始',starting:'正在开始',running:'正在执行',stop_requested:'取消已请求，等待停止确认',stopped:'已停止',not_started:'未开始',completed:'已结束',unknown:'结果未知，停止未确认'};
+function label(row:ExecutionRow){return row.state==='queued'?labels.queued:row.source==='application'?'未收到执行端确认':labels[row.state];}
 export function ExecutionPanel({controller,state}:{controller:ConversationController;state:UiState}){
   const execution=state.execution??controller.execution.view();
   const rows=execution.conversationId===state.activeId?execution.rows:[];

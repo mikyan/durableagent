@@ -1,5 +1,5 @@
 import {defineDoc,defineDocFamily,type Harness,type Registry,type ToolExecutionApi,type ToolRegistration} from '@earendil-works/pi-durable';
-import {createBashTool} from '@earendil-works/pi-durable/tools';
+import {createBashTool,createReadTool,createWriteTool} from '@earendil-works/pi-durable/tools';
 import {ExecutionError,FileError,StreamDecoder,type ExecutionEnv,type FileSystem,type ShellExecOptions,type Result,type ShellExecResult} from '@earendil-works/pi-durable/env';
 import {BACKGROUND_CONTEXT,type Context} from '@earendil-works/chord/context';
 import {randomUUID,createHash} from 'node:crypto';
@@ -8,13 +8,16 @@ import type {AdoptedBinding,LocationAdapter} from './project-bindings.js';
 import type {EffectAuthority,EffectSnapshot} from './projects.js';
 import type {SendAuthority} from './submission-protocol.js';
 import type {ExecutionChannel} from './execution-channel.js';
+import {ManagedFiles} from './managed-files.js';
+import {FileWrites,type FileExecutionEffect} from './file-writes.js';
+import {WorkspaceCoordinator,type WriteClaim,type WriteScope} from './workspace-coordination.js';
 
-export const EXECUTION_EXTENSION={id:'managed-execution',actions:['execution.list','execution.readOutput']} as const;
+export const EXECUTION_EXTENSION={id:'managed-execution',actions:['execution.list','execution.readOutput','files.list']} as const;
 type Command={kind:'shell';script:string}|{kind:'argv';argv:string[]};
 type ExecutionContext={productId:string;sdkConversationId:number;taskId:number;callId:string;bindingId:string;locationVersion:number;controlGeneration:number;namespace:string};
 type Request={executionId:string;context:ExecutionContext;command:Command;cwd:string;env:Record<string,string>;inheritEnv:boolean;timeoutMs:number|null};
 type Receipt=Record<string,any>&{executionId:string;state:string};
-type StoredIntent={request:Request|null;receipt:Receipt|null;cursor:number;workspaceIdentity:string|null};
+type StoredIntent={request:Request|null;receipt:Receipt|null;cursor:number;workspaceIdentity:string|null;writeScope?:WriteScope;fileOperationId?:string};
 type IndexEntry={key:string;productId:string;bindingId:string;namespace:string;state:string};
 const Intent=defineDocFamily({kind:'app.managed-execution-intent',version:1,scope:'session',family:true,initial:(_:null):StoredIntent=>({request:null,receipt:null,cursor:0,workspaceIdentity:null}),checkpointWhen:()=>false});
 const Index=defineDoc({kind:'app.managed-execution-index',version:1,scope:'session',initial:()=>({items:{} as Record<string,IndexEntry>}),checkpointWhen:()=>false});
@@ -33,8 +36,11 @@ export class ManagedExecution implements EffectAuthority {
  private namespace='unverified:termux';
  private tail:Promise<unknown>=Promise.resolve();
  private closedOwners=new Set<string>();
+ private writes?:WorkspaceCoordinator;
+ private readonly fileWrites:FileWrites;
  readonly locations:LocationAdapter;
  constructor(private readonly options:{channel:ExecutionChannel;authority:SendAuthority;boundary?:(stage:string,request:Readonly<Request>)=>void|Promise<void>}){
+  this.fileWrites=new FileWrites(options.channel);
   this.locations={deferInspection:true,inspect:async workspace=>{
    if(workspace.environment!=='termux')return {state:'environment-changed',reason:'此位置不属于当前 Termux 执行环境'};
    try{const value=await options.channel.request('inspectWorkspace',{path:workspace.path});if(value.state!=='available'||typeof value.identity!=='string'||typeof value.namespace!=='string')return {state:'missing',reason:'Termux 中的位置不可用，保留原位置'};this.namespace=value.namespace;return {state:'available',identity:value.identity};}
@@ -42,7 +48,15 @@ export class ManagedExecution implements EffectAuthority {
   },environment:async binding=>new ManagedEnvironment(this,binding)};
  }
  private serial<T>(action:()=>Promise<T>):Promise<T>{const result=this.tail.then(action,action);this.tail=result.catch(()=>{});return result;}
- attach(harness:Harness){this.harness=harness;}
+ attach(harness:Harness){this.harness=harness;this.fileWrites.attach(harness);this.writes=new WorkspaceCoordinator(harness,async claim=>{
+  const index=await harness.snapshot(Index,BACKGROUND_CONTEXT),entry=index?.items[claim.operationId];
+  if(!entry)return failure('EXECUTION_STORAGE_INCONSISTENT','写入占用缺少执行索引');
+  const saved=await harness.snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(!saved?.request||hash(saved.request)!==claim.requestDigest)return failure('EXECUTION_STORAGE_INCONSISTENT','写入占用与持久执行不一致');
+  const receipt=this.receipt(await this.options.channel.request('query',{executionId:claim.operationId}),copy(saved.request));
+  const proof=saved.fileOperationId?await this.fileWrites.evidence(saved.fileOperationId,receipt):{state:receipt.state,scopeConfirmed:receipt.scopeConfirmed===true};
+  return {operationId:claim.operationId,requestDigest:claim.requestDigest,namespace:claim.namespace,...proof,sequence:Number(receipt.sequence??0)};
+ });}
+ private writeClaim(request:Request,scope:WriteScope={domain:'device-files',kind:'environment'}):WriteClaim{return {operationId:request.executionId,requestDigest:hash(request),namespace:request.context.namespace,source:'termux',bindingId:request.context.bindingId,productId:request.context.productId,scope};}
  environmentNamespace(){return this.namespace;}
  /** Fixed-core tools whose effects all use this environment. Never an extension-exposed replay switch. */
  wrapTool<T extends ToolRegistration<any,any>>(tool:T):T{
@@ -51,7 +65,13 @@ export class ManagedExecution implements EffectAuthority {
    return tool.execute(args,{...api,env:api.env.forCall(api)},context);
   }} as T;
  }
- install(registry:Registry){registry.install({name:EXECUTION_EXTENSION.id,tools:[this.wrapTool(createBashTool())]});}
+ install(registry:Registry){registry.install({name:EXECUTION_EXTENSION.id,tools:[this.wrapTool(createBashTool()),this.wrapTool(createReadTool()),this.wrapTool(createWriteTool())]});}
+ async files(binding:AdoptedBinding,context:Context):Promise<Result<ManagedFiles,FileError>>{
+  try{context.abortSignal?.throwIfAborted();const position=await this.locations.inspect(binding.location);
+   if(position.state!=='available'||binding.actualIdentity&&position.identity!==binding.actualIdentity)return {ok:false,error:new FileError('unknown','原文件位置尚未核验或已经改变',binding.location.path)};
+   return {ok:true,value:new ManagedFiles({channel:this.options.channel,cwd:binding.location.path,namespace:this.namespace})};
+  }catch{return {ok:false,error:new FileError(context.abortSignal?.aborted?'aborted':'unknown','文件环境尚未就绪',binding.location.path)};}
+ }
  private owner(){if(!this.harness)return failure('EXECUTION_NOT_READY','执行记录尚未打开');return this.harness;}
  private async identity(){const value=await this.options.channel.request('ping',{});if(value.protocol!==1||typeof value.executorId!=='string'||typeof value.ledgerEpoch!=='string'||value.namespace!=='termux:'+value.executorId)return failure('EXECUTOR_IDENTITY','执行实例身份无法核验');return value as {protocol:1;executorId:string;ledgerEpoch:string;namespace:string};}
  private async policy(request:Request,api?:ToolExecutionApi,context:Context=BACKGROUND_CONTEXT){
@@ -77,18 +97,22 @@ export class ManagedExecution implements EffectAuthority {
  }
  private async reconcile(){
   const entries=Object.entries((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{});
+  const reservations=new Map((await this.writes?.list()??[]).map(value=>[value.operationId,value]));
   for(const [executionId,entry] of entries){
    if(terminal.has(entry.state))continue;
    const saved=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);
    if(!saved?.request)return failure('EXECUTION_STORAGE_INCONSISTENT','执行索引缺少持久意图，运行保持关闭');
    const request=copy(saved.request);let receipt:Receipt;
+   if(reservations.get(executionId)?.state==='queued')continue;
    try{receipt=this.receipt(await this.options.channel.request('query',{executionId}),request);if(receipt.reason==='NO_RECEIPT')throw Error('Acceptance not yet confirmed');}
    catch{receipt={...saved.receipt,protocol:1,executionId,namespace:request.context.namespace,context:request.context,state:'unknown',reason:'CLIENT_CONFIRMATION_LOST',source:'application'};}
    await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,entry.key,null),index=await tx.doc(Index);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_STORAGE_INCONSISTENT','执行意图在核验时改变');if(terminal.has(intent.receipt?.state??''))return;if(receipt.source!=='application'&&intent.receipt&&Number(receipt.sequence??0)<Number(intent.receipt.sequence??0))return;intent.receipt=copy(receipt);index.items[executionId].state=receipt.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});
+   if(!terminal.has(receipt.state))await this.writes!.reserve(this.writeClaim(request,saved.writeScope));
   }
+  await this.writes?.refresh();
  }
  recover(){return this.serial(()=>this.reconcile());}
- async run(binding:AdoptedBinding,api:ToolExecutionApi|undefined,command:string|readonly string[],options:ShellExecOptions|undefined,context:Context,ordinal=1):Promise<Result<ShellExecResult,ExecutionError>>{
+ async run(binding:AdoptedBinding,api:ToolExecutionApi|undefined,command:string|readonly string[],options:ShellExecOptions|undefined,context:Context,ordinal=1,fileEffect?:FileExecutionEffect):Promise<Result<ShellExecResult,ExecutionError>>{
   if(!api)return {ok:false,error:new ExecutionError('unknown','命令缺少持久工具调用身份')};
   if(Array.isArray(command)&&(!command.length||!command[0]))return {ok:false,error:new ExecutionError('spawn_error','命令参数列表为空，未下发执行')};
   const key=`${api.taskId}:${api.callId}:${ordinal}`;
@@ -97,15 +121,15 @@ export class ManagedExecution implements EffectAuthority {
   try{
    const identity=await this.identity();
    const fixed={command:typeof command==='string'?{kind:'shell' as const,script:command}:{kind:'argv' as const,argv:[...command]},cwd:posix.resolve(binding.location.path,options?.cwd??'.'),env:{...options?.env},inheritEnv:options?.inheritEnv??true,timeoutMs:options?.timeout===undefined?null:Math.ceil(options.timeout*1000)};
-   let workspaceIdentity:string|null=null;
+   let workspaceIdentity:string|null=null;let writeScope:WriteScope=fileEffect?.scope??{domain:'device-files',kind:'environment'};
    const request=await this.serial(async()=>{if(this.closedOwners.has(binding.id+':'+binding.sdkConversationId))return failure('EXECUTION_STOPPED','此执行环境的所有者已经关闭');await this.reconcile();const saved=await this.owner().snapshot(Intent,key,context);let initialIdentity:string|null=null;if(!saved?.request){const position=await this.locations.inspect(binding.location);if(position.state!=='available'||!position.identity||binding.actualIdentity&&position.identity!==binding.actualIdentity)return failure('EXECUTION_LOCATION_CHANGED','原执行位置无法核验，未启动命令');initialIdentity=position.identity;}return api.commit(async tx=>{
     const intent=await tx.doc(Intent,key,null),index=await tx.doc(Index);
-    if(intent.request){if(!same(fixed,{command:intent.request.command,cwd:intent.request.cwd,env:intent.request.env,inheritEnv:intent.request.inheritEnv,timeoutMs:intent.request.timeoutMs})||intent.request.context.bindingId!==binding.id||intent.request.context.namespace!==identity.namespace)return failure('EXECUTION_INTENT_MISMATCH','同一工具调用的最终参数或位置已改变');workspaceIdentity=intent.workspaceIdentity;return copy(intent.request);}
+    if(intent.request){if(!same(fixed,{command:intent.request.command,cwd:intent.request.cwd,env:intent.request.env,inheritEnv:intent.request.inheritEnv,timeoutMs:intent.request.timeoutMs})||intent.request.context.bindingId!==binding.id||intent.request.context.namespace!==identity.namespace)return failure('EXECUTION_INTENT_MISMATCH','同一工具调用的最终参数或位置已改变');if(!same(intent.writeScope??{domain:'device-files',kind:'environment'},writeScope)||intent.fileOperationId!==fileEffect?.fileOperationId)return failure('EXECUTION_INTENT_MISMATCH','同一工具调用的写入范围已经改变');workspaceIdentity=intent.workspaceIdentity;return copy(intent.request);}
     if(Object.values(index.items).some(value=>value.state==='unknown'))return failure('UNRESOLVED_EXECUTION','存在结果不明的执行，不能换一个命令身份绕过核验');
     const control=await this.options.authority.readControl(binding.controlProductId);
     if(control.pendingAbort||control.generation<=control.stoppedThrough||context.abortSignal?.aborted)return failure('EXECUTION_STOPPED','控制代次已停止');
     const request:Request={executionId:randomUUID(),context:{productId:binding.controlProductId,sdkConversationId:api.conversationId,taskId:api.taskId,callId:api.callId,bindingId:binding.id,locationVersion:binding.location.version,controlGeneration:control.generation,namespace:identity.namespace},...fixed};
-    intent.request=copy(request);intent.workspaceIdentity=initialIdentity;workspaceIdentity=initialIdentity;index.items[request.executionId]={key,productId:binding.controlProductId,bindingId:binding.id,namespace:identity.namespace,state:'intent'};return request;
+    intent.request=copy(request);intent.writeScope=copy(writeScope);if(fileEffect)intent.fileOperationId=fileEffect.fileOperationId;intent.workspaceIdentity=initialIdentity;workspaceIdentity=initialIdentity;index.items[request.executionId]={key,productId:binding.controlProductId,bindingId:binding.id,namespace:identity.namespace,state:'intent'};return request;
    },context,{persistence:{kind:'immediate'}});});
    fixedRequest=request;
    onAbort=()=>{cancelWait??=this.cancelRecorded(key,request);void cancelWait.catch(()=>{});};
@@ -113,8 +137,9 @@ export class ManagedExecution implements EffectAuthority {
    if(context.abortSignal?.aborted)onAbort();
    await this.options.boundary?.('intent-persisted',copy(request));
    await this.policy(request,api,context);
+   for(;;){const reservation=await this.writes!.reserve(this.writeClaim(request,writeScope));if(reservation.state==='cancelled')return failure('EXECUTION_STOPPED','排队的写入已取消');if(reservation.state!=='queued')break;await this.policy(request,api,context);await this.writes!.refresh();await new Promise(resolve=>setTimeout(resolve,20));}
    let receipt=this.receipt(await this.options.channel.request('query',{executionId:request.executionId}),request);
-   if(receipt.state==='unknown'&&receipt.reason==='NO_RECEIPT')receipt=this.receipt(await this.options.channel.request('prepare',request),request);
+   if(receipt.state==='unknown'&&receipt.reason==='NO_RECEIPT'){await fileEffect?.beforePrepare(request.executionId);receipt=this.receipt(await this.options.channel.request('prepare',request),request);}
    await this.save(api,key,request,receipt);
    await this.options.boundary?.('accepted',copy(request));
    if(receipt.state==='accepted_not_started'){
@@ -164,7 +189,9 @@ export class ManagedExecution implements EffectAuthority {
    }
   }
  });}
- async list(productId:string,cursor?:unknown){await this.recover();const index=await this.owner().snapshot(Index,BACKGROUND_CONTEXT),entries=Object.entries(index?.items??{}).filter(([,entry])=>entry.productId===productId),executions:Receipt[]=[];const start=cursor===undefined?0:entries.findIndex(([id])=>id===cursor)+1;if(cursor!==undefined&&(!start||typeof cursor!=='string'))return failure('INVALID_ARGUMENT','执行列表位置已失效，请重新读取');const page=entries.slice(start,start+20);for(const [,entry] of page){const intent=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(intent?.receipt)executions.push(copy(intent.receipt));}return {executions,nextCursor:start+page.length<entries.length?page.at(-1)![0]:null};}
+ async list(productId:string,cursor?:unknown){await this.recover();const index=await this.owner().snapshot(Index,BACKGROUND_CONTEXT),entries=Object.entries(index?.items??{}).filter(([,entry])=>entry.productId===productId),executions:Receipt[]=[];const start=cursor===undefined?0:entries.findIndex(([id])=>id===cursor)+1;if(cursor!==undefined&&(!start||typeof cursor!=='string'))return failure('INVALID_ARGUMENT','执行列表位置已失效，请重新读取');const queued=new Set((await this.writes!.list()).filter(value=>value.state==='queued').map(value=>value.operationId));const page=entries.slice(start,start+20);for(const [id,entry] of page){const intent=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(intent?.request&&queued.has(id))executions.push({executionId:id,state:'queued',source:'application',reason:'WRITER_QUEUED',context:copy(intent.request.context),namespace:intent.request.context.namespace,sequence:0});else if(intent?.receipt)executions.push(copy(intent.receipt));}return {executions,nextCursor:start+page.length<entries.length?page.at(-1)![0]:null};}
+ async fileChanges(productId:string){await this.recover();return this.fileWrites.list(productId);}
+ async writeFile(binding:AdoptedBinding,api:ToolExecutionApi|undefined,path:string,content:string|Uint8Array,context:Context,ordinal:number){const available=await this.files(binding,context);if(!available.ok)return available;return this.fileWrites.write(binding,api,path,content,context,ordinal,(argv,effect)=>this.run(binding,api,argv,undefined,context,ordinal,effect));}
  async readOutput(productId:string,executionId:string,cursor:unknown){
   if(!Number.isSafeInteger(cursor)||Number(cursor)<0)return failure('INVALID_ARGUMENT','输出位置无效');
   const entry=(await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items[executionId];if(!entry||entry.productId!==productId)return failure('EXECUTION_NOT_FOUND','此会话没有这次受管执行');
@@ -186,10 +213,10 @@ export class ManagedExecution implements EffectAuthority {
    return {ok:true,value:result};
   }catch{return {ok:false,error:new FileError(context.abortSignal?.aborted?'aborted':'unknown','读取原始输出未完成',path)};}
  }
- async withSnapshot<T>(action:(snapshot:EffectSnapshot)=>Promise<T>):Promise<T>{return this.serial(async()=>{await this.reconcile();const items=Object.values((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{}),pending=items.filter(value=>!terminal.has(value.state));return action({known:!pending.some(value=>value.state==='unknown'),pendingBindingIds:[...new Set(pending.map(value=>value.bindingId))],pendingControlProductIds:[...new Set(pending.map(value=>value.productId))]});});}
+ async withSnapshot<T>(action:(snapshot:EffectSnapshot)=>Promise<T>):Promise<T>{return this.serial(async()=>{await this.reconcile();const items=Object.values((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{}),pending=items.filter(value=>!terminal.has(value.state)),writers=(await this.writes!.list()).filter(value=>!['released','cancelled'].includes(value.state));return action({known:![...pending,...writers].some(value=>value.state==='unknown'),pendingBindingIds:[...new Set([...pending,...writers].map(value=>value.bindingId))],pendingControlProductIds:[...new Set([...pending,...writers].map(value=>value.productId))]});});}
 }
 
-/** File operations are added by T10. This T09 environment never substitutes the Android app UID. */
+/** Files and shell share the adopted location and its owning Termux UID. */
 class ManagedEnvironment implements ExecutionEnv {
  private ordinal=0;
  get id(){return this.owner.environmentNamespace();}cwd:string;
@@ -201,9 +228,13 @@ class ManagedEnvironment implements ExecutionEnv {
  private unsupported=async():Promise<any>=>({ok:false,error:new FileError('not_supported','文件能力尚未就绪')});
  readBinaryFile:FileSystem['readBinaryFile']=(path,context)=>this.owner.readBinary(path,this.id,context);
  readTextFile:FileSystem['readTextFile']=async(path,context)=>{const result=await this.readBinaryFile(path,context);return result.ok?{ok:true,value:new TextDecoder().decode(result.value)}:result;};
- openTextLineReader=this.unsupported;readTextLines=this.unsupported;openBinaryReader=this.unsupported;
- writeFile=this.unsupported;appendFile=this.unsupported;truncateFile=this.unsupported;flushFile=this.unsupported;renameFile=this.unsupported;fileInfo=this.unsupported;
- listDir=this.unsupported;openDirReader=this.unsupported;watch=this.unsupported;canonicalPath=this.unsupported;exists=this.unsupported;createDir=this.unsupported;
+ openTextLineReader=this.unsupported;readTextLines=this.unsupported;
+ openBinaryReader:FileSystem['openBinaryReader']=async(path,options,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.openBinaryReader(path,options,context):files;};
+ fileInfo:FileSystem['fileInfo']=async(path,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.fileInfo(path,context):files;};
+ exists:FileSystem['exists']=async(path,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.exists(path,context):files;};
+ writeFile:FileSystem['writeFile']=(path,content,context)=>this.owner.writeFile(this.binding,this.api,path,content,context,++this.ordinal);
+ appendFile=this.unsupported;truncateFile=this.unsupported;flushFile=this.unsupported;renameFile=this.unsupported;
+ listDir=this.unsupported;openDirReader=this.unsupported;watch=this.unsupported;canonicalPath=this.unsupported;createDir=this.unsupported;
  remove=this.unsupported;createTempDir=this.unsupported;createTempFile=this.unsupported;
  cleanup(context:Context){return this.owner.cleanup(this.binding,context);}
 }

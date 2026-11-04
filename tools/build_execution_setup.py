@@ -10,7 +10,7 @@ import textwrap
 def build(repo):
     repo = Path(repo)
     source = (repo / 'tools/execution_setup_installer.py').read_text(encoding='utf-8')
-    scripts = ',\n'.join(repr(name) + ': base64.b64decode(' + repr(base64.b64encode((repo / 'managed-execution' / name).read_bytes()).decode()) + ')' for name in ('durable_executor.py', 'execution_transport.py'))
+    scripts = ',\n'.join(repr(name) + ': base64.b64decode(' + repr(base64.b64encode((repo / 'managed-execution' / name).read_bytes()).decode()) + ')' for name in ('durable_executor.py', 'execution_transport.py', 'file_service.py'))
     source += '\ntry:\n    main({' + scripts + "})\nexcept SetupFault as error:\n    raise SystemExit('DurableAgent setup refused: ' + str(error))\n"
     packed = gzip.compress(source.encode(), mtime=0)
     expected = hashlib.sha256(packed).hexdigest()
