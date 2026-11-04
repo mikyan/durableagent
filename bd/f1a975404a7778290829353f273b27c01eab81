@@ -1,0 +1,100 @@
+docs/evidence/t10-saf/t10-saf-observation10-device.log
+  s_467dcb949b5b60::t_e4edaf8b642e09 1-32
+docs/evidence/t10-saf/t10-saf-storage11-diagnostic-device.log
+  s_467dcb949b5b60::t_25c7ce6cb8013a 1-40
+docs/evidence/t10-saf/README.md
+  s_467dcb949b5b60::t_cf6db7d6ff7463 24-26,66-84,105,147-151
+  s_467dcb949b5b60::t_df07e2679f1867 27,102-104,152-154
+  s_467dcb949b5b60::t_c2b32f678c7321 21-23,33-65,143-146
+  s_467dcb949b5b60::t_5340e91bd658a3 3-4,85-101
+  s_467dcb949b5b60::t_90b9d462834ca7 106-128
+  s_467dcb949b5b60::t_b5c69bc9951b41 142
+runtime/ORIGINAL_DOCUMENTS.md
+  s_467dcb949b5b60::t_c2b32f678c7321 64-67,137-139
+  s_467dcb949b5b60::t_5ad1741fe01a49 105-115
+  s_467dcb949b5b60::t_30d6de43e75ac2 1-63,68-104,116-136,140-152
+android/document-fixture/README.md
+  s_467dcb949b5b60::t_5ad1741fe01a49 29-39
+docs/evidence/t10-saf/t10-saf-green11-storage-device.log
+  s_467dcb949b5b60::t_7c4aae5700c75c 1-25
+docs/evidence/t10-saf/t10-saf-installed-before11diag.json
+  s_467dcb949b5b60::t_25c7ce6cb8013a 1-14
+docs/evidence/t10-saf/storage11-diagnostic-artifacts.json
+  s_467dcb949b5b60::t_c7ca8d3324cbef 1-10
+docs/evidence/t10-saf/t10-saf-failures09-device.log
+  s_467dcb949b5b60::t_9cb31f5ca3cf99 1-41
+docs/evidence/t10-saf/t10-saf-failures09b-device.log
+  s_467dcb949b5b60::t_c0c44fa02a97ca 1-27
+docs/evidence/t10-saf/t10-saf-final-cancel-device.log
+  s_467dcb949b5b60::t_cc1bb51d571550 1-25
+docs/evidence/t10-saf/t10-saf-final-channel-device.log
+  s_467dcb949b5b60::t_b4954f2727e43b 1-25
+docs/evidence/t10-saf/t10-saf-final-diff-device.log
+  s_467dcb949b5b60::t_ca7d71f1f0ff3e 1-27
+docs/evidence/t10-saf/t10-saf-final-failures-device.log
+  s_467dcb949b5b60::t_9c5ef7c6e8bb81 1-27
+docs/evidence/t10-saf/t10-saf-final-observation-device.log
+  s_467dcb949b5b60::t_cc39d2f96cdbdf 1-25
+docs/evidence/t10-saf/t10-saf-final-provider-read.log
+  s_467dcb949b5b60::t_6049163af22599 1-2
+docs/evidence/t10-saf/t10-saf-final-reader-device.log
+  s_467dcb949b5b60::t_76e21632a6e347 1-25
+docs/evidence/t10-saf/t10-saf-final-write-device.log
+  s_467dcb949b5b60::t_69f8e8bba03ccb 1-25
+docs/evidence/t10-saf/t10-saf-green05-device.log
+  s_467dcb949b5b60::t_f42c90e96f20a6 1-25
+docs/evidence/t10-saf/t10-saf-green06-hostdeath-phaseB.log
+  s_467dcb949b5b60::t_22922e1c1dfee4 1-25
+docs/evidence/t10-saf/t10-saf-green07-revocation.log
+  s_467dcb949b5b60::t_d866cbf186e530 1-27
+docs/evidence/t10-saf/t10-saf-green08-diff.log
+  s_467dcb949b5b60::t_faf63a319e7cd8 1-27
+docs/evidence/t10-saf/t10-saf-installed-final.json
+  s_467dcb949b5b60::t_784587ddc14056 1-14
+docs/evidence/t10-saf/t10-saf-observation10b-device.log
+  s_467dcb949b5b60::t_4cac25fb640f1e 1-25
+docs/evidence/t10-saf/t10-saf-red05-device.log
+  s_467dcb949b5b60::t_188ee5ad9dbb0a 1-44
+docs/evidence/t10-saf/t10-saf-red06-hostdeath-phaseA.log
+  s_467dcb949b5b60::t_55bb76dfb7788e 1-12
+docs/evidence/t10-saf/t10-saf-red06-hostdeath-phaseB.log
+  s_467dcb949b5b60::t_0ee33c39123032 1-32
+docs/evidence/t10-saf/t10-saf-red06-root-hostdeath.json
+  s_467dcb949b5b60::t_2c4a51e12b19ec 1-9
+docs/evidence/t10-saf/t10-saf-red07-revocation.log
+  s_467dcb949b5b60::t_5e8cc37189b349 1-43
+docs/evidence/t10-saf/t10-saf-red08-diff.log
+  s_467dcb949b5b60::t_887ad0d5120bce 1-43
+docs/evidence/t10-saf/t10-saf-red11-storage-device.log
+  s_467dcb949b5b60::t_0b92a62722c99c 1-38
+docs/evidence/t10-saf/t10-saf-red11b-storage-device.log
+  s_467dcb949b5b60::t_63e8687e521a01 1-50
+docs/evidence/t10-saf/t10-saf-regrant07-device.log
+  s_467dcb949b5b60::t_ae49d6c08225db 1-27
+docs/evidence/t10-saf/t10-saf-regrant08-device.log
+  s_467dcb949b5b60::t_b5e172e24b1a6d 1-27
+docs/evidence/t10-saf/t10-saf-restore09b-device.log
+  s_467dcb949b5b60::t_35d5685dfede61 1-2
+docs/evidence/t10-saf/t10-saf-shared01-device.log
+  s_467dcb949b5b60::t_79d7a7a469a99f 1-49
+docs/evidence/t10-saf/t10-saf-shared02-device.log
+  s_467dcb949b5b60::t_1a856b4e463dc8 1-43
+docs/evidence/t10-saf/t10-saf-shared03-device.log
+  s_467dcb949b5b60::t_97142813e11ddf 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "bdf1a975404a7778290829353f273b27c01eab81",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
