@@ -1,0 +1,181 @@
+android/README.md
+  s_467dcb949b5b60::t_6adc8d913c6330 160-166
+  s_467dcb949b5b60::t_efe509a6c6a2bd 42,125-135,137-159
+  s_467dcb949b5b60::t_72b5174e650b35 136,167-173
+docs/evidence/t08/README.md
+  s_467dcb949b5b60::t_69157a5f2a8022 119-129,132
+  s_467dcb949b5b60::t_4b8e56f84b22af 1-7,49-50,54-58,60-109,111-118,154-160
+  s_467dcb949b5b60::t_d27559504d2a6e 130-131,135-152
+  s_467dcb949b5b60::t_84b8e8bc49e044 42-47,153
+  s_467dcb949b5b60::t_5c3c728ab4b4e6 8-41,48,51-53,59,110,133-134
+docs/evidence/t08/runtime-first-full.log
+  s_467dcb949b5b60::t_eb1e5aa11bce01 1-199
+docs/evidence/t08/emu16k-application-final.log
+  s_467dcb949b5b60::t_3d585be9f96e57 1-65
+ui/test/projects.test.ts
+  s_467dcb949b5b60::t_eb1e5aa11bce01 1-37
+android/app/src/androidTest/java/dev/durableagent/probe/ProjectApplicationTest.kt
+  s_467dcb949b5b60::t_6b264ca76199fb 1-35,37,41-42,50-89,91-101,104-128,142-158,160-162
+  s_467dcb949b5b60::t_3138991e2fd630 49,90,129-141,159
+  s_467dcb949b5b60::t_ed32a00481d927 36,38-40,43-48,102-103
+runtime/src/projects.ts
+  s_467dcb949b5b60::t_3138991e2fd630 60-67
+  s_467dcb949b5b60::t_77e8f4ae73f723 1-59,68-79
+docs/evidence/t08/android-final-build-lint.log
+  s_467dcb949b5b60::t_efe59c38ef5816 1-123
+docs/evidence/t08/final-apk-inspection.json
+  s_467dcb949b5b60::t_03e1bde39ce00c 173-174
+  s_467dcb949b5b60::t_3d585be9f96e57 1-172,175-208
+docs/evidence/t08/identity-review-green.log
+  s_467dcb949b5b60::t_3d585be9f96e57 1-4
+docs/evidence/t08/project-policy-latest.log
+  s_467dcb949b5b60::t_72b5174e650b35 1,3-4,6-22,24,29
+  s_467dcb949b5b60::t_6adc8d913c6330 2,5,23,25-28
+ui/test/project-platform.ts
+  s_467dcb949b5b60::t_eb1e5aa11bce01 1-41
+docs/evidence/t08/live-provider-encoding.json
+  s_467dcb949b5b60::t_ffe22716ee9c68 1
+runtime/src/project-validation.ts
+  s_467dcb949b5b60::t_eb1e5aa11bce01 1-12
+runtime/validation/project-policy.mjs
+  s_467dcb949b5b60::t_56f3f6da5209d1 108-114
+  s_467dcb949b5b60::t_e6d5dcde992cb3 18-19,24-25,30-31,35-36,51,56-57,61-62,69,76,82,87,92-93,100,107,116-121
+  s_467dcb949b5b60::t_a06f696bc65932 115
+  s_467dcb949b5b60::t_271dd9ea43e21e 1-17,20-23,26-29,32-34,37-50,52-55,58-60,63-68,70-75,77-81,83-86,88-91,94-99,101-106
+runtime/test/project-live-transport.test.mjs
+  s_467dcb949b5b60::t_83af469f0bac33 1-18
+runtime/PROJECTS.md
+  s_467dcb949b5b60::t_a33122a16aafda 133
+  s_467dcb949b5b60::t_6adc8d913c6330 1-7,10-118,120-132
+  s_467dcb949b5b60::t_72b5174e650b35 8-9,119
+docs/specs/v1/tickets/08-projects-and-bindings.md
+  s_467dcb949b5b60::t_a33122a16aafda 11-23,46
+android/app/src/androidTest/java/dev/durableagent/probe/NativeProjectFenceCrashTest.kt
+  s_467dcb949b5b60::t_26cf714b060d89 1-74
+android/app/src/androidTest/java/dev/durableagent/probe/NativeSubmissionStoreTest.kt
+  s_467dcb949b5b60::t_81f2d5bf7f3ef8 250,256,282
+android/app/src/debug/java/dev/durableagent/probe/SubmissionFaultProbeService.kt
+  s_467dcb949b5b60::t_a7a1e972a6c9dd 21-22,31-32
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_4d0212cd541508 61-62
+android/app/src/main/java/dev/durableagent/probe/NativeInputAccess.kt
+  s_467dcb949b5b60::t_667d710c027eed 6,48-56
+android/app/src/main/java/dev/durableagent/probe/NativeInputStore.kt
+  s_467dcb949b5b60::t_ef6b3c63ec7660 49-52,369-379,582,600,615,617-618
+android/app/src/main/java/dev/durableagent/probe/NativeSubmissionRecords.kt
+  s_467dcb949b5b60::t_7dd2dee75537c0 16-82,98
+docs/evidence/t08/android-build-lint.log
+  s_467dcb949b5b60::t_7e1cedbc323c2a 1-125
+docs/evidence/t08/android-final-package.log
+  s_467dcb949b5b60::t_4471f1408e2c40 1-86
+docs/evidence/t08/android-latest-build-lint.log
+  s_467dcb949b5b60::t_855bdea3df7ae7 1-120
+docs/evidence/t08/credential-audit-final.json
+  s_467dcb949b5b60::t_d2f7f2aea91dd7 1-19
+docs/evidence/t08/credential-audit-fourth.json
+  s_467dcb949b5b60::t_91f68577aa86d5 1-19
+docs/evidence/t08/emu16k-application-first.log
+  s_467dcb949b5b60::t_99de0e3fef7ae2 1-82
+docs/evidence/t08/emu16k-application-fourth.log
+  s_467dcb949b5b60::t_2cdc9dbc59bd59 1-88
+docs/evidence/t08/emu16k-native-final.log
+  s_467dcb949b5b60::t_397b23d10d2475 1-257
+docs/evidence/t08/emu16k-native-green.log
+  s_467dcb949b5b60::t_0a521588b01ff0 1-65
+docs/evidence/t08/emu16k-native-red.log
+  s_467dcb949b5b60::t_7d04bf5c3e12a1 1-99
+docs/evidence/t08/emu16k-real-second.log
+  s_467dcb949b5b60::t_5c5350ab81f82b 1-52
+docs/evidence/t08/emu16k-real-third.log
+  s_467dcb949b5b60::t_f71a722d9db8e6 1-67
+docs/evidence/t08/identity-review-red.log
+  s_467dcb949b5b60::t_0f9c96bc13ddad 1-6
+docs/evidence/t08/native-reviewed-metrics.json
+  s_467dcb949b5b60::t_e8c34fe75dbb5c 1-34
+docs/evidence/t08/project-policy-final.log
+  s_467dcb949b5b60::t_d937558055d90b 1-23
+docs/evidence/t08/runtime-full.log
+  s_467dcb949b5b60::t_e62e38fa3b1494 1-168
+docs/evidence/t08/ui-full.log
+  s_467dcb949b5b60::t_09fbb8c49c7f1f 1-51
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_9bc860125c005e 3,20-21,25,28,32,45-49
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_2c37671529c743 8,14
+runtime/src/application-records.ts
+  s_467dcb949b5b60::t_b270003f2928e4 1-5
+runtime/src/application.ts
+  s_467dcb949b5b60::t_44a2c61f7d15a3 14-16,19,25,34,41-42,45,61,74-76,114,127,150,156,168,201,204-206,213,226
+runtime/src/live-model.ts
+  s_467dcb949b5b60::t_b082550828b822 7,41,43,56
+runtime/src/project-bindings.ts
+  s_467dcb949b5b60::t_85ebe295ddd15f 1-26
+runtime/src/project-protocol.ts
+  s_467dcb949b5b60::t_cb0a4b43b3ae8d 1-23
+runtime/src/submission.ts
+  s_467dcb949b5b60::t_9c7d7260610100 10-12,16,21,37,72,90,95,97,99,101
+runtime/src/transport.ts
+  s_467dcb949b5b60::t_cc25cf24eefc20 3,7,11
+runtime/test/projects.test.mjs
+  s_467dcb949b5b60::t_2664a25b9c521a 1-3
+runtime/validation/submission-authority.mjs
+  s_467dcb949b5b60::t_732f60a414bbee 11-13,19
+runtime/validation/submission-policy.mjs
+  s_467dcb949b5b60::t_6c86e160bad68b 61,77
+ui/README.md
+  s_467dcb949b5b60::t_52063f467c41d3 1,3,28-31,85-93,99,105-106
+ui/src/controller.ts
+  s_467dcb949b5b60::t_14c5284e23d9ee 7,10,26-27,38,69,102,122,181-231
+ui/src/extensions.ts
+  s_467dcb949b5b60::t_ef1b099eb4bece 3,7-8
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_c89d6f8bd0a28b 5,10,13,49-52,57,59,76,90,93,101,104,107,132,144
+ui/src/extensions/projects.tsx
+  s_467dcb949b5b60::t_1e9b2ee0c86bdb 1-46
+ui/src/project-view.ts
+  s_467dcb949b5b60::t_58bc0a421e8c76 1-2
+ui/src/projects.css
+  s_467dcb949b5b60::t_62692dcfea3cc0 1
+ui/src/style.css
+  s_467dcb949b5b60::t_b82dcb8afd7ffd 12
+ui/test/input-platform.ts
+  s_467dcb949b5b60::t_f33a992d592716 5,16-24,69
+ui/test/projects-real.test.mjs
+  s_467dcb949b5b60::t_dc32639435364f 1-49
+android/app/src/androidTest/java/dev/durableagent/probe/NativeProjectFenceTest.kt
+  s_5996300bc1a7a2::t_08969d3453fa99 1-190
+ui/test/projects-page.test.tsx
+  s_4656f38e701a3b::t_1ee282f6e46499 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "9bdb2015b3e642ec4a73d0c4e96e37f58b797201",
+  "prompts": {},
+  "sessions": {
+    "s_4656f38e701a3b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a269-9015-7c23-97f8-527284353fa1",
+        "model": "unknown"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_5996300bc1a7a2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a289-5acd-7910-a35f-55f1a378be00",
+        "model": "unknown"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
