@@ -52,7 +52,7 @@ export async function install(mode:string) {
   // Fixture workspace defaults are replaced by the same stable private domain.
   const executionValidationFaults=mode==='execution'&&host.__submissionValidation?executionFaults(host.__submissionValidation,metrics):undefined;
   if(executionValidationFaults)host.__appExecutionFault=(stage:string)=>executionValidationFaults.set(stage);
-  const execution=nativeExecution&&sends&&['product','execution','execution-real'].includes(mode)?new ManagedExecution({channel:new NativeExecutionChannel(nativeExecution),authority:sends,...(executionValidationFaults?{boundary:executionValidationFaults.boundary}:{})}):undefined;
+  const execution=nativeExecution&&sends&&['product','execution','execution-real'].includes(mode)?new ManagedExecution({channel:new NativeExecutionChannel(nativeExecution),authority:sends,fileEffects:{register:async value=>inputInvoke('registerEffectJson',JSON.stringify(value)),adopt:async value=>inputInvoke('adoptEffectJson',JSON.stringify(value)),require:async id=>inputInvoke('requireEffectJson',id),record:async(id,proof)=>inputInvoke('recordEffectEvidenceJson',id,JSON.stringify(proof))},...(executionValidationFaults?{boundary:executionValidationFaults.boundary}:{})}):undefined;
   configuration.workspacePath=execution?'/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace':join(host.__applicationRoot,'workspace');
   const path=join(host.__applicationRoot,'application.sqlite');
   let submissionValidation:any;

@@ -20,6 +20,7 @@ HANDLE_IDLE_SECONDS = 300
 FILE_BYTES = 16 * 1024 * 1024
 DIFF_INPUT_BYTES = 32768
 DIFF_BYTES = 16384
+STAGED_BYTES = 128 * 1024 * 1024
 
 
 class FileFault(Exception):
@@ -124,6 +125,31 @@ def read_record(path):
     return json.loads(path.read_text())
 
 
+def content_digest(value):
+    if not isinstance(value, str) or not re.fullmatch(r"[a-f0-9]{64}", value):
+        raise FileFault("invalid")
+    return value
+
+
+def read_blob(root, reference):
+    digest = content_digest(reference["digest"])
+    size = reference["totalBytes"]
+    if not integer(size, FILE_BYTES):
+        raise FileFault("invalid")
+    path = Path(root) / "blobs" / (digest + ".blob")
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    try:
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or info.st_size != size:
+            raise FileFault("invalid")
+        data = bounded_file(fd)
+        if len(data) != size or sha(data) != digest:
+            raise FileFault("invalid")
+        return data
+    finally:
+        os.close(fd)
+
+
 def apply_write(root, identifier, boundary=None):
     """Fixed helper entrypoint. Only Executor launches it; there is no apply RPC."""
     plan_path, result_path = record_path(root, identifier, ".plan.json"), record_path(root, identifier, ".result.json")
@@ -142,7 +168,10 @@ def apply_write(root, identifier, boundary=None):
         parent_info = os.fstat(parent_fd)
         if str(parent_info.st_dev) + ":" + str(parent_info.st_ino) != plan["position"]["ancestorObjectIds"][0]:
             raise FileFault("invalid")
-        flags = os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK
+        mode = plan.get("mode", "write")
+        flags = (os.O_RDONLY if mode == "flush" else os.O_RDWR) | os.O_NOFOLLOW | os.O_NONBLOCK
+        if plan.get("mode", "write") == "append":
+            flags |= os.O_APPEND
         if plan["before"] is None:
             fd = os.open(Path(plan["canonicalPath"]).name, flags | os.O_CREAT | os.O_EXCL, 0o600, dir_fd=parent_fd)
             touched = True
@@ -155,8 +184,9 @@ def apply_write(root, identifier, boundary=None):
             old = bounded_file(fd)
             if fingerprint(before_info, old) != plan["before"]:
                 raise FileFault("invalid")
-        data = base64.b64decode(plan["data"], validate=True)
-        os.lseek(fd, 0, os.SEEK_SET)
+        data = read_blob(root, plan["contentRef"]) if "contentRef" in plan else base64.b64decode(plan["data"], validate=True)
+        if mode == "write":
+            os.lseek(fd, 0, os.SEEK_SET)
         touched = True
         offset = 0
         while offset < len(data):
@@ -164,7 +194,10 @@ def apply_write(root, identifier, boundary=None):
             if count <= 0:
                 raise FileFault("unknown")
             offset += count
-        os.ftruncate(fd, len(data))
+        if mode == "write":
+            os.ftruncate(fd, len(data))
+        elif mode == "truncate":
+            os.ftruncate(fd, plan["size"])
         os.fsync(fd)
         # Local crash-injection seam only; never configurable through transport or CLI.
         if boundary is not None:
@@ -198,7 +231,7 @@ class FileService:
         self.lock = threading.RLock()
 
     def dispatch(self, method, payload):
-        schemas = {"file.open": {"path", "noFollow"}, "file.read": {"handle", "offset", "length"}, "file.info": {"handle"}, "file.close": {"handle"}, "file.stat": {"path"}, "file.canonical": {"path"}, "file.prepareWrite": {"operationId", "path", "mode", "data"}, "file.writeResult": {"operationId"}, "file.verifyWrite": {"operationId"}, "file.describe": set(), "file.resolveWrite": {"path"}}
+        schemas = {"file.open": {"path", "noFollow"}, "file.read": {"handle", "offset", "length"}, "file.info": {"handle"}, "file.close": {"handle"}, "file.stat": {"path"}, "file.canonical": {"path"}, "file.prepareWrite": {"operationId", "path", "mode", "data"}, "file.prepareStagedWrite": {"operationId", "path", "mode", "digest", "totalBytes"}, "file.prepareMutation": {"operationId", "path", "kind", "options"}, "file.stage": {"digest", "totalBytes", "offset", "data"}, "file.writeResult": {"operationId"}, "file.verifyWrite": {"operationId"}, "file.describe": set(), "file.resolveWrite": {"path"}, "file.openDir": {"path"}, "file.readDir": {"handle", "maxEntries"}}
         try:
             if method not in schemas or type(payload) is not dict or set(payload) != schemas[method]:
                 raise FileFault("invalid")
@@ -206,6 +239,10 @@ class FileService:
                 self.expire()
                 if method == "file.open":
                     value = self.open(payload)
+                elif method == "file.openDir":
+                    value = self.open_directory(payload["path"])
+                elif method == "file.readDir":
+                    value = self.read_directory(payload)
                 elif method == "file.stat":
                     path = absolute_path(payload["path"])
                     value = file_info(path, os.lstat(path))
@@ -213,10 +250,16 @@ class FileService:
                     value = os.path.realpath(absolute_path(payload["path"]), strict=True)
                 elif method == "file.prepareWrite":
                     value = self.prepare_write(payload)
+                elif method == "file.prepareStagedWrite":
+                    value = self.prepare_write(payload, staged=True)
+                elif method == "file.prepareMutation":
+                    value = self.prepare_mutation(payload)
+                elif method == "file.stage":
+                    value = self.stage(payload)
                 elif method == "file.verifyWrite":
                     value = self.verify_write(payload["operationId"])
                 elif method == "file.describe":
-                    value = {"protocol": 1, "namespace": self.namespace, "applyArgvPrefix": [sys.executable, str(Path(__file__).resolve()), "apply", str(self.write_root().resolve())]}
+                    value = {"protocol": 1, "namespace": self.namespace, "maxWriteBytes": FILE_BYTES, "chunkBytes": PAGE_BYTES, "applyArgvPrefix": [sys.executable, str(Path(__file__).resolve()), "apply", str(self.write_root().resolve())]}
                 elif method == "file.resolveWrite":
                     value = self.resolve_write(payload["path"])
                 elif method == "file.writeResult":
@@ -227,7 +270,7 @@ class FileService:
                 elif method == "file.close":
                     handle = self.handles.pop(payload["handle"], None)
                     if handle:
-                        os.close(handle["fd"])
+                        self.close_handle(handle)
                     value = None
                 elif method == "file.info":
                     handle = self.handles.get(payload["handle"])
@@ -316,31 +359,106 @@ class FileService:
                 raise FileFault("not_supported")
         return {"namespace": self.namespace, "canonicalPath": canonical_path, "objectId": object_id, "ancestorObjectIds": ancestors}
 
-    def prepare_write(self, payload):
-        identifier = operation_id(payload["operationId"])
-        path = absolute_path(payload["path"])
-        if payload["mode"] != "write" or not isinstance(payload["data"], str) or len(payload["data"]) > 45000:
+    def stage(self, payload):
+        digest = content_digest(payload["digest"])
+        total, offset = payload["totalBytes"], payload["offset"]
+        if not integer(total, FILE_BYTES) or not integer(offset, total) or not isinstance(payload["data"], str) or len(payload["data"]) > 45000:
             raise FileFault("invalid")
         data = base64.b64decode(payload["data"], validate=True)
-        if len(data) > PAGE_BYTES or base64.b64encode(data).decode() != payload["data"]:
+        if len(data) > PAGE_BYTES or offset + len(data) > total or base64.b64encode(data).decode() != payload["data"]:
             raise FileFault("invalid")
         root = self.write_root()
+        blobs = root / "blobs"
+        if blobs.is_symlink():
+            raise FileFault("invalid")
+        blobs.mkdir(mode=0o700, exist_ok=True)
+        sealed, partial = blobs / (digest + ".blob"), blobs / (digest + ".part")
+        if sealed.exists():
+            existing = read_blob(root, payload)
+            if existing[offset:offset+len(data)] != data:
+                raise FileFault("invalid")
+            return {"namespace": self.namespace, "digest": digest, "totalBytes": total, "nextOffset": total, "sealed": True}
+        used = sum(entry.stat(follow_symlinks=False).st_size for entry in blobs.iterdir())
+        if used + len(data) > STAGED_BYTES:
+            raise FileFault("not_supported")
+        fd = os.open(partial, os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600)
+        try:
+            metadata = os.fstat(fd)
+            if not stat.S_ISREG(metadata.st_mode) or not offset <= metadata.st_size <= total:
+                raise FileFault("invalid")
+            overlap = min(len(data), metadata.st_size - offset)
+            os.lseek(fd, offset, os.SEEK_SET)
+            if os.read(fd, overlap) != data[:overlap]:
+                raise FileFault("invalid")
+            os.lseek(fd, metadata.st_size, os.SEEK_SET)
+            written = overlap
+            while written < len(data):
+                count = os.write(fd, data[written:])
+                if count <= 0:
+                    raise FileFault("unknown")
+                written += count
+            os.fsync(fd)
+            next_offset = os.fstat(fd).st_size
+            complete = next_offset == total
+            if complete and sha(bounded_file(fd)) != digest:
+                raise FileFault("invalid")
+        finally:
+            os.close(fd)
+        if complete:
+            os.replace(partial, sealed)
+            directory = os.open(blobs, os.O_RDONLY)
+            try:
+                os.fsync(directory)
+            finally:
+                os.close(directory)
+        return {"namespace": self.namespace, "digest": digest, "totalBytes": total, "nextOffset": next_offset, "sealed": complete}
+
+    def prepare_mutation(self, payload):
+        kind, options = payload["kind"], payload["options"]
+        if type(options) is not dict or kind not in ("truncate", "flush"):
+            raise FileFault("invalid")
+        if kind == "truncate":
+            if set(options) != {"size"} or not integer(options["size"], FILE_BYTES):
+                raise FileFault("invalid")
+        elif options:
+            raise FileFault("invalid")
+        return self.prepare_write({"operationId": payload["operationId"], "path": payload["path"], "mode": kind, "data": "", **options}, mutation=True)
+
+    def prepare_write(self, payload, staged=False, mutation=False):
+        identifier = operation_id(payload["operationId"])
+        path = absolute_path(payload["path"])
+        if payload["mode"] not in (("truncate", "flush") if mutation else ("write", "append")):
+            raise FileFault("invalid")
+        root = self.write_root()
+        if staged:
+            data = read_blob(root, payload)
+        else:
+            if not isinstance(payload["data"], str) or len(payload["data"]) > 45000:
+                raise FileFault("invalid")
+            data = base64.b64decode(payload["data"], validate=True)
+            if len(data) > PAGE_BYTES or base64.b64encode(data).decode() != payload["data"]:
+                raise FileFault("invalid")
+            self.stage({"digest": sha(data), "totalBytes": len(data), "offset": 0, "data": payload["data"]})
+        reference = {"digest": sha(data), "totalBytes": len(data)}
         plan_path = record_path(root, identifier, ".plan.json")
-        requested = sha(canonical_json({**payload, "namespace": self.namespace}).encode())
+        extra = {"size": payload["size"]} if payload["mode"] == "truncate" else {}
+        requested = sha(canonical_json({"operationId": identifier, "path": path, "mode": payload["mode"], **extra, **reference, "namespace": self.namespace}).encode())
         if plan_path.exists():
             plan = read_record(plan_path)
             if plan["requestDigest"] != requested:
                 raise FileFault("invalid")
         else:
-            canonical_path = os.path.realpath(path, strict=True) if os.path.lexists(path) else os.path.join(os.path.realpath(os.path.dirname(path), strict=True), os.path.basename(path))
+            canonical_path = os.path.realpath(path, strict=True) if mutation or os.path.lexists(path) else os.path.join(os.path.realpath(os.path.dirname(path), strict=True), os.path.basename(path))
             before = None
+            old_data = b""
             if os.path.exists(canonical_path):
                 fd = os.open(canonical_path, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
                 try:
                     metadata = os.fstat(fd)
                     if not stat.S_ISREG(metadata.st_mode):
                         raise FileFault("is_directory" if stat.S_ISDIR(metadata.st_mode) else "invalid")
-                    before = fingerprint(metadata, bounded_file(fd))
+                    old_data = bounded_file(fd)
+                    before = fingerprint(metadata, old_data)
                 finally:
                     os.close(fd)
             ancestors = []
@@ -349,9 +467,16 @@ class FileService:
                 value = ancestor.stat()
                 ancestors.append(str(value.st_dev) + ":" + str(value.st_ino))
             position = {"namespace": self.namespace, "canonicalPath": canonical_path, "objectId": before["device"] + ":" + before["inode"] if before else None, "ancestorObjectIds": ancestors}
-            plan = {"protocol": 1, "operationId": identifier, "namespace": self.namespace, "requestDigest": requested, "path": path, "canonicalPath": canonical_path, "before": before, "expectedAfter": {"size": len(data), "sha256": sha(data)}, "data": payload["data"], "position": position}
+            expected = old_data + data if payload["mode"] == "append" else data
+            if payload["mode"] == "truncate":
+                expected = old_data[:payload["size"]].ljust(payload["size"], b"\0")
+            elif payload["mode"] == "flush":
+                expected = old_data
+            if len(expected) > FILE_BYTES:
+                raise FileFault("not_supported")
+            plan = {"protocol": 1, "operationId": identifier, "namespace": self.namespace, "requestDigest": requested, "path": path, "canonicalPath": canonical_path, "mode": payload["mode"], **extra, "before": before, "expectedAfter": {"size": len(expected), "sha256": sha(expected)}, "contentRef": reference, "position": position}
             atomic_json(plan_path, plan)
-        return {"protocol": 1, "operationId": identifier, "namespace": self.namespace, "requestDigest": requested, "position": plan["position"], "original": True, "argv": [sys.executable, str(Path(__file__).resolve()), "apply", str(root.resolve()), identifier]}
+        return {"protocol": 1, "operationId": identifier, "namespace": self.namespace, "requestDigest": requested, "position": plan["position"], "expectedAfter": plan["expectedAfter"], "original": True, "argv": [sys.executable, str(Path(__file__).resolve()), "apply", str(root.resolve()), identifier]}
 
     def read(self, payload):
         if not integer(payload["offset"]) or not integer(payload["length"], PAGE_BYTES):
@@ -364,16 +489,70 @@ class FileService:
         data = os.read(handle["fd"], payload["length"])
         return {"handle": payload["handle"], "epoch": self.epoch, "namespace": self.namespace, "offset": payload["offset"], "data": base64.b64encode(data).decode()}
 
+    def open_directory(self, path):
+        path = absolute_path(path)
+        if len(self.handles) >= HANDLE_LIMIT:
+            raise FileFault("unknown")
+        fd = os.open(path, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            iterator = os.scandir(fd)
+            token = str(uuid.uuid4())
+            self.handles[token] = {"fd": fd, "path": path, "lastUsed": time.monotonic(), "iterator": iterator, "done": False, "pending": None}
+            return {"handle": token, "epoch": self.epoch, "namespace": self.namespace}
+        except BaseException:
+            os.close(fd)
+            raise
+
+    def read_directory(self, payload):
+        if not integer(payload["maxEntries"], 128) or payload["maxEntries"] == 0:
+            raise FileFault("invalid")
+        handle = self.handles.get(payload["handle"])
+        if handle is None:
+            raise FileFault("unknown")
+        if "iterator" not in handle:
+            raise FileFault("not_directory")
+        handle["lastUsed"] = time.monotonic()
+        entries = []
+        size = 0
+        while len(entries) < payload["maxEntries"] and not handle["done"]:
+            info = handle["pending"]
+            if info is None:
+                try:
+                    entry = next(handle["iterator"])
+                except StopIteration:
+                    handle["done"] = True
+                    break
+                try:
+                    info = file_info(os.path.join(handle["path"], entry.name), entry.stat(follow_symlinks=False))
+                except (FileNotFoundError, FileFault):
+                    continue
+            entry_size = len(canonical_json(info).encode()) + 1
+            if size + entry_size > PAGE_BYTES:
+                handle["pending"] = info
+                break
+            entries.append(info)
+            size += entry_size
+            handle["pending"] = None
+        return {"handle": payload["handle"], "epoch": self.epoch, "namespace": self.namespace, "entries": entries, "done": handle["done"]}
+
+    @staticmethod
+    def close_handle(handle):
+        try:
+            if "iterator" in handle:
+                handle["iterator"].close()
+        finally:
+            os.close(handle["fd"])
+
     def expire(self):
         for token, handle in list(self.handles.items()):
             if time.monotonic() - handle["lastUsed"] > HANDLE_IDLE_SECONDS:
-                os.close(handle["fd"])
+                self.close_handle(handle)
                 del self.handles[token]
 
     def close(self):
         with self.lock:
             for handle in self.handles.values():
-                os.close(handle["fd"])
+                self.close_handle(handle)
             self.handles.clear()
 
 

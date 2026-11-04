@@ -44,6 +44,144 @@ def supervised_directory():
 
 
 class FileCapabilityTest(unittest.TestCase):
+    def test_truncate_extend_and_flush_preserve_original_inode_and_reject_missing_files(self):
+        with supervised_directory() as (root, executor):
+            target = root / "truncate.bin"
+            target.write_bytes(b"abcdef")
+            inode = target.stat().st_ino
+            for kind, options, expected in [("truncate", {"size": 3}, b"abc"), ("truncate", {"size": 6}, b"abc\0\0\0"), ("flush", {}, b"abc\0\0\0")]:
+                identifier = str(uuid.uuid4())
+                planned = executor.dispatch("file.prepareMutation", {"operationId": identifier, "path": str(target), "kind": kind, "options": options})
+                self.assertTrue(planned["ok"], planned)
+                request = {"executionId": str(uuid.uuid4()), "context": {"productId": "file-test", "sdkConversationId": 1, "taskId": 1, "callId": kind, "bindingId": "binding", "locationVersion": 1, "controlGeneration": 1, "namespace": executor.identity()["namespace"]}, "command": {"kind": "argv", "argv": planned["value"]["argv"]}, "cwd": str(root), "env": {}, "inheritEnv": True, "timeoutMs": 5000}
+                accepted = executor.prepare(request)
+                executor.start(request["executionId"], accepted["finalDigest"])
+                deadline = time.monotonic() + 8
+                while True:
+                    receipt = executor.query(request["executionId"])
+                    if receipt.get("scopeConfirmed"):
+                        break
+                    self.assertLess(time.monotonic(), deadline)
+                    time.sleep(0.02)
+                self.assertEqual(receipt["exitCode"], 0)
+                self.assertEqual(target.read_bytes(), expected)
+                self.assertEqual(target.stat().st_ino, inode)
+                result = executor.dispatch("file.writeResult", {"operationId": identifier})["value"]
+                self.assertEqual(result["state"], "completed")
+                self.assertEqual(result["after"]["sha256"], hashlib.sha256(expected).hexdigest())
+            for kind, options in [("truncate", {"size": 0}), ("flush", {})]:
+                absent = executor.dispatch("file.prepareMutation", {"operationId": str(uuid.uuid4()), "path": str(root / "missing"), "kind": kind, "options": options})
+                self.assertEqual(absent["error"]["code"], "not_found")
+            invalid = executor.dispatch("file.prepareMutation", {"operationId": str(uuid.uuid4()), "path": str(target), "kind": "truncate", "options": {"size": -1}})
+            self.assertEqual(invalid["error"]["code"], "invalid")
+
+    def test_large_binary_staging_survives_reopen_and_repeated_chunks_before_original_write(self):
+        with supervised_directory() as (root, executor):
+            data = bytes(range(256)) * 600
+            digest = hashlib.sha256(data).hexdigest()
+            namespace = executor.identity()["namespace"]
+            stage_root = root / "owned-executor" / "file-capabilities"
+            service = FileService(namespace, stage_root)
+            first = {"digest": digest, "totalBytes": len(data), "offset": 0, "data": base64.b64encode(data[:32768]).decode()}
+            reply = service.dispatch("file.stage", first)
+            self.assertTrue(reply["ok"])
+            self.assertEqual(reply["value"]["nextOffset"], 32768)
+            service.close()
+            service = FileService(namespace, stage_root)
+            try:
+                repeated = service.dispatch("file.stage", first)
+                self.assertEqual(repeated["value"]["nextOffset"], 32768)
+                different = service.dispatch("file.stage", {**first, "data": base64.b64encode(b"bad").decode()})
+                self.assertEqual(different["error"]["code"], "invalid")
+                for offset in range(32768, len(data), 32768):
+                    reply = service.dispatch("file.stage", {"digest": digest, "totalBytes": len(data), "offset": offset, "data": base64.b64encode(data[offset:offset+32768]).decode()})
+                    self.assertTrue(reply["ok"])
+                self.assertTrue(reply["value"]["sealed"])
+                self.assertEqual(reply["value"]["nextOffset"], len(data))
+            finally:
+                service.close()
+            target = root / "large-original.bin"
+            target.write_bytes(b"old")
+            identifier = str(uuid.uuid4())
+            prepared_file = executor.dispatch("file.prepareStagedWrite", {"operationId": identifier, "path": str(target), "mode": "write", "digest": digest, "totalBytes": len(data)})
+            self.assertTrue(prepared_file["ok"])
+            request = {"executionId": str(uuid.uuid4()), "context": {"productId": "file-test", "sdkConversationId": 1, "taskId": 1, "callId": "large-write", "bindingId": "binding", "locationVersion": 1, "controlGeneration": 1, "namespace": namespace}, "command": {"kind": "argv", "argv": prepared_file["value"]["argv"]}, "cwd": str(root), "env": {}, "inheritEnv": True, "timeoutMs": 5000}
+            accepted = executor.prepare(request)
+            executor.start(request["executionId"], accepted["finalDigest"])
+            deadline = time.monotonic() + 8
+            while True:
+                receipt = executor.query(request["executionId"])
+                if receipt.get("scopeConfirmed"):
+                    break
+                self.assertLess(time.monotonic(), deadline)
+                time.sleep(0.02)
+            self.assertEqual(receipt["exitCode"], 0)
+            self.assertEqual(target.read_bytes(), data)
+            self.assertEqual(executor.dispatch("file.writeResult", {"operationId": identifier})["value"]["diff"], {"available": False, "reason": "too_large"})
+
+    def test_append_is_binary_exact_and_same_execution_does_not_append_twice(self):
+        with supervised_directory() as (root, executor):
+            target = root / "binary.dat"
+            target.write_bytes(b"a\0")
+            identifier = str(uuid.uuid4())
+            planned = executor.dispatch("file.prepareWrite", {"operationId": identifier, "path": str(target), "mode": "append", "data": base64.b64encode(b"\xff\n").decode()})
+            self.assertTrue(planned["ok"])
+            plan = planned["value"]
+            request = {"executionId": str(uuid.uuid4()), "context": {"productId": "file-test", "sdkConversationId": 1, "taskId": 1, "callId": "append", "bindingId": "binding", "locationVersion": 1, "controlGeneration": 1, "namespace": executor.identity()["namespace"]}, "command": {"kind": "argv", "argv": plan["argv"]}, "cwd": str(root), "env": {}, "inheritEnv": True, "timeoutMs": 5000}
+            prepared = executor.prepare(request)
+            executor.start(request["executionId"], prepared["finalDigest"])
+            deadline = time.monotonic() + 8
+            while True:
+                result = executor.query(request["executionId"])
+                if result.get("scopeConfirmed"):
+                    break
+                self.assertLess(time.monotonic(), deadline)
+                time.sleep(0.02)
+            self.assertEqual(result["exitCode"], 0)
+            self.assertEqual(target.read_bytes(), b"a\0\xff\n")
+            receipt = executor.dispatch("file.writeResult", {"operationId": identifier})["value"]
+            self.assertEqual(receipt["state"], "completed")
+            self.assertEqual(receipt["diff"], {"available": False, "reason": "binary"})
+            executor.start(request["executionId"], prepared["finalDigest"])
+            self.assertEqual(target.read_bytes(), b"a\0\xff\n")
+
+    def test_open_directory_pages_remain_on_the_opened_directory_and_are_bounded(self):
+        with tempfile.TemporaryDirectory(prefix="durable-directory-test-") as directory:
+            root = Path(directory)
+            target = root / "entries"
+            target.mkdir()
+            for index in range(150):
+                (target / (str(index) + "-世界.txt")).write_bytes(b"data")
+            (target / "nested").mkdir()
+            (target / "alias").symlink_to("0-世界.txt")
+            service = FileService("termux:directory")
+            try:
+                opened = service.dispatch("file.openDir", {"path": str(target)})
+                self.assertTrue(opened["ok"])
+                token = opened["value"]["handle"]
+                target.rename(root / "moved")
+                target.mkdir()
+                (target / "replacement").write_bytes(b"different directory")
+                entries = []
+                for _ in range(20):
+                    page = service.dispatch("file.readDir", {"handle": token, "maxEntries": 17})
+                    self.assertTrue(page["ok"])
+                    self.assertLessEqual(len(page["value"]["entries"]), 17)
+                    entries.extend(page["value"]["entries"])
+                    if page["value"]["done"]:
+                        break
+                else:
+                    self.fail("Directory reader did not finish within its bounded entry count")
+                self.assertEqual(len(entries), 152)
+                self.assertNotIn("replacement", {entry["name"] for entry in entries})
+                self.assertEqual(next(entry for entry in entries if entry["name"] == "alias")["kind"], "symlink")
+                self.assertEqual(next(entry for entry in entries if entry["name"] == "nested")["kind"], "directory")
+                self.assertEqual(service.dispatch("file.readDir", {"handle": token, "maxEntries": 0})["error"]["code"], "invalid")
+                service.dispatch("file.close", {"handle": token})
+                self.assertEqual(service.dispatch("file.readDir", {"handle": token, "maxEntries": 1})["error"]["code"], "unknown")
+            finally:
+                service.close()
+
     def test_write_coordination_resolves_actual_symlink_aliases_and_missing_leaf_before_any_effect(self):
         with supervised_directory() as (root, executor):
             original = root / "source.txt"

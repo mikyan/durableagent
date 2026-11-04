@@ -9,7 +9,8 @@ import type {EffectAuthority,EffectSnapshot} from './projects.js';
 import type {SendAuthority} from './submission-protocol.js';
 import type {ExecutionChannel} from './execution-channel.js';
 import {ManagedFiles} from './managed-files.js';
-import {FileWrites,type FileExecutionEffect} from './file-writes.js';
+import {FileWrites,type FileExecutionEffect,type FileMutationMode,type FileMutationOptions} from './file-writes.js';
+import type {FileEffectAuthority} from './file-effect-protocol.js';
 import {WorkspaceCoordinator,type WriteClaim,type WriteScope} from './workspace-coordination.js';
 
 export const EXECUTION_EXTENSION={id:'managed-execution',actions:['execution.list','execution.readOutput','files.list']} as const;
@@ -39,8 +40,8 @@ export class ManagedExecution implements EffectAuthority {
  private writes?:WorkspaceCoordinator;
  private readonly fileWrites:FileWrites;
  readonly locations:LocationAdapter;
- constructor(private readonly options:{channel:ExecutionChannel;authority:SendAuthority;boundary?:(stage:string,request:Readonly<Request>)=>void|Promise<void>}){
-  this.fileWrites=new FileWrites(options.channel);
+ constructor(private readonly options:{channel:ExecutionChannel;authority:SendAuthority;fileEffects?:FileEffectAuthority;boundary?:(stage:string,request:Readonly<Request>)=>void|Promise<void>}){
+  this.fileWrites=new FileWrites(options.channel,options.fileEffects);
   this.locations={deferInspection:true,inspect:async workspace=>{
    if(workspace.environment!=='termux')return {state:'environment-changed',reason:'此位置不属于当前 Termux 执行环境'};
    try{const value=await options.channel.request('inspectWorkspace',{path:workspace.path});if(value.state!=='available'||typeof value.identity!=='string'||typeof value.namespace!=='string')return {state:'missing',reason:'Termux 中的位置不可用，保留原位置'};this.namespace=value.namespace;return {state:'available',identity:value.identity};}
@@ -94,8 +95,10 @@ export class ManagedExecution implements EffectAuthority {
   const receipt=this.receipt(await this.options.channel.request('cancel',{executionId:request.executionId,reason:'user'}),request);
   // A native/SDK stop can retire the invocation. Execution facts outlive that task.
   await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,key,null),index=await tx.doc(Index);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_INTENT_MISMATCH','停止身份不一致');if(intent.receipt&&Number(receipt.sequence??0)<Number(intent.receipt.sequence??0))return;intent.receipt=copy(receipt);index.items[request.executionId].state=receipt.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});
+  if(receipt.state==='not_started'&&receipt.neverStarted===true&&receipt.scopeConfirmed===true)await this.writes?.cancelQueued(request.executionId);
  }
  private async reconcile(){
+  await this.fileWrites.recoverNative();
   const entries=Object.entries((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{});
   const reservations=new Map((await this.writes?.list()??[]).map(value=>[value.operationId,value]));
   for(const [executionId,entry] of entries){
@@ -139,7 +142,7 @@ export class ManagedExecution implements EffectAuthority {
    await this.policy(request,api,context);
    for(;;){const reservation=await this.writes!.reserve(this.writeClaim(request,writeScope));if(reservation.state==='cancelled')return failure('EXECUTION_STOPPED','排队的写入已取消');if(reservation.state!=='queued')break;await this.policy(request,api,context);await this.writes!.refresh();await new Promise(resolve=>setTimeout(resolve,20));}
    let receipt=this.receipt(await this.options.channel.request('query',{executionId:request.executionId}),request);
-   if(receipt.state==='unknown'&&receipt.reason==='NO_RECEIPT'){await fileEffect?.beforePrepare(request.executionId);receipt=this.receipt(await this.options.channel.request('prepare',request),request);}
+   if(receipt.state==='unknown'&&receipt.reason==='NO_RECEIPT'){try{await fileEffect?.beforePrepare({executionId:request.executionId,requestDigest:hash(request),context:{productId:request.context.productId,controlGeneration:request.context.controlGeneration,sdkConversationId:request.context.sdkConversationId}});}catch(error){await this.cancelRecorded(key,request);throw error;}receipt=this.receipt(await this.options.channel.request('prepare',request),request);}
    await this.save(api,key,request,receipt);
    await this.options.boundary?.('accepted',copy(request));
    if(receipt.state==='accepted_not_started'){
@@ -191,7 +194,7 @@ export class ManagedExecution implements EffectAuthority {
  });}
  async list(productId:string,cursor?:unknown){await this.recover();const index=await this.owner().snapshot(Index,BACKGROUND_CONTEXT),entries=Object.entries(index?.items??{}).filter(([,entry])=>entry.productId===productId),executions:Receipt[]=[];const start=cursor===undefined?0:entries.findIndex(([id])=>id===cursor)+1;if(cursor!==undefined&&(!start||typeof cursor!=='string'))return failure('INVALID_ARGUMENT','执行列表位置已失效，请重新读取');const queued=new Set((await this.writes!.list()).filter(value=>value.state==='queued').map(value=>value.operationId));const page=entries.slice(start,start+20);for(const [id,entry] of page){const intent=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(intent?.request&&queued.has(id))executions.push({executionId:id,state:'queued',source:'application',reason:'WRITER_QUEUED',context:copy(intent.request.context),namespace:intent.request.context.namespace,sequence:0});else if(intent?.receipt)executions.push(copy(intent.receipt));}return {executions,nextCursor:start+page.length<entries.length?page.at(-1)![0]:null};}
  async fileChanges(productId:string){await this.recover();return this.fileWrites.list(productId);}
- async writeFile(binding:AdoptedBinding,api:ToolExecutionApi|undefined,path:string,content:string|Uint8Array,context:Context,ordinal:number){const available=await this.files(binding,context);if(!available.ok)return available;return this.fileWrites.write(binding,api,path,content,context,ordinal,(argv,effect)=>this.run(binding,api,argv,undefined,context,ordinal,effect));}
+ async writeFile(binding:AdoptedBinding,api:ToolExecutionApi|undefined,path:string,content:string|Uint8Array,context:Context,ordinal:number,mode:FileMutationMode='write',options:FileMutationOptions={}){const available=await this.files(binding,context);if(!available.ok)return available;return this.fileWrites.write(binding,api,path,content,context,ordinal,(argv,effect)=>this.run(binding,api,argv,undefined,context,ordinal,effect),mode,options);}
  async readOutput(productId:string,executionId:string,cursor:unknown){
   if(!Number.isSafeInteger(cursor)||Number(cursor)<0)return failure('INVALID_ARGUMENT','输出位置无效');
   const entry=(await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items[executionId];if(!entry||entry.productId!==productId)return failure('EXECUTION_NOT_FOUND','此会话没有这次受管执行');
@@ -226,15 +229,22 @@ class ManagedEnvironment implements ExecutionEnv {
  absolutePath:FileSystem['absolutePath']=async path=>({ok:true,value:posix.resolve(this.cwd,path)});
  joinPath:FileSystem['joinPath']=async parts=>({ok:true,value:posix.join(...parts)});
  private unsupported=async():Promise<any>=>({ok:false,error:new FileError('not_supported','文件能力尚未就绪')});
- readBinaryFile:FileSystem['readBinaryFile']=(path,context)=>this.owner.readBinary(path,this.id,context);
- readTextFile:FileSystem['readTextFile']=async(path,context)=>{const result=await this.readBinaryFile(path,context);return result.ok?{ok:true,value:new TextDecoder().decode(result.value)}:result;};
- openTextLineReader=this.unsupported;readTextLines=this.unsupported;
+ readBinaryFile:FileSystem['readBinaryFile']=async(path,context)=>{const files=await this.owner.files(this.binding,context);if(!files.ok)return files;const raw=await this.owner.readBinary(posix.resolve(this.cwd,path),this.id,context);return !raw.ok&&raw.error.code==='not_supported'?files.value.readBinaryFile(path,context):raw;};
+ readTextFile:FileSystem['readTextFile']=async(path,context)=>{const result=await this.readBinaryFile(path,context);return result.ok?{ok:true,value:Buffer.from(result.value).toString('utf8')}:result;};
+ openTextLineReader:FileSystem['openTextLineReader']=async(path,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.openTextLineReader(path,context):files;};
+ readTextLines:FileSystem['readTextLines']=async(path,options,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.readTextLines(path,options,context):files;};
  openBinaryReader:FileSystem['openBinaryReader']=async(path,options,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.openBinaryReader(path,options,context):files;};
  fileInfo:FileSystem['fileInfo']=async(path,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.fileInfo(path,context):files;};
  exists:FileSystem['exists']=async(path,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.exists(path,context):files;};
  writeFile:FileSystem['writeFile']=(path,content,context)=>this.owner.writeFile(this.binding,this.api,path,content,context,++this.ordinal);
- appendFile=this.unsupported;truncateFile=this.unsupported;flushFile=this.unsupported;renameFile=this.unsupported;
- listDir=this.unsupported;openDirReader=this.unsupported;watch=this.unsupported;canonicalPath=this.unsupported;createDir=this.unsupported;
+ appendFile:FileSystem['appendFile']=(path,content,context)=>this.owner.writeFile(this.binding,this.api,path,content,context,++this.ordinal,'append');
+ truncateFile:FileSystem['truncateFile']=async(path,size,context)=>{if(!Number.isSafeInteger(size)||size<0)return {ok:false,error:new FileError('invalid','截断大小必须为非负整数',path)};if(size>16777216)return {ok:false,error:new FileError('not_supported','单次截断超过 16 MiB',path)};return this.owner.writeFile(this.binding,this.api,path,'',context,++this.ordinal,'truncate',{size});};
+ flushFile:FileSystem['flushFile']=(path,context)=>this.owner.writeFile(this.binding,this.api,path,'',context,++this.ordinal,'flush');
+ renameFile=this.unsupported;
+ listDir:FileSystem['listDir']=async(path,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.listDir(path,context):files;};
+ openDirReader:FileSystem['openDirReader']=async(path,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.openDirReader(path,context):files;};
+ canonicalPath:FileSystem['canonicalPath']=async(path,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.canonicalPath(path,context):files;};
+ watch=this.unsupported;createDir=this.unsupported;
  remove=this.unsupported;createTempDir=this.unsupported;createTempFile=this.unsupported;
  cleanup(context:Context){return this.owner.cleanup(this.binding,context);}
 }

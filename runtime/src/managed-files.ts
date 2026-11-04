@@ -1,6 +1,7 @@
 import type {Context} from '@earendil-works/chord';
 import {posix} from 'node:path';
-import {FileError,LineScanner,type BinaryReader,type FileInfo,type FileErrorCode,type Result} from '@earendil-works/pi-durable/env';
+import {FileError,LineScanner,StreamDecoder,type BinaryReader,type DirReader,type TextLineReader,type FileInfo,type FileErrorCode,type Result} from '@earendil-works/pi-durable/env';
+import {BACKGROUND_CONTEXT} from '@earendil-works/chord/context';
 import type {ExecutionChannel} from './execution-channel.js';
 
 const codes=new Set(['aborted','not_found','permission_denied','not_directory','is_directory','invalid','not_supported','unknown']);
@@ -18,6 +19,56 @@ export class ManagedFiles {
  }
  async exists(path:string,context:Context):Promise<Result<boolean,FileError>>{
   const result=await this.fileInfo(path,context);return result.ok?{ok:true,value:true}:result.error.code==='not_found'?{ok:true,value:false}:result;
+ }
+ async canonicalPath(path:string,context:Context):Promise<Result<string,FileError>>{const absolute=posix.resolve(this.options.cwd,path);return this.result(absolute,context,async()=>{const actual=await this.call('file.canonical',{path:absolute},absolute,context);if(typeof actual!=='string'||!posix.isAbsolute(actual))throw unknown(absolute);return actual;});}
+ async openDirReader(path:string,context:Context):Promise<Result<DirReader,FileError>>{
+  const absolute=posix.resolve(this.options.cwd,path);return this.result(absolute,context,async()=>{
+   const opened=await this.call('file.openDir',{path:absolute},absolute,context);
+   if(opened?.namespace!==this.options.namespace||typeof opened.handle!=='string'||!opened.handle||typeof opened.epoch!=='string'||!opened.epoch)throw unknown(absolute);
+   let closed=false;return {next:(maxEntries,current)=>this.result(absolute,current,async()=>{
+    if(closed)throw new FileError('invalid','目录读取已关闭',absolute);if(!Number.isSafeInteger(maxEntries)||maxEntries<1||maxEntries>10000)throw new FileError('invalid','目录页大小无效',absolute);
+    const entries:FileInfo[]=[];let done=false,bytes=0;
+    while(entries.length<maxEntries&&!done){const count=Math.min(128,maxEntries-entries.length),page=await this.call('file.readDir',{handle:opened.handle,maxEntries:count},absolute,current);
+     if(page?.namespace!==this.options.namespace||page.handle!==opened.handle||page.epoch!==opened.epoch||typeof page.done!=='boolean'||!Array.isArray(page.entries)||page.entries.length>count||!page.done&&!page.entries.length)throw unknown(absolute);
+     for(const entry of page.entries){if(typeof entry?.name!=='string'||!entry.name||['.','..'].includes(entry.name)||entry.name.includes('/')||entry.name.includes('\0'))throw unknown(absolute);const metadata=info(entry,posix.join(absolute,entry.name));bytes+=Buffer.byteLength(JSON.stringify(metadata));if(bytes>4*1024*1024)throw new FileError('not_supported','目录页超过有界读取大小',absolute);entries.push(metadata);}done=page.done;
+    }
+    return {entries,done};
+   }),close:async()=>{if(closed)return;closed=true;await this.call('file.close',{handle:opened.handle},absolute,BACKGROUND_CONTEXT).catch(()=>{});}};
+  });
+ }
+ async listDir(path:string,context:Context):Promise<Result<FileInfo[],FileError>>{
+  const opened=await this.openDirReader(path,context);if(!opened.ok)return opened;
+  try{return await this.result(path,context,async()=>{const entries:FileInfo[]=[];let bytes=0;for(;;){const page=await opened.value.next(128,context);if(!page.ok)throw page.error;for(const entry of page.value.entries){bytes+=Buffer.byteLength(JSON.stringify(entry));if(entries.length>=10000||bytes>4*1024*1024)throw new FileError('not_supported','目录集合超过有界读取大小，请用目录分页',path);entries.push(entry);}if(page.value.done)return entries;}});}finally{await opened.value.close(BACKGROUND_CONTEXT);}
+ }
+ async readBinaryFile(path:string,context:Context):Promise<Result<Uint8Array,FileError>>{
+  const opened=await this.openBinaryReader(path,undefined,context);if(!opened.ok)return opened;
+  try{return await this.result(path,context,async()=>{const before=await opened.value.info(context);if(!before.ok)throw before.error;
+   if(before.value.size>16*1024*1024)throw new FileError('not_supported','整文件读取超过 16 MiB；请使用分段 reader',path);
+   const bytes=Buffer.alloc(before.value.size);let offset=0;
+   while(offset<bytes.length){const part=await opened.value.read(offset,Math.min(32768,bytes.length-offset),context);if(!part.ok)throw part.error;if(!part.value.length)throw unknown(path);bytes.set(part.value,offset);offset+=part.value.length;}
+   const after=await opened.value.info(context);if(!after.ok)throw after.error;if(after.value.size!==before.value.size||after.value.mtimeMs!==before.value.mtimeMs)throw unknown(path);
+   return bytes;
+  });}finally{await opened.value.close(BACKGROUND_CONTEXT);}
+ }
+ async readTextFile(path:string,context:Context):Promise<Result<string,FileError>>{const result=await this.readBinaryFile(path,context);return result.ok?{ok:true,value:Buffer.from(result.value).toString('utf8')}:result;}
+ async openTextLineReader(path:string,context:Context):Promise<Result<TextLineReader,FileError>>{
+  const opened=await this.openBinaryReader(path,undefined,context);if(!opened.ok)return opened;
+  let closed=false,ended=false,offset=0,buffered='';const decoder=new StreamDecoder(),binary=opened.value;
+  return {ok:true,value:{readLine:current=>this.result(path,current,async()=>{
+   if(closed)throw new FileError('invalid','文本读取已关闭',path);
+   for(;;){const newline=buffered.indexOf('\n');if(newline>=0){const text=buffered.slice(0,newline);buffered=buffered.slice(newline+1);return {text,terminated:true};}
+    if(ended){if(!buffered)return undefined;const text=buffered;buffered='';return {text,terminated:false};}
+    if(Buffer.byteLength(buffered)>4*1024*1024)throw new FileError('not_supported','单行文本超过有界读取大小',path);
+    const page=await binary.read(offset,32768,current);if(!page.ok)throw page.error;offset+=page.value.length;
+    if(!page.value.length){buffered+=decoder.decode();ended=true;}else buffered+=decoder.decode(page.value);
+   }
+  }),close:async()=>{if(closed)return;closed=true;buffered='';await binary.close(BACKGROUND_CONTEXT);}}};
+ }
+ async readTextLines(path:string,options:{maxLines?:number}|undefined,context:Context):Promise<Result<string[],FileError>>{
+  if(options?.maxLines!==undefined&&options.maxLines<=0)return {ok:true,value:[]};
+  const opened=await this.openTextLineReader(path,context);if(!opened.ok)return opened;
+  try{return await this.result(path,context,async()=>{const lines:string[]=[];let bytes=0;while(options?.maxLines===undefined||lines.length<options.maxLines){const next=await opened.value.readLine(context);if(!next.ok)throw next.error;if(next.value===undefined)break;bytes+=Buffer.byteLength(next.value.text)+1;if(bytes>16*1024*1024||lines.length>=100000)throw new FileError('not_supported','文本集合超过有界读取大小',path);lines.push(next.value.text);}return lines;});}
+  finally{await opened.value.close(BACKGROUND_CONTEXT);}
  }
  private async result<T>(path:string,context:Context,action:()=>Promise<T>):Promise<Result<T,FileError>>{
   try{context.abortSignal?.throwIfAborted();return {ok:true,value:await action()};}
@@ -56,7 +107,7 @@ export class ManagedFiles {
      while(offset<metadata.value.size){const page=await reader.read(offset,Math.min(32768,metadata.value.size-offset),current);if(!page.ok)throw page.error;if(!page.value.length)break;scanner.push(page.value);offset+=page.value.length;}
      return scanner.finish();
     }),
-    close:async current=>{if(closed)return;closed=true;await this.call('file.close',{handle:opened.handle},absolute,current).catch(()=>{});}
+    close:async()=>{if(closed)return;closed=true;await this.call('file.close',{handle:opened.handle},absolute,BACKGROUND_CONTEXT).catch(()=>{});}
    };
    return reader;
   });

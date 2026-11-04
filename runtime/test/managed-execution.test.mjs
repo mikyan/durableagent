@@ -197,6 +197,26 @@ test('arbitrary shell commands from two conversations share a durable environmen
  }finally{peer.allowFinish=true;await app.close();native.close();await rm(dir,{recursive:true,force:true});}
 });
 
+test('stopping a queued writer never starts its command and releases only that waiting reservation',async()=>{
+ class QueuePeer extends ExecutionPeer {
+  finish=false;tombstones=new Map();
+  async request(method,payload){
+   if(method==='cancel'&&!this.records.has(payload.executionId)){this.requests.push({method,payload});const value={...this.identity,executionId:payload.executionId,state:'not_started',neverStarted:true,scopeConfirmed:true,sequence:0,reason:'CANCELLED_BEFORE_ACCEPTANCE'};this.tombstones.set(payload.executionId,value);return value;}
+   if(method==='query'&&this.tombstones.has(payload.executionId))return this.tombstones.get(payload.executionId);
+   if(method==='query'&&this.finish){const record=this.records.get(payload.executionId);if(record?.receipt.state==='running')record.receipt={...record.receipt,state:'completed',scopeConfirmed:true,sequence:4};}
+   const value=await super.request(method,payload);if(method==='start'&&!this.finish){const record=this.records.get(payload.executionId);record.receipt={...value,state:'running',scopeConfirmed:false};return structuredClone(record.receipt);}return value;
+  }
+ }
+ const dir=await mkdtemp(join(tmpdir(),'managed-queued-stop-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new QueuePeer(),execution=new ManagedExecution({channel:peer,authority:native}),app=new Application({...configuration(),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution});
+ try{await app.start();for(const id of ['first','waiting']){await call(app,'create',{creationId:id});await native.create(id,'run',id);await call(app,'send',{intentId:id});if(id==='first')await until(()=>peer.starts===1);}
+  await until(async()=>(await call(app,'execution.list',{id:'waiting'})).executions[0]?.state==='queued');const queued=(await call(app,'execution.list',{id:'waiting'})).executions[0];
+  const stopped=await native.stop('waiting','stop-waiting');await call(app,'stop',{id:'waiting',stopId:stopped.pendingAbort.stopId});
+  assert.equal((await call(app,'execution.list',{id:'waiting'})).executions[0].state,'not_started');assert.equal(peer.records.has(queued.executionId),false);assert.equal(peer.starts,1);
+  await execution.withSnapshot(async value=>{assert.deepEqual(value.pendingControlProductIds,['first']);});
+  peer.finish=true;await call(app,'create',{creationId:'third'});await native.create('third','run later','third');await call(app,'send',{intentId:'third'});await until(async()=>(await call(app,'sendStatus',{intentId:'third'})).submission?.status==='done');assert.equal(peer.starts,2);assert.equal(peer.records.has(queued.executionId),false);
+ }finally{peer.finish=true;await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
 
 test('the real SDK write tool persists one file plan and exposes its verified original-file change',async()=>{
  class FilePeer extends ExecutionPeer {
@@ -204,17 +224,19 @@ test('the real SDK write tool persists one file plan and exposes its verified or
   position={namespace:this.identity.namespace,canonicalPath:'/termux/default-workspace/source.txt',objectId:'1:9',ancestorObjectIds:['1:2']};
   async request(method,payload){
    if(method==='file.describe')return {ok:true,value:{protocol:1,namespace:this.identity.namespace,applyArgvPrefix:['/termux/python','/termux/file_service.py','apply','/termux/records']}};
+   if(method==='file.canonical')return {ok:true,value:this.position.canonicalPath};
    if(method==='file.resolveWrite')return {ok:true,value:this.position};
    if(method==='file.prepareWrite'){const plan={...payload,requestDigest:hash(payload),position:this.position,namespace:this.identity.namespace,argv:['/termux/python','/termux/file_service.py','apply','/termux/records',payload.operationId]};this.plans.set(payload.operationId,plan);return {ok:true,value:plan};}
    if(method==='file.writeResult'){const plan=this.plans.get(payload.operationId);return {ok:true,value:{protocol:1,operationId:payload.operationId,namespace:this.identity.namespace,requestDigest:plan.requestDigest,state:'completed',original:true,path:plan.path,canonicalPath:plan.path,after:{size:this.data.length,sha256:createHash('sha256').update(this.data).digest('hex')},diff:{available:true,text:'--- before\n+++ after\n-before\n+after-世界\n'}}};}
    const value=await super.request(method,payload);if(method==='start'){const plan=this.plans.get(this.records.get(payload.executionId).request.command.argv.at(-1));this.data=Buffer.from(plan.data,'base64');}return value;
   }
  }
- const dir=await mkdtemp(join(tmpdir(),'managed-file-write-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new FilePeer(),execution=new ManagedExecution({channel:peer,authority:native}),options={...configuration('write',{path:'source.txt',content:'after-世界\n'}),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution};let app=new Application(options);
+ const fileRecords=new Map(),fileEffects={register:async value=>{fileRecords.set(value.operationId,{...value,state:'registered',scopeConfirmed:false,sequence:-1});return fileRecords.get(value.operationId);},adopt:async value=>{if(!fileRecords.has(value.operationId))fileRecords.set(value.operationId,{...value,state:'registered',scopeConfirmed:false,sequence:-1});return fileRecords.get(value.operationId);},require:async id=>fileRecords.get(id),record:async(id,proof)=>{fileRecords.set(id,{...fileRecords.get(id),...proof});return fileRecords.get(id);}};
+ const dir=await mkdtemp(join(tmpdir(),'managed-file-write-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new FilePeer(),execution=new ManagedExecution({channel:peer,authority:native,fileEffects}),options={...configuration('write',{path:'source.txt',content:'after-世界\n'}),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution};let app=new Application(options);
  try{await app.start();await call(app,'create',{creationId:'one'});await native.create('one','write the original','write');await call(app,'send',{intentId:'write'});await until(async()=>(await call(app,'sendStatus',{intentId:'write'})).submission?.status==='done');
   assert.equal((await call(app,'open',{id:'one'})).entries.find(entry=>entry.role==='tool')?.text,'Successfully wrote to source.txt');assert.equal(peer.starts,1);assert.equal(peer.data.toString(),'after-世界\n');
-  const changes=await call(app,'files.list',{id:'one'});assert.equal(changes.changes.length,1);assert.equal(changes.changes[0].original,true);assert.equal(changes.changes[0].state,'completed');assert.ok(changes.changes[0].bindingId);assert.equal(changes.changes[0].path,'/termux/default-workspace/source.txt');assert.match(changes.changes[0].diff.text,/-before\n\+after-世界/);
-  await app.close();app=new Application({...options,execution:new ManagedExecution({channel:peer,authority:native})});await app.start();assert.equal((await call(app,'files.list',{id:'one'})).changes[0].operationId,changes.changes[0].operationId);assert.equal(peer.starts,1);
+  const changes=await call(app,'files.list',{id:'one'});assert.equal(changes.changes.length,1);assert.equal(changes.changes[0].original,true);assert.equal(changes.changes[0].state,'completed');assert.ok(changes.changes[0].bindingId);assert.equal(changes.changes[0].path,'/termux/default-workspace/source.txt');assert.match(changes.changes[0].diff.text,/-before\n\+after-世界/);const nativeFact=fileRecords.get(changes.changes[0].operationId);assert.ok(nativeFact,'native stop must retain a separate original-file effect');assert.equal(nativeFact.kind,'file');assert.equal(nativeFact.source,'termux');assert.equal(nativeFact.productId,'one');assert.equal(nativeFact.controlGeneration,1);assert.equal(nativeFact.scopeConfirmed,true);assert.equal(nativeFact.state,'completed');assert.notEqual(nativeFact.operationId,changes.changes[0].executionId);assert.match(nativeFact.requestDigest,/^[a-f0-9]{64}$/);
+  await app.close();app=new Application({...options,execution:new ManagedExecution({channel:peer,authority:native,fileEffects})});await app.start();assert.equal((await call(app,'files.list',{id:'one'})).changes[0].operationId,changes.changes[0].operationId);assert.equal(peer.starts,1);
  }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
 });
 
@@ -226,6 +248,7 @@ test('an ended helper with unconfirmed original-file effects still occupies its 
   async request(method,payload){
    const prefix=['/termux/python','/termux/file_service.py','apply','/termux/records'];
    if(method==='file.describe')return {ok:true,value:{protocol:1,namespace:this.identity.namespace,applyArgvPrefix:prefix}};
+   if(method==='file.canonical')return {ok:true,value:this.position.canonicalPath};
    if(method==='file.resolveWrite')return {ok:true,value:this.position};
    if(method==='file.prepareWrite'){this.plan={...payload,requestDigest:hash(payload),position:this.position,namespace:this.identity.namespace,argv:[...prefix,payload.operationId]};return {ok:true,value:this.plan};}
    if(method==='file.writeResult')return {ok:true,value:{operationId:payload.operationId,namespace:this.identity.namespace,requestDigest:this.plan.requestDigest,state:'applying'}};
@@ -238,5 +261,71 @@ test('an ended helper with unconfirmed original-file effects still occupies its 
   await execution.withSnapshot(async snapshot=>{assert.equal(snapshot.known,false);assert.deepEqual(snapshot.pendingControlProductIds,['one']);assert.equal(snapshot.pendingBindingIds.length,1);});
   const catalog=await call(app,'projects.get');await assert.rejects(call(app,'workspaces.update',{operationId:'do-not-rebind',expectedVersion:catalog.version,id:'default',path:'/different'}),{code:'LOCATION_UNKNOWN'});
   peer.verified=true;await execution.withSnapshot(async snapshot=>{assert.equal(snapshot.known,true);assert.deepEqual(snapshot.pendingBindingIds,[]);});const verified=await call(app,'files.list',{id:'one'});assert.equal(verified.changes[0].state,'completed');assert.equal(verified.changes[0].diff.available,false);assert.equal(peer.starts,1,'verification must not re-execute the write');
+ }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
+
+test('large SDK binary writes stage bounded chunks before starting one supervised effect',async()=>{
+ const data=Buffer.alloc(153600,173);
+ class StagedPeer extends ExecutionPeer {
+  staged=Buffer.alloc(0);plan;
+  position={namespace:this.identity.namespace,canonicalPath:'/termux/default-workspace/large.bin',objectId:'1:9',ancestorObjectIds:['1:2']};
+  async request(method,payload){
+   const prefix=['/termux/python','/termux/file_service.py','apply','/termux/records'];
+   if(method==='file.describe')return {ok:true,value:{protocol:1,namespace:this.identity.namespace,maxWriteBytes:16777216,chunkBytes:32768,applyArgvPrefix:prefix}};
+   if(method==='file.canonical')return {ok:true,value:this.position.canonicalPath};
+   if(method==='file.resolveWrite')return {ok:true,value:this.position};
+   if(method==='file.stage'){assert.ok(Buffer.byteLength(JSON.stringify(payload))<60000);assert.equal(payload.offset,this.staged.length);const part=Buffer.from(payload.data,'base64');assert.ok(part.length<=32768);this.staged=Buffer.concat([this.staged,part]);return {ok:true,value:{namespace:this.identity.namespace,digest:payload.digest,totalBytes:payload.totalBytes,nextOffset:this.staged.length,sealed:this.staged.length===payload.totalBytes}};}
+   if(method==='file.prepareStagedWrite'){assert.equal(payload.digest,createHash('sha256').update(this.staged).digest('hex'));this.plan={...payload,requestDigest:hash(payload),position:this.position,namespace:this.identity.namespace,expectedAfter:{size:this.staged.length,sha256:payload.digest},argv:[...prefix,payload.operationId]};return {ok:true,value:this.plan};}
+   if(method==='file.writeResult')return {ok:true,value:{protocol:1,operationId:payload.operationId,namespace:this.identity.namespace,requestDigest:this.plan.requestDigest,state:'completed',original:true,path:this.position.canonicalPath,canonicalPath:this.position.canonicalPath,after:this.plan.expectedAfter,diff:{available:false,reason:'too_large'}}};
+   return super.request(method,payload);
+  }
+ }
+ const dir=await mkdtemp(join(tmpdir(),'managed-staged-write-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new StagedPeer(),execution=new ManagedExecution({channel:peer,authority:native}),registry=createRegistry();
+ registry.install({name:'file-contract',tools:[execution.wrapTool(defineTool({name:'write_contract',description:'Fixed binary file contract',parameters:obj({}),execute:async(_args,api,context)=>{const result=await api.env.writeFile('large.bin',data,context);if(!result.ok)throw result.error;return {output:[{type:'text',text:'large file complete'}]};}}))]});
+ const app=new Application({...configuration('write_contract',{}),registry,path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution});
+ try{await app.start();await call(app,'create',{creationId:'one'});await native.create('one','write binary','write');await call(app,'send',{intentId:'write'});await until(async()=>(await call(app,'sendStatus',{intentId:'write'})).submission?.status==='done');assert.equal((await call(app,'open',{id:'one'})).entries.find(entry=>entry.role==='tool')?.text,'large file complete');assert.deepEqual(peer.staged,data);assert.equal(peer.starts,1);assert.equal((await call(app,'files.list',{id:'one'})).changes[0].diff.reason,'too_large');
+ }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
+test('SDK append preserves the existing binary prefix and its completed identity across reopen',async()=>{
+ const suffix=Buffer.from([0,255,10]),expected=Buffer.from([65,66,0,255,10]);
+ class AppendPeer extends ExecutionPeer {
+  plan;data=Buffer.from([65,66]);
+  position={namespace:this.identity.namespace,canonicalPath:'/termux/default-workspace/append.bin',objectId:'1:9',ancestorObjectIds:['1:2']};
+  async request(method,payload){const prefix=['/termux/python','/termux/file_service.py','apply','/termux/records'];
+   if(method==='file.describe')return {ok:true,value:{protocol:1,namespace:this.identity.namespace,applyArgvPrefix:prefix}};
+   if(method==='file.resolveWrite')return {ok:true,value:this.position};
+   if(method==='file.prepareWrite'){assert.equal(payload.mode,'append');assert.deepEqual(Buffer.from(payload.data,'base64'),suffix);this.plan={...payload,namespace:this.identity.namespace,requestDigest:hash(payload),position:this.position,expectedAfter:{size:5,sha256:createHash('sha256').update(expected).digest('hex')},argv:[...prefix,payload.operationId]};return {ok:true,value:this.plan};}
+   if(method==='start'&&this.records.get(payload.executionId)?.receipt.state==='accepted_not_started')this.data=Buffer.concat([this.data,suffix]);
+   if(method==='file.writeResult')return {ok:true,value:{...this.plan,state:'completed',original:true,after:{size:this.data.length,sha256:createHash('sha256').update(this.data).digest('hex')},diff:{available:false,reason:'binary'}}};
+   return super.request(method,payload);
+  }
+ }
+ const dir=await mkdtemp(join(tmpdir(),'managed-append-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new AppendPeer();
+ const options=execution=>{const registry=createRegistry();registry.install({name:'append-contract',tools:[execution.wrapTool(defineTool({name:'append_contract',description:'Fixed binary append contract',parameters:obj({}),execute:async(_args,api,context)=>{const result=await api.env.appendFile('append.bin',suffix,context);if(!result.ok)throw result.error;return {output:[{type:'text',text:'append complete'}]};}}))]});return {...configuration('append_contract',{}),registry,path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution};};
+ let app=new Application(options(new ManagedExecution({channel:peer,authority:native})));
+ try{await app.start();await call(app,'create',{creationId:'one'});await native.create('one','append binary','append');await call(app,'send',{intentId:'append'});await until(async()=>(await call(app,'sendStatus',{intentId:'append'})).submission?.status==='done');assert.equal((await call(app,'open',{id:'one'})).entries.find(entry=>entry.role==='tool')?.text,'append complete');assert.deepEqual(peer.data,expected);assert.equal(peer.starts,1);const change=(await call(app,'files.list',{id:'one'})).changes[0];assert.equal(change.state,'completed');
+  await app.close();app=new Application(options(new ManagedExecution({channel:peer,authority:native})));await app.start();assert.equal((await call(app,'files.list',{id:'one'})).changes[0].operationId,change.operationId);assert.deepEqual(peer.data,expected);assert.equal(peer.starts,1);
+ }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
+test('SDK truncate and flush use qualified supervised file operations with exact result evidence',async()=>{
+ class MutationPeer extends ExecutionPeer {
+  plans=new Map();data=Buffer.from('abcdef');
+  position={namespace:this.identity.namespace,canonicalPath:'/termux/default-workspace/truncate.bin',objectId:'1:9',ancestorObjectIds:['1:2']};
+  async request(method,payload){const prefix=['/termux/python','/termux/file_service.py','apply','/termux/records'];
+   if(method==='file.describe')return {ok:true,value:{protocol:1,namespace:this.identity.namespace,applyArgvPrefix:prefix}};
+   if(method==='file.resolveWrite')return {ok:true,value:this.position};
+   if(method==='file.prepareMutation'){assert.ok(['truncate','flush'].includes(payload.kind));const expected=payload.kind==='truncate'?Buffer.from('abc'):this.data;assert.deepEqual(payload.options,payload.kind==='truncate'?{size:3}:{});const plan={...payload,namespace:this.identity.namespace,requestDigest:hash(payload),position:this.position,expectedAfter:{size:expected.length,sha256:createHash('sha256').update(expected).digest('hex')},argv:[...prefix,payload.operationId]};this.plans.set(payload.operationId,plan);return {ok:true,value:plan};}
+   if(method==='start'&&this.records.get(payload.executionId)?.receipt.state==='accepted_not_started'){const plan=this.plans.get(this.records.get(payload.executionId).request.command.argv.at(-1));if(plan.kind==='truncate')this.data=this.data.subarray(0,plan.options.size);}
+   if(method==='file.writeResult')return {ok:true,value:{...this.plans.get(payload.operationId),state:'completed',original:true,after:{size:this.data.length,sha256:createHash('sha256').update(this.data).digest('hex')},diff:{available:true,text:''}}};
+   return super.request(method,payload);
+  }
+ }
+ const dir=await mkdtemp(join(tmpdir(),'managed-truncate-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new MutationPeer(),execution=new ManagedExecution({channel:peer,authority:native}),registry=createRegistry();
+ registry.install({name:'truncate-contract',tools:[execution.wrapTool(defineTool({name:'truncate_contract',description:'Fixed truncate and flush contract',parameters:obj({}),execute:async(_args,api,context)=>{const invalid=await api.env.truncateFile('truncate.bin',-1,context);if(invalid.ok||invalid.error.code!=='invalid')throw Error('invalid size not rejected');for(const invoke of [()=>api.env.truncateFile('truncate.bin',3,context),()=>api.env.flushFile('truncate.bin',context)]){const result=await invoke();if(!result.ok)throw result.error;}return {output:[{type:'text',text:'truncate and flush complete'}]};}}))]});
+ const app=new Application({...configuration('truncate_contract',{}),registry,path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution});
+ try{await app.start();await call(app,'create',{creationId:'one'});await native.create('one','truncate and flush','mutate');await call(app,'send',{intentId:'mutate'});await until(async()=>(await call(app,'sendStatus',{intentId:'mutate'})).submission?.status==='done');assert.equal((await call(app,'open',{id:'one'})).entries.find(entry=>entry.role==='tool')?.text,'truncate and flush complete');assert.equal(peer.data.toString(),'abc');assert.equal(peer.starts,2);const changes=(await call(app,'files.list',{id:'one'})).changes;assert.equal(changes.length,2);assert.ok(changes.every(change=>change.state==='completed'));
  }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
 });
