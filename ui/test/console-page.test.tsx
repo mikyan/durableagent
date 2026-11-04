@@ -128,13 +128,15 @@ it('shows the question strip only above the visible transcript and supports jump
   const input=screen.getAllByTestId('history-message').find(row=>row.dataset.messageId==='11')!;
   const viewport=input.closest('.thread-scroll')!;
   const rect=(top:number,bottom:number)=>({top,bottom,height:bottom-top,left:0,right:400,width:400,x:0,y:top,toJSON:()=>({})});
-  vi.spyOn(viewport,'getBoundingClientRect').mockReturnValue(rect(100,700));
+  const viewportPosition=vi.spyOn(viewport,'getBoundingClientRect').mockReturnValue(rect(100,700));
   const position=vi.spyOn(input,'getBoundingClientRect').mockReturnValue(rect(120,180));
   fireEvent.scroll(viewport);expect(screen.queryByRole('button',{name:'回到本次输入'})).toBeNull();
   position.mockReturnValue(rect(-80,90));fireEvent.scroll(viewport);
   fireEvent.click(await screen.findByRole('button',{name:'回到本次输入'}));
   expect(document.activeElement).toBe(input);
-  fireEvent.scroll(viewport);
+  viewportPosition.mockReturnValue(rect(100,130));fireEvent.scroll(viewport);
+  expect(screen.queryByRole('button',{name:'回到本次输入'})).toBeNull();
+  viewportPosition.mockReturnValue(rect(100,700));fireEvent.scroll(viewport);
   fireEvent.click(await screen.findByRole('button',{name:'关闭输入浮条'}));
   fireEvent.scroll(viewport);expect(screen.queryByRole('button',{name:'回到本次输入'})).toBeNull();
  }finally{vi.restoreAllMocks();f.controller.dispose();}
@@ -180,6 +182,7 @@ it('offers the available native camera next to image and file picking, preservin
   expect((screen.getByRole('textbox',{name:'消息'}) as HTMLTextAreaElement).value).toBe('拍照前的草稿');
   expect(f.native.drafts.get('one')?.text).toBe('拍照前的草稿');
   await waitFor(()=>expect(screen.getByTestId('draft-status').dataset.state).toBe('saved'));
+  expect(f.controller.snapshot().inputError).toBeUndefined();
   expect(f.requests.some(row=>row.method==='send')).toBe(false);
  }finally{f.controller.dispose();}
 });

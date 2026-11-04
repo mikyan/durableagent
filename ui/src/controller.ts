@@ -140,7 +140,7 @@ export class ConversationController {
   }
   editDraft(text:string){if(this.state.activeId)this.drafts.edit(this.state.activeId,text);}
   removeAttachment(selectionId:string){if(this.state.activeId)this.drafts.remove(this.state.activeId,selectionId);}
-  async selectAttachment(kind:'image'|'file'|'camera'){const id=this.state.activeId,epoch=this.epoch;if(!id)return;try{await this.drafts.select(id,kind);}catch(error){if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:this.reason(error)});}}
+  async selectAttachment(kind:'image'|'file'|'camera'){const id=this.state.activeId,epoch=this.epoch;if(!id)return;try{await this.drafts.select(id,kind);}catch(error){if(error instanceof ApplicationFailure&&error.code==='INPUT_PICKER_CANCELLED')return;if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:this.reason(error)});}}
   async prepareAttachment(selectionId:string){if(this.state.activeId)await this.drafts.prepare(this.state.activeId,selectionId);}
   async refreshDraft(){const id=this.state.activeId,epoch=this.epoch;if(!id)return;try{await this.drafts.read(id);if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:undefined});}catch(error){if(epoch===this.epoch&&id===this.state.activeId)this.publish({inputError:this.reason(error)});}}
   async flushDraft(){if(this.state.activeId)return this.drafts.flush(this.state.activeId);}

@@ -118,7 +118,7 @@ export class DraftCoordinator {
         const value=await this.request<NativeDraft>('input.select',{id,kind:selection.kind,expectedRevision:selection.expectedRevision,operationId:selection.operationId},180000);
         r.selectionRetry=undefined;r.error=undefined;
         if(value.stateVersion>=r.saved.stateVersion){r.saved=value;r.selections=value.selections;r.savedEpoch=selection.editEpoch;if(r.editEpoch===selection.editEpoch){r.text=value.text;r.status='saved';}else r.status='pending';}
-      }catch(error){if(error instanceof ApplicationFailure&&error.code==='INPUT_PICKER_CANCELLED'){r.selectionRetry=undefined;r.error=undefined;return;}this.fail(r,error);throw error;}
+      }catch(error){if(error instanceof ApplicationFailure&&error.code==='INPUT_PICKER_CANCELLED'){r.selectionRetry=undefined;r.error=undefined;throw error;}this.fail(r,error);throw error;}
     })();r.writer=writer;
     try{await writer;}finally{r.busy=false;if(r.writer===writer)r.writer=undefined;this.notify();}
     for(const selection of r.selections)if(!before.has(selection.id)){

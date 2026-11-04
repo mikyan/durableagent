@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import type {ConversationController,UiState} from '../controller';
 import type {SendView} from '../submissions';
 
@@ -22,12 +23,15 @@ function presentation(item:SendView,stoppedThrough:number,abortPending:boolean){
 }
 
 export function SendStates({controller,state}:{controller:ConversationController;state:UiState}){
+  const [expanded,setExpanded]=useState(false);
   const sends=state.submissions;if(!sends)return null;
   const stoppedThrough=sends.control?.stoppedThrough??0;
   const status=sends.stopStatus?.control.version===sends.control?.version?sends.stopStatus:undefined;
   const showStop=sends.stopping||sends.stopError||sends.control?.pendingAbort||status&&status.externalPending>0||sends.control&&sends.control.generation<=stoppedThrough;
   const stopLabel=sends.stopping?'正在保存停止请求…':sends.control&&stoppedThrough>0?(sends.control.pendingAbort?'停止请求已保存 · 等待会话中断核验':status?.phase==='external-unconfirmed'?'停止已请求，外部结果待核验':status?.phase==='stopped'?'停止完成 · 相关受管操作已核验':'停止请求已保存 · 会话中断已确认'):'停止请求未确认';
-  return <section className="send-states" aria-label="发送状态">
+  const summary=sends.stopError??sends.error??(showStop?stopLabel:sends.items[0]?presentation(sends.items[0],stoppedThrough,!!sends.control?.pendingAbort).label:undefined);
+  return <section className={'send-states'+(expanded?' is-expanded':'')} aria-label="发送状态">
+    {summary&&<button type="button" className="send-states-summary" aria-expanded={expanded} onClick={()=>setExpanded(value=>!value)}>{'发送状态：'+summary+ (expanded?' · 收起':' · 展开')}</button>}
     {(sends.items.length>0||sends.error||showStop)&&<div className="send-states-heading"><span>发送状态</span><button className="text-button" data-testid="refresh-submissions" onClick={()=>void controller.refreshSubmissions()} disabled={sends.loading}>刷新发送状态</button></div>}
     {showStop&&<p className="stop-status" data-testid="stop-status" role="status">{stopLabel}{sends.stopError&&<span>{sends.stopError}</span>}</p>}
     {sends.error&&<p className="send-error" role="status">{sends.error}</p>}

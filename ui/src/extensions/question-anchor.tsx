@@ -5,7 +5,7 @@ export function QuestionAnchor({viewport,messages,onJump}:{viewport:RefObject<HT
  const [above,setAbove]=useState(false),[dismissed,setDismissed]=useState<string>();
  useEffect(()=>{
   const root=viewport.current;if(!root||!message){setAbove(false);return;}
-  const measure=()=>{const target=Array.from(root.querySelectorAll<HTMLElement>('[data-message-id]')).find(row=>row.dataset.messageId===message.id);if(!target){setAbove(false);return;}const bounds=root.getBoundingClientRect();setAbove(bounds.height>0&&target.getBoundingClientRect().bottom<=bounds.top);};
+  const measure=()=>{const target=Array.from(root.querySelectorAll<HTMLElement>('[data-message-id]')).find(row=>row.dataset.messageId===message.id);if(!target){setAbove(false);return;}const bounds=root.getBoundingClientRect();setAbove(bounds.height>=100&&target.getBoundingClientRect().bottom<=bounds.top);};
   measure();root.addEventListener('scroll',measure,{passive:true});window.addEventListener('resize',measure);
   const observer=typeof ResizeObserver==='undefined'?undefined:new ResizeObserver(measure);observer?.observe(root);if(root.firstElementChild)observer?.observe(root.firstElementChild);
   return()=>{root.removeEventListener('scroll',measure);window.removeEventListener('resize',measure);observer?.disconnect();};

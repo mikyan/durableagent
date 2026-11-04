@@ -26,7 +26,14 @@ try{
  const command=(method,params={})=>new Promise((resolve,reject)=>{const id=++sequence,timer=setTimeout(()=>{pending.delete(id);reject(Error('CDP timeout: '+method));},20000);pending.set(id,{resolve,reject,timer});socket.send(JSON.stringify({id,method,params}));});
  const evaluate=async(expression)=>{const value=await command('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});if(value.exceptionDetails)throw Error(JSON.stringify(value.exceptionDetails));return value.result.value;};
  async function click(selector){
-  const rect=await until(()=>evaluate('(()=>{const e=document.querySelector('+JSON.stringify(selector)+');if(!e||e.disabled)return null;const r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width>0&&r.height>0&&s.visibility!=="hidden"&&r.top>=0&&r.bottom<=innerHeight?{x:r.x+r.width/2,y:r.y+r.height/2}:null})()'),'visible control '+selector);
+  // IME and responsive layout may move a control after focus. Tap only a stable,
+  // unobscured target; never retry a send automatically after the tap.
+  let previous,stable=0;
+  const rect=await until(async()=>{
+   const value=await evaluate('(()=>{const e=document.querySelector('+JSON.stringify(selector)+');if(!e||e.disabled)return null;const r=e.getBoundingClientRect(),s=getComputedStyle(e),x=r.x+r.width/2,y=r.y+r.height/2,hit=document.elementFromPoint(x,y);return r.width>0&&r.height>0&&s.visibility!=="hidden"&&r.top>=0&&r.bottom<=innerHeight&&hit&&e.contains(hit)?{x,y}:null})()');
+   stable=value&&previous&&Math.abs(value.x-previous.x)<.25&&Math.abs(value.y-previous.y)<.25?stable+1:0;previous=value;
+   if(stable>=3)return value;await wait(200);return null;
+  },'stable visible control '+selector);
   const scale=await evaluate('devicePixelRatio');adb('shell','input','tap',String(Math.round(rect.x*scale)),String(Math.round(rect.y*scale)));await wait(500);
  }
  for(const step of plan.steps){
