@@ -1,0 +1,146 @@
+{
+  "capturedAt": "2026-11-04T15:45:08.714742+00:00",
+  "readOnly": true,
+  "serialStored": false,
+  "model": "SM-S9110",
+  "android": "16",
+  "sdk": "36",
+  "abi": "arm64-v8a",
+  "pageSize": {
+    "returnCode": 0,
+    "value": "4096"
+  },
+  "keyguardBefore": {
+    "returnCode": 0,
+    "facts": {
+      "showing": "false",
+      "inputRestricted": "false",
+      "mKeyguardOccluded": "false"
+    }
+  },
+  "foregroundPackage": "com.sec.android.app.launcher",
+  "packages": {
+    "dev.durableagent.probe": {
+      "present": true,
+      "versionName": "0.1.0",
+      "versionCode": "1",
+      "uid": "10205",
+      "forceStopped": false,
+      "debuggable": true,
+      "apkCount": 1,
+      "apkSha256": [
+        "decd21c7b9edb246a6133ee25476104367804080835676e4f50c1ec6ca8df6b0"
+      ]
+    },
+    "com.termux": {
+      "present": true,
+      "versionName": "0.118.3",
+      "versionCode": "1002",
+      "uid": "10187",
+      "forceStopped": false,
+      "debuggable": true,
+      "apkCount": 1,
+      "apkSha256": [
+        "72fdb596045116bf5ba1b5bdf5b26fddb9acc0bd074ad9f2da9eb0ae85e83a4e"
+      ],
+      "matchesValidatedApkPin": true
+    }
+  },
+  "applicationService": {
+    "observationAvailable": true,
+    "active": false,
+    "anyPackageService": false
+  },
+  "termuxProcesses": {
+    "count": 0,
+    "processNames": {},
+    "commandsRead": false,
+    "scope": "process names only; shell count does not prove an interactive user session"
+  },
+  "managedFiles": {
+    "durable_executor.py": {
+      "present": false,
+      "stat": null,
+      "observation": "absent"
+    },
+    "execution_transport.py": {
+      "present": false,
+      "stat": null,
+      "observation": "absent"
+    },
+    "file_service.py": {
+      "present": false,
+      "stat": null,
+      "observation": "absent"
+    },
+    "installation.json": {
+      "present": false,
+      "stat": null,
+      "observation": "absent"
+    },
+    "execution.sqlite": {
+      "present": false,
+      "stat": null,
+      "observation": "absent"
+    },
+    "transport/pairing.json": {
+      "present": false,
+      "stat": null,
+      "observation": "absent"
+    },
+    "installation.lock": {
+      "present": false,
+      "stat": null,
+      "observation": "absent"
+    },
+    "server.lock": {
+      "present": false,
+      "stat": null,
+      "observation": "absent"
+    },
+    "writes.lock": {
+      "present": false,
+      "stat": null,
+      "observation": "absent"
+    }
+  },
+  "applicationPairingDatabase": {
+    "present": false,
+    "stat": null,
+    "observation": "absent",
+    "rowsRead": false
+  },
+  "observationCorrection": "Attempt01 incorrectly trusted adb exec-out exit0 for missing file stat. Retained attempt01; this run validates exact stat/hash/header formats and records explicit ENOENT as absent.",
+  "keyguardAfter": {
+    "returnCode": 0,
+    "facts": {
+      "showing": "false",
+      "inputRestricted": "false",
+      "mKeyguardOccluded": "false"
+    }
+  },
+  "limitations": [
+    "No SDK owner, execution RPC, app/Termux launch, install, process kill, restart, network change or credential access.",
+    "No production ledger is present at the expected path; no database rows or user command/file contents were read.",
+    "Process command lines and environment were not read; exact listener/worker ownership remains unconfirmed."
+  ],
+  "termuxPrerequisites": {
+    "python": {
+      "exists": false,
+      "observation": "absent"
+    },
+    "bash": {
+      "exists": true,
+      "observation": "present"
+    },
+    "openssl": {
+      "exists": false,
+      "observation": "absent"
+    }
+  },
+  "recommendation": {
+    "app": "An in-place E7CF APK install can be prepared; retain app data and let Android enforce signer compatibility. Do not uninstall or clear on rejection. Installed current APK pin is recorded, not claimed identical to final.",
+    "termux": "Existing validated Termux APK must be retained. Managed execution helpers, install manifest, ledger and both production pairing paths are absent, so this is additive first-time managed setup, not an upgrade of existing production authority. Do not assume emulator pairing/identity applies.",
+    "pending": "Before actual setup/launch, root should retain current facts and use the public installation/pairing path; no such action was performed in this read-only pass."
+  }
+}

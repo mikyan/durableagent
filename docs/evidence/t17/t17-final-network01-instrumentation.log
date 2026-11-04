@@ -1,0 +1,29 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: T13_EXECUTION_WAIT_METERED={"run":"c7a5330b-1baf-4b9b-833c-3e7ee6de42b5","executionId":"811d5dea-5787-469b-8265-c1e9932214e8","busyStartedElapsed":11117502}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: T13_EXECUTION_WAIT_UNMETERED={"run":"c7a5330b-1baf-4b9b-833c-3e7ee6de42b5","observedToConfirmedMs":934,"stopped":{"cancelReason":"network_policy","cancelRequested":true,"captureIncomplete":false,"context":{"bindingId":"f9aa7e92-f6ef-4599-8342-ed5c629ac14a","callId":"location-1","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"policy-chat","sdkConversationId":5,"taskId":20},"createdAt":1793808940202,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"811d5dea-5787-469b-8265-c1e9932214e8","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","exitCode":-15,"finalDigest":"c6eca83c082cda830034e3a0d1b4556afae4f6472132367889c26c9f8acbcb95","finishedAt":1793808943380,"guardianPid":20616,"ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","localCapabilities":{"helperSha256":"13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1","runnerSha256":"a65ecba8be5119b414ecfdc4b1d514b02515e95b89daac8a197f37983eb15111","version":1},"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":60,"outputCursor":2,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/811d5dea-5787-469b-8265-c1e9932214e8.raw","protocol":1,"rawSha256":"2912cf0bf47b5379742c57f5bb41be9d655b835b8ce007607f1de187e9823bd7","requestDigest":"68564694372b37d16b509e90b294a80c16b50b19b51f67541e97b8522d25257a","scopeConfirmed":true,"sequence":7,"startRequestedAt":1793808940716,"startedAt":1793808940909,"state":"stopped"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: dataSaverExecutionEvidence={"case":"actual-network-download-busy","run":"c7a5330b-1baf-4b9b-833c-3e7ee6de42b5","initial":{"enabled":false,"version":0,"period":1,"network":{"identity":"4:484442034189","known":true,"metered":false,"blocked":false},"restricted":false,"reason":"disabled"},"stopped":{"cancelReason":"network_policy","cancelRequested":true,"captureIncomplete":false,"context":{"bindingId":"f9aa7e92-f6ef-4599-8342-ed5c629ac14a","callId":"location-1","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"policy-chat","sdkConversationId":5,"taskId":20},"createdAt":1793808940202,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"811d5dea-5787-469b-8265-c1e9932214e8","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","exitCode":-15,"finalDigest":"c6eca83c082cda830034e3a0d1b4556afae4f6472132367889c26c9f8acbcb95","finishedAt":1793808943380,"guardianPid":20616,"ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","localCapabilities":{"helperSha256":"13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1","runnerSha256":"a65ecba8be5119b414ecfdc4b1d514b02515e95b89daac8a197f37983eb15111","version":1},"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":60,"outputCursor":2,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/811d5dea-5787-469b-8265-c1e9932214e8.raw","protocol":1,"rawSha256":"2912cf0bf47b5379742c57f5bb41be9d655b835b8ce007607f1de187e9823bd7","requestDigest":"68564694372b37d16b509e90b294a80c16b50b19b51f67541e97b8522d25257a","scopeConfirmed":true,"sequence":7,"startRequestedAt":1793808940716,"startedAt":1793808940909,"state":"stopped"},"busy":{"pid":20549,"started":11117502,"ended":0,"observedAt":11117548},"meteredObservedElapsed":11118105,"confirmedElapsed":11119039,"observedToConfirmedMs":934,"modelRequests":1,"executionCount":1,"networkReturnDidNotReplay":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualMeteredTransitionStopsTheDownloadingChildWhileJavascriptIsBusyWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 24.728
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

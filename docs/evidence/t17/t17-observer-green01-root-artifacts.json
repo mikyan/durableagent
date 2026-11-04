@@ -1,0 +1,32 @@
+{
+  "capturedAt": "2026-11-04T16:21:23.910027+00:00",
+  "provenance": "Root reconstructed after run from frozen test APK and source copies; not a contemporaneous pre-run manifest",
+  "targetMainSha256": "e7cf5a6ddff4bc435f513fc727e2ac1f12b93801aefb6570fb8e4457b650bfc0",
+  "baseIntegration": "dfe6a3a008e7ce9081a362c8d834e7e5ac87dfa0",
+  "productionChanges": null,
+  "files": {
+    "test.apk": {
+      "bytes": 4327164,
+      "sha256": "c2516f1057f7d40580a139813d3cfc8386ce8934c39dc164f9434bbe4c24b03f"
+    },
+    "RecoveryFailureObservation.kt": {
+      "bytes": 5876,
+      "sha256": "d4b197dd25205e7ea5c18a1a9452f4d17e3325f0e3e0775510d5f995f02ccd0f"
+    },
+    "RecoveryFailureObservationTest.kt": {
+      "bytes": 5030,
+      "sha256": "5427e1f6a54a913034085726d9004a151e3da8c170242f6c40885b6ebb53642d"
+    },
+    "RecoveryRealApplicationTest.kt": {
+      "bytes": 17441,
+      "sha256": "2f769dd07c2e998b409c3707ffd732cbe22907d5e294182ef75dd24b22c2eeeb"
+    }
+  },
+  "sourceCommit": "54ed92dc29988234010e7bf710609ce6a6ac6e11",
+  "usedFor": [
+    "observer-regression-green01",
+    "real-mimo03",
+    "final-stop01",
+    "cutover-t17-final01"
+  ]
+}

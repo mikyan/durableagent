@@ -1,0 +1,38 @@
+{
+  "capturedAt": "2026-11-04T16:31:21.476382+00:00",
+  "device": "Android16 API36 4KB x86_64 emulator",
+  "mainApkSha256": "e7cf5a6ddff4bc435f513fc727e2ac1f12b93801aefb6570fb8e4457b650bfc0",
+  "product": "real-recovery-4e7e1556-f574-499f-9c26-bb71cb9f2df6",
+  "executionId": "58877da0-1f84-465b-a529-2ec0b1be24ca",
+  "status": "PASS",
+  "trigger": "Actual am force-stop com.termux after read-only no-active-worker preflight; 2 known never-started records retained",
+  "uiAction": "Actual Android tap on original execution status query",
+  "visibleMessage": "Termux 已被系统强行停止。请手动打开 Termux 一次，再返回本应用；无需重新初始化。",
+  "boundedNoBypassSeconds": 57.3,
+  "recovery": "Explicit operator launch of Termux once, return to product and ordinary status query; no Connect/setup/new command/send",
+  "finalRows": [
+    {
+      "id": "58877da0-1f84-465b-a529-2ec0b1be24ca",
+      "state": "completed",
+      "text": "已结束\n退出码 0\n58877da0-1f84-465b-a529-2ec0b1be24ca\n核验状态"
+    }
+  ],
+  "beforeAndAfterCounts": {
+    "completed": 114,
+    "stopped": 29,
+    "not_started": 1,
+    "accepted_not_started": 2
+  },
+  "pairingSha256BeforeAndAfter": "aca431a45c1177e9177ba9829c6962362d9ea29db2f8f01f0c6a41c021c984d4",
+  "sameRetainedPreparedRecords": true,
+  "navigationHarnessFailuresRetained": [
+    "ui03 wrong selector",
+    "ui04 swipe outside scroll panel",
+    "ui05 and ui07 attempted serializing DOM node in wait expression; fixed to boolean selector"
+  ],
+  "notClaimed": [
+    "active Termux worker death",
+    "S23 or other OEM",
+    "MiMo01 intermittent failure repair"
+  ]
+}
