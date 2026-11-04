@@ -54,12 +54,13 @@ export class InputPlatform {
   async handle(request:ApplicationRequest):Promise<ApplicationResponse> {
     this.requests.push(request);
     try{
-      const value=request.method==='input.readSend'?await this.readSend(String(request.payload?.intentId)):request.method==='input.listSends'?await this.listSends(request.payload):request.method==='input.readControl'?await this.readControl(String(request.payload?.id)):this.apply(request);
+      const value=request.method==='input.readSend'?await this.readSend(String(request.payload?.intentId)):request.method==='input.listSends'?await this.listSends(request.payload):request.method==='input.readControl'?await this.readControl(String(request.payload?.id)):request.method==='input.stopStatus'?await this.readControl(String(request.payload?.id)).then(control=>({control,externalPending:0,externalUnknown:0,phase:control.pendingAbort?'waiting':control.stoppedThrough>0?'stopped':'not-requested'})):this.apply(request);
       return {type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value};
     }
     catch(error){return {type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:false,error:{code:(error as {code?:string}).code??'INPUT_FAILED',message:(error as Error).message}};}
   }
   apply(request:ApplicationRequest):unknown {
+    if(request.method==='input.stopNotification'){this.read(String(request.payload?.id));return {enabled:true,requested:false};}
     const p=request.payload??{},id=String(p.id);
     if(request.method==='input.list')return {conversations:[...this.conversations.values()]};
     const previous=this.read(id);

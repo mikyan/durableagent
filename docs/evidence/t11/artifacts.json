@@ -1,0 +1,11 @@
+{
+  "implementationHead": "bedbe53852fb83b356944f4569d4683e26631c05",
+  "integrationAncestor": "22fe83e8b4984ba8aece9ff10347e630b3953fa2",
+  "sourceFreeze": "Full02 behavior plus narrow onCreate lint annotation and comment",
+  "appSha256": "3ddbae2cf26a8034c95351211fbd80843fb3eb87cb2430667fb95fb40c96c6ae",
+  "testSha256": "b676f370082a93a177c54d9d74db095187f1b7f388a46e87f256f92608031800",
+  "sourceHashCount": 156,
+  "sourceManifestSha256": "9fe26dc4fa625ea5f71dacc09b7e9d4597cfd6f73b5de3a08ab71a0591f3ede1",
+  "deviceBehaviorCandidate": "full02 F452D0272A39CBD9834627DFEF64992B087902A94A606B85F67E0814140F4EE9",
+  "testByteIdenticalToFull02": true
+}

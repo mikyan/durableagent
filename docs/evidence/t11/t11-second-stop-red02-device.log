@@ -1,0 +1,59 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeStopServiceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeStopServiceTest:
+INSTRUMENTATION_STATUS: test=aSecondStopIsExaminedWhileTheFirstSdkBarrierStillWaits
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeStopServiceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Second stop reached native verification while the first job was active
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.NativeStopServiceTest.until(NativeStopServiceTest.kt:19)
+	at dev.durableagent.probe.NativeStopServiceTest.aSecondStopIsExaminedWhileTheFirstSdkBarrierStillWaits(NativeStopServiceTest.kt:32)
+
+INSTRUMENTATION_STATUS: stream=
+Error in aSecondStopIsExaminedWhileTheFirstSdkBarrierStillWaits(dev.durableagent.probe.NativeStopServiceTest):
+java.lang.AssertionError: Second stop reached native verification while the first job was active
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.NativeStopServiceTest.until(NativeStopServiceTest.kt:19)
+	at dev.durableagent.probe.NativeStopServiceTest.aSecondStopIsExaminedWhileTheFirstSdkBarrierStillWaits(NativeStopServiceTest.kt:32)
+
+INSTRUMENTATION_STATUS: test=aSecondStopIsExaminedWhileTheFirstSdkBarrierStillWaits
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeStopStoreTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeStopStoreTest:
+INSTRUMENTATION_STATUS: test=publishedV6UpgradeRetainsTextOnlyHoldsAndStopWhileAddingUnverifiedEffectCatalogue
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeStopStoreTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=publishedV6UpgradeRetainsTextOnlyHoldsAndStopWhileAddingUnverifiedEffectCatalogue
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 5.603
+There was 1 failure:
+1) aSecondStopIsExaminedWhileTheFirstSdkBarrierStillWaits(dev.durableagent.probe.NativeStopServiceTest)
+java.lang.AssertionError: Second stop reached native verification while the first job was active
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.NativeStopServiceTest.until(NativeStopServiceTest.kt:19)
+	at dev.durableagent.probe.NativeStopServiceTest.aSecondStopIsExaminedWhileTheFirstSdkBarrierStillWaits(NativeStopServiceTest.kt:32)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

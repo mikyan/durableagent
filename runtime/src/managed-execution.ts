@@ -71,6 +71,7 @@ export class ManagedExecution implements EffectAuthority {
   await api.commit(async tx=>{const intent=await tx.doc(Intent,key,null),index=await tx.doc(Index);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_INTENT_MISMATCH','持久执行意图不一致');if(intent.receipt&&Number(receipt.sequence??0)<Number(intent.receipt.sequence??0))return;intent.receipt=copy(receipt);if(cursor!==undefined)intent.cursor=cursor;index.items[request.executionId].state=receipt.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});
  }
  private async cancelRecorded(key:string,request:Request){
+  await this.options.channel.rememberIntent?.(request);
   const receipt=this.receipt(await this.options.channel.request('cancel',{executionId:request.executionId,reason:'user'}),request);
   // A native/SDK stop can retire the invocation. Execution facts outlive that task.
   await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,key,null),index=await tx.doc(Index);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_INTENT_MISMATCH','停止身份不一致');if(intent.receipt&&Number(receipt.sequence??0)<Number(intent.receipt.sequence??0))return;intent.receipt=copy(receipt);index.items[request.executionId].state=receipt.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});
@@ -81,13 +82,13 @@ export class ManagedExecution implements EffectAuthority {
    if(terminal.has(entry.state))continue;
    const saved=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);
    if(!saved?.request)return failure('EXECUTION_STORAGE_INCONSISTENT','执行索引缺少持久意图，运行保持关闭');
-   const request=copy(saved.request);let receipt:Receipt;
+   const request=copy(saved.request);await this.options.channel.rememberIntent?.(request);let receipt:Receipt;
    try{receipt=this.receipt(await this.options.channel.request('query',{executionId}),request);if(receipt.reason==='NO_RECEIPT')throw Error('Acceptance not yet confirmed');}
    catch{receipt={...saved.receipt,protocol:1,executionId,namespace:request.context.namespace,context:request.context,state:'unknown',reason:'CLIENT_CONFIRMATION_LOST',source:'application'};}
    await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,entry.key,null),index=await tx.doc(Index);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_STORAGE_INCONSISTENT','执行意图在核验时改变');if(terminal.has(intent.receipt?.state??''))return;if(receipt.source!=='application'&&intent.receipt&&Number(receipt.sequence??0)<Number(intent.receipt.sequence??0))return;intent.receipt=copy(receipt);index.items[executionId].state=receipt.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});
   }
  }
- recover(){return this.serial(()=>this.reconcile());}
+ recover(){return this.serial(async()=>{await this.reconcile();await this.options.channel.recoveryComplete?.();});}
  async run(binding:AdoptedBinding,api:ToolExecutionApi|undefined,command:string|readonly string[],options:ShellExecOptions|undefined,context:Context,ordinal=1):Promise<Result<ShellExecResult,ExecutionError>>{
   if(!api)return {ok:false,error:new ExecutionError('unknown','命令缺少持久工具调用身份')};
   if(Array.isArray(command)&&(!command.length||!command[0]))return {ok:false,error:new ExecutionError('spawn_error','命令参数列表为空，未下发执行')};

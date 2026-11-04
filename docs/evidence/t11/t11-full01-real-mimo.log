@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.StopExecutionTest:
+INSTRUMENTATION_STATUS: test=realMimoToolStopHasNoOldFollowupAndExplicitNewInputUsesNewGeneration
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: stopExecutionEvidence={"case":"real-mimo-stop-new-generation","oldRequests":1,"totalRequests":3,"stopped":{"cancelReason":"user","cancelRequested":true,"captureIncomplete":false,"context":{"bindingId":"8452cc62-92a2-4284-8835-f044ff5f9d96","callId":"call_bb913d4c161440b4bcbb5ed7","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"real-stop","sdkConversationId":5,"taskId":20},"createdAt":1793771132912,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"c65c2562-e866-455a-a3f1-568330433293","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","exitCode":-15,"finalDigest":"494ff64364714b381d85c7261fb608fbf1902b107a66a4c752113ef7e8535c9c","finishedAt":1793771134393,"guardianPid":24247,"ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":12,"outputCursor":1,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/c65c2562-e866-455a-a3f1-568330433293.raw","protocol":1,"rawSha256":"6ac7a8896b5955141b69534ba8259a2c7e2fd58c40a6811cf83699443f406d8f","requestDigest":"54797aae87ea9303b92b93bbfdca7843e1bff1469df7acd24c2a1357f88aa141","scopeConfirmed":true,"sequence":6,"startRequestedAt":1793771133252,"startedAt":1793771133461,"state":"stopped"},"newReceipt":{"protocol":1,"intentId":"af60345b-ddf5-45f1-baf6-e87efc9e5500","id":"real-stop","inputToken":"f40e8f03-cbac-4915-a21b-7cd4c56c22e3","inputRevision":3,"inputDigest":"21386ef991919f0ad125c21ce915ae2137513df2121853ac57c6363a37820f2d","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"e37677d03f88c4e5f526c2f03ed002052ddc69c1b462016e9b543a2649c2b4a2"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":2,"bindingId":"8452cc62-92a2-4284-8835-f044ff5f9d96","submissionId":26},"verifier":{"captureIncomplete":false,"context":{"bindingId":"8452cc62-92a2-4284-8835-f044ff5f9d96","callId":"call_2bce4f41c6ad47e28601eae0","controlGeneration":2,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"real-stop","sdkConversationId":5,"taskId":29},"createdAt":1793771139115,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"6c761943-06ae-4628-af8b-d62ad1029b2b","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","exitCode":0,"finalDigest":"64ded51b4b05a25b36ee4150940be8029e2c4ae8dc550ffa135b06d49d483028","finishedAt":1793771139516,"guardianPid":24300,"ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":18,"outputCursor":1,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/6c761943-06ae-4628-af8b-d62ad1029b2b.raw","protocol":1,"rawSha256":"52e6cc6a0ee5e18b04697913a020756e784d8721e037007b6e94bcf8f8fc088a","requestDigest":"1725a001f35f20f96a5b304dd25859fd35fa64c69ba8b447bac876f8b67a7f04","scopeConfirmed":true,"sequence":5,"startRequestedAt":1793771139335,"startedAt":1793771139490,"state":"completed"},"oldFollowupRequests":0}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoToolStopHasNoOldFollowupAndExplicitNewInputUsesNewGeneration
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 22.685
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1
