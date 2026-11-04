@@ -15,6 +15,24 @@ import {createRegistry,defineTool} from '@earendil-works/pi-durable';
 import {obj} from '@earendil-works/pi-schema';
 import {PersistentExecutionPeer,executionConfiguration} from '../validation/execution-peer.mjs';
 
+test('recovery holds an unconfirmed original effect inside the same SDK invocation until matching proof returns',async()=>{
+ class UnconfirmedPeer extends ExecutionPeer {
+  confirmed=false;
+  async request(method,payload){const value=await super.request(method,payload);if(['start','query'].includes(method)&&value.state==='completed'&&!this.confirmed)return {...value,state:'unknown',scopeConfirmed:false,reason:'OBSERVATION_LOST'};return value;}
+ }
+ const dir=await mkdtemp(join(tmpdir(),'recovery-unknown-effect-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new UnconfirmedPeer(),listeners=new Set();let requests=0,used=0;
+ const recovery={conditions:async()=>({network:'available',userUnlocked:true}),subscribe:listener=>{listeners.add(listener);return()=>listeners.delete(listener);},publishWake:async()=>{},probe:async()=>({allowed:++used<=5,used:Math.min(used,5),at:Date.now()+100})};
+ const execution=new ManagedExecution({channel:peer,authority:native}),app=new Application({...executionConfiguration(()=>requests++),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution,recovery});
+ try{
+  await app.start();await call(app,'create',{creationId:'chat'});await native.create('chat','one original effect','original');await call(app,'send',{intentId:'original'});
+  await until(async()=>requests>1||(await call(app,'open',{id:'chat'})).recovery?.reason==='external-unconfirmed');
+  assert.equal(requests,1,'Unverified tool result must not be returned to the model');assert.equal(peer.starts,1);assert.equal(peer.records.size,1);
+  peer.confirmed=true;for(const listener of listeners)listener();
+  await until(async()=>(await call(app,'sendStatus',{intentId:'original'})).submission?.status==='done');
+  assert.equal(requests,2);assert.equal(peer.starts,1);assert.equal(peer.records.size,1);assert.equal((await call(app,'history',{id:'chat'})).items.filter(entry=>entry.role==='user').length,1);
+ }finally{peer.confirmed=true;for(const listener of listeners)listener();await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
 test('a policy-waiting prepared shell leaves the writer domain available to a controlled local file operation',async()=>{
  class LocalPeer extends ExecutionPeer {
   plans=new Map();data=Buffer.from('before');

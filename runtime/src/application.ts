@@ -26,14 +26,16 @@ import {DATA_SAVER_EXTENSION,type DataSaverAuthority} from './data-saver-protoco
 import {storageFailure} from './storage-failure.js';
 import {verifyApplicationStorage} from './storage-format.js';
 import {RetainedHistory} from './retained-history.js';
+import {Recovery,recoveryPreflight,type RecoveryHost} from './recovery.js';
 
 import {Configuration,Products,validateConfiguration,type ProductRecord} from './application-records.js';
 const ModelConfiguration=defineDoc({kind:'app.model-configuration',version:1,scope:'session',initial:():StoredModels=>({version:0,defaultModel:null,connections:[]}),checkpointWhen:()=>false});
 class DuplicateCreation extends Error {constructor(readonly productId:string){super('Creation already committed');}}
 class ActionError extends Error {constructor(readonly code:string,message:string){super(message);}}
 const settings:HarnessSettings={progress:{partialIntervalMs:1,outputIntervalMs:1,persistWithinMs:1000},retry:{enabled:false,maxRetries:0,baseDelayMs:1}};
+const recoverySettings:HarnessSettings={...settings,retry:{enabled:true,maxRetries:3,baseDelayMs:1000},restartLimit:5,stream:{maxRetries:0}};
 export type ApplicationInputs=FrozenInputAccess&{rememberConversation(conversation:InputConversation,capability?:InputCapability):void};
-export type ApplicationOptions={dataSaver?:DataSaverAuthority;storageFormats?:Readonly<Record<string,import('./storage-format.js').ApplicationRecordFormat>>;execution?:ManagedExecution;routes?:RouteAuthority;extensions?:readonly ExtensionDescriptor[];agentFactories?:AgentFactories;path:string;models:Models;connections?:ModelConnections;inputs?:ApplicationInputs;sends?:SendAuthority;submissionBoundary?:(stage:SubmissionBoundary,intent:import('./submission-protocol.js').NativeSendIntent)=>void|Promise<void>;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;projectBoundary?:(stage:ProjectBoundary)=>void|Promise<void>;registry?:ReturnType<typeof createRegistry>;effects?:EffectAuthority;locationEdits?:LocationEditAuthority;locations?:LocationAdapter;storageFactory?:()=>Promise<Storage>};
+export type ApplicationOptions={recovery?:RecoveryHost;dataSaver?:DataSaverAuthority;storageFormats?:Readonly<Record<string,import('./storage-format.js').ApplicationRecordFormat>>;execution?:ManagedExecution;routes?:RouteAuthority;extensions?:readonly ExtensionDescriptor[];agentFactories?:AgentFactories;path:string;models:Models;connections?:ModelConnections;inputs?:ApplicationInputs;sends?:SendAuthority;submissionBoundary?:(stage:SubmissionBoundary,intent:import('./submission-protocol.js').NativeSendIntent)=>void|Promise<void>;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;projectBoundary?:(stage:ProjectBoundary)=>void|Promise<void>;registry?:ReturnType<typeof createRegistry>;effects?:EffectAuthority;locationEdits?:LocationEditAuthority;locations?:LocationAdapter;storageFactory?:()=>Promise<Storage>};
 export class Application {
   private harness?:Harness;
   private retained?:RetainedHistory;
@@ -56,6 +58,10 @@ export class Application {
   private projects?:Projects;
   private productsCache=new Map<string,ProductRecord>();
   private dispatch=new DispatchGate();
+  private recovery?:Recovery;
+  private waking?:Promise<void>;
+  private projecting?:Promise<void>;
+  private projectAgain=false;
   private workspace={id:'default',path:''};
   constructor(private readonly options:ApplicationOptions) {if(options.dataSaver){this.state.extensions.push(DATA_SAVER_EXTENSION.id);for(const action of DATA_SAVER_EXTENSION.actions)this.actions.add(action);}for(const action of ['extensions.get','routing.list','routing.query','routing.create','routing.send'])this.actions.add(action);if(options.execution){options.locations=options.execution.locations;options.effects=options.execution;this.state.extensions.push(EXECUTION_EXTENSION.id);for(const action of EXECUTION_EXTENSION.actions)this.actions.add(action);}this.state.extensions.push(PROJECTS_EXTENSION.id);for(const action of PROJECTS_EXTENSION.actions)this.actions.add(action);installConversationAgent(extension=>{this.state.extensions.push(extension.id);for(const action of extension.actions)this.actions.add(action);});if(options.connections){this.state.extensions.push(MODELS_EXTENSION.id);for(const action of MODELS_EXTENSION.actions)this.actions.add(action);}if(options.inputs)this.state.extensions.push(INPUT_EXTENSION.id);if(options.sends){this.state.extensions.push(SUBMISSION_EXTENSION.id);for(const action of SUBMISSION_EXTENSION.actions)this.actions.add(action);}}
   status(){return {...this.state};}
@@ -64,26 +70,31 @@ export class Application {
     if(this.starting)return this.starting;
     if(this.harness)return Promise.resolve();
     this.state={...this.state,phase:'opening',reason:undefined,failure:undefined,readOnly:undefined};
-    this.starting=this.open().catch(async error=>{this.state={...this.state,phase:'failed',reason:this.safeError(error),failure:storageFailure(error),readOnly:!!this.retained};await this.harness?.close(context);this.harness=undefined;throw error;}).finally(()=>{this.starting=undefined;});
+    this.starting=this.open().catch(async error=>{this.state={...this.state,phase:'failed',reason:this.safeError(error),failure:storageFailure(error),readOnly:!!this.retained};await this.harness?.close(context);this.harness=undefined;this.recovery?.close();throw error;}).finally(()=>{this.starting=undefined;});
     return this.starting;
   }
   private async open() {
+    if(this.options.recovery)await recoveryPreflight(this.options.recovery);
     await this.retained?.close();this.retained=undefined;
     this.dispatch=new DispatchGate();
     this.registry=createRegistry();for(const contribution of this.options.registry?.snapshot().installed()??[])this.registry.install(contribution);
+    this.recovery?.close();this.recovery=this.options.recovery?new Recovery(this.options.recovery,()=>{for(const subscription of this.subscriptions.values())subscription.refresh?.();this.queueHostProjection();}):undefined;
+    this.options.execution?.setRecovery(this.recovery);
+    this.recovery?.install(this.registry,this.options.execution?(id,context)=>this.options.execution!.awaitContinuation(id,context):undefined);
     this.options.execution?.install(this.registry);
     const getRouting=()=>{this.ready();if(!this.routing)throw new ActionError('ROUTING_UNAVAILABLE','转交能力尚未就绪');return this.routing;};
     this.installedExtensions=assembleAgentExtensions(this.options.extensions??BUNDLED_EXTENSIONS,{routing:()=>routingAgent(getRouting),models:()=>modelsAgent(async(method,payload)=>{const r=await this.request({protocol:1,connectionId:'agent-extensions',requestId:crypto.randomUUID(),method:method as any,payload});if(!r.ok)throw new ActionError(r.error.code,r.error.message);return r.value;},getRouting),...this.options.agentFactories},this.registry);
-    this.runtimeSettings(); // Fail before open: SDK catches some settings getter errors during reconciliation.
     if(!this.options.inputs||!this.options.sends)throw new ActionError('INPUT_UNAVAILABLE','原生输入与停止存储尚不可用，运行保持关闭');
+    if(this.options.recovery)await this.options.sends.pendingStops();
+    this.runtimeSettings(); // Fail before open: SDK catches some settings getter errors during reconciliation.
     const storage=this.options.storageFactory?await this.options.storageFactory():(await openOwnedStorage(this.options.path,this.options.secret)).storage;
     try {
       await verifyApplicationStorage(storage,this.options.storageFormats);
-      this.harness=await Harness.open(storage,{models:()=>this.dispatch.models(this.options.models),settings:()=>this.runtimeSettings(),registry:this.registry,conversationCreated:inheritBinding,...(this.options.locations?{env:target=>bindingEnvironment(target,this.options.locations)}:{})},context);
+      this.harness=await Harness.open(storage,{models:()=>this.dispatch.models(this.options.models),settings:()=>this.runtimeSettings(),registry:this.registry,conversationCreated:inheritBinding,...(this.recovery?{onWake:wake=>this.recovery!.schedule(wake),now:this.options.recovery!.now}:{}),...(this.options.locations?{env:target=>bindingEnvironment(target,this.options.locations)}:{})},context);
     }catch(error){if(storageFailure(error)?.code==='STORAGE_VERSION_UNSUPPORTED')this.retained=await RetainedHistory.open(storage);if(!this.retained)await storage.close(context);throw error;}
     this.options.execution?.attach(this.harness);
     void this.harness.closed.then(result=>{if(result.kind==='failed')this.state={...this.state,phase:'failed',reason:this.safeError(result.error),failure:storageFailure(result.error)};});
-    this.harness.observeCommits({advance:publication=>{this.storedSeq=publication.seq;},end:()=>{}});
+    this.harness.observeCommits({advance:publication=>{this.storedSeq=publication.seq;this.recovery?.changedConditions();this.queueHostProjection();},end:()=>{}});
     this.state={...this.state,phase:'configuring'};
     await this.options.loadConfiguration?.();
     this.defaultModel=await this.harness.commit(async tx=>{
@@ -100,19 +111,47 @@ export class Application {
     this.routing=new Routing({harness:this.harness,authority:this.options.sends!,routes:this.options.routes??(('createRoute' in this.options.sends!)?this.options.sends as unknown as RouteAuthority:undefined),submissions:this.submissions!,ids:async()=>Object.keys((await this.harness!.snapshot(Products,context))?.items??{}),summary:async id=>this.summary(await this.product(id)),create:(id,title)=>this.create(id,title),ready:()=>{this.ready();}});
     await this.options.execution?.recover();
     await this.submissions?.prepare();
-    if(this.submissions)this.dispatch.check=()=>this.submissions!.checkDispatch();
+    if(this.submissions)this.dispatch.check=async()=>{await this.submissions!.checkDispatch();await this.recovery?.model();};
     this.state={...this.state,phase:'ready'};
+    this.queueHostProjection();
     if(this.options.inputs)for(const product of Object.values((await this.harness.snapshot(Products,context))?.items??{}))await this.snapshot(product.id,product);
     await this.submissions?.recover();
+    await this.recovery?.flushWake();
     this.dispatch.release();
     this.harness.resume();
+  }
+  /** A host wake observes and continues existing SDK work; it never creates an input. */
+  wake():Promise<void>{return this.waking??=(async()=>{
+    if(this.state.phase!=='ready'||!this.harness||this.closing)return;
+    await this.submissions?.prepare();await this.options.execution?.recover();
+    await this.recovery?.flushWake();
+    this.queueHostProjection();
+    if(this.state.phase==='ready'&&!this.closing)this.harness?.resume();
+  })().finally(()=>{this.waking=undefined;});}
+  /** Read-only native publication, independent of UI subscriptions. Settled SDK input receipts
+   * provide the completion identity; an assistant/tool message alone never means work is done. */
+  private queueHostProjection(){
+    if(this.state.phase!=='ready'||this.closing||!this.options.recovery?.publishProjection)return;
+    this.projectAgain=true;if(this.projecting)return;
+    this.projecting=(async()=>{while(this.projectAgain&&this.state.phase==='ready'&&!this.closing){
+      this.projectAgain=false;
+      const conversations:import('./recovery.js').RecoveryProjection['conversations']=[],completions:import('./recovery.js').RecoveryProjection['completions']=[];
+      for(const product of this.productsCache.values()){
+        const view=await this.snapshot(product.id,product);conversations.push({id:product.id,phase:view.phase,...(view.recovery?{recovery:view.recovery}:{})});
+        if(view.phase!=='done')continue;
+        let cursor:string|undefined,latest:string|undefined;
+        do{const page=await this.submissions!.list({id:product.id,cursor,limit:100});for(const send of page.items)if(send.submission?.status==='done'&&send.submission.answerEntryId)latest=send.submission.answerEntryId;cursor=page.next;}while(cursor);
+        if(latest)completions.push({identity:`answer:${product.sdkId}:${latest}`,conversationId:product.id});
+      }
+      await this.options.recovery!.publishProjection!({conversations,completions});
+    }})().catch(()=>{/* Result remains durable; a later commit/host wake retries native publication. */}).finally(()=>{this.projecting=undefined;});
   }
   private ready() {
     if(this.state.phase!=='ready'||!this.harness)throw new ActionError(this.state.phase==='configuring'?'CONFIG_LOADING':this.state.phase==='failed'?'STORAGE_UNAVAILABLE':'HOST_NOT_READY',this.state.reason??(this.state.phase==='configuring'?'正在装载配置':'运行宿主尚未就绪'));
     return this.harness;
   }
   private runtimeSettings() {
-    const value=this.options.bootstrapSettings?.()??settings;
+    const value=this.options.bootstrapSettings?.()??(this.options.recovery?recoverySettings:settings);
     if(value.stream){
       const allowed=new Set(['transport','timeoutMs','maxRetries','maxRetryDelayMs','cacheRetention','deferred']);
       if(Object.keys(value.stream).some(key=>!allowed.has(key)))throw new ActionError('INVALID_STREAM_OPTIONS','模型请求选项只能包含允许的非秘密字段');
@@ -272,7 +311,9 @@ export class Application {
     const live=view.docs['pi.live'] as any,agent=view.docs['pi.agent'] as any;
     const ref=agent?.model??{},model=this.options.models.getModel(ref.provider,ref.modelId);
     const entries=view.entries.flatMap(entry=>this.message(entry));
-    const phase=live?.run?(live.generation?.retry||live.generation?.deferred?'waiting':'running'):live?.runFailure?(live.runFailure.reason==='aborted'?'stopped':'failed'):entries.some(entry=>entry.role==='assistant')?'done':'idle';
+    const retry=live?.generation?.retry,deferred=live?.generation?.deferred;
+    const recovery=live?.run?(this.recovery?.status(product.id)??(retry?{phase:'waiting' as const,reason:'model-retry' as const,message:retry.error,nextAt:retry.at,used:live.generation.attempt,limit:this.runtimeSettings().retry?.maxRetries??3}:deferred?{phase:'waiting' as const,reason:'deferred-poll' as const,message:'等待原模型响应的下一次查询；不会创建新请求',nextAt:deferred.pollAt}:undefined)):undefined;
+    const phase=live?.run?(recovery||live.generation?.retry||live.generation?.deferred?'waiting':'running'):live?.runFailure?(live.runFailure.reason==='aborted'?'stopped':'failed'):entries.some(entry=>entry.role==='assistant')?'done':'idle';
     const text=live?.run?this.content(live.generation?.message?.content):'';
     const selected={provider:ref.provider??'',modelId:ref.modelId??'',name:model?.name??ref.modelId??'未配置模型'};
     if(this.options.inputs){
@@ -281,7 +322,7 @@ export class Application {
       const key=JSON.stringify({conversation,capability});
       if(this.rememberedInputs.get(product.id)!==key){this.options.inputs.rememberConversation(conversation,capability);this.rememberedInputs.set(product.id,key);}
     }
-    return {id:product.id,revision:++this.revision,conversation:{id:product.id,title:product.title,model:selected,workspaceId:product.workspaceId,projectId:product.projectId??null,createdAt:product.createdAt,phase,submissionContext:this.submissionContext(product)},entries,progress:text?{text,persisted:false}:undefined,phase,storedSeq:this.storedSeq,reason:live?.runFailure?.detail??live?.generation?.retry?.error};
+    return {id:product.id,revision:++this.revision,conversation:{id:product.id,title:product.title,model:selected,workspaceId:product.workspaceId,projectId:product.projectId??null,createdAt:product.createdAt,phase,submissionContext:this.submissionContext(product)},entries,progress:text?{text,persisted:false}:undefined,phase,storedSeq:this.storedSeq,reason:recovery?.message??live?.runFailure?.detail??live?.generation?.retry?.error,...(recovery?{recovery}:{})};
   }
   private content(value:any):string {return typeof value==='string'?value:Array.isArray(value)?value.filter(x=>x.type==='text').map(x=>x.text).join(''):'';}
   private message(entry:EntryRecord):HistoryMessage[] {return (entry.model??[]).flatMap((message:any,index:number)=>{
@@ -301,10 +342,12 @@ export class Application {
   close():Promise<void> {
     return this.closing??=(async()=>{
       await this.starting?.catch(()=>{});this.state={...this.state,phase:'closed'};
+        await this.projecting;
       this.attachments.clear();
       const watches=[...this.subscriptions.values()];this.subscriptions.clear();for(const entry of watches)await entry.watch.stop();
       let auditError:unknown;try{if(this.options.secret)await auditStorageSecret(this.options.path,this.options.secret);}catch(error){auditError=error;}
       await this.harness?.close(context);this.harness=undefined;
+      this.recovery?.close();
       await this.options.execution?.closeReads();
       await this.retained?.close();this.retained=undefined;
       if(this.options.secret)await auditStorageSecret(this.options.path,this.options.secret);if(auditError)throw auditError;

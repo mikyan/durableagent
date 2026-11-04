@@ -15,6 +15,8 @@ import {DocumentWrites,type DocumentWriteArguments} from './document-writes.js';
 import {FileWrites,type FileExecutionEffect,type FileMutationMode,type FileMutationOptions} from './file-writes.js';
 import type {FileEffectAuthority} from './file-effect-protocol.js';
 import {WorkspaceCoordinator,type WriteClaim,type WriteScope} from './workspace-coordination.js';
+import {continuationEligibility} from './execution-continuation.js';
+import type {Recovery} from './recovery.js';
 
 export const EXECUTION_EXTENSION={id:'managed-execution',actions:['execution.list','execution.readOutput','files.list']} as const;
 type Command={kind:'shell';script:string}|{kind:'argv';argv:string[]};
@@ -36,6 +38,26 @@ const failure=(code:string,message:string):never=>{throw new ManagedExecutionErr
 
 /** Fixed core: app-owned invocation identity, final policy and external receipts; SDK owns scheduling. */
 export class ManagedExecution implements EffectAuthority {
+ private recovery?:Recovery;
+ setRecovery(recovery?:Recovery){this.recovery=recovery;}
+ async awaitContinuation(productId:string,context:Context){
+  if(!this.recovery)return;
+  const entries=Object.values((await this.owner().snapshot(Index,context))?.items??{}).filter(entry=>entry.productId===productId);
+  for(const entry of entries){const value=await this.owner().snapshot(Intent,entry.key,context);if(value?.request&&value.receipt&&continuationEligibility(value.receipt)!=='proceed')await this.holdReceipt(entry.key,copy(value.request),context);}
+ }
+ private async holdReceipt(key:string,request:Request,context:Context){
+  if(!this.recovery)return;
+  await this.recovery.external(request.executionId,request.context.productId,async()=>{
+   await this.policy(request,undefined,context);
+   const saved=await this.owner().snapshot(Intent,key,context);if(!saved?.receipt)return false;
+   const interrupted=(await this.options.dataSaver?.decision(request.executionId))?.policyInterrupted===true;
+   return continuationEligibility(saved.receipt,interrupted)==='proceed';
+  },async()=>{
+   await this.policy(request,undefined,context);
+   const receipt=this.receipt(await this.options.channel.request('query',{executionId:request.executionId}),request);
+   await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,key,null),index=await tx.doc(Index);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_INTENT_MISMATCH','核验执行身份已改变');if(receipt.source!=='application'&&Number(receipt.sequence??0)<Number(intent.receipt?.sequence??0))return;intent.receipt=copy(receipt);index.items[request.executionId].state=receipt.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});
+  },context.abortSignal);
+ }
  private harness?:Harness;
  private namespace='unverified:termux';
  private tail:Promise<unknown>=Promise.resolve();
@@ -233,6 +255,7 @@ export class ManagedExecution implements EffectAuthority {
    const decoders={stdout:new StreamDecoder(),stderr:new StreamDecoder()};let cursor=0,decodedBytes=0,newlines=0,endsWithNewline=true;
    const emit=(text:string,stream:'stdout'|'stderr')=>{if(!text)return;decodedBytes+=Buffer.byteLength(text);newlines+=text.split('\n').length-1;endsWithNewline=text.endsWith('\n');options?.onOutput?.(text,context,{stream});};
    while(true){
+    if(this.recovery&&continuationEligibility(receipt)!=='proceed'){await this.holdReceipt(key,request,context);receipt=copy((await this.owner().snapshot(Intent,key,context))!.receipt!);}
     const page=await this.options.channel.request('readOutput',{executionId:request.executionId,cursor});
     if(page.executionId!==request.executionId||page.namespace!==request.context.namespace||page.cursor!==cursor||!Array.isArray(page.chunks))return failure('OUTPUT_IDENTITY_MISMATCH','输出不属于当前执行或位置');
     for(const chunk of page.chunks){if(chunk.sequence!==cursor+1||!['stdout','stderr'].includes(chunk.stream)||typeof chunk.data!=='string')return failure('OUTPUT_GAP','执行输出位置不连续');const stream=chunk.stream as 'stdout'|'stderr';emit(decoders[stream].decode(Buffer.from(chunk.data,'base64')),stream);cursor=chunk.sequence;}
@@ -240,8 +263,8 @@ export class ManagedExecution implements EffectAuthority {
     receipt=this.receipt(await this.options.channel.request('query',{executionId:request.executionId}),request);
     await this.save(api,key,request,receipt,cursor);
     await this.options.boundary?.('output-checkpoint',copy(request));
-    if(receipt.cancelReason==='network_policy')await this.holdPolicyInterrupted(request,api,context);
-    if(receipt.state==='unknown')return {ok:false,error:new ExecutionError('unknown','执行结果不明，保留原执行身份；不能自动重跑')};
+    if(continuationEligibility(receipt)==='policy-interrupted')await this.holdPolicyInterrupted(request,api,context);
+    if(continuationEligibility(receipt)==='verify-external'){if(this.recovery)continue;return {ok:false,error:new ExecutionError('unknown','执行结果不明，保留原执行身份；不能自动重跑')};}
     if(terminal.has(receipt.state)&&cursor===receipt.outputCursor){
      for(const stream of ['stdout','stderr'] as const)emit(decoders[stream].decode(),stream);
      const spillPath=options?.spill&&!receipt.captureIncomplete&&(decodedBytes>options.spill.afterBytes||newlines+(endsWithNewline?0:1)>options.spill.afterLines)?receipt.outputRef as string:undefined;
@@ -256,6 +279,10 @@ export class ManagedExecution implements EffectAuthority {
    if(error instanceof ManagedExecutionError&&['EXECUTION_STOPPED','EXECUTION_LOCATION_CHANGED'].includes(error.code))onAbort?.();
    if(cancelWait)try{await cancelWait;}catch{}
    if(fixedRequest){const request=fixedRequest;try{await api.commit(async tx=>{const intent=await tx.doc(Intent,key,null),index=await tx.doc(Index);if(intent.request&&same(intent.request,request)&&!terminal.has(intent.receipt?.state??'')){intent.receipt={...intent.receipt,protocol:1,executionId:request.executionId,namespace:request.context.namespace,context:request.context,state:'unknown',reason:'CLIENT_CONFIRMATION_LOST',source:'application'};index.items[request.executionId].state='unknown';}},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});}catch{/* A killed invocation cannot commit. Its durable intent remains pending for startup reconciliation. */}}
+   if(this.recovery&&fixedRequest&&!context.abortSignal?.aborted&&!(error instanceof ManagedExecutionError&&['EXECUTION_STOPPED','EXECUTION_LOCATION_CHANGED'].includes(error.code))){
+    await this.holdReceipt(key,fixedRequest,context);
+    return await this.run(binding,api,command,options,context,ordinal,fileEffect);
+   }
    return {ok:false,error:new ExecutionError('unknown',error instanceof ManagedExecutionError?error.message:'执行连接未确认结果，保留原身份等待核验')};
   }finally{if(fixedRequest)this.dispatching.delete(fixedRequest.executionId);if(onAbort)context.abortSignal?.removeEventListener('abort',onAbort);}
  }

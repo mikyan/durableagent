@@ -29,6 +29,10 @@ class ApplicationService:Service() {
     private var dataSaver:NativeDataSaverAccess?=null
     private var dataSaverMonitor:NativeDataSaverMonitor?=null
     private var documents:NativeDocumentAccess?=null
+    private var recovery:NativeRecoveryAccess?=null
+    @Volatile private var clientsBound=false
+    private var idleSince=0L
+    private var stopAfterClose=false
     private val busyStarted=AtomicLong(0)
     private val busyEnded=AtomicLong(0)
     private val ownerProgress=AtomicLong(0)
@@ -66,6 +70,8 @@ class ApplicationService:Service() {
                 14->reply?.let {acknowledge(it,text)}
                 15->reply?.let {receiveInput(it,transfer,index,count,text)}
                 20->if(debug&&text=="close"){closing=true;if(node==null){phase="{\"phase\":\"closed\"}";release()}}
+                60->if(recovery?.foreground!=true&&peers.isEmpty()){closing=true;stopAfterClose=true}
+                61->node?.getExecutor("globalThis.__appRecoveryWake?.()")?.executeVoid()
                 30->reply?.let {writeCredential(text,it)}
                 31->if(debug)reply?.let {importValidationCredential(text,it)}
                 32->if(debug)node?.getExecutor("globalThis.__appRunModelPolicy?.()")?.executeVoid()
@@ -91,14 +97,19 @@ class ApplicationService:Service() {
             }
         };true
     })
-    override fun onCreate(){super.onCreate();thread.start();owner=Handler(thread.looper);if(debug)owner.post{ValidationCredential.prepare(this)}}
-    override fun onBind(intent:Intent)=messenger.binder
+    override fun onCreate(){super.onCreate();thread.start();owner=Handler(thread.looper);if(debug&&getSystemService(UserManager::class.java).isUserUnlocked)owner.post{ValidationCredential.prepare(this)}}
+    override fun onBind(intent:Intent):IBinder {clientsBound=true;start(intent);return messenger.binder}
+    override fun onUnbind(intent:Intent):Boolean {clientsBound=false;if(node==null)stopSelf();return false}
     override fun onStartCommand(intent:Intent?,flags:Int,startId:Int):Int {
+        start(intent)
+        return if(intent?.getStringExtra("validationMode").let{it==null||it=="product"})START_STICKY else START_NOT_STICKY
+    }
+    private fun start(intent:Intent?){
+        if(!getSystemService(UserManager::class.java).isUserUnlocked){phase="{\"phase\":\"failed\",\"reason\":\"等待设备首次解锁；尚未打开会话存储\"}";return}
         val mode=if(debug)intent?.getStringExtra("validationMode")?:"product" else "product"
         val run=if(debug)intent?.getStringExtra("validationRun") else null
         if(inputNamespace==null)inputNamespace=runCatching{NativeInputBridge.namespace(mode,run)}.getOrNull()
         owner.post {if(node==null&&!closing)open(mode,run)}
-        return START_NOT_STICKY
     }
     /** The Binder thread remains responsive while Node is busy. Only a persisted matching barrier can arm this watchdog. */
     private fun urgentStop(text:String,deadline:Long=SystemClock.elapsedRealtime()+20000){
@@ -140,7 +151,8 @@ class ApplicationService:Service() {
     }
     private fun open(mode:String,run:String?) {
         try {
-            check(mode in setOf("product","fixture","hang","real","models","models-fixture","execution","execution-real","extensions-fixture","extensions-real"))
+            val actualMode=mode.removePrefix("recovery-")
+            check(actualMode in setOf("product","fixture","hang","real","models","models-fixture","execution","execution-real","extensions-fixture","extensions-real"))
             check(mode=="product"||run?.matches(Regex("[a-zA-Z0-9-]{1,80}"))==true)
             check(!File(noBackupFilesDir,"unsupported-restore").exists()) { "检测到不受支持的系统恢复，原数据已保留；运行已关闭，请使用原安装的数据继续核验。" }
             val domain=File(filesDir,if(mode=="product")"application" else "application-validation/$run")
@@ -149,6 +161,10 @@ class ApplicationService:Service() {
             val root=RuntimeBundle.unpack(this)
             val runtime=V8Host.getNodeI18nInstance().createV8Runtime<NodeRuntime>();node=runtime
             runtime.globalObject.set("__applicationRoot",domain.absolutePath)
+            if(mode=="product"||mode.startsWith("recovery-")){
+                recovery=NativeRecoveryAccess(this,mode,run)
+                runtime.createV8ValueObject().use{access->access.bind(recovery!!);runtime.globalObject.set("__nativeRecovery",access)}
+            }
             if(debug&&mode!="product")runtime.createV8ValueObject().use{probe->probe.bind(submissionProbe);runtime.globalObject.set("__submissionValidation",probe)}
             credentials=NativeCredentialAccess(CredentialVault(this,if(mode=="product")"credentials-v1" else "cv-$run"))
             runtime.createV8ValueObject().use {access->access.bind(credentials!!);runtime.globalObject.set("__nativeCredentials",access)}
@@ -157,16 +173,16 @@ class ApplicationService:Service() {
             dataSaverMonitor=NativeDataSaverMonitor(this,NativeInputBridge.namespace(mode,run))
             dataSaver=NativeDataSaverAccess(this,NativeInputBridge.namespace(mode,run))
             runtime.createV8ValueObject().use {access->access.bind(dataSaver!!);runtime.globalObject.set("__nativeDataSaver",access)}
-            execution=ExecutionAccess(this,NativeInputBridge.namespace(mode,run),mode in setOf("product","execution","execution-real"))
+            execution=ExecutionAccess(this,NativeInputBridge.namespace(mode,run),actualMode in setOf("product","execution","execution-real"))
             runtime.createV8ValueObject().use {access->access.bind(execution!!);runtime.globalObject.set("__nativeExecution",access)}
             documents=NativeDocumentAccess(this,NativeDocumentBridge.namespace(mode,run),NativeInputBridge.namespace(mode,run))
             runtime.createV8ValueObject().use {access->access.bind(documents!!);runtime.globalObject.set("__nativeDocuments",access)}
-            if(mode=="real"||mode=="execution-real"||mode=="extensions-real"){
+            if(actualMode=="real"||actualMode=="execution-real"||actualMode=="extensions-real"){
                 val clear=ValidationCredential.consume(this)
                 try{runtime.globalObject.set("__validationKey",String(clear,Charsets.UTF_8).trim())}finally{clear.fill(0)}
             }
             val entry=File(root,"dist/application-bridge.js").toURI().toString()
-            val source="import(${JSONObject.quote(entry)}).then(m=>m.install(${JSONObject.quote(mode)})).catch(e=>{globalThis.__appFailure=String(e.message||e)})"
+            val source="import(${JSONObject.quote(entry)}).then(m=>m.install(${JSONObject.quote(actualMode)})).catch(e=>{globalThis.__appFailure=String(e.message||e)})"
             ownerRunsJavaScript=true
             runtime.getExecutor("const vm=require('node:vm');new vm.Script(${JSONObject.quote(source)},{importModuleDynamically:vm.constants.USE_MAIN_CONTEXT_DEFAULT_LOADER}).runInThisContext();").executeVoid()
             owner.post(pump)
@@ -217,6 +233,7 @@ class ApplicationService:Service() {
         val runtime=node?:return
         try {
             runtime.await(V8AwaitMode.RunNoWait)
+            if(recovery?.poll()==true)runtime.getExecutor("globalThis.__appRecoveryWake?.()").executeVoid()
             ownerProgress.incrementAndGet()
             val failure=runtime.getExecutor("globalThis.__appFailure||''").executeString()
             if(failure.isNotEmpty())error(failure)
@@ -232,7 +249,11 @@ class ApplicationService:Service() {
                 for(i in 0 until events.length()){val event=events.getJSONObject(i);peers[event.optString("connectionId")]?.let {send(it,10,event.toString())}}
                 phase=runtime.getExecutor("globalThis.__appStatus()").executeString()
                 ownerReady=JSONObject(phase).optString("phase")=="ready"
-                if(runtime.getExecutor("globalThis.__appClosed===true").executeBoolean()){release();return}
+                if(recovery!=null&&ownerReady&&!clientsBound&&recovery?.pendingWork==false&&runtime.getExecutor("globalThis.__appStarted===true").executeBoolean()){
+                    if(idleSince==0L)idleSince=SystemClock.elapsedRealtime()
+                    if(SystemClock.elapsedRealtime()-idleSince>=1000){closing=true;stopAfterClose=true}
+                }else idleSince=0L
+                if(runtime.getExecutor("globalThis.__appClosed===true").executeBoolean()){val stop=stopAfterClose;release();stopAfterClose=false;if(stop)stopSelf();return}
             }
             owner.postDelayed(this,5)
         }catch(error:Throwable){fail(error)}
@@ -281,8 +302,8 @@ class ApplicationService:Service() {
         try{peer.send(Message.obtain(null,16).apply{data=Bundle().apply{putString("transfer",id);putInt("index",index)}})}catch(_:RemoteException){incoming.remove(id);item.timeout?.let(owner::removeCallbacks);return}
         if(item.next==count){incoming.remove(id);item.timeout?.let(owner::removeCallbacks);accept(item.text.toString(),peer)}
     }
-    private fun status()=JSONObject(phase).put("instance",instance).put("pid",Process.myPid()).put("domainOwned",lease!=null).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).toString()
+    private fun status()=JSONObject(phase).put("instance",instance).put("pid",Process.myPid()).put("domainOwned",lease!=null).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).apply{recovery?.let{put("recovery",it.state())}}.toString()
     private fun fail(error:Throwable){phase=JSONObject().put("phase","failed").put("reason",error.message?:error.javaClass.simpleName).toString();release()}
-    private fun release(){acceptedStops.clear();ownerReady=false;ownerRunsJavaScript=false;inputNamespace=null;node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;documents?.close();documents=null;dataSaver?.close();dataSaver=null;dataSaverMonitor?.close();dataSaverMonitor=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
+    private fun release(){acceptedStops.clear();ownerReady=false;ownerRunsJavaScript=false;inputNamespace=null;node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;documents?.close();documents=null;dataSaver?.close();dataSaver=null;dataSaverMonitor?.close();dataSaverMonitor=null;recovery?.close();recovery=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
     override fun onDestroy(){emergency.shutdownNow();main.removeCallbacksAndMessages(null);owner.post {release();thread.quitSafely()};super.onDestroy()}
 }
