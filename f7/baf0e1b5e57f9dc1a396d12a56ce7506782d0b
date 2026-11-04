@@ -1,0 +1,21 @@
+managed-execution/evidence/android-development.json
+  s_467dcb949b5b60::t_0c5c2295fd85ee 685-753
+managed-execution/VALIDATION.md
+  s_467dcb949b5b60::t_2073fc4739bdd2 17,36,48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "f7baf0e1b5e57f9dc1a396d12a56ce7506782d0b",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
