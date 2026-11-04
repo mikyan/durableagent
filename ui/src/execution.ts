@@ -48,7 +48,13 @@ export class ExecutionCoordinator {
     }catch(error){if(generation===this.generation&&currentRead===this.reads)this.publish({error:this.message(error)});}
     finally{if(generation===this.generation&&currentRead===this.reads)this.publish({loading:false});}
   }
-  private newer(row:ExecutionRow){const previous=this.state.rows.find(item=>item.executionId===row.executionId);return previous&&previous.source!=='application'&&(row.source==='application'||(previous.sequence??0)>(row.sequence??0))?previous:row;}
+  private newer(row:ExecutionRow){
+    const previous=this.state.rows.find(item=>item.executionId===row.executionId);if(!previous)return row;
+    // A later loss of contact is new information even without a new server event.
+    // It cannot undo a confirmed terminal fact, but must qualify a past running receipt.
+    if(row.source==='application')return previous.source!=='application'&&['completed','stopped','not_started'].includes(previous.state)?previous:row;
+    return (previous.sequence??0)>(row.sequence??0)?previous:row;
+  }
   query(executionId:string){return this.operate('execution.query',executionId);}
   cancel(executionId:string){return this.operate('execution.cancel',executionId);}
   private async operate(method:'execution.query'|'execution.cancel',executionId:string){
