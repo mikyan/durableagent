@@ -1,7 +1,8 @@
 """Root-only external observation; never starts an Android application component.
 
 Reads only the dedicated native recovery DB after ApplicationService has exited, with two
-identical copies, absent journal/WAL, SQLite integrity check and read-only access.
+identical copies, absent/empty rollback journal, absent WAL/SHM, SQLite integrity
+check and read-only access.
 No credential, SDK database, instrumentation, service or broadcast is opened.
 """
 import argparse,hashlib,json,os,re,sqlite3,subprocess,time
@@ -30,9 +31,20 @@ def service_state():
  dump=text('shell','dumpsys','activity','services',package)
  registered=bool(re.search(r'ServiceRecord\{[^\n]*dev\.durableagent\.probe/(?:\.ApplicationService|dev\.durableagent\.probe\.ApplicationService)\b',dump))
  return registered,dump
-def journals_absent():
- command='test ! -e '+database+'-journal && test ! -e '+database+'-wal && test ! -e '+database+'-shm'
- return call('shell','run-as',package,'sh','-c',"'"+command+"'",check=False).returncode==0
+def journal_state():
+ result={}
+ for suffix,key in [('-journal','rollbackJournalBytes'),('-wal','walBytes'),('-shm','shmBytes')]:
+  path=database+suffix
+  command='if test -e '+path+'; then stat -c %s '+path+'; else echo absent; fi'
+  response=call('shell','run-as',package,'sh','-c',"'"+command+"'",check=False)
+  if response.returncode!=0:return None
+  value=response.stdout.decode().strip()
+  if value=='absent':result[key]=None
+  elif re.fullmatch(r'\d+',value):result[key]=int(value)
+  else:return None
+ return result
+def clean_journals(state):
+ return state is not None and state['rollbackJournalBytes'] in (None,0) and state['walBytes'] is None and state['shmBytes'] is None
 def primary_user_conditions(trust,users):
  assert re.search(r'^Current user:\s*0\s*$',users,re.M),'Current Android user must be primary user 0'
  user=re.search(r'^  UserInfo\{0:[^\n]*isPrimary=true\s*\n(?P<body>.*?)(?=^  UserInfo\{|\Z)',users,re.M|re.S)
@@ -53,13 +65,16 @@ def capture_state():
  registered,_=service_state()
  return {'at':now(),'agentPid':agent(),'applicationServiceRegistered':registered,'packageUserState':user_line,'stopped':'stopped=true' in user_line,**primary_user_conditions(trust,users)},trust,users
 def stable_snapshot(index):
- if service_state()[0] or not journals_absent():return None
+ before=journal_state()
+ if service_state()[0] or not clean_journals(before):return None
  first=call('exec-out','run-as',package,'cat',database,check=False)
  if first.returncode!=0:return None
- if not journals_absent() or service_state()[0]:return None
+ between=journal_state()
+ if not clean_journals(between) or service_state()[0]:return None
  time.sleep(.1)
  second=call('exec-out','run-as',package,'cat',database,check=False)
- if second.returncode!=0 or second.stdout!=first.stdout or not journals_absent() or service_state()[0]:return None
+ after=journal_state()
+ if second.returncode!=0 or second.stdout!=first.stdout or not clean_journals(after) or service_state()[0]:return None
  assert first.stdout.startswith(b'SQLite format 3\x00'),'Unexpected native recovery database format'
  path=destination/f'recovery-{index}.sqlite';path.write_bytes(first.stdout)
  connection=sqlite3.connect(path.resolve().as_uri()+'?mode=ro&immutable=1',uri=True)
@@ -73,7 +88,7 @@ def stable_snapshot(index):
   if completion:
    assert conversation and conversation.get('phase')=='done','Completion projection must agree with settled product state'
    assert any(identity==completion['identity'] for identity,_ in outbox),'Matching durable native outbox row is required'
-  return {'sha256':hashlib.sha256(first.stdout).hexdigest(),'bytes':len(first.stdout),'file':path.name,'journalAbsent':True,'identicalCopies':2,'integrity':'ok','readOnly':True,'applicationServiceAbsentBeforeAndAfterCopy':True,'completion':completion,'outbox':[{'identity':identity,'delivery':published} for identity,published in outbox],'conversation':conversation}
+  return {'sha256':hashlib.sha256(first.stdout).hexdigest(),'bytes':len(first.stdout),'file':path.name,'journalStates':[before,between,after],'rollbackJournalClean':True,'identicalCopies':2,'integrity':'ok','readOnly':True,'applicationServiceAbsentBeforeAndAfterCopy':True,'completion':completion,'outbox':[{'identity':identity,'delivery':published} for identity,published in outbox],'conversation':conversation}
  finally:connection.close()
 report={'product':product,'run':prepared['run'],'startedAt':now(),'observerStartedTarget':False,'instrumentationUsed':False,'sdkOpened':False,'credentialsResolved':False,'stoppedInterval':args.stopped_interval,'observations':[],'completed':False}
 end=time.monotonic()+args.wait;index=0
