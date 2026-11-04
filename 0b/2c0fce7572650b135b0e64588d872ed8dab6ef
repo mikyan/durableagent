@@ -1,0 +1,30 @@
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentBridge.kt
+  s_467dcb949b5b60::t_49a3576be8c9c6 6-9,14-15,21-22,31-38,51,54,57,63,65
+ui/src/extensions/documents.tsx
+  s_467dcb949b5b60::t_49a3576be8c9c6 7,20
+  s_467dcb949b5b60::t_1d958c0b95e5b3 1-6,8-19,21-44
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_1d958c0b95e5b3 14
+runtime/src/document-protocol.ts
+  s_467dcb949b5b60::t_1d958c0b95e5b3 1-4
+ui/src/documents.css
+  s_467dcb949b5b60::t_1d958c0b95e5b3 1
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_1d958c0b95e5b3 13,112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "0b2c0fce7572650b135b0e64588d872ed8dab6ef",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
