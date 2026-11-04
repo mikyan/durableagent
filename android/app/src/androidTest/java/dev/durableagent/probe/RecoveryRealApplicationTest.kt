@@ -51,8 +51,11 @@ class RecoveryRealApplicationTest {
     @Test(timeout=300000) fun realFileResumesOriginalExecutionAfterOwnerDeathUsingItsPersistedCredential(){
         assumeTrue(InstrumentationRegistry.getArguments().getString("realProvider")=="true")
         val arguments=InstrumentationRegistry.getArguments();val unbound=arguments.getString("productUnbound")=="true"
+        val diagnostic=arguments.getString("recoveryDiagnostic")=="true";val recoveryWait=arguments.getString("recoveryWaitMs")?.toLong()?.also{require(it in 30000..120000)}?:120000L
         val mode=if(unbound)"product" else "recovery-product";val run=id();val product="real-recovery-$run";val connection=if(unbound)arguments.getString("productConnection")?:error("Product connection precondition missing")else "recovery-live";val path="/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t12-$run.txt"
         val page=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode",mode).putExtra("validationRun",run));var wire=Wire(mode,run);var connected=true;var primary:Throwable?=null;var credentialGeneration=1L
+        var observedSdkId=0L;var observedExecutionId="";var observedIntentKey=""
+        fun observation(stage:String){if(diagnostic&&observedSdkId>0&&observedExecutionId.isNotEmpty())instrumentation.sendStatus(0,Bundle().apply{putString("recoveryDiagnostic",RecoveryFailureObservation.capture(context,mode,run,product,observedSdkId,observedExecutionId,observedIntentKey).put("stage",stage).put("beforeCleanup",true).put("servicePid",service()?.pid?:0).toString())})}
         NativeInputStore(context,NativeInputBridge.namespace(mode,run)).withLeaseWait(1000).use{store->ExecutionAccess(context).use{observer->try{
             wire.ready()
             if(unbound){
@@ -76,6 +79,8 @@ class RecoveryRealApplicationTest {
                 if(rows.length()!=1){assertFalse("The model returned without performing the required real tool operation",wire.call("open",JSONObject().put("id",product)).optString("phase") in setOf("done","failed"));false}else{execution=rows.getJSONObject(0);execution.optString("state")=="running"&&execution.optInt("outputCursor")>0}
             }
             val partial=file(observer,path);assertEquals("part-one\n",partial)
+            observedSdkId=expectation.getLong("sdkConversationId");observedExecutionId=execution.getString("executionId");val scope=execution.getJSONObject("context");observedIntentKey="${scope.getLong("taskId")}:${scope.getString("callId")}:1"
+            observation("before-owner-death")
             val before=wire.state()?:error("Missing pre-death state");val pid=before.getInt("pid");assertNotEquals(Process.myPid(),pid);assertTrue(before.getBoolean("domainOwned"));val beforeRequests=before.getJSONObject("metrics").getInt("modelRequests");assertTrue(beforeRequests>0)
             instrumentation.sendStatus(0,Bundle().apply{putString("realRecoveryCheckpoint",JSONObject().put("run",run).put("product",product).put("path",path).put("executionId",execution.getString("executionId")).put("beforePid",pid).put("beforeRequests",beforeRequests).put("partial",partial).toString())})
             // Only this app's reported :agent owner is killed. The executor/process scope remains untouched.
@@ -84,7 +89,9 @@ class RecoveryRealApplicationTest {
             Process.killProcess(pid)
             if(unbound){
                 until("Android restarts the unbound sticky product owner"){service()?.let{if(it.pid>0&&it.pid!=pid){recoveredPid=it.pid;true}else false}==true}
-                NativeRecoveryStore(context,NativeInputBridge.namespace(mode,run)).use{recovery->until("Unbound product owner durably finishes before any client reconnects"){
+                val recoveryStarted=SystemClock.elapsedRealtime();var nextObservation=10000L
+                NativeRecoveryStore(context,NativeInputBridge.namespace(mode,run)).use{recovery->until("Unbound product owner durably finishes before any client reconnects",recoveryWait){
+                    if(diagnostic&&SystemClock.elapsedRealtime()-recoveryStarted>=nextObservation){observation("unbound-${nextObservation}ms");nextObservation=if(nextObservation==10000L)30000L else Long.MAX_VALUE}
                     try{val values=recovery.readProjection().getJSONArray("completions");(0 until values.length()).any{values.getJSONObject(it).getString("conversationId")==product}}catch(error:IllegalStateException){if(error.message=="RECOVERY_STORAGE_BUSY")false else throw error}
                 }}
                 wire=Wire(mode,run);connected=true
@@ -102,7 +109,9 @@ class RecoveryRealApplicationTest {
             val answer=(0 until history.length()).map{history.getJSONObject(it)}.filter{it.optString("role")=="assistant"}.last().optString("text");assertTrue(answer.contains("part-one"));assertTrue(answer.contains("part-two"))
             val after=wire.state()?:error("Missing post-recovery state");if(!unbound){assertEquals(credentialGeneration,after.getJSONObject("metrics").getLong("lastCredentialGeneration"));assertTrue(beforeRequests+after.getJSONObject("metrics").getInt("modelRequests")<=6)}
             instrumentation.sendStatus(0,Bundle().apply{putString("realRecoveryEvidence",JSONObject().put("run",run).put("product",product).put("path",path).put("originalExecution",execution.getString("executionId")).put("finalExecution",completed.getJSONObject(0)).put("admission",settled.getJSONObject("receipt")).put("beforePid",pid).put("afterPid",after.getInt("pid")).put("unboundProduct",unbound).put("recoveredPid",recoveredPid?:JSONObject.NULL).put("credentialGeneration",credentialGeneration).put("beforeRequests",beforeRequests).put("observedAfterRequests",after.getJSONObject("metrics").optInt("modelRequests")).put("completeRequestCountObserved",!unbound).put("partial",partial).put("final",content).toString())})
-        }catch(error:Throwable){primary=error;instrumentation.sendStatus(0,Bundle().apply{putString("realRecoveryFailure",JSONObject().put("run",run).put("product",product).put("path",path).put("error",error.javaClass.simpleName).toString())});throw error}
+        }catch(error:Throwable){primary=error;observation("failure-before-stop")
+            if(diagnostic)try{if(!connected){wire=Wire(mode,run);connected=true};val retained=wire.state(5);instrumentation.sendStatus(0,Bundle().apply{putString("recoveryOwnerAfterFailure",JSONObject().put("product",product).put("observedAfterFailureAndRebind",true).put("state",retained?:JSONObject.NULL).toString())})}catch(observationError:Exception){error.addSuppressed(observationError)}
+            instrumentation.sendStatus(0,Bundle().apply{putString("realRecoveryFailure",JSONObject().put("run",run).put("product",product).put("path",path).put("error",error.javaClass.simpleName).toString())});throw error}
         finally{
             if(primary!=null)try{val control=store.readControl(product);NativeStopController.request(context,mode,run,JSONObject().put("id",product).put("actionId",id()).put("expectedControlVersion",control.getLong("version")));until("Failed fixture's own work stops",30000){!store.readControl(product).has("pendingAbort")}}catch(error:Throwable){primary!!.addSuppressed(error)}
             page.close();if(!connected){wire=Wire(mode,run);wire.ready()};try{wire.closeHost()}catch(error:Throwable){if(primary!=null)primary!!.addSuppressed(error)else throw error}finally{wire.close()}

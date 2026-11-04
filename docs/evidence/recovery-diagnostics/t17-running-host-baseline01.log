@@ -1,0 +1,33 @@
+(node:96436) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ owner death after partial running output resumes the original tool and collects its later completion (1051.8189ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1398.9176
+
+✖ failing tests:
+
+test at test\recovery-running-execution.test.mjs:16:1
+✖ owner death after partial running output resumes the original tool and collects its later completion (1051.8189ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'T12_PART_ONE\npart-one\npart-two\n'
+  - 'T12_PART_ONE\npart-one\npart-two'
+                                     ^
+  
+      at TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/recovery-running-execution.test.mjs:30:130)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'T12_PART_ONE\npart-one\npart-two\n',
+    expected: 'T12_PART_ONE\npart-one\npart-two',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
