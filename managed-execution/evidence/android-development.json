@@ -682,6 +682,75 @@
           }
         }
       ]
+    },
+    {
+      "log": "t09-production-04-same-env-raw.log",
+      "sha256": "26faa765b73fe7271e4169cbcc9dc5e614d9c494deea1c59a2dd0f9376fc149a",
+      "result": [
+        "Time: 19.577",
+        "OK (1 test)"
+      ],
+      "events": [
+        {
+          "kind": "executionRawEvidence",
+          "value": {
+            "run": "c0c123ee-05b1-46a0-8c23-edb9804cc434",
+            "receipt": {
+              "captureIncomplete": false,
+              "context": {
+                "bindingId": "5f4b8bdc-0987-4252-9049-6214e252ff97",
+                "callId": "location-1",
+                "controlGeneration": 1,
+                "locationVersion": 1,
+                "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+                "productId": "raw-output",
+                "sdkConversationId": 5,
+                "taskId": 20
+              },
+              "createdAt": 1793763114139,
+              "defaultWorkspace": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace",
+              "executionId": "fc1e55c7-503e-4809-b42a-68cc0355fb24",
+              "executorId": "a0578db8-1bd2-4158-8e78-b27216f25c6a",
+              "exitCode": 0,
+              "finalDigest": "37eb17eab0a615f8d47cffe980a44b7d56023b1701d2e31e352d0fbd5098636f",
+              "finishedAt": 1793763115711,
+              "guardianPid": 19541,
+              "ledgerEpoch": "c156417c-ec2d-4528-99d1-78d257676c18",
+              "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+              "outputBytes": 1200000,
+              "outputCursor": 74,
+              "outputRef": "/data/data/com.termux/files/home/.local/share/durableagent-execution/outputs/fc1e55c7-503e-4809-b42a-68cc0355fb24.raw",
+              "protocol": 1,
+              "rawSha256": "fbd76da693b862a85071fd09ed8c4d5a24c0370f433370f2522f6b21fd6c3606",
+              "requestDigest": "7c9924eef5b5bd4b708be6bd892eeb4e9361c99c724f18a4ab05510c7555ae3b",
+              "scopeConfirmed": true,
+              "sequence": 78,
+              "startRequestedAt": 1793763114332,
+              "startedAt": 1793763114452,
+              "state": "completed"
+            },
+            "sameEnvironmentExactBytesVerified": 1200000
+          }
+        }
+      ]
+    },
+    {
+      "log": "t09-python-green-13-termux.log",
+      "sha256": "3f9c1efaad89670808360617993cd82a5dbf27bba10f9d9b3e9ed99e2e7d03f5",
+      "result": [
+        "Ran 21 tests in 18.377s",
+        "OK"
+      ],
+      "events": []
+    },
+    {
+      "log": "t09-python-green-13-wire-termux.log",
+      "sha256": "721447ffd8e5cf6757d643edfc244a8ea1dba8b3c6031153e70a7e37db76868f",
+      "result": [
+        "Ran 4 tests in 3.025s",
+        "OK"
+      ],
+      "events": []
     }
   ]
 }

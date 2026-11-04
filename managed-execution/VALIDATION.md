@@ -14,7 +14,7 @@
 | --- | --- | --- |
 | production02 | `74C51AAAB52B9A963608706A967501FA7E8A4FBA403CEEF00F100BB1EFFA8BC0` | 真实 React／SDK／Termux 六场景 |
 | production03 | `327D00BE1CE244B79AC1690A47F4DCDC0182EE2BF1A093C1F783D7D753C9E444` | 独立原生控制、SDK conformance 与恢复扩展 |
-| production04 | `96BECAA1BE6BF78AF9E4974FEE0CF46385FF735C396FF765840BA99E156D9AE8` | 最终资源预算与同环境完整输出读取候选 |
+| production04 | `96BECAA1BE6BF78AF9E4974FEE0CF46385FF735C396FF765840BA99E156D9AE8` | 最终资源预算与同环境完整输出读取 |
 
 02 完整矩阵采用只修正测试路径比较的测试 APK `61F13CC8D7E39B760FA49030E9015CC05C253BC3648FEE34F5116918E9734E4F`。03 原测试 APK 为 `650327C86062CF656C8D5442FA0B1B2CAE7E900B126C090C7CFADAE656861B6D`。二者使用的执行端源码为 `42DC6866D388484E9726C42256E822D8D880B8B38F2273B39AE124EB9000AD73`，传输源码为 `C20F4EF5BD53BEA4CAF01BD00C9276790FA2DF1640A2896663EAC662FFD691E8`，完整初始化资产为 `423EFD8F8ED407E843D2AC1A80ADB6409E9A0C7E89FF03A8623F5AA2167564C1`。
 
@@ -33,6 +33,7 @@
 - **执行端恢复与取消：** GREEN11 完整 21/21、15.447 秒；cwd 固定后的 GREEN12 执行端 19/19、16.146 秒；增强 production wire 1/1、1.045 秒。包括真实进程、文件效果、取消与接纳竞争、guardian SIGKILL 后 unknown／拒绝重放、启动提交前后中断、有界大输出与 raw SHA、配额停止、实际丢弃首次已开始执行的 start 响应后同 ID 只有一次效果、cwd 被置换或原先缺失时拒绝启动。
 - **主机真实 SDK：** runtime 全套 157/157、17.744 秒；其中 ManagedExecution 17 项使用实际 SDK、独立原生／SDK SQLite 和外部传输测试接缝，四窗口使用真正 Node 子进程 SIGKILL 与真实文件效果。另有 UI 62 项与完整 TypeScript／Vite／Android 构建通过。主机测试不替代跨 UID 的实际 Termux 证明。
 - **最终资源预算：** GREEN13 实际执行端 21/21、18.377 秒；同源传输三项与增强生产 CLI wire 一项共 4/4、3.025 秒。原先只有 raw 字节额度，实际细碎输出与超大继承环境两项先 RED；现在每执行／全局块数与最终参数 JSON 同时有界。真实子进程逐字节输出并等待公开读取后的确认，验证小预算停止、重开后的全局额度、未出现延迟效果；原 1.2 MB 与 16 MiB 配额测试保留。
+- **04 实际升级及完整引用：** 根代理核对 APK 的 43 个 runtime、10 个 UI、129 个源码文件与初始化资产；再次从应用实际复制、Termux 粘贴运行，源哈希与 manifest 符合 04，同一配对直接连接成功。`actualCompleteRawOutputIsReadThroughTheSameEnvironment` 实际 1/1、19.577 秒：真实 SDK 命令产生 1,200,000 bytes，再通过同一 ExecutionEnv 的 raw 引用逐页读取、核 SHA，并与预期逐字节比较。
 
 ## 保留的失败与修正
 
@@ -44,6 +45,6 @@
 
 ## 待收尾
 
-04 同一 ExecutionEnv 完整 raw 读取仍等待实际 Android 验证。曾对 03 的旧测试 APK 指定新增 raw selector，返回 `OK (0 tests)`，明确不计通过。完成后还须独立审查与合入最新 integration。
+实际执行矩阵已完成，尚待独立审查与合入最新 integration。曾对 03 的旧测试 APK 指定新增 raw selector，返回 `OK (0 tests)`，明确不计通过；以上 04 才是该用例的实际证明。
 
 已知平台边界继续有效：Android/OEM 可冻结监督者与命令；墙钟等待结束、回调、连接关闭或 PID 消失都不能单独证明效果已停止。S23 最终 OEM 矩阵、用户锁屏／开机体验以及 pinned x86 Termux 的 16 KiB bootstrap 问题保留给 T17；不能用本轮 4 KiB 开发验证覆盖它们。
