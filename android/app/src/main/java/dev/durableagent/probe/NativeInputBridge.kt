@@ -64,7 +64,7 @@ class NativeInputBridge(private val activity:Activity,namespace:String,private v
         val request=selection?:return true;selection=null
         val captured=if(requestCode==PICK_CAMERA)capture.also{capture=null}else null
         val uri=captured?:data?.data
-        if(resultCode!=Activity.RESULT_OK||uri==null){captured?.let{CameraCaptureProvider.discard(activity,it)};reply(request,error("INPUT_PICKER_CANCELLED","已取消附件选择，原草稿保持不变。"));return true}
+        if(resultCode!=Activity.RESULT_OK||uri==null){captured?.let{activity.revokeUriPermission(it,Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION);CameraCaptureProvider.discard(activity,it)};reply(request,error("INPUT_PICKER_CANCELLED","已取消附件选择，原草稿保持不变。"));return true}
         val flags=if(captured!=null)Intent.FLAG_GRANT_READ_URI_PERMISSION else data?.flags?:0
         captured?.let{activity.revokeUriPermission(it,Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)}
         execute(request,false,action={

@@ -179,6 +179,7 @@ it('offers the available native camera next to image and file picking, preservin
   await waitFor(()=>expect(f.requests.find(row=>row.method==='input.select')?.payload?.kind).toBe('camera'));
   expect((screen.getByRole('textbox',{name:'消息'}) as HTMLTextAreaElement).value).toBe('拍照前的草稿');
   expect(f.native.drafts.get('one')?.text).toBe('拍照前的草稿');
+  await waitFor(()=>expect(screen.getByTestId('draft-status').dataset.state).toBe('saved'));
   expect(f.requests.some(row=>row.method==='send')).toBe(false);
  }finally{f.controller.dispose();}
 });

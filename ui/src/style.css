@@ -36,19 +36,38 @@
 .details-panel dd p{font-size:12px;line-height:1.7;color:var(--muted);margin-top:8px}
 .context-pill{flex-wrap:wrap;white-space:normal;row-gap:5px;max-width:100%;line-height:1.6}
 .context-pill span{min-width:0;overflow-wrap:anywhere}
-@media(min-width:900px) and (max-width:1099px){.navigation{position:absolute;z-index:10;left:0;top:0;bottom:0;box-shadow:20px 0 80px #0008}.nav-scrim{display:block}}
-@media(max-width:1099px){.auxiliary-panel{position:absolute;z-index:20;inset:12px 12px calc(12px + env(safe-area-inset-bottom));width:auto;max-width:none;border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 80px #0009}.auxiliary-scroll{padding-bottom:12px}}
+@media(min-width:900px) and (max-width:1099px){.navigation{width:220px;padding-inline:12px}.auxiliary-panel{width:260px;min-width:240px;max-width:32vw}}
+@media(max-width:899px){.auxiliary-panel{position:absolute;z-index:20;inset:12px 12px calc(12px + env(safe-area-inset-bottom));width:auto;max-width:none;border:1px solid var(--line);border-radius:22px;box-shadow:0 20px 80px #0009}.auxiliary-scroll{padding-bottom:12px}}
 @media(max-height:560px){.topbar{height:60px;min-height:60px;padding:7px 14px}.composer-area{padding-top:6px}.draft-status{padding-top:3px;padding-bottom:3px}.details-panel{max-height:calc(100dvh - 150px)}.navigation{padding-top:12px}.brand{padding-bottom:10px}}
 
-.question-anchor{position:absolute;top:88px;left:50%;transform:translateX(-50%);width:calc(100% - 40px);max-width:640px;z-index:3;display:flex;align-items:center;border:1px solid #ffffff18;border-radius:16px;background:#44444af2;box-shadow:0 6px 24px #0004;backdrop-filter:blur(14px)}
+.question-anchor{position:absolute;top:calc(88px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:calc(100% - 40px);max-width:640px;z-index:3;display:flex;align-items:center;border:1px solid #ffffff18;border-radius:16px;background:#44444af2;box-shadow:0 6px 24px #0004;backdrop-filter:blur(14px)}
 .question-jump{min-width:0;flex:1;text-align:left;padding:10px 14px;background:none}
 .question-jump small{display:block;font-size:10px;color:var(--accent);margin-bottom:4px}
 .question-jump span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
 .question-dismiss{width:44px;min-height:48px;background:none;color:var(--muted);font-size:23px}
-@media(max-height:560px){.question-anchor{top:62px}}
+@media(max-height:560px){.question-anchor{top:calc(62px + env(safe-area-inset-top))}}
 
 .failure-notice{text-align:left;border:1px solid #da8b8544;border-radius:16px;padding:14px;font-size:13px;line-height:1.7;color:var(--muted)}
 .failure-notice strong{color:var(--red);font-weight:500}
 .failure-notice p{margin:8px 0}
 .failure-notice details{margin-top:10px}
 .failure-notice pre{white-space:pre-wrap;overflow-wrap:anywhere;max-height:140px;overflow:auto;font-size:11px}
+
+.details-panel .panel-heading{position:sticky;top:-20px;z-index:2;background:var(--surface);padding:12px 0;margin-top:-12px}
+.details-panel dd{text-align:left;min-width:0}
+.send-states{max-height:min(190px,24dvh);overflow:auto;overscroll-behavior:contain}
+@media(max-height:560px){.send-states{max-height:18dvh}.context-pill{font-size:10px}.draft-attachments{max-height:16dvh;overflow:auto}}
+
+.auxiliary-panel{padding-top:calc(20px + env(safe-area-inset-top))}
+.file-changes button,.documents-panel button,.execution-panel button,.extension-page button{background:var(--floating);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-height:42px;font:inherit}
+.file-changes h3{font-size:14px}
+.file-changes pre{white-space:pre-wrap;overflow-wrap:anywhere;overflow:auto;font-size:12px;line-height:1.65;padding:12px;border-radius:10px;background:#202023}
+@media(max-width:899px){.auxiliary-panel{top:calc(12px + env(safe-area-inset-top));padding-top:16px}}
+
+.approval-mode{color:var(--green)}
+
+/* A large composer must never push the dialog's close control outside the window. */
+.main>.details-panel{z-index:8;top:calc(88px + env(safe-area-inset-top));bottom:auto;left:16px;right:16px;width:auto;max-height:min(420px,calc(100% - env(safe-area-inset-top) - 110px))}
+.draft-read-notice{font-size:11px;color:var(--muted);line-height:1.6;margin:0 0 8px;max-height:15dvh;overflow:auto}
+.draft-read-notice summary{padding:4px 0;cursor:pointer;color:#e6b98a}
+@media(max-height:560px){.main>.details-panel{top:calc(64px + env(safe-area-inset-top));max-height:calc(100% - env(safe-area-inset-top) - 82px)}}

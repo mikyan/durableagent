@@ -7,7 +7,7 @@ function presentation(item:SendView,stoppedThrough:number,abortPending:boolean){
   if(item.durable==='failed')return {stage:'failed',label:'发送尚未保存',detail:'未凭此结果向 SDK 投递。请保留草稿并检查错误。'};
   if(item.durable==='unknown')return {stage:'unknown',label:'发送保存未确认',detail:'请核验同一次发送；不要把它当作未发送而重复创建。'};
   const progress=item.status?.submission;
-  if(progress?.status==='done'||progress?.status==='unanswered')return {stage:'settled',label:progress.status==='done'?'输入已结算':'输入已结算 · 未获回答',detail:progress.reason??'不代表整个会话或外部操作全部结束。'};
+  if(progress?.status==='done'||progress?.status==='unanswered')return {stage:'settled',label:progress.status==='done'?'输入已结算':'输入已结算 · 未获回答',detail:progress.reason?(({aborted:'会话已停止',reset:'上下文已重置',turn_limit:'达到本轮限制',no_model:'模型未配置',model_error:'模型请求失败',faulted:'执行异常',restart_limit:'达到恢复次数限制',interrupted:'执行中断',nothing_to_answer:'没有待回答内容'} as Record<string,string>)[progress.reason]??'未获回答')+'（'+progress.reason+'）':'不代表整个会话或外部操作全部结束。'};
   if(item.intent?.cancelled||item.intent&&item.intent.controlGeneration<=stoppedThrough){
     const interrupted=!!item.intent&&item.intent.controlGeneration<=stoppedThrough&&!abortPending;
     if(accepted&&!interrupted)return {stage:'stop-pending',label:'已接纳 · 已请求停止',detail:'停止请求已保存，等待会话中断核验。这次发送不会重新投递。'};

@@ -5,8 +5,8 @@ import {ExecutionPanel} from './execution';
 import {ExtensionPage} from '../extension-host';
 
 export function useWideLayout(){
- const [wide,setWide]=useState(()=>window.matchMedia?.('(min-width: 1100px)').matches??false);
- useEffect(()=>{const query=window.matchMedia?.('(min-width: 1100px)');if(!query)return;const changed=()=>setWide(query.matches);query.addEventListener('change',changed);return()=>query.removeEventListener('change',changed);},[]);
+ const [wide,setWide]=useState(()=>window.matchMedia?.('(min-width: 900px)').matches??false);
+ useEffect(()=>{const query=window.matchMedia?.('(min-width: 900px)');if(!query)return;const changed=()=>setWide(query.matches);query.addEventListener('change',changed);return()=>query.removeEventListener('change',changed);},[]);
  return wide;
 }
 export function AuxiliaryPanel({controller,state,wide,onClose}:{controller:ConversationController;state:UiState;wide:boolean;onClose:()=>void}){

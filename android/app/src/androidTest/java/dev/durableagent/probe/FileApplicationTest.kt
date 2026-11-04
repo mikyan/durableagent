@@ -66,7 +66,7 @@ class FileApplicationTest {
             assertEquals(11,roundtrip.getInt("finalBytes"));assertEquals("polling",roundtrip.getString("watchMode"));assertTrue(roundtrip.getString("canonical").startsWith("$defaultPath/.durableagent-t10-$run/"))
             val changes=wire.call("files.list",target(id)).getJSONArray("changes");assertTrue(changes.length()>=8)
             var realDiff=false;for(i in 0 until changes.length()){val row=changes.getJSONObject(i);assertTrue(row.getBoolean("original"));assertTrue(row.getBoolean("scopeConfirmed"));assertEquals("completed",row.getString("state"));if(row.getJSONObject("diff").optString("text").contains("+真实修改-after"))realDiff=true};assertTrue(realDiff)
-            button(page,"查看文件变更");until{js(page,"document.querySelector('.file-changes')?.textContent.includes('+真实修改-after')")=="true"}
+            click(page,"button[aria-label=会话详情]");button(page,"文件变更与执行");button(page,"查看文件变更");until{js(page,"document.querySelector('.file-changes')?.textContent.includes('+真实修改-after')")=="true"}
             evidence("original-roundtrip",JSONObject().put("run",run).put("conversationId",id).put("result",roundtrip).put("changes",changes).put("uiActualDiff",true))
             send(page,"FILE_DEPENDENCY",wire,id);val dependency=marker(wire,id,"FILE-DEPENDENCY-PASS:");evidence("independent-dependency-artifact",dependency)
             }

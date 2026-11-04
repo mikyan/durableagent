@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.os.Bundle
 import android.webkit.*
+import android.view.WindowInsets
+import android.widget.FrameLayout
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -84,7 +86,16 @@ class AgentActivity:Activity() {
             }}}
             @JavascriptInterface fun writeCredential(json:String){runOnUiThread {if(webView===view&&!destroyed&&json.length<=120000&&view.url?.substringBefore('#')=="https://appassets.androidplatform.net/assets/ui/index.html")client?.writeCredential(json)}}
         },"DurableNative")
-        setContentView(view);view.loadUrl("https://appassets.androidplatform.net/assets/ui/index.html")
+        // Android 16 edge-to-edge keeps the window behind the IME. Give the WebView
+        // the remaining measured area; CSS dvh alone cannot observe the covered region.
+        val frame=FrameLayout(this).apply{setBackgroundColor(android.graphics.Color.rgb(37,37,40))}
+        frame.addView(view,FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT))
+        frame.setOnApplyWindowInsetsListener{container,insets->
+            val bottom=if(insets.isVisible(WindowInsets.Type.ime()))insets.getInsets(WindowInsets.Type.ime()).bottom else 0
+            if(container.paddingBottom!=bottom)container.setPadding(0,0,0,bottom)
+            insets
+        }
+        setContentView(frame);frame.requestApplyInsets();view.loadUrl("https://appassets.androidplatform.net/assets/ui/index.html")
     }
     private fun denied()=WebResourceResponse("text/plain","utf-8",403,"Forbidden",emptyMap(),ByteArrayInputStream(ByteArray(0)))
     private fun showRecovery(reason:String){
