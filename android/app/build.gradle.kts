@@ -4,7 +4,7 @@ android {
     compileSdk = 36
     buildToolsVersion = "36.0.0"
     defaultConfig {
-        applicationId = providers.gradleProperty("validationApplicationId").orElse("dev.durableagent.probe").get().also { require(it == "dev.durableagent.probe" || it == "dev.durableagent.retention") }
+        applicationId = providers.gradleProperty("validationApplicationId").orElse("dev.durableagent.probe").get().also { require(it in setOf("dev.durableagent.probe","dev.durableagent.retention","dev.durableagent.saf")) {"Unsupported validation applicationId: $it"} }
         minSdk = 36
         targetSdk = 36
         versionCode = 1
