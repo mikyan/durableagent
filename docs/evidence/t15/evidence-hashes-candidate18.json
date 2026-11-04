@@ -38,5 +38,9 @@
   "screenshots/t15-candidate18-retained-diff04-retained-original-diff.png": {
     "sha256": "4bc597585cce62fb300750d8a6f781d08cc57b0075ee095e2663ab052520ca69",
     "bytes": 294871
+  },
+  "README.md": {
+    "sha256": "0784f7bb96b85dc4f8b37e172266c101dc6f0ad62937d7613822486d65daf670",
+    "bytes": 11159
   }
 }

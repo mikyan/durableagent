@@ -1,6 +1,6 @@
-# T15 Console 实施证据（阶段候选）
+# T15 Console 实施证据索引
 
-本分支以已接受的 b06bfc7 为基础。此目录记录实际测试及可见验收，不表示 GitHub #16 已通过最终 gate。T12/T13 接线及协调者的真实 MiMo 401、真实 Termux 文件差异联测仍待完成。冻结产物由根任务安排验证，不覆盖正在使用的设备或已有 Termux。
+当前生产候选为 [18](CANDIDATE18.md)，源码 c868f0c；已合入接受的 T13，并完成实际省流可见入口／单次放行、真实 Termux 文件差异与最终可读性复核。真实 MiMo 401 与选择器取消恢复见 [候选 15](CANDIDATE15.md)，原生系统栏／横屏 IME 及联合测试见 [候选 16](CANDIDATE16.md)。旧候选的验证来源保持原范围，不因后续修复而重标 APK。尚待独立合并与 T12 最终联合通知目标验证；GitHub #16 状态由根任务决定。
 
 ## 实现边界
 
@@ -12,7 +12,7 @@ context.get 调用 SDK 的公开 Conversation.context() 与已解析模型。当
 
 相机入口由原生 ACTION_IMAGE_CAPTURE 可用性提供。每次使用新的私有 UUID JPEG 与临时 URI 授权，返回后沿既有原生选择／准备链路入稿；取消不把已确认草稿改成保存失败。通知 target 限于当前域精确 URI 与已有稳定 ID，启动和 onNewIntent 只选择，不创建或重发。页面选中偏好仍是普通 WebView 偏好，原生草稿是内容权威。
 
-## 测试结果
+## 候选 14 测试结果（历史范围）
 
 | 层次 | 结果与范围 |
 | --- | --- |
@@ -25,7 +25,7 @@ context.get 调用 SDK 的公开 Conversation.context() 与已解析模型。当
 
 真实运行域的截图与公开 Interface 响应保存在 raw/。console 模式仅以明确标注的合成 HTTP 回复经过实际 SDK 和存储产生长正文；hang 模式控制模型传输等待。它们用于布局和执行隔离，不作为真实 MiMo、真实 Provider 写入或 OEM 后台恢复证据。
 
-## 可见验收
+## 候选 14 可见验收（历史范围）
 
 | 场景 | 实际观察 |
 | --- | --- |
@@ -38,7 +38,7 @@ context.get 调用 SDK 的公开 Conversation.context() 与已解析模型。当
 | UI 扩展 | 实际[挂载时间线](screenshots/timeline-mounted-running.png)，[关闭辅助区域后仍运行](screenshots/timeline-closed-running.png)，草稿保持，再明确停止；[步骤](raw/t15-auxiliary-live03.json)。时间线挂载卡片可见，数据组件在同一可滚动区域下方。 |
 | 相机 | [返回后的原生 JPEG 选择](screenshots/camera-admitted.png)和[系统取消后的原草稿](screenshots/camera-cancelled.png)。 |
 
-这是复用 API 36、4 KB 模拟器的真实 WebView 与窗口变化，并非购买/接入了一台物理平板。原有 SAF fixture 原件及未知收据均未重置。尚未完成真实文件差异及真实 401 的 T15 新外壳截图，不用空白文件面板替代它们。
+这是复用 API 36、4 KB 模拟器的真实 WebView 与窗口变化，并非购买/接入了一台物理平板。原有 SAF fixture 原件及未知收据均未重置。候选 14 当时尚未完成真实文件差异及真实 401 的新外壳截图；此历史缺口现分别由候选 15 的真实 401 与候选 16—18 的真实原件差异记录补齐，未用空白面板替代。
 
 ## 保留的失败及修正
 
@@ -54,12 +54,15 @@ context.get 调用 SDK 的公开 Conversation.context() 与已解析模型。当
 
 ## 余下 gate
 
-1. 合入根任务已接受的 T12/T13 后，接 NativeRecoveryBridge、通知权限/投递未确认状态和 Data Saver 面板，保持各自原生事实权威。
-2. 根任务在其执行设备上验证新外壳的真实 MiMo 401 中文操作提示、真实受管原件 diff，并覆盖合并后跨功能流程。
-3. 合并最新 integration、必要检查及独立 merger。GitHub 状态与远端发布由根任务处理。
+1. 根任务完成公开发布审计、必要合并检查及独立 merger；GitHub 状态与远端发布由根任务处理。
+2. T15 接受合并后，由 T12 在最终联合版本验证已保留的完成通知会打开准确会话；T12 的生命周期结果不因旧 UI 的目标接线缺口而冒充该联合验证已完成。
+
+T13 已接受并合入；可见 Console 等待入口和精确单次放行实际通过。真实 MiMo 401、Termux 原件 diff、系统栏和合并后的 IME 检查已经完成，不再列为当前待办。Xiaomi 15 未提供，模拟器范围仍不代替未测试 OEM。
 
 ## 固定产物
 
 候选 14 的代码来源为 ce6ac2a；[构建、源码及 APK 摘要](ARTIFACTS.json)与[复现／真实联测说明](RUN.md)已固定。APK 不进入 Git。测试辅助与本目录证据另以文档提交追加，不改变安装包源码。
 
 候选 15 的主 APK 为 b2bc5bd（包含 df31204），实际第三轮测试辅助为 9480a87；[固定摘要](ARTIFACTS-candidate15.json)和[边界／安全联测说明](CANDIDATE15.md)分开列明，生产包未因测试驱动修正而重建。
+
+当前固定主 APK／源码见 [候选 18 摘要](ARTIFACTS-candidate18.json)；其相对候选 16 只有文件差异前景色变化，原生、运行时和执行组件保持字节相同。候选 16 的完整 UI 99/99、相关运行时 33/33、实际单次放行与真实文件契约，及候选 18 的只读最终截图，分别保留在对应记录中。详情页测试选择器失败、正文对比度失败及 summary 对比度失败均未覆盖。
