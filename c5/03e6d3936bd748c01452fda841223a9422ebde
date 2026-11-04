@@ -1,0 +1,302 @@
+docs/evidence/t16/host-ui-final-75.log
+  s_467dcb949b5b60::t_34c6809810f468 1-20
+ui/src/controller.ts
+  s_467dcb949b5b60::t_0aceeac9cca0a0 69,73-74,110,114
+docs/evidence/t16/t16-d2d-control-seed.log
+  s_467dcb949b5b60::t_8e27de0dd9afa4 1-25
+android/app/src/androidTest/java/dev/durableagent/probe/NativeSubmissionStoreTest.kt
+  s_467dcb949b5b60::t_271a831b28bf0a 257
+  s_467dcb949b5b60::t_0a1eda2d792cf8 283
+docs/evidence/t16/t16-native-candidate05.log
+  s_467dcb949b5b60::t_8e0c65504860f8 1-742
+ui/src/extensions/models.tsx
+  s_467dcb949b5b60::t_877c0c798bdd45 47-51
+docs/evidence/t16/t16-incremental-build.log
+  s_467dcb949b5b60::t_8e0c65504860f8 1-7
+ui/test/app.test.tsx
+  s_467dcb949b5b60::t_136a169a12ddf0 12-33
+runtime/test/retention.test.mjs
+  s_467dcb949b5b60::t_5bdb90f56335d4 1-3
+runtime/src/application.ts
+  s_467dcb949b5b60::t_07108c8d746fde 29,90
+  s_467dcb949b5b60::t_de9992c38960b0 35,80
+  s_467dcb949b5b60::t_0aceeac9cca0a0 27,38,65-66,70,82,135,287
+  s_467dcb949b5b60::t_3dfe6cd0c59929 25,84,128,200
+  s_467dcb949b5b60::t_3f13889f0fa94a 26
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_0aceeac9cca0a0 13
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_1bf54c91197c5b 92
+  s_467dcb949b5b60::t_187512d4acd7cd 68
+  s_467dcb949b5b60::t_4930ee57499787 127-128
+  s_467dcb949b5b60::t_3d9977c6d14ff3 69
+ui/test/controller.test.ts
+  s_467dcb949b5b60::t_b68fc7bc816dfa 7-24
+android/settings.gradle.kts
+  s_467dcb949b5b60::t_1bf54c91197c5b 5
+android/app/src/androidTest/java/dev/durableagent/probe/NativeProjectFenceTest.kt
+  s_467dcb949b5b60::t_271a831b28bf0a 179
+  s_467dcb949b5b60::t_3d9977c6d14ff3 188
+docs/evidence/t16/t16-d2d-rules-restored.log
+  s_467dcb949b5b60::t_8e27de0dd9afa4 1-25
+android/app/src/main/java/dev/durableagent/probe/NativeInputAccess.kt
+  s_467dcb949b5b60::t_0a1eda2d792cf8 23
+  s_467dcb949b5b60::t_877c0c798bdd45 49-51
+android/backup-fixture/src/main/res/xml/permissive_rules.xml
+  s_467dcb949b5b60::t_1bf54c91197c5b 1
+android/app/src/androidTest/java/dev/durableagent/probe/RetentionApplicationTest.kt
+  s_467dcb949b5b60::t_d0211144c2ec10 14-15,22-52,58-67
+  s_467dcb949b5b60::t_a55aad4fad1e8b 53-54
+  s_467dcb949b5b60::t_19b29424da1ed0 55-57
+  s_467dcb949b5b60::t_187512d4acd7cd 1-13,16-21,68-84
+runtime/src/storage-format.ts
+  s_467dcb949b5b60::t_3f13889f0fa94a 1-15,19-37
+  s_467dcb949b5b60::t_3d9977c6d14ff3 16-18
+android/fixtures/input-source/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_94b41348eae331 2
+docs/evidence/t16/t16-d2d-backup.log
+  s_467dcb949b5b60::t_8e27de0dd9afa4 1-16
+android/app/src/androidTest/java/dev/durableagent/probe/ExternalInputFixture.kt
+  s_467dcb949b5b60::t_94b41348eae331 22
+docs/evidence/t16/t16-d2d-control-before-restore.log
+  s_467dcb949b5b60::t_8e27de0dd9afa4 1-25
+docs/evidence/t16/frozen-artifacts.json
+  s_467dcb949b5b60::t_5891829bc6266c 1-93,100-108,157-158
+  s_467dcb949b5b60::t_b19e6412af8185 94-99,109-156
+runtime/src/input-protocol.ts
+  s_467dcb949b5b60::t_0a1eda2d792cf8 3,25
+  s_467dcb949b5b60::t_877c0c798bdd45 14
+docs/evidence/t16/t16-d2d-rules-before-restore.log
+  s_467dcb949b5b60::t_8e27de0dd9afa4 1-25
+runtime/test/application.test.mjs
+  s_467dcb949b5b60::t_3f13889f0fa94a 169
+android/backup-fixture/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_1bf54c91197c5b 1-4
+runtime/src/retained-history.ts
+  s_467dcb949b5b60::t_0aceeac9cca0a0 1-38
+android/app/src/main/java/dev/durableagent/probe/PrivateDataBackupAgent.kt
+  s_467dcb949b5b60::t_1bf54c91197c5b 1-25
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_3d9977c6d14ff3 77-80
+  s_467dcb949b5b60::t_187512d4acd7cd 73-76
+  s_467dcb949b5b60::t_4930ee57499787 108-109
+  s_467dcb949b5b60::t_877c0c798bdd45 35
+android/app/src/androidTest/java/dev/durableagent/probe/NativeRetentionTest.kt
+  s_467dcb949b5b60::t_5d6f0a66f8d1d3 75-87
+  s_467dcb949b5b60::t_9b146191031e2d 1-74,103
+  s_467dcb949b5b60::t_39cd1a61d769cd 88-102
+runtime/validation/retention-policy.mjs
+  s_467dcb949b5b60::t_5bdb90f56335d4 1-143
+docs/evidence/t16/t16-d2d-channel-setup.log
+  s_467dcb949b5b60::t_8e27de0dd9afa4 1-5
+docs/evidence/t16/t16-d2d-rules-seed.log
+  s_467dcb949b5b60::t_8e27de0dd9afa4 1-25
+runtime/validation/retention-seed.mjs
+  s_467dcb949b5b60::t_3d9977c6d14ff3 1-12
+android/app/src/debug/java/dev/durableagent/probe/InputTestDocumentsProvider.kt
+  s_467dcb949b5b60::t_1bf54c91197c5b 83
+runtime/test/fixtures/retention-crash-host.mjs
+  s_467dcb949b5b60::t_fb1e64ef1e18d9 1-11
+docs/evidence/t16/t16-d2d-restore.log
+  s_467dcb949b5b60::t_8e27de0dd9afa4 1-4
+android/backup-fixture/src/androidTest/java/dev/durableagent/backupfixture/BackupChannelTest.kt
+  s_467dcb949b5b60::t_9b398a7497539a 18-19,44,46,48-49
+  s_467dcb949b5b60::t_1bf54c91197c5b 1-17,20-43,45,47,50-51
+docs/evidence/t16/packaging-candidate05.json
+  s_467dcb949b5b60::t_dc8f7a0ff2a366 1-9
+android/backup-fixture/build.gradle.kts
+  s_467dcb949b5b60::t_1bf54c91197c5b 1-15
+docs/evidence/t16/t16-readonly-ui-green.log
+  s_467dcb949b5b60::t_6c3e9f8e68bbbb 1-9
+runtime/src/application-records.ts
+  s_467dcb949b5b60::t_539905a46a5a02 4,8-13
+  s_467dcb949b5b60::t_07108c8d746fde 5-7
+docs/evidence/t16/t16-d2d-restore-sets.log
+  s_467dcb949b5b60::t_8e27de0dd9afa4 1
+android/app/src/main/java/dev/durableagent/probe/NativeInputStore.kt
+  s_467dcb949b5b60::t_fa61ed01624024 441,446
+  s_467dcb949b5b60::t_0a1eda2d792cf8 302-309,607,617,652-653,658-660
+  s_467dcb949b5b60::t_93758e1681beeb 432,437-440,442-444,447-461,464-468,636,651,656-657
+docs/evidence/t16/t16-d2d-control-restored.log
+  s_467dcb949b5b60::t_8e27de0dd9afa4 1-74
+docs/evidence/t16/t16-readonly-red03.log
+  s_467dcb949b5b60::t_8e0c65504860f8 1-41
+docs/evidence/t16/packaging-candidate06.json
+  s_467dcb949b5b60::t_f5cb3f536a6977 1-9
+docs/evidence/t16/packaging-before.json
+  s_467dcb949b5b60::t_e55b6dd93beefe 1-9
+docs/evidence/t16/README.md
+  s_467dcb949b5b60::t_7afa79d706a3fc 68-70
+  s_467dcb949b5b60::t_4e4a7de093f8d3 71
+  s_467dcb949b5b60::t_cc25aca1605514 47
+  s_467dcb949b5b60::t_10439f1ca1d8c3 13,73-82,84-89
+  s_467dcb949b5b60::t_68654b528ad6e8 29-30
+  s_467dcb949b5b60::t_c7472d929665d4 1-2,4-12,14,37-46,48-64,67,72
+  s_467dcb949b5b60::t_f63952481d9463 15-24,34-36,65-66
+  s_467dcb949b5b60::t_03d60fe57bd511 3,31-32,83
+  s_467dcb949b5b60::t_d50110301eea36 25-27
+  s_467dcb949b5b60::t_5382fb0cc60150 28,33
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_72357b2a0f71c4 99,116,121
+android/app/src/debug/AndroidManifest.xml
+  s_467dcb949b5b60::t_1bf54c91197c5b 8
+android/fixtures/input-source/app/src/main/java/dev/durableagent/inputsource/ControlReceiver.java
+  s_467dcb949b5b60::t_94b41348eae331 9,14-15,24-25,30
+runtime/src/submission.ts
+  s_467dcb949b5b60::t_877c0c798bdd45 66
+  s_467dcb949b5b60::t_3f13889f0fa94a 4,67
+android/app/src/main/AndroidManifest.xml
+  s_467dcb949b5b60::t_1bf54c91197c5b 5
+android/app/src/androidTest/java/dev/durableagent/probe/NativeRetentionMigrationTest.kt
+  s_467dcb949b5b60::t_eb70159c62a267 25
+  s_467dcb949b5b60::t_271a831b28bf0a 31
+  s_467dcb949b5b60::t_e1146809c23d33 1-24,26-30,32-44
+docs/evidence/t16/t16-channel-restored-settings.log
+  s_467dcb949b5b60::t_8e27de0dd9afa4 1-4
+docs/evidence/t16/host-runtime-final-180.log
+  s_467dcb949b5b60::t_34c6809810f468 1-229
+android/app/src/main/java/dev/durableagent/probe/NativeContentRetention.kt
+  s_467dcb949b5b60::t_090b5f5a49419f 1-14,16-23,30-80
+  s_467dcb949b5b60::t_fa61ed01624024 15,24-29
+docs/evidence/t16/t16-readonly-red02.log
+  s_467dcb949b5b60::t_6e1ea448b2e4cc 1-47
+runtime/test/retention-process.test.mjs
+  s_467dcb949b5b60::t_fb1e64ef1e18d9 1-28
+runtime/src/storage-failure.ts
+  s_467dcb949b5b60::t_3dfe6cd0c59929 1-3,6-8,10-12
+  s_467dcb949b5b60::t_a504bf6ea4c3ae 4-5
+  s_467dcb949b5b60::t_3f13889f0fa94a 9
+docs/evidence/t16/t16-readonly-red02-uid.log
+  s_467dcb949b5b60::t_6e1ea448b2e4cc 1-988
+android/app/build.gradle.kts
+  s_467dcb949b5b60::t_1bf54c91197c5b 7,17
+  s_467dcb949b5b60::t_a55aad4fad1e8b 21-38,40,52
+docs/evidence/t16/d2d-reinstall02/active.log
+  s_467dcb949b5b60::t_0d11a857db340f 1-3
+docs/evidence/t16/d2d-reinstall02/artifacts.json
+  s_467dcb949b5b60::t_9a375d9dca0e18 1-18
+docs/evidence/t16/d2d-reinstall02/backup.log
+  s_467dcb949b5b60::t_11f0441fbef2f9 1-11
+docs/evidence/t16/d2d-reinstall02/control-after-backup.log
+  s_467dcb949b5b60::t_ca7d8536f11cf2 1-25
+docs/evidence/t16/d2d-reinstall02/control-after-reinstall.log
+  s_467dcb949b5b60::t_563a1abb41267c 1-25
+docs/evidence/t16/d2d-reinstall02/control-reinstall.log
+  s_467dcb949b5b60::t_b2469ebd955089 1-2
+docs/evidence/t16/d2d-reinstall02/control-restored.log
+  s_467dcb949b5b60::t_e776c713b9ba2c 1-25
+docs/evidence/t16/d2d-reinstall02/control-seed.log
+  s_467dcb949b5b60::t_5b23c71cf9afef 1-25
+docs/evidence/t16/d2d-reinstall02/control-test-install.log
+  s_467dcb949b5b60::t_f581e57e144e6d 1-2
+docs/evidence/t16/d2d-reinstall02/control-uninstall.log
+  s_467dcb949b5b60::t_6f81712661be1a 1
+docs/evidence/t16/d2d-reinstall02/enable.log
+  s_467dcb949b5b60::t_48f4fc9ae7f0a7 1
+docs/evidence/t16/d2d-reinstall02/init.log
+  s_467dcb949b5b60::t_e58025fc2bdbbd 1-2
+docs/evidence/t16/d2d-reinstall02/launched.json
+  s_467dcb949b5b60::t_0ad1993dc3aa4d 1
+docs/evidence/t16/d2d-reinstall02/restore-cloud.log
+  s_467dcb949b5b60::t_d5502eda4458ea 1
+docs/evidence/t16/d2d-reinstall02/restore-disabled.log
+  s_467dcb949b5b60::t_c70c2e1cb39eca 1
+docs/evidence/t16/d2d-reinstall02/restore-local-params.log
+  s_467dcb949b5b60::t_14a5534f5df617 1
+docs/evidence/t16/d2d-reinstall02/restore-mode.log
+  s_467dcb949b5b60::t_d03c62902a932e 1
+docs/evidence/t16/d2d-reinstall02/restore-system.log
+  s_467dcb949b5b60::t_078eb480878d26 1-542
+docs/evidence/t16/d2d-reinstall02/restore-transport.log
+  s_467dcb949b5b60::t_ac5c396a118a2a 1
+docs/evidence/t16/d2d-reinstall02/rules-after-backup.log
+  s_467dcb949b5b60::t_6ead21338fc368 1-25
+docs/evidence/t16/d2d-reinstall02/rules-after-reinstall.log
+  s_467dcb949b5b60::t_0e46fdfc800a8a 1-25
+docs/evidence/t16/d2d-reinstall02/rules-excluded.log
+  s_467dcb949b5b60::t_044fbbef9379cd 1-25
+docs/evidence/t16/d2d-reinstall02/rules-reinstall.log
+  s_467dcb949b5b60::t_d95a13723b1082 1-2
+docs/evidence/t16/d2d-reinstall02/rules-seed.log
+  s_467dcb949b5b60::t_f85efab30616d7 1-25
+docs/evidence/t16/d2d-reinstall02/rules-test-install.log
+  s_467dcb949b5b60::t_ffa88829b46ab9 1-2
+docs/evidence/t16/d2d-reinstall02/rules-uninstall.log
+  s_467dcb949b5b60::t_b92352ef13ebbf 1
+docs/evidence/t16/d2d-reinstall02/sets.log
+  s_467dcb949b5b60::t_846b6bbe2c4ae6 1
+docs/evidence/t16/d2d-reinstall02/transport.log
+  s_467dcb949b5b60::t_75919ebd01936a 1
+docs/evidence/t16/host-runtime-current.log
+  s_467dcb949b5b60::t_e5d927e7469d37 1-213
+docs/evidence/t16/host-runtime-first.log
+  s_467dcb949b5b60::t_81c69afe247d25 1-225
+docs/evidence/t16/host-ui-74.log
+  s_467dcb949b5b60::t_94607f2375e4ba 1-32
+docs/evidence/t16/t16-candidate04-three.log
+  s_467dcb949b5b60::t_726e25201bbe65 1-91
+docs/evidence/t16/t16-candidate05-build.log
+  s_467dcb949b5b60::t_70bbed2dc90ef8 1-128
+docs/evidence/t16/t16-candidate06-build.log
+  s_467dcb949b5b60::t_5d715b063d6815 1-128
+docs/evidence/t16/t16-content-red01.log
+  s_467dcb949b5b60::t_1a7d1cb264fce4 1-41
+docs/evidence/t16/t16-device-baseline.json
+  s_467dcb949b5b60::t_8b447b5d1ab167 1-13
+docs/evidence/t16/t16-device-channel-baseline.md
+  s_467dcb949b5b60::t_918438780123ad 1-21
+docs/evidence/t16/t16-local-archive-observation.json
+  s_467dcb949b5b60::t_9d19f4c665db8b 1-83
+docs/evidence/t16/t16-local-backup.log
+  s_467dcb949b5b60::t_8681202a8d5ae6 1-18
+docs/evidence/t16/t16-local-control-after-backup.log
+  s_467dcb949b5b60::t_667c04519142e9 1-25
+docs/evidence/t16/t16-local-control-before-restore.log
+  s_467dcb949b5b60::t_dce04f302bdddf 1-25
+docs/evidence/t16/t16-local-control-restored.log
+  s_467dcb949b5b60::t_e52d4d5c4a4b0a 1-25
+docs/evidence/t16/t16-local-control-seed.log
+  s_467dcb949b5b60::t_1a057c22fcea5c 1-25
+docs/evidence/t16/t16-local-restore.log
+  s_467dcb949b5b60::t_f9cf3b2fa10da7 1-5
+docs/evidence/t16/t16-local-rules-after-backup.log
+  s_467dcb949b5b60::t_b0f70f83652f60 1-25
+docs/evidence/t16/t16-local-rules-before-restore.log
+  s_467dcb949b5b60::t_f01500826872eb 1-25
+docs/evidence/t16/t16-local-rules-restored.log
+  s_467dcb949b5b60::t_a73ea0866392f2 1-25
+docs/evidence/t16/t16-local-rules-seed.log
+  s_467dcb949b5b60::t_c413465522a563 1-25
+docs/evidence/t16/t16-migration-red01.log
+  s_467dcb949b5b60::t_804ad5c18cfb4e 1-32
+docs/evidence/t16/t16-migration-red02-and-source.log
+  s_467dcb949b5b60::t_8807893bbc7069 1-57
+docs/evidence/t16/t16-native-candidate01.log
+  s_467dcb949b5b60::t_14f9d57baef557 1-535
+docs/evidence/t16/t16-native-candidate02.log
+  s_467dcb949b5b60::t_81a98831625362 1-752
+docs/evidence/t16/t16-readonly-green01.log
+  s_467dcb949b5b60::t_161feb0b1f7970 1-25
+docs/evidence/t16/t16-readonly-ui-red.log
+  s_467dcb949b5b60::t_175c009b18dfcc 1-33
+docs/evidence/t16/t16-retention-rules-dump.txt
+  s_467dcb949b5b60::t_13934abc79a410 1-57
+docs/evidence/t16/t16-rules-rules-dump.txt
+  s_467dcb949b5b60::t_0494bf95374a88 1-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "c503e6d3936bd748c01452fda841223a9422ebde",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
