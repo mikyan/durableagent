@@ -1,0 +1,27 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentTest:
+INSTRUMENTATION_STATUS: test=revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"actual-grant-revoked","platformHeldFdStillReadable":true,"applicationPolicy":"reject-further-original-reads-after-current-uri-grant-revocation"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"revoked-capability-denied-including-held-reader","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=revokedUriGrantBlocksFreshReadsAndFurtherUseOfAnOpenedReader
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.434
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

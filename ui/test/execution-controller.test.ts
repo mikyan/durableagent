@@ -3,6 +3,16 @@ import type {ApplicationRequest} from '../../runtime/src/application-protocol';
 import {ApplicationClient} from '../src/client';
 import {ExecutionCoordinator} from '../src/execution';
 
+it('shows a durable writer queue before external acceptance and still allows native cancellation',async()=>{
+ let cancelled=false;
+ const client=new ApplicationClient({postMessage:json=>{const request:ApplicationRequest=JSON.parse(json);if(request.method==='execution.cancel')cancelled=true;
+  const row=cancelled?{executionId:'waiting',state:'not_started',scopeConfirmed:true,sequence:1}:{executionId:'waiting',state:'queued',source:'application',reason:'WRITER_QUEUED',sequence:0};
+  queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value:request.method==='execution.list'?{executions:[row]}:row}));
+ }});
+ const execution=new ExecutionCoordinator(()=>client,()=>{});
+ try{await execution.refresh('one');expect(execution.view().error).toBeUndefined();expect(execution.view().rows[0]?.state).toBe('queued');await execution.cancel('waiting');expect(cancelled).toBe(true);expect(execution.view().rows[0].state).toBe('not_started');}finally{client.dispose();}
+});
+
 it('uses the independent native route to connect, query and cancel without submitting command content',async()=>{
   const requests:ApplicationRequest[]=[];
   let current:Record<string,unknown>={executionId:'known-execution',state:'unknown',source:'application',reason:'CLIENT_CONFIRMATION_LOST'};

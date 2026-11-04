@@ -158,6 +158,7 @@ export class Application {
           if(control.pendingAbort||control.generation!==operation.controlGeneration||control.stoppedThrough>=operation.controlGeneration)throw new ActionError('EXECUTION_STOPPED','该执行所属控制代次已停止，不能恢复许可');
           value=await this.options.dataSaver!.grant({executionId,requestDigest,finalDigest,period});break;
         }
+        case 'files.list':value=await this.options.execution!.fileChanges(this.text(payload,'id'),payload.cursor);break;
         case 'execution.list':value=await this.options.execution!.list(this.text(payload,'id'),payload.cursor);break;
         case 'execution.readOutput':value=await this.options.execution!.readOutput(this.text(payload,'id'),this.text(payload,'executionId'),payload.cursor);break;
         case 'extensions.get':value=await this.extensionCatalog(typeof payload.id==='string'?payload.id:undefined);break;
@@ -304,6 +305,7 @@ export class Application {
       const watches=[...this.subscriptions.values()];this.subscriptions.clear();for(const entry of watches)await entry.watch.stop();
       let auditError:unknown;try{if(this.options.secret)await auditStorageSecret(this.options.path,this.options.secret);}catch(error){auditError=error;}
       await this.harness?.close(context);this.harness=undefined;
+      await this.options.execution?.closeReads();
       await this.retained?.close();this.retained=undefined;
       if(this.options.secret)await auditStorageSecret(this.options.path,this.options.secret);if(auditError)throw auditError;
     })().finally(()=>{this.closing=undefined;});

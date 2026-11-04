@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <queries><provider android:authorities="dev.durableagent.inputsource.documents"/></queries>
+    <queries><provider android:authorities="dev.durableagent.documentsfixture.documents"/></queries>
     <application>
         <receiver android:name=".CredentialBootProbeReceiver" android:exported="true" android:directBootAware="true" android:process=":credential_probe"/>
         <service android:name=".CredentialLeaseProbeService" android:exported="false" android:process=":credential_lease_probe"/>

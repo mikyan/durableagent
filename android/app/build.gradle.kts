@@ -4,7 +4,7 @@ android {
     compileSdk = 36
     buildToolsVersion = "36.0.0"
     defaultConfig {
-        applicationId = providers.gradleProperty("validationApplicationId").orElse("dev.durableagent.probe").get().also { require(it == "dev.durableagent.probe" || it == "dev.durableagent.retention") }
+        applicationId = providers.gradleProperty("validationApplicationId").orElse("dev.durableagent.probe").get().also { require(it in setOf("dev.durableagent.probe","dev.durableagent.retention","dev.durableagent.saf")) {"Unsupported validation applicationId: $it"} }
         minSdk = 36
         targetSdk = 36
         versionCode = 1
@@ -56,7 +56,7 @@ val packageUi by tasks.registering(Sync::class) {
 }
 val generateExecutionSetup by tasks.registering(Exec::class) {
     val output=layout.buildDirectory.file("generated/runtimeAssets/execution-setup.txt")
-    inputs.files("../../tools/build_execution_setup.py","../../tools/execution_setup_installer.py","../../managed-execution/durable_executor.py","../../managed-execution/execution_transport.py")
+    inputs.files("../../tools/build_execution_setup.py","../../tools/execution_setup_installer.py","../../managed-execution/durable_executor.py","../../managed-execution/execution_transport.py","../../managed-execution/file_service.py")
     outputs.file(output)
     commandLine("python",file("../../tools/build_execution_setup.py").absolutePath,"--output",output.get().asFile.absolutePath)
 }

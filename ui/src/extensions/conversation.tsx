@@ -12,6 +12,7 @@ import {SendStates} from './submissions';
 import {ExtensionPage} from '../extension-host';
 import {positionLabels} from '../project-view';
 import {ExecutionPanel} from './execution';
+import {DocumentsPanel} from './documents';
 
 const ModelSettings=lazy(builtInUiExtensions[MODELS_EXTENSION.id].load);
 const ProjectSettings=lazy(builtInUiExtensions[PROJECTS_EXTENSION.id].load);
@@ -117,6 +118,7 @@ export default function ConversationPage({controller,state}:{controller:Conversa
       {reason&&<div className="connection-notice" role={state.error?'alert':'status'}><span>{reason}</span><button onClick={reconnect}>重新连接</button></div>}
       {!settingsPage&&hasDataSaver&&state.dataSaver&&<DataSaverPanel policy={controller.dataSaver} view={state.dataSaver}/>}
       {!settingsPage&&<ExecutionPanel controller={controller} state={state}/>}
+      {!settingsPage&&<DocumentsPanel client={controller.extensionClient}/>}
       {extensionsPage?<ExtensionPage client={controller.extensionClient} conversationId={state.activeId}/>:projectsPage?<Suspense fallback={<p className="empty-state">正在打开项目设置…</p>}><ProjectSettings controller={controller} state={state}/></Suspense>:modelsPage?<Suspense fallback={<p className="empty-state">正在打开模型设置…</p>}><ModelSettings controller={controller} state={state}/></Suspense>:!state.activeId?<div className="home-content">
         <div className="home-brand">π</div><p className="eyebrow">DURABLE AGENT</p><h1>从一个问题开始</h1><p className="home-description">独立的会话，同一个工作空间。</p>
         <button className="primary-button" data-testid="create-conversation" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>{state.pending?'正在创建…':'新建会话'}</button>

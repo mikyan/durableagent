@@ -1,0 +1,44 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentTest:
+INSTRUMENTATION_STATUS: test=trustedJavetChannelReadsActualOriginalThroughBoundedRequests
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Trusted original channel must admit the real capability: {"ok":false,"error":{"code":"DOCUMENT_CHANNEL_UNAVAILABLE","message":"原文件通道尚不可用。"}}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.NativeDocumentTest.trustedJavetChannelReadsActualOriginalThroughBoundedRequests$lambda$2$0$request(NativeDocumentTest.kt:50)
+	at dev.durableagent.probe.NativeDocumentTest.trustedJavetChannelReadsActualOriginalThroughBoundedRequests(NativeDocumentTest.kt:59)
+
+INSTRUMENTATION_STATUS: stream=
+Error in trustedJavetChannelReadsActualOriginalThroughBoundedRequests(dev.durableagent.probe.NativeDocumentTest):
+java.lang.AssertionError: Trusted original channel must admit the real capability: {"ok":false,"error":{"code":"DOCUMENT_CHANNEL_UNAVAILABLE","message":"原文件通道尚不可用。"}}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.NativeDocumentTest.trustedJavetChannelReadsActualOriginalThroughBoundedRequests$lambda$2$0$request(NativeDocumentTest.kt:50)
+	at dev.durableagent.probe.NativeDocumentTest.trustedJavetChannelReadsActualOriginalThroughBoundedRequests(NativeDocumentTest.kt:59)
+
+INSTRUMENTATION_STATUS: test=trustedJavetChannelReadsActualOriginalThroughBoundedRequests
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.593
+There was 1 failure:
+1) trustedJavetChannelReadsActualOriginalThroughBoundedRequests(dev.durableagent.probe.NativeDocumentTest)
+java.lang.AssertionError: Trusted original channel must admit the real capability: {"ok":false,"error":{"code":"DOCUMENT_CHANNEL_UNAVAILABLE","message":"原文件通道尚不可用。"}}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.NativeDocumentTest.trustedJavetChannelReadsActualOriginalThroughBoundedRequests$lambda$2$0$request(NativeDocumentTest.kt:50)
+	at dev.durableagent.probe.NativeDocumentTest.trustedJavetChannelReadsActualOriginalThroughBoundedRequests(NativeDocumentTest.kt:59)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

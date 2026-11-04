@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentObservationTest:
+INSTRUMENTATION_STATUS: test=originalPanelAndReceiptRespondWhileActualNodeOwnerIsBusy
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"native-original-observation-while-node-busy","run":"50341a42-047b-4394-ac72-06fc7f3f3687","barrier":{"pid":16749,"started":12690917,"ended":0,"observedAt":12691011},"receipt":{"operationId":"observation-50341a42-047b-4394-ac72-06fc7f3f3687","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","productId":"6fdc06d4-e8ab-4a2f-879e-b5688546895d","controlGeneration":1,"sdkConversationId":5,"expectedDigest":"21998928836741932680bb7ef8fb3fe2d8709b5afdf896752642d10595f9a610","contentDigest":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","byteLength":0,"protocol":1,"requestDigest":"5d6efd48db4c82c1878bcd6944e4cf0c72f2c3c830085212b8faf02b1c401105","namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","kind":"file","source":"saf","original":true,"uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","displayName":"original.bin","nativeControlNamespace":"input-50341a42-047b-4394-ac72-06fc7f3f3687","state":"not_started","scopeConfirmed":true,"sequence":1,"stagedOffset":0,"sealed":true,"diff":{"state":"unavailable","available":false,"reason":"not_completed"},"reason":"DOCUMENT_CANCELLED_BEFORE_START"},"panel":"original.bin原件\n\n当前可读写原件\n\ncontent:\/\/dev.durableagent.documentsfixture.documents\/document\/original\napplication\/octet-stream · 4 字节"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=originalPanelAndReceiptRespondWhileActualNodeOwnerIsBusy
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 23.785
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

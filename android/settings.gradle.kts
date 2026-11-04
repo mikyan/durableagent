@@ -3,3 +3,4 @@ dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_P
 rootProject.name = "DurableAgentRuntimeProbe"
 include(":app")
 include(":backup-fixture")
+include(":document-fixture")

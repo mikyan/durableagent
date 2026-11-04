@@ -1,0 +1,109 @@
+{
+  "workspace": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-uthash-install02",
+  "dependencyGuide": "https://troydhanson.github.io/uthash/userguide.html",
+  "commands": [
+    {
+      "argv": [
+        "apt-get",
+        "-s",
+        "-o",
+        "Debug::NoLocking=1",
+        "--no-upgrade",
+        "--no-remove",
+        "install",
+        "uthash=2.4.0"
+      ],
+      "exit": 0,
+      "stdout": "NOTE: This is only a simulation!\n      apt-get needs root privileges for real execution.\n      Keep also in mind that locking is deactivated,\n      so don't depend on the relevance to the real current situation!\nReading package lists...\nBuilding dependency tree...\nReading state information...\nThe following NEW packages will be installed:\n  uthash\n0 upgraded, 1 newly installed, 0 to remove and 72 not upgraded.\nInst uthash (2.4.0 termux-main stable:stable [all])\nConf uthash (2.4.0 termux-main stable:stable [all])\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "apt-get",
+        "download",
+        "uthash=2.4.0"
+      ],
+      "exit": 0,
+      "stdout": "Get:1 https://packages-cf.termux.dev/apt/termux-main stable/main x86_64 uthash all 2.4.0 [20.2 kB]\nFetched 20.2 kB in 3s (7839 B/s)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "apt-get",
+        "-y",
+        "--no-upgrade",
+        "--no-remove",
+        "-o",
+        "Dpkg::Options::=--force-confold",
+        "install",
+        "./uthash_2.4.0_all.deb"
+      ],
+      "exit": 0,
+      "stdout": "Reading package lists...\nBuilding dependency tree...\nReading state information...\nThe following NEW packages will be installed:\n  uthash\n0 upgraded, 1 newly installed, 0 to remove and 72 not upgraded.\nNeed to get 20.2 kB of archives.\nAfter this operation, 258 kB of additional disk space will be used.\nGet:1 https://packages-cf.termux.dev/apt/termux-main stable/main x86_64 uthash all 2.4.0 [20.2 kB]\nFetched 20.2 kB in 2s (10.6 kB/s)\nSelecting previously unselected package uthash.\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 14600 files and directories currently installed.)\nPreparing to unpack .../archives/uthash_2.4.0_all.deb ...\nUnpacking uthash (2.4.0) ...\nSetting up uthash (2.4.0) ...\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "clang",
+        "-std=c11",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "main.c",
+        "-o",
+        "lookup"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "./lookup"
+      ],
+      "exit": 0,
+      "stdout": "uthash lookup key=7 value=49 count=10\ndependency-install-build-run-pass\n",
+      "stderr": ""
+    }
+  ],
+  "productionBefore": {
+    "scripts": {
+      "durable_executor.py": "71689c55df8735939a1e7b2bcb98a0746ff8f91a8241b0bf463f4293f8c5a7d4",
+      "execution_transport.py": "c20f4ef5bd53bea4caf01bd00c9276790fa2df1640a2896663eac662ffd691e8"
+    },
+    "ledgerRows": 52,
+    "ledgerFactsSha256": "b359ed308e025996b7377d33538675fce7e1b1fc7c30c03a271cd929de26aea7",
+    "daemon19324Alive": true
+  },
+  "archive": {
+    "name": "uthash_2.4.0_all.deb",
+    "bytes": 20192,
+    "sha256": "c502f831f51201a3db207b0e8a1896cd67f06c09e488b0b0acee687cb9e488b2"
+  },
+  "packageChanges": {
+    "uthash": {
+      "before": null,
+      "after": [
+        "2.4.0",
+        "installed"
+      ]
+    }
+  },
+  "artifacts": {
+    "sourceSha256": "d5bb1eb860e50a4819f0709062ff1d083627fba44e8f58812d78ba8b999685a4",
+    "elfSha256": "e9b291013974011a54775a99e1eb1f7178425c12fd6919f44128abea08b1906b",
+    "elfBytes": 11656,
+    "elfMachine": 62,
+    "mode": "0o700"
+  },
+  "productionAfter": {
+    "scripts": {
+      "durable_executor.py": "71689c55df8735939a1e7b2bcb98a0746ff8f91a8241b0bf463f4293f8c5a7d4",
+      "execution_transport.py": "c20f4ef5bd53bea4caf01bd00c9276790fa2df1640a2896663eac662ffd691e8"
+    },
+    "ledgerRows": 52,
+    "ledgerFactsSha256": "b359ed308e025996b7377d33538675fce7e1b1fc7c30c03a271cd929de26aea7",
+    "daemon19324Alive": true
+  },
+  "passed": true
+}

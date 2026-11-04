@@ -12,6 +12,22 @@ from execution_setup_installer import install, SetupFault
 
 
 class SetupTest(unittest.TestCase):
+    def test_adds_file_capability_to_owned_v1_install_without_replacing_data_or_pairing(self):
+        old = {'durable_executor.py': b'executor v1\n', 'execution_transport.py': b'transport v1\n'}
+        updated = {**old, 'file_service.py': b'file capabilities\n'}
+        with tempfile.TemporaryDirectory() as folder:
+            home = Path(folder)
+            install(home, old)
+            root = home / '.local/share/durableagent-execution'
+            (root / 'execution.sqlite').write_bytes(b'existing ledger is not installer owned')
+            (root / 'pairing.json').write_bytes(b'existing public pairing')
+            install(home, updated)
+            self.assertEqual((root / 'file_service.py').read_bytes(), updated['file_service.py'])
+            self.assertEqual((root / 'execution.sqlite').read_bytes(), b'existing ledger is not installer owned')
+            self.assertEqual((root / 'pairing.json').read_bytes(), b'existing public pairing')
+            with self.assertRaisesRegex(SetupFault, 'MANIFEST_UNRECOGNIZED'):
+                install(home, old)
+
     def test_refuses_unmanaged_modified_and_symlink_files_without_touching_them(self):
         scripts = {'durable_executor.py': b'executor\n', 'execution_transport.py': b'transport\n'}
         with tempfile.TemporaryDirectory() as folder:

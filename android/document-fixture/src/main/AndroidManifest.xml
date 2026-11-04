@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application android:label="DurableAgent 原文件测试" android:allowBackup="false">
+        <provider android:name=".DocumentProvider" android:authorities="dev.durableagent.documentsfixture.documents" android:exported="true" android:grantUriPermissions="true" android:permission="android.permission.MANAGE_DOCUMENTS">
+            <intent-filter><action android:name="android.content.action.DOCUMENTS_PROVIDER"/></intent-filter>
+        </provider>
+        <receiver android:name=".ControlReceiver" android:exported="true"/>
+    </application>
+</manifest>
