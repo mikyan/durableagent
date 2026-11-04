@@ -1,0 +1,24 @@
+managed-execution/execution_transport.py
+  s_467dcb949b5b60::t_754c3ff436e6c0 264-266,272
+managed-execution/test_executor.py
+  s_467dcb949b5b60::t_091a7cc14a56c3 77,103-107,321
+  s_467dcb949b5b60::t_4ed187a1785491 620
+managed-execution/test_transport.py
+  s_467dcb949b5b60::t_00cb4abaaaf9aa 97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "374d74df91a4c6ae6e8acb8e8bd5f0598cc9c93c",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
