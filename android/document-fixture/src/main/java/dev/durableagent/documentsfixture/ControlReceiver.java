@@ -16,8 +16,10 @@ public final class ControlReceiver extends BroadcastReceiver {
             switch(operation){
                 case "reset":Fixture.reset(context);break;
                 case "replace":Fixture.replace(context);break;
+                case "hold-readback":context.getSharedPreferences("state",0).edit().putBoolean("holdReadback",true).putBoolean("writeSeen",false).commit();break;
+                case "release":context.getSharedPreferences("state",0).edit().putBoolean("holdReadback",false).commit();break;
                 case "revoke":context.revokeUriPermission(target,Uri.parse("content://"+Fixture.AUTHORITY+"/document/original"),Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);break;
-                case "read":value.put("base64",Base64.encodeToString(Files.readAllBytes(Fixture.original(context).toPath()),Base64.NO_WRAP));break;
+                case "read":value.put("base64",Base64.encodeToString(Files.readAllBytes(Fixture.original(context).toPath()),Base64.NO_WRAP)).put("writeOpens",context.getSharedPreferences("state",0).getInt("writeOpens",0));break;
                 default:throw new IllegalArgumentException("Unknown control");
             }
             setResultCode(0);setResultData(value.toString());

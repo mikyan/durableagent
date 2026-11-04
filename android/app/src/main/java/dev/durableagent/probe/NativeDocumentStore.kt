@@ -59,6 +59,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         return JSONObject().put("resources",JSONArray(records.map(::current)))
     }
     fun describe(resourceId:String):JSONObject = current(resource(resourceId))
+    fun cancel(request:JSONObject):JSONObject = fail("DOCUMENT_CANCEL_UNAVAILABLE","原文件取消尚不可用。")
     fun prepare(request:JSONObject):JSONObject {
         val plan=plan(request);val operationId=plan.getString("operationId")
         val digest=NativeInputStore.sha256(plan.toString().toByteArray(Charsets.UTF_8))
