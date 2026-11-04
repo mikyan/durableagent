@@ -73,6 +73,7 @@ class ApplicationService:Service() {
                 20->if(debug&&text=="close"){closing=true;if(node==null){phase="{\"phase\":\"closed\"}";release()}}
                 60->if(recovery?.foreground!=true&&peers.isEmpty()){closing=true;stopAfterClose=true}
                 61->node?.getExecutor("globalThis.__appRecoveryWake?.()")?.executeVoid()
+                62->reply?.let{reconnect(text,it)}
                 30->reply?.let {writeCredential(text,it)}
                 31->if(debug)reply?.let {importValidationCredential(text,it)}
                 32->if(debug)node?.getExecutor("globalThis.__appRunModelPolicy?.()")?.executeVoid()
@@ -214,6 +215,30 @@ class ApplicationService:Service() {
             }
             pending.add(text)
         }catch(_:Throwable){/* Invalid wire messages cannot reach the SDK. */}
+    }
+    /** Explicit native reconnect, serialized before its correlated UI status refresh. */
+    private fun reconnect(text:String,peer:Messenger){
+        var request:JSONObject?=null
+        val response=try{
+            check(text.length<=4096){"INVALID_RECONNECT"};val wrapper=JSONObject(text);request=wrapper.getJSONObject("request")
+            check(request.getInt("protocol")==1&&request.getString("method")=="host.reconnect"&&request.getString("connectionId").length in 1..128&&request.getString("requestId").length in 1..128){"INVALID_RECONNECT"}
+            check(!request.has("payload")||request.optJSONObject("payload")?.length()==0){"INVALID_RECONNECT"}
+            val mode=if(debug)wrapper.getString("mode")else "product";val run=if(debug&&!wrapper.isNull("run"))wrapper.getString("run")else null
+            check(mode.removePrefix("recovery-") in setOf("product","fixture","console","hang","real","models","models-fixture","execution","execution-real","extensions-fixture","extensions-real")){"INVALID_RECONNECT"}
+            val namespace=NativeInputBridge.namespace(mode,run)
+            check(!closing){"HOST_CLOSING"}
+            check(node==null||inputNamespace==namespace){"HOST_DOMAIN_MISMATCH"}
+            if(node==null){inputNamespace=namespace;open(mode,run)}
+            check(node!=null){"HOST_NOT_READY"}
+            // Keep ready/opening and retained read-only owners intact. The normal
+            // open path remains responsible for the OS lease and stop recovery.
+            JSONObject().put("ok",true).put("value",JSONObject().put("phase",JSONObject(phase).getString("phase")))
+        }catch(error:Exception){
+            val code=error.message.takeIf{it in setOf("HOST_CLOSING","HOST_DOMAIN_MISMATCH","HOST_NOT_READY")}?:"INVALID_RECONNECT"
+            val message=when(code){"HOST_CLOSING"->"运行宿主正在关闭，请稍后重新连接。";"HOST_DOMAIN_MISMATCH"->"已有运行宿主属于另一个会话存储，保留现有运行。";"HOST_NOT_READY"->JSONObject(phase).optString("reason","运行宿主尚未就绪，请稍后重新连接。");else->"重新连接请求无效。"}
+            JSONObject().put("ok",false).put("error",JSONObject().put("code",code).put("message",message))
+        }
+        if(request!=null)send(peer,10,response.put("type","response").put("protocol",1).put("connectionId",request.optString("connectionId")).put("requestId",request.optString("requestId")).toString())
     }
     private fun credentialTarget(target:String):Boolean=node?.getExecutor("globalThis.__appCredentialTarget?.(${JSONObject.quote(target)})===true")?.executeBoolean()==true
     private fun writeCredential(text:String,peer:Messenger){

@@ -75,6 +75,7 @@ class AgentActivity:Activity() {
             @JavascriptInterface fun postMessage(json:String){runOnUiThread {if(webView===view&&!destroyed){
                 if(json.length>650000)return@runOnUiThread
                 if(view.url?.substringBefore('#')!="https://appassets.androidplatform.net/assets/ui/index.html")return@runOnUiThread
+                if(client!=null&&runCatching{JSONObject(json).optString("method")}.getOrNull()=="host.reconnect"){client?.reconnect(json);return@runOnUiThread}
                 if(execution?.accept(json)==true)return@runOnUiThread
                 if(documents?.accept(json)==true)return@runOnUiThread
                 if(inputs?.accept(json)==true)return@runOnUiThread

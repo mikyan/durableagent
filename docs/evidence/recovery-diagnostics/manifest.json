@@ -62,6 +62,10 @@
     {
       "path": "t17-observer-regression-green01-device.log",
       "sha256": "8cc4e238a56213e321eee78722cf0a2f6036a8d1458d0a7460a4ecc2195d48c3"
+    },
+    {
+      "path": "t17-mimo-selected-timeouts.log",
+      "sha256": "40d9bc09561fe632b42f5e5281b5989c1573c70c841b5a2ee2b340c1ada950fd"
     }
   ],
   "productionChanged": false
