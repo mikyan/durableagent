@@ -36,6 +36,23 @@ async function pointer(selector){
 }
 async function screenshot(label){const shot=await page.command('Page.captureScreenshot',{format:'png'});await writeFile(`${output}-${label}.png`,Buffer.from(shot.data,'base64'),{flag:'wx'});}
 const activityRecords=()=>adb('shell','dumpsys','activity','activities').split('\n').filter(line=>/\* Hist\s+#\d+:/.test(line)&&line.includes(`${pkg}/.AgentActivity`));
+async function finishActivity(){
+ const actions=[];evidence.activityExit=actions;
+ for(let attempt=0;attempt<3;attempt++){
+  if(activityRecords().length===0)return;
+  const focus=adb('shell','dumpsys','window','windows').split('\n').find(line=>line.includes('mCurrentFocus='))??'';
+  if(!focus.includes(`${pkg}/.AgentActivity`)){
+   // A finishing record can outlive its window briefly. Never send Back into
+   // another app, the launcher or keyguard to clean up our Activity.
+   const deadline=Date.now()+5000;while(Date.now()<deadline){if(activityRecords().length===0)return;await pause(150);}
+   throw Error('Activity remains recorded without its own focused window; no further Back sent');
+  }
+  const ime=adb('shell','dumpsys','input_method');actions.push({at:new Date().toISOString(),backNumber:attempt+1,inputShown:/mInputShown=true/.test(ime),inputViewShown:/mIsInputViewShown=true/.test(ime)});
+  adb('shell','input','keyevent','4');const deadline=Date.now()+4000;
+  while(Date.now()<deadline){if(activityRecords().length===0)return;await pause(150);}
+ }
+ throw Error('Activity remains after three bounded Back actions; preserved for root diagnosis');
+}
 try{
  let prepared,proof;
  if(stage==='verify'){
@@ -61,14 +78,14 @@ try{
   const status=await request('sendStatus',{intentId:intent.intentId});assert.ok(status.receipt,'Durable SDK admission');
   const waiting=await until(async()=>{const value=await request('open',{id:product});return value.recovery?.reason==='network-offline'&&value;},'Actual offline wait');
   evidence.admission=status.receipt;evidence.waiting=waiting.recovery;evidence.history=await request('history',{id:product});evidence.ownerPid=pid(`${pkg}:agent`);assert.match(evidence.ownerPid,/^\d+$/);assert.equal((await request('execution.list',{id:product})).executions.length,0);await screenshot('prepared');
-  page.close();page=null;adb('shell','input','keyevent','4');await until(()=>activityRecords().length===0,'Activity naturally finished');assert.equal(pid(`${pkg}:agent`),evidence.ownerPid,'Same owner remains after all clients leave');
+  page.close();page=null;await finishActivity();assert.equal(pid(`${pkg}:agent`),evidence.ownerPid,'Same owner remains after all clients leave');
   const services=adb('shell','dumpsys','activity','services',pkg);const ownerRecords=services.split(/(?=  \* ServiceRecord\{)/).filter(block=>/^  \* ServiceRecord\{[^\n]*dev\.durableagent\.probe\/\.ApplicationService\b/m.test(block));assert.equal(ownerRecords.length,1);assert.match(ownerRecords[0],/isForeground=true/);assert.match(ownerRecords[0],/startRequested=true/);await writeFile(`${output}-services.txt`,services+'\n',{flag:'wx'});
   Object.assign(evidence,{prepared:true,allUiAndCdpClosed:true,preparedAt:new Date().toISOString(),httpCountObserved:false});
  }else{
   const status=await request('sendStatus',{intentId:prepared.intentId});assert.equal(status.submission?.status,'done');assert.deepEqual(status.receipt,prepared.admission);
   const history=await request('history',{id:prepared.product});assert.deepEqual(history.items.filter(row=>row.role==='user').map(row=>row.text),[prepared.text]);const answer=history.items.filter(row=>row.role==='assistant').at(-1);assert.ok(answer?.text.includes(`T12-LIFECYCLE-${prepared.run}`));assert.equal(proof.nativeSnapshot.completion.identity,`answer:${prepared.admission.context.sdkConversationId}:${answer.id}`,'Reopened history retains the externally observed original completion');assert.equal(String(status.submission.answerEntryId),String(answer.id));assert.equal((await request('execution.list',{id:prepared.product})).executions.length,0);
-  Object.assign(evidence,{passed:true,product:prepared.product,intentId:prepared.intentId,admission:status.receipt,history,externalCompletedAt:proof.observedAt,completeHttpCountObserved:false});
-  page.close();page=null;adb('shell','input','keyevent','4');await until(()=>activityRecords().length===0,'Observer Activity finishes');
+  Object.assign(evidence,{publicVerificationPassed:true,product:prepared.product,intentId:prepared.intentId,admission:status.receipt,history,externalCompletedAt:proof.observedAt,completeHttpCountObserved:false});
+  page.close();page=null;await finishActivity();evidence.passed=true;
  }
  await writeFile(`${output}.json`,JSON.stringify(evidence,null,2)+'\n',{flag:'wx'});process.stdout.write(JSON.stringify({stage,product:evidence.product,prepared:evidence.prepared,passed:evidence.passed,evidence:`${output}.json`})+'\n');
 }catch(error){
