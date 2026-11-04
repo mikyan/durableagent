@@ -1,0 +1,32 @@
+android/app/src/androidTest/java/dev/durableagent/probe/FileSharedOriginalTest.kt
+  s_467dcb949b5b60::t_4459ff21f4ad86 1-92
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_19fa8e64532d18 118
+runtime/src/execution-validation.ts
+  s_467dcb949b5b60::t_9fa52488b5f386 24-28,30
+android/app/src/androidTest/java/dev/durableagent/probe/FileNativeObservationTest.kt
+  s_467dcb949b5b60::t_b7410592cf9746 1-31
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_4d6230304c1217 453
+  s_467dcb949b5b60::t_fc3954f38cdc0c 446-452,454-468
+runtime/src/file-writes.ts
+  s_467dcb949b5b60::t_19fa8e64532d18 79,93
+android/app/src/androidTest/java/dev/durableagent/probe/FileRealProviderTest.kt
+  s_467dcb949b5b60::t_66914fa04625cb 35,37,39,41-42,51-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "53bb69a1b9fe2df72386e2cf8a0c63bdd4969d02",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
