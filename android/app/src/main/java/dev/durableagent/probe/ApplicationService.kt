@@ -26,6 +26,7 @@ class ApplicationService:Service() {
     private var credentials:NativeCredentialAccess?=null
     private var inputs:NativeInputAccess?=null
     private var execution:ExecutionAccess?=null
+    private var documents:NativeDocumentAccess?=null
     private val busyStarted=AtomicLong(0)
     private val busyEnded=AtomicLong(0)
     private val ownerProgress=AtomicLong(0)
@@ -151,6 +152,8 @@ class ApplicationService:Service() {
             runtime.createV8ValueObject().use {access->access.bind(inputs!!);runtime.globalObject.set("__nativeInputs",access)}
             execution=ExecutionAccess(this,NativeInputBridge.namespace(mode,run),mode in setOf("product","execution","execution-real"))
             runtime.createV8ValueObject().use {access->access.bind(execution!!);runtime.globalObject.set("__nativeExecution",access)}
+            documents=NativeDocumentAccess(this,NativeDocumentBridge.namespace(mode,run),NativeInputBridge.namespace(mode,run))
+            runtime.createV8ValueObject().use {access->access.bind(documents!!);runtime.globalObject.set("__nativeDocuments",access)}
             if(mode=="real"||mode=="execution-real"||mode=="extensions-real"){
                 val clear=ValidationCredential.consume(this)
                 try{runtime.globalObject.set("__validationKey",String(clear,Charsets.UTF_8).trim())}finally{clear.fill(0)}
@@ -273,6 +276,6 @@ class ApplicationService:Service() {
     }
     private fun status()=JSONObject(phase).put("instance",instance).put("pid",Process.myPid()).put("domainOwned",lease!=null).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).toString()
     private fun fail(error:Throwable){phase=JSONObject().put("phase","failed").put("reason",error.message?:error.javaClass.simpleName).toString();release()}
-    private fun release(){acceptedStops.clear();ownerReady=false;ownerRunsJavaScript=false;inputNamespace=null;node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
+    private fun release(){acceptedStops.clear();ownerReady=false;ownerRunsJavaScript=false;inputNamespace=null;node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;documents?.close();documents=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
     override fun onDestroy(){emergency.shutdownNow();main.removeCallbacksAndMessages(null);owner.post {release();thread.quitSafely()};super.onDestroy()}
 }

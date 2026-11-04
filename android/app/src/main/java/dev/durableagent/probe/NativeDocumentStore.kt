@@ -37,7 +37,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     private val readers=mutableMapOf<String,Reader>()
     init { require(namespace.matches(Regex("[a-zA-Z0-9._-]{1,100}"))) }
     fun select(uri:Uri,resultFlags:Int):JSONObject {
-        if(uri.scheme!="content"||!DocumentsContract.isDocumentUri(context,uri))fail("DOCUMENT_INVALID","请选择系统文档提供者中的原文件。")
+        if(uri.scheme!="content"||uri.toString().length>4096||!DocumentsContract.isDocumentUri(context,uri))fail("DOCUMENT_INVALID","请选择具有受支持位置长度的系统文档原文件。")
         requireGrant(uri,READ)
         val flags=resultFlags and (READ or WRITE)
         if(flags and READ==0)fail("DOCUMENT_PERMISSION_REQUIRED","系统尚未授予此原文件的读取权限。")
@@ -54,9 +54,17 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
         }finally{db.endTransaction()}}
         return record
     }
-    fun list():JSONObject {
-        val records=locked{db->db.rawQuery("SELECT record FROM resources ORDER BY id",null).use{cursor->buildList{while(cursor.moveToNext())add(JSONObject(cursor.getString(0)))}}}
-        return JSONObject().put("resources",JSONArray(records.map(::current)))
+    @JvmOverloads fun list(cursor:String?=null):JSONObject {
+        if(cursor!=null&&!cursor.matches(Regex("[a-f0-9]{64}")))fail("DOCUMENT_INVALID","原文件列表游标无效。")
+        val records=locked{db->db.rawQuery("SELECT record FROM resources WHERE id>? ORDER BY id LIMIT 21",arrayOf(cursor?:"")).use{rows->buildList{while(rows.moveToNext())add(JSONObject(rows.getString(0)))}}}
+        val values=JSONArray();var bytes=0;var count=0;var last:String?=null
+        for(record in records){
+            if(count==20)break
+            val value=current(record);val length=value.toString().toByteArray(Charsets.UTF_8).size
+            if(bytes+length>60000){if(count==0)fail("DOCUMENT_FRAME_LIMIT","此原文件记录过大，无法放入列表响应。");break}
+            values.put(value);bytes+=length;count++;last=value.getString("resourceId")
+        }
+        return JSONObject().put("resources",values).put("nextCursor",if(count<records.size)last else JSONObject.NULL)
     }
     fun describe(resourceId:String):JSONObject = current(resource(resourceId))
     fun cancel(request:JSONObject):JSONObject {
@@ -313,13 +321,16 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
     }
     private fun current(record:JSONObject):JSONObject {
         val value=JSONObject(record.toString());val uri=Uri.parse(value.getString("uri"))
+        value.remove("byteLength");value.remove("lastModified");value.put("networkAccess","unknown")
         val persisted=resolver.persistedUriPermissions.firstOrNull{it.uri==uri}
         val readable=granted(uri,READ);val writable=granted(uri,WRITE)
         value.put("grant",JSONObject().put("read",readable).put("write",writable).put("persistedRead",persisted?.isReadPermission==true).put("persistedWrite",persisted?.isWritePermission==true))
         try{
             if(!readable)fail("DOCUMENT_PERMISSION_REQUIRED","原文件系统授权已撤销或尚未取得，请重新选择。")
             originalIo{
-                resolver.query(uri,arrayOf(DocumentsContract.Document.COLUMN_DISPLAY_NAME,DocumentsContract.Document.COLUMN_MIME_TYPE,DocumentsContract.Document.COLUMN_FLAGS,DocumentsContract.Document.COLUMN_SIZE,DocumentsContract.Document.COLUMN_LAST_MODIFIED),null,null,null)?.use{cursor->
+                val queried=resolver.query(uri,arrayOf(DocumentsContract.Document.COLUMN_DISPLAY_NAME,DocumentsContract.Document.COLUMN_MIME_TYPE,DocumentsContract.Document.COLUMN_FLAGS,DocumentsContract.Document.COLUMN_SIZE,DocumentsContract.Document.COLUMN_LAST_MODIFIED),null,null,null)
+                    ?:fail("DOCUMENT_UNAVAILABLE","文档提供者暂不可用。")
+                queried.use{cursor->
                     if(!cursor.moveToFirst())fail("DOCUMENT_NOT_FOUND","原文件已移动、删除或无法定位。")
                     fun text(column:String,fallback:String):String {val index=cursor.getColumnIndex(column);return if(index>=0&&!cursor.isNull(index))cursor.getString(index).take(300)else fallback}
                     fun number(column:String):Long? {val index=cursor.getColumnIndex(column);return if(index>=0&&!cursor.isNull(index))cursor.getLong(index)else null}
@@ -327,7 +338,7 @@ class NativeDocumentStore(context:Context,private val namespace:String="document
                     value.put("providerFlags",number(DocumentsContract.Document.COLUMN_FLAGS)?:0)
                     number(DocumentsContract.Document.COLUMN_SIZE)?.let{value.put("byteLength",it)}
                     number(DocumentsContract.Document.COLUMN_LAST_MODIFIED)?.let{value.put("lastModified",it)}
-                }?:fail("DOCUMENT_UNAVAILABLE","文档提供者暂不可用。")
+                }
             }
             value.put("provider",uri.authority).put("availability","available")
             value.remove("reasonCode");value.remove("reason")
