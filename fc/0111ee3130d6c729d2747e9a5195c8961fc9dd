@@ -1,0 +1,25 @@
+managed-execution/evidence/t10-android-writer-queue.json
+  s_467dcb949b5b60::t_235b20cdc52b96 1-196
+managed-execution/FILE-VALIDATION.md
+  s_467dcb949b5b60::t_80358f6a6e17c3 13,17,103-108,111
+android/app/src/androidTest/java/dev/durableagent/probe/StopExecutionTest.kt
+  s_467dcb949b5b60::t_3cabad732828dc 26-27,46,48,50,60-61,85-91,95-96,99,101,103,107,111-112,114-115,117-118,127
+managed-execution/evidence/t10-android-stop-isolation.json
+  s_467dcb949b5b60::t_235b20cdc52b96 1-215
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "fc0111ee3130d6c729d2747e9a5195c8961fc9dd",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
