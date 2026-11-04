@@ -1,0 +1,78 @@
+{
+  "sourceCommit": "664e5f2ceba3f32d79d273fb1969ac934e1d9772",
+  "artifacts": {
+    "app-debug.apk": "48faee5b25ea08c52661420a072c33091c0172b9f80c2825d11cd4e893bde87b",
+    "app-debug-androidTest.apk": "caeb3877a062d0b8470914ef1fc16d95fb5b688e4e57fa661f17a61521c05bb8",
+    "execution-setup.txt": "94db1e48a3d39ff52beafd31243dcab07a41d4a81fc89ea862c82ebadbdb3ff8"
+  },
+  "result": "PASS 1/1 in 44.865s",
+  "evidence": {
+    "run": "9555a3ce-14ef-4e11-8c0d-e0b03f510e44",
+    "conversationId": "5e647061-967b-4c23-92c0-e71df0de8078",
+    "original": {
+      "operationId": "80ea5b36-1fd1-40f6-b9ca-141c7d94252c",
+      "bindingId": "0f44aac7-926e-4bfd-9fd0-daac698ea44b",
+      "executionId": "2469ed23-6a00-4dd1-89a2-526dc59714c1",
+      "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-real-9555a3ce-14ef-4e11-8c0d-e0b03f510e44.txt",
+      "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+      "original": true,
+      "state": "completed",
+      "scopeConfirmed": true,
+      "diff": {
+        "available": true,
+        "text": "--- before\n+++ after\n@@ -0,0 +1 @@\n+MiMo-T10-原件-9555a3ce-14ef-4e11-8c0d-e0b03f510e44\n"
+      }
+    },
+    "readToolVerified": true,
+    "independentBash": {
+      "captureIncomplete": false,
+      "context": {
+        "bindingId": "0f44aac7-926e-4bfd-9fd0-daac698ea44b",
+        "callId": "call_74bc686d5e6d492385bd956c",
+        "controlGeneration": 1,
+        "locationVersion": 1,
+        "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+        "productId": "5e647061-967b-4c23-92c0-e71df0de8078",
+        "sdkConversationId": 5,
+        "taskId": 43
+      },
+      "createdAt": 1793779804011,
+      "defaultWorkspace": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace",
+      "executionId": "02f347e0-3d81-4d96-8b92-960b94749955",
+      "executorId": "a0578db8-1bd2-4158-8e78-b27216f25c6a",
+      "exitCode": 0,
+      "finalDigest": "3cb0382eb1de8c4452a63301d52909c788bc4e55f675c760a8f01add2d5ae116",
+      "finishedAt": 1793779804370,
+      "guardianPid": 7364,
+      "ledgerEpoch": "c156417c-ec2d-4528-99d1-78d257676c18",
+      "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+      "outputBytes": 53,
+      "outputCursor": 1,
+      "outputRef": "/data/data/com.termux/files/home/.local/share/durableagent-execution/outputs/02f347e0-3d81-4d96-8b92-960b94749955.raw",
+      "protocol": 1,
+      "rawSha256": "a09ba4cbd839b1b1829a164447c93325f1c50d8848ebfbe00cb00d19db29c2c0",
+      "requestDigest": "3b59bd4570beff1344b8ca604219d87c9264e3d65bd020f1502b5ab219d1d44b",
+      "scopeConfirmed": true,
+      "sequence": 5,
+      "startRequestedAt": 1793779804196,
+      "startedAt": 1793779804329,
+      "state": "completed"
+    },
+    "exactBytesBase64": "TWlNby1UMTAt5Y6f5Lu2LTk1NTVhM2NlLTE0ZWYtNGUxMS04YzBkLWUwYjAzZjUxMGU0NAo=",
+    "transportRequests": 6,
+    "tools": 3
+  },
+  "credentialAudit": {
+    "appBytes": 25411584,
+    "uidLogBytes": 367725,
+    "actualKeyMatches": 0,
+    "positiveControl": true,
+    "encodings": [
+      "UTF-8",
+      "UTF-16LE",
+      "UTF-16BE"
+    ],
+    "allOffsets": true,
+    "performedBy": "root"
+  }
+}
