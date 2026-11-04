@@ -1,0 +1,37 @@
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionObservationTest.kt
+  s_467dcb949b5b60::t_c8bab41b0c1f8f 31-40
+  s_467dcb949b5b60::t_2be5305445e5fd 41
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_9e10f862fa52c4 14
+managed-execution/FILE-VALIDATION.md
+  s_467dcb949b5b60::t_8601a8f9f9870f 52-53,60-64,68
+ui/test/execution-page.test.tsx
+  s_467dcb949b5b60::t_1c21af978c8253 40-54
+  s_467dcb949b5b60::t_29e8d478713bf2 55-65
+runtime/test/managed-execution.test.mjs
+  s_467dcb949b5b60::t_3463d6b0ce0893 389
+runtime/src/document-writes.ts
+  s_467dcb949b5b60::t_801e7dc899bec9 63
+ui/src/extensions/file-changes.tsx
+  s_467dcb949b5b60::t_801e7dc899bec9 4,17-54,71
+android/app/src/androidTest/java/dev/durableagent/probe/FileRealProviderTest.kt
+  s_467dcb949b5b60::t_2f715964bd2e2e 38-39
+android/app/src/androidTest/java/dev/durableagent/probe/FileQueueApplicationTest.kt
+  s_467dcb949b5b60::t_922bf8e8c13fdf 34-44,52,64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "964d3ad591b352cd6ead2eaaf4b6c6e7072498eb",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
