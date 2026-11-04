@@ -101,7 +101,7 @@ export class ManagedExecution implements EffectAuthority {
   if(control.pendingAbort||control.generation!==request.context.controlGeneration||control.stoppedThrough>=request.context.controlGeneration)return failure('EXECUTION_STOPPED','原控制代次已停止，不能启动命令');
   if(api&&(await api.getTask(api.taskId,context))?.abortRequested)return failure('EXECUTION_STOPPED','此工具调用已停止');
  }
- private async awaitNetwork(request:Request,receipt:Receipt,api:ToolExecutionApi,context:Context){
+ private async awaitNetwork(request:Request,receipt:Receipt,api:ToolExecutionApi,context:Context,writeScope?:WriteScope){
   const authority=this.options.dataSaver;if(!authority)return;
   let decision=await this.policyRead(request,api,context,()=>authority.prepared(request.executionId,hash(request),String(receipt.finalDigest)));
   for(;;){
@@ -110,6 +110,7 @@ export class ManagedExecution implements EffectAuthority {
    if(decision.policyInterrupted)await this.holdPolicyInterrupted(request,api,context);
    if(decision.phase==='allowed'||decision.phase==='granted')return;
    if(decision.phase!=='waiting')return failure('DATA_SAVER_RESULT_UNVERIFIED','网络变化后的原执行需要核验，不能自动重跑');
+   if(decision.dispatched!==true)await this.writes!.waitEligibility(this.writeClaim(request,writeScope),{operationId:request.executionId,requestDigest:hash(request),namespace:request.context.namespace,state:receipt.state,scopeConfirmed:false,sequence:Number(receipt.sequence),dispatched:false});
    // This is one pending SDK invocation, not a second task scheduler or a new execution ID.
    await new Promise(resolve=>setTimeout(resolve,100));
    decision=await this.policyRead(request,api,context,()=>authority.decision(request.executionId));
@@ -165,7 +166,11 @@ export class ManagedExecution implements EffectAuthority {
    try{receipt=this.receipt(await this.options.channel.request('query',{executionId}),request);if(receipt.reason==='NO_RECEIPT')throw Error('Acceptance not yet confirmed');}
    catch{receipt={...saved.receipt,protocol:1,executionId,namespace:request.context.namespace,context:request.context,state:'unknown',reason:'CLIENT_CONFIRMATION_LOST',source:'application'};}
    await this.owner().commit(async tx=>{const intent=await tx.doc(Intent,entry.key,null),index=await tx.doc(Index);if(!intent.request||!same(intent.request,request))return failure('EXECUTION_STORAGE_INCONSISTENT','执行意图在核验时改变');if(terminal.has(intent.receipt?.state??''))return;if(receipt.source!=='application'&&intent.receipt&&Number(receipt.sequence??0)<Number(intent.receipt.sequence??0))return;intent.receipt=copy(receipt);index.items[executionId].state=receipt.state;},BACKGROUND_CONTEXT,{persistence:{kind:'immediate'}});
-   if(!terminal.has(receipt.state))await this.writes!.reserve(this.writeClaim(request,saved.writeScope));
+   if(!terminal.has(receipt.state)){
+    const decision=receipt.state==='accepted_not_started'&&this.options.dataSaver?await this.options.dataSaver.prepared(executionId,hash(request),String(receipt.finalDigest)):undefined;
+    if(decision?.phase==='waiting'&&decision.dispatched!==true)await this.writes!.waitEligibility(this.writeClaim(request,saved.writeScope),{operationId:executionId,requestDigest:hash(request),namespace:request.context.namespace,state:receipt.state,scopeConfirmed:false,sequence:Number(receipt.sequence),dispatched:false});
+    else await this.writes!.reserve(this.writeClaim(request,saved.writeScope));
+   }
   }
   await this.writes?.refresh();
  }
@@ -197,15 +202,21 @@ export class ManagedExecution implements EffectAuthority {
    await this.options.boundary?.('intent-persisted',copy(request));
    await this.policy(request,api,context);
    if(this.options.dataSaver)await this.policyRead(request,api,context,()=>this.options.dataSaver!.register(request));
-   for(;;){const reservation=await this.writes!.reserve(this.writeClaim(request,writeScope));if(reservation.state==='cancelled')return failure('EXECUTION_STOPPED','排队的写入已取消');if(reservation.state!=='queued')break;await this.policy(request,api,context);await this.writes!.refresh();await new Promise(resolve=>setTimeout(resolve,20));}
-   if(fileEffect)await this.options.boundary?.('file-reserved',copy(request));
+   const acquireWriter=async()=>{
+    for(;;){const reservation=await this.writes!.reserve(this.writeClaim(request,writeScope));if(reservation.state==='cancelled')return failure('EXECUTION_STOPPED','排队的写入已取消');if(reservation.state!=='queued')break;await this.policy(request,api,context);await this.writes!.refresh();await new Promise(resolve=>setTimeout(resolve,20));}
+    if(fileEffect){await this.options.boundary?.('file-reserved',copy(request));try{await fileEffect.beforePrepare({executionId:request.executionId,requestDigest:hash(request),context:{productId:request.context.productId,controlGeneration:request.context.controlGeneration,sdkConversationId:request.context.sdkConversationId}});}catch(error){await this.cancelRecorded(key,request);throw error;}}
+   };
+   if(!this.options.dataSaver)await acquireWriter();
+   // Executor.prepare fixes metadata only; no original file plan or process is
+   // started here. Network-ineligible work must not hold the writer domain.
    let receipt=this.receipt(await this.options.channel.request('query',{executionId:request.executionId}),request);
-   if(receipt.state==='unknown'&&receipt.reason==='NO_RECEIPT'){try{await fileEffect?.beforePrepare({executionId:request.executionId,requestDigest:hash(request),context:{productId:request.context.productId,controlGeneration:request.context.controlGeneration,sdkConversationId:request.context.sdkConversationId}});}catch(error){await this.cancelRecorded(key,request);throw error;}receipt=this.receipt(await this.options.channel.request('prepare',request),request);}
+   if(receipt.state==='unknown'&&receipt.reason==='NO_RECEIPT')receipt=this.receipt(await this.options.channel.request('prepare',request),request);
    await this.save(api,key,request,receipt);
    this.dispatching.delete(request.executionId);
    await this.options.boundary?.('accepted',copy(request));
    while(receipt.state==='accepted_not_started'){
-    await this.awaitNetwork(request,receipt,api,context);
+    await this.awaitNetwork(request,receipt,api,context,writeScope);
+    if(this.options.dataSaver)await acquireWriter();
     if(this.options.dataSaver)await this.policyRead(request,api,context,async()=>undefined);else await this.policy(request,api,context);
     const position=await this.locations.inspect(binding.location);
     if(position.state!=='available'||!workspaceIdentity||position.identity!==workspaceIdentity)return failure('EXECUTION_LOCATION_CHANGED','执行位置已经改变，未启动命令');
@@ -266,7 +277,7 @@ export class ManagedExecution implements EffectAuthority {
  async list(productId:string,cursor?:unknown){await this.recover();const index=await this.owner().snapshot(Index,BACKGROUND_CONTEXT),entries=Object.entries(index?.items??{}).filter(([,entry])=>entry.productId===productId),executions:Receipt[]=[];const start=cursor===undefined?0:entries.findIndex(([id])=>id===cursor)+1;if(cursor!==undefined&&(!start||typeof cursor!=='string'))return failure('INVALID_ARGUMENT','执行列表位置已失效，请重新读取');const queued=new Set((await this.writes!.list()).filter(value=>value.state==='queued').map(value=>value.operationId));const page=entries.slice(start,start+20);for(const [id,entry] of page){const intent=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(intent?.request&&queued.has(id))executions.push({executionId:id,state:'queued',source:'application',reason:'WRITER_QUEUED',context:copy(intent.request.context),namespace:intent.request.context.namespace,sequence:0});else if(intent?.receipt)executions.push(copy(intent.receipt));}return {executions,nextCursor:start+page.length<entries.length?page.at(-1)![0]:null};}
  async fileChanges(productId:string,cursor?:unknown){await this.recover();const files=await this.fileWrites.list(productId,cursor),untrackedExecutions=[];for(const [executionId,entry]of Object.entries((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{})){if(entry.productId!==productId)continue;const stored=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(stored?.fileOperationId)continue;untrackedExecutions.push({executionId,state:entry.state,diff:{available:false,reason:'unknown_command_scope'}});}return {...files,documents:await this.documentWrites?.list(productId)??{changes:[],limited:false},untrackedExecutions:untrackedExecutions.slice(-20),untrackedLimited:untrackedExecutions.length>20};}
  async writeDocument(binding:AdoptedBinding,api:ToolExecutionApi|undefined,args:DocumentWriteArguments,context:Context){if(!this.documentWrites)return failure('DOCUMENT_UNAVAILABLE','原件能力尚未就绪');return this.documentWrites.write(binding,api,args,context);}
- async writeFile(binding:AdoptedBinding,api:ToolExecutionApi|undefined,path:string,content:string|Uint8Array,context:Context,ordinal:number,mode:FileMutationMode='write',options:FileMutationOptions={}){const available=await this.files(binding,context);if(!available.ok)return available;return this.fileWrites.write(binding,api,path,content,context,ordinal,(argv,effect)=>this.run(binding,api,argv,undefined,context,ordinal,effect),mode,options);}
+ async writeFile(binding:AdoptedBinding,api:ToolExecutionApi|undefined,path:string,content:string|Uint8Array,context:Context,ordinal:number,mode:FileMutationMode='write',options:FileMutationOptions={}){const available=await this.files(binding,context);if(!available.ok)return available;return this.fileWrites.write(binding,api,path,content,context,ordinal,(argv,effect)=>this.run(binding,api,argv,{inheritEnv:effect.inheritEnv},context,ordinal,effect),mode,options);}
  async readOutput(productId:string,executionId:string,cursor:unknown){
   if(!Number.isSafeInteger(cursor)||Number(cursor)<0)return failure('INVALID_ARGUMENT','输出位置无效');
   const entry=(await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items[executionId];if(!entry||entry.productId!==productId)return failure('EXECUTION_NOT_FOUND','此会话没有这次受管执行');

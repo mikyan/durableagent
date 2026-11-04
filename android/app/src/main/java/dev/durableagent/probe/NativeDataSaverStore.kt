@@ -84,7 +84,7 @@ class NativeDataSaverStore(private val context:Context,private val namespace:Str
         if(!value.optBoolean("terminal")){value.put("policyCancelError",code.takeIf{it.matches(Regex("[A-Z][A-Z0-9_]{0,63}"))}?:"CANCEL_UNCONFIRMED");saveOperation(db,value)}
         refresh(db,network)
     }
-    fun observe(receipt:JSONObject,network:DataSaverNetwork):JSONObject=transaction(network){db,network->
+    fun observe(receipt:JSONObject,network:DataSaverNetwork,verifiedLocal:Boolean?=null):JSONObject=transaction(network){db,network->
         val id=receipt.getString("executionId");val current=operation(db,id)?:fail("DATA_SAVER_NOT_FOUND","原执行的省流记录不存在。")
         val tombstone=receipt.optString("state")=="not_started"&&receipt.optString("reason")=="CANCELLED_BEFORE_ACCEPTANCE"&&receipt.optBoolean("neverStarted")&&receipt.optBoolean("scopeConfirmed")
         if(receipt.optString("namespace")!=current.getString("namespace")||!tombstone&&(receipt.optString("requestDigest")!=current.getString("requestDigest")||!current.isNull("finalDigest")&&receipt.optString("finalDigest")!=current.getString("finalDigest")))
@@ -92,11 +92,17 @@ class NativeDataSaverStore(private val context:Context,private val namespace:Str
         val sequence=receipt.getLong("sequence");if(sequence<0)fail("DATA_SAVER_IDENTITY_CONFLICT","外部结果顺序无法核验。")
         if(!current.optBoolean("terminal")&&sequence>=current.optLong("sequence",-1)){
             val state=receipt.getString("state");if(state !in setOf("accepted_not_started","starting","running","stop_requested","completed","stopped","not_started","unknown"))fail("DATA_SAVER_IDENTITY_CONFLICT","外部执行状态无法核验。")
+            if(verifiedLocal!=null){current.put("classification",if(verifiedLocal)"controlled-local" else "unknown").put("localCapability",if(verifiedLocal)JSONObject(receipt.getJSONObject("localCapability").toString())else JSONObject.NULL)}
             current.put("sequence",sequence).put("state",state).put("scopeConfirmed",receipt.optBoolean("scopeConfirmed")).put("terminal",state in setOf("completed","stopped","not_started")&&receipt.optBoolean("scopeConfirmed"))
             val cancelReason=receipt.optString("cancelReason");if(cancelReason in setOf("user","timeout","network_policy"))current.put("cancelReason",cancelReason)
             saveOperation(db,current)
         }
         refresh(db,network);operationView(db,id,network)
+    }
+    fun revalidateLocal(executionId:String,accept:(JSONObject?)->Boolean,network:DataSaverNetwork):Unit=transaction(network){db,network->
+        val value=operation(db,executionId)?:fail("DATA_SAVER_NOT_FOUND","固定执行不存在。")
+        if(value.optString("classification")=="controlled-local"&&!accept(value.optJSONObject("localCapability"))){value.put("classification","unknown").put("localCapability",JSONObject.NULL);saveOperation(db,value)}
+        refresh(db,network);invalidateRunning(db,network)
     }
     fun prepared(executionId:String,requestDigest:String,finalDigest:String,network:DataSaverNetwork):JSONObject=transaction(network){db,network->
         val current=operation(db,executionId)?:fail("DATA_SAVER_NOT_FOUND","固定执行不存在。")
@@ -122,7 +128,7 @@ class NativeDataSaverStore(private val context:Context,private val namespace:Str
     private fun saveOperation(db:SQLiteDatabase,value:JSONObject){db.execSQL("UPDATE operations SET data=? WHERE id=?",arrayOf(value.toString(),value.getString("executionId")))}
     private fun operationView(db:SQLiteDatabase,id:String,network:DataSaverNetwork):JSONObject{
         val value=operation(db,id)?:fail("DATA_SAVER_NOT_FOUND","固定执行不存在。")
-        val policy=view(db,network);val phase=when{value.optBoolean("terminal")->"terminal";value.optBoolean("policyInterrupted")->"result-unverified";!policy.getBoolean("restricted")->"allowed";granted(value,policy)->"granted";else->"waiting"}
+        val policy=view(db,network);val phase=when{value.optBoolean("terminal")->"terminal";value.optBoolean("policyInterrupted")->"result-unverified";(!policy.getBoolean("restricted")||value.optString("classification")=="controlled-local")->"allowed";granted(value,policy)->"granted";else->"waiting"}
         return value.put("phase",phase).put("period",policy.getLong("period")).put("reason",policy.getString("reason"))
     }
     private fun granted(value:JSONObject,policy:JSONObject)=value.optLong("grantPeriod",-1)==policy.getLong("period")&&!value.isNull("finalDigest")&&value.optString("grantFinalDigest")==value.getString("finalDigest")

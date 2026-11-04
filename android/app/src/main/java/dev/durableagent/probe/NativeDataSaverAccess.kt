@@ -11,6 +11,15 @@ class NativeDataSaverAccess private constructor(private val context:Context,priv
     private val network=if(source==null)AndroidDataSaverNetwork(context)else null
     private val current=source?:{network!!.current()}
     private val store=NativeDataSaverStore(context,namespace,current)
+    private val implementation by lazy{try{context.assets.open("execution-capabilities.json").bufferedReader().use{JSONObject(it.readText())}}catch(_:Exception){JSONObject()}}
+    // Only an authenticated executor receipt can carry this proof. The Javet
+    // register/prepared actions deliberately have no classification argument.
+    private fun verifiedLocal(proof:JSONObject?):Boolean {
+        if(proof==null||implementation.optInt("version")!=1)return false
+        if(proof.optString("kind") !in setOf("physical-cwd-v1","file-apply-v1"))return false
+        if(proof.optString("kind")=="file-apply-v1"&&proof.opt("isolatedPython")!=true)return false
+        return listOf("runnerSha256","helperSha256").all{val expected=implementation.optString(it);expected.matches(Regex("[a-f0-9]{64}"))&&proof.optString(it)==expected}
+    }
     @V8Function fun requestJson(method:String,payloadJson:String):String=try {
         val value=JSONObject(payloadJson)
         val result=when(method){
@@ -54,10 +63,11 @@ class NativeDataSaverAccess private constructor(private val context:Context,priv
     fun observe(receipt:JSONObject):JSONObject {
         val id=receipt.getString("executionId")
         if(receipt.has("context"))store.prepared(id,receipt.getString("requestDigest"),receipt.getString("finalDigest"),current())
-        return store.observe(receipt,current())
+        return store.observe(receipt,current(),verifiedLocal(receipt.optJSONObject("localCapability")))
     }
     fun requireStart(executionId:String,finalDigest:String):JSONObject {
         NativeInputStore(context,namespace).withLeaseWait(1000).use{it.requireEffect(executionId)}
+        store.revalidateLocal(executionId,::verifiedLocal,current())
         return store.requireStart(executionId,finalDigest,current())
     }
     override fun close(){network?.close();store.close()}

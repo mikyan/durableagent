@@ -15,6 +15,42 @@ import {createRegistry,defineTool} from '@earendil-works/pi-durable';
 import {obj} from '@earendil-works/pi-schema';
 import {PersistentExecutionPeer,executionConfiguration} from '../validation/execution-peer.mjs';
 
+test('a policy-waiting prepared shell leaves the writer domain available to a controlled local file operation',async()=>{
+ class LocalPeer extends ExecutionPeer {
+  plans=new Map();data=Buffer.from('before');
+  position={namespace:this.identity.namespace,canonicalPath:'/termux/default-workspace/local.txt',objectId:'1:9',ancestorObjectIds:['1:2']};
+  async request(method,payload){
+   const prefix=['/termux/python','/termux/file_service.py','apply','/termux/records'];
+   if(method==='file.describe')return {ok:true,value:{protocol:1,namespace:this.identity.namespace,applyArgvPrefix:prefix}};
+   if(method==='file.canonical')return {ok:true,value:this.position.canonicalPath};
+   if(method==='file.resolveWrite')return {ok:true,value:this.position};
+   if(method==='file.prepareWrite'){const plan={...payload,namespace:this.identity.namespace,requestDigest:hash(payload),position:this.position,argv:[...prefix,payload.operationId]};this.plans.set(payload.operationId,plan);return {ok:true,value:plan};}
+   if(method==='file.writeResult'){const plan=this.plans.get(payload.operationId);return {ok:true,value:{...plan,state:'completed',original:true,after:{size:this.data.length,sha256:createHash('sha256').update(this.data).digest('hex')},diff:{available:false,reason:'binary'}}};}
+   const result=await super.request(method,payload);
+   if(method==='start'){const request=this.records.get(payload.executionId).request,plan=this.plans.get(request.command.argv?.at(-1));if(plan)this.data=Buffer.from(plan.data,'base64');}
+   return result;
+  }
+ }
+ class Policy {
+  records=new Map();release=false;
+  async register(request){let row=this.records.get(request.executionId);if(!row){row={executionId:request.executionId,requestDigest:hash(request),productId:request.context.productId,controlGeneration:request.context.controlGeneration,namespace:request.context.namespace,classification:request.command.kind==='argv'?'controlled-local':'unknown',period:1,phase:'waiting',reason:'metered',grantPeriod:null};this.records.set(request.executionId,row);}return structuredClone(row);}
+  async prepared(id,requestDigest,finalDigest){const row=this.records.get(id);assert.equal(row.requestDigest,requestDigest);row.finalDigest=finalDigest;return this.decision(id);}
+  async decision(id){const row=this.records.get(id);return {...structuredClone(row),phase:row.classification==='controlled-local'||this.release?'allowed':'waiting'};}
+ }
+ const dir=await mkdtemp(join(tmpdir(),'policy-writer-order-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new LocalPeer(),policy=new Policy(),execution=new ManagedExecution({channel:peer,authority:native,dataSaver:policy});
+ const isLocal=body=>JSON.stringify(body.messages.at(-1).content).includes('local');
+ const app=new Application({...configuration(body=>isLocal(body)?'write':'bash',body=>isLocal(body)?{path:'local.txt',content:'local-after'}:{command:'unknown-network-work'}),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution});
+ try{
+  await app.start();await call(app,'create',{creationId:'shell'});await native.create('shell','shell','shell');await call(app,'send',{intentId:'shell'});
+  await until(()=>[...policy.records.values()].some(row=>row.productId==='shell'&&row.finalDigest));
+  const shell=[...policy.records.values()].find(row=>row.productId==='shell');assert.equal(peer.records.get(shell.executionId).receipt.state,'accepted_not_started');assert.equal(peer.starts,0);
+  await call(app,'create',{creationId:'local'});await native.create('local','local','local');await call(app,'send',{intentId:'local'});
+  await until(async()=>(await call(app,'sendStatus',{intentId:'local'})).submission?.status==='done');
+  assert.equal(peer.data.toString(),'local-after');assert.equal([...peer.records.values()].find(row=>row.request.command.kind==='argv').request.inheritEnv,false,'new fixed file intent must not inherit mutable process environment');assert.equal(peer.starts,1);assert.equal(peer.records.get(shell.executionId).receipt.state,'accepted_not_started');assert.equal((await call(app,'files.list',{id:'local'})).changes[0].scopeConfirmed,true);
+  policy.release=true;await until(async()=>(await call(app,'sendStatus',{intentId:'shell'})).submission?.status==='done');assert.equal(peer.starts,2);assert.equal(peer.records.size,2);
+ }finally{policy.release=true;await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
 const canonical=value=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
 const hash=value=>createHash('sha256').update(JSON.stringify(canonical(value))).digest('hex');
 const call=async(app,method,payload={})=>{const r=await app.request({protocol:1,connectionId:'test',requestId:crypto.randomUUID(),method,payload});if(!r.ok)throw Object.assign(Error(r.error.message),r.error);return r.value;};

@@ -3,6 +3,7 @@ import argparse
 import base64
 import gzip
 import hashlib
+import json
 from pathlib import Path
 import textwrap
 
@@ -53,6 +54,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--capabilities-output', type=Path)
     args = parser.parse_args()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(build(args.repo), encoding='utf-8', newline='\n')
+    if args.capabilities_output:
+        proof = {'version': 1, 'runnerSha256': hashlib.sha256((args.repo / 'managed-execution/durable_executor.py').read_bytes()).hexdigest(), 'helperSha256': hashlib.sha256((args.repo / 'managed-execution/file_service.py').read_bytes()).hexdigest()}
+        args.capabilities_output.parent.mkdir(parents=True, exist_ok=True)
+        args.capabilities_output.write_text(json.dumps(proof, sort_keys=True) + '\n', encoding='utf-8', newline='\n')
