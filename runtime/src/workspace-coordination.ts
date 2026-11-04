@@ -1,7 +1,7 @@
 import {defineDoc,type Harness} from '@earendil-works/pi-durable';
 import {BACKGROUND_CONTEXT} from '@earendil-works/chord/context';
 
-export type FilePosition={namespace:string;canonicalPath:string;objectId:string|null;ancestorObjectIds:string[]};
+export type FilePosition={namespace:string;canonicalPath:string;objectId:string|null;ancestorObjectIds:string[];parentAnchor?:string;missingParents?:string[];writeRoot?:string};
 export type WriteScope={domain:'device-files';kind:'environment'}|{domain:'device-files';kind:'paths';positions:FilePosition[]};
 export type WriteClaim={operationId:string;requestDigest:string;namespace:string;source:'termux'|'saf';bindingId:string;productId:string;scope:WriteScope};
 export type WriteEvidence={operationId:string;requestDigest:string;namespace:string;state:string;scopeConfirmed:boolean;sequence:number};
@@ -15,7 +15,7 @@ function conflicts(a:WriteScope,b:WriteScope){
  if(a.domain!==b.domain)return false;if(a.kind==='environment'||b.kind==='environment')return true;
  const below=(child:string,parent:string)=>child===parent||child.startsWith(parent==='/'?'/':parent+'/');
  return a.positions.some(left=>b.positions.some(right=>left.namespace===right.namespace&&(
-  below(left.canonicalPath,right.canonicalPath)||below(right.canonicalPath,left.canonicalPath)||
+  below(left.writeRoot??left.canonicalPath,right.writeRoot??right.canonicalPath)||below(right.writeRoot??right.canonicalPath,left.writeRoot??left.canonicalPath)||
   left.objectId!==null&&(left.objectId===right.objectId||right.ancestorObjectIds.includes(left.objectId))||
   right.objectId!==null&&left.ancestorObjectIds.includes(right.objectId))));
 }

@@ -1,6 +1,6 @@
 import {defineDoc,defineDocFamily,type Harness,type Registry,type ToolExecutionApi,type ToolRegistration} from '@earendil-works/pi-durable';
 import {createBashTool,createReadTool,createWriteTool} from '@earendil-works/pi-durable/tools';
-import {ExecutionError,FileError,StreamDecoder,type ExecutionEnv,type FileSystem,type ShellExecOptions,type Result,type ShellExecResult} from '@earendil-works/pi-durable/env';
+import {ExecutionError,FileError,StreamDecoder,type ExecutionEnv,type FileSystem,type ShellExecOptions,type Result,type ShellExecResult,type FileWatcher,type WatchTarget,type FileChange} from '@earendil-works/pi-durable/env';
 import {BACKGROUND_CONTEXT,type Context} from '@earendil-works/chord/context';
 import {randomUUID,createHash} from 'node:crypto';
 import {posix} from 'node:path';
@@ -9,6 +9,8 @@ import type {EffectAuthority,EffectSnapshot} from './projects.js';
 import type {SendAuthority} from './submission-protocol.js';
 import type {ExecutionChannel} from './execution-channel.js';
 import {ManagedFiles} from './managed-files.js';
+import {ManagedDocuments} from './managed-documents.js';
+import {DocumentWrites,type DocumentWriteArguments} from './document-writes.js';
 import {FileWrites,type FileExecutionEffect,type FileMutationMode,type FileMutationOptions} from './file-writes.js';
 import type {FileEffectAuthority} from './file-effect-protocol.js';
 import {WorkspaceCoordinator,type WriteClaim,type WriteScope} from './workspace-coordination.js';
@@ -39,9 +41,14 @@ export class ManagedExecution implements EffectAuthority {
  private closedOwners=new Set<string>();
  private writes?:WorkspaceCoordinator;
  private readonly fileWrites:FileWrites;
+ private readonly documents?:ManagedDocuments;
+ private readonly documentWrites?:DocumentWrites;
+ private readonly watchers=new Map<string,Set<FileWatcher>>();
+ private readsClosed=false;
  readonly locations:LocationAdapter;
- constructor(private readonly options:{channel:ExecutionChannel;authority:SendAuthority;fileEffects?:FileEffectAuthority;boundary?:(stage:string,request:Readonly<Request>)=>void|Promise<void>}){
+ constructor(private readonly options:{channel:ExecutionChannel;authority:SendAuthority;fileEffects?:FileEffectAuthority;documents?:ExecutionChannel;boundary?:(stage:string,request:Readonly<Request>)=>void|Promise<void>}){
   this.fileWrites=new FileWrites(options.channel,options.fileEffects);
+  if(options.documents){this.documents=new ManagedDocuments(options.documents);this.documentWrites=new DocumentWrites(options.documents,options.authority);}
   this.locations={deferInspection:true,inspect:async workspace=>{
    if(workspace.environment!=='termux')return {state:'environment-changed',reason:'此位置不属于当前 Termux 执行环境'};
    try{const value=await options.channel.request('inspectWorkspace',{path:workspace.path});if(value.state!=='available'||typeof value.identity!=='string'||typeof value.namespace!=='string')return {state:'missing',reason:'Termux 中的位置不可用，保留原位置'};this.namespace=value.namespace;return {state:'available',identity:value.identity};}
@@ -49,7 +56,8 @@ export class ManagedExecution implements EffectAuthority {
   },environment:async binding=>new ManagedEnvironment(this,binding)};
  }
  private serial<T>(action:()=>Promise<T>):Promise<T>{const result=this.tail.then(action,action);this.tail=result.catch(()=>{});return result;}
- attach(harness:Harness){this.harness=harness;this.fileWrites.attach(harness);this.writes=new WorkspaceCoordinator(harness,async claim=>{
+ attach(harness:Harness){this.harness=harness;this.readsClosed=false;this.fileWrites.attach(harness);this.documentWrites?.attach(harness,()=>this.writes!);this.writes=new WorkspaceCoordinator(harness,async claim=>{
+  if(claim.source==='saf'){if(!this.documentWrites)return failure('DOCUMENT_UNAVAILABLE','原件能力尚未就绪，保留写入占用');return this.documentWrites.evidence(claim);}
   const index=await harness.snapshot(Index,BACKGROUND_CONTEXT),entry=index?.items[claim.operationId];
   if(!entry)return failure('EXECUTION_STORAGE_INCONSISTENT','写入占用缺少执行索引');
   const saved=await harness.snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(!saved?.request||hash(saved.request)!==claim.requestDigest)return failure('EXECUTION_STORAGE_INCONSISTENT','写入占用与持久执行不一致');
@@ -66,13 +74,22 @@ export class ManagedExecution implements EffectAuthority {
    return tool.execute(args,{...api,env:api.env.forCall(api)},context);
   }} as T;
  }
- install(registry:Registry){registry.install({name:EXECUTION_EXTENSION.id,tools:[this.wrapTool(createBashTool()),this.wrapTool(createReadTool()),this.wrapTool(createWriteTool())]});}
+ install(registry:Registry){registry.install({name:EXECUTION_EXTENSION.id,tools:[this.wrapTool(createBashTool()),this.wrapTool(createReadTool()),this.wrapTool(createWriteTool()),...(this.documents?[this.wrapTool(this.documents.listTool()),this.wrapTool(this.documents.readTool()),this.wrapTool(this.documents.writeTool((args,api,context)=>(api.env as ManagedEnvironment).writeDocument(args,context)))]:[])]});}
  async files(binding:AdoptedBinding,context:Context):Promise<Result<ManagedFiles,FileError>>{
   try{context.abortSignal?.throwIfAborted();const position=await this.locations.inspect(binding.location);
    if(position.state!=='available'||binding.actualIdentity&&position.identity!==binding.actualIdentity)return {ok:false,error:new FileError('unknown','原文件位置尚未核验或已经改变',binding.location.path)};
    return {ok:true,value:new ManagedFiles({channel:this.options.channel,cwd:binding.location.path,namespace:this.namespace})};
   }catch{return {ok:false,error:new FileError(context.abortSignal?.aborted?'aborted':'unknown','文件环境尚未就绪',binding.location.path)};}
  }
+ async watch(binding:AdoptedBinding,targets:readonly WatchTarget[],onChange:(change:FileChange)=>void,context:Context):Promise<Result<FileWatcher,FileError>>{
+  const owner=binding.id+':'+binding.sdkConversationId,closed=()=>this.readsClosed||this.closedOwners.has(owner);
+  if(closed())return {ok:false,error:new FileError('aborted','文件监听所属环境已关闭')};const files=await this.files(binding,context);if(!files.ok)return files;
+  const opened=await files.value.watch(targets,onChange,context);if(!opened.ok)return opened;
+  if(closed()){await opened.value.stop(BACKGROUND_CONTEXT);return {ok:false,error:new FileError('aborted','文件监听所属环境已关闭')};}
+  const watchers=this.watchers.get(owner)??new Set<FileWatcher>();this.watchers.set(owner,watchers);
+  const watcher:FileWatcher={mode:opened.value.mode,stop:async current=>{watchers.delete(watcher);if(!watchers.size)this.watchers.delete(owner);await opened.value.stop(current);}};watchers.add(watcher);return {ok:true,value:watcher};
+ }
+ async closeReads(){this.readsClosed=true;for(const readers of [...this.watchers.values()])for(const reader of [...readers])await reader.stop(BACKGROUND_CONTEXT);}
  private owner(){if(!this.harness)return failure('EXECUTION_NOT_READY','执行记录尚未打开');return this.harness;}
  private async identity(){const value=await this.options.channel.request('ping',{});if(value.protocol!==1||typeof value.executorId!=='string'||typeof value.ledgerEpoch!=='string'||value.namespace!=='termux:'+value.executorId)return failure('EXECUTOR_IDENTITY','执行实例身份无法核验');return value as {protocol:1;executorId:string;ledgerEpoch:string;namespace:string};}
  private async policy(request:Request,api?:ToolExecutionApi,context:Context=BACKGROUND_CONTEXT){
@@ -99,6 +116,7 @@ export class ManagedExecution implements EffectAuthority {
  }
  private async reconcile(){
   await this.fileWrites.recoverNative();
+  await this.documentWrites?.recover();
   const entries=Object.entries((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{});
   const reservations=new Map((await this.writes?.list()??[]).map(value=>[value.operationId,value]));
   for(const [executionId,entry] of entries){
@@ -183,6 +201,7 @@ export class ManagedExecution implements EffectAuthority {
  }
  async cleanup(binding:AdoptedBinding,context:Context){return this.serial(async()=>{
   context.abortSignal?.throwIfAborted();this.closedOwners.add(binding.id+':'+binding.sdkConversationId);
+  for(const watcher of [...this.watchers.get(binding.id+':'+binding.sdkConversationId)??[]])await watcher.stop(BACKGROUND_CONTEXT);
   const entries=Object.values((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{});
   for(const entry of entries){if(entry.bindingId!==binding.id||terminal.has(entry.state))continue;const saved=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(!saved?.request)return failure('EXECUTION_STORAGE_INCONSISTENT','执行记录缺失，停止范围未确认');const request=copy(saved.request);if(request.context.sdkConversationId!==binding.sdkConversationId)continue;
    await this.cancelRecorded(entry.key,request);const deadline=performance.now()+5000;
@@ -193,7 +212,8 @@ export class ManagedExecution implements EffectAuthority {
   }
  });}
  async list(productId:string,cursor?:unknown){await this.recover();const index=await this.owner().snapshot(Index,BACKGROUND_CONTEXT),entries=Object.entries(index?.items??{}).filter(([,entry])=>entry.productId===productId),executions:Receipt[]=[];const start=cursor===undefined?0:entries.findIndex(([id])=>id===cursor)+1;if(cursor!==undefined&&(!start||typeof cursor!=='string'))return failure('INVALID_ARGUMENT','执行列表位置已失效，请重新读取');const queued=new Set((await this.writes!.list()).filter(value=>value.state==='queued').map(value=>value.operationId));const page=entries.slice(start,start+20);for(const [id,entry] of page){const intent=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(intent?.request&&queued.has(id))executions.push({executionId:id,state:'queued',source:'application',reason:'WRITER_QUEUED',context:copy(intent.request.context),namespace:intent.request.context.namespace,sequence:0});else if(intent?.receipt)executions.push(copy(intent.receipt));}return {executions,nextCursor:start+page.length<entries.length?page.at(-1)![0]:null};}
- async fileChanges(productId:string){await this.recover();return this.fileWrites.list(productId);}
+ async fileChanges(productId:string,cursor?:unknown){await this.recover();const files=await this.fileWrites.list(productId,cursor),untrackedExecutions=[];for(const [executionId,entry]of Object.entries((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{})){if(entry.productId!==productId)continue;const stored=await this.owner().snapshot(Intent,entry.key,BACKGROUND_CONTEXT);if(stored?.fileOperationId)continue;untrackedExecutions.push({executionId,state:entry.state,diff:{available:false,reason:'unknown_command_scope'}});}return {...files,documents:await this.documentWrites?.list(productId)??{changes:[],limited:false},untrackedExecutions:untrackedExecutions.slice(-20),untrackedLimited:untrackedExecutions.length>20};}
+ async writeDocument(binding:AdoptedBinding,api:ToolExecutionApi|undefined,args:DocumentWriteArguments,context:Context){if(!this.documentWrites)return failure('DOCUMENT_UNAVAILABLE','原件能力尚未就绪');return this.documentWrites.write(binding,api,args,context);}
  async writeFile(binding:AdoptedBinding,api:ToolExecutionApi|undefined,path:string,content:string|Uint8Array,context:Context,ordinal:number,mode:FileMutationMode='write',options:FileMutationOptions={}){const available=await this.files(binding,context);if(!available.ok)return available;return this.fileWrites.write(binding,api,path,content,context,ordinal,(argv,effect)=>this.run(binding,api,argv,undefined,context,ordinal,effect),mode,options);}
  async readOutput(productId:string,executionId:string,cursor:unknown){
   if(!Number.isSafeInteger(cursor)||Number(cursor)<0)return failure('INVALID_ARGUMENT','输出位置无效');
@@ -216,7 +236,7 @@ export class ManagedExecution implements EffectAuthority {
    return {ok:true,value:result};
   }catch{return {ok:false,error:new FileError(context.abortSignal?.aborted?'aborted':'unknown','读取原始输出未完成',path)};}
  }
- async withSnapshot<T>(action:(snapshot:EffectSnapshot)=>Promise<T>):Promise<T>{return this.serial(async()=>{await this.reconcile();const items=Object.values((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{}),pending=items.filter(value=>!terminal.has(value.state)),writers=(await this.writes!.list()).filter(value=>!['released','cancelled'].includes(value.state));return action({known:![...pending,...writers].some(value=>value.state==='unknown'),pendingBindingIds:[...new Set([...pending,...writers].map(value=>value.bindingId))],pendingControlProductIds:[...new Set([...pending,...writers].map(value=>value.productId))]});});}
+ async withSnapshot<T>(action:(snapshot:EffectSnapshot)=>Promise<T>):Promise<T>{return this.serial(async()=>{await this.reconcile();const items=Object.values((await this.owner().snapshot(Index,BACKGROUND_CONTEXT))?.items??{}),pending=[...items.filter(value=>!terminal.has(value.state)),...await this.documentWrites?.pending()??[]],writers=(await this.writes!.list()).filter(value=>!['released','cancelled'].includes(value.state));return action({known:![...pending,...writers].some(value=>value.state==='unknown'),pendingBindingIds:[...new Set([...pending,...writers].map(value=>value.bindingId))],pendingControlProductIds:[...new Set([...pending,...writers].map(value=>value.productId))]});});}
 }
 
 /** Files and shell share the adopted location and its owning Termux UID. */
@@ -225,6 +245,7 @@ class ManagedEnvironment implements ExecutionEnv {
  get id(){return this.owner.environmentNamespace();}cwd:string;
  constructor(private readonly owner:ManagedExecution,private readonly binding:AdoptedBinding,private readonly api?:ToolExecutionApi){this.cwd=binding.location.path;}
  forCall(api:ToolExecutionApi){return new ManagedEnvironment(this.owner,this.binding,api);}
+ writeDocument(args:DocumentWriteArguments,context:Context){return this.owner.writeDocument(this.binding,this.api,args,context);}
  exec(command:string|readonly string[],options:ShellExecOptions|undefined,context:Context){return this.owner.run(this.binding,this.api,command,options,context,++this.ordinal);}
  absolutePath:FileSystem['absolutePath']=async path=>({ok:true,value:posix.resolve(this.cwd,path)});
  joinPath:FileSystem['joinPath']=async parts=>({ok:true,value:posix.join(...parts)});
@@ -240,11 +261,12 @@ class ManagedEnvironment implements ExecutionEnv {
  appendFile:FileSystem['appendFile']=(path,content,context)=>this.owner.writeFile(this.binding,this.api,path,content,context,++this.ordinal,'append');
  truncateFile:FileSystem['truncateFile']=async(path,size,context)=>{if(!Number.isSafeInteger(size)||size<0)return {ok:false,error:new FileError('invalid','截断大小必须为非负整数',path)};if(size>16777216)return {ok:false,error:new FileError('not_supported','单次截断超过 16 MiB',path)};return this.owner.writeFile(this.binding,this.api,path,'',context,++this.ordinal,'truncate',{size});};
  flushFile:FileSystem['flushFile']=(path,context)=>this.owner.writeFile(this.binding,this.api,path,'',context,++this.ordinal,'flush');
- renameFile=this.unsupported;
+ renameFile:FileSystem['renameFile']=(source,destination,context)=>this.owner.writeFile(this.binding,this.api,source,'',context,++this.ordinal,'rename',{destination:posix.resolve(this.cwd,destination)});
  listDir:FileSystem['listDir']=async(path,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.listDir(path,context):files;};
  openDirReader:FileSystem['openDirReader']=async(path,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.openDirReader(path,context):files;};
  canonicalPath:FileSystem['canonicalPath']=async(path,context)=>{const files=await this.owner.files(this.binding,context);return files.ok?files.value.canonicalPath(path,context):files;};
- watch=this.unsupported;createDir=this.unsupported;
+ watch:FileSystem['watch']=(targets,onChange,context)=>this.owner.watch(this.binding,targets,onChange,context);
+ createDir=this.unsupported;
  remove=this.unsupported;createTempDir=this.unsupported;createTempFile=this.unsupported;
  cleanup(context:Context){return this.owner.cleanup(this.binding,context);}
 }

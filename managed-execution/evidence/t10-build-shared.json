@@ -1,0 +1,60 @@
+{
+  "directory": "/storage/emulated/0/Download/durableagent-t10-build-18ce1cd7-d377-447f-847a-7a3f1f9163f4",
+  "sourceElfSha256": "883c8c0ab79bb30c3b63c401d8f2060fc740cd0bcca1317aef32d10f0933bf48",
+  "commands": [
+    {
+      "argv": [
+        "chmod",
+        "700",
+        "/storage/emulated/0/Download/durableagent-t10-build-18ce1cd7-d377-447f-847a-7a3f1f9163f4/roundtrip"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/storage/emulated/0/Download/durableagent-t10-build-18ce1cd7-d377-447f-847a-7a3f1f9163f4/roundtrip"
+      ],
+      "errno": 13,
+      "error": "[Errno 13] Permission denied: '/storage/emulated/0/Download/durableagent-t10-build-18ce1cd7-d377-447f-847a-7a3f1f9163f4/roundtrip'"
+    },
+    {
+      "argv": [
+        "ln",
+        "-s",
+        "roundtrip",
+        "/storage/emulated/0/Download/durableagent-t10-build-18ce1cd7-d377-447f-847a-7a3f1f9163f4/symbolic"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "ln: failed to create symbolic link '/storage/emulated/0/Download/durableagent-t10-build-18ce1cd7-d377-447f-847a-7a3f1f9163f4/symbolic': Permission denied\n"
+    },
+    {
+      "argv": [
+        "ln",
+        "/storage/emulated/0/Download/durableagent-t10-build-18ce1cd7-d377-447f-847a-7a3f1f9163f4/roundtrip",
+        "/storage/emulated/0/Download/durableagent-t10-build-18ce1cd7-d377-447f-847a-7a3f1f9163f4/hard"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "ln: failed to create hard link '/storage/emulated/0/Download/durableagent-t10-build-18ce1cd7-d377-447f-847a-7a3f1f9163f4/hard' => '/storage/emulated/0/Download/durableagent-t10-build-18ce1cd7-d377-447f-847a-7a3f1f9163f4/roundtrip': Permission denied\n"
+    },
+    {
+      "argv": [
+        "bash",
+        "/storage/emulated/0/Download/durableagent-t10-build-18ce1cd7-d377-447f-847a-7a3f1f9163f4/readable-script.sh"
+      ],
+      "exit": 0,
+      "stdout": "shared-script-read-by-bash\n",
+      "stderr": ""
+    }
+  ],
+  "writeReadBack": true,
+  "modeAfterChmod": "0o660",
+  "mounts": [
+    "/dev/fuse /mnt/user/0/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0",
+    "/dev/fuse /storage/emulated fuse rw,lazytime,nosuid,nodev,noexec,noatime,user_id=0,group_id=0,allow_other 0 0"
+  ],
+  "sourceUnchanged": true
+}

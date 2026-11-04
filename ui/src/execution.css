@@ -13,3 +13,6 @@
 .execution-row-title{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
 .execution-list code{display:block;overflow-wrap:anywhere;font-size:11px;margin-bottom:8px;color:#69756c}
 @media(max-width:600px){.execution-panel{margin-left:10px;margin-right:10px}.execution-content{max-height:200px}}
+.file-changes{border-top:1px solid #d9e1d7;margin-top:16px;padding-top:14px}
+.file-changes details{margin:8px 0;color:#53634f}
+.file-diff{max-height:280px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;padding:12px;border-radius:7px;background:#f3f6f0;color:#233222;font-size:12px;line-height:1.6}

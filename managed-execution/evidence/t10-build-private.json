@@ -1,0 +1,145 @@
+{
+  "workspace": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-roundtrip-a2ca3f32-e78b-47df-be00-5f8520e76448",
+  "pageSize": 4096,
+  "commands": [
+    {
+      "argv": [
+        "clang",
+        "--version"
+      ],
+      "cwd": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-roundtrip-a2ca3f32-e78b-47df-be00-5f8520e76448",
+      "exit": 0,
+      "stdout": "clang version 21.1.8\nTarget: x86_64-unknown-linux-android24\nThread model: posix\nInstalledDir: /data/data/com.termux/files/usr/bin\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "make",
+        "--version"
+      ],
+      "cwd": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-roundtrip-a2ca3f32-e78b-47df-be00-5f8520e76448",
+      "exit": 0,
+      "stdout": "GNU Make 4.4.1\nBuilt for x86_64-pc-linux-android\nCopyright (C) 1988-2023 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "pkg-config",
+        "--modversion",
+        "zlib"
+      ],
+      "cwd": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-roundtrip-a2ca3f32-e78b-47df-be00-5f8520e76448",
+      "exit": 0,
+      "stdout": "1.3.1\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "pkg-config",
+        "--cflags",
+        "--libs",
+        "zlib"
+      ],
+      "cwd": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-roundtrip-a2ca3f32-e78b-47df-be00-5f8520e76448",
+      "exit": 0,
+      "stdout": "-I/data/data/com.termux/files/usr/include -L/data/data/com.termux/files/usr/lib -lz\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "make",
+        "all"
+      ],
+      "cwd": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-roundtrip-a2ca3f32-e78b-47df-be00-5f8520e76448",
+      "exit": 0,
+      "stdout": "clang -Wall -Wextra -Werror main.c -o roundtrip -I/data/data/com.termux/files/usr/include -L/data/data/com.termux/files/usr/lib -lz\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "./roundtrip"
+      ],
+      "cwd": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-roundtrip-a2ca3f32-e78b-47df-be00-5f8520e76448",
+      "exit": 0,
+      "stdout": "zlib=1.3.1\nDurableAgent dependency roundtrip\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "make",
+        "clean",
+        "all"
+      ],
+      "cwd": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-roundtrip-a2ca3f32-e78b-47df-be00-5f8520e76448",
+      "exit": 0,
+      "stdout": "rm -f roundtrip\nclang -Wall -Wextra -Werror main.c -o roundtrip -I/data/data/com.termux/files/usr/include -L/data/data/com.termux/files/usr/lib -lz\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "./roundtrip"
+      ],
+      "cwd": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-roundtrip-a2ca3f32-e78b-47df-be00-5f8520e76448",
+      "exit": 0,
+      "stdout": "zlib=1.3.1\nDurableAgent dependency roundtrip\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "ln",
+        "-s",
+        "roundtrip",
+        "roundtrip-link"
+      ],
+      "cwd": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-roundtrip-a2ca3f32-e78b-47df-be00-5f8520e76448",
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "./roundtrip-link"
+      ],
+      "cwd": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-roundtrip-a2ca3f32-e78b-47df-be00-5f8520e76448",
+      "exit": 0,
+      "stdout": "zlib=1.3.1\nDurableAgent dependency roundtrip\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "ln",
+        "roundtrip",
+        "roundtrip-hardlink"
+      ],
+      "cwd": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-roundtrip-a2ca3f32-e78b-47df-be00-5f8520e76448",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "ln: failed to create hard link 'roundtrip-hardlink' => 'roundtrip': Permission denied\n"
+    }
+  ],
+  "artifacts": {
+    "sourceSha256": "392e01acd1f006e6c363e9994053e807d26247aafec532aca44a96ace99bee7f",
+    "elfSha256": "883c8c0ab79bb30c3b63c401d8f2060fc740cd0bcca1317aef32d10f0933bf48",
+    "elfMachine": 62,
+    "elfClass": 2,
+    "mode": "0o700",
+    "size": 6440
+  },
+  "symbolicLink": {
+    "target": "roundtrip",
+    "sameInode": true
+  },
+  "hardlink": {
+    "created": false
+  },
+  "shared": {
+    "directory": "/storage/emulated/0/Download/durableagent-t10-build-7c92eab4-83e3-4ac7-a6da-4971781dd0fe",
+    "stage": "mkdir",
+    "error": {
+      "errno": 13,
+      "type": "PermissionError",
+      "message": "[Errno 13] Permission denied: '/storage/emulated/0/Download/durableagent-t10-build-7c92eab4-83e3-4ac7-a6da-4971781dd0fe'"
+    }
+  },
+  "privateBuildPassed": true
+}

@@ -44,6 +44,100 @@ def supervised_directory():
 
 
 class FileCapabilityTest(unittest.TestCase):
+    def test_write_creates_missing_parents_only_after_supervised_start_under_verified_ancestor(self):
+        with supervised_directory() as (root, executor):
+            target = root / "new-parent" / "nested" / "original.txt"
+            position = executor.dispatch("file.resolveWrite", {"path": str(target)})
+            self.assertTrue(position["ok"], position)
+            self.assertEqual(position["value"]["writeRoot"], str(root / "new-parent"))
+            identifier = str(uuid.uuid4())
+            planned = executor.dispatch("file.prepareWrite", {"operationId": identifier, "path": str(target), "mode": "write", "data": base64.b64encode(b"nested original\n").decode()})
+            self.assertTrue(planned["ok"], planned)
+            self.assertFalse((root / "new-parent").exists())
+            request = {"executionId": str(uuid.uuid4()), "context": {"productId": "file-test", "sdkConversationId": 1, "taskId": 1, "callId": "nested-write", "bindingId": "binding", "locationVersion": 1, "controlGeneration": 1, "namespace": executor.identity()["namespace"]}, "command": {"kind": "argv", "argv": planned["value"]["argv"]}, "cwd": str(root), "env": {}, "inheritEnv": True, "timeoutMs": 5000}
+            accepted = executor.prepare(request)
+            executor.start(request["executionId"], accepted["finalDigest"])
+            deadline = time.monotonic() + 8
+            while True:
+                receipt = executor.query(request["executionId"])
+                if receipt.get("scopeConfirmed"):
+                    break
+                self.assertLess(time.monotonic(), deadline)
+                time.sleep(0.02)
+            self.assertEqual(receipt["exitCode"], 0)
+            self.assertEqual(target.read_bytes(), b"nested original\n")
+            self.assertTrue(executor.dispatch("file.verifyWrite", {"operationId": identifier})["value"]["matchesExpected"])
+            self.assertEqual(executor.dispatch("file.writeResult", {"operationId": identifier})["value"]["state"], "completed")
+
+    def test_supervised_rename_keeps_open_reader_on_original_and_never_repeats_after_later_edits(self):
+        with supervised_directory() as (root, executor):
+            source, destination = root / "source.txt", root / "destination.txt"
+            source.write_bytes(b"original bytes\n")
+            destination.write_bytes(b"previous destination\n")
+            inode = source.stat().st_ino
+            opened = executor.dispatch("file.open", {"path": str(source), "noFollow": True})["value"]
+            identifier = str(uuid.uuid4())
+            planned = executor.dispatch("file.prepareMutation", {"operationId": identifier, "path": str(source), "kind": "rename", "options": {"destination": str(destination)}})
+            self.assertTrue(planned["ok"], planned)
+            self.assertEqual(destination.read_bytes(), b"previous destination\n")
+            request = {"executionId": str(uuid.uuid4()), "context": {"productId": "file-test", "sdkConversationId": 1, "taskId": 1, "callId": "rename", "bindingId": "binding", "locationVersion": 1, "controlGeneration": 1, "namespace": executor.identity()["namespace"]}, "command": {"kind": "argv", "argv": planned["value"]["argv"]}, "cwd": str(root), "env": {}, "inheritEnv": True, "timeoutMs": 5000}
+            accepted = executor.prepare(request)
+            executor.start(request["executionId"], accepted["finalDigest"])
+            deadline = time.monotonic() + 8
+            while True:
+                receipt = executor.query(request["executionId"])
+                if receipt.get("scopeConfirmed"):
+                    break
+                self.assertLess(time.monotonic(), deadline)
+                time.sleep(0.02)
+            self.assertEqual(receipt["exitCode"], 0)
+            self.assertFalse(source.exists())
+            self.assertEqual(destination.read_bytes(), b"original bytes\n")
+            self.assertEqual(destination.stat().st_ino, inode)
+            page = executor.dispatch("file.read", {"handle": opened["handle"], "offset": 0, "length": 100})
+            self.assertEqual(base64.b64decode(page["value"]["data"]), b"original bytes\n")
+            result = executor.dispatch("file.writeResult", {"operationId": identifier})["value"]
+            self.assertEqual(result["state"], "completed")
+            self.assertEqual(result["destination"], str(destination))
+            self.assertTrue(executor.dispatch("file.verifyWrite", {"operationId": identifier})["value"]["matchesExpected"])
+            source.write_bytes(b"new source")
+            destination.write_bytes(b"later edit")
+            executor.start(request["executionId"], accepted["finalDigest"])
+            self.assertEqual(source.read_bytes(), b"new source")
+            self.assertEqual(destination.read_bytes(), b"later edit")
+
+    def test_polling_snapshot_reports_real_nested_changes_missing_targets_and_new_epoch(self):
+        with tempfile.TemporaryDirectory(prefix="durable-watch-") as directory:
+            root = Path(directory)
+            (root / "nested").mkdir()
+            target = root / "nested" / "source.txt"
+            target.write_bytes(b"before")
+            (root / ".hidden").write_bytes(b"hidden")
+            (root / "ignored").write_bytes(b"ignored")
+            targets = [{"path": str(root), "recursive": True, "exclude": {"hidden": True, "names": ["ignored"]}}, {"path": str(root / "missing"), "recursive": False, "exclude": {"hidden": False, "names": []}}]
+            service = FileService("termux:watch")
+            try:
+                first = service.dispatch("file.snapshot", {"targets": targets})
+                self.assertTrue(first["ok"], first)
+                self.assertEqual(first, service.dispatch("file.snapshot", {"targets": targets}))
+                (root / ".hidden").write_bytes(b"hidden changed")
+                (root / "ignored").write_bytes(b"ignored changed")
+                self.assertEqual(first, service.dispatch("file.snapshot", {"targets": targets}))
+                target.write_bytes(b"after expanded")
+                changed = service.dispatch("file.snapshot", {"targets": targets})["value"]
+                self.assertNotEqual(first["value"]["snapshots"][0]["revision"], changed["snapshots"][0]["revision"])
+                self.assertEqual(first["value"]["snapshots"][1], changed["snapshots"][1])
+                (root / "missing").write_bytes(b"created")
+                created = service.dispatch("file.snapshot", {"targets": targets})["value"]
+                self.assertNotEqual(changed["snapshots"][1]["revision"], created["snapshots"][1]["revision"])
+                fresh = FileService("termux:watch")
+                try:
+                    self.assertNotEqual(created["epoch"], fresh.dispatch("file.snapshot", {"targets": targets})["value"]["epoch"])
+                finally:
+                    fresh.close()
+            finally:
+                service.close()
+
     def test_truncate_extend_and_flush_preserve_original_inode_and_reject_missing_files(self):
         with supervised_directory() as (root, executor):
             target = root / "truncate.bin"

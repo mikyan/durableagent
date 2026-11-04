@@ -150,10 +150,66 @@ def read_blob(root, reference):
         os.close(fd)
 
 
+def read_rename_entry(path, parent_fd=None, missing=False):
+    try:
+        fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent_fd)
+    except FileNotFoundError:
+        if missing:
+            return None
+        raise
+    try:
+        metadata = os.fstat(fd)
+        if not stat.S_ISREG(metadata.st_mode):
+            raise FileFault("is_directory" if stat.S_ISDIR(metadata.st_mode) else "not_supported")
+        return fingerprint(metadata, bounded_file(fd))
+    finally:
+        os.close(fd)
+
+
+def apply_rename(root, identifier, plan, boundary=None):
+    result_path = record_path(root, identifier, ".result.json")
+    if result_path.exists():
+        return 0 if read_record(result_path)["state"] == "completed" else 1
+    result = {"protocol": 1, "operationId": identifier, "namespace": plan["namespace"], "requestDigest": plan["requestDigest"], "state": "applying", "original": True, "path": plan["path"], "canonicalPath": plan["canonicalPath"], "destination": plan["destination"], "before": plan["before"], "expectedAfter": plan["expectedAfter"], "diff": {"available": False, "reason": "unconfirmed"}}
+    atomic_json(result_path, result)
+    parents, touched = [], False
+    try:
+        for path, position in ((plan["canonicalPath"], plan["position"]), (plan["destination"], plan["destinationPosition"])):
+            fd = os.open(Path(path).parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+            parents.append(fd)
+            metadata = os.fstat(fd)
+            if str(metadata.st_dev) + ":" + str(metadata.st_ino) != position["ancestorObjectIds"][0]:
+                raise FileFault("invalid")
+        source, destination = Path(plan["canonicalPath"]).name, Path(plan["destination"]).name
+        if read_rename_entry(source, parents[0]) != plan["before"] or read_rename_entry(destination, parents[1], missing=True) != plan["destinationBefore"]:
+            raise FileFault("invalid")
+        touched = True
+        os.rename(source, destination, src_dir_fd=parents[0], dst_dir_fd=parents[1])
+        for parent in parents:
+            os.fsync(parent)
+        if boundary is not None:
+            boundary("after-effect")
+        after = read_rename_entry(destination, parents[1])
+        if after != plan["before"] or plan["canonicalPath"] != plan["destination"] and os.path.lexists(plan["canonicalPath"]):
+            raise FileFault("unknown")
+        result.update(state="completed", after=after, diff={"available": True, "text": ""})
+        atomic_json(result_path, result)
+        return 0
+    except (OSError, FileFault, ValueError):
+        result.update(state="unknown" if touched else "not_started", reason="RENAME_NOT_CONFIRMED" if touched else "PRECONDITION_CHANGED")
+        atomic_json(result_path, result)
+        return 1
+    finally:
+        for parent in parents:
+            os.close(parent)
+
+
 def apply_write(root, identifier, boundary=None):
     """Fixed helper entrypoint. Only Executor launches it; there is no apply RPC."""
     plan_path, result_path = record_path(root, identifier, ".plan.json"), record_path(root, identifier, ".result.json")
     plan = read_record(plan_path)
+    if plan.get("mode") == "rename":
+        return apply_rename(root, identifier, plan, boundary)
     if result_path.exists():
         # A replay after an interrupted apply is never a license to repeat the write.
         return 0 if read_record(result_path)["state"] == "completed" else 1
@@ -163,11 +219,29 @@ def apply_write(root, identifier, boundary=None):
     parent_fd = None
     touched = False
     try:
-        parent_path = Path(plan["canonicalPath"]).parent
+        parent_path = Path(plan["position"].get("parentAnchor", str(Path(plan["canonicalPath"]).parent)))
         parent_fd = os.open(parent_path, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
         parent_info = os.fstat(parent_fd)
         if str(parent_info.st_dev) + ":" + str(parent_info.st_ino) != plan["position"]["ancestorObjectIds"][0]:
             raise FileFault("invalid")
+        created = []
+        for name in plan["position"].get("missingParents", []):
+            if not isinstance(name, str) or not name or name in (".", "..") or "/" in name or "\0" in name:
+                raise FileFault("invalid")
+            touched = True
+            try:
+                os.mkdir(name, 0o700, dir_fd=parent_fd)
+                created.append(str(parent_path / name))
+                os.fsync(parent_fd)
+            except FileExistsError:
+                pass
+            next_parent = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent_fd)
+            os.close(parent_fd)
+            parent_fd = next_parent
+            parent_path = parent_path / name
+        parent_info = os.fstat(parent_fd)
+        result.update(parentObjectId=str(parent_info.st_dev) + ":" + str(parent_info.st_ino), createdParents=created)
+        atomic_json(result_path, result)
         mode = plan.get("mode", "write")
         flags = (os.O_RDONLY if mode == "flush" else os.O_RDWR) | os.O_NOFOLLOW | os.O_NONBLOCK
         if plan.get("mode", "write") == "append":
@@ -231,7 +305,7 @@ class FileService:
         self.lock = threading.RLock()
 
     def dispatch(self, method, payload):
-        schemas = {"file.open": {"path", "noFollow"}, "file.read": {"handle", "offset", "length"}, "file.info": {"handle"}, "file.close": {"handle"}, "file.stat": {"path"}, "file.canonical": {"path"}, "file.prepareWrite": {"operationId", "path", "mode", "data"}, "file.prepareStagedWrite": {"operationId", "path", "mode", "digest", "totalBytes"}, "file.prepareMutation": {"operationId", "path", "kind", "options"}, "file.stage": {"digest", "totalBytes", "offset", "data"}, "file.writeResult": {"operationId"}, "file.verifyWrite": {"operationId"}, "file.describe": set(), "file.resolveWrite": {"path"}, "file.openDir": {"path"}, "file.readDir": {"handle", "maxEntries"}}
+        schemas = {"file.open": {"path", "noFollow"}, "file.read": {"handle", "offset", "length"}, "file.info": {"handle"}, "file.close": {"handle"}, "file.stat": {"path"}, "file.canonical": {"path"}, "file.prepareWrite": {"operationId", "path", "mode", "data"}, "file.prepareStagedWrite": {"operationId", "path", "mode", "digest", "totalBytes"}, "file.prepareMutation": {"operationId", "path", "kind", "options"}, "file.stage": {"digest", "totalBytes", "offset", "data"}, "file.writeResult": {"operationId"}, "file.verifyWrite": {"operationId"}, "file.describe": set(), "file.resolveWrite": {"path"}, "file.openDir": {"path"}, "file.readDir": {"handle", "maxEntries"}, "file.snapshot": {"targets"}}
         try:
             if method not in schemas or type(payload) is not dict or set(payload) != schemas[method]:
                 raise FileFault("invalid")
@@ -254,6 +328,8 @@ class FileService:
                     value = self.prepare_write(payload, staged=True)
                 elif method == "file.prepareMutation":
                     value = self.prepare_mutation(payload)
+                elif method == "file.snapshot":
+                    value = self.snapshot(payload["targets"])
                 elif method == "file.stage":
                     value = self.stage(payload)
                 elif method == "file.verifyWrite":
@@ -289,6 +365,57 @@ class FileService:
         except (ValueError, TypeError):
             return {"ok": False, "error": {"code": "invalid"}}
 
+    def snapshot(self, targets):
+        if type(targets) is not list or not 1 <= len(targets) <= 32:
+            raise FileFault("invalid")
+        snapshots = []
+        scanned, total_bytes = 0, 0
+        for target in targets:
+            if type(target) is not dict or set(target) != {"path", "recursive", "exclude"} or type(target["recursive"]) is not bool:
+                raise FileFault("invalid")
+            path, exclude = absolute_path(target["path"]), target["exclude"]
+            if type(exclude) is not dict or set(exclude) != {"hidden", "names"} or type(exclude["hidden"]) is not bool or type(exclude["names"]) is not list or len(exclude["names"]) > 128 or any(not isinstance(name, str) or not name or "/" in name or "\0" in name for name in exclude["names"]):
+                raise FileFault("invalid")
+            records = []
+
+            def visit(current, depth):
+                nonlocal scanned, total_bytes
+                scanned += 1
+                if scanned > 2048 or depth > 64:
+                    raise FileFault("not_supported")
+                try:
+                    value = os.lstat(current)
+                except FileNotFoundError:
+                    records.append([current, "missing"])
+                    return
+                # A selected root symlink represents its selected target; descendant links are not followed.
+                if depth == 0 and stat.S_ISLNK(value.st_mode):
+                    records.append([current, "root-link", os.readlink(current)])
+                    value = os.stat(current)
+                directory = stat.S_ISDIR(value.st_mode)
+                record = [current, str(value.st_dev), str(value.st_ino), value.st_mode]
+                if not directory:
+                    record.extend([value.st_size, value.st_mtime_ns, value.st_ctime_ns])
+                encoded = canonical_json(record).encode()
+                total_bytes += len(encoded)
+                if total_bytes > 1024 * 1024:
+                    raise FileFault("not_supported")
+                records.append(record)
+                if directory and (depth == 0 or target["recursive"]):
+                    with os.scandir(current) as entries:
+                        for entry in entries:
+                            if exclude["hidden"] and entry.name.startswith(".") or entry.name in exclude["names"]:
+                                scanned += 1
+                                if scanned > 2048:
+                                    raise FileFault("not_supported")
+                                continue
+                            visit(entry.path, depth + 1)
+
+            visit(path, 0)
+            records.sort(key=canonical_json)
+            snapshots.append({"path": path, "revision": sha(canonical_json(records).encode())})
+        return {"namespace": self.namespace, "epoch": self.epoch, "snapshots": snapshots}
+
     def open(self, payload):
         path = absolute_path(payload["path"])
         if type(payload["noFollow"]) is not bool:
@@ -322,7 +449,10 @@ class FileService:
 
     def verify_write(self, identifier):
         plan = read_record(record_path(self.write_root(), identifier, ".plan.json"))
-        fd = os.open(plan["canonicalPath"], os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
+        renamed = plan.get("mode") == "rename"
+        observed_path = plan["destination"] if renamed else plan["canonicalPath"]
+        position = plan["destinationPosition"] if renamed else plan["position"]
+        fd = os.open(observed_path, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW)
         try:
             before = os.fstat(fd)
             if not stat.S_ISREG(before.st_mode):
@@ -332,32 +462,53 @@ class FileService:
             if (before.st_size, before.st_mtime_ns, before.st_ctime_ns) != (after.st_size, after.st_mtime_ns, after.st_ctime_ns):
                 raise FileFault("unknown")
             observed = fingerprint(after, data)
-            parent = Path(plan["canonicalPath"]).parent.stat()
-            same_parent = str(parent.st_dev) + ":" + str(parent.st_ino) == plan["position"]["ancestorObjectIds"][0]
+            parent = Path(observed_path).parent.stat()
+            parent_identity = position["ancestorObjectIds"][0]
+            if position.get("missingParents"):
+                result_path = record_path(self.write_root(), identifier, ".result.json")
+                parent_identity = read_record(result_path).get("parentObjectId") if result_path.exists() else None
+            same_parent = str(parent.st_dev) + ":" + str(parent.st_ino) == parent_identity
             original = plan["before"]
             same_file = original is None or (original["device"], original["inode"]) == (observed["device"], observed["inode"])
             matches = same_parent and same_file and observed["size"] == plan["expectedAfter"]["size"] and observed["sha256"] == plan["expectedAfter"]["sha256"]
+            if renamed and plan["canonicalPath"] != plan["destination"] and os.path.lexists(plan["canonicalPath"]):
+                matches = False
             # This is an observation of the original, never a process-death or cancellation claim.
             return {"protocol": 1, "operationId": identifier, "namespace": self.namespace, "requestDigest": plan["requestDigest"], "matchesExpected": matches, "observed": observed, "observedAtMs": time.time_ns() // 1000000, "scopeConfirmed": False}
         finally:
             os.close(fd)
 
     def resolve_write(self, path):
-        path = absolute_path(path)
-        canonical_path = os.path.realpath(path, strict=True) if os.path.lexists(path) else os.path.join(os.path.realpath(os.path.dirname(path), strict=True), os.path.basename(path))
+        path = os.path.normpath(absolute_path(path))
+        missing_parents = []
+        if os.path.lexists(path):
+            canonical_path = os.path.realpath(path, strict=True)
+            parent = Path(canonical_path).parent
+        else:
+            parent = Path(path).parent
+            while not parent.exists():
+                if parent.is_symlink():
+                    os.path.realpath(parent, strict=True)
+                missing_parents.insert(0, parent.name)
+                parent = parent.parent
+                if len(missing_parents) > 64:
+                    raise FileFault("not_supported")
+            parent = Path(os.path.realpath(parent, strict=True))
+            if not parent.is_dir():
+                raise FileFault("not_directory")
+            canonical_path = str(parent.joinpath(*missing_parents, Path(path).name))
         object_id = None
         if os.path.exists(canonical_path):
             current = os.stat(canonical_path)
             file_info(canonical_path, current)
             object_id = str(current.st_dev) + ":" + str(current.st_ino)
         ancestors = []
-        parent = Path(canonical_path).parent
         for ancestor in [parent, *parent.parents]:
             value = ancestor.stat()
             ancestors.append(str(value.st_dev) + ":" + str(value.st_ino))
             if len(ancestors) > 128:
                 raise FileFault("not_supported")
-        return {"namespace": self.namespace, "canonicalPath": canonical_path, "objectId": object_id, "ancestorObjectIds": ancestors}
+        return {"namespace": self.namespace, "canonicalPath": canonical_path, "objectId": object_id, "ancestorObjectIds": ancestors, **({"parentAnchor": str(parent), "missingParents": missing_parents, "writeRoot": str(parent / missing_parents[0])} if missing_parents else {})}
 
     def stage(self, payload):
         digest = content_digest(payload["digest"])
@@ -415,6 +566,8 @@ class FileService:
 
     def prepare_mutation(self, payload):
         kind, options = payload["kind"], payload["options"]
+        if kind == "rename":
+            return self.prepare_rename(payload)
         if type(options) is not dict or kind not in ("truncate", "flush"):
             raise FileFault("invalid")
         if kind == "truncate":
@@ -423,6 +576,30 @@ class FileService:
         elif options:
             raise FileFault("invalid")
         return self.prepare_write({"operationId": payload["operationId"], "path": payload["path"], "mode": kind, "data": "", **options}, mutation=True)
+
+    def prepare_rename(self, payload):
+        identifier, path = operation_id(payload["operationId"]), absolute_path(payload["path"])
+        options = payload["options"]
+        if type(options) is not dict or set(options) != {"destination"}:
+            raise FileFault("invalid")
+        destination = absolute_path(options["destination"])
+        requested = sha(canonical_json({"operationId": identifier, "path": path, "mode": "rename", "destination": destination, "namespace": self.namespace}).encode())
+        root = self.write_root()
+        plan_path = record_path(root, identifier, ".plan.json")
+        if plan_path.exists():
+            plan = read_record(plan_path)
+            if plan["requestDigest"] != requested:
+                raise FileFault("invalid")
+        else:
+            # This first contract supports regular files. Final symlinks are not followed for rename.
+            if os.path.islink(path) or os.path.islink(destination):
+                raise FileFault("not_supported")
+            before = read_rename_entry(path)
+            old_destination = read_rename_entry(destination, missing=True)
+            position, destination_position = self.resolve_write(path), self.resolve_write(destination)
+            plan = {"protocol": 1, "operationId": identifier, "namespace": self.namespace, "requestDigest": requested, "path": path, "canonicalPath": position["canonicalPath"], "mode": "rename", "before": before, "destination": destination_position["canonicalPath"], "destinationBefore": old_destination, "destinationPosition": destination_position, "expectedAfter": {"size": before["size"], "sha256": before["sha256"]}, "position": position}
+            atomic_json(plan_path, plan)
+        return {"protocol": 1, "operationId": identifier, "namespace": self.namespace, "requestDigest": requested, "position": plan["position"], "expectedAfter": plan["expectedAfter"], "destination": plan["destination"], "original": True, "argv": [sys.executable, str(Path(__file__).resolve()), "apply", str(root.resolve()), identifier]}
 
     def prepare_write(self, payload, staged=False, mutation=False):
         identifier = operation_id(payload["operationId"])
@@ -448,7 +625,10 @@ class FileService:
             if plan["requestDigest"] != requested:
                 raise FileFault("invalid")
         else:
-            canonical_path = os.path.realpath(path, strict=True) if mutation or os.path.lexists(path) else os.path.join(os.path.realpath(os.path.dirname(path), strict=True), os.path.basename(path))
+            if mutation:
+                os.path.realpath(path, strict=True)
+            position = self.resolve_write(path)
+            canonical_path = position["canonicalPath"]
             before = None
             old_data = b""
             if os.path.exists(canonical_path):
@@ -461,12 +641,8 @@ class FileService:
                     before = fingerprint(metadata, old_data)
                 finally:
                     os.close(fd)
-            ancestors = []
-            parent = Path(canonical_path).parent
-            for ancestor in [parent, *parent.parents]:
-                value = ancestor.stat()
-                ancestors.append(str(value.st_dev) + ":" + str(value.st_ino))
-            position = {"namespace": self.namespace, "canonicalPath": canonical_path, "objectId": before["device"] + ":" + before["inode"] if before else None, "ancestorObjectIds": ancestors}
+            if position["objectId"] != (before["device"] + ":" + before["inode"] if before else None):
+                raise FileFault("unknown")
             expected = old_data + data if payload["mode"] == "append" else data
             if payload["mode"] == "truncate":
                 expected = old_data[:payload["size"]].ljust(payload["size"], b"\0")

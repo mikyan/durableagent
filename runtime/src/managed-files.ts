@@ -1,6 +1,6 @@
 import type {Context} from '@earendil-works/chord';
 import {posix} from 'node:path';
-import {FileError,LineScanner,StreamDecoder,type BinaryReader,type DirReader,type TextLineReader,type FileInfo,type FileErrorCode,type Result} from '@earendil-works/pi-durable/env';
+import {FileError,LineScanner,StreamDecoder,type BinaryReader,type DirReader,type TextLineReader,type FileInfo,type FileErrorCode,type Result,type WatchTarget,type FileChange,type FileWatcher} from '@earendil-works/pi-durable/env';
 import {BACKGROUND_CONTEXT} from '@earendil-works/chord/context';
 import type {ExecutionChannel} from './execution-channel.js';
 
@@ -14,6 +14,23 @@ function info(value:any,path:string):FileInfo{
 /** File capabilities are executed by the identity that owns the files, never by local Node fs. */
 export class ManagedFiles {
  constructor(private readonly options:{channel:ExecutionChannel;cwd:string;namespace:string}){}
+ async watch(targets:readonly WatchTarget[],onChange:(change:FileChange)=>void,context:Context):Promise<Result<FileWatcher,FileError>>{
+  return this.result(this.options.cwd,context,async()=>{
+   if(!Array.isArray(targets)||!targets.length||targets.length>32)throw new FileError('invalid','监听目标数量无效');
+   const normalized=targets.map(target=>({path:posix.resolve(this.options.cwd,target.path),recursive:target.recursive===true,exclude:{hidden:target.exclude?.hidden===true,names:[...target.exclude?.names??[]]}}));
+   for(const target of normalized)if(target.path.includes('\0')||Buffer.byteLength(target.path)>4096||target.exclude.names.length>128||target.exclude.names.some(name=>typeof name!=='string'||!name||name.includes('/')||name.includes('\0')))throw new FileError('invalid','监听目标格式无效');
+   const snapshot=async()=>{const reply=await this.call('file.snapshot',{targets:normalized},this.options.cwd,BACKGROUND_CONTEXT);if(reply?.namespace!==this.options.namespace||typeof reply.epoch!=='string'||!reply.epoch||!Array.isArray(reply.snapshots)||reply.snapshots.length!==normalized.length||reply.snapshots.some((entry:any,index:number)=>entry?.path!==normalized[index].path||typeof entry.revision!=='string'||!/^[a-f0-9]{64}$/.test(entry.revision)))throw unknown(this.options.cwd);return reply as {epoch:string;snapshots:{path:string;revision:string}[]};};
+   let previous=await snapshot(),active=true,gap=false,timer:ReturnType<typeof setTimeout>|undefined,inFlight:Promise<void>|undefined;
+   const deactivate=()=>{active=false;clearTimeout(timer);context.abortSignal?.removeEventListener('abort',abort);};
+   const emit=(event:FileChange)=>{if(!active)return;try{onChange(event);}catch{deactivate();}};
+   const poll=async()=>{try{const current=await snapshot();if(!active)return;if(gap||current.epoch!==previous.epoch)emit({kind:'overflow'});else{const paths=current.snapshots.filter((entry,index)=>entry.revision!==previous.snapshots[index].revision).map(entry=>entry.path);if(paths.length)emit({kind:'paths',paths});}previous=current;gap=false;}
+    catch(error){if(!active)return;if(error instanceof FileError&&['invalid','not_supported'].includes(error.code)){emit({kind:'failed',error});deactivate();}else if(!gap){gap=true;emit({kind:'overflow'});}}
+    finally{if(active)timer=setTimeout(()=>{inFlight=poll();},500);}};
+   const stop=async()=>{deactivate();await inFlight;},abort=()=>{void stop();};
+   context.abortSignal?.addEventListener('abort',abort,{once:true});if(context.abortSignal?.aborted)await stop();else timer=setTimeout(()=>{inFlight=poll();},500);
+   return {mode:'polling',stop};
+  });
+ }
  async fileInfo(path:string,context:Context):Promise<Result<FileInfo,FileError>>{
   const absolute=posix.resolve(this.options.cwd,path);return this.result(absolute,context,async()=>info(await this.call('file.stat',{path:absolute},absolute,context),absolute));
  }

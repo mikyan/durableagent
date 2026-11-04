@@ -13,6 +13,18 @@ const claim=(id,scope)=>({operationId:id,requestDigest:'a'.repeat(64),namespace:
 const whole={domain:'device-files',kind:'environment'},local=path=>({domain:'device-files',kind:'paths',positions:[position(path)]});
 const open=async path=>{const {storage}=await openOwnedStorage(path);return Harness.open(storage,{models:createModels(),registry:createRegistry()},context);};
 
+test('creating missing parents occupies the first new directory so sibling creation cannot overlap',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'writer-missing-parent-')),harness=await open(join(dir,'sdk.sqlite'));
+ const writes=new WorkspaceCoordinator(harness,async()=>{throw Error('No external proof');});
+ const missing=path=>({domain:'device-files',kind:'paths',positions:[{...position(path),objectId:null,writeRoot:'/work/new',parentAnchor:'/work',missingParents:['new','nested']}]});
+ try{
+  assert.equal((await writes.reserve(claim('first',missing('/work/new/nested/first.txt')))).state,'granted');
+  assert.equal((await writes.reserve(claim('sibling',missing('/work/new/nested/second.txt')))).state,'queued');
+  assert.equal((await writes.reserve(claim('ancestor',local('/work/new')))).state,'queued');
+  assert.equal((await writes.reserve(claim('elsewhere',local('/work/other.txt')))).state,'granted');
+ }finally{await harness.close(context);await rm(dir,{recursive:true,force:true});}
+});
+
 test('a shell writer holds local file writes across host reopen until matching terminal scope evidence arrives',async()=>{
  const dir=await mkdtemp(join(tmpdir(),'writer-domain-')),path=join(dir,'sdk.sqlite');let harness=await open(path),finished=false;
  const verify=async c=>({operationId:c.operationId,requestDigest:c.requestDigest,namespace:c.namespace,state:finished?'completed':'unknown',scopeConfirmed:finished,sequence:finished?3:0});

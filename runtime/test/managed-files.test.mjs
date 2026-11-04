@@ -3,6 +3,16 @@ import assert from 'node:assert/strict';
 import {BACKGROUND_CONTEXT as context} from '@earendil-works/chord/context';
 import {ManagedFiles} from '../dist/managed-files.js';
 
+test('polling watch establishes a snapshot, reports reconnect overflow and stops callbacks before returning',async()=>{
+ let revision='a'.repeat(64),epoch='server-one',disconnected=false,calls=0;const events=[];
+ const files=new ManagedFiles({cwd:'/work',namespace:'termux:watch',channel:{request:async(method,payload)=>{assert.equal(method,'file.snapshot');assert.deepEqual(payload.targets,[{path:'/work/tree',recursive:true,exclude:{hidden:true,names:['ignored']}}]);calls++;if(disconnected)throw Error('connection lost');return {ok:true,value:{namespace:'termux:watch',epoch,snapshots:[{path:'/work/tree',revision}]}};}}});
+ const until=async predicate=>{const deadline=Date.now()+5000;while(!predicate()){assert.ok(Date.now()<deadline);await new Promise(resolve=>setTimeout(resolve,20));}};
+ const opened=await files.watch([{path:'tree',recursive:true,exclude:{hidden:true,names:['ignored']}}],event=>events.push(event),context);assert.equal(opened.ok,true);assert.equal(opened.value.mode,'polling');assert.equal(calls,1);assert.deepEqual(events,[]);
+ try{revision='b'.repeat(64);await until(()=>events.some(event=>event.kind==='paths'));assert.deepEqual(events.find(event=>event.kind==='paths').paths,['/work/tree']);disconnected=true;await until(()=>events.some(event=>event.kind==='overflow'));disconnected=false;epoch='server-two';await until(()=>events.filter(event=>event.kind==='overflow').length>=2);}
+ finally{await opened.value.stop(context);}
+ const stoppedCalls=calls,stoppedEvents=events.length;revision='c'.repeat(64);await new Promise(resolve=>setTimeout(resolve,650));assert.equal(calls,stoppedCalls);assert.equal(events.length,stoppedEvents);
+});
+
 // Only the external authenticated file service is controlled here. Actual fd/UID proof is in Termux tests.
 test('SDK binary reader assembles bounded remote pages and fails on a lost opened handle without reopening its path',async()=>{
  const bytes=Buffer.concat([Buffer.from('original-世界\n'),Buffer.alloc(100000,65)]),namespace='termux:fixture';let lost=false;
