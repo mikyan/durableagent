@@ -1,0 +1,49 @@
+{
+  "authority": "Actual persisted Termux executor receipt and independent original-file observation, read-only",
+  "observations": [
+    {
+      "productId": "real-stop",
+      "executionId": "3e26deba-fea7-410e-81b0-4111d5c507e9",
+      "controlGeneration": 2,
+      "state": "completed",
+      "scopeConfirmed": true,
+      "cancelRequested": null,
+      "exitCode": 0,
+      "requestDigest": "5ec1d83331a0d2e4e0551688a9f419f556e1b69811aade390ded1cfb712b5ee9"
+    },
+    {
+      "productId": "real-stop",
+      "executionId": "5c692a1e-1bf9-4c13-98e4-b57ad8a35694",
+      "controlGeneration": 1,
+      "state": "stopped",
+      "scopeConfirmed": true,
+      "cancelRequested": true,
+      "exitCode": -15,
+      "requestDigest": "6be6914a5b2bc14e4fc08b85ba457e4e6bed83357fce49d5df2e751244e47a55",
+      "lateEffect": {
+        "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t11-eb2dbb61-0e9e-48f6-88c4-73673bbcfc6b-late",
+        "exists": false
+      }
+    },
+    {
+      "productId": "target",
+      "executionId": "9842b615-cd87-483d-af79-be90680feead",
+      "controlGeneration": 2,
+      "state": "completed",
+      "scopeConfirmed": true,
+      "cancelRequested": null,
+      "exitCode": 0,
+      "requestDigest": "94f080a7723d4dd5ce0921548d04bea0f32a1941075b631903e47816174b338b"
+    },
+    {
+      "productId": "other",
+      "executionId": "a32559f9-a105-492d-8fee-97709cfa0786",
+      "controlGeneration": 1,
+      "state": "stopped",
+      "scopeConfirmed": true,
+      "cancelRequested": true,
+      "exitCode": -15,
+      "requestDigest": "339f28542ad09e84e6b8a9caa58ca7929616a7cc6eb90415d624b82f3a10d8d8"
+    }
+  ]
+}

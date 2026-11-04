@@ -4,6 +4,7 @@ import type {Models} from '@earendil-works/pi-ai/models';
 import {randomUUID,createHash} from 'node:crypto';
 import {checkRouteSource} from './routing.js';
 import {InputError,materializeFrozenInput} from './input.js';
+import {abortControlScope} from './stop.js';
 import type {FrozenInputAccess} from './input-protocol.js';
 import type {AdmissionReceipt,NativeSendIntent,SendAuthority,SendStatus,SubmissionContext} from './submission-protocol.js';
 
@@ -18,7 +19,7 @@ export function receiptMatchesIntent(intent:NativeSendIntent,receipt:AdmissionRe
  return equal(expected,{protocol:receipt.protocol,intentId:receipt.intentId,id:receipt.id,inputToken:receipt.inputToken,inputRevision:receipt.inputRevision,inputDigest:receipt.inputDigest,context:receipt.context,queue:receipt.queue,controlGeneration:receipt.controlGeneration,...(receipt.source?{source:receipt.source}:{})});
 }
 export type SubmissionBoundary='before-sdk-commit'|'after-sdk-submit'|'after-sdk-commit'|'before-native-ack'|'after-native-ack';
-type Options={harness:Harness;authority:SendAuthority;inputs:FrozenInputAccess;models:Models;available?:(provider:string,modelId:string)=>Promise<boolean>;resolve:(tx:Tx,id:string)=>Promise<SubmissionContext>;adopt?:(tx:Tx,id:string,bindingId:string)=>Promise<void>;ready:()=>void;pause:()=>()=>void;boundary?:(stage:SubmissionBoundary,intent:NativeSendIntent)=>void|Promise<void>};
+type Options={harness:Harness;authority:SendAuthority;inputs:FrozenInputAccess;models:Models;available?:(provider:string,modelId:string)=>Promise<boolean>;resolve:(tx:Tx,id:string)=>Promise<SubmissionContext>;adopt?:(tx:Tx,id:string,bindingId:string)=>Promise<void>;reconcileEffects?:()=>Promise<void>;ready:()=>void;pause:()=>()=>void;boundary?:(stage:SubmissionBoundary,intent:NativeSendIntent)=>void|Promise<void>};
 /** One application admission seam. SDK remains the sole submission/inbox/scheduling authority. */
 export class Submissions {
   private tail:Promise<unknown>=Promise.resolve();
@@ -97,7 +98,8 @@ export class Submissions {
       const barrier=control.pendingAbort;if(!barrier)continue;
       const actual=await this.options.harness.commit(tx=>this.options.resolve(tx,id),context);
       if(actual.sdkConversationId!==barrier.context.sdkConversationId)throw new SubmissionError('STOP_ASSOCIATION_MISMATCH','待停止范围关联无法核验，运行保持关闭');
-      await (await this.options.harness.conversation(actual.sdkConversationId as ConversationId,context))!.abort(context,{background:true});
+      await abortControlScope(this.options.harness,id,actual.sdkConversationId as ConversationId);
+      await this.options.reconcileEffects?.();
       await this.options.authority.confirmAbort(id,barrier);
     }
   }

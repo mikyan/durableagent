@@ -28,7 +28,7 @@ class NativeRetentionMigrationTest {
         // Current public writes seed unchanged v4 record shapes; only the later empty schema is removed.
         val path=File(File(context.noBackupFilesDir,namespace),"input.sqlite")
         SQLiteDatabase.openDatabase(path.absolutePath,null,SQLiteDatabase.OPEN_READWRITE).use { db ->
-            db.beginTransaction();try{db.execSQL("DROP TABLE frozen_holds");db.execSQL("DROP TABLE content_holds");db.execSQL("DROP TABLE content_quarantine");db.execSQL("PRAGMA user_version=4");db.setTransactionSuccessful()}finally{db.endTransaction()}
+            db.beginTransaction();try{db.execSQL("DROP TABLE frozen_holds");db.execSQL("DROP TABLE content_holds");db.execSQL("DROP TABLE content_quarantine");db.execSQL("DROP TABLE native_effects");db.execSQL("DROP TABLE native_effect_catalogue");db.execSQL("PRAGMA user_version=4");db.setTransactionSuccessful()}finally{db.endTransaction()}
         }
         NativeInputStore(context,namespace,boundary={if(it=="migration.prepared")throw IllegalStateException("synthetic interrupted migration")}).use { store ->
             try{store.inspect("retained-chat");fail("Migration must not succeed after injected interruption")}catch(error:NativeInputException){assertEquals("INPUT_MIGRATION_FAILED",error.code)}

@@ -1,0 +1,20 @@
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t11-stop/durableagent/ui
+
+(node:53012) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:57512) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:53332) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:51364) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+ Test Files  23 passed (23)
+      Tests  76 passed (76)
+   Start at  13:36:23
+   Duration  8.13s (environment 54%, tests 29%, import 13%, transform 3%)
+
+    Isolate  23 workers spawned · ~1.86s startup each (spawn + environment, per file)
+             at least ~991ms faster with isolate: false — reuses workers across files instead of one per file
+

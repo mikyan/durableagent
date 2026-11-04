@@ -41,6 +41,24 @@ class ExecutionPeer {
  }
 }
 
+test('startup registers an unresolved persisted execution with native stop authority before an offline query or abort confirmation',async()=>{
+ class OfflinePeer extends ExecutionPeer{
+  remembered=[];offline=false;
+  async rememberIntent(request){this.remembered.push(structuredClone(request));}
+  async request(method,payload){if(method==='prepare'){this.requests.push({method,payload:structuredClone(payload)});throw Error('Synthetic prepare acknowledgement unavailable');}if(this.offline&&method==='query')throw Error('Synthetic peer offline');return super.request(method,payload);}
+ }
+ const dir=await mkdtemp(join(tmpdir(),'stop-recovery-index-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new OfflinePeer();
+ const options={...configuration(),path:join(dir,'sdk.sqlite'),inputs:native,sends:native};let app=new Application({...options,execution:new ManagedExecution({channel:peer,authority:native})});
+ try{
+  await app.start();await call(app,'create',{creationId:'one'});await native.create('one','run one immutable command','send');await call(app,'send',{intentId:'send'});
+  await until(()=>peer.requests.some(item=>item.method==='prepare'));await until(async()=>(await call(app,'sendStatus',{intentId:'send'})).submission?.status==='done');
+  const fixed=peer.requests.find(item=>item.method==='prepare').payload;await app.close();peer.remembered=[];peer.offline=true;await native.stop('one','stop-before-reopen');
+  app=new Application({...options,execution:new ManagedExecution({channel:peer,authority:native})});await app.start();
+  assert.ok(peer.remembered.some(item=>JSON.stringify(item)===JSON.stringify(fixed)),'native recovery catalogue must retain the original intent even without a remote receipt');
+  assert.equal((await native.readControl('one')).pendingAbort,undefined);assert.equal(peer.requests.filter(item=>item.method==='prepare').length,1);
+ }finally{await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
 test('a real SDK tool stores stable execution context and reaches one external command through the application',async()=>{
  const dir=await mkdtemp(join(tmpdir(),'managed-execution-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new ExecutionPeer();
  let execution=new ManagedExecution({channel:peer,authority:native}),app=new Application({...configuration(),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution});

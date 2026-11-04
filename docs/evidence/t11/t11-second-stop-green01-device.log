@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeStopServiceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeStopServiceTest:
+INSTRUMENTATION_STATUS: test=aSecondStopIsExaminedWhileTheFirstSdkBarrierStillWaits
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: stopServiceEvidence={"first":{"control":{"id":"first","version":1,"generation":1,"stoppedThrough":1,"pendingAbort":{"stopId":"first-stop","throughGeneration":1,"context":{"sdkConversationId":101,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"synthetic-directory"}}}},"externalPending":1,"externalUnknown":1,"catalogueReady":true,"phase":"waiting"},"second":{"control":{"id":"second","version":1,"generation":1,"stoppedThrough":1,"pendingAbort":{"stopId":"second-stop","throughGeneration":1,"context":{"sdkConversationId":101,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"synthetic-directory"}}}},"externalPending":1,"externalUnknown":1,"catalogueReady":true,"phase":"waiting"},"actualCancellationClaimed":false}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeStopServiceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=aSecondStopIsExaminedWhileTheFirstSdkBarrierStillWaits
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.849
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

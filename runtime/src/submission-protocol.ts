@@ -3,13 +3,14 @@ import type {NativeDraft} from './input-protocol.js';
 /** Data only. Native owns explicit intent/control facts; SDK owns accepted input progress. */
 export const SUBMISSION_EXTENSION={id:'submission',actions:['send','sendStatus','sendList']} as const;
 export type SendMethod='sendStatus'|'sendList';
-export type NativeSendMethod='input.createSend'|'input.readSend'|'input.listSends'|'input.readControl'|'input.stop';
+export type NativeSendMethod='input.createSend'|'input.readSend'|'input.listSends'|'input.readControl'|'input.stop'|'input.stopStatus'|'input.stopNotification';
 export type LocationExpectation={workspaceId:string;version:number;identity:string};
 export type SubmissionContext={sdkConversationId:number;associationVersion:number;location:LocationExpectation};
 export type QueuePolicy={whenBusy:'followUp';whenIdle:'start'};
 export const DEFAULT_QUEUE:QueuePolicy={whenBusy:'followUp',whenIdle:'start'};
 export type StopBarrier={stopId:string;throughGeneration:number;context:SubmissionContext};
 export type NativeControl={id:string;version:number;generation:number;stoppedThrough:number;pendingAbort?:StopBarrier};
+export type NativeStopStatus={control:NativeControl;phase:'not-requested'|'waiting'|'external-unconfirmed'|'stopped';externalPending:number;externalUnknown:number};
 export type AdmissionReceipt={source?:import('./routing-protocol.js').RouteSource;protocol:1;intentId:string;id:string;inputToken:string;inputRevision:number;inputDigest:string;context:SubmissionContext;queue:QueuePolicy;controlGeneration:number;bindingId:string;submissionId:number};
 export type NativeSendIntent={
   protocol:1;intentId:string;actionId:string;id:string;
