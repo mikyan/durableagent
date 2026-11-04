@@ -1,0 +1,26 @@
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentAccess.kt
+  s_467dcb949b5b60::t_61801b8b6a0922 8-11
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_e1703f9d3b1d47 29,155-156,279
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentService.kt
+  s_467dcb949b5b60::t_61801b8b6a0922 1-81
+android/app/src/main/java/dev/durableagent/probe/NativeDocumentStore.kt
+  s_467dcb949b5b60::t_e1703f9d3b1d47 40,58-67,324
+  s_467dcb949b5b60::t_114c36430e5797 57,331-333,341
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "dfcc7c3d3a58ab9fff5714e8bb3a2af84957ee42",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
