@@ -5,8 +5,8 @@ import {randomUUID} from 'node:crypto';
 import {join} from 'node:path';
 import assert from 'node:assert/strict';
 
-const [stage,serial,output,preparedPath,proofPath]=process.argv.slice(2);
-assert.ok(['prepare','reopen','verify'].includes(stage)&&serial&&output,'stage serial new-output-prefix [prepared-json external-proof-json]');
+const [stage,serial,output,preparedPath,proofPath,baselinePath,otherProduct]=process.argv.slice(2);
+assert.ok(['prepare','reopen','verify','background','notification'].includes(stage)&&serial&&output,'stage serial new-output-prefix [prepared-json external-proof-json baseline-verification-json other-product]');
 const pkg='dev.durableagent.probe',adbPath=process.env.ADB||join(process.env.LOCALAPPDATA,'Android','Sdk','platform-tools','adb.exe');
 const adb=(...args)=>execFileSync(adbPath,['-s',serial,...args],{encoding:'utf8',timeout:30000,maxBuffer:16*1024*1024}).trim();
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
@@ -54,15 +54,28 @@ async function finishActivity(){
  throw Error('Activity remains after three bounded Back actions; preserved for root diagnosis');
 }
 try{
- let prepared,proof;
- if(stage==='verify'||stage==='reopen'){
+ let prepared,proof,baseline;
+ if(stage!=='prepare'){
   assert.ok(preparedPath&&proofPath,'Verify requires original prepared and external completed evidence');prepared=JSON.parse(await readFile(preparedPath,'utf8'));proof=JSON.parse(await readFile(proofPath,'utf8'));
-  if(stage==='verify')assert.equal(proof.completed,true);else{assert.equal(proof.stoppedInterval,true);assert.equal(proof.stoppedIntervalPassed,true);assert.equal(proof.completed,false);}
+  if(stage!=='reopen')assert.equal(proof.completed,true);else{assert.equal(proof.stoppedInterval,true);assert.equal(proof.stoppedIntervalPassed,true);assert.equal(proof.completed,false);}
   assert.equal(proof.product,prepared.product);assert.equal(proof.run,prepared.run);assert.equal(proof.observerStartedTarget,false);assert.equal(prepared.prepared,true);
  }
- assert.equal(activityRecords().length,0,'Root must close earlier Activity before this isolated lifecycle stage');
- adb('shell','am','start','-W','-n',`${pkg}/.AgentActivity`,'--es','validationMode','product');page=await attach();
+ if(stage==='notification'||stage==='background'){
+  assert.ok(baselinePath,'Notification verification requires the previously completed public history');baseline=JSON.parse(await readFile(baselinePath,'utf8'));assert.equal(baseline.passed,true);assert.equal(baseline.product,prepared.product);assert.equal(baseline.intentId,prepared.intentId);
+ }
+ if(stage==='notification'){
+  assert.equal(activityRecords().length,1,'A separately recorded physical notification tap must already have opened exactly one Activity');
+ }else{
+  assert.equal(activityRecords().length,0,'Root must close earlier Activity before this isolated lifecycle stage');
+  adb('shell','am','start','-W','-n',`${pkg}/.AgentActivity`,'--es','validationMode','product');
+ }
+ page=await attach();
  await until(()=>page.evaluate("document.querySelector('[data-testid=application]')?.dataset.status==='ready'"),'Real product ready');
+ if(stage==='notification'){
+  const marker=`T12-LIFECYCLE-${prepared.run}`;
+  evidence.notificationUi=await until(()=>page.evaluate(`(()=>{const selected=localStorage.getItem('durableagent.ui.selectedConversation'),messages=[...document.querySelectorAll('[data-testid=message-text]')].map(e=>e.textContent);return selected===${JSON.stringify(prepared.product)}&&messages.includes(${JSON.stringify(prepared.text)})&&messages.includes(${JSON.stringify(marker)})?{selected,messages}:null})()`),'Physical notification selects and renders the original conversation');
+  evidence.observerStartedActivity=false;evidence.explicitSendClicks=0;await screenshot('notification-target');
+ }
  if(stage==='prepare'){
   assert.equal(adb('shell','settings','get','global','wifi_on'),'0','Actual Wi-Fi disabled by root');assert.equal(adb('shell','settings','get','global','mobile_data'),'0','Actual mobile data disabled by root');
   const before=(await request('list')).conversations;assert.ok(before.every(row=>!['running','waiting'].includes(row.phase)),'No other active product work');
@@ -93,8 +106,26 @@ try{
   Object.assign(evidence,{prepared:true,allUiAndCdpClosed:true,preparedAt:new Date().toISOString(),httpCountObserved:false});
  }else{
   const status=stage==='reopen'?await until(async()=>{const value=await request('sendStatus',{intentId:prepared.intentId});return value.submission?.status==='done'&&value;},'Original input after explicit launcher reopen',120000):await request('sendStatus',{intentId:prepared.intentId});assert.equal(status.submission?.status,'done');assert.deepEqual(status.receipt,prepared.admission);
-  const history=await request('history',{id:prepared.product});assert.deepEqual(history.items.filter(row=>row.role==='user').map(row=>row.text),[prepared.text]);const answer=history.items.filter(row=>row.role==='assistant').at(-1);assert.ok(answer?.text.includes(`T12-LIFECYCLE-${prepared.run}`));if(stage==='verify')assert.equal(proof.nativeSnapshot.completion.identity,`answer:${prepared.admission.context.sdkConversationId}:${answer.id}`,'Reopened history retains the externally observed original completion');assert.equal(String(status.submission.answerEntryId),String(answer.id));assert.equal((await request('execution.list',{id:prepared.product})).executions.length,0);
-  Object.assign(evidence,{publicVerificationPassed:true,product:prepared.product,intentId:prepared.intentId,admission:status.receipt,history,...(stage==='verify'?{externalCompletedAt:proof.observedAt}:{explicitUserReopen:true,stoppedIntervalEndedAt:proof.observedAt}),completeHttpCountObserved:false});
+  const history=await request('history',{id:prepared.product});assert.deepEqual(history.items.filter(row=>row.role==='user').map(row=>row.text),[prepared.text]);const answer=history.items.filter(row=>row.role==='assistant').at(-1);assert.ok(answer?.text.includes(`T12-LIFECYCLE-${prepared.run}`));if(stage!=='reopen')assert.equal(proof.nativeSnapshot.completion.identity,`answer:${prepared.admission.context.sdkConversationId}:${answer.id}`,'Reopened history retains the externally observed original completion');assert.equal(String(status.submission.answerEntryId),String(answer.id));assert.equal((await request('execution.list',{id:prepared.product})).executions.length,0);
+  if(stage==='notification'||stage==='background'){assert.deepEqual(history,baseline.history);const intents=(await request('input.listSends',{id:prepared.product})).intents;assert.equal(intents.length,1);assert.equal(intents[0].intentId,prepared.intentId);assert.deepEqual(intents[0].receipt,prepared.admission);Object.assign(evidence,{originalIntentCount:1,historyUnchanged:true});}
+  if(stage==='background'){
+   assert.match(otherProduct??'',/^[-A-Za-z0-9_]{1,128}$/);assert.notEqual(otherProduct,prepared.product);
+   const oldHistory=await request('history',{id:otherProduct}),oldIntents=await request('input.listSends',{id:otherProduct});
+   if(await page.evaluate("document.querySelector('[data-testid=application]')?.dataset.navOpen==='false'"))await pointer('[aria-label="打开会话列表"]');
+   await pointer('[aria-label="返回首页"]');await pointer(`[data-conversation-id="${otherProduct}"]`);
+   await until(()=>page.evaluate(`localStorage.getItem('durableagent.ui.selectedConversation')===${JSON.stringify(otherProduct)}&&document.querySelector('[data-testid=message-input]')?.disabled===false`),'Other existing conversation selected');
+   const before=await request('input.inspect',{id:otherProduct});let text=before.text;
+   if(!text&&!(before.selections?.length)){text=`未发送的通知验证草稿 ${prepared.run}`;await page.evaluate(`(()=>{const input=document.querySelector('[data-testid=message-input]');Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set.call(input,${JSON.stringify(text)});input.dispatchEvent(new Event('input',{bubbles:true}));})()`);}
+   await until(()=>page.evaluate(`document.querySelector('[data-testid=message-input]')?.value===${JSON.stringify(text)}&&document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'`),'Other unsent draft committed');
+   const draft=await request('input.inspect',{id:otherProduct});assert.equal(draft.text,text);assert.deepEqual(await request('history',{id:otherProduct}),oldHistory);assert.deepEqual(await request('input.listSends',{id:otherProduct}),oldIntents);
+   evidence.otherConversation={id:otherProduct,draft,history:oldHistory,intents:oldIntents};evidence.explicitSendClicks=0;await screenshot('background-draft');
+  }
+  if(stage==='notification'){
+   assert.ok(baseline.otherConversation,'Physical target verification starts from a different saved conversation');const other=baseline.otherConversation;assert.notEqual(other.id,prepared.product);
+   assert.deepEqual(await request('input.inspect',{id:other.id}),other.draft);assert.deepEqual(await request('history',{id:other.id}),other.history);assert.deepEqual(await request('input.listSends',{id:other.id}),other.intents);
+   Object.assign(evidence,{notificationTargetPassed:true,otherConversation:other,otherUnsentDraftUnchanged:true});
+  }
+  Object.assign(evidence,{publicVerificationPassed:true,product:prepared.product,intentId:prepared.intentId,admission:status.receipt,history,...(stage!=='reopen'?{externalCompletedAt:proof.observedAt}:{explicitUserReopen:true,stoppedIntervalEndedAt:proof.observedAt}),completeHttpCountObserved:false});
   page.close();page=null;await finishActivity();evidence.passed=true;
  }
  await writeFile(`${output}.json`,JSON.stringify(evidence,null,2)+'\n',{flag:'wx'});process.stdout.write(JSON.stringify({stage,product:evidence.product,prepared:evidence.prepared,passed:evidence.passed,evidence:`${output}.json`})+'\n');
