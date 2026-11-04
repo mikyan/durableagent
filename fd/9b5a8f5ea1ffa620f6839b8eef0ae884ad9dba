@@ -1,0 +1,23 @@
+ui/src/execution.ts
+  s_467dcb949b5b60::t_5b56d0b59f2fb3 51-57
+ui/test/execution-controller.test.ts
+  s_467dcb949b5b60::t_e7cfc3eeb1ac48 8,11-13,28-31,33-35,37-49
+  s_467dcb949b5b60::t_5b56d0b59f2fb3 32,36
+  s_467dcb949b5b60::t_0cba645b2a2102 50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "fd9b5a8f5ea1ffa620f6839b8eef0ae884ad9dba",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
