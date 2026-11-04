@@ -28,7 +28,7 @@
 
 每页保留执行身份、命名空间、连续 sequence、stdout/stderr 来源和原始 bytes。两个增量 UTF-8 decoder 各自保留跨片段字符。SDK 自己维护有界工具输出窗口、精确丢弃计数及最终历史；当前适配器不主动省略片段，因此 skipped 为零。输出持续由有界页拉取，不积存在一次最终回调中。
 
-在同一次读取中按游标续取并拒绝身份不符、重复或缺口。SDK 任务重放有一个新的输出 buffer，因此先从同一执行的持久 spool 重新填充该 buffer，再继续读取；这不重新启动命令。原始 spool 每执行有上限。完整输出引用只能通过同一 `ExecutionEnv` 的 `readBinaryFile`／`readTextFile` 读取：必须命中当前应用登记的执行，命名空间一致、输出完整且终态，逐页读取后校验长度和 SHA-256。其他文件能力目前明确 `not_supported`，留给 T10。
+在同一次读取中按游标续取并拒绝身份不符、重复或缺口。SDK 任务重放有一个新的输出 buffer，因此先从同一执行的持久 spool 重新填充该 buffer，再继续读取；这不重新启动命令。原始 spool 每执行有上限。完整输出引用只能通过同一 `ExecutionEnv` 的 `readBinaryFile`／`readTextFile` 读取：必须命中当前应用登记的执行，命名空间一致、输出完整且终态，逐页读取后校验长度和 SHA-256。T10 的实际原文件能力和与命令共用的写占用见 [FILES.md](FILES.md)。
 
 | Interface | 输入与结果 |
 | --- | --- |
