@@ -1,0 +1,31 @@
+{
+  "scope": "Independent host real SDK 1.5.0 and SQLite; synthetic check failure, no Android causal claim",
+  "results": [
+    {
+      "version": "old-05",
+      "sourceSha256": "34d94aab1a801c33776f92deba63db49b22f00f583879f01a3d2f007c2357282",
+      "checks": 1,
+      "modelRequests": 0,
+      "submissionId": 8,
+      "submissionStatus": "unanswered",
+      "stopReason": "aborted",
+      "errorMessage": "运行已停止",
+      "retryable": false,
+      "userEntries": 1,
+      "requestsAfterReopen": 0
+    },
+    {
+      "version": "candidate-06",
+      "sourceSha256": "6ce4bd80e03641edecd974b52d741d2bff6de1abf19926a53b869885412f18f4",
+      "checks": 1,
+      "modelRequests": 0,
+      "submissionId": 8,
+      "submissionStatus": "unanswered",
+      "stopReason": "error",
+      "errorMessage": "运行前检查未完成（INPUT_STORAGE_BUSY）",
+      "retryable": false,
+      "userEntries": 1,
+      "requestsAfterReopen": 0
+    }
+  ]
+}

@@ -8,7 +8,7 @@ export type {LocationAdapter} from './project-bindings.js';
 import {Admission,Binding,CurrentBinding,receiptMatchesIntent} from './submission.js';
 import type {SendAuthority,SubmissionContext} from './submission-protocol.js';
 export type ProjectBoundary='fenced'|'changed'|'committed'|'published';
-export type EffectSnapshot={known:boolean;pendingBindingIds:string[]};
+export type EffectSnapshot={known:boolean;pendingBindingIds:string[];pendingControlProductIds?:string[]};
 export type EffectAuthority={withSnapshot<T>(action:(snapshot:EffectSnapshot)=>Promise<T>):Promise<T>};
 export class ProjectError extends Error {constructor(readonly code:string,message:string){super(message);}}
 type Catalog={initialized:boolean;version:number;projects:Record<string,ProjectRecord>;workspaces:Record<string,WorkspaceRecord>;operations:Record<string,{fingerprint:string}>};
@@ -47,6 +47,7 @@ export class Projects {
   const targets=workspaceIds.map(id=>positions.get(id));
   const related=(workspaceId:string,identity?:string|null)=>workspaceIds.includes(workspaceId)||targets.some(target=>!target?.identity||!identity||target.identity===identity);
   for(const p of Object.values(products.items))if(related(p.workspaceId,positions.get(p.workspaceId)?.identity))ids.add(p.id);
+  if(effects.pendingControlProductIds?.some(id=>ids.has(id)))throw new ProjectError('LOCATION_BUSY','仍有此控制归属下的未决受管执行，不能修改位置');
   let cursor:string|undefined;do{const page=await this.options.sends.listSends({cursor,limit:50});for(const intent of page.intents){
    if(intent.cancelled||!ids.has(intent.id))continue;
    const admission=await tx.doc(Admission,intent.intentId,null),receipt=admission?.receipt;

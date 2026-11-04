@@ -4,7 +4,7 @@ import type {ExecutionEnv} from '@earendil-works/pi-durable/env';
 import {Binding} from './submission.js';
 import type {WorkspaceRecord,PositionState} from './project-protocol.js';
 export type AdoptedBinding={id:string;location:WorkspaceRecord;projectId:string|null;sourceProductId:string;controlProductId:string;sdkConversationId:number;actualIdentity?:string};
-export type LocationAdapter={inspect(workspace:WorkspaceRecord):Promise<PositionState>;environment?(binding:AdoptedBinding):Promise<ExecutionEnv>};
+export type LocationAdapter={inspect(workspace:WorkspaceRecord):Promise<PositionState>;environment?(binding:AdoptedBinding):Promise<ExecutionEnv>;/** Fixed core adapter revalidates at every actual file/command entry. */deferInspection?:boolean};
 export const ExecutionBinding=defineDoc({kind:'app.execution-binding',version:1,scope:'conversation',history:'latest',fork:'current',initial:()=>({bindingId:null as string|null,inherited:false as boolean,controlProductId:null as string|null}),checkpointWhen:()=>false});
 export async function inheritBinding(tx:Tx,record:ConversationRecord){
  const child=await tx.doc(ExecutionBinding,record.id);
@@ -15,8 +15,8 @@ export async function bindingEnvironment(target:EnvTarget,adapter?:LocationAdapt
  const execution=await target.read.snapshot(ExecutionBinding,target.conversationId,context);
  if(!execution?.bindingId)throw Error('执行位置尚未绑定');const binding=await target.read.snapshot(Binding,execution.bindingId,context);
  if(!binding?.id||!binding.location||!binding.sourceProductId||!execution.controlProductId)throw Error('执行位置版本缺失，不能回退当前目录');
- if(!adapter?.environment)throw Error('执行环境尚未就绪，未访问任何目录');const current=await adapter.inspect(binding.location);
- if(current.state!=='available'||binding.actualIdentity&&current.identity!==binding.actualIdentity)throw Error(current.reason??'执行位置或授权已改变，保留原绑定');
+ if(!adapter?.environment)throw Error('执行环境尚未就绪，未访问任何目录');
+ if(!adapter.deferInspection){const current=await adapter.inspect(binding.location);if(current.state!=='available'||binding.actualIdentity&&current.identity!==binding.actualIdentity)throw Error(current.reason??'执行位置或授权已改变，保留原绑定');}
  return adapter.environment({id:binding.id,location:binding.location,projectId:binding.projectId??null,sourceProductId:binding.sourceProductId,controlProductId:execution.controlProductId,sdkConversationId:target.conversationId,...(binding.actualIdentity?{actualIdentity:binding.actualIdentity}:{})});
 }
 

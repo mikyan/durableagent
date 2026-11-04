@@ -1,0 +1,21 @@
+{
+  "run": "5e8025f1-5a91-42bd-8e12-397b23f02f5e",
+  "capturedAt": "2026-11-04T04:04:24.7557438Z",
+  "effects": {
+    "success": {
+      "bytes": 4,
+      "exactOnce": true,
+      "base64": "b25lCg=="
+    },
+    "reconnect": {
+      "bytes": 4,
+      "exactOnce": true,
+      "base64": "b25lCg=="
+    },
+    "cancel": "absent",
+    "timeout": "absent"
+  },
+  "rawBytes": 1200000,
+  "rawPages": 74,
+  "hostReopenNewRequests": 0
+}

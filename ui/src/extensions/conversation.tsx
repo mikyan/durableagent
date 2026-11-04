@@ -9,6 +9,7 @@ import {DraftAttachments,bytes} from './attachments';
 import {SendStates} from './submissions';
 import {ExtensionPage} from '../extension-host';
 import {positionLabels} from '../project-view';
+import {ExecutionPanel} from './execution';
 
 const ModelSettings=lazy(builtInUiExtensions[MODELS_EXTENSION.id].load);
 const ProjectSettings=lazy(builtInUiExtensions[PROJECTS_EXTENSION.id].load);
@@ -106,6 +107,7 @@ export default function ConversationPage({controller,state}:{controller:Conversa
         {settingsPage?<><div className="title-pill"><h1>{modelsPage?'模型与连接':projectsPage?'项目与工作区':'扩展与时间线'}</h1></div><button className="round-button" aria-label="返回会话" onClick={()=>modelsPage?controller.leaveModels():projectsPage?controller.leaveProjects():controller.leaveExtensions()}><Icon name="close"/></button></>:state.activeId?<><div className="title-pill"><span className={`dot phase-${phase}`}/><h1>{active?.title??'正在打开会话'}</h1></div><button className="round-button" data-testid="create-conversation" aria-label="新建会话" disabled={!ready||state.pending} onClick={create}><Icon name="plus"/></button></>:<span className="topbar-label">本地 · 会话</span>}
       </header>
       {reason&&<div className="connection-notice" role={state.error?'alert':'status'}><span>{reason}</span><button onClick={reconnect}>重新连接</button></div>}
+      {!settingsPage&&<ExecutionPanel controller={controller} state={state}/>}
       {extensionsPage?<ExtensionPage client={controller.extensionClient} conversationId={state.activeId}/>:projectsPage?<Suspense fallback={<p className="empty-state">正在打开项目设置…</p>}><ProjectSettings controller={controller} state={state}/></Suspense>:modelsPage?<Suspense fallback={<p className="empty-state">正在打开模型设置…</p>}><ModelSettings controller={controller} state={state}/></Suspense>:!state.activeId?<div className="home-content">
         <div className="home-brand">π</div><p className="eyebrow">DURABLE AGENT</p><h1>从一个问题开始</h1><p className="home-description">独立的会话，同一个工作空间。</p>
         <button className="primary-button" data-testid="create-conversation" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>{state.pending?'正在创建…':'新建会话'}</button>

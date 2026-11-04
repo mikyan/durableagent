@@ -15,19 +15,21 @@ import java.io.ByteArrayInputStream
 class AgentActivity:Activity() {
     private var client:ApplicationClient?=null
     private var inputs:NativeInputBridge?=null
+    private var execution:NativeExecutionBridge?=null
     var webView:WebView?=null
         private set
     private var destroyed=false
     override fun onCreate(savedInstanceState:Bundle?){super.onCreate(savedInstanceState);openPage()}
     private fun openPage(){
         if(destroyed)return
-        client?.disconnect();inputs?.close();webView?.let{it.removeJavascriptInterface("DurableNative");it.destroy()}
+        client?.disconnect();inputs?.close();execution?.close();webView?.let{it.removeJavascriptInterface("DurableNative");it.destroy()}
         val view=WebView(this);webView=view
         val debug=(applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE)!=0
         if(debug)WebView.setWebContentsDebuggingEnabled(true)
         val mode=if(debug)intent.getStringExtra("validationMode")?:"product" else "product"
         val run=if(debug)intent.getStringExtra("validationRun") else null
         inputs=NativeInputBridge(this,NativeInputBridge.namespace(mode,run)){json->if(webView===view&&!destroyed)view.evaluateJavascript("window.__durableReceive?.(${json})",null)}
+        execution=NativeExecutionBridge(this){json->if(webView===view&&!destroyed)view.evaluateJavascript("window.__durableReceive?.(${json})",null)}
         client=if(mode=="input-only")null else ApplicationClient(this,mode,run){what,json ->
             if(webView!==view||destroyed)return@ApplicationClient
             if(what==10)view.evaluateJavascript("window.__durableReceive?.(${json})",null)
@@ -43,7 +45,7 @@ class AgentActivity:Activity() {
             }
             override fun onRenderProcessGone(view:WebView,detail:RenderProcessGoneDetail):Boolean {
                 val current=webView===view
-                if(current){webView=null;client?.disconnect();client=null;inputs?.close();inputs=null}
+                if(current){webView=null;client?.disconnect();client=null;inputs?.close();inputs=null;execution?.close();execution=null}
                 (view.parent as? android.view.ViewGroup)?.removeView(view);view.removeJavascriptInterface("DurableNative");view.destroy()
                 if(current)showRecovery("界面进程已退出。重新打开即可查看会话当前状态。");return true
             }
@@ -51,6 +53,8 @@ class AgentActivity:Activity() {
         view.addJavascriptInterface(object {
             @JavascriptInterface fun postMessage(json:String){runOnUiThread {if(webView===view&&!destroyed){
                 if(json.length>650000)return@runOnUiThread
+                if(view.url?.substringBefore('#')!="https://appassets.androidplatform.net/assets/ui/index.html")return@runOnUiThread
+                if(execution?.accept(json)==true)return@runOnUiThread
                 if(inputs?.accept(json)==true)return@runOnUiThread
                 if(client!=null)client?.post(json) else try{
                     val request=JSONObject(json)
@@ -58,7 +62,7 @@ class AgentActivity:Activity() {
                     view.evaluateJavascript("window.__durableReceive?.($response)",null)
                 }catch(_:Exception){/* An invalid envelope has no trusted correlation identity. */}
             }}}
-            @JavascriptInterface fun writeCredential(json:String){runOnUiThread {if(webView===view&&!destroyed&&json.length<=120000)client?.writeCredential(json)}}
+            @JavascriptInterface fun writeCredential(json:String){runOnUiThread {if(webView===view&&!destroyed&&json.length<=120000&&view.url?.substringBefore('#')=="https://appassets.androidplatform.net/assets/ui/index.html")client?.writeCredential(json)}}
         },"DurableNative")
         setContentView(view);view.loadUrl("https://appassets.androidplatform.net/assets/ui/index.html")
     }
@@ -72,5 +76,6 @@ class AgentActivity:Activity() {
         setContentView(layout)
     }
     override fun onActivityResult(requestCode:Int,resultCode:Int,data:Intent?){if(inputs?.selected(requestCode,resultCode,data)!=true)super.onActivityResult(requestCode,resultCode,data)}
-    override fun onDestroy(){destroyed=true;client?.disconnect();inputs?.close();inputs=null;webView?.let{it.removeJavascriptInterface("DurableNative");it.destroy()};webView=null;super.onDestroy()}
+    override fun onRequestPermissionsResult(requestCode:Int,permissions:Array<out String>,grantResults:IntArray){if(execution?.permissionResult(requestCode,permissions,grantResults)!=true)super.onRequestPermissionsResult(requestCode,permissions,grantResults)}
+    override fun onDestroy(){destroyed=true;client?.disconnect();inputs?.close();inputs=null;execution?.close();execution=null;webView?.let{it.removeJavascriptInterface("DurableNative");it.destroy()};webView=null;super.onDestroy()}
 }

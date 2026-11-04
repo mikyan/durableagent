@@ -25,6 +25,7 @@ class ApplicationService:Service() {
     private var closeDispatched=false
     private var credentials:NativeCredentialAccess?=null
     private var inputs:NativeInputAccess?=null
+    private var execution:ExecutionAccess?=null
     private val busyStarted=AtomicLong(0)
     private val busyEnded=AtomicLong(0)
     private val submissionProbe=SubmissionValidationProbe()
@@ -61,6 +62,7 @@ class ApplicationService:Service() {
                 36->if(debug)reply?.let {node?.getExecutor("globalThis.__appSubmissionFault?.(${JSONObject.quote(text)})")?.executeVoid();send(it,36,status())}
                 41->if(debug)reply?.let {node?.getExecutor("globalThis.__appProjectWitness?.(${JSONObject.quote(text)})")?.executeVoid();send(it,41,status())}
                 42->if(debug)node?.getExecutor("globalThis.__appRunProjectPolicy?.()")?.executeVoid()
+                43->if(debug)reply?.let {node?.getExecutor("globalThis.__appExecutionFault?.(${JSONObject.quote(text)})")?.executeVoid();send(it,43,status())}
                 51->if(debug)reply?.let {node?.getExecutor("globalThis.__appExtensionRoute?.(${JSONObject.quote(text)})")?.executeVoid();send(it,51,status())}
                 52->if(debug)node?.getExecutor("globalThis.__appRunExtensionPolicy?.()")?.executeVoid()
                 40->if(debug)node?.getExecutor("globalThis.__appRunSubmissionPolicy?.()")?.executeVoid()
@@ -83,7 +85,7 @@ class ApplicationService:Service() {
     }
     private fun open(mode:String,run:String?) {
         try {
-            check(mode in setOf("product","fixture","hang","real","models","models-fixture","extensions-fixture","extensions-real"))
+            check(mode in setOf("product","fixture","hang","real","models","models-fixture","execution","execution-real","extensions-fixture","extensions-real"))
             check(mode=="product"||run?.matches(Regex("[a-zA-Z0-9-]{1,80}"))==true)
             val domain=File(filesDir,if(mode=="product")"application" else "application-validation/$run")
             lease=StorageDomainLease.acquire(domain)?:error("Application storage already owned")
@@ -96,7 +98,9 @@ class ApplicationService:Service() {
             runtime.createV8ValueObject().use {access->access.bind(credentials!!);runtime.globalObject.set("__nativeCredentials",access)}
             inputs=NativeInputAccess(NativeInputStore(this,NativeInputBridge.namespace(mode,run)))
             runtime.createV8ValueObject().use {access->access.bind(inputs!!);runtime.globalObject.set("__nativeInputs",access)}
-            if(mode=="real"||mode=="extensions-real"){
+            execution=ExecutionAccess(this)
+            runtime.createV8ValueObject().use {access->access.bind(execution!!);runtime.globalObject.set("__nativeExecution",access)}
+            if(mode=="real"||mode=="execution-real"||mode=="extensions-real"){
                 val clear=ValidationCredential.consume(this)
                 try{runtime.globalObject.set("__validationKey",String(clear,Charsets.UTF_8).trim())}finally{clear.fill(0)}
             }
@@ -214,6 +218,6 @@ class ApplicationService:Service() {
     }
     private fun status()=JSONObject(phase).put("instance",instance).put("pid",Process.myPid()).put("domainOwned",lease!=null).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).toString()
     private fun fail(error:Throwable){phase=JSONObject().put("phase","failed").put("reason",error.message?:error.javaClass.simpleName).toString();release()}
-    private fun release(){node?.close();node=null;credentials=null;inputs?.close();inputs=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
+    private fun release(){node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
     override fun onDestroy(){owner.post {release();thread.quitSafely()};super.onDestroy()}
 }

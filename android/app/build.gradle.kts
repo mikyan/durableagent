@@ -33,7 +33,13 @@ val packageUi by tasks.registering(Sync::class) {
     into(layout.buildDirectory.dir("generated/runtimeAssets/ui"))
     doFirst {check(file("../../ui/dist/index.html").exists()) {"Run npm ci and npm run build in ui/ first"}}
 }
-tasks.named("preBuild").configure { dependsOn(packageRuntime,packageUi) }
+val generateExecutionSetup by tasks.registering(Exec::class) {
+    val output=layout.buildDirectory.file("generated/runtimeAssets/execution-setup.txt")
+    inputs.files("../../tools/build_execution_setup.py","../../tools/execution_setup_installer.py","../../managed-execution/durable_executor.py","../../managed-execution/execution_transport.py")
+    outputs.file(output)
+    commandLine("python",file("../../tools/build_execution_setup.py").absolutePath,"--output",output.get().asFile.absolutePath)
+}
+tasks.named("preBuild").configure { dependsOn(packageRuntime,packageUi,generateExecutionSetup) }
 dependencies {
     implementation("com.caoccao.javet:javet-node-android-i18n:6.0.3")
     androidTestImplementation("androidx.test:runner:1.6.2")
