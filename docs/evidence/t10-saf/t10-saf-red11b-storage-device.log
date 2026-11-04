@@ -1,0 +1,50 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentStorageTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentStorageTest:
+INSTRUMENTATION_STATUS: test=legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentStorageTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalStateException: Check failed.
+	at dev.durableagent.probe.StorageDomainLease$Companion.acquire(StorageDomainLease.kt:20)
+	at dev.durableagent.probe.NativeDocumentStore.metadataLease(NativeDocumentStore.kt:402)
+	at dev.durableagent.probe.NativeDocumentStore.locked(NativeDocumentStore.kt:392)
+	at dev.durableagent.probe.NativeDocumentStore.list(NativeDocumentStore.kt:60)
+	at dev.durableagent.probe.NativeDocumentStore.list$default(NativeDocumentStore.kt:58)
+	at dev.durableagent.probe.NativeDocumentStorageTest.legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence(NativeDocumentStorageTest.kt:40)
+
+INSTRUMENTATION_STATUS: stream=
+Error in legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence(dev.durableagent.probe.NativeDocumentStorageTest):
+java.lang.IllegalStateException: Check failed.
+	at dev.durableagent.probe.StorageDomainLease$Companion.acquire(StorageDomainLease.kt:20)
+	at dev.durableagent.probe.NativeDocumentStore.metadataLease(NativeDocumentStore.kt:402)
+	at dev.durableagent.probe.NativeDocumentStore.locked(NativeDocumentStore.kt:392)
+	at dev.durableagent.probe.NativeDocumentStore.list(NativeDocumentStore.kt:60)
+	at dev.durableagent.probe.NativeDocumentStore.list$default(NativeDocumentStore.kt:58)
+	at dev.durableagent.probe.NativeDocumentStorageTest.legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence(NativeDocumentStorageTest.kt:40)
+
+INSTRUMENTATION_STATUS: test=legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.383
+There was 1 failure:
+1) legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence(dev.durableagent.probe.NativeDocumentStorageTest)
+java.lang.IllegalStateException: Check failed.
+	at dev.durableagent.probe.StorageDomainLease$Companion.acquire(StorageDomainLease.kt:20)
+	at dev.durableagent.probe.NativeDocumentStore.metadataLease(NativeDocumentStore.kt:402)
+	at dev.durableagent.probe.NativeDocumentStore.locked(NativeDocumentStore.kt:392)
+	at dev.durableagent.probe.NativeDocumentStore.list(NativeDocumentStore.kt:60)
+	at dev.durableagent.probe.NativeDocumentStore.list$default(NativeDocumentStore.kt:58)
+	at dev.durableagent.probe.NativeDocumentStorageTest.legacyRegistryUpgradesAndUnavailableOrFutureStoragePreservesEvidence(NativeDocumentStorageTest.kt:40)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

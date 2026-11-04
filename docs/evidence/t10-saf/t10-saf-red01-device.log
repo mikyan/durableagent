@@ -1,0 +1,43 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentTest:
+INSTRUMENTATION_STATUS: test=actualSystemPickerRetainsOriginalCapabilityAndBinaryBytesAcrossReopen
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"picker-waiting","rootTitle":"DurableAgent 原文件测试","filename":"original.bin","run":"b455142f-b743-47eb-bb8d-2f2d3c1d13a6"}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Original selection must retain real capability: {"ok":false,"error":{"code":"DOCUMENT_UNAVAILABLE","message":"原文件能力尚不可用。"},"type":"response","protocol":1,"connectionId":"document-picker","requestId":"select-original"}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.NativeDocumentTest.actualSystemPickerRetainsOriginalCapabilityAndBinaryBytesAcrossReopen(NativeDocumentTest.kt:51)
+
+INSTRUMENTATION_STATUS: stream=
+Error in actualSystemPickerRetainsOriginalCapabilityAndBinaryBytesAcrossReopen(dev.durableagent.probe.NativeDocumentTest):
+java.lang.AssertionError: Original selection must retain real capability: {"ok":false,"error":{"code":"DOCUMENT_UNAVAILABLE","message":"原文件能力尚不可用。"},"type":"response","protocol":1,"connectionId":"document-picker","requestId":"select-original"}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.NativeDocumentTest.actualSystemPickerRetainsOriginalCapabilityAndBinaryBytesAcrossReopen(NativeDocumentTest.kt:51)
+
+INSTRUMENTATION_STATUS: test=actualSystemPickerRetainsOriginalCapabilityAndBinaryBytesAcrossReopen
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 52.164
+There was 1 failure:
+1) actualSystemPickerRetainsOriginalCapabilityAndBinaryBytesAcrossReopen(dev.durableagent.probe.NativeDocumentTest)
+java.lang.AssertionError: Original selection must retain real capability: {"ok":false,"error":{"code":"DOCUMENT_UNAVAILABLE","message":"原文件能力尚不可用。"},"type":"response","protocol":1,"connectionId":"document-picker","requestId":"select-original"}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.NativeDocumentTest.actualSystemPickerRetainsOriginalCapabilityAndBinaryBytesAcrossReopen(NativeDocumentTest.kt:51)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

@@ -18,6 +18,7 @@ import threading
 import time
 import uuid
 from contextlib import contextmanager
+from file_service import FileService
 try:
     import fcntl
 except ImportError:
@@ -169,6 +170,7 @@ class Executor:
                 self.db.execute("PRAGMA user_version=1")
             self.meta = dict(self.db.execute("SELECT key, value FROM identity"))
             self.meta.update(protocol=1, namespace="termux:" + self.meta["executorId"], defaultWorkspace=str((self.root / "workspace").absolute()))
+            self.files = FileService(self.meta["namespace"], self.root / "file-capabilities")
         finally:
             if fcntl is not None:
                 fcntl.flock(self.write_gate, fcntl.LOCK_UN)
@@ -177,6 +179,8 @@ class Executor:
         return dict(self.meta)
 
     def dispatch(self, method, payload):
+        if isinstance(method, str) and method.startswith("file."):
+            return self.files.dispatch(method, payload)
         schemas = {
             "start": ({"executionId", "finalDigest"}, set()), "query": ({"executionId"}, set()),
             "cancel": ({"executionId"}, {"reason"}), "readOutput": ({"executionId", "cursor"}, {"limit"}),
@@ -614,6 +618,7 @@ class Executor:
             scope.close()
 
     def close(self):
+        self.files.close()
         self.db.close()
         if self.write_gate is not None:
             os.close(self.write_gate)

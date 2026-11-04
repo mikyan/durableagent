@@ -55,4 +55,18 @@ class ExecutionRecoveryTest {
    }finally{page?.close();store.close();try{if(halted)wire.client.control(38)else wire.closeHost()}finally{wire.close()}}
   }
  }
+
+ @Test(timeout=180000) fun actualOwnerDiesAfterOriginalAppendAndRecoveryDoesNotAppendAgain(){
+  val run=uuid();var page:ActivityScenario<AgentActivity>?=ActivityScenario.launch<AgentActivity>(Intent(context,AgentActivity::class.java).putExtra("validationMode","execution").putExtra("validationRun",run));var wire=Wire(run);val store=NativeInputStore(context,NativeInputBridge.namespace("execution",run));val id="recover-original";var halted=false
+  try{
+   val before=wire.ready();wire.call("create",JSONObject().put("creationId",id));val intent=prepare(store,id,"FILE_QUEUE_LOCAL");wire.control(43,"before-result");wire.async("send",JSONObject().put("intentId",intent));var boundary=JSONObject();until{boundary=wire.control(37);boundary.optString("stage")=="execution-before-result"};halted=true
+   assertEquals(before.getInt("pid"),boundary.getInt("pid"));val domain=File(context.filesDir,"application-validation/$run");assertNull(StorageDomainLease.acquire(domain));page?.close();page=null;wire.client.control(38);until(15000){StorageDomainLease.acquire(domain)?.let{it.close();true}?:false};wire.close();halted=false
+   wire=Wire(run);val after=wire.ready();assertNotEquals(before.getInt("pid"),after.getInt("pid"));until{wire.call("sendStatus",JSONObject().put("intentId",intent)).optJSONObject("submission")?.optString("status")=="done"}
+   val executions=wire.call("execution.list",target(id)).getJSONArray("executions");assertEquals(1,executions.length());val execution=executions.getJSONObject(0);assertEquals("completed",execution.getString("state"));val changes=wire.call("files.list",target(id)).getJSONArray("changes");assertEquals(1,changes.length());val original=changes.getJSONObject(0);assertEquals("completed",original.getString("state"));assertTrue(original.getBoolean("scopeConfirmed"));assertTrue(original.getBoolean("original"))
+   val verify=prepare(store,id,"FILE_QUEUE_READ");wire.call("send",JSONObject().put("intentId",verify));until{wire.call("sendStatus",JSONObject().put("intentId",verify)).optJSONObject("submission")?.optString("status")=="done"}
+   val entries=wire.call("open",target(id)).getJSONArray("entries");val text=(0 until entries.length()).map{entries.getJSONObject(it).optString("text","")}.last{it.startsWith("FILE-QUEUE-READ:")};val read=JSONObject(text.removePrefix("FILE-QUEUE-READ:"));assertEquals("local\n",read.getString("text"))
+   val requests=wire.control(12).getJSONObject("metrics").getInt("modelRequests");wire.call("send",JSONObject().put("intentId",intent));assertEquals(1,wire.call("execution.list",target(id)).getJSONArray("executions").length());assertEquals(requests,wire.control(12).getJSONObject("metrics").getInt("modelRequests"))
+   instrumentation.sendStatus(0,Bundle().apply{putString("originalRecoveryEvidence",JSONObject().put("run",run).put("beforePid",before.getInt("pid")).put("afterPid",after.getInt("pid")).put("boundary",boundary).put("original",original).put("read",read).put("sameIntentAddedExecutions",0).toString())})
+  }finally{page?.close();store.close();try{if(halted)wire.client.control(38)else wire.closeHost()}finally{wire.close()}}
+ }
 }

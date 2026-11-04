@@ -1,5 +1,6 @@
 import {validationConfiguration} from './application-validation.js';
 import {EXECUTION_CONFORMANCE_NAMES} from './execution-conformance.js';
+import {FILE_CONFORMANCE_NAMES} from './file-conformance.js';
 
 /** Debug host mode only. A bounded deterministic model drives the actual SDK/Termux boundary. */
 export function executionValidation(run:string,requested:()=>void){
@@ -17,7 +18,14 @@ export function executionValidation(run:string,requested:()=>void){
   EXEC_TIMEOUT:{command:`sleep 30; printf 'too-late\\n' >> '${prefix}-timeout'`,timeout:0.2},
   EXEC_CONFORMANCE_SETUP:{command:`mkdir -- '${prefix}-conformance'; for i in 0 1 2 3; do mkdir -- '${prefix}-conformance/'$i || exit; done; printf 'conformance-directories-ready\\n'`},
   EXEC_CONFORMANCE_CLEANUP:{command:`for i in 0 1 2 3; do rmdir -- '${prefix}-conformance/'$i || exit; done; rmdir -- '${prefix}-conformance'; printf 'conformance-directories-removed\\n'`},
+  FILE_QUEUE_SHELL:{command:`printf 'queue-shell-running\\n'; sleep 8; mkdir -p -- '.durableagent-t10-${run}'; printf 'shell\\n' >> '.durableagent-t10-${run}/queue.txt'; printf 'queue-shell-complete\\n'`},
  };
  const text=(input:unknown)=>typeof input==='string'?input:Array.isArray(input)?input.map(part=>part?.text??'').join(''):'';
- return validationConfiguration({requested,toolName:input=>text(input).trim()==='EXEC_RAW_OUTPUT'||/^EXEC_CONFORMANCE_[0-3]$/.test(text(input).trim())?'execution_conformance':'bash',toolArguments:input=>{const name=text(input).trim();if(name==='EXEC_RAW_OUTPUT')return {caseName:'raw-output'};if(/^EXEC_CONFORMANCE_[0-3]$/.test(name))return {caseName:EXECUTION_CONFORMANCE_NAMES[Number(name.at(-1))]};const value=cases[name];if(!value)throw Error('Unknown execution validation case');return value;}});
+ const originalCase=(name:string)=>{
+  if(name.startsWith('FILE_DOCUMENT_WRITE:')){const value=JSON.parse(name.slice('FILE_DOCUMENT_WRITE:'.length));if(!/^[a-f0-9]{64}$/.test(value.resourceId)||!/^[a-f0-9]{64}$/.test(value.expectedDigest)||value.content!==`native-${run}\n`)throw Error('Invalid shared original fixture');return {tool:'document_write',args:{resourceId:value.resourceId,expectedDigest:value.expectedDigest,content:value.content}};}
+  if(name.startsWith('FILE_SHARED_BASH:')){const path=name.slice('FILE_SHARED_BASH:'.length);if(!/^\/storage\/emulated\/0\/Download\/DurableAgent-SAF-[a-f0-9-]{36}\/original\.bin$/.test(path))throw Error('Invalid shared original path');return {tool:'bash',args:{command:`test "$(cat -- '${path}')" = 'native-${run}' || exit 93; printf 'shell-${run}\\n' >> '${path}'; printf 'shared-original-append-complete\\n'`}};}
+  return undefined;
+ };
+ const fileCases:Record<string,string>={FILE_ROUNDTRIP:'roundtrip',FILE_DEPENDENCY:'dependency',FILE_QUEUE_SETUP:'queue-setup',FILE_QUEUE_LOCAL:'queue-append',FILE_QUEUE_READ:'queue-read',FILE_PURE:'pure'};
+ return validationConfiguration({requested,toolName:input=>{const name=text(input).trim();return originalCase(name)?.tool??(fileCases[name]?'file_contract':name==='EXEC_RAW_OUTPUT'||/^(EXEC|FILE)_CONFORMANCE_[0-3]$/.test(name)?'execution_conformance':'bash');},toolArguments:input=>{const name=text(input).trim();const original=originalCase(name);if(original)return original.args;if(fileCases[name])return {run,caseName:fileCases[name]};if(/^FILE_CONFORMANCE_[0-3]$/.test(name))return {caseName:FILE_CONFORMANCE_NAMES[Number(name.at(-1))]};if(name==='EXEC_RAW_OUTPUT')return {caseName:'raw-output'};if(/^EXEC_CONFORMANCE_[0-3]$/.test(name))return {caseName:EXECUTION_CONFORMANCE_NAMES[Number(name.at(-1))]};const value=cases[name];if(!value)throw Error('Unknown execution validation case');return value;}});
 }

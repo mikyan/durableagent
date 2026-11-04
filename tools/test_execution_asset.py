@@ -19,7 +19,7 @@ class AssetTest(unittest.TestCase):
         compressed = base64.b64decode(encoded)
         self.assertIn(hashlib.sha256(compressed).hexdigest(), command)
         installer = gzip.decompress(compressed).decode()
-        for name in ('durable_executor.py', 'execution_transport.py'):
+        for name in ('durable_executor.py', 'execution_transport.py', 'file_service.py'):
             self.assertIn(base64.b64encode((repo / 'managed-execution' / name).read_bytes()).decode(), installer)
         self.assertIn('python=3.14.8', command)
         self.assertIn('openssl-tool=1:3.6.5', command)

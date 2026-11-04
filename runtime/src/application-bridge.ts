@@ -28,9 +28,12 @@ export async function install(mode:string) {
   if(extensionMode)host.__appExtensionRoute=(value:string)=>{const input=JSON.parse(value);if(typeof input.id!=='string'||typeof input.text!=='string')throw Error('Invalid extension fixture');route={...input,at:Number(metrics.transportRequests??metrics.modelRequests??0)};metrics.extensionRequestHasTargetDraft=false;};
   const observeExtensionRequest=(body:string)=>{if(route?.forbiddenDraft&&JSON.stringify(JSON.parse(body)).includes(route.forbiddenDraft))metrics.extensionRequestHasTargetDraft=true;};
   const routeTool=()=>route&&Number(metrics.transportRequests??metrics.modelRequests??0)===route.at?'conversation_transfer':undefined;
+  let executionTool='bash';
+  if(mode==='execution-real')host.__appExecutionTool=(value:string)=>{if(!['bash','read','write'].includes(value))throw Error('Invalid real execution tool');executionTool=value;metrics.executionValidationTool=value;};
   if(projectValidation)host.__appProjectWitness=(value:string)=>{if(value!=='witness')throw Error('Unknown project validation mode');projectValidation.enable();};
   const nativeInputs=host.__nativeInputs;delete host.__nativeInputs;
   const nativeExecution=host.__nativeExecution;delete host.__nativeExecution;
+  const nativeDocuments=host.__nativeDocuments;delete host.__nativeDocuments;
   const inputInvoke=(method:string,...args:string[])=>{const response=JSON.parse(nativeInputs[method](...args));if(!response.ok)throw new InputError(response.error.code,response.error.message);return response.value;};
   const inputs:ApplicationInputs|undefined=nativeInputs?{rememberConversation:(conversation,capability)=>{inputInvoke('rememberConversationJson',JSON.stringify(conversation),JSON.stringify(capability??null));},readFrozen:async token=>inputInvoke('readFrozenJson',token),readObject:async(token,objectId)=>Buffer.from(inputInvoke('readObjectBase64',token,objectId),'base64'),retainFrozen:async(ownerId,token)=>{inputInvoke('retainFrozenJson',ownerId,token);}}:undefined;
   const locationEdits=nativeInputs?{beginLocationEdit:async(operationId:string)=>inputInvoke('beginLocationEditJson',operationId),readLocationEdit:async()=>inputInvoke('readLocationEditJson'),finishLocationEdit:async(operationId:string,contexts:unknown[])=>{inputInvoke('finishLocationEditJson',operationId,JSON.stringify(contexts));}}:undefined;
@@ -41,7 +44,7 @@ export async function install(mode:string) {
   else if(mode==='real'||mode==='execution-real'){
     secret=host.__validationKey;delete host.__validationKey;
     if(!secret)throw new Error('Encrypted validation credential unavailable');
-    const live=liveModels(secret,patch=>Object.assign(metrics,patch),{forceEcho:false,forceTool:()=>mode==='execution-real'?'bash':projectValidation?.enabled?'location_witness':routeTool(),observeRequest:extensionMode?observeExtensionRequest:undefined});
+    const live=liveModels(secret,patch=>Object.assign(metrics,patch),{forceEcho:false,forceTool:()=>mode==='execution-real'?executionTool:projectValidation?.enabled?'location_witness':routeTool(),observeRequest:extensionMode?observeExtensionRequest:undefined,maxRequests:mode==='execution-real'?6:4});
     configuration={models:live.models,workspacePath:configuration.workspacePath,initialModel:{provider:live.provider,modelId:live.model,name:'MiMo V2.6 Flash'}};
   }else if(mode==='product'||mode==='models'||mode==='models-fixture'){
     const native=host.__nativeCredentials;delete host.__nativeCredentials;
@@ -52,7 +55,8 @@ export async function install(mode:string) {
   // Fixture workspace defaults are replaced by the same stable private domain.
   const executionValidationFaults=mode==='execution'&&host.__submissionValidation?executionFaults(host.__submissionValidation,metrics):undefined;
   if(executionValidationFaults)host.__appExecutionFault=(stage:string)=>executionValidationFaults.set(stage);
-  const execution=nativeExecution&&sends&&['product','execution','execution-real'].includes(mode)?new ManagedExecution({channel:new NativeExecutionChannel(nativeExecution),authority:sends,...(executionValidationFaults?{boundary:executionValidationFaults.boundary}:{})}):undefined;
+  if(executionValidationFaults)host.__appFileGate=(action:string)=>executionValidationFaults.gate(action);
+  const execution=nativeExecution&&sends&&['product','execution','execution-real'].includes(mode)?new ManagedExecution({channel:new NativeExecutionChannel(nativeExecution),authority:sends,documents:nativeDocuments?new NativeExecutionChannel(nativeDocuments):undefined,fileEffects:{register:async value=>inputInvoke('registerEffectJson',JSON.stringify(value)),adopt:async value=>inputInvoke('adoptEffectJson',JSON.stringify(value)),require:async id=>inputInvoke('requireEffectJson',id),record:async(id,proof)=>inputInvoke('recordEffectEvidenceJson',id,JSON.stringify(proof))},...(executionValidationFaults?{boundary:executionValidationFaults.boundary}:{})}):undefined;
   configuration.workspacePath=execution?'/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace':join(host.__applicationRoot,'workspace');
   const path=join(host.__applicationRoot,'application.sqlite');
   let submissionValidation:any;

@@ -1,9 +1,9 @@
 import {ApplicationClient,ApplicationFailure} from './client';
 
-export type ExecutionState='accepted_not_started'|'starting'|'running'|'stop_requested'|'stopped'|'not_started'|'completed'|'unknown';
+export type ExecutionState='queued'|'accepted_not_started'|'starting'|'running'|'stop_requested'|'stopped'|'not_started'|'completed'|'unknown';
 export type ExecutionRow={executionId:string;state:ExecutionState;sequence?:number;source?:'application';reason?:string;exitCode?:number|null;captureIncomplete?:boolean;scopeConfirmed?:boolean};
 export type ExecutionView={rows:ExecutionRow[];conversationId?:string;nextCursor?:string;limited?:boolean;loading:boolean;connecting:boolean;copying:boolean;pending:string[];connected:boolean;notice?:string;error?:string};
-const states=new Set(['accepted_not_started','starting','running','stop_requested','stopped','not_started','completed','unknown']);
+const states=new Set(['queued','accepted_not_started','starting','running','stop_requested','stopped','not_started','completed','unknown']);
 function receipt(value:unknown):ExecutionRow {
   const row=value as ExecutionRow;
   if(!row||typeof row!=='object'||!/^[-A-Za-z0-9_]{1,128}$/.test(row.executionId)||!states.has(row.state)||row.sequence!==undefined&&(!Number.isSafeInteger(row.sequence)||row.sequence<0))throw Error('执行回执格式无法确认。');
