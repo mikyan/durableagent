@@ -33,6 +33,19 @@ test('recovery holds an unconfirmed original effect inside the same SDK invocati
  }finally{peer.confirmed=true;for(const listener of listeners)listener();await app.close();native.close();await rm(dir,{recursive:true,force:true});}
 });
 
+test('an unavailable native recovery budget keeps an unknown effect pending instead of ending the input',async()=>{
+ class UnconfirmedPeer extends ExecutionPeer {confirmed=false;async request(method,payload){const value=await super.request(method,payload);return ['start','query'].includes(method)&&value.state==='completed'&&!this.confirmed?{...value,state:'unknown',scopeConfirmed:false,reason:'OBSERVATION_LOST'}:value;}}
+ const dir=await mkdtemp(join(tmpdir(),'recovery-authority-unavailable-')),native=new SqliteSendAuthority(join(dir,'native.sqlite')),peer=new UnconfirmedPeer(),listeners=new Set();let requests=0,available=false,claims=0,attempts=0;
+ const recovery={conditions:async()=>({network:'available',userUnlocked:true}),subscribe:listener=>{listeners.add(listener);return()=>listeners.delete(listener);},publishWake:async()=>{},probe:async()=>{attempts++;if(!available)throw Object.assign(Error('Native recovery storage temporarily unavailable'),{code:'HOST_RECOVERY_UNAVAILABLE'});return {allowed:true,used:++claims,at:Date.now()+1000};}};
+ const execution=new ManagedExecution({channel:peer,authority:native}),app=new Application({...executionConfiguration(()=>requests++),path:join(dir,'sdk.sqlite'),inputs:native,sends:native,execution,recovery,bootstrapSettings:()=>({retry:{enabled:false,maxRetries:0}})});
+ try{
+  await app.start();await call(app,'create',{creationId:'chat'});await native.create('chat','one effect across temporary native storage loss','original');await call(app,'send',{intentId:'original'});
+  await until(()=>attempts>0);await new Promise(resolve=>setTimeout(resolve,40));
+  const waiting=await call(app,'open',{id:'chat'});assert.equal(waiting.phase,'waiting','A missing observation budget is not a terminal model failure');assert.equal(waiting.recovery.reason,'external-unconfirmed');assert.equal(requests,1);assert.equal(claims,0);assert.equal(peer.starts,1);
+  available=true;peer.confirmed=true;for(const listener of listeners)listener();await until(async()=>(await call(app,'sendStatus',{intentId:'original'})).submission?.status==='done');assert.equal(requests,2);assert.equal(peer.starts,1);assert.equal(peer.records.size,1);
+ }finally{available=true;peer.confirmed=true;for(const listener of listeners)listener();await app.close();native.close();await rm(dir,{recursive:true,force:true});}
+});
+
 test('a policy-waiting prepared shell leaves the writer domain available to a controlled local file operation',async()=>{
  class LocalPeer extends ExecutionPeer {
   plans=new Map();data=Buffer.from('before');

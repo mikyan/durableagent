@@ -44,7 +44,16 @@ export class Recovery {
   try{for(;;){
    if(this.closed||signal?.aborted)throw Error('恢复等待已结束');
    const version=this.version;if(await verified())return;
-   const budget=await this.host.probe?.(workId)??{allowed:false,used:0,exhausted:true};
+   let budget:{allowed:boolean;used:number;at?:number;exhausted?:boolean};
+   try{budget=await this.host.probe?.(workId)??{allowed:false,used:0,exhausted:true};}
+   catch(error){
+    if(typeof error!=='object'||error===null||!('code'in error)||error.code!=='HOST_RECOVERY_UNAVAILABLE')throw error;
+    const status:RecoveryStatus={phase:'waiting',reason:'external-unconfirmed',message:'恢复核验记录暂不可用，保留原执行身份等待记录可用后核验'};
+    const old=this.waiting.get(productId);this.waiting.set(productId,status);if(JSON.stringify(old)!==JSON.stringify(status))this.publish();
+    // Native metadata unavailability is not permission to return an unsafe tool
+    // result. No external query or model attempt is spent by this local wait.
+    await this.changed(version,signal,(this.host.now?.()??Date.now())+1000);continue;
+   }
    const status:RecoveryStatus={phase:'waiting',reason:'external-unconfirmed',message:budget.exhausted?'外部结果仍未确认，自动核验额度已用完；保留原工作等待人工核验':'外部结果尚未确认，保留原执行身份等待核验',used:budget.used,limit:5,...(!budget.exhausted&&budget.at!==undefined?{nextAt:budget.at}:{})};
    const old=this.waiting.get(productId);this.waiting.set(productId,status);if(JSON.stringify(old)!==JSON.stringify(status))this.publish();
    if(budget.allowed){try{await probe();}catch(error){if(signal?.aborted)throw error;}if(await verified())return;}
