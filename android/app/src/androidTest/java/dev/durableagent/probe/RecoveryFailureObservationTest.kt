@@ -3,6 +3,7 @@ package dev.durableagent.probe
 import android.database.sqlite.SQLiteDatabase
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.*
 import org.junit.Test
@@ -12,6 +13,39 @@ import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
 class RecoveryFailureObservationTest {
+    @Test fun fixedRequestObservationVerifiesReceiptBeforeReportingTimeoutWithoutExposingContent(){
+        val context=InstrumentationRegistry.getInstrumentation().targetContext;val run=UUID.randomUUID().toString()
+        val directory=File(context.filesDir,"application-validation/$run");check(!directory.exists());check(directory.mkdirs())
+        val sdk=File(directory,"application.sqlite");val key="117:isolated-call:1";val command="private-command-should-not-appear"
+        val request=JSONObject().put("executionId","isolated-execution").put("context",JSONObject().put("productId","isolated-product").put("sdkConversationId",102))
+            .put("command",JSONObject().put("kind","shell").put("script",command)).put("timeoutMs",30000).put("env",JSONObject().put("PRIVATE","private-env-should-not-appear"))
+        val digest=NativeInputStore.sha256(NativeExecutionFence.canonical(request).toByteArray(Charsets.UTF_8))
+        fun observe(expectedDigest:String=digest,execution:String="isolated-execution",expectedCommand:String=command):JSONObject {
+            val before=sdk.readBytes()
+            val result=RecoveryFailureObservation.fixedRequest(context,"recovery-fixture",run,"isolated-product",102,execution,key,expectedDigest,expectedCommand)
+            assertArrayEquals(before,sdk.readBytes());assertFalse(result.toString().contains("private-command"));assertFalse(result.toString().contains("private-env"));return result
+        }
+        try{
+            SQLiteDatabase.openOrCreateDatabase(sdk,null).use{db->
+                db.execSQL("CREATE TABLE documents(id INTEGER,kind TEXT,key_value TEXT,scope_kind TEXT,owner_id INTEGER,family INTEGER,retired_at INTEGER)")
+                db.execSQL("CREATE TABLE document_revisions(document_id INTEGER,seq INTEGER,kind TEXT,version INTEGER,content TEXT)")
+                db.execSQL("INSERT INTO documents VALUES(1,?,?,'session',0,1,NULL)",arrayOf(JSONObject.quote("app.managed-execution-intent"),JSONObject.quote(key)))
+                db.execSQL("INSERT INTO document_revisions VALUES(1,100,'base',1,'{\"request\":null,\"cursor\":0}')")
+                db.execSQL("INSERT INTO document_revisions VALUES(1,101,'delta',1,?)",arrayOf(JSONArray().put(JSONArray().put("s").put(JSONArray().put("request")).put(request)).toString()))
+                db.execSQL("INSERT INTO document_revisions VALUES(1,102,'delta',1,'[[\"s\",[\"cursor\"],1],[\"s\",[\"receipt\"],{\"state\":\"running\"}]]')")
+            }
+            val projected=observe();assertTrue(projected.toString(),projected.optBoolean("readOnly")&&projected.optBoolean("verified"));assertEquals(30000,projected.getInt("timeoutMs"));assertEquals(102L,projected.getLong("latestSeq"));assertEquals(digest,projected.getString("requestDigest"))
+            for(result in listOf(observe(expectedDigest="wrong-digest"),observe(execution="other-execution"),observe(expectedCommand="another-command"))){assertFalse(result.optBoolean("verified"));assertTrue(result.has("readFailure"))}
+            SQLiteDatabase.openDatabase(sdk.path,null,SQLiteDatabase.OPEN_READWRITE).use{db->db.execSQL("INSERT INTO document_revisions VALUES(1,103,'delta',1,'[[\"s\",[\"request\",\"timeoutMs\"],60000]]')")}
+            assertTrue("Never report a stale base through an unsupported request rewrite",observe().has("readFailure"))
+            SQLiteDatabase.openDatabase(sdk.path,null,SQLiteDatabase.OPEN_READWRITE).use{db->db.execSQL("INSERT INTO document_revisions VALUES(1,104,'base',1,?)",arrayOf(JSONObject().put("request",request).toString()))}
+            val checkpoint=observe();assertTrue(checkpoint.getBoolean("verified"));assertEquals(104L,checkpoint.getLong("baseSeq"))
+            SQLiteDatabase.openDatabase(sdk.path,null,SQLiteDatabase.OPEN_READWRITE).use{db->db.execSQL("INSERT INTO document_revisions VALUES(1,105,'delta',1,?)",arrayOf(JSONArray().put(JSONArray().put("r").put(JSONObject().put("request",request))).toString()))}
+            assertEquals(105L,observe().getLong("latestSeq"))
+        }finally{
+            check(directory.canonicalPath.startsWith(context.filesDir.canonicalPath+"/application-validation/"));directory.deleteRecursively()
+        }
+    }
     @Test fun readonlyDiagnosticObservesThreeRealAndroidDatabasesWithoutChangingThem(){
         val context=InstrumentationRegistry.getInstrumentation().targetContext
         val mode="recovery-fixture";val run=UUID.randomUUID().toString();val namespace=NativeInputBridge.namespace(mode,run)

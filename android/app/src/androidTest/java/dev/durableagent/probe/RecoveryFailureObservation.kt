@@ -30,6 +30,34 @@ internal object RecoveryFailureObservation {
             JSONObject().put("readFailure",error.javaClass.simpleName).put("readStage",stage).put("readCode",reason)
         }
     }
+    /** Bounded diagnostic projection of the immutable request, not an SDK reimplementation. */
+    fun fixedRequest(context:Context,mode:String,run:String,product:String,sdkId:Long,executionId:String,intentKey:String,expectedDigest:String,expectedCommand:String):JSONObject {
+        val sdk=File(context.filesDir,if(mode=="product")"application/application.sqlite" else "application-validation/$run/application.sqlite")
+        return read(sdk){db->
+            val document=db.rawQuery("SELECT id FROM documents WHERE kind=? AND key_value=? AND scope_kind='session' AND owner_id=0 AND family=1 AND retired_at IS NULL",arrayOf(JSONObject.quote("app.managed-execution-intent"),JSONObject.quote(intentKey))).use{rows->check(rows.moveToFirst());val id=rows.getLong(0);check(!rows.moveToNext());id}
+            var request:JSONObject?=null;var baseSeq=0L;var latestSeq=0L
+            db.rawQuery("SELECT seq,version,content FROM document_revisions WHERE document_id=? AND kind='base' ORDER BY seq DESC LIMIT 1",arrayOf(document.toString())).use{rows->check(rows.moveToFirst());check(rows.getInt(1)==1);baseSeq=rows.getLong(0);latestSeq=baseSeq;request=JSONObject(rows.getString(2)).optJSONObject("request")}
+            db.rawQuery("SELECT seq,kind,version,content FROM document_revisions WHERE document_id=? AND seq>? ORDER BY seq",arrayOf(document.toString(),baseSeq.toString())).use{rows->while(rows.moveToNext()){
+                check(rows.getString(1)=="delta"&&rows.getInt(2)==1);val changes=JSONArray(rows.getString(3))
+                for(i in 0 until changes.length()){
+                    val op=changes.getJSONArray(i);val kind=op.getString(0)
+                    if(kind=="r"){check(op.length()==2);request=op.getJSONObject(1).optJSONObject("request");continue}
+                    check(kind in setOf("s","d","a","t","p","m"));val path=op.getJSONArray(1);check(path.length()>0)
+                    if(path.getString(0)=="request"){
+                        // The product saves the full immutable request. Never guess
+                        // through a future partial rewrite or deletion of that request.
+                        check(kind=="s"&&path.length()==1&&op.length()==3);request=op.optJSONObject(2)
+                    }
+                };latestSeq=rows.getLong(0)
+            }}
+            val fixed=checkNotNull(request);val owner=fixed.getJSONObject("context")
+            check(fixed.getString("executionId")==executionId&&owner.getString("productId")==product&&owner.getLong("sdkConversationId")==sdkId)
+            val digest=NativeInputStore.sha256(NativeExecutionFence.canonical(fixed).toByteArray(Charsets.UTF_8));check(digest==expectedDigest)
+            val command=fixed.getJSONObject("command");check(command.getString("kind")=="shell"&&command.getString("script")==expectedCommand)
+            JSONObject().put("verified",true).put("executionId",executionId).put("requestDigest",digest).put("timeoutMs",fixed.get("timeoutMs"))
+                .put("documentId",document).put("baseSeq",baseSeq).put("latestSeq",latestSeq).put("commandMatches",true)
+        }
+    }
     fun capture(context:Context,mode:String,run:String,product:String,sdkId:Long,executionId:String,intentKey:String):JSONObject {
         val namespace=NativeInputBridge.namespace(mode,run)
         val sdk=File(context.filesDir,if(mode=="product")"application/application.sqlite" else "application-validation/$run/application.sqlite")
