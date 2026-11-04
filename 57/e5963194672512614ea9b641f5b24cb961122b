@@ -1,0 +1,35 @@
+docs/evidence/t13/t13-react-grant09-device.log
+  s_467dcb949b5b60::t_b94fb497cb57f5 1-29
+docs/evidence/t13/t13-react-grant09-network-metered.log
+  s_467dcb949b5b60::t_b94fb497cb57f5 1-2
+docs/evidence/t13/native-ui-configuration-review.md
+  s_467dcb949b5b60::t_ffcff539046741 30-51
+docs/evidence/t13/t13-ui-config-green01-device.log
+  s_467dcb949b5b60::t_b94fb497cb57f5 1-41
+docs/evidence/t13/evidence-hashes.json
+  s_467dcb949b5b60::t_b9833bd1e46632 5,9,13,17,21,25,29,33,37,41,45,47-605,609,613,617,621,625
+  s_467dcb949b5b60::t_deed7d0ea081a6 1-4,6-8,10-12,14-16,18-20,22-24,26-28,30-32,34-36,38-40,42-44,46,606-608,610-612,614-616,618-620,622-624,626-630
+docs/evidence/t13/t13-react-grant09-network-after.log
+  s_467dcb949b5b60::t_b94fb497cb57f5 1-2
+docs/evidence/t13/README.md
+  s_467dcb949b5b60::t_ffcff539046741 35,38,253-256,310-326,343-347,358-359,372,377
+docs/evidence/t13/REPRODUCE.md
+  s_467dcb949b5b60::t_ffcff539046741 56-60,98-103
+  s_467dcb949b5b60::t_f9cee654fbcbb1 104
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "57e5963194672512614ea9b641f5b24cb961122b",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
