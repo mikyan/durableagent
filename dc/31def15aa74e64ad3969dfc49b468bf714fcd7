@@ -1,0 +1,23 @@
+android/app/src/androidTest/java/dev/durableagent/probe/NativeDocumentFailureTest.kt
+  s_467dcb949b5b60::t_c7ac1d7740f5ce 1-70
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/DocumentProvider.java
+  s_467dcb949b5b60::t_c7ac1d7740f5ce 28-29,42,55-63
+android/document-fixture/src/main/java/dev/durableagent/documentsfixture/ControlReceiver.java
+  s_467dcb949b5b60::t_c7ac1d7740f5ce 19-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "dc31def15aa74e64ad3969dfc49b468bf714fcd7",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
