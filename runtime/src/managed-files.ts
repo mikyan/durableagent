@@ -104,7 +104,7 @@ export class ManagedFiles {
    const opened=await this.call('file.open',{path:absolute,noFollow:options?.noFollow??false},absolute,context);
    if(opened?.namespace!==this.options.namespace||typeof opened.handle!=='string'||!opened.handle||typeof opened.epoch!=='string'||!opened.epoch)throw unknown(absolute);
    info(opened.info,absolute);let closed=false;
-   const ensure=()=>{if(closed)throw unknown(absolute);};
+   const ensure=()=>{if(closed)throw new FileError('invalid','文件读取已关闭',absolute);};
    const reader:BinaryReader={
     info:current=>this.result(absolute,current,async()=>{ensure();return info(await this.call('file.info',{handle:opened.handle},absolute,current),absolute);}),
     read:(offset,length,current)=>this.result(absolute,current,async()=>{

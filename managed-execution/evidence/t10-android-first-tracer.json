@@ -1,0 +1,169 @@
+{
+  "candidate": "production01",
+  "passedStages": [
+    {
+      "case": "original-roundtrip",
+      "result": {
+        "run": "4b8e3dc3-03a8-4cc8-a709-a8e79ddba471",
+        "conversationId": "4b9d0f53-835c-436e-adf9-a39027f9f825",
+        "result": {
+          "root": ".durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471",
+          "canonical": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/nested/original.bin",
+          "renamed": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/nested/renamed.bin",
+          "originalReadSha256": "21d2dd19a7be6710a6dddb879d382fcccf37bc896b7b76ca43018335f8f6d576",
+          "bashWriteSha256": "b2adabd0a6befce9391a9877023b9a86b42f96c4b8d1f1f18054b0b2357a9138",
+          "finalSha256": "17fa4ffb988114bcc457e3e4e1a00aaa168e0043cf0f9594135d6743b7449dd6",
+          "finalBytes": 11,
+          "watchMode": "polling",
+          "diffPath": ".durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/change.txt",
+          "names": [
+            "original.bin",
+            "renamed.bin"
+          ]
+        },
+        "changes": [
+          {
+            "operationId": "8d2fa86c-20c8-46aa-89ec-e4bff22b6082",
+            "bindingId": "816059bc-2ab5-4289-980b-b960d7e8bb9f",
+            "executionId": "45bc315a-e96e-4334-901a-04ed0a901bb6",
+            "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/nested/original.bin",
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "original": true,
+            "state": "completed",
+            "scopeConfirmed": true,
+            "diff": {
+              "available": false,
+              "reason": "binary"
+            }
+          },
+          {
+            "operationId": "692f3a54-2ec2-4cc1-abd9-32a79cf8f417",
+            "bindingId": "816059bc-2ab5-4289-980b-b960d7e8bb9f",
+            "executionId": "56fa2bde-3e96-42db-aae6-53504d86aeb6",
+            "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/nested/original.bin",
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "original": true,
+            "state": "completed",
+            "scopeConfirmed": true,
+            "diff": {
+              "available": false,
+              "reason": "binary"
+            }
+          },
+          {
+            "operationId": "3d1f1665-81b7-4384-be5e-a3053239251f",
+            "bindingId": "816059bc-2ab5-4289-980b-b960d7e8bb9f",
+            "executionId": "cb7697c3-1e1d-4868-93a3-3086e79cc178",
+            "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/nested/original.bin",
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "original": true,
+            "state": "completed",
+            "scopeConfirmed": true,
+            "diff": {
+              "available": false,
+              "reason": "binary"
+            }
+          },
+          {
+            "operationId": "c7fafb45-f1ea-4cdf-b255-b26892f91442",
+            "bindingId": "816059bc-2ab5-4289-980b-b960d7e8bb9f",
+            "executionId": "f353c6da-a15f-448b-a0d2-fa40b2b61b96",
+            "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/nested/original.bin",
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "original": true,
+            "state": "completed",
+            "scopeConfirmed": true,
+            "diff": {
+              "available": false,
+              "reason": "binary"
+            }
+          },
+          {
+            "operationId": "c6139cfe-40f1-41bd-9994-b53d7ee19e2f",
+            "bindingId": "816059bc-2ab5-4289-980b-b960d7e8bb9f",
+            "executionId": "cc26dac5-aaff-4b65-93d3-9bd322a6c108",
+            "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/nested/original.bin",
+            "destination": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/nested/renamed.bin",
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "original": true,
+            "state": "completed",
+            "scopeConfirmed": true,
+            "diff": {
+              "available": true,
+              "text": ""
+            }
+          },
+          {
+            "operationId": "6ac4aa16-8d6e-4533-864b-c2040e34e76a",
+            "bindingId": "816059bc-2ab5-4289-980b-b960d7e8bb9f",
+            "executionId": "7089614d-ab20-4284-bb1b-d2ae8a05a353",
+            "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/nested/original.bin",
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "original": true,
+            "state": "completed",
+            "scopeConfirmed": true,
+            "diff": {
+              "available": true,
+              "text": "--- before\n+++ after\n@@ -0,0 +1 @@\n+replacement"
+            }
+          },
+          {
+            "operationId": "b7c913f1-a76c-4694-bb0d-3b0523167a32",
+            "bindingId": "816059bc-2ab5-4289-980b-b960d7e8bb9f",
+            "executionId": "c1e7c4b0-5c19-4d48-acf4-33cb41d6f110",
+            "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/change.txt",
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "original": true,
+            "state": "completed",
+            "scopeConfirmed": true,
+            "diff": {
+              "available": true,
+              "text": "--- before\n+++ after\n@@ -0,0 +1 @@\n+before\n"
+            }
+          },
+          {
+            "operationId": "6abc4f5d-d91e-45d9-ab5a-2d78646cde1c",
+            "bindingId": "816059bc-2ab5-4289-980b-b960d7e8bb9f",
+            "executionId": "82eb1cd4-8da0-4c10-a384-db4b1499f8aa",
+            "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/change.txt",
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "original": true,
+            "state": "completed",
+            "scopeConfirmed": true,
+            "diff": {
+              "available": true,
+              "text": "--- before\n+++ after\n@@ -1 +1 @@\n-before\n+真实修改-after\n"
+            }
+          },
+          {
+            "operationId": "7bb7ca5e-5848-466c-b38a-7c9e93c839cd",
+            "bindingId": "816059bc-2ab5-4289-980b-b960d7e8bb9f",
+            "executionId": "985c5e10-1381-423a-8729-6a15ba170280",
+            "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-4b8e3dc3-03a8-4cc8-a709-a8e79ddba471/nested/renamed.bin",
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "original": true,
+            "state": "completed",
+            "scopeConfirmed": true,
+            "diff": {
+              "available": false,
+              "reason": "binary"
+            }
+          }
+        ],
+        "uiActualDiff": true
+      }
+    },
+    {
+      "case": "independent-dependency-artifact",
+      "result": {
+        "path": "/data/data/com.termux/files/home/.local/share/durableagent-runtime-probe/t10-build-uthash-install02/lookup",
+        "bytes": 11656,
+        "sha256": "e9b291013974011a54775a99e1eb1f7178425c12fd6919f44128abea08b1906b",
+        "sourceSha256": "d5bb1eb860e50a4819f0709062ff1d083627fba44e8f58812d78ba8b999685a4"
+      }
+    }
+  ],
+  "overall": "failed",
+  "failure": "Pinned SDK binary reader after explicit close returned unknown; required invalid. Root retains original full log.",
+  "rerun": false
+}

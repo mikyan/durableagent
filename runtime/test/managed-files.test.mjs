@@ -30,6 +30,8 @@ test('SDK binary reader assembles bounded remote pages and fails on a lost opene
  assert.equal(opened.ok,true);const reader=opened.value;
  try{const result=await reader.read(0,bytes.length,context);assert.equal(result.ok,true);assert.deepEqual(Buffer.from(result.value),bytes);lost=true;const stale=await reader.read(0,3,context);assert.equal(stale.ok,false);assert.equal(stale.error.code,'unknown');}
  finally{await reader.close(context);}
+ await reader.close(context);
+ for(const result of [await reader.read(0,1,context),await reader.info(context),await reader.scanLines({startLine:0},context)]){assert.equal(result.ok,false);assert.equal(result.error.code,'invalid','explicit close is a known invalid handle, distinct from remote loss');}
 });
 
 test('SDK line scanning counts decoded UTF-8 bytes while retaining raw file positions and the initial BOM rule',async()=>{

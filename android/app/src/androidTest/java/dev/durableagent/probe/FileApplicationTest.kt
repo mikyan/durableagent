@@ -53,6 +53,7 @@ class FileApplicationTest {
             until{wire.call("list").getJSONArray("conversations").length()==1};val id=wire.call("list").getJSONArray("conversations").getJSONObject(0).getString("id")
             val catalog=wire.call("projects.get",target(id));val defaultPath=catalog.getJSONArray("workspaces").getJSONObject(0).getString("path")
             assertTrue(catalog.getJSONObject("selection").isNull("projectId"))
+            if(InstrumentationRegistry.getArguments().getString("fileContractsOnly")!="true"){
             send(page,"FILE_ROUNDTRIP");val roundtrip=marker(wire,id,"FILE-ROUNDTRIP-PASS:")
             assertEquals(11,roundtrip.getInt("finalBytes"));assertEquals("polling",roundtrip.getString("watchMode"));assertTrue(roundtrip.getString("canonical").startsWith("$defaultPath/.durableagent-t10-$run/"))
             val changes=wire.call("files.list",target(id)).getJSONArray("changes");assertTrue(changes.length()>=8)
@@ -60,6 +61,7 @@ class FileApplicationTest {
             button(page,"查看文件变更");until{js(page,"document.querySelector('.file-changes')?.textContent.includes('+真实修改-after')")=="true"}
             evidence("original-roundtrip",JSONObject().put("run",run).put("conversationId",id).put("result",roundtrip).put("changes",changes).put("uiActualDiff",true))
             send(page,"FILE_DEPENDENCY");val dependency=marker(wire,id,"FILE-DEPENDENCY-PASS:");evidence("independent-dependency-artifact",dependency)
+            }
             send(page,"EXEC_CONFORMANCE_SETUP");until{val value=wire.call("open",target(id));value.optString("phase")=="done"&&texts(value).contains("conformance-directories-ready")}
             val names=listOf("binary reader reads byte ranges of the opened file","binary reader scans lines like decoding the whole file","binary reader keeps reading the file it opened after a rename","directory reader refuses missing paths and files")
             fun mutate(method:String,payload:JSONObject):JSONObject{val current=wire.call("projects.get",target(id));return wire.call(method,payload.put("operationId",uuid()).put("expectedVersion",current.getLong("version")))}
