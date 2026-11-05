@@ -1,0 +1,23 @@
+android/app/src/main/java/dev/durableagent/probe/NativeCredentialAccess.kt
+  s_467dcb949b5b60::t_57d47ee9b07307 7,27
+ui/src/extensions/provider-auth.tsx
+  s_467dcb949b5b60::t_57d47ee9b07307 44,52
+docs/specs/provider-configuration.md
+  s_467dcb949b5b60::t_57d47ee9b07307 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "aedbaac10dbc36981d3a1454c3907be460399526",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
