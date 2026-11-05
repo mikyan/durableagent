@@ -1,5 +1,5 @@
 import type {ApplicationStatus,ConversationSnapshot,ConversationSummary,HistoryMessage,HistoryPage} from '../../runtime/src/application-protocol';
-import {ApplicationClient,ApplicationFailure} from './client';
+import {ApplicationClient,ApplicationFailure,type ProviderAuthInput} from './client';
 import {MODELS_EXTENSION,type ConnectionProtocol,type CredentialInfo,type ModelConfiguration} from '../../runtime/src/model-protocol';
 import type {InputConversation} from '../../runtime/src/input-protocol';
 import {DraftCoordinator,type DraftView} from './drafts';
@@ -10,9 +10,9 @@ import {DataSaverCoordinator,type DataSaverView} from './data-saver';
 import {DATA_SAVER_EXTENSION} from '../../runtime/src/data-saver-protocol';
 
 export interface SelectionPreferences {get(key:string):string|null;set(key:string,value:string):void}
-export type UiPage='conversation'|'conversations'|'models'|'projects'|'extensions'|'tools'|'settings';
-export type UiState={dataSaver?:DataSaverView;execution?:ExecutionView;status:ApplicationStatus;conversations:ConversationSummary[];inputConversations:InputConversation[];inputReady:boolean;inputError?:string;draft?:DraftView;submissions?:ReturnType<SubmissionCoordinator['view']>;activeId?:string;conversation?:ConversationSnapshot;history:HistoryMessage[];next?:string;loading:boolean;pending:boolean;error?:string;page:UiPage;models?:ModelConfiguration;modelsLoading:boolean;modelsPending:boolean;modelsError?:string;modelsNotice?:string;projects?:ProjectCatalog;projectsLoading?:boolean;projectsPending?:boolean;projectsUnconfirmed?:boolean;projectsError?:string;projectsNotice?:string};
-export type ConnectionInput={name:string;protocol:ConnectionProtocol;endpoint:string;modelId?:string};
+export type UiPage='conversation'|'conversations'|'models'|'projects'|'extensions'|'tools'|'termux'|'settings';
+export type UiState={dataSaver?:DataSaverView;execution?:ExecutionView;status:ApplicationStatus;conversations:ConversationSummary[];inputConversations:InputConversation[];inputReady:boolean;inputError?:string;draft?:DraftView;submissions?:ReturnType<SubmissionCoordinator['view']>;activeId?:string;conversation?:ConversationSnapshot;history:HistoryMessage[];next?:string;loading:boolean;pending:boolean;error?:string;page:UiPage;modelProviderId?:string;models?:ModelConfiguration;modelsLoading:boolean;modelsPending:boolean;modelsError?:string;modelsNotice?:string;projects?:ProjectCatalog;projectsLoading?:boolean;projectsPending?:boolean;projectsUnconfirmed?:boolean;projectsError?:string;projectsNotice?:string};
+export type ConnectionInput={name:string;protocol:ConnectionProtocol;providerId?:string;endpoint?:string;modelId?:string};
 export type ModelReference={provider:string;modelId:string};
 const mergeMessages=(older:HistoryMessage[],current:HistoryMessage[])=>[...new Map([...older,...current].map(message=>[message.id,message])).values()].sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true}));
 
@@ -36,6 +36,7 @@ export class ConversationController {
   readonly execution=new ExecutionCoordinator(()=>this.client,()=>this.publish({execution:this.execution.view()}));
   extensionClient?:import('./extensions/timeline').TimelineClient;
   showPage(page:UiPage){this.publish({page});}
+  showModelProvider(modelProviderId?:string){this.publish({page:'models',modelProviderId,modelsNotice:undefined});}
   openExtensions(){this.publish({page:'extensions'});}
   leaveExtensions(){this.publish({page:'conversation'});}
   private sendPoll?:ReturnType<typeof setTimeout>;
@@ -211,7 +212,7 @@ export class ConversationController {
       if(pending&&epoch===this.epoch&&id===this.state.activeId&&Date.now()<deadline)next();
     },1000);};next();
   }
-  async openModels(){this.publish({page:'models',modelsNotice:undefined});await this.loadModels();}
+  async openModels(){this.publish({page:'models',modelProviderId:undefined,modelsNotice:undefined});await this.loadModels();}
   leaveModels(){this.publish({page:'conversation',modelsError:undefined,modelsNotice:undefined});}
   async openProjects(){this.publish({page:'projects',projectsNotice:undefined});await this.loadProjects();}
   leaveProjects(){this.publish({page:'conversation',projectsNotice:undefined});}
@@ -273,15 +274,21 @@ export class ConversationController {
     finally{if(epoch===this.epoch)this.publish({modelsLoading:false});}
   }
   async createConnection(input:ConnectionInput) {
-    const fingerprint=JSON.stringify([input.name,input.protocol,input.endpoint,input.modelId??'']);
+    const fingerprint=JSON.stringify([input.name,input.protocol,input.providerId??'',input.endpoint??'',input.modelId??'']);
     if(this.connectionCreation?.fingerprint!==fingerprint)this.connectionCreation={fingerprint,id:crypto.randomUUID()};
-    const ok=await this.changeModels('models.create',{creationId:this.connectionCreation.id,name:input.name,protocol:input.protocol,endpoint:input.endpoint,...(input.protocol==='openai-compatible'?{modelId:input.modelId}:{})},'连接已添加；请单独配置 API Key 和默认模型。');
+    const creationId=this.connectionCreation.id;
+    const ok=await this.changeModels('models.create',{creationId,...input},'连接已添加；请配置凭据并选择模型。');
     if(ok)this.connectionCreation=undefined;
-    return ok;
+    return ok?this.state.models?.connections.find(connection=>connection.id===creationId)??null:null;
   }
   setDefaultModel(selection:ModelReference){return this.changeModels('models.setDefault',{selection:{provider:selection.provider,modelId:selection.modelId}},'默认模型已更新，仅影响以后新建的会话。');}
   setConnectionEnabled(id:string,enabled:boolean){return this.changeModels('models.setEnabled',{id,enabled},enabled?'连接已启用。':'连接已停用；旧定义与会话选择仍保留。');}
-  private async changeModels(method:'models.create'|'models.setDefault'|'models.setEnabled',payload:Record<string,unknown>,notice:string) {
+  refreshConnectionModels(id:string){return this.changeModels('models.refresh',{id},'模型目录已刷新。');}
+  authenticateProvider(input:ProviderAuthInput){
+    if(!this.client)return Promise.reject(new ApplicationFailure('HOST_UNAVAILABLE','无法连接登录服务，请重新连接。'));
+    return this.client.authenticateProvider(input);
+  }
+  private async changeModels(method:'models.create'|'models.setDefault'|'models.setEnabled'|'models.refresh',payload:Record<string,unknown>,notice:string) {
     const client=this.client,epoch=this.epoch,models=this.state.models;
     if(!client||!models||this.state.modelsPending||this.state.modelsLoading||this.state.status.phase!=='ready')return false;
     this.publish({modelsPending:true,modelsError:undefined,modelsNotice:undefined});
@@ -297,7 +304,7 @@ export class ConversationController {
       const credential:CredentialInfo=await client.writeCredential(operation==='save'?{operation,target:id,expectedGeneration:connection.credential.generation,key:key!}:{operation,target:id,expectedGeneration:connection.credential.generation});
       if(epoch!==this.epoch)return false;
       const models=this.state.models!;
-      this.publish({models:{...models,connections:models.connections.map(item=>item.id===id?{...item,credential}:item)},modelsNotice:operation==='save'?'API Key 已保存；已配置不代表云端验证成功。':'API Key 已移除；已发出的请求不会因此撤回。'});return true;
+      this.publish({models:{...models,connections:models.connections.map(item=>item.id===id?{...item,credential}:item)},modelsNotice:operation==='save'?'API Key 已保存；已配置不代表云端验证成功。':'凭据已移除；已发出的请求不会因此撤回。'});return true;
     }catch(error){
       if(epoch===this.epoch){
         const code=error instanceof ApplicationFailure?error.code:'';

@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import type {ConversationController,UiState} from '../controller';
 import type {SendView} from '../submissions';
 
@@ -22,29 +21,43 @@ function presentation(item:SendView,stoppedThrough:number,abortPending:boolean){
   return {stage:'pending',label:'待投递',detail:item.status?.waiting?.message??'此次发送已保存在本机，等待接纳条件具备。'};
 }
 
-export function SendStates({controller,state}:{controller:ConversationController;state:UiState}){
-  const [expanded,setExpanded]=useState(false);
+export function SubmissionStatus({item,controller,state}:{item:SendView;controller:ConversationController;state:UiState}){
+  const sends=state.submissions;
+  const view=presentation(item,sends?.control?.stoppedThrough??0,!!sends?.control?.pendingAbort),accepted=item.status?.accepted||!!item.intent?.receipt;
+  const retry=accepted?item.intent?.delivery!=='acknowledged':view.stage!=='stopped';
+  return <div className="message-delivery" data-testid="submission-item" data-intent-id={item.intentId} data-stage={view.stage}>
+    <details><summary><span className="delivery-dot" aria-hidden="true"/>{view.label}</summary><div className="disclosure-content"><p>{view.detail}</p><time dateTime={new Date(item.createdAt).toISOString()}>{new Date(item.createdAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</time></div></details>
+    {item.status?.waiting&&<p>{item.status.waiting.message}</p>}{item.error&&<p className="send-error" role="status">{item.error}</p>}
+    {retry&&<button type="button" className="text-button" data-testid="retry-submission" disabled={item.busy||sends?.stopping} onClick={()=>void controller.retrySubmission(item.intentId)}>{accepted?'补齐本机发送确认':'核验并重试此次发送'}</button>}
+  </div>;
+}
+
+export function SubmissionMessages({controller,state}:{controller:ConversationController;state:UiState}){
+  const sends=state.submissions;if(!sends)return null;
+  // Associate by the SDK's entry identity, never by matching user text.
+  const unmatched=sends.items.filter(item=>!(state.history??[]).some(message=>message.id===item.status?.submission?.entryId)).slice().reverse();
+  return <>{unmatched.map(item=><article className="message role-user submission-message" key={item.intentId}>
+    <div className="message-label">你<span className="saved-label">{item.status?.submission?.entryId?'对应消息尚未载入':'此次发送'}</span></div>
+    <p className="message-text">{item.preview.text||'附件输入'}{item.preview.attachmentCount>0?` · ${item.preview.attachmentCount} 个附件`:''}</p>
+    <SubmissionStatus item={item} controller={controller} state={state}/>
+  </article>)}</>;
+}
+
+export function SubmissionControlStatus({controller,state}:{controller:ConversationController;state:UiState}){
   const sends=state.submissions;if(!sends)return null;
   const stoppedThrough=sends.control?.stoppedThrough??0;
   const status=sends.stopStatus?.control.version===sends.control?.version?sends.stopStatus:undefined;
   const showStop=sends.stopping||sends.stopError||sends.control?.pendingAbort||status&&status.externalPending>0||sends.control&&sends.control.generation<=stoppedThrough;
   const stopLabel=sends.stopping?'正在保存停止请求…':sends.control&&stoppedThrough>0?(sends.control.pendingAbort?'停止请求已保存 · 等待会话中断核验':status?.phase==='external-unconfirmed'?'停止已请求，外部结果待核验':status?.phase==='stopped'?'停止完成 · 相关受管操作已核验':'停止请求已保存 · 会话中断已确认'):'停止请求未确认';
-  const known=showStop?stopLabel:sends.items[0]?presentation(sends.items[0],stoppedThrough,!!sends.control?.pendingAbort).label:undefined;
-  const summary=sends.stopError||sends.error?(known??'发送状态待读取')+' · 状态读取未确认':known;
-  return <section className={'send-states'+(expanded?' is-expanded':'')} aria-label="发送状态">
-    {summary&&<button type="button" className="send-states-summary" aria-expanded={expanded} onClick={()=>setExpanded(value=>!value)}>{'发送状态：'+summary+ (expanded?' · 收起':' · 展开')}</button>}
-    {(sends.items.length>0||sends.error||showStop)&&<div className="send-states-heading"><span>发送状态</span><button className="text-button" data-testid="refresh-submissions" onClick={()=>void controller.refreshSubmissions()} disabled={sends.loading}>刷新发送状态</button></div>}
-    {showStop&&<p className="stop-status" data-testid="stop-status" role="status">{stopLabel}{sends.stopError&&<span>{sends.stopError}</span>}</p>}
-    {sends.error&&<p className="send-error" role="status">{sends.error}</p>}
-    <div className="send-state-list">{sends.items.map(item=>{
-      const view=presentation(item,stoppedThrough,!!sends.control?.pendingAbort),accepted=item.status?.accepted||!!item.intent?.receipt;
-      return <article className="send-state" data-testid="submission-item" data-intent-id={item.intentId} data-stage={view.stage} key={item.intentId}>
-        <div className="send-state-title"><strong>{view.label}</strong><time dateTime={new Date(item.createdAt).toISOString()}>{new Date(item.createdAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</time></div>
-        <p className="send-preview">{item.preview.text||'附件输入'}{item.preview.attachmentCount>0?` · ${item.preview.attachmentCount} 个附件`:''}</p>
-        <p>{view.detail}</p>{item.status?.waiting&&view.stage!=='pending'&&<p>{item.status.waiting.message}</p>}{item.error&&<p className="send-error">{item.error}</p>}
-        {(accepted?item.intent?.delivery!=='acknowledged':view.stage!=='stopped')&&<button type="button" className="text-button" data-testid="retry-submission" disabled={item.busy||sends.stopping} onClick={()=>void controller.retrySubmission(item.intentId)}>{accepted?'补齐本机发送确认':'核验并重试此次发送'}</button>}
-      </article>;
-    })}</div>
-    {sends.next&&<button className="text-button" onClick={()=>void controller.refreshSubmissions(sends.next)} disabled={sends.loading}>更早的发送</button>}
-  </section>;
+  return <>
+    {(showStop||sends.error)&&<article className="message role-system activity-message" role="status">
+      {showStop&&<p data-testid="stop-status">{stopLabel}{sends.stopError&&<span className="send-error">{sends.stopError}</span>}</p>}
+      {sends.error&&<p className="send-error">{sends.error}</p>}
+    </article>}
+    {(sends.items.length>0||sends.error||showStop)&&<div className="message-status-actions"><button className="text-button" data-testid="refresh-submissions" onClick={()=>void controller.refreshSubmissions()} disabled={sends.loading}>核验发送状态</button>{sends.next&&<button className="text-button" onClick={()=>void controller.refreshSubmissions(sends.next)} disabled={sends.loading}>更早的发送记录</button>}</div>}
+  </>;
+}
+
+export function SendStates({controller,state}:{controller:ConversationController;state:UiState}){
+  return <><SubmissionMessages controller={controller} state={state}/><SubmissionControlStatus controller={controller} state={state}/></>;
 }
