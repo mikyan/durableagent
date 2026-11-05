@@ -8,7 +8,7 @@ import {join} from 'node:path';
 import type {ConnectionDefinition,ProviderView,PublicModel} from './model-protocol.js';
 import {authenticationFailure,credentialSecrets,decodeCredential,encryptedCredentialStore,ProviderAuthentication,ProviderAuthenticationError,type PrivateCredentialAccess} from './provider-auth.js';
 import {sanitizeEvent,redactResponse} from './model-secrets.js';
-import {InputError,validateContextBudget,validateProviderInput,type ProviderInputEvidence} from './input.js';
+import {InputError,validateContextBudget,validateProviderPayload,type ProviderInputEvidence} from './input.js';
 import type {ModelRetryAfter} from './model-retry-after.js';
 
 const marker='application-request-auth';
@@ -98,7 +98,7 @@ export class SdkProviders {
           const nativeTransport=['google-generative-ai','google-vertex','bedrock-converse-stream'].includes(model.api);
           const selected={...options,...resolved!.auth,env:resolved!.env,apiKey:resolved!.auth.apiKey,headers:resolved!.auth.headers,maxRetries:0,timeoutMs:45000,transport:'sse',...(nativeTransport?{fetch:undefined}:{fetch:checkedFetch}),
             onProviderStreamEvent:options?.onProviderStreamEvent?((event:unknown)=>options.onProviderStreamEvent(sanitizeEvent(event,secrets))):undefined,
-            onPayload:async(payload:unknown)=>{validateContextBudget(payload);const evidence=await validateProviderInput(new Request('https://payload.invalid/',{method:'POST',body:JSON.stringify(payload)}),model);await this.hooks.retryAfter()?.wait(definition.id,options?.signal);const latest=await this.access.metadata(definition.id);if(!latest.configured||latest.generation!==current.generation)fail('CREDENTIAL_CHANGED','凭据已变更，请重试');this.hooks.enabled(definition.id);this.hooks.onRequest?.({connectionId:definition.id,generation:current.generation,endpoint:endpoint??'',input:evidence,requestTools:{names:[],choice:'sdk'}});return payload;}};
+            onPayload:async(payload:unknown)=>{const evidence=await validateProviderPayload(payload,model);await this.hooks.retryAfter()?.wait(definition.id,options?.signal);const latest=await this.access.metadata(definition.id);if(!latest.configured||latest.generation!==current.generation)fail('CREDENTIAL_CHANGED','凭据已变更，请重试');this.hooks.enabled(definition.id);this.hooks.onRequest?.({connectionId:definition.id,generation:current.generation,endpoint:endpoint??'',input:evidence,requestTools:{names:[],choice:'sdk'}});return payload;}};
           const stream=method==='fetchDeferred'?implementation.fetchDeferred?.(requestModel,originalHandle!,selected):method==='streamSimple'?implementation.streamSimple(requestModel,transcript!,selected):implementation.stream(requestModel,transcript!,selected);
           if(!stream)fail('DEFERRED_UNRECOVERABLE','提供方不支持恢复此响应');
           for await(const event of stream!){

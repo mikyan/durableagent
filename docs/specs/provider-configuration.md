@@ -8,6 +8,6 @@
 
 登录和请求期 OAuth 刷新复用 SDK 实现。凭据存入现有 Android Keystore 保护的私有密文库，刷新采用每连接原生 OS 锁并检查凭据代次。SDK 会被耐久保存的外层请求选项继续使用非秘密标记，真实鉴权仅在私有 Provider 调用中解析。账号、认证种类或目的地配置改变时保留旧连接，要求新建连接；旧 deferred 响应遇到凭据代次变化不盲目恢复。显式 OAuth 再登录与原凭据驱动的自动刷新分开判定：再登录必须能核对新旧稳定账号标识；提供方未返回该标识，或旧凭据已移除而无法核对时，要求新增连接。此判定在最终原生锁内保存前执行，避免交互期间的并发变更绕过。正常刷新仍复用 SDK 原凭据及其取消隔离和落盘契约。
 
-模型目录是 SDK 支持范围，不等于账号权限或设备实测结果。Google、Vertex、Bedrock 使用 SDK 自带传输；其余 Provider 保留 SDK API，并在支持的 fetch 边界检查 HTTPS 目的地、禁止跳转和清理反射的凭据。调用前检查输入预算和连接状态，输出保持 SDK 错误并过滤凭据。依赖外部账号权限、AWS profile、ADC／服务账号文件或设备浏览器回调的方式，仍受实际 Android 环境约束；缺失时显示认证或请求错误，不伪装已可用。
+模型目录是 SDK 支持范围，不等于账号权限或设备实测结果。Google、Vertex、Bedrock 使用 SDK 自带传输；其余 Provider 保留 SDK API，并在支持的 fetch 边界检查 HTTPS 目的地、禁止跳转和清理反射的凭据。调用前检查输入预算和连接状态，输出保持 SDK 错误并过滤凭据。Bedrock 的 SDK payload 含已解码图片／redacted-content 二进制 blob，预算按 AWS 实际 base64 JSON 表示计算；仅生成校验投影，不修改交给 SDK 的 payload。其余 Provider 保持原 JSON 预算，深度、循环、应用总额与模型总额检查继续生效。依赖外部账号权限、AWS profile、ADC／服务账号文件或设备浏览器回调的方式，仍受实际 Android 环境约束；缺失时显示认证或请求错误，不伪装已可用。
 
 本次验证范围仅 TypeScript 类型检查、UI 构建与 Android Kotlin 编译；未发起各 Provider 登录或模型调用，不新增或运行 Provider 测试，不宣称全部 Provider 已实测。
