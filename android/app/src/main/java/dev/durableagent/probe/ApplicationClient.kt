@@ -34,12 +34,12 @@ class ApplicationClient(private val context:Context,private val mode:String="pro
     })
     private val connection=object:ServiceConnection {
         override fun onServiceConnected(name:ComponentName,binder:IBinder){remote=Messenger(binder);val batch=pending.toList();pending.clear();for((what,json)in batch)send(what,json)}
-        override fun onServiceDisconnected(name:ComponentName){remote=null;receive(0,"运行宿主连接已断开，请重新连接查看状态。")}
+        override fun onServiceDisconnected(name:ComponentName){remote=null;receive(0,"应用服务连接已断开，请重新连接查看状态。")}
     }
     fun connect(startService:Boolean=true){main.post(object:Runnable{override fun run(){
         if(disposed||bound)return
         try{val intent=Intent(context,ApplicationService::class.java).putExtra("validationMode",mode).putExtra("validationRun",run);if(startService)context.startService(intent);bound=context.bindService(intent,connection,Context.BIND_AUTO_CREATE);if(bound)return}catch(_:RuntimeException){}
-        if(++attempts<30)main.postDelayed(this,100) else receive(0,"系统暂未允许连接运行宿主。")
+        if(++attempts<30)main.postDelayed(this,100) else receive(0,"系统暂未允许连接应用服务。")
     }})}
     fun post(json:String){main.post {if(disposed)return@post;runCatching{connections.add(JSONObject(json).getString("connectionId"));send(10,json)}}}
     fun reconnect(json:String){main.post {if(disposed)return@post;runCatching{
@@ -54,7 +54,7 @@ class ApplicationClient(private val context:Context,private val mode:String="pro
     fun control(what:Int,json:String=""){main.post {if(!disposed)send(what,json)}}
     private fun send(what:Int,json:String){val peer=remote;if(peer==null){pending.add(what to json);return}
         if(what==10&&json.length>48000){if(json.length>650000||inputs.size>=4){receive(0,"输入超过传输上限，尚未提交。");return};val first=inputs.isEmpty();inputs.addLast(Input(json));if(first)sendInput();return}
-        try{peer.send(Message.obtain(null,what).apply{replyTo=receiver;data=Bundle().apply{putString("json",json)}})}catch(_:RemoteException){receive(0,"运行宿主连接已断开。")}}
+        try{peer.send(Message.obtain(null,what).apply{replyTo=receiver;data=Bundle().apply{putString("json",json)}})}catch(_:RemoteException){receive(0,"应用服务连接已断开。")}}
     private fun sendInput(){val peer=remote?:return;val item=inputs.firstOrNull()?:return;val index=item.index
         try{peer.send(Message.obtain(null,15).apply{replyTo=receiver;data=Bundle().apply{putString("transfer",item.id);putInt("index",index);putInt("count",item.count);putString("json",item.json.substring(index*48000,minOf((index+1)*48000,item.json.length)))}})}catch(_:RemoteException){receive(0,"输入传输中断，请重新连接查看状态。");return}
         item.timeout=Runnable{if(inputs.firstOrNull()===item&&item.index==index){inputs.clear();receive(0,"输入传输确认超时，请重新连接查看状态。")}};main.postDelayed(item.timeout!!,30000)

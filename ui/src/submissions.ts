@@ -119,7 +119,7 @@ export class SubmissionCoordinator {
         void this.request<{control:NativeControl;status:'stopped'|'waiting'}>('stop',{id,stopId:control.pendingAbort.stopId}).then(result=>{
           if(epoch!==this.generation)return;
           if(result.control.version>=(this.controls.get(id)?.version??-1)){this.controls.set(id,result.control);state.runtime=result.status;this.notify();}
-        }).catch(()=>{if(epoch===this.generation){state.error='停止请求已原生保存；运行宿主的中断确认尚未取得。';this.notify();}});
+        }).catch(()=>{if(epoch===this.generation){state.error='停止请求已在本机保存，尚未收到应用服务的停止确认。';this.notify();}});
       }
       return true;
     }catch(error){if(epoch===this.generation){if(!unknownResult(error))state.request=undefined;state.error=reason(error);this.notify();}return false;}

@@ -84,7 +84,7 @@ export default function ConversationPage({controller,state}:{controller:Conversa
   },[controller,hasDataSaver,state.activeId]);
   const hasModels=state.status.extensions.includes(MODELS_EXTENSION.id);
   const hasProjects=state.status.extensions.includes(PROJECTS_EXTENSION.id);
-  const startupReason=state.status.reason??(state.status.phase==='opening'?'正在连接运行宿主…':state.status.phase==='configuring'?'正在装载配置，请稍候。':state.status.phase==='closed'?'运行宿主已关闭，请重新连接。':state.status.phase==='failed'?'连接未完成，请重新连接。':!ready?'当前运行宿主未提供会话功能。':undefined);
+  const startupReason=state.status.reason??(state.status.phase==='opening'?'正在连接应用服务…':state.status.phase==='configuring'?'正在装载配置，请稍候。':state.status.phase==='closed'?'应用服务已关闭，请重新连接。':state.status.phase==='failed'?'连接未完成，请重新连接。':!ready?'当前应用未提供会话功能。':undefined);
   const reason=settingsPage||!state.activeId?state.error??startupReason:startupReason;
   useEffect(()=>{
     const motion=window.matchMedia?.('(prefers-reduced-motion: reduce)');
@@ -159,7 +159,7 @@ export default function ConversationPage({controller,state}:{controller:Conversa
         <QuestionAnchor key={state.activeId} viewport={scroll} messages={state.history} onJump={jump}/>
         <div className="thread-scroll" ref={scroll} onScroll={()=>{const element=scroll.current;if(element)follow.current=element.scrollHeight-element.scrollTop-element.clientHeight<100;}}>
           <div className="thread" aria-label="会话消息">
-            {state.status.readOnly?<p className="empty-state">保留历史以只读方式展示，运行和新发送已关闭。</p>:!ready&&<p className="empty-state">草稿可在本地编辑保存。会话历史等待运行宿主连接。</p>}
+            {state.status.readOnly?<p className="empty-state">保留历史以只读方式展示，运行和新发送已关闭。</p>:!ready&&<p className="empty-state">草稿可在本地编辑保存。会话历史将在应用服务连接后显示。</p>}
             {state.next&&<button className="history-button" onClick={()=>void older()} disabled={state.loading}>{state.loading?'正在读取…':'查看更早的消息'}</button>}
             {state.loading&&!state.conversation&&<p className="empty-state" role="status">正在读取已保存的会话…</p>}
             {!state.loading&&state.conversation&&!state.history.length&&!state.conversation.progress&&<div className="chat-empty"><span>π</span><h2>有什么想一起解决？</h2><p>发送第一条消息，开始这次会话。</p></div>}

@@ -217,7 +217,7 @@ class ApplicationService:Service() {
             }
             val status=JSONObject(phase)
             if(node==null||status.optString("phase")=="failed"&&!status.optBoolean("readOnly")){
-                send(peer,10,JSONObject().put("type","response").put("protocol",1).put("connectionId",connection).put("requestId",request.optString("requestId")).put("ok",false).put("error",JSONObject().put("code","HOST_NOT_READY").put("message",JSONObject(phase).optString("reason","运行宿主尚未就绪"))).toString());return
+                send(peer,10,JSONObject().put("type","response").put("protocol",1).put("connectionId",connection).put("requestId",request.optString("requestId")).put("ok",false).put("error",JSONObject().put("code","HOST_NOT_READY").put("message",JSONObject(phase).optString("reason","应用服务尚未就绪"))).toString());return
             }
             pending.add(text)
         }catch(_:Throwable){/* Invalid wire messages cannot reach the SDK. */}
@@ -241,7 +241,7 @@ class ApplicationService:Service() {
             JSONObject().put("ok",true).put("value",JSONObject().put("phase",JSONObject(phase).getString("phase")))
         }catch(error:Exception){
             val code=error.message.takeIf{it in setOf("HOST_CLOSING","HOST_DOMAIN_MISMATCH","HOST_NOT_READY")}?:"INVALID_RECONNECT"
-            val message=when(code){"HOST_CLOSING"->"运行宿主正在关闭，请稍后重新连接。";"HOST_DOMAIN_MISMATCH"->"已有运行宿主属于另一个会话存储，保留现有运行。";"HOST_NOT_READY"->JSONObject(phase).optString("reason","运行宿主尚未就绪，请稍后重新连接。");else->"重新连接请求无效。"}
+            val message=when(code){"HOST_CLOSING"->"应用服务正在关闭，请稍后重新连接。";"HOST_DOMAIN_MISMATCH"->"应用服务已连接另一组会话数据，已保留原有状态。";"HOST_NOT_READY"->JSONObject(phase).optString("reason","应用服务尚未就绪，请稍后重新连接。");else->"重新连接请求无效。"}
             JSONObject().put("ok",false).put("error",JSONObject().put("code",code).put("message",message))
         }
         if(request!=null)send(peer,10,response.put("type","response").put("protocol",1).put("connectionId",request.optString("connectionId")).put("requestId",request.optString("requestId")).toString())

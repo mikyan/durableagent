@@ -45,7 +45,7 @@ export function encryptedCredentialStore(access:PrivateCredentialAccess,guard?:(
   const read=async(id:string)=>{const info=await access.metadata(id);return info.configured?decodeCredential((await access.resolve(id)).key):undefined;};
   const tails=new Map<string,Promise<unknown>>();
   const mutate=async(id:string,modify:Parameters<CredentialStore['modify']>[1],options:Parameters<CredentialStore['modify']>[2],explicitLogin:boolean)=>{
-    if(!access.acquire||!access.release||!access.save)fail('AUTH_STORAGE_UNAVAILABLE','当前运行宿主不支持保存登录凭据');
+    if(!access.acquire||!access.release||!access.save)fail('AUTH_STORAGE_UNAVAILABLE','当前应用不支持保存登录凭据');
     options?.signal?.throwIfAborted();
     const {lease}=await access.acquire!(id);
     try{

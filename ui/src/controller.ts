@@ -167,7 +167,7 @@ export class ConversationController {
     const draft=this.state.draft;if(!draft||!draft.text.trim()&&!draft.selections.length)return false;
     const epoch=this.epoch,id=this.state.activeId,actionVersion=this.submissions.actionVersion(id);
     const context=draft.submissionContext??this.state.conversation?.conversation.submissionContext??this.state.inputConversations.find(item=>item.id===id)?.submissionContext;
-    if(!context){this.publish({error:'尚未取得可信的会话位置关联，请连接运行宿主后重试。'});return false;}
+    if(!context){this.publish({error:'尚未取得可信的会话位置关联，请连接应用服务后重试。'});return false;}
     this.publish({pending:true,error:undefined});
     try {
       const {frozen,editEpoch}=await this.drafts.freeze(id);
@@ -308,7 +308,7 @@ export class ConversationController {
     }catch(error){
       if(epoch===this.epoch){
         const code=error instanceof ApplicationFailure?error.code:'';
-        const message=code==='CREDENTIAL_WRITER_UNAVAILABLE'?'当前宿主无法安全保存凭据，请重新连接或更新应用。':code.includes('CONFLICT')?'凭据状态已变更，请刷新后重新输入。':'凭据写入未确认，请刷新状态后重试。';
+        const message=code==='CREDENTIAL_WRITER_UNAVAILABLE'?'当前应用无法安全保存凭据，请重新连接或更新应用。':code.includes('CONFLICT')?'凭据状态已变更，请刷新后重新输入。':'凭据写入未确认，请刷新状态后重试。';
         this.publish({modelsError:message});
       }
       return false;
