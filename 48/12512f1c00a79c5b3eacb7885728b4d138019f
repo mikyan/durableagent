@@ -1,0 +1,60 @@
+docs/evidence/console-followup/README.md
+  s_467dcb949b5b60::t_fc54b470ee5f83 33
+  s_467dcb949b5b60::t_c05ead30a74733 1-32,34-57
+docs/evidence/console-followup/raw/final-mimo20-secret-audit.json
+  s_467dcb949b5b60::t_0a542f897aa15d 1-19
+docs/evidence/console-followup/SHA256SUMS
+  s_467dcb949b5b60::t_56a1a898a15903 1-19
+docs/evidence/console-followup/raw/beta-actual-tool03.log
+  s_467dcb949b5b60::t_255cf01543452f 1-42
+docs/evidence/console-followup/raw/beta-capability-tests04.log
+  s_467dcb949b5b60::t_d90f0f525aec10 1-5
+docs/evidence/console-followup/raw/beta-source-diagnostic01.log
+  s_467dcb949b5b60::t_8be5d8810a8d91 1-50
+docs/evidence/console-followup/raw/beta-source-diagnostic02.log
+  s_467dcb949b5b60::t_84f3d1ea1d80f5 1-37
+docs/evidence/console-followup/raw/candidate-metadata.json
+  s_467dcb949b5b60::t_bea7f4705b2238 1-55
+docs/evidence/console-followup/raw/core-jvm-tests17.json
+  s_467dcb949b5b60::t_d1e9f86511c872 1-26
+docs/evidence/console-followup/raw/core-runtime-tests12.log
+  s_467dcb949b5b60::t_e1009364278f5d 1-78
+docs/evidence/console-followup/raw/final-real-mimo-environment20.log
+  s_467dcb949b5b60::t_6af47a15649afe 1-25
+docs/evidence/console-followup/raw/installed-candidates12.json
+  s_467dcb949b5b60::t_2b8ca404836098 1-10
+docs/evidence/console-followup/raw/javet-frozen-green09.log
+  s_467dcb949b5b60::t_1269d31b6f80ac 1-25
+docs/evidence/console-followup/raw/javet-termux-background08.log
+  s_467dcb949b5b60::t_ef15a1a38434a0 1-46
+docs/evidence/console-followup/raw/mimo-environment13-secret-audit.json
+  s_467dcb949b5b60::t_43cf28e4ac5fa3 1-19
+docs/evidence/console-followup/raw/real-mimo-environment13.log
+  s_467dcb949b5b60::t_8559fb2bd72a4a 1-25
+docs/evidence/console-followup/raw/s23-freezer-observation16.json
+  s_467dcb949b5b60::t_6b9871fd1832e1 1-7
+docs/evidence/console-followup/raw/sdk-dispatch-diagnostic15-native.log
+  s_467dcb949b5b60::t_d17e955673af6f 1-5
+docs/evidence/console-followup/raw/sdk-pending-wake-contracts18.log
+  s_467dcb949b5b60::t_b2b36e6531b7a9 1-33
+docs/evidence/console-followup/raw/sdk-pending-wake-full17.log
+  s_467dcb949b5b60::t_e2d9678a2b3b4e 1-76
+docs/evidence/console-followup/raw/sdk-safe-failure02.log
+  s_467dcb949b5b60::t_4fa909146c3c49 1-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "4812512f1c00a79c5b3eacb7885728b4d138019f",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
