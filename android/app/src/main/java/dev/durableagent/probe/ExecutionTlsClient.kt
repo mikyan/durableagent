@@ -27,7 +27,7 @@ data class ExecutionPairing(val port:Int,val serverSpkiSha256:String,val executo
 /** One bounded authenticated session per request; no automatic command mutation retry. */
 class ExecutionTlsClient(private val identity:ExecutionIdentity,private val pairing:ExecutionPairing,private val diagnostic:((String)->Unit)?=null) {
     fun request(method:String,payload:JSONObject):JSONObject=request(method,payload,10000)
-    fun request(method:String,payload:JSONObject,timeoutMs:Long,beforeDispatch:()->Unit={}):JSONObject {
+    fun request(method:String,payload:JSONObject,timeoutMs:Long,pendingWake:((()->Boolean)->AutoCloseable)?=null,beforeDispatch:()->Unit={}):JSONObject {
         require(timeoutMs in 1..10000)
         val requestDeadline=android.os.SystemClock.elapsedRealtime()+timeoutMs
         if(!method.matches(Regex("[a-zA-Z][a-zA-Z0-9.]{0,63}")))throw ExecutionChannelException("INVALID_METHOD")
@@ -50,6 +50,7 @@ class ExecutionTlsClient(private val identity:ExecutionIdentity,private val pair
         var stage="connect"
         var authenticating=true
         var operationWriteAttempted=false
+        var pending:AutoCloseable?=null
         try {
             socket.use {
                 it.enabledProtocols=it.supportedProtocols.filter {protocol->protocol=="TLSv1.3"||protocol=="TLSv1.2"}.toTypedArray()
@@ -73,6 +74,7 @@ class ExecutionTlsClient(private val identity:ExecutionIdentity,private val pair
                     // stop/policy rejection must never become permission to retry.
                     authenticating=false;stage="beforeDispatch";beforeDispatch()
                     operationWriteAttempted=true;stage="operationFrame"
+                    pending=pendingWake?.invoke{!socket.isClosed&&android.os.SystemClock.elapsedRealtime()<requestDeadline}
                 }
             }
         }catch(error:ExecutionChannelException){throw error}
@@ -90,7 +92,7 @@ class ExecutionTlsClient(private val identity:ExecutionIdentity,private val pair
                 throw ExecutionNotDispatchedException(code)
             throw ExecutionChannelException(code)
         }
-        finally {deadline.cancel(false);runCatching{socket.close()}}
+        finally {runCatching{pending?.close()};deadline.cancel(false);runCatching{socket.close()}}
     }
     private fun exchange(input:DataInputStream,output:DataOutputStream,method:String,payload:JSONObject,session:JSONObject?,beforeWrite:()->Unit={}):JSONObject {
         val id=UUID.randomUUID().toString()

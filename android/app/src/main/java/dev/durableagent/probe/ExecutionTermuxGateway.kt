@@ -78,6 +78,31 @@ class ExecutionTermuxGateway(private val context: Context) {
     internal fun ensureExisting(timeoutMs:Long,eligible:()->Boolean):ExecutionPairing=existing(null,timeoutMs,eligible)
     /** Explicit recovery after proven-unsent transport failure, always using the original authority. */
     internal fun wakeExisting(expected:ExecutionPairing,timeoutMs:Long,eligible:()->Boolean) {existing(expected,timeoutMs,eligible)}
+    internal fun wakeGeneration():Long=existingLaunchGeneration.get()
+    /** A hint for an already-sent frame: do not probe, replace its socket, or claim any outcome. */
+    internal fun wakePending(expected:ExecutionPairing,observedGeneration:Long,timeoutMs:Long,eligible:()->Boolean,claim:()->Boolean,dispatchIfPending:((()->Unit)->Boolean)) {
+        require(timeoutMs in 1..10000)
+        val deadline=SystemClock.elapsedRealtime()+timeoutMs
+        fun remaining():Long {
+            if(Thread.currentThread().isInterrupted||!eligible())throw ExecutionChannelException("CHANNEL_CLOSED")
+            return (deadline-SystemClock.elapsedRealtime()).also{if(it<=0)throw ExecutionChannelException("EXISTING_EXECUTOR_UNAVAILABLE")}
+        }
+        while(!existingStart.tryLock(minOf(100L,remaining()),java.util.concurrent.TimeUnit.MILLISECONDS)){}
+        try{
+            remaining();requireReady();remaining()
+            val identity=ExecutionIdentity(context,"production-v1",allowCreate=false)
+            val actual=ExecutionPairingStore(context).use{it.requireClient(identity.certificateSha256())}
+            if(actual!=expected)throw ExecutionChannelException("PAIRING_CONFLICT")
+            remaining()
+            // A launch for this same authority after this socket wait began already
+            // serves overlapping waiters. This does not extend a request's deadline.
+            if(existingLaunchGeneration.get()!=observedGeneration&&lastExistingLaunch==expected)return
+            dispatchIfPending{
+                remaining()
+                if(claim()) {remaining();launchExisting(expected)}
+            }
+        }finally{existingStart.unlock()}
+    }
     private fun existing(wakeExpected:ExecutionPairing?,timeoutMs:Long,eligible:()->Boolean):ExecutionPairing {
         require(timeoutMs in 1..10000)
         val deadline=SystemClock.elapsedRealtime()+timeoutMs
@@ -107,11 +132,17 @@ class ExecutionTermuxGateway(private val context: Context) {
         try{
             remaining();if(wakeExpected==null&&reachable())return pairing
             requireReady();remaining()
-            if(!dispatch("if [ ! -x '$PYTHON' ] || [ ! -f '$SCRIPT' ]; then exit 78; fi; exec '$PYTHON' '$SCRIPT' serve-existing >/dev/null 2>&1",null))throw ExecutionChannelException("TERMUX_START_UNCONFIRMED")
+            launchExisting(pairing)
             do{remaining();if(reachable())return pairing;Thread.sleep(minOf(100L,remaining()))}while(true)
         }finally{existingStart.unlock()}
     }
     fun requireReady() = requireReady(allowSourceCheck = false)
+
+    /** Called only while existingStart is held. Both initial and recovery launches advance it. */
+    private fun launchExisting(pairing:ExecutionPairing) {
+        if(!dispatch("if [ ! -x '$PYTHON' ] || [ ! -f '$SCRIPT' ]; then exit 78; fi; exec '$PYTHON' '$SCRIPT' serve-existing >/dev/null 2>&1",null))throw ExecutionChannelException("TERMUX_START_UNCONFIRMED")
+        lastExistingLaunch=pairing;existingLaunchGeneration.incrementAndGet()
+    }
 
     /** Only the explicit connect action may fetch source proof for newly installed GitHub bytes. */
     private fun requireReady(allowSourceCheck: Boolean) {
@@ -147,6 +178,8 @@ class ExecutionTermuxGateway(private val context: Context) {
     }
     companion object {
         private val existingStart=java.util.concurrent.locks.ReentrantLock()
+        private val existingLaunchGeneration=java.util.concurrent.atomic.AtomicLong()
+        private var lastExistingLaunch:ExecutionPairing?=null
         const val PERMISSION="com.termux.permission.RUN_COMMAND"
         const val PORT=47193
         private const val PYTHON="/data/data/com.termux/files/usr/bin/python"

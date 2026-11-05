@@ -59,4 +59,19 @@ class ExecutionOperationBudgetTest {
             assertSame(original,error)
         }
     }
+    @Test fun anInFlightWakeConsumesTheSameAllowanceAsPreDispatchRecovery() {
+        val budget=ExecutionOperationBudget({true},{0L})
+        assertTrue(budget.claimRecovery());assertFalse(budget.claimRecovery())
+        assertThrows(ExecutionNotDispatchedException::class.java){
+            budget.execute(wake={fail("An in-flight wake already spent this operation's recovery")}){throw ExecutionNotDispatchedException("CONNECTION_UNCONFIRMED")}
+        }
+    }
+    @Test fun concurrentRecoveryRequestsCanClaimOnlyOneWake() {
+        val budget=ExecutionOperationBudget({true},{0L})
+        val start=java.util.concurrent.CountDownLatch(1)
+        val claims=java.util.concurrent.atomic.AtomicInteger()
+        val threads=(1..8).map{Thread{start.await();if(budget.claimRecovery())claims.incrementAndGet()}.apply{start()}}
+        start.countDown();threads.forEach{it.join(1000);assertFalse(it.isAlive)}
+        assertEquals(1,claims.get())
+    }
 }
