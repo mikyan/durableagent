@@ -3,6 +3,7 @@ import {createModels,type Models} from '@earendil-works/pi-ai/models';
 import {projectWitness} from './project-validation.js';
 import {Application} from './application.js';
 import {ManagedExecution} from './managed-execution.js';
+import {hostEnvironment} from './environment-prompt.js';
 import {NativeExecutionChannel} from './execution-channel.js';
 import {executionValidation} from './execution-validation.js';
 import {executionConformanceRegistry} from './execution-conformance.js';
@@ -20,6 +21,7 @@ import type {DataSaverAuthority} from './data-saver-protocol.js';
 const host=globalThis as any;
 // The native owner chooses this mode before loading JS. It is not a UI action.
 export async function install(mode:string) {
+  const nativeEnvironment=hostEnvironment(host.__hostEnvironmentJson);delete host.__hostEnvironmentJson;
   const extensionMode=mode.startsWith('extensions-');if(extensionMode)mode=mode.slice('extensions-'.length);
   let secret:string|undefined;
   let connections:ModelConnections|undefined;
@@ -73,7 +75,7 @@ export async function install(mode:string) {
   const path=join(host.__applicationRoot,'application.sqlite');
   let submissionValidation:any;
   if(host.__submissionValidation){const native=host.__submissionValidation;delete host.__submissionValidation;const module=await import(new URL('../validation/submission-control.mjs',import.meta.url).href);submissionValidation=module.submissionControl(path,native,metrics,mode==='fixture'||mode==='hang');host.__appSubmissionFault=(value:string)=>submissionValidation.set(value);}
-  const app=new Application({path,...configuration,secret,connections,inputs,sends,locationEdits,execution,dataSaver,recovery,routes:nativeInputs?{createRoute:async request=>inputInvoke('createRouteJson',JSON.stringify(request))}:undefined,...(mode==='execution'&&execution?{registry:executionConformanceRegistry(execution)}:{}),...(projectValidation?{registry:projectValidation.registry,locations:projectValidation.locations}:{}),...(submissionValidation?{submissionBoundary:submissionValidation.boundary,...(submissionValidation.storageFactory?{storageFactory:submissionValidation.storageFactory}:{})}:{})});
+  const app=new Application({hostEnvironment:nativeEnvironment,path,...configuration,secret,connections,inputs,sends,locationEdits,execution,dataSaver,recovery,routes:nativeInputs?{createRoute:async request=>inputInvoke('createRouteJson',JSON.stringify(request))}:undefined,...(mode==='execution'&&execution?{registry:executionConformanceRegistry(execution)}:{}),...(projectValidation?{registry:projectValidation.registry,locations:projectValidation.locations}:{}),...(submissionValidation?{submissionBoundary:submissionValidation.boundary,...(submissionValidation.storageFactory?{storageFactory:submissionValidation.storageFactory}:{})}:{})});
   if(recovery)host.__appRecoveryWake=()=>{for(const listener of [...recoveryListeners])listener();void app.wake().catch(error=>{metrics.recoveryFailure=String(error.code??'HOST_RECOVERY_UNAVAILABLE');});};
   if(extensionMode&&mode==='fixture')host.__appRunExtensionPolicy=()=>{
     if(metrics.extensionPolicyState==='running')return;metrics.extensionPolicyState='running';metrics.extensionPolicyCases=[];
