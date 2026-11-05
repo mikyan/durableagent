@@ -1,0 +1,23 @@
+runtime/src/sdk-providers.ts
+  s_467dcb949b5b60::t_bf1fb17fec56a1 11,101
+docs/specs/provider-configuration.md
+  s_467dcb949b5b60::t_bf1fb17fec56a1 11
+runtime/src/input.ts
+  s_467dcb949b5b60::t_bf1fb17fec56a1 54-55,73-75,86-96
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "0a820a578df87a403ab1ba8823a21c4c8fcd90b8",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
