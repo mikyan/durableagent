@@ -211,7 +211,7 @@ export class Application {
         case 'routing.create':value=await this.routing!.create({source:payload.source as RouteSource,creationId:this.text(payload,'creationId',128),title:typeof payload.title==='string'?payload.title.slice(0,120):undefined});break;
         case 'routing.send':value=await this.routing!.send(payload as RouteRequest);break;
         case 'models.get':value=await this.options.connections!.publicConfiguration();break;
-        case 'models.create':case 'models.setDefault':case 'models.setEnabled':value=await this.changeModels(request.method,payload);break;
+        case 'models.refresh':case 'models.create':case 'models.setDefault':case 'models.setEnabled':value=await this.changeModels(request.method,payload);break;
         case 'models.select': {
           const model=this.options.connections!.selection(payload.selection),product=await this.product(this.text(payload,'id',128));
           await (await harness.conversation(product.sdkId as ConversationId,context))!.configure({model:{provider:model.provider,modelId:model.modelId}},context);
@@ -275,11 +275,13 @@ export class Application {
     const run=async()=>{
       const harness=this.ready(),connections=this.options.connections!;
       const definition=method==='models.create'?connections.definition(payload):undefined;
+      const refreshed=method==='models.refresh'?await connections.refresh(this.text(payload,'id',128)):undefined;
       const configuration=await harness.commit(async tx=>{
         const doc=await tx.doc(ModelConfiguration);
-        if(definition){const previous=doc.connections.find(item=>item.id===definition.id);if(previous){if(previous.endpoint!==definition.endpoint||previous.protocol!==definition.protocol||JSON.stringify(previous.models)!==JSON.stringify(definition.models)||previous.name!==definition.name)throw new ModelConfigurationError('IMMUTABLE_CONNECTION','连接定义已固定；请新建连接');return JSON.parse(JSON.stringify(doc)) as StoredModels;}}
-        if(!Number.isSafeInteger(payload.expectedVersion)||payload.expectedVersion!==doc.version)throw new ModelConfigurationError('CONFIG_CONFLICT','模型设置已更新，请刷新后重试');
-        if(definition)doc.connections.push(definition);
+        if(definition){const previous=doc.connections.find(item=>item.id===definition.id);if(previous){if(previous.endpoint!==definition.endpoint||previous.protocol!==definition.protocol||previous.providerId!==definition.providerId||JSON.stringify(previous.models)!==JSON.stringify(definition.models)||previous.name!==definition.name)throw new ModelConfigurationError('IMMUTABLE_CONNECTION','连接定义已固定；请新建连接');return JSON.parse(JSON.stringify(doc)) as StoredModels;}}
+        if(method!=='models.refresh'&&(!Number.isSafeInteger(payload.expectedVersion)||payload.expectedVersion!==doc.version))throw new ModelConfigurationError('CONFIG_CONFLICT','模型设置已更新，请刷新后重试');
+        if(refreshed){doc.catalogs??={};doc.catalogs[this.text(payload,'id',128)]=JSON.stringify(refreshed);}
+        else if(definition)doc.connections.push(definition);
         else if(method==='models.setDefault')doc.defaultModel=connections.selection(payload.selection,doc);
         else {const item=doc.connections.find(item=>item.id===payload.id);if(!item||typeof payload.enabled!=='boolean')throw new ModelConfigurationError('INVALID_ARGUMENT','连接状态无效');item.enabled=payload.enabled;}
         doc.version++;return JSON.parse(JSON.stringify(doc)) as StoredModels;

@@ -86,6 +86,7 @@ class AgentActivity:Activity() {
                 }catch(_:Exception){/* An invalid envelope has no trusted correlation identity. */}
             }}}
             @JavascriptInterface fun writeCredential(json:String){runOnUiThread {if(webView===view&&!destroyed&&json.length<=120000&&view.url?.substringBefore('#')=="https://appassets.androidplatform.net/assets/ui/index.html")client?.writeCredential(json)}}
+            @JavascriptInterface fun authenticateProvider(json:String){runOnUiThread {if(webView===view&&!destroyed&&json.length<=120000&&view.url?.substringBefore('#')=="https://appassets.androidplatform.net/assets/ui/index.html")client?.authenticateProvider(json)}}
         },"DurableNative")
         // Own occluded window geometry here, including initial/replacement WebViews.
         // Older WebViews do not reliably expose system bars through CSS safe areas.

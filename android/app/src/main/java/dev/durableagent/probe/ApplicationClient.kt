@@ -50,6 +50,7 @@ class ApplicationClient(private val context:Context,private val mode:String="pro
         send(62,JSONObject().put("request",request).put("mode",mode).put("run",run?:JSONObject.NULL).toString())
     }}}
     fun writeCredential(json:String){main.post {if(disposed)return@post;runCatching{connections.add(JSONObject(json).getString("connectionId"));send(30,json)}}}
+    fun authenticateProvider(json:String){main.post {if(disposed)return@post;runCatching{connections.add(JSONObject(json).getString("connectionId"));send(70,json)}}}
     fun control(what:Int,json:String=""){main.post {if(!disposed)send(what,json)}}
     private fun send(what:Int,json:String){val peer=remote;if(peer==null){pending.add(what to json);return}
         if(what==10&&json.length>48000){if(json.length>650000||inputs.size>=4){receive(0,"输入超过传输上限，尚未提交。");return};val first=inputs.isEmpty();inputs.addLast(Input(json));if(first)sendInput();return}

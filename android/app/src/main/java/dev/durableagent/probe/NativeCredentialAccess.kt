@@ -8,7 +8,8 @@ import org.json.JSONObject
  * WebView or expose resolveJson through the ordinary Application Interface. The native UI write
  * route checks its immutable connection target and readiness before calling saveJson/removeJson.
  */
-class NativeCredentialAccess(private val vault: CredentialVault) {
+class NativeCredentialAccess(private val vault: CredentialVault,private val openAuthUrl:((String)->Unit)?=null) : AutoCloseable {
+    private val mutations = mutableMapOf<String, Pair<String,StorageDomainLease>>()
     private data class ObservedFailure(val revision: String, val generation: Long, val state: String)
     private val observedFailures = mutableMapOf<String, ObservedFailure>()
 
@@ -47,17 +48,40 @@ class NativeCredentialAccess(private val vault: CredentialVault) {
     // Deliberately not @V8Function: plaintext writes never enter generic Node Application.request.
     @Synchronized
     fun saveJson(connectionId: String, key: String, expectedGeneration: Long): String = result {
-        val metadata = vault.save(connectionId, key, expectedGeneration)
+        val metadata = vault.acquireMutation(connectionId).use { vault.save(connectionId, key, expectedGeneration) }
         observedFailures.remove(connectionId)
         metadata.toJson()
     }
 
     @Synchronized
     fun removeJson(connectionId: String, expectedGeneration: Long): String = result {
-        val metadata = vault.remove(connectionId, expectedGeneration)
+        val metadata = vault.acquireMutation(connectionId).use { vault.remove(connectionId, expectedGeneration) }
         observedFailures.remove(connectionId)
         metadata.toJson()
     }
+
+    @Synchronized @V8Function fun acquireMutationJson(connectionId:String):String = result {
+        val lease=vault.acquireMutation(connectionId);val token=java.util.UUID.randomUUID().toString()
+        mutations[token]=connectionId to lease;JSONObject().put("lease",token)
+    }
+    @Synchronized @V8Function fun releaseMutationJson(connectionId:String,token:String):String = result {
+        val held=mutations[token] ?: throw CredentialVaultException("invalid-input")
+        if(held.first!=connectionId)throw CredentialVaultException("invalid-input")
+        mutations.remove(token);held.second.close();JSONObject()
+    }
+    @Synchronized @V8Function fun saveManagedJson(connectionId:String,secret:String,generation:Long,token:String):String = result {
+        if(mutations[token]?.first!=connectionId)throw CredentialVaultException("invalid-input")
+        val payload=JSONObject(secret)
+        if(payload.optString("format")!="durableagent-sdk-credential"||payload.optInt("version")!=1||payload.optJSONObject("credential")?.optString("type") !in setOf("api_key","oauth"))throw CredentialVaultException("invalid-input")
+        val saved=vault.save(connectionId,secret,generation);observedFailures.remove(connectionId);saved.toJson()
+    }
+    @Synchronized @V8Function fun deviceIdJson():String = result { JSONObject().put("id",vault.deviceId()) }
+    @V8Function fun openAuthUrlJson(url:String):String = result {
+        val uri=android.net.Uri.parse(url)
+        if(url.length>8192||uri.scheme!="https"||uri.host.isNullOrEmpty()||uri.userInfo!=null||openAuthUrl==null)throw CredentialVaultException("invalid-input")
+        openAuthUrl.invoke(url);JSONObject()
+    }
+    @Synchronized override fun close(){mutations.values.forEach{it.second.close()};mutations.clear()}
 
     private fun result(action: () -> JSONObject): String = try {
         JSONObject().put("ok", true).put("value", action()).toString()
