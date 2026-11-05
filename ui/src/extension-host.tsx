@@ -6,14 +6,14 @@ import './extensions.css';
 export class ExtensionBoundary extends Component<{id:string;children:ReactNode;onFailure?:()=>void},{failed:boolean}>{
  state={failed:false};static getDerivedStateFromError(){return {failed:true};}
  componentDidCatch(){this.props.onFailure?.();}
- render(){return this.state.failed?<p role="alert">扩展 {this.props.id} 的界面未能挂载。会话仍由运行宿主管理；请关闭页面后重试。</p>:this.props.children;}
+ render(){return this.state.failed?<p role="alert">扩展 {this.props.id} 的界面未能挂载。会话仍由应用服务管理；请关闭页面后重试。</p>:this.props.children;}
 }
 function MountSignal({onMount,children}:{onMount:()=>void;children:ReactNode}){useEffect(onMount,[onMount]);return children;}
 export function ExtensionPage({client,conversationId,timelineLoader=builtInUiExtensions.timeline.load}:{client?:TimelineClient;conversationId?:string;timelineLoader?:()=>Promise<{default:ComponentType<any>}>}){
  const [catalog,setCatalog]=useState<ExtensionCatalog>(),[error,setError]=useState<string>(),[timeline,setTimeline]=useState(false);
  const [mount,setMount]=useState<'loading'|'mounted'|'failed'>('loading');const Timeline=useMemo(()=>lazy(timelineLoader),[timelineLoader]);
  const mounted=useCallback(()=>{setMount('mounted');},[]),failed=useCallback(()=>{setMount('failed');},[]);
- useEffect(()=>{let active=true;setCatalog(undefined);setError(undefined);setTimeline(false);if(client)void client.request<ExtensionCatalog>('extensions.get',conversationId?{id:conversationId}:{}).then(value=>{if(active)setCatalog(value);},reason=>{if(active)setError(reason.message??'扩展状态暂不可用');});else setError('运行宿主连接已断开');return()=>{active=false;};},[client,conversationId]);
+ useEffect(()=>{let active=true;setCatalog(undefined);setError(undefined);setTimeline(false);if(client)void client.request<ExtensionCatalog>('extensions.get',conversationId?{id:conversationId}:{}).then(value=>{if(active)setCatalog(value);},reason=>{if(active)setError(reason.message??'扩展状态暂不可用');});else setError('应用服务连接已断开');return()=>{active=false;};},[client,conversationId]);
  return <div className="extension-page" data-testid="extension-page"><p>随包界面与 Agent 贡献分别加载。打开或关闭页面不会启停 Agent。</p>
   {conversationId&&<p>当前会话 ID：<code data-testid="extension-conversation-id">{conversationId}</code></p>}
   {error&&<p role="alert">{error}</p>}

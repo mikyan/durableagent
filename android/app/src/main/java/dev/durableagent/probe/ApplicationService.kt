@@ -75,6 +75,7 @@ class ApplicationService:Service() {
                 61->node?.getExecutor("globalThis.__appRecoveryWake?.()")?.executeVoid()
                 62->reply?.let{reconnect(text,it)}
                 30->reply?.let {writeCredential(text,it)}
+                70->reply?.let {authenticateProvider(text,it)}
                 31->if(debug)reply?.let {importValidationCredential(text,it)}
                 32->if(debug)node?.getExecutor("globalThis.__appRunModelPolicy?.()")?.executeVoid()
                 33->if(debug)node?.getExecutor("globalThis.__appRunInputPolicy?.()")?.executeVoid()
@@ -179,7 +180,9 @@ class ApplicationService:Service() {
                 runtime.createV8ValueObject().use{access->access.bind(recovery!!);runtime.globalObject.set("__nativeRecovery",access)}
             }
             if(debug&&mode!="product")runtime.createV8ValueObject().use{probe->probe.bind(submissionProbe);runtime.globalObject.set("__submissionValidation",probe)}
-            credentials=NativeCredentialAccess(CredentialVault(this,if(mode=="product")"credentials-v1" else "cv-$run"))
+            credentials=NativeCredentialAccess(CredentialVault(this,if(mode=="product")"credentials-v1" else "cv-$run")){url->
+                startActivity(Intent(Intent.ACTION_VIEW,android.net.Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            }
             runtime.createV8ValueObject().use {access->access.bind(credentials!!);runtime.globalObject.set("__nativeCredentials",access)}
             inputs=NativeInputAccess(NativeInputStore(this,NativeInputBridge.namespace(mode,run)).withLeaseWait(1000))
             runtime.createV8ValueObject().use {access->access.bind(inputs!!);runtime.globalObject.set("__nativeInputs",access)}
@@ -214,7 +217,7 @@ class ApplicationService:Service() {
             }
             val status=JSONObject(phase)
             if(node==null||status.optString("phase")=="failed"&&!status.optBoolean("readOnly")){
-                send(peer,10,JSONObject().put("type","response").put("protocol",1).put("connectionId",connection).put("requestId",request.optString("requestId")).put("ok",false).put("error",JSONObject().put("code","HOST_NOT_READY").put("message",JSONObject(phase).optString("reason","运行宿主尚未就绪"))).toString());return
+                send(peer,10,JSONObject().put("type","response").put("protocol",1).put("connectionId",connection).put("requestId",request.optString("requestId")).put("ok",false).put("error",JSONObject().put("code","HOST_NOT_READY").put("message",JSONObject(phase).optString("reason","应用服务尚未就绪"))).toString());return
             }
             pending.add(text)
         }catch(_:Throwable){/* Invalid wire messages cannot reach the SDK. */}
@@ -238,12 +241,27 @@ class ApplicationService:Service() {
             JSONObject().put("ok",true).put("value",JSONObject().put("phase",JSONObject(phase).getString("phase")))
         }catch(error:Exception){
             val code=error.message.takeIf{it in setOf("HOST_CLOSING","HOST_DOMAIN_MISMATCH","HOST_NOT_READY")}?:"INVALID_RECONNECT"
-            val message=when(code){"HOST_CLOSING"->"运行宿主正在关闭，请稍后重新连接。";"HOST_DOMAIN_MISMATCH"->"已有运行宿主属于另一个会话存储，保留现有运行。";"HOST_NOT_READY"->JSONObject(phase).optString("reason","运行宿主尚未就绪，请稍后重新连接。");else->"重新连接请求无效。"}
+            val message=when(code){"HOST_CLOSING"->"应用服务正在关闭，请稍后重新连接。";"HOST_DOMAIN_MISMATCH"->"应用服务已连接另一组会话数据，已保留原有状态。";"HOST_NOT_READY"->JSONObject(phase).optString("reason","应用服务尚未就绪，请稍后重新连接。");else->"重新连接请求无效。"}
             JSONObject().put("ok",false).put("error",JSONObject().put("code",code).put("message",message))
         }
         if(request!=null)send(peer,10,response.put("type","response").put("protocol",1).put("connectionId",request.optString("connectionId")).put("requestId",request.optString("requestId")).toString())
     }
     private fun credentialTarget(target:String):Boolean=node?.getExecutor("globalThis.__appCredentialTarget?.(${JSONObject.quote(target)})===true")?.executeBoolean()==true
+    private fun authenticateProvider(text:String,peer:Messenger){
+        var request:JSONObject?=null
+        try{
+            check(text.length<=120000);request=JSONObject(text)
+            val allowed=setOf("protocol","connectionId","requestId","target","operation","authType","sessionId","promptId","answer","eventIndex")
+            check(request.keys().asSequence().all{it in allowed})
+            check(request.getInt("protocol")==1&&request.getString("connectionId").matches(Regex("[A-Za-z0-9_-]{1,128}"))&&request.getString("requestId").length in 1..128)
+            check(credentialTarget(request.getString("target")))
+            check(request.getString("operation") in setOf("start","status","answer","cancel","openUrl"))
+            val connection=request.getString("connectionId");check(peers[connection]?.binder==peer.binder)
+            check(node?.getExecutor("typeof globalThis.__appProviderAuthRequest==='function'")?.executeBoolean()==true)
+            // Dedicated ephemeral login path; never enqueue answers in Application.request.
+            node!!.getExecutor("globalThis.__appProviderAuthRequest(${JSONObject.quote(text)})").executeVoid()
+        }catch(_:Exception){send(peer,10,JSONObject().put("type","response").put("protocol",1).put("connectionId",request?.optString("connectionId")?:"").put("requestId",request?.optString("requestId")?:"").put("ok",false).put("error",JSONObject().put("code","AUTH_REQUEST_REJECTED").put("message","登录操作未接纳，请刷新连接后重试。")).toString())}
+    }
     private fun writeCredential(text:String,peer:Messenger){
         var request:JSONObject?=null
         val result=try{
@@ -341,6 +359,6 @@ class ApplicationService:Service() {
     }
     private fun status()=JSONObject(phase).put("instance",instance).put("pid",Process.myPid()).put("domainOwned",lease!=null).put("nativeOwners",V8Host.getNodeI18nInstance().v8RuntimeCount).apply{recovery?.let{put("recovery",it.state())}}.toString()
     private fun fail(error:Throwable){phase=JSONObject().put("phase","failed").put("reason",error.message?:error.javaClass.simpleName).toString();release()}
-    private fun release(){acceptedStops.clear();ownerReady=false;ownerRunsJavaScript=false;inputNamespace=null;node?.close();node=null;credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;documents?.close();documents=null;dataSaver?.close();dataSaver=null;dataSaverMonitor?.close();dataSaverMonitor=null;recovery?.close();recovery=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
+    private fun release(){acceptedStops.clear();ownerReady=false;ownerRunsJavaScript=false;inputNamespace=null;node?.close();node=null;credentials?.close();credentials=null;inputs?.close();inputs=null;execution?.close();execution=null;documents?.close();documents=null;dataSaver?.close();dataSaver=null;dataSaverMonitor?.close();dataSaverMonitor=null;recovery?.close();recovery=null;lease?.close();lease=null;closing=false;closeDispatched=false;pending.clear()}
     override fun onDestroy(){emergency.shutdownNow();main.removeCallbacksAndMessages(null);owner.post {release();thread.quitSafely()};super.onDestroy()}
 }

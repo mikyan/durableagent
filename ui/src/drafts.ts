@@ -18,7 +18,7 @@ export class DraftCoordinator {
   constructor(private readonly client:()=>ApplicationClient|undefined,private readonly changed:()=>void){}
   view(id:string):DraftView|undefined {const r=this.records.get(id);return r?{id,text:r.text,selections:r.selections,revision:r.saved.revision,stateVersion:r.saved.stateVersion,status:r.status,error:r.error,busy:r.busy,preparingIds:r.selections.filter(item=>this.preparations.has(`${id}:${item.id}`)).map(item=>item.id),observingIds:r.selections.filter(item=>this.polls.get(id)?.selectionIds.has(item.id)).map(item=>item.id),preparationErrors:{...r.preparationErrors},submissionContext:r.saved.submissionContext}:undefined;}
   private notify(){if(this.alive)this.changed();}
-  private request<T>(method:Parameters<ApplicationClient['request']>[0],payload:Record<string,unknown>,timeout?:number){const client=this.client();if(!client)throw new ApplicationFailure('HOST_UNAVAILABLE','草稿宿主不可用，请重新连接。');return client.request<T>(method,payload,timeout);}
+  private request<T>(method:Parameters<ApplicationClient['request']>[0],payload:Record<string,unknown>,timeout?:number){const client=this.client();if(!client)throw new ApplicationFailure('HOST_UNAVAILABLE','应用服务暂不可用，请重新连接。');return client.request<T>(method,payload,timeout);}
   async read(id:string,timeout?:number){
     const value=await this.request<NativeDraft>('input.read',{id},timeout);
     this.adoptRead(id,value);

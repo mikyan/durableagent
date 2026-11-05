@@ -63,8 +63,8 @@ export async function install(mode:string) {
     configuration={models:live.models,workspacePath:configuration.workspacePath,initialModel:{provider:live.provider,modelId:live.model,name:'MiMo V2.6 Flash'}};
   }else if(mode==='product'||mode==='models'||mode==='models-fixture'){
     const native=host.__nativeCredentials;delete host.__nativeCredentials;
-    const invoke=(name:string,id:string)=>{const result=JSON.parse(native[name](id));if(!result.ok)throw new ModelConfigurationError(result.error.code,result.error.message);return result.value;};
-    connections=new ModelConnections({credentials:{metadata:async id=>invoke('metadataJson',id),resolve:async id=>invoke('resolveJson',id)},onRequest:receipt=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;metrics.lastCredentialGeneration=receipt.generation;metrics.lastConnectionId=receipt.connectionId;metrics.lastInput=receipt.input;metrics.lastRequestTools=receipt.requestTools;},...(mode==='models-fixture'?{fetch:fixtureTransport({requested:()=>{},aborted:()=>{}})}:{})});
+    const invoke=(name:string,...args:unknown[])=>{const result=JSON.parse(native[name](...args));if(!result.ok)throw new ModelConfigurationError(result.error.code,result.error.message);return result.value;};
+    connections=new ModelConnections({credentials:{metadata:async id=>invoke('metadataJson',id),resolve:async id=>invoke('resolveJson',id),acquire:async id=>invoke('acquireMutationJson',id),release:async(id,lease)=>{invoke('releaseMutationJson',id,lease);},save:async(id,value,generation,lease)=>invoke('saveManagedJson',id,value,generation,lease),deviceId:async()=>invoke('deviceIdJson').id,openUrl:async url=>{invoke('openAuthUrlJson',url);}},onRequest:receipt=>{metrics.modelRequests=Number(metrics.modelRequests??0)+1;metrics.lastCredentialGeneration=receipt.generation;metrics.lastConnectionId=receipt.connectionId;metrics.lastInput=receipt.input;metrics.lastRequestTools=receipt.requestTools;},...(mode==='models-fixture'?{fetch:fixtureTransport({requested:()=>{},aborted:()=>{}})}:{})});
     configuration={models:connections.models,workspacePath:configuration.workspacePath};
   }else throw new Error('Unsupported native application mode');
   // Fixture workspace defaults are replaced by the same stable private domain.
@@ -124,11 +124,16 @@ export async function install(mode:string) {
   host.__appCredentialTarget=(id:string)=>app.credentialTarget(id);
   const events:ApplicationEnvelope[]=[];
   const emit=(event:ApplicationEnvelope)=>events.push(event);
+  host.__appProviderAuthRequest=(encoded:string)=>{
+    const request=JSON.parse(encoded) as import('./model-protocol.js').ProviderAuthRequest;
+    const base={type:'response' as const,protocol:1 as const,connectionId:request.connectionId,requestId:request.requestId};
+    void(async()=>{try{if(!app.credentialTarget(request.target)||!connections)throw new ModelConfigurationError('AUTH_TARGET_UNAVAILABLE','模型连接尚未就绪');emit({...base,ok:true,value:await connections.authenticate(request)});}catch(error){const value=error as {code?:string;message?:string};emit({...base,ok:false,error:{code:value.code??'PROVIDER_AUTH_FAILED',message:value.code?value.message??'登录未完成':'提供方登录操作未完成，请重试。'}});}})();
+  };
   host.__appRequest=(encoded:string)=>{const request=JSON.parse(encoded) as ApplicationRequest;void app.request(request,emit).then(emit);};
-  host.__appDisconnect=(connectionId:string)=>{void app.disconnect(connectionId);};
+  host.__appDisconnect=(connectionId:string)=>{connections?.disconnectAuthentication(connectionId);void app.disconnect(connectionId);};
   host.__takeAppEvents=()=>JSON.stringify(events.splice(0));
   host.__appStatus=()=>JSON.stringify({...app.status(),metrics});
-  host.__appClose=()=>{void app.close().then(()=>{host.__appClosed=true;}).catch(error=>{host.__appFailure=String(error);});};
+  host.__appClose=()=>{connections?.close();void app.close().then(()=>{host.__appClosed=true;}).catch(error=>{host.__appFailure=String(error);});};
   try {await app.start();host.__appStarted=true;}
   catch(error){if(!app.status().readOnly)throw error;}
 }

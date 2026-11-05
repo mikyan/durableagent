@@ -29,7 +29,7 @@ export default function ProjectSettings({controller,state}:{controller:Conversat
     <div className="settings-status">{state.projectsLoading&&<span role="status">正在读取项目与位置…</span>}<button className="text-button" data-testid="refresh-projects" disabled={!!state.projectsLoading||!!state.projectsPending||state.status.phase!=='ready'} onClick={()=>void controller.loadProjects()}>刷新项目状态</button></div>
     {state.projectsError&&<p className="settings-error" role="alert">{state.projectsError}</p>}{state.projectsNotice&&<p className="settings-notice" role="status">{state.projectsNotice}</p>}
     {state.projectsUnconfirmed&&<p className="settings-hint">这次修改结果未确认。<button className="secondary-button" data-testid="retry-project-change" disabled={!!state.projectsPending||state.status.phase!=='ready'} onClick={()=>void controller.retryProjectChange()}>核验这次修改</button></p>}
-    {!supported&&<p className="settings-error">当前运行宿主未提供项目管理。</p>}
+    {!supported&&<p className="settings-error">当前应用未提供项目管理。</p>}
     <section className="settings-section"><h2>当前会话</h2>{state.activeId?<>
       <p data-testid="current-project">项目：{selection?(currentProject?.name??'未关联项目'):'正在读取'}</p><p data-testid="current-workspace">工作区：{currentWorkspace?.name??'正在读取'}</p>
       {currentWorkspace&&<p className="workspace-path" data-testid="current-workspace-path">{currentWorkspace.path}</p>}{selection&&<Position position={selection.position} testId="current-position"/>}
