@@ -1,0 +1,45 @@
+ui/src/controller.ts
+  s_467dcb949b5b60::t_3f15bf49c087ad 2,13-15,39,215,277,279-280,282,286-291,307
+ui/src/client.ts
+  s_467dcb949b5b60::t_3e2b2bc6dd3e24 2,4-5,39-49
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_8d6b25c88b77b5 11,14,43-44,60,76-78,88-96,101,112,132,137,145,147,151,170,173-175
+ui/src/extensions/execution.tsx
+  s_467dcb949b5b60::t_cb1999a19db47f 12,15
+ui/src/extensions/models.tsx
+  s_467dcb949b5b60::t_0598bb84e1536b 2,4,9-10,25,27-69,73-74,77-95
+ui/src/extensions/provider-auth.tsx
+  s_467dcb949b5b60::t_f02df68ce986c4 1-61
+ui/src/extensions/submissions.tsx
+  s_467dcb949b5b60::t_0e15cb5a135f7c 24-46,52-62
+ui/src/models.css
+  s_467dcb949b5b60::t_593a46725c86b2 2,46-56
+ui/src/style.css
+  s_467dcb949b5b60::t_1b5966b62e8342 96-120,132
+ui/src/extensions/termux.tsx
+  s_09b60c3f0070e5::t_2c92965abb99dd 1-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "1a8ece492fe290a09c1d9befcbb3f1de4729b93e",
+  "prompts": {},
+  "sessions": {
+    "s_09b60c3f0070e5": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ac0b-0d07-79d1-9072-a1d123c14c5f",
+        "model": "unknown"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    },
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
