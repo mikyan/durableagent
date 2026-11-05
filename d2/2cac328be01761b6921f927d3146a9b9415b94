@@ -1,0 +1,19 @@
+android/app/src/androidTest/java/dev/durableagent/probe/FileApplicationTest.kt
+  s_467dcb949b5b60::t_b4f93566a05716 73-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "d22cac328be01761b6921f927d3146a9b9415b94",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
