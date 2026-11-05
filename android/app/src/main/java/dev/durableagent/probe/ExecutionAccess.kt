@@ -73,7 +73,13 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
                         val identity = ExecutionIdentity(context,"production-v1",allowCreate=false)
                         val client=ExecutionTlsClient(identity,peer)
                         fun request(name:String,value:JSONObject,beforeDispatch:()->Unit={}):JSONObject =
-                            client.request(name,value,operationBudget.remaining()){
+                            client.request(name,value,operationBudget.remaining(),pendingWake={waiting->
+                                PendingExecutionWake(
+                                    eligible={waiting()&&!closed&&runCatching{operationBudget.remaining()}.isSuccess},
+                                    generation=gateway::wakeGeneration,
+                                    wake={generation,eligible,dispatch->gateway.wakePending(peer,generation,operationBudget.remaining(),eligible,operationBudget::claimRecovery,dispatch)},
+                                )
+                            }){
                                 operationBudget.remaining();beforeDispatch();operationBudget.remaining()
                             }
                         operationBudget.execute(wake={gateway.wakeExisting(peer,operationBudget.remaining()){!closed}}){
