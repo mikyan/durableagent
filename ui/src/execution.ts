@@ -25,6 +25,8 @@ export class ExecutionCoordinator {
     if(error instanceof ApplicationFailure&&error.code==='TERMUX_SOURCE_UNAVAILABLE')return '暂时无法获取官方发行记录，不能确认当前安装包来源。请联网后重试“连接执行环境”；无需重新初始化或卸载 Termux。';
     if(error instanceof ApplicationFailure&&error.code==='TERMUX_SOURCE_UNSUPPORTED')return '暂不支持此 Termux 安装来源或打包形式。请保留现有 Termux 及其数据，查看“安装来源与兼容说明”；不要直接卸载或覆盖安装。';
     if(error instanceof ApplicationFailure&&error.code==='TERMUX_CAPABILITY_UNSUPPORTED')return '当前 Termux 的外部命令接口不兼容，无法连接。请核对安装渠道与版本；已有环境和执行记录会保留。';
+    if(error instanceof ApplicationFailure&&error.code==='BOOTSTRAP_PROTOCOL_MISMATCH')return '执行端握手协议或响应无法确认。请核对本应用与执行端是否为配套发布版本，再重试连接；保留现有配对和执行记录，不要重新初始化。';
+    if(error instanceof ApplicationFailure&&error.code==='INSTANCE_MISMATCH')return '执行端响应与已配对记录不一致，无法确认执行端身份。请确认连接的是原有 Termux 执行环境，再重试连接；保留现有配对和执行记录，不要重新初始化。';
     if(error instanceof ApplicationFailure&&error.code==='TERMUX_MISSING')return '尚未安装 Termux。请展开“安装来源与兼容说明”打开官方发布页，完成首次打开后，再执行初始化命令。';
     if(error instanceof ApplicationFailure&&error.code==='TERMUX_PERMISSION_REQUIRED')return '尚未取得 Termux 命令执行授权。请点击“连接执行环境”，在系统提示中允许本应用运行 Termux 命令。';
     if(error instanceof ApplicationFailure&&error.code==='SETUP_REQUIRED')return '尚未完成执行环境初始化。请点击“复制初始化命令”，在 Termux 中粘贴并运行，再回来连接执行环境。';

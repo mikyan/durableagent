@@ -83,7 +83,15 @@ class TermuxSourceVerifierTest {
     }
 
     @Test fun checksumDownloadRejectsArbitraryOrDowngradedLocationsBeforeConnecting() {
-        for (url in listOf("http://github.com/termux/termux-app/releases/download/v0.118.3/x", "https://evil.example/test", "https://github.com/another/repo/releases/download/v0.118.3/x")) {
+        val prefix = "https://github.com/termux/termux-app/releases/download/v0.118.3/"
+        for (url in listOf(
+            "http://github.com/termux/termux-app/releases/download/v0.118.3/x",
+            "https://evil.example/test", "https://github.com/another/repo/releases/download/v0.118.3/x",
+            prefix + "termux-app_v0.119.0%2Bgithub-debug_sha256sums",
+            prefix + "termux-app_v0.118.3%2Bunknown_sha256sums",
+            prefix + "../termux-app_v0.118.3%2Bgithub-debug_sha256sums",
+            prefix + "termux-app_v0.118.3%2Bgithub-debug_sha256sums?redirect=elsewhere",
+        )) {
             assertThrows(java.io.IOException::class.java) { TermuxChecksumDownload.read(url, 1000) }
         }
     }

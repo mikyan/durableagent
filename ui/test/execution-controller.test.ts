@@ -67,6 +67,26 @@ it('keeps an explicitly requested connection pending while source verification a
  }finally{client.dispose();vi.useRealTimers();}
 });
 
+it.each([
+ ['BOOTSTRAP_PROTOCOL_MISMATCH','握手协议或响应无法确认','核对本应用与执行端是否为配套发布版本'],
+ ['INSTANCE_MISMATCH','无法确认执行端身份','确认连接的是原有 Termux 执行环境'],
+])('explains %s while preserving retained executions and pairing',async(code,reason,nextStep)=>{
+ const requests:ApplicationRequest[]=[],row={executionId:'retained',state:'completed',sequence:3};
+ const client=new ApplicationClient({postMessage:json=>{
+  const request:ApplicationRequest=JSON.parse(json);requests.push(request);
+  queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,...(request.method==='execution.list'?{ok:true,value:{executions:[row]}}:{ok:false,error:{code,message:'执行通道未完成请求（'+code+'）'}})}));
+ }});
+ const execution=new ExecutionCoordinator(()=>client,()=>{});
+ try{
+  await execution.refresh('conversation');await execution.connect();
+  expect(execution.view().connected).toBe(false);expect(execution.view().connecting).toBe(false);
+  expect(execution.view().error).toContain(reason);expect(execution.view().error).toContain(nextStep);
+  expect(execution.view().error).toContain('保留现有配对和执行记录');expect(execution.view().error).toContain('不要重新初始化');
+  expect(execution.view().rows).toEqual([row]);
+  expect(requests.map(request=>request.method)).toEqual(['execution.list','execution.connect']);
+ }finally{client.dispose();}
+});
+
 it('opens only the selected official download source through the native route without connecting',async()=>{
  const requests:ApplicationRequest[]=[];
  const client=new ApplicationClient({postMessage:json=>{

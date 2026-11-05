@@ -29,6 +29,19 @@ data class TermuxArtifact(
     val hasSplits: Boolean = false,
 )
 
+/** One release naming rule shared by document parsing and the transport's path allowlist. */
+private object TermuxReleaseFiles {
+    val families = listOf("github-debug", "apt-android-7-github-debug")
+    private val versionPattern = Regex("[0-9]+(?:\\.[0-9]+){1,3}(?:[-.][0-9A-Za-z]+)*")
+    fun validVersion(version: String) = version.length <= 80 && versionPattern.matches(version)
+    private fun stem(version: String, family: String) = "termux-app_v$version+$family"
+    fun checksumName(version: String, family: String) = "${stem(version, family)}_sha256sums"
+    fun checksumUrl(version: String, family: String) =
+        "https://github.com/termux/termux-app/releases/download/v$version/${checksumName(version, family).replace("+", "%2B")}"
+    fun apkPattern(version: String, family: String) =
+        Regex("${Regex.escape(stem(version, family))}_(?:arm64-v8a|armeabi-v7a|x86|x86_64|universal)\\.apk")
+}
+
 /** Source proof only. Permission, bootstrap and authenticated execution capabilities are separate. */
 class TermuxSourceVerifier(
     private val cacheFile: File,
@@ -43,11 +56,11 @@ class TermuxSourceVerifier(
         if (artifact.signerSha256 != GITHUB_SIGNER) fail("TERMUX_SOURCE_UNSUPPORTED")
         if (artifact.apkSha256 in KNOWN_GITHUB_APKS || cached(artifact)) return
         if (!allowOnline) fail("TERMUX_SOURCE_UNVERIFIED")
-        if (!VERSION.matches(artifact.versionName) || artifact.versionName.length > 80) fail("TERMUX_SOURCE_UNVERIFIED")
+        if (!TermuxReleaseFiles.validVersion(artifact.versionName)) fail("TERMUX_SOURCE_UNVERIFIED")
         val deadline = clock() + sourceBudgetMs
         var unavailable = false
-        for (family in FAMILIES) {
-            val url = checksumUrl(artifact.versionName, family)
+        for (family in TermuxReleaseFiles.families) {
+            val url = TermuxReleaseFiles.checksumUrl(artifact.versionName, family)
             val remaining = remaining(deadline)
             val body = try { fetchWithin(url, remaining) } catch (_: java.io.IOException) { unavailable = true; continue }
             remaining(deadline)
@@ -79,7 +92,7 @@ class TermuxSourceVerifier(
     private fun matchesChecksum(body: String, artifact: TermuxArtifact, family: String): Boolean {
         if (body.toByteArray(Charsets.UTF_8).size > MAX_CHECKSUM_BYTES) fail("TERMUX_SOURCE_UNAVAILABLE")
         val files = linkedMapOf<String, String>()
-        val filename = Regex("termux-app_v${Regex.escape(artifact.versionName)}\\+${Regex.escape(family)}_(?:arm64-v8a|armeabi-v7a|x86|x86_64|universal)\\.apk")
+        val filename = TermuxReleaseFiles.apkPattern(artifact.versionName, family)
         for (line in body.lineSequence().filter { it.isNotEmpty() }) {
             val match = CHECKSUM.matchEntire(line) ?: fail("TERMUX_SOURCE_UNAVAILABLE")
             val hash = match.groupValues[1].lowercase()
@@ -117,16 +130,13 @@ class TermuxSourceVerifier(
         const val FDROID_SIGNER = "228fb2cfe90831c1499ec3ccaf61e96e8e1ce70766b9474672ce427334d41c42"
         const val MAX_CHECKSUM_BYTES = 32_768
         private val HASH = Regex("[0-9a-f]{64}")
-        private val VERSION = Regex("[0-9]+(?:\\.[0-9]+){1,3}(?:[-.][0-9A-Za-z]+)*")
         private val CHECKSUM = Regex("([0-9a-fA-F]{64})[ \\t]+\\*?([^\\s]+)")
-        private val FAMILIES = listOf("github-debug", "apt-android-7-github-debug")
         private val downloads = ThreadPoolExecutor(2, 2, 0, TimeUnit.MILLISECONDS, SynchronousQueue(),
             { task -> Thread(task, "TermuxSourceDownload").apply { isDaemon = true } }, ThreadPoolExecutor.AbortPolicy())
         private val KNOWN_GITHUB_APKS = setOf(
             "72fdb596045116bf5ba1b5bdf5b26fddb9acc0bd074ad9f2da9eb0ae85e83a4e",
             "3550e61f4d9eb49b712fd1bd9519dc37085a4d8eb597c57a340f0a64859b7144",
         )
-        private fun checksumUrl(version: String, family: String) = "https://github.com/termux/termux-app/releases/download/v$version/termux-app_v$version%2B${family}_sha256sums"
         private fun fail(code: String): Nothing = throw ExecutionChannelException(code)
     }
 }
@@ -196,7 +206,8 @@ object TermuxChecksumDownload {
         val parts = uri.path.split('/')
         if (parts.size != 7 || parts.take(5) != listOf("", "termux", "termux-app", "releases", "download")) return false
         val tag = parts[5]
-        if (tag.length > 81 || !tag.matches(Regex("v[0-9]+(?:\\.[0-9]+){1,3}(?:[-.][0-9A-Za-z]+)*"))) return false
-        return parts[6] in listOf("termux-app_$tag+github-debug_sha256sums", "termux-app_$tag+apt-android-7-github-debug_sha256sums")
+        val version = tag.removePrefix("v")
+        if (!tag.startsWith("v") || !TermuxReleaseFiles.validVersion(version)) return false
+        return TermuxReleaseFiles.families.any { parts[6] == TermuxReleaseFiles.checksumName(version, it) }
     }
 }
