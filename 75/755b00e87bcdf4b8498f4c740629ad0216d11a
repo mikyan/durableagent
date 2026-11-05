@@ -1,0 +1,27 @@
+.github/workflows/release.yml
+  s_467dcb949b5b60::t_33e514df95259c 122
+runtime/test/recovery-wake-timer.test.mjs
+  s_467dcb949b5b60::t_a6df28b6ffdae1 1-31
+runtime/test/retry-after.test.mjs
+  s_467dcb949b5b60::t_a6df28b6ffdae1 9,14,21-22
+runtime/test/fixtures/recovery-wake-timer.mjs
+  s_467dcb949b5b60::t_a6df28b6ffdae1 1-15
+runtime/test/fixtures/recovery-crash-host.mjs
+  s_467dcb949b5b60::t_a6df28b6ffdae1 6-7,9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "75755b00e87bcdf4b8498f4c740629ad0216d11a",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
