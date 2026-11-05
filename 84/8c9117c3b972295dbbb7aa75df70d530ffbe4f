@@ -1,0 +1,45 @@
+ui/test/execution-controller.test.ts
+  s_467dcb949b5b60::t_8b1384868b38e6 57-69
+  s_467dcb949b5b60::t_b31368d7462d52 70-85
+  s_467dcb949b5b60::t_bf02016ac7af1d 21-24,27-38,55-56
+  s_467dcb949b5b60::t_893288020beb8d 86-94
+  s_467dcb949b5b60::t_3a3be66a3049ca 1,39-46,48-54
+  s_467dcb949b5b60::t_48af9ddcae70aa 25-26
+  s_467dcb949b5b60::t_199de509e56eab 47
+ui/test/execution-page.test.tsx
+  s_467dcb949b5b60::t_f2f6369cc1bb40 3-4,9-34
+ui/src/execution.css
+  s_467dcb949b5b60::t_f6d9232d62574d 6-7
+managed-execution/README.md
+  s_467dcb949b5b60::t_48af9ddcae70aa 7,9-11
+ui/src/execution.ts
+  s_467dcb949b5b60::t_fde0a17e9a4ac4 24,47
+  s_467dcb949b5b60::t_8873c62369a57a 26,28
+  s_467dcb949b5b60::t_b4f49c9dc8426a 30
+  s_467dcb949b5b60::t_b4ab47a107cfb1 51
+  s_467dcb949b5b60::t_017ed975ac244a 25,27,29
+  s_467dcb949b5b60::t_6d820a193cee00 4,6,20,31,41-46
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_6d820a193cee00 15
+ui/src/extensions/execution.tsx
+  s_467dcb949b5b60::t_f6d9232d62574d 15-24
+docs/TERMUX-COMPATIBILITY.md
+  s_467dcb949b5b60::t_48af9ddcae70aa 1-2,4-15,17-38
+  s_467dcb949b5b60::t_c0e6b4ca4f20cd 3,16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "848c9117c3b972295dbbb7aa75df70d530ffbe4f",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
