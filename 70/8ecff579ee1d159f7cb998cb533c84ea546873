@@ -1,0 +1,40 @@
+tools/release_metadata.py
+  s_467dcb949b5b60::t_683bc198cbfd04 1-94
+.github/workflows/ci.yml
+  s_467dcb949b5b60::t_ac5cd15f6eb4f1 1-126
+tools/smoke_release.py
+  s_467dcb949b5b60::t_8f4624446f4b03 119-120,124,136,138-143,154,163,195-198,214-222,247
+  s_467dcb949b5b60::t_9b99fe2f10b574 1-118,121-123,125-135,137,144-153,155-162,164-194,199-213,223-246,248-260
+README.md
+  s_467dcb949b5b60::t_60af81f99d78b6 5-9
+docs/releases/v0.1.0.md
+  s_467dcb949b5b60::t_60af81f99d78b6 17
+  s_467dcb949b5b60::t_683bc198cbfd04 1-16,18-23
+docs/RELEASING.md
+  s_467dcb949b5b60::t_60af81f99d78b6 1-34
+android/version.properties
+  s_467dcb949b5b60::t_683bc198cbfd04 1-3
+android/app/build.gradle.kts
+  s_467dcb949b5b60::t_ce77b472b95074 1-2,4
+  s_467dcb949b5b60::t_683bc198cbfd04 5-6,15-16
+.github/workflows/release.yml
+  s_467dcb949b5b60::t_5f87e43db634cb 1-208
+android/release-signing-certificate.sha256
+  s_467dcb949b5b60::t_280ab79c8b6781 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "708ecff579ee1d159f7cb998cb533c84ea546873",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
