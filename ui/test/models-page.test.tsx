@@ -30,14 +30,14 @@ it('keeps empty settings usable, adds a connection, saves a key narrowly and exp
     }});return client;
   });
   render(<App controller={controller}/>);
-  fireEvent.click(await screen.findByRole('button',{name:'模型与连接'}));
-  expect(await screen.findByText(/聊天、附件及工具结果可能发送给所选云端模型/)).toBeTruthy();
-  fireEvent.change(screen.getByRole('textbox',{name:'连接名称'}),{target:{value:'我的服务'}});
-  fireEvent.change(screen.getByRole('combobox',{name:'连接协议'}),{target:{value:'openai-compatible'}});
+  fireEvent.click(await screen.findByRole('button',{name:'模型'}));
+  expect(await screen.findByText('聊天、附件和工具结果会发送给你选择的模型服务。')).toBeTruthy();
+  fireEvent.click(screen.getByRole('button',{name:/OpenAI 兼容 API/}));
+  fireEvent.change(screen.getByRole('textbox',{name:'账号名称'}),{target:{value:'我的服务'}});
   fireEvent.change(screen.getByRole('textbox',{name:'服务地址'}),{target:{value:'https://models.example/v1'}});
   fireEvent.change(screen.getByRole('textbox',{name:'模型 ID'}),{target:{value:'text-model'}});
   fireEvent.click(screen.getByRole('button',{name:'添加连接'}));
-  const card=await screen.findByTestId('connection-card');
+  let card=await screen.findByTestId('connection-card');
   expect(within(card).getByText('我的服务')).toBeTruthy();
   expect(controller.snapshot().models?.defaultModel).toBeNull();
   const password=within(card).getByLabelText('API Key') as HTMLInputElement;
@@ -49,13 +49,17 @@ it('keeps empty settings usable, adds a connection, saves a key narrowly and exp
   expect(JSON.stringify(ordinary)).not.toContain('synthetic-password-never-echo');
   expect(document.body.textContent).not.toContain('synthetic-password-never-echo');
   expect(await screen.findByText('已配置')).toBeTruthy();
+  fireEvent.click(screen.getByRole('button',{name:'返回模型列表'}));
+  fireEvent.click(screen.getByText(/^切换模型/));
   fireEvent.change(screen.getByRole('combobox',{name:'新会话默认模型'}),{target:{value:JSON.stringify(['destination-a','text-model'])}});
-  fireEvent.click(screen.getByRole('button',{name:'设为新会话默认模型'}));
+  fireEvent.click(screen.getByRole('button',{name:'设为默认'}));
   expect(await screen.findByText('默认模型已更新，仅影响以后新建的会话。')).toBeTruthy();
+  fireEvent.click(screen.getByRole('button',{name:/OpenAI 兼容 API/}));
+  card=await screen.findByTestId('connection-card');
   fireEvent.click(within(card).getByRole('button',{name:'停用连接'}));
   expect(await within(card).findByRole('button',{name:'启用连接'})).toBeTruthy();
   expect(screen.getAllByTestId('connection-card')).toHaveLength(1);
-  fireEvent.click(within(card).getByRole('button',{name:'移除 API Key'}));
+  fireEvent.click(within(card).getByRole('button',{name:'移除凭据'}));
   expect(await within(card).findByText('未配置')).toBeTruthy();
   expect(credentials[1]).toMatchObject({operation:'remove',expectedGeneration:1});
   expect(credentials[1]).not.toHaveProperty('key');
@@ -64,7 +68,7 @@ it('keeps empty settings usable, adds a connection, saves a key narrowly and exp
 
 it('clears a rejected credential input without echoing reflected secrets or pretending the stored generation changed',async()=>{
   const marker='synthetic-reflected-password';let attempt:CredentialWriteRequest|undefined;
-  const config:ModelConfiguration={version:4,defaultModel:null,connections:[{id:'broken',name:'需要重配',protocol:'mimo-cn',endpoint:'https://token-plan-cn.xiaomimimo.com/v1',models:[],enabled:true,createdAt:1,credential:{connectionId:'broken',state:'corrupt',generation:7,configured:false}}]};
+  const config:ModelConfiguration={version:4,defaultModel:null,providers:[{id:'xiaomi-token-plan-cn',name:'MiMo',models:[],authMethods:[{type:'api_key',label:'API Key'}]}],connections:[{id:'broken',name:'需要重配',protocol:'mimo-cn',endpoint:'https://token-plan-cn.xiaomimimo.com/v1',models:[],enabled:true,createdAt:1,credential:{connectionId:'broken',state:'corrupt',generation:7,configured:false}}]};
   const controller=new ConversationController(()=>{
     const client=new ApplicationClient({postMessage:json=>{
       const request:ApplicationRequest=JSON.parse(json);
@@ -75,9 +79,10 @@ it('clears a rejected credential input without echoing reflected secrets or pret
       queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:false,error:{code:'CREDENTIAL_CONFLICT',message:`Unsafe external reflection: ${marker}`}}));
     }});return client;
   });
-  render(<App controller={controller}/>);fireEvent.click(await screen.findByRole('button',{name:'模型与连接'}));
+  render(<App controller={controller}/>);fireEvent.click(await screen.findByRole('button',{name:'模型'}));
+  fireEvent.click(await screen.findByRole('button',{name:/MiMo/}));
   expect(await screen.findByText('凭据密文损坏')).toBeTruthy();
-  expect(screen.getByText(/若保存仍被拒绝.*添加新连接/)).toBeTruthy();
+  expect(screen.getByText(/若保存仍被拒绝.*添加新账号/)).toBeTruthy();
   const password=screen.getByLabelText('API Key') as HTMLInputElement;
   fireEvent.change(password,{target:{value:marker}});fireEvent.click(screen.getByRole('button',{name:'保存 API Key'}));
   expect(await screen.findByText('凭据状态已变更，请刷新后重新输入。')).toBeTruthy();

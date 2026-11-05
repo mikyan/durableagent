@@ -17,7 +17,7 @@ it('keeps external uncertainty visible after SDK abort and confirms completion o
   try{
     const {rerender}=render(<SendStates controller={controller} state={state}/>);
     expect(screen.getByTestId('stop-status').textContent).toContain('外部结果待核验');
-    expect(screen.getByRole('button',{name:/发送状态：.*外部结果待核验.*状态读取未确认/})).toBeTruthy();
+    expect(screen.getByRole('status').textContent).toContain('读取暂未确认');
     expect(screen.getByTestId('stop-status').textContent).not.toContain('停止完成');
     rerender(<SendStates controller={controller} state={{...state,submissions:{...state.submissions!,stopStatus:{control,phase:'stopped',externalPending:0,externalUnknown:0}}} as UiState}/>);
     expect(screen.getByTestId('stop-status').textContent).toContain('停止完成');
@@ -43,8 +43,8 @@ it('allows an explicit queued send and distinguishes input settlement from the c
     fireEvent.change(input,{target:{value:'忙时明确发出的下一条输入'}});fireEvent.click(screen.getByRole('button',{name:'发送消息'}));
     expect(await screen.findByText('已接纳 · 排队中')).toBeTruthy();expect(screen.getByText(/排队不表示模型已读取/)).toBeTruthy();
     expect(screen.getByTestId('conversation-status').dataset.phase).toBe('running');
-    progress='placed';fireEvent.click(screen.getByRole('button',{name:'刷新发送状态'}));expect(await screen.findByText('已放入消息记录')).toBeTruthy();
-    progress='done';fireEvent.click(screen.getByRole('button',{name:'刷新发送状态'}));expect(await screen.findByText('输入已结算')).toBeTruthy();
+    progress='placed';fireEvent.click(screen.getByRole('button',{name:'核验发送状态'}));expect(await screen.findByText('已放入消息记录')).toBeTruthy();
+    progress='done';fireEvent.click(screen.getByRole('button',{name:'核验发送状态'}));expect(await screen.findByText('输入已结算')).toBeTruthy();
     expect(screen.getByText(/不代表整个会话或外部操作全部结束/)).toBeTruthy();expect(screen.getByTestId('conversation-status').dataset.phase).toBe('running');
     expect(requests.filter(request=>request.method==='send')).toHaveLength(1);
   }finally{cleanup();controller.dispose();}

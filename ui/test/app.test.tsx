@@ -27,7 +27,7 @@ it('opens compatible retained history even when native drafts are unavailable an
     expect(await screen.findByText(entry.text)).toBeTruthy();
     expect((screen.getByRole('button',{name:'发送消息'}) as HTMLButtonElement).disabled).toBe(true);
     expect(requests.some(request=>['send','subscribe','create'].includes(request.method))).toBe(false);
-    expect(screen.queryByText('草稿可在本地编辑保存。会话历史等待运行宿主连接。')).toBeNull();
+    expect(screen.queryByText('草稿可在本地编辑保存。会话历史等待应用服务连接。')).toBeNull();
   }finally{controller.dispose();}
 });
 
@@ -95,7 +95,7 @@ it('shows the missing native host without invented conversations or enabled send
   const native=new InputPlatform();
   const controller=new ConversationController(()=>new ApplicationClient(undefined));
   render(<App controller={controller}/>);
-  expect(await screen.findByText('无法连接运行宿主，请在应用中打开此页面。')).toBeTruthy();
+  expect(await screen.findByText('无法连接应用服务，请在应用中打开此页面。')).toBeTruthy();
   expect(screen.queryByRole('textbox',{name:'消息'})).toBeNull();
   expect((screen.getByRole('button',{name:'新建会话'}) as HTMLButtonElement).disabled).toBe(true);
   controller.dispose();

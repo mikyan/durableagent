@@ -34,14 +34,20 @@ it('real model settings start empty, configure by DOM, resolve credentials only 
   },{get:key=>preferences.get(key)??null,set:(key,value)=>preferences.set(key,value)});
   try{
     await app.start();controller=connect();render(createElement(App,{controller}));
-    fireEvent.click(await screen.findByRole('button',{name:'模型与连接'}));
-    const name=await screen.findByRole('textbox',{name:'连接名称'});await waitFor(()=>expect(name.disabled).toBe(false));
-    fireEvent.change(name,{target:{value:'设备上的 MiMo 连接'}});fireEvent.click(screen.getByRole('button',{name:'添加连接'}));
+    fireEvent.click(await screen.findByRole('button',{name:'模型'}));
+    fireEvent.click(await screen.findByRole('button',{name:/OpenAI 兼容 API/}));
+    const name=await screen.findByRole('textbox',{name:'账号名称'});await waitFor(()=>expect(name.disabled).toBe(false));
+    fireEvent.change(name,{target:{value:'设备上的测试连接'}});
+    fireEvent.change(screen.getByRole('textbox',{name:'服务地址'}),{target:{value:'https://models.example/v1'}});
+    fireEvent.change(screen.getByRole('textbox',{name:'模型 ID'}),{target:{value:'mimo-v2.6-flash'}});
+    fireEvent.click(screen.getByRole('button',{name:'添加连接'}));
     const card=await screen.findByTestId('connection-card'),id=card.dataset.connectionId;
     expect(controller.snapshot().models.defaultModel).toBeNull();expect(reads).toBe(0);
     const password=within(card).getByLabelText('API Key');fireEvent.change(password,{target:{value:'synthetic-real-ui-key'}});fireEvent.click(within(card).getByRole('button',{name:'保存 API Key'}));
     expect(await within(card).findByText('已配置')).toBeTruthy();expect(password.value).toBe('');
-    fireEvent.change(screen.getByRole('combobox',{name:'新会话默认模型'}),{target:{value:JSON.stringify([id,'mimo-v2.6-flash'])}});fireEvent.click(screen.getByRole('button',{name:'设为新会话默认模型'}));
+    fireEvent.click(screen.getByRole('button',{name:'返回模型列表'}));
+    fireEvent.click(screen.getByText(/^切换模型/));
+    fireEvent.change(screen.getByRole('combobox',{name:'新会话默认模型'}),{target:{value:JSON.stringify([id,'mimo-v2.6-flash'])}});fireEvent.click(screen.getByRole('button',{name:'设为默认'}));
     expect(await screen.findByText('默认模型已更新，仅影响以后新建的会话。')).toBeTruthy();expect(reads).toBe(0);
     fireEvent.click(screen.getByRole('button',{name:'返回会话'}));fireEvent.click(screen.getByRole('button',{name:'新建会话'}));
     const input=await screen.findByRole('textbox',{name:'消息'});await waitFor(()=>expect(input.disabled).toBe(false));
@@ -50,7 +56,8 @@ it('real model settings start empty, configure by DOM, resolve credentials only 
     expect(controller.snapshot().history.map(message=>message.text)).toEqual(['用配置的模型回复','你好🌍']);
     expect(ordinary.join('')).not.toContain('synthetic-real-ui-key');expect(JSON.stringify(controller.snapshot())).not.toContain('synthetic-real-ui-key');
     cleanup();controller.dispose();await app.close();app=create();await app.start();controller=connect();render(createElement(App,{controller}));
-    expect(await screen.findByText('你好🌍')).toBeTruthy();fireEvent.click(screen.getByRole('button',{name:'模型与连接'}));
+    expect(await screen.findByText('你好🌍')).toBeTruthy();fireEvent.click(screen.getByRole('button',{name:'模型'}));
+    fireEvent.click(await screen.findByText(/^切换模型/));
     await waitFor(()=>expect(screen.getByRole('combobox',{name:'新会话默认模型'}).value).toBe(JSON.stringify([id,'mimo-v2.6-flash'])));
     expect(requests).toBe(1);expect(reads).toBe(1);
   }finally{
