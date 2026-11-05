@@ -27,7 +27,7 @@ it('opens compatible retained history even when native drafts are unavailable an
     expect(await screen.findByText(entry.text)).toBeTruthy();
     expect((screen.getByRole('button',{name:'发送消息'}) as HTMLButtonElement).disabled).toBe(true);
     expect(requests.some(request=>['send','subscribe','create'].includes(request.method))).toBe(false);
-    expect(screen.queryByText('草稿可在本地编辑保存。会话历史等待应用服务连接。')).toBeNull();
+    expect(screen.queryByText('草稿可在本地编辑保存。会话历史将在应用服务连接后显示。')).toBeNull();
   }finally{controller.dispose();}
 });
 
