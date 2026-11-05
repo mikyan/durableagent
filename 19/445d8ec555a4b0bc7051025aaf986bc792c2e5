@@ -1,0 +1,29 @@
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_71287c39405cfc 175-177
+docs/specs/agent-environment-context.md
+  s_467dcb949b5b60::t_1e313a4f4018eb 1-14
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_62d76e947afd28 6,24,78
+runtime/src/application.ts
+  s_467dcb949b5b60::t_dafcdc0c6c9af8 31,40,89
+runtime/src/environment-prompt.ts
+  s_467dcb949b5b60::t_dcd712a37ef9a5 1-32
+runtime/src/managed-execution.ts
+  s_467dcb949b5b60::t_ba546e887c3559 22,76-77,94-97,112-120,145,368
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "19445d8ec555a4b0bc7051025aaf986bc792c2e5",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
