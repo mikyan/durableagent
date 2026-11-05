@@ -1,0 +1,5 @@
+--------- beginning of main
+11-06 00:52:51.122  9788  9935 D DEBUG-sdk-tls15: {"method":"ping","stage":"connect","class":"SocketException","operationWriteAttempted":false}
+11-06 00:52:53.124  9788  9935 D DEBUG-sdk-tls15: {"method":"ping","stage":"connect","class":"SocketException","operationWriteAttempted":false}
+11-06 00:53:04.199  9788  9965 D DEBUG-sdk-tls15: {"method":"file.writeResult","stage":"operationFrame","class":"SocketTimeoutException","operationWriteAttempted":true}
+11-06 00:53:04.199  9788  9965 D DEBUG-sdk-native15: {"method":"file.writeResult","code":"CONNECTION_UNCONFIRMED"}

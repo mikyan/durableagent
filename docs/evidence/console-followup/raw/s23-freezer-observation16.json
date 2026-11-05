@@ -1,0 +1,7 @@
+{
+  "observedAtUtc": "2026-11-05T17:01:13.677990+00:00",
+  "device": "Galaxy S23",
+  "scope": "existing owned Termux listener, read-only cgroup observation",
+  "listenerPid": 1393,
+  "freezer": "/frozen"
+}

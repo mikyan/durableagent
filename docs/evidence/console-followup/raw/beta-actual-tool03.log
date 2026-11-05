@@ -1,0 +1,42 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExecutionTransportTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ExecutionTransportTest:
+INSTRUMENTATION_STATUS: test=productionBootstrapUsesRealTermuxAndPersistsVerifiedPeer
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: executionEvidence={"case":"real-termux-bootstrap","executorId":"78c8fb74-e1e4-41d9-ba95-66471877d93c","ledgerEpoch":"6e80c4ab-fc80-4016-b168-0af496547118","port":47193}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExecutionTransportTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=productionBootstrapUsesRealTermuxAndPersistsVerifiedPeer
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExecutionChannelDiagnosticTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ExecutionChannelDiagnosticTest:
+INSTRUMENTATION_STATUS: test=namespacedJavetReadOnlyCommandInAgentProcessPreservesNativeCode
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: executionChannelDiagnostic={"ok":true,"stage":"query","trace":[{"boundary":"begin:ping","ok":true},{"boundary":"poll","ok":true,"pending":false,"resultOk":true},{"stage":"ping","ok":true,"elapsedMs":255},{"boundary":"rememberIntent","ok":true},{"stage":"rememberIntent","ok":true,"elapsedMs":129},{"boundary":"begin:prepare","ok":true},{"boundary":"poll","ok":true,"pending":false,"resultOk":true},{"stage":"prepare","ok":true,"elapsedMs":186},{"boundary":"begin:start","ok":true},{"boundary":"poll","ok":true,"pending":false,"resultOk":true},{"stage":"start","ok":true,"elapsedMs":276},{"boundary":"begin:query","ok":true},{"boundary":"poll","ok":true,"pending":false,"resultOk":true},{"stage":"query","ok":true,"elapsedMs":198},{"boundary":"begin:query","ok":true},{"boundary":"poll","ok":true,"pending":false,"resultOk":true},{"stage":"query","ok":true,"elapsedMs":204}],"operation":"command","pid":9288,"process":"dev.durableagent.probe:agent","sameApplicationServiceProcess":true,"separateNodeOwner":true,"elapsedMs":8851}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExecutionChannelDiagnosticTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=namespacedJavetReadOnlyCommandInAgentProcessPreservesNativeCode
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 14.722
+
+OK (2 tests)
+
+
+INSTRUMENTATION_CODE: -1

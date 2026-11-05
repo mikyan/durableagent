@@ -1,0 +1,46 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExecutionChannelDiagnosticTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ExecutionChannelDiagnosticTest:
+INSTRUMENTATION_STATUS: test=namespacedJavetPingInAgentProcessPreservesNativeCode
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: executionChannelDiagnostic={"ok":false,"stage":"ping","name":"ExecutionChannelError","code":"CONNECTION_UNCONFIRMED","trace":[{"boundary":"begin:ping","ok":true},{"boundary":"poll","ok":true,"pending":false,"resultOk":false,"resultCode":"CONNECTION_UNCONFIRMED"},{"stage":"ping","ok":false,"name":"ExecutionChannelError","code":"CONNECTION_UNCONFIRMED","elapsedMs":2097}],"operation":"ping","pid":22879,"process":"dev.durableagent.probe:agent","sameApplicationServiceProcess":true,"separateNodeOwner":true,"elapsedMs":2515}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExecutionChannelDiagnosticTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: {"ok":false,"stage":"ping","name":"ExecutionChannelError","code":"CONNECTION_UNCONFIRMED","trace":[{"boundary":"begin:ping","ok":true},{"boundary":"poll","ok":true,"pending":false,"resultOk":false,"resultCode":"CONNECTION_UNCONFIRMED"},{"stage":"ping","ok":false,"name":"ExecutionChannelError","code":"CONNECTION_UNCONFIRMED","elapsedMs":2097}],"operation":"ping","pid":22879,"process":"dev.durableagent.probe:agent","sameApplicationServiceProcess":true,"separateNodeOwner":true,"elapsedMs":2515}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExecutionChannelDiagnosticTest.observe(ExecutionChannelDiagnosticTest.kt:44)
+	at dev.durableagent.probe.ExecutionChannelDiagnosticTest.namespacedJavetPingInAgentProcessPreservesNativeCode(ExecutionChannelDiagnosticTest.kt:20)
+
+INSTRUMENTATION_STATUS: stream=
+Error in namespacedJavetPingInAgentProcessPreservesNativeCode(dev.durableagent.probe.ExecutionChannelDiagnosticTest):
+java.lang.AssertionError: {"ok":false,"stage":"ping","name":"ExecutionChannelError","code":"CONNECTION_UNCONFIRMED","trace":[{"boundary":"begin:ping","ok":true},{"boundary":"poll","ok":true,"pending":false,"resultOk":false,"resultCode":"CONNECTION_UNCONFIRMED"},{"stage":"ping","ok":false,"name":"ExecutionChannelError","code":"CONNECTION_UNCONFIRMED","elapsedMs":2097}],"operation":"ping","pid":22879,"process":"dev.durableagent.probe:agent","sameApplicationServiceProcess":true,"separateNodeOwner":true,"elapsedMs":2515}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExecutionChannelDiagnosticTest.observe(ExecutionChannelDiagnosticTest.kt:44)
+	at dev.durableagent.probe.ExecutionChannelDiagnosticTest.namespacedJavetPingInAgentProcessPreservesNativeCode(ExecutionChannelDiagnosticTest.kt:20)
+
+INSTRUMENTATION_STATUS: test=namespacedJavetPingInAgentProcessPreservesNativeCode
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 2.543
+There was 1 failure:
+1) namespacedJavetPingInAgentProcessPreservesNativeCode(dev.durableagent.probe.ExecutionChannelDiagnosticTest)
+java.lang.AssertionError: {"ok":false,"stage":"ping","name":"ExecutionChannelError","code":"CONNECTION_UNCONFIRMED","trace":[{"boundary":"begin:ping","ok":true},{"boundary":"poll","ok":true,"pending":false,"resultOk":false,"resultCode":"CONNECTION_UNCONFIRMED"},{"stage":"ping","ok":false,"name":"ExecutionChannelError","code":"CONNECTION_UNCONFIRMED","elapsedMs":2097}],"operation":"ping","pid":22879,"process":"dev.durableagent.probe:agent","sameApplicationServiceProcess":true,"separateNodeOwner":true,"elapsedMs":2515}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.ExecutionChannelDiagnosticTest.observe(ExecutionChannelDiagnosticTest.kt:44)
+	at dev.durableagent.probe.ExecutionChannelDiagnosticTest.namespacedJavetPingInAgentProcessPreservesNativeCode(ExecutionChannelDiagnosticTest.kt:20)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

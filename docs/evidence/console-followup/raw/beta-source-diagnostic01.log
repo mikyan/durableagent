@@ -1,0 +1,50 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.TermuxSourceDeviceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.TermuxSourceDeviceTest:
+INSTRUMENTATION_STATUS: test=verifiesInstalledOfficialArtifactOnlineThenReusesOnlyItsOwnOfflineProof
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"stage":"installed_artifact","elapsedMs":191}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"family":"LEGACY","budgetMs":14967,"stage":"download_start","elapsedMs":247}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"family":"LEGACY","outcome":"NOT_FOUND","fetchElapsedMs":4129,"stage":"download_return","elapsedMs":4376}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"family":"APT_ANDROID_7","budgetMs":10834,"stage":"download_start","elapsedMs":4380}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"family":"APT_ANDROID_7","errors":[{"class":"java.net.SocketTimeoutException","reason":"IO_TIMEOUT"},{"class":"java.net.SocketException","reason":"UNCLASSIFIED"}],"fetchElapsedMs":4082,"stage":"download_error","elapsedMs":8461}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"outcome":"FAILED","errors":[{"class":"dev.durableagent.probe.ExecutionChannelException","reason":"SOURCE_UNAVAILABLE"}],"stage":"online_authorization","elapsedMs":8466}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.TermuxSourceDeviceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Termux source diagnosis failed at online_authorization; see safe termuxSourceDiagnostic events
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.TermuxSourceDeviceTest.verifiesInstalledOfficialArtifactOnlineThenReusesOnlyItsOwnOfflineProof(TermuxSourceDeviceTest.kt:130)
+
+INSTRUMENTATION_STATUS: stream=
+Error in verifiesInstalledOfficialArtifactOnlineThenReusesOnlyItsOwnOfflineProof(dev.durableagent.probe.TermuxSourceDeviceTest):
+java.lang.AssertionError: Termux source diagnosis failed at online_authorization; see safe termuxSourceDiagnostic events
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.TermuxSourceDeviceTest.verifiesInstalledOfficialArtifactOnlineThenReusesOnlyItsOwnOfflineProof(TermuxSourceDeviceTest.kt:130)
+
+INSTRUMENTATION_STATUS: test=verifiesInstalledOfficialArtifactOnlineThenReusesOnlyItsOwnOfflineProof
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 8.506
+There was 1 failure:
+1) verifiesInstalledOfficialArtifactOnlineThenReusesOnlyItsOwnOfflineProof(dev.durableagent.probe.TermuxSourceDeviceTest)
+java.lang.AssertionError: Termux source diagnosis failed at online_authorization; see safe termuxSourceDiagnostic events
+	at org.junit.Assert.fail(Assert.java:89)
+	at dev.durableagent.probe.TermuxSourceDeviceTest.verifiesInstalledOfficialArtifactOnlineThenReusesOnlyItsOwnOfflineProof(TermuxSourceDeviceTest.kt:130)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

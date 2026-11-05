@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExecutionRealProviderTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ExecutionRealProviderTest:
+INSTRUMENTATION_STATUS: test=realMimoIdentifiesAndroidAndItsActualTermuxWorkspace
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: executionEnvironmentEvidence={"run":"a2b2da3b-77e1-4272-8528-1fb53f0778d4","conversationId":"dbaeee22-6bdd-4845-9c2d-0431e6f48ceb","execution":{"captureIncomplete":false,"context":{"bindingId":"fd39180d-2fee-4fd6-9371-f88b3d8f23ea","callId":"call_6b2905eba1204d75ab897475","controlGeneration":1,"locationVersion":1,"namespace":"termux:50dd1912-d69d-486f-b7c6-b00718c25109","productId":"dbaeee22-6bdd-4845-9c2d-0431e6f48ceb","sdkConversationId":5,"taskId":20},"createdAt":1793896881388,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"a6ab7e2b-60d3-4f1a-af30-ae25be2c986f","executorId":"50dd1912-d69d-486f-b7c6-b00718c25109","exitCode":0,"finalDigest":"c22d4d7787157ffe2bea5c0252360ed7e24a5f87d1e386cc62de5c1a3990af38","finishedAt":1793896882517,"guardianPid":2924,"ledgerEpoch":"f33d8612-d682-4ee5-b2a6-353a458349e6","localCapabilities":{"helperSha256":"13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1","runnerSha256":"a65ecba8be5119b414ecfdc4b1d514b02515e95b89daac8a197f37983eb15111","version":1},"namespace":"termux:50dd1912-d69d-486f-b7c6-b00718c25109","outputBytes":190,"outputCursor":9,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/a6ab7e2b-60d3-4f1a-af30-ae25be2c986f.raw","protocol":1,"rawSha256":"04aed2d43f86618bbc4b51f977ef8d53d2c585460ad5f960467d65601230d2f4","requestDigest":"fc62a102ee9facc6f05b554c9a682e7dc236e59afee2a16f72403a37099a35e5","scopeConfirmed":true,"sequence":13,"startRequestedAt":1793896881926,"startedAt":1793896882400,"state":"completed"},"actualStdout":"kernel=Linux\napi=36\nabi=arm64-v8a\npwd=\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\nuid=10187\nmarker=environment-世界-a2b2da3b-77e1-4272-8528-1fb53f0778d4\n","adoptedPath":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","realPath":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","modelAnswer":{"hostPlatform":"Android","toolProvider":"Termux","independentUid":true,"adoptedPath":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","hostAndroidApi":36,"kernel":"Linux","androidApi":36,"deviceAbi":"arm64-v8a","physicalCwd":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","toolUid":10187,"marker":"environment-世界-a2b2da3b-77e1-4272-8528-1fb53f0778d4"},"systemRequestEnvironment":{"present":true,"host":{"platform":"android","androidApi":36,"androidRelease":"16","supportedAbis":["arm64-v8a","armeabi-v7a","armeabi"],"appProcess64Bit":true},"binding":"adopted","adoptedPath":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","describesIndependentTermuxUid":true,"offersBash":true},"modelToolCall":{"name":"bash","validArguments":true,"argumentKeys":["command"],"commandSha256":"4311517e11d65b8c7d55a4d6bf152eefd8cdfa9c08fd8505154dbf0b257ca172"},"appStayedForeground":true,"transportRequests":2,"explicitBashChoice":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExecutionRealProviderTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoIdentifiesAndroidAndItsActualTermuxWorkspace
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 25.756
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1
