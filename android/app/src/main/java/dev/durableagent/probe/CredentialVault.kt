@@ -103,7 +103,7 @@ class CredentialVault(
     /** Product callers always supply expectedGeneration; null is explicit unconditional replace. */
     fun save(connectionId: String, key: String, expectedGeneration: Long? = null): CredentialMetadata {
         validateId(connectionId)
-        if (key.isEmpty() || key.length > MAX_KEY_CHARS) fail("invalid-input")
+        if (key.isEmpty() || key.toByteArray(Charsets.UTF_8).size > MAX_KEY_CHARS) fail("invalid-input")
         return locked { directory ->
             val previous = read(directory, connectionId)
             val generation = nextGeneration(previous, expectedGeneration)
@@ -164,6 +164,22 @@ class CredentialVault(
             val plaintext = decryptCiphertext(cipher, decode(envelope.getString("ciphertext")))
             try { CredentialValue(plaintext.toString(Charsets.UTF_8), generation) }
             finally { plaintext.fill(0) }
+        }
+    }
+
+    /** Separate from the ciphertext lease: held across SDK OAuth refresh without holding a vault read lock. */
+    fun acquireMutation(connectionId: String): StorageDomainLease {
+        validateId(connectionId)
+        if (context.getSystemService(UserManager::class.java)?.isUserUnlocked != true || context.isDeviceProtectedStorage) fail("temporarily-unavailable")
+        return StorageDomainLease.acquire(File(context.noBackupFilesDir, "$namespace-mutations/${digest(connectionId)}")) ?: fail("temporarily-unavailable")
+    }
+
+    fun deviceId(): String = locked { directory ->
+        val file = File(directory, "installation-id")
+        if (file.exists()) file.readText().takeIf { it.matches(Regex("[a-f0-9-]{36}")) } ?: fail("corrupt")
+        else UUID.randomUUID().toString().also { value ->
+            FileOutputStream(file).use { it.write(value.toByteArray(Charsets.US_ASCII)); it.fd.sync() }
+            syncDirectory(directory)
         }
     }
 
@@ -249,7 +265,7 @@ class CredentialVault(
 
     companion object {
         private const val VERSION = 1
-        private const val MAX_KEY_CHARS = 16_384
+        private const val MAX_KEY_CHARS = 65_536
         private const val MAX_ENVELOPE_BYTES = 100_000
         private const val MAX_GENERATION = 9_007_199_254_740_991L
         private val processMonitor = Any()

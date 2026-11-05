@@ -1,0 +1,37 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.TermuxSourceDeviceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.TermuxSourceDeviceTest:
+INSTRUMENTATION_STATUS: test=verifiesInstalledOfficialArtifactOnlineThenReusesOnlyItsOwnOfflineProof
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"stage":"installed_artifact","elapsedMs":465}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"family":"LEGACY","budgetMs":14965,"stage":"download_start","elapsedMs":528}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"family":"LEGACY","outcome":"NOT_FOUND","fetchElapsedMs":2749,"stage":"download_return","elapsedMs":3277}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"family":"APT_ANDROID_7","budgetMs":12210,"stage":"download_start","elapsedMs":3282}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"family":"APT_ANDROID_7","outcome":"DOCUMENT","fetchElapsedMs":3899,"stage":"download_return","elapsedMs":7181}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"outcome":"VERIFIED","requests":2,"stage":"online_authorization","elapsedMs":7220}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: termuxSourceDiagnostic={"outcome":"VERIFIED","stage":"offline_authorization","elapsedMs":7231}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.TermuxSourceDeviceTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=verifiesInstalledOfficialArtifactOnlineThenReusesOnlyItsOwnOfflineProof
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 7.266
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

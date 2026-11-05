@@ -51,7 +51,8 @@ export async function materializeFrozenInput(access:FrozenInputAccess,token:stri
 /** Guard the actual serialized body, including prior history and JSON/base64 expansion. */
 export type ProviderInputEvidence={serializedBytes:number;images:{sha256:string;byteLength:number;mimeType:string}[];textParts:{sha256:string;byteLength:number}[]};
 /** Conservative context ceiling before the SDK constructs another full serialized request. */
-export function validateContextBudget(value:unknown):void {
+export function validateContextBudget(value:unknown):void {validatePayloadBudget(value,false);}
+function validatePayloadBudget(value:unknown,bedrockBlobs:boolean):void {
   let bytes=0;const ancestors=new Set<object>();
   const charge=(count:number)=>{bytes+=count;if(bytes>INPUT_BUDGETS.requestBytes)fail('INPUT_CONTEXT_BUDGET','模型上下文在编码前已超过本地预算，请保留原会话并缩小输入或开启新会话');};
   const string=(value:string)=>{
@@ -69,6 +70,9 @@ export function validateContextBudget(value:unknown):void {
   };
   const walk=(item:unknown,depth:number)=>{
     if(depth>128)fail('INPUT_CONTEXT_BUDGET','模型上下文在编码前超过嵌套预算');
+    // The pinned Bedrock adapter decodes image/redacted-content blobs before
+    // onPayload; Smithy writes those Uint8Arrays as base64 JSON strings.
+    if(bedrockBlobs&&item instanceof Uint8Array){charge(2+4*Math.ceil(item.byteLength/3));return;}
     if(typeof item==='string'){string(item);return;}
     if(item===null||typeof item==='boolean'||typeof item==='number'){charge(String(item).length);return;}
     if(typeof item!=='object')return;
@@ -78,6 +82,17 @@ export function validateContextBudget(value:unknown):void {
     ancestors.delete(item);
   };
   walk(value,0);
+}
+/** Validate an SDK payload without changing the object handed back to its adapter. */
+export async function validateProviderPayload(payload:unknown,model:Model<Api>):Promise<ProviderInputEvidence> {
+  const bedrockBlobs=model.api==='bedrock-converse-stream';
+  validatePayloadBudget(payload,bedrockBlobs);
+  const body=bedrockBlobs?JSON.stringify(payload,function(key,value){
+    // Read the original member, because Buffer.toJSON runs before a replacer.
+    const original=this[key];
+    return original instanceof Uint8Array?Buffer.from(original.buffer,original.byteOffset,original.byteLength).toString('base64'):value;
+  }):JSON.stringify(payload);
+  return validateProviderInput(new Request('https://payload.invalid/',{method:'POST',body}),model);
 }
 export async function validateProviderInput(request:Request,model:Model<Api>):Promise<ProviderInputEvidence> {
   const maximum=Math.min(INPUT_BUDGETS.requestBytes,model.inputLimits?.maxRequestBytes??Infinity);

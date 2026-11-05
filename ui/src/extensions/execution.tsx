@@ -9,12 +9,10 @@ export function ExecutionPanel({controller,state}:{controller:ConversationContro
   const execution=state.execution??controller.execution.view();
   const rows=execution.conversationId===state.activeId?execution.rows:[];
   return <details className="execution-panel" open>
-    <summary>本地执行 <span>{execution.connecting?'连接中…':execution.connected?'已连接':'按需连接'}</span></summary>
+    <summary>Termux 执行 <span>{execution.connecting?'连接中…':execution.connected?'已连接':'按需连接'}</span></summary>
     <div className="execution-content">
-      <p>首次使用：复制初始化命令，在 Termux 中粘贴并运行，再回来连接执行环境。</p>
       <div className="execution-actions">
-        <button type="button" onClick={()=>void controller.execution.copySetup()} disabled={execution.copying}>复制初始化命令</button>
-        <button type="button" onClick={()=>void controller.execution.connect()} disabled={execution.connecting}>{execution.connecting?'正在连接…':'连接执行环境'}</button>
+        <button type="button" onClick={()=>controller.showPage('termux')}>Termux 安装与连接</button>
         {state.activeId&&<button type="button" onClick={()=>void controller.execution.refresh(state.activeId!)} disabled={execution.loading||state.status.phase!=='ready'}>{execution.loading?'正在读取…':'查看本会话执行'}</button>}
       </div>
       {execution.notice&&<p className="execution-notice" role="status">{execution.notice}</p>}

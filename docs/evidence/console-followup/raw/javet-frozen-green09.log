@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExecutionChannelDiagnosticTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ExecutionChannelDiagnosticTest:
+INSTRUMENTATION_STATUS: test=namespacedJavetPingInAgentProcessPreservesNativeCode
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: executionChannelDiagnostic={"ok":true,"stage":"ping","trace":[{"boundary":"begin:ping","ok":true},{"boundary":"poll","ok":true,"pending":false,"resultOk":true},{"stage":"ping","ok":true,"elapsedMs":4303}],"operation":"ping","pid":25673,"process":"dev.durableagent.probe:agent","sameApplicationServiceProcess":true,"separateNodeOwner":true,"elapsedMs":4719}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ExecutionChannelDiagnosticTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=namespacedJavetPingInAgentProcessPreservesNativeCode
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 4.73
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

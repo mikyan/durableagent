@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-06",
+  "device": {
+    "model": "Galaxy S23 SM-S9110",
+    "android": "16",
+    "api": 36,
+    "abi": "arm64-v8a",
+    "pageSize": 4096
+  },
+  "termux": {
+    "version": "0.118.3",
+    "existingInstallationPreserved": true
+  },
+  "candidates": [
+    {
+      "commit": "83ff666ba614133ce186506e3a244660c558b1f2",
+      "apkSha256": "4ff55b3e44e58e8ac8fd6ab5652c396a11502448a0fa30cb15290e469789b88c",
+      "testApkSha256": "94ab7ba53ca3e2b32b4239d35bbb2adda9431ad6ec45faf18d5e335768b1abbf",
+      "evidence": [
+        "real-mimo-environment13.log"
+      ]
+    },
+    {
+      "commit": "b31642a0bb75e7bcaac584106a8d02a9ded548e0",
+      "apkSha256": "09452a36e41c7d8484f96992b9fe48318dd43f0fb5a941978a5be115c60c3337",
+      "testApkSha256": "94ab7ba53ca3e2b32b4239d35bbb2adda9431ad6ec45faf18d5e335768b1abbf",
+      "evidence": [
+        "sdk-pending-wake-full17.log",
+        "sdk-pending-wake-contracts18.log"
+      ]
+    },
+    {
+      "commit": "f2546a07ad85b7aca35ef8ae0dc6262d36ea54f5",
+      "apkSha256": "228af7f5baf69bf5251de9093941b036a1cf2b6312ea6ac3851c8659dcd3cc63",
+      "testApkSha256": "e671b85a654b18f91c964d88a473695b822edb1894749b61db68dd144a70f552",
+      "evidence": [
+        "final-real-mimo-environment20.log"
+      ],
+      "build": "Runtime/UI builds, debug/test APK and lintDebug passed"
+    },
+    {
+      "commit": "0a820a578df87a403ab1ba8823a21c4c8fcd90b8",
+      "apkSha256": "fdaac68f9e24b1c99c74cbc3c04176eede4c56439fe7441c1e3c449db8ee20de",
+      "testApkSha256": "e671b85a654b18f91c964d88a473695b822edb1894749b61db68dd144a70f552",
+      "build": "Runtime/UI bundles, Debug APK/test APK and lintDebug passed; only Bedrock budget projection changed after integrated MiMo run, not rerun"
+    }
+  ],
+  "alternateTermux": {
+    "device": "isolated API 36 x86_64 emulator, 4 KB",
+    "version": "0.119.0-beta.3",
+    "apkSha256": "ecf7b280268ae6963876f5663ed7a00622e458c0425bb41f0ab8e1998bfbbac5",
+    "packagedSetupSha256": "f1f8d9987c5fb83c8e97ef25f3d365760a43a450de8876e6325a08dd37b327ec",
+    "freshFixturePackagesUpdatedSeparately": true
+  }
+}

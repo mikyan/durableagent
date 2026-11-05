@@ -1,0 +1,59 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.FileApplicationTest:
+INSTRUMENTATION_STATUS: test=originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: EXEC_CONFORMANCE_SETUP reproduced the reported unconfirmed execution connection; run=e41e6d41-72b4-4ddf-8d71-8c80b7bbec64 conversation=b4980e8e-0add-44a7-aabe-5ebaa29ddb99 phase=running
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertFalse(Assert.java:65)
+	at dev.durableagent.probe.FileApplicationTest.originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux$lambda$2(FileApplicationTest.kt:75)
+	at dev.durableagent.probe.FileApplicationTest.$r8$lambda$7Zjm4eelNis64NwIRuMLgQxap8o(Unknown Source:0)
+	at dev.durableagent.probe.FileApplicationTest$$ExternalSyntheticLambda12.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.FileApplicationTest.until(FileApplicationTest.kt:26)
+	at dev.durableagent.probe.FileApplicationTest.until$default(FileApplicationTest.kt:26)
+	at dev.durableagent.probe.FileApplicationTest.originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux(FileApplicationTest.kt:73)
+
+INSTRUMENTATION_STATUS: stream=
+Error in originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux(dev.durableagent.probe.FileApplicationTest):
+java.lang.AssertionError: EXEC_CONFORMANCE_SETUP reproduced the reported unconfirmed execution connection; run=e41e6d41-72b4-4ddf-8d71-8c80b7bbec64 conversation=b4980e8e-0add-44a7-aabe-5ebaa29ddb99 phase=running
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertFalse(Assert.java:65)
+	at dev.durableagent.probe.FileApplicationTest.originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux$lambda$2(FileApplicationTest.kt:75)
+	at dev.durableagent.probe.FileApplicationTest.$r8$lambda$7Zjm4eelNis64NwIRuMLgQxap8o(Unknown Source:0)
+	at dev.durableagent.probe.FileApplicationTest$$ExternalSyntheticLambda12.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.FileApplicationTest.until(FileApplicationTest.kt:26)
+	at dev.durableagent.probe.FileApplicationTest.until$default(FileApplicationTest.kt:26)
+	at dev.durableagent.probe.FileApplicationTest.originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux(FileApplicationTest.kt:73)
+
+INSTRUMENTATION_STATUS: test=originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 11.741
+There was 1 failure:
+1) originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux(dev.durableagent.probe.FileApplicationTest)
+java.lang.AssertionError: EXEC_CONFORMANCE_SETUP reproduced the reported unconfirmed execution connection; run=e41e6d41-72b4-4ddf-8d71-8c80b7bbec64 conversation=b4980e8e-0add-44a7-aabe-5ebaa29ddb99 phase=running
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertFalse(Assert.java:65)
+	at dev.durableagent.probe.FileApplicationTest.originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux$lambda$2(FileApplicationTest.kt:75)
+	at dev.durableagent.probe.FileApplicationTest.$r8$lambda$7Zjm4eelNis64NwIRuMLgQxap8o(Unknown Source:0)
+	at dev.durableagent.probe.FileApplicationTest$$ExternalSyntheticLambda12.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.FileApplicationTest.until(FileApplicationTest.kt:26)
+	at dev.durableagent.probe.FileApplicationTest.until$default(FileApplicationTest.kt:26)
+	at dev.durableagent.probe.FileApplicationTest.originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux(FileApplicationTest.kt:73)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

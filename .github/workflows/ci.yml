@@ -109,10 +109,10 @@ jobs:
         run: |
           npm ci --ignore-scripts --prefix runtime
           npm ci --ignore-scripts --prefix ui
-      - name: Build both variants, compile device tests and run lint
+      - name: Test native contracts, build both variants, compile device tests and run lint
         run: >-
           ./android/gradlew -p android --no-daemon --stacktrace
-          :app:assembleDebug :app:assembleDebugAndroidTest :app:assembleRelease
+          :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest :app:assembleRelease
           :app:lintDebug :app:lintRelease
       - name: Upload Android lint reports
         if: always()

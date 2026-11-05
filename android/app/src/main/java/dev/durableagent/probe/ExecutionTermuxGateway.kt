@@ -19,7 +19,7 @@ import java.util.UUID
 /** Fixed public bootstrap/launcher only. Arbitrary commands never cross RUN_COMMAND. */
 class ExecutionTermuxGateway(private val context: Context) {
     fun connect(): ExecutionPairing {
-        requireReady()
+        requireReady(allowSourceCheck = true)
         val previous = ExecutionPairingStore(context).use { it.read() }
         val identity = ExecutionIdentity(context,"production-v1",allowCreate=previous==null)
         val clientHash = identity.certificateSha256()
@@ -74,8 +74,38 @@ class ExecutionTermuxGateway(private val context: Context) {
         throw last
     }
     /** Reopen only an already-paired authority; never initialize trust or replay an operation. */
-    fun ensureExisting(eligible:()->Boolean={true}):ExecutionPairing {
-        val deadline=SystemClock.elapsedRealtime()+10000
+    fun ensureExisting(eligible:()->Boolean={true}):ExecutionPairing=existing(null,10000,eligible)
+    internal fun ensureExisting(timeoutMs:Long,eligible:()->Boolean):ExecutionPairing=existing(null,timeoutMs,eligible)
+    /** Explicit recovery after proven-unsent transport failure, always using the original authority. */
+    internal fun wakeExisting(expected:ExecutionPairing,timeoutMs:Long,eligible:()->Boolean) {existing(expected,timeoutMs,eligible)}
+    internal fun wakeGeneration():Long=existingLaunchGeneration.get()
+    /** A hint for an already-sent frame: do not probe, replace its socket, or claim any outcome. */
+    internal fun wakePending(expected:ExecutionPairing,observedGeneration:Long,timeoutMs:Long,eligible:()->Boolean,claim:()->Boolean,dispatchIfPending:((()->Unit)->Boolean)) {
+        require(timeoutMs in 1..10000)
+        val deadline=SystemClock.elapsedRealtime()+timeoutMs
+        fun remaining():Long {
+            if(Thread.currentThread().isInterrupted||!eligible())throw ExecutionChannelException("CHANNEL_CLOSED")
+            return (deadline-SystemClock.elapsedRealtime()).also{if(it<=0)throw ExecutionChannelException("EXISTING_EXECUTOR_UNAVAILABLE")}
+        }
+        while(!existingStart.tryLock(minOf(100L,remaining()),java.util.concurrent.TimeUnit.MILLISECONDS)){}
+        try{
+            remaining();requireReady();remaining()
+            val identity=ExecutionIdentity(context,"production-v1",allowCreate=false)
+            val actual=ExecutionPairingStore(context).use{it.requireClient(identity.certificateSha256())}
+            if(actual!=expected)throw ExecutionChannelException("PAIRING_CONFLICT")
+            remaining()
+            // A launch for this same authority after this socket wait began already
+            // serves overlapping waiters. This does not extend a request's deadline.
+            if(existingLaunchGeneration.get()!=observedGeneration&&lastExistingLaunch==expected)return
+            dispatchIfPending{
+                remaining()
+                if(claim()) {remaining();launchExisting(expected)}
+            }
+        }finally{existingStart.unlock()}
+    }
+    private fun existing(wakeExpected:ExecutionPairing?,timeoutMs:Long,eligible:()->Boolean):ExecutionPairing {
+        require(timeoutMs in 1..10000)
+        val deadline=SystemClock.elapsedRealtime()+timeoutMs
         fun remaining():Long {
             if(Thread.currentThread().isInterrupted||!eligible())throw ExecutionChannelException("CHANNEL_CLOSED")
             return (deadline-SystemClock.elapsedRealtime()).also{if(it<=0)throw ExecutionChannelException("EXISTING_EXECUTOR_UNAVAILABLE")}
@@ -83,35 +113,55 @@ class ExecutionTermuxGateway(private val context: Context) {
         remaining();requireReady()
         val identity=ExecutionIdentity(context,"production-v1",allowCreate=false)
         val pairing=ExecutionPairingStore(context).use{it.requireClient(identity.certificateSha256())}
+        if(wakeExpected!=null&&pairing!=wakeExpected)throw ExecutionChannelException("PAIRING_CONFLICT")
         fun reachable():Boolean = try {
             val value=ExecutionTlsClient(identity,pairing).request("ping",JSONObject(),minOf(2000L,remaining()))
             if(value.opt("protocol")!=1||value.optString("executorId")!=pairing.executorId||value.optString("ledgerEpoch")!=pairing.ledgerEpoch)throw ExecutionChannelException("INSTANCE_MISMATCH")
             remaining();true
-        }catch(error:ExecutionChannelException){if(error.code!="CONNECTION_ABSENT")throw error;false}
-        if(reachable())return pairing
+        }catch(error:ExecutionChannelException){
+            // A frozen Termux process can keep its listener while the read-only
+            // readiness ping times out. Wake it once, then authenticate the same
+            // pairing again; this classification never applies to user operations.
+            if(error.code!="CONNECTION_ABSENT"&&error.code!="CONNECTION_UNCONFIRMED")throw error
+            false
+        }
+        if(wakeExpected==null&&reachable())return pairing
         // The independent control socket remains separate. Only overlapping
-        // absent-listener launches are coalesced, outside every native input lease.
+        // unavailable-listener wakeups are coalesced, outside every native input lease.
         if(!existingStart.tryLock(remaining(),java.util.concurrent.TimeUnit.MILLISECONDS))throw ExecutionChannelException("EXISTING_EXECUTOR_UNAVAILABLE")
         try{
-            remaining();if(reachable())return pairing
+            remaining();if(wakeExpected==null&&reachable())return pairing
             requireReady();remaining()
-            if(!dispatch("if [ ! -x '$PYTHON' ] || [ ! -f '$SCRIPT' ]; then exit 78; fi; exec '$PYTHON' '$SCRIPT' serve-existing >/dev/null 2>&1",null))throw ExecutionChannelException("TERMUX_START_UNCONFIRMED")
+            launchExisting(pairing)
             do{remaining();if(reachable())return pairing;Thread.sleep(minOf(100L,remaining()))}while(true)
         }finally{existingStart.unlock()}
     }
-    fun requireReady() {
+    fun requireReady() = requireReady(allowSourceCheck = false)
+
+    /** Called only while existingStart is held. Both initial and recovery launches advance it. */
+    private fun launchExisting(pairing:ExecutionPairing) {
+        if(!dispatch("if [ ! -x '$PYTHON' ] || [ ! -f '$SCRIPT' ]; then exit 78; fi; exec '$PYTHON' '$SCRIPT' serve-existing >/dev/null 2>&1",null))throw ExecutionChannelException("TERMUX_START_UNCONFIRMED")
+        lastExistingLaunch=pairing;existingLaunchGeneration.incrementAndGet()
+    }
+
+    /** Only the explicit connect action may fetch source proof for newly installed GitHub bytes. */
+    private fun requireReady(allowSourceCheck: Boolean) {
         val pm=context.packageManager
         val pkg=try { pm.getPackageInfo("com.termux",PackageManager.GET_SIGNING_CERTIFICATES) }
         catch (_: PackageManager.NameNotFoundException) { throw ExecutionChannelException("TERMUX_MISSING") }
-        val info=pkg.applicationInfo ?: throw ExecutionChannelException("TERMUX_UNTRUSTED")
+        val info=pkg.applicationInfo ?: throw ExecutionChannelException("TERMUX_SOURCE_UNSUPPORTED")
         val signers=pkg.signingInfo?.apkContentsSigners.orEmpty().map { ExecutionIdentity.sha256(it.toByteArray()) }
-        if (pkg.versionName!="0.118.3" || pkg.longVersionCode!=1002L || !info.splitSourceDirs.isNullOrEmpty() || signers!=listOf("b6da01480eefd5fbf2cd3771b8d1021ec791304bdd6c4bf41d3faabad48ee5e1")) throw ExecutionChannelException("TERMUX_UNTRUSTED")
+        if (signers.size != 1 || !info.splitSourceDirs.isNullOrEmpty()) throw ExecutionChannelException("TERMUX_SOURCE_UNSUPPORTED")
         val digest=MessageDigest.getInstance("SHA-256")
         File(info.sourceDir).inputStream().use { input -> val buffer=ByteArray(65536); while(true) { val count=input.read(buffer); if(count<0)break; digest.update(buffer,0,count) } }
         val hash=digest.digest().joinToString("") { "%02x".format(it) }
-        if (hash !in setOf("72fdb596045116bf5ba1b5bdf5b26fddb9acc0bd074ad9f2da9eb0ae85e83a4e","3550e61f4d9eb49b712fd1bd9519dc37085a4d8eb597c57a340f0a64859b7144")) throw ExecutionChannelException("TERMUX_UNTRUSTED")
         if (info.flags and ApplicationInfo.FLAG_STOPPED != 0) throw ExecutionChannelException("TERMUX_FORCE_STOPPED")
         if (context.checkSelfPermission(PERMISSION)!=PackageManager.PERMISSION_GRANTED) throw ExecutionChannelException("TERMUX_PERMISSION_REQUIRED")
+        TermuxSourceVerifier(File(context.noBackupFilesDir, "termux-source-proof")).requireTrusted(
+            TermuxArtifact(pkg.versionName.orEmpty(), hash, signers.single()), allowSourceCheck)
+        val service = try { pm.getServiceInfo(ComponentName("com.termux", "com.termux.app.RunCommandService"), 0) }
+        catch (_: PackageManager.NameNotFoundException) { throw ExecutionChannelException("TERMUX_CAPABILITY_UNSUPPORTED") }
+        if (!info.enabled || !service.enabled || !service.exported || service.permission != PERMISSION) throw ExecutionChannelException("TERMUX_CAPABILITY_UNSUPPORTED")
     }
     private fun dispatch(script: String, callback: PendingIntent?): Boolean {
         val intent=Intent("com.termux.RUN_COMMAND").apply {
@@ -128,6 +178,8 @@ class ExecutionTermuxGateway(private val context: Context) {
     }
     companion object {
         private val existingStart=java.util.concurrent.locks.ReentrantLock()
+        private val existingLaunchGeneration=java.util.concurrent.atomic.AtomicLong()
+        private var lastExistingLaunch:ExecutionPairing?=null
         const val PERMISSION="com.termux.permission.RUN_COMMAND"
         const val PORT=47193
         private const val PYTHON="/data/data/com.termux/files/usr/bin/python"

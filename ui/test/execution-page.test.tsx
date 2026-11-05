@@ -1,22 +1,53 @@
 // @vitest-environment jsdom
 import {expect,it} from 'vitest';
-import {cleanup,render,screen,fireEvent} from '@testing-library/react';
+import {cleanup,render,screen,fireEvent,waitFor} from '@testing-library/react';
+import type {ApplicationRequest} from '../../runtime/src/application-protocol';
 import {ExecutionPanel} from '../src/extensions/execution';
+import TermuxSettings from '../src/extensions/termux';
 import {ConversationController,type UiState} from '../src/controller';
 import {ApplicationClient} from '../src/client';
+
+it('offers official installation sources through native browser actions without connecting or navigating the privileged page',async()=>{
+ const requests:ApplicationRequest[]=[];
+ const client=new ApplicationClient({postMessage:json=>{
+  const request:ApplicationRequest=JSON.parse(json);requests.push(request);
+  const value=request.method==='status'?{phase:'ready',extensions:['managed-execution']}:request.method==='execution.openDownload'?{opened:true}:{conversations:[]};
+  queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value}));
+ }});
+ const controller=new ConversationController(()=>client);
+ try{
+  await controller.connect();render(<TermuxSettings controller={controller} state={controller.snapshot()}/>);
+  fireEvent.click(screen.getByText('安装来源与兼容说明'));
+  expect(screen.getByText(/不限定单一版本/)).toBeTruthy();
+  expect(screen.getByText(/首次连接可能需要联网核验/)).toBeTruthy();
+  expect(screen.getByText(/请勿为连接而卸载/)).toBeTruthy();
+  fireEvent.click(screen.getByRole('button',{name:'GitHub 官方发布页 ↗'}));
+  await waitFor(()=>expect(requests.some(request=>request.method==='execution.openDownload')).toBe(true));
+  await Promise.resolve();
+  fireEvent.click(screen.getByRole('button',{name:'F-Droid 官方页面 ↗'}));
+  await waitFor(()=>expect(requests.filter(request=>request.method==='execution.openDownload')).toHaveLength(2));
+  expect(requests.filter(request=>request.method.startsWith('execution.')).map(({method,payload})=>({method,payload}))).toEqual([
+   {method:'execution.openDownload',payload:{source:'github'}},{method:'execution.openDownload',payload:{source:'fdroid'}},
+  ]);
+  expect(screen.queryByRole('link')).toBeNull();
+ }finally{cleanup();controller.dispose();}
+});
 
 it('keeps application uncertainty and a pending cancel distinct from a confirmed stop',()=>{
   const controller=new ConversationController(()=>new ApplicationClient(undefined));
   const state:UiState={...controller.snapshot(),activeId:'one',execution:{rows:[{executionId:'lost',state:'unknown',source:'application',reason:'CLIENT_CONFIRMATION_LOST'},{executionId:'pending',state:'stop_requested'},{executionId:'incomplete',state:'completed',exitCode:0,captureIncomplete:true}],conversationId:'one',loading:false,connecting:false,copying:false,pending:[],connected:false}};
   try{
-    render(<ExecutionPanel controller={controller} state={state}/>);
+    const {rerender}=render(<ExecutionPanel controller={controller} state={state}/>);
     expect(screen.getByText('未收到执行端确认')).toBeTruthy();
     expect(screen.getByText('取消已请求，等待停止确认')).toBeTruthy();
     expect(screen.queryByText('已停止')).toBeNull();
     expect(screen.getByText('输出不完整')).toBeTruthy();
     expect(screen.getByText('退出码 0')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button',{name:'Termux 安装与连接'}));
+    expect(controller.snapshot().page).toBe('termux');
+    rerender(<TermuxSettings controller={controller} state={state}/>);
     expect(screen.getByRole('button',{name:'复制初始化命令'})).toBeTruthy();
-    expect(screen.getByRole('button',{name:'连接执行环境'})).toBeTruthy();
+    expect(screen.getByRole('button',{name:'连接 Termux'})).toBeTruthy();
   }finally{cleanup();controller.dispose();}
 });
 

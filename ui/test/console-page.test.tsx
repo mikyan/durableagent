@@ -58,7 +58,7 @@ it('reaches the current conversation Data Saver wait from Console and grants onl
  }finally{f.controller.dispose();}
 });
 
-it('navigates between an independent home, conversation list, tools and settings without executing a command',async()=>{
+it('navigates between an independent home, conversation list, tools, Termux and settings without executing a command',async()=>{
  const f=consoleFixture();
  try{
   render(<App controller={f.controller}/>);
@@ -70,6 +70,8 @@ it('navigates between an independent home, conversation list, tools and settings
   fireEvent.click(screen.getByRole('button',{name:'打开会话列表'}));
   fireEvent.click(screen.getByRole('button',{name:'工具'}));
   expect(await screen.findByRole('heading',{name:'工具',level:1})).toBeTruthy();
+  fireEvent.click(screen.getByRole('button',{name:/Termux\s*安装、初始化与连接/}));
+  expect(await screen.findByRole('heading',{name:'Termux',level:1})).toBeTruthy();
   expect(screen.getByRole('button',{name:'复制初始化命令'})).toBeTruthy();
   fireEvent.click(screen.getByRole('button',{name:'打开会话列表'}));
   fireEvent.click(screen.getByRole('button',{name:'设置'}));
@@ -184,7 +186,7 @@ it('presents authentication failures in Chinese with a model settings action and
   expect(await screen.findByText(/模型服务拒绝了当前凭据/)).toBeTruthy();
   expect(screen.getByText(/鉴权失败.*401/)).toBeTruthy();
   fireEvent.click(screen.getByRole('button',{name:'检查模型与凭据'}));
-  expect(await screen.findByRole('heading',{name:'模型与连接',level:1})).toBeTruthy();
+  expect(await screen.findByRole('heading',{name:'模型',level:1})).toBeTruthy();
   expect(f.requests.some(row=>row.method==='send')).toBe(false);
  }finally{f.controller.dispose();}
 });

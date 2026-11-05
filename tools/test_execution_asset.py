@@ -10,7 +10,7 @@ from build_execution_setup import build
 
 
 class AssetTest(unittest.TestCase):
-    def test_copyable_command_contains_verified_complete_sources_and_pinned_packages(self):
+    def test_copyable_command_contains_verified_complete_sources_without_patch_version_gates(self):
         repo = Path(__file__).resolve().parents[1]
         command = build(repo)
         self.assertEqual(command, build(repo))
@@ -21,8 +21,10 @@ class AssetTest(unittest.TestCase):
         installer = gzip.decompress(compressed).decode()
         for name in ('durable_executor.py', 'execution_transport.py', 'file_service.py'):
             self.assertIn(base64.b64encode((repo / 'managed-execution' / name).read_bytes()).decode(), installer)
-        self.assertIn('python=3.14.8', command)
-        self.assertIn('openssl-tool=1:3.6.5', command)
+        self.assertNotRegex(command, r'python=\d|openssl-tool=\d')
+        self.assertIn('--check-python', command)
+        self.assertIn('--check-runtime', command)
+        self.assertIn('--no-upgrade', command)
         self.assertIn('--no-remove', command)
         self.assertIn('--force-confold', command)
         self.assertNotIn('rm -rf', command)

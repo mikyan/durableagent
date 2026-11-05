@@ -4,11 +4,15 @@
 
 ## 初始化
 
-1. 使用 T03 已验证的官方 Termux 0.118.3，完成首次打开。
+1. 保留现有 Termux 安装和数据，先核对[安装来源与兼容策略](../docs/TERMUX-COMPATIBILITY.md)。新安装可从应用“本地执行 → 安装来源与兼容说明”打开 GitHub 或 F-Droid 官方页面，再完成 Termux 首次打开。
 2. 应用首页或会话页的“本地执行”区域点击“复制初始化命令”，到 Termux 粘贴运行。
-3. 返回应用点击“连接执行环境”，按 Android 系统界面授予 RUN_COMMAND 权限。
+3. 返回应用点击“连接执行环境”，按 Android 系统界面授予 RUN_COMMAND 权限；新识别的 GitHub 安装包可能需要联网核验官方发行记录。来源确认后仍须通过执行端握手，才能显示已连接。
 
-APK 中的 `execution-setup.txt` 由 `tools/build_execution_setup.py` 在 Gradle preBuild 时生成。它包含完整的两个生产 Python 脚本、压缩载荷 SHA-256 与安装器，不下载未固定的脚本。初始化只安装缺失的 `python=3.14.8`、`openssl-tool=1:3.6.5`；若已有不同版本，保留并停止，不降级。依赖安装使用原有包源、禁止移除包、保留已有配置。
+生产接入不再要求 Termux 版本必须是 0.118.3；T03 的固定版本保留为历史验证基线。来源可信、执行端能力兼容和完整设备验收是三个不同结论。普通恢复使用已核验的安装物，不在后台联网刷新来源，也不自动重新初始化或更换配对。
+
+APK 中的 `execution-setup.txt` 由 `tools/build_execution_setup.py` 在 Gradle preBuild 时生成。它包含完整的三个生产 Python 脚本、压缩载荷 SHA-256 与安装器，不下载未固定的脚本。初始化复用满足能力的现有 Python／OpenSSL，只从原有包源安装缺失的 `python`、`openssl-tool` 包名；不固定补丁版本。模拟计划若会更改或移除已安装依赖则停止，安装保留已有配置。
+
+共享能力检查在独立子进程及私有临时目录运行实际随包实现，覆盖 SQLite WAL／STRICT／JSON／事务、Python 文件 API、文件锁、subreaper／pidfd 自身 signal 0、生产 OpenSSL 证书操作与 Python TLS 加载。既有 Python 先预检，最终安装器写脚本和属性前再检查。失败保留原环境，不修改配对与账本；该探测不替代设备上的真实执行、停止和恢复验证。
 
 脚本固定安装在 `$HOME/.local/share/durableagent-execution`。安装器保留账本、密钥、工作区和其他文件，只更新自身 manifest 记录且内容仍匹配的脚本。运行中的服务或 guardian 持有锁时拒绝更新；符号链接、无归属脚本和用户修改均拒绝覆盖。中断安装只允许恢复同一已记录载荷。Termux 属性文件原内容会备份保留，末尾追加有效的 `allow-external-apps=true`。
 
@@ -35,7 +39,7 @@ Android／OEM 可以同时冻结执行进程与监督者。超时和断线只产
 ## 验证入口
 
 - Termux 临时目录：`python -m unittest test_executor test_transport test_production_wire -v`，含真实 SQLite、mTLS、子进程、文件效果和 SIGKILL 窗口。wire 测试需端口 47193 空闲。
-- 安装器临时目录：将 `tools/execution_setup_installer.py` 与 `tools/test_execution_setup.py` 放入同一 Termux 测试目录，运行 `python -m unittest test_execution_setup -v`。只操作测试创建的临时目录，不执行生产安装入口。
+- 安装器临时目录：保留仓库相对布局，复制 `tools/execution_setup_installer.py`、`tools/test_execution_setup.py` 及 `managed-execution/` 下三个生产脚本，在 `tools/` 运行 `python -m unittest test_execution_setup -v`。能力测试会读取这些实际生产脚本；只操作测试创建的临时目录，不执行生产安装入口。
 - 主机：`python -m unittest discover -s tools -p test_execution_asset.py -v`，以及 `ui/` 的 Vitest、typecheck 和 build。
 - Android：`ExecutionUiTest.setupButtonCopiesTheCompletePackagedCommandWithoutNode` 核验实际按钮复制的剪贴板与 APK 资产逐字相同；`ExecutionTransportTest` 验证原生存储、身份、回调与 TLS 边界。生产 bootstrap 测试要求已经完成真实初始化与权限流程。
 

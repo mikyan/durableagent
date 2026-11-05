@@ -1,0 +1,33 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.FileApplicationTest:
+INSTRUMENTATION_STATUS: test=originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: fileEvidence={"case":"pinned-file-contract-0","result":{"run":"2fc0c5ab-e75f-4f61-b3d6-c9c47a384b03","name":"binary reader reads byte ranges of the opened file","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t09-2fc0c5ab-e75f-4f61-b3d6-c9c47a384b03-conformance\/0","passed":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: fileEvidence={"case":"pinned-file-contract-1","result":{"run":"2fc0c5ab-e75f-4f61-b3d6-c9c47a384b03","name":"binary reader scans lines like decoding the whole file","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t09-2fc0c5ab-e75f-4f61-b3d6-c9c47a384b03-conformance\/1","passed":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: fileEvidence={"case":"pinned-file-contract-2","result":{"run":"2fc0c5ab-e75f-4f61-b3d6-c9c47a384b03","name":"binary reader keeps reading the file it opened after a rename","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t09-2fc0c5ab-e75f-4f61-b3d6-c9c47a384b03-conformance\/2","passed":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: fileEvidence={"case":"pinned-file-contract-3","result":{"run":"2fc0c5ab-e75f-4f61-b3d6-c9c47a384b03","name":"directory reader refuses missing paths and files","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t09-2fc0c5ab-e75f-4f61-b3d6-c9c47a384b03-conformance\/3","passed":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: fileEvidence={"case":"file-host-reopen","result":{"run":"2fc0c5ab-e75f-4f61-b3d6-c9c47a384b03","newModelRequests":0,"fixtureFilesRetained":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 149.956
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

@@ -1,0 +1,76 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.FileApplicationTest:
+INSTRUMENTATION_STATUS: test=originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: fileEvidence={"case":"original-roundtrip","result":{"run":"ada6294a-18fb-4a3c-8259-f80e0852f926","conversationId":"142678ea-7940-4ac0-9c7b-273bc9cef4f1","result":{"root":".durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926","canonical":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/nested\/original.bin","renamed":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/nested\/renamed.bin","originalReadSha256":"21d2dd19a7be6710a6dddb879d382fcccf37bc896b7b76ca43018335f8f6d576","bashWriteSha256":"b2adabd0a6befce9391a9877023b9a86b42f96c4b8d1f1f18054b0b2357a9138","finalSha256":"17fa4ffb988114bcc457e3e4e1a00aaa168e0043cf0f9594135d6743b7449dd6","finalBytes":11,"watchMode":"polling","diffPath":".durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/change.txt","names":["original.bin","renamed.bin"]},"changes":[{"operationId":"375c01a9-8f38-498a-9abd-fd4390b4322e","bindingId":"215a8669-5343-47a9-a1e5-c5f0681ef4a1","executionId":"4f7750d6-08c7-4c5b-8395-16cf733580d8","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/nested\/original.bin","namespace":"termux:50dd1912-d69d-486f-b7c6-b00718c25109","original":true,"state":"completed","scopeConfirmed":true,"diff":{"available":false,"reason":"binary"}},{"operationId":"341ef12e-466b-4411-8fcb-8ef8cecda2f5","bindingId":"215a8669-5343-47a9-a1e5-c5f0681ef4a1","executionId":"234b2a04-5065-4b6e-93ca-6cbf7a9cfc8a","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/nested\/original.bin","namespace":"termux:50dd1912-d69d-486f-b7c6-b00718c25109","original":true,"state":"completed","scopeConfirmed":true,"diff":{"available":false,"reason":"binary"}},{"operationId":"d712dc19-bc6b-4d1f-9127-d3f860a29ca4","bindingId":"215a8669-5343-47a9-a1e5-c5f0681ef4a1","executionId":"9608d586-00be-480c-810d-a5b81f8a6e0e","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/nested\/original.bin","namespace":"termux:50dd1912-d69d-486f-b7c6-b00718c25109","original":true,"state":"completed","scopeConfirmed":true,"diff":{"available":false,"reason":"binary"}},{"operationId":"81891322-eff9-4180-9c12-71a26e2336c5","bindingId":"215a8669-5343-47a9-a1e5-c5f0681ef4a1","executionId":"b53b3ab3-a948-4049-bc66-3af2716fbc93","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/nested\/original.bin","namespace":"termux:50dd1912-d69d-486f-b7c6-b00718c25109","original":true,"state":"completed","scopeConfirmed":true,"diff":{"available":false,"reason":"binary"}},{"operationId":"e8f617a3-74b0-4836-9261-c25eaaef6bcd","bindingId":"215a8669-5343-47a9-a1e5-c5f0681ef4a1","executionId":"caba4a73-3400-42d6-a2df-8800df32a6d5","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/nested\/original.bin","destination":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/nested\/renamed.bin","namespace":"termux:50dd1912-d69d-486f-b7c6-b00718c25109","original":true,"state":"completed","scopeConfirmed":true,"diff":{"available":true,"text":""}},{"operationId":"c40f7ae6-665b-4d99-be41-81c2b9e9e4d8","bindingId":"215a8669-5343-47a9-a1e5-c5f0681ef4a1","executionId":"9c8d01fa-ca24-4b95-b236-2646ed314452","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/nested\/original.bin","namespace":"termux:50dd1912-d69d-486f-b7c6-b00718c25109","original":true,"state":"completed","scopeConfirmed":true,"diff":{"available":true,"text":"--- before\n+++ after\n@@ -0,0 +1 @@\n+replacement"}},{"operationId":"5ec3c1de-83cc-4f3e-9ef1-8dce60d6a646","bindingId":"215a8669-5343-47a9-a1e5-c5f0681ef4a1","executionId":"b68eb902-006f-42a4-88e9-5e76d25867fb","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/change.txt","namespace":"termux:50dd1912-d69d-486f-b7c6-b00718c25109","original":true,"state":"completed","scopeConfirmed":true,"diff":{"available":true,"text":"--- before\n+++ after\n@@ -0,0 +1 @@\n+before\n"}},{"operationId":"f773e79f-2beb-486d-aa79-f71ff5a14d5d","bindingId":"215a8669-5343-47a9-a1e5-c5f0681ef4a1","executionId":"becef6d2-8f6f-4d30-a99a-20de56eae366","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/change.txt","namespace":"termux:50dd1912-d69d-486f-b7c6-b00718c25109","original":true,"state":"completed","scopeConfirmed":true,"diff":{"available":true,"text":"--- before\n+++ after\n@@ -1 +1 @@\n-before\n+真实修改-after\n"}},{"operationId":"ee905f52-070f-4e93-a790-52d19060ed79","bindingId":"215a8669-5343-47a9-a1e5-c5f0681ef4a1","executionId":"7328f10f-dd8e-4cb6-9e78-6ecd84ccba37","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926\/nested\/renamed.bin","namespace":"termux:50dd1912-d69d-486f-b7c6-b00718c25109","original":true,"state":"completed","scopeConfirmed":true,"diff":{"available":false,"reason":"binary"}}],"uiActualDiff":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalStateException: Completed file tool has no success marker: FILE_ROUNDTRIP
+FILE-ROUNDTRIP-PASS:{"root":".durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926","canonical":"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926/nested/original.bin","renamed":"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926/nested/renamed.bin","originalReadSha256":"21d2dd19a7be6710a6dddb879d382fcccf37bc896b7b76ca43018335f8f6d576","bashWriteSha256":"b2adabd0a6befce9391a9877023b9a86b42f96c4b8d1f1f18054b0b2357a9138","finalSha256":"17fa4ffb988114bcc457e3e4e1a00aaa168e0043cf0f9594135d6743b7449dd6","finalBytes":11,"watchMode":"polling","diffPath":".durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926/change.txt","names":["original.bin","renamed.bin"]}
+你好🌍
+FILE_DEPENDENCY
+<harness>
+[error] 文件操作未完成（not_found）
+</harness>
+你好🌍
+	at dev.durableagent.probe.FileApplicationTest.marker$lambda$0(FileApplicationTest.kt:54)
+	at dev.durableagent.probe.FileApplicationTest.$r8$lambda$-7pMw7U_X_RZsoq4H3brixnwFnc(Unknown Source:0)
+	at dev.durableagent.probe.FileApplicationTest$$ExternalSyntheticLambda8.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.FileApplicationTest.until(FileApplicationTest.kt:26)
+	at dev.durableagent.probe.FileApplicationTest.until$default(FileApplicationTest.kt:26)
+	at dev.durableagent.probe.FileApplicationTest.marker(FileApplicationTest.kt:54)
+	at dev.durableagent.probe.FileApplicationTest.originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux(FileApplicationTest.kt:71)
+
+INSTRUMENTATION_STATUS: stream=
+Error in originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux(dev.durableagent.probe.FileApplicationTest):
+java.lang.IllegalStateException: Completed file tool has no success marker: FILE_ROUNDTRIP
+FILE-ROUNDTRIP-PASS:{"root":".durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926","canonical":"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926/nested/original.bin","renamed":"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926/nested/renamed.bin","originalReadSha256":"21d2dd19a7be6710a6dddb879d382fcccf37bc896b7b76ca43018335f8f6d576","bashWriteSha256":"b2adabd0a6befce9391a9877023b9a86b42f96c4b8d1f1f18054b0b2357a9138","finalSha256":"17fa4ffb988114bcc457e3e4e1a00aaa168e0043cf0f9594135d6743b7449dd6","finalBytes":11,"watchMode":"polling","diffPath":".durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926/change.txt","names":["original.bin","renamed.bin"]}
+你好🌍
+FILE_DEPENDENCY
+<harness>
+[error] 文件操作未完成（not_found）
+</harness>
+你好🌍
+	at dev.durableagent.probe.FileApplicationTest.marker$lambda$0(FileApplicationTest.kt:54)
+	at dev.durableagent.probe.FileApplicationTest.$r8$lambda$-7pMw7U_X_RZsoq4H3brixnwFnc(Unknown Source:0)
+	at dev.durableagent.probe.FileApplicationTest$$ExternalSyntheticLambda8.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.FileApplicationTest.until(FileApplicationTest.kt:26)
+	at dev.durableagent.probe.FileApplicationTest.until$default(FileApplicationTest.kt:26)
+	at dev.durableagent.probe.FileApplicationTest.marker(FileApplicationTest.kt:54)
+	at dev.durableagent.probe.FileApplicationTest.originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux(FileApplicationTest.kt:71)
+
+INSTRUMENTATION_STATUS: test=originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 104.317
+There was 1 failure:
+1) originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux(dev.durableagent.probe.FileApplicationTest)
+java.lang.IllegalStateException: Completed file tool has no success marker: FILE_ROUNDTRIP
+FILE-ROUNDTRIP-PASS:{"root":".durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926","canonical":"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926/nested/original.bin","renamed":"/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926/nested/renamed.bin","originalReadSha256":"21d2dd19a7be6710a6dddb879d382fcccf37bc896b7b76ca43018335f8f6d576","bashWriteSha256":"b2adabd0a6befce9391a9877023b9a86b42f96c4b8d1f1f18054b0b2357a9138","finalSha256":"17fa4ffb988114bcc457e3e4e1a00aaa168e0043cf0f9594135d6743b7449dd6","finalBytes":11,"watchMode":"polling","diffPath":".durableagent-t10-ada6294a-18fb-4a3c-8259-f80e0852f926/change.txt","names":["original.bin","renamed.bin"]}
+你好🌍
+FILE_DEPENDENCY
+<harness>
+[error] 文件操作未完成（not_found）
+</harness>
+你好🌍
+	at dev.durableagent.probe.FileApplicationTest.marker$lambda$0(FileApplicationTest.kt:54)
+	at dev.durableagent.probe.FileApplicationTest.$r8$lambda$-7pMw7U_X_RZsoq4H3brixnwFnc(Unknown Source:0)
+	at dev.durableagent.probe.FileApplicationTest$$ExternalSyntheticLambda8.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.FileApplicationTest.until(FileApplicationTest.kt:26)
+	at dev.durableagent.probe.FileApplicationTest.until$default(FileApplicationTest.kt:26)
+	at dev.durableagent.probe.FileApplicationTest.marker(FileApplicationTest.kt:54)
+	at dev.durableagent.probe.FileApplicationTest.originalFilesRoundtripAndPinnedSdkContractsThroughActualTermux(FileApplicationTest.kt:71)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

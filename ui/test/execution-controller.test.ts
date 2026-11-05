@@ -1,4 +1,4 @@
-import {expect,it} from 'vitest';
+import {expect,it,vi} from 'vitest';
 import type {ApplicationRequest} from '../../runtime/src/application-protocol';
 import {ApplicationClient} from '../src/client';
 import {ExecutionCoordinator} from '../src/execution';
@@ -16,6 +16,100 @@ it('explains manual Termux reopening after an asynchronous force-stop error with
   expect(execution.view().rows).toEqual([row]);
   expect(requests.map(request=>request.method)).toEqual(['execution.list','execution.query']);
  }finally{client.dispose();}
+});
+
+it('asks for explicit source verification without reconnecting or changing a retained execution',async()=>{
+ const requests:ApplicationRequest[]=[],row={executionId:'retained',state:'completed',sequence:3};
+ const client=new ApplicationClient({postMessage:json=>{
+  const request:ApplicationRequest=JSON.parse(json);requests.push(request);
+  const reply:{ok:true;value:unknown}|{ok:false;error:{code:string;message:string}}=request.method==='execution.list'?{ok:true,value:{executions:[row]}}:request.method==='execution.connect'?{ok:true,value:{protocol:1,executorId:'peer',ledgerEpoch:'ledger'}}:{ok:false,error:{code:'TERMUX_SOURCE_UNVERIFIED',message:'执行通道未完成请求（TERMUX_SOURCE_UNVERIFIED）'}};
+  queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,...reply}));
+ }});
+ const execution=new ExecutionCoordinator(()=>client,()=>{});
+ try{
+  await execution.refresh('conversation');await execution.query('retained');
+  expect(execution.view().error).toContain('当前 Termux 安装包的来源尚未确认');
+  expect(execution.view().error).toContain('联网后点击“连接执行环境”');
+  expect(execution.view().rows).toEqual([row]);
+  expect(requests.map(request=>request.method)).toEqual(['execution.list','execution.query']);
+  await execution.connect();
+  expect(execution.view().connected).toBe(true);expect(execution.view().error).toBeUndefined();
+  expect(execution.view().rows).toEqual([row]);
+ }finally{client.dispose();}
+});
+
+it.each([
+ ['TERMUX_SOURCE_UNAVAILABLE','暂时无法获取官方发行记录','联网后重试'],
+ ['TERMUX_SOURCE_UNSUPPORTED','暂不支持此 Termux 安装来源或打包形式','保留现有 Termux'],
+ ['TERMUX_CAPABILITY_UNSUPPORTED','外部命令接口不兼容','核对安装渠道与版本'],
+ ['TERMUX_MISSING','尚未安装 Termux','官方发布页'],
+ ['TERMUX_PERMISSION_REQUIRED','尚未取得 Termux 命令执行授权','连接执行环境'],
+ ['SETUP_REQUIRED','尚未完成执行环境初始化','复制初始化命令'],
+])('explains %s separately without presenting a failed connection as ready',async(code,reason,nextStep)=>{
+ const client=new ApplicationClient({postMessage:json=>{
+  const request:ApplicationRequest=JSON.parse(json);
+  queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:false,error:{code,message:'执行通道未完成请求（'+code+'）'}}));
+ }});
+ const execution=new ExecutionCoordinator(()=>client,()=>{});
+ try{await execution.connect();expect(execution.view().connected).toBe(false);expect(execution.view().connecting).toBe(false);expect(execution.view().error).toContain(reason);expect(execution.view().error).toContain(nextStep);}finally{client.dispose();}
+});
+
+it('keeps an explicitly requested connection pending while source verification and bootstrap complete',async()=>{
+ vi.useFakeTimers();let request:ApplicationRequest|undefined;
+ const client=new ApplicationClient({postMessage:json=>{request=JSON.parse(json);}});
+ const execution=new ExecutionCoordinator(()=>client,()=>{});
+ try{
+  const pending=execution.connect();
+  await vi.advanceTimersByTimeAsync(45000);
+  expect(execution.view().connecting).toBe(true);expect(execution.view().error).toBeUndefined();
+  client.receive({type:'response',protocol:1,connectionId:request!.connectionId,requestId:request!.requestId,ok:true,value:{protocol:1,executorId:'peer',ledgerEpoch:'ledger'}});
+  await pending;expect(execution.view().connected).toBe(true);expect(execution.view().connecting).toBe(false);
+ }finally{client.dispose();vi.useRealTimers();}
+});
+
+it.each([
+ ['BOOTSTRAP_PROTOCOL_MISMATCH','握手协议或响应无法确认','核对本应用与执行端是否为配套发布版本'],
+ ['INSTANCE_MISMATCH','无法确认执行端身份','确认连接的是原有 Termux 执行环境'],
+])('explains %s while preserving retained executions and pairing',async(code,reason,nextStep)=>{
+ const requests:ApplicationRequest[]=[],row={executionId:'retained',state:'completed',sequence:3};
+ const client=new ApplicationClient({postMessage:json=>{
+  const request:ApplicationRequest=JSON.parse(json);requests.push(request);
+  queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,...(request.method==='execution.list'?{ok:true,value:{executions:[row]}}:{ok:false,error:{code,message:'执行通道未完成请求（'+code+'）'}})}));
+ }});
+ const execution=new ExecutionCoordinator(()=>client,()=>{});
+ try{
+  await execution.refresh('conversation');await execution.connect();
+  expect(execution.view().connected).toBe(false);expect(execution.view().connecting).toBe(false);
+  expect(execution.view().error).toContain(reason);expect(execution.view().error).toContain(nextStep);
+  expect(execution.view().error).toContain('保留现有配对和执行记录');expect(execution.view().error).toContain('不要重新初始化');
+  expect(execution.view().rows).toEqual([row]);
+  expect(requests.map(request=>request.method)).toEqual(['execution.list','execution.connect']);
+ }finally{client.dispose();}
+});
+
+it('opens only the selected official download source through the native route without connecting',async()=>{
+ const requests:ApplicationRequest[]=[];
+ const client=new ApplicationClient({postMessage:json=>{
+  const request:ApplicationRequest=JSON.parse(json);requests.push(request);
+  queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value:{opened:true}}));
+ }});
+ const execution=new ExecutionCoordinator(()=>client,()=>{});
+ try{
+  await execution.openDownload('github');await execution.openDownload('fdroid');
+  expect(requests.map(({method,payload})=>({method,payload}))).toEqual([
+   {method:'execution.openDownload',payload:{source:'github'}},{method:'execution.openDownload',payload:{source:'fdroid'}},
+  ]);
+  expect(execution.view().connected).toBe(false);expect(execution.view().notice).toContain('浏览器');
+ }finally{client.dispose();}
+});
+
+it('shows the official addresses when no external browser can open the download page',async()=>{
+ const client=new ApplicationClient({postMessage:json=>{
+  const request:ApplicationRequest=JSON.parse(json);
+  queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:false,error:{code:'TERMUX_DOWNLOAD_UNAVAILABLE',message:'unavailable'}}));
+ }});
+ const execution=new ExecutionCoordinator(()=>client,()=>{});
+ try{await execution.openDownload('github');expect(execution.view().openingSource).toBeUndefined();expect(execution.view().error).toContain('https://github.com/termux/termux-app/releases');expect(execution.view().notice).toBeUndefined();}finally{client.dispose();}
 });
 
 it('shows a durable writer queue before external acceptance and still allows native cancellation',async()=>{
