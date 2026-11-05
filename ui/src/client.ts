@@ -1,7 +1,8 @@
 import {APPLICATION_PROTOCOL,type ApplicationEnvelope,type ApplicationMethod,type ApplicationRequest,type ConversationSnapshot} from '../../runtime/src/application-protocol';
-import type {CredentialInfo,CredentialWriteRequest} from '../../runtime/src/model-protocol';
+import type {CredentialInfo,CredentialWriteRequest,ProviderAuthRequest,ProviderAuthSession} from '../../runtime/src/model-protocol';
 
-export interface NativePort {postMessage(message:string):void;writeCredential?(message:string):void;initialConversationId?():string|null}
+export interface NativePort {postMessage(message:string):void;writeCredential?(message:string):void;authenticateProvider?(message:string):void;initialConversationId?():string|null}
+export type ProviderAuthInput=Omit<ProviderAuthRequest,'protocol'|'connectionId'|'requestId'>;
 export type CredentialMutation={operation:'save';target:string;expectedGeneration:number;key:string}|{operation:'remove';target:string;expectedGeneration:number};
 export class ApplicationFailure extends Error {
   constructor(readonly code:string,message:string){super(message);this.name='ApplicationFailure';}
@@ -33,6 +34,17 @@ export class ApplicationClient {
       this.pending.set(requestId,{resolve:value=>resolve(value as CredentialInfo),reject,timer});
       try{this.port!.writeCredential!(JSON.stringify(request));}
       catch{clearTimeout(timer);this.pending.delete(requestId);reject(new ApplicationFailure('CREDENTIAL_WRITER_UNAVAILABLE','凭据写入连接已断开。'));}
+    });
+  }
+  authenticateProvider(input:ProviderAuthInput):Promise<ProviderAuthSession> {
+    if(this.disposed)return Promise.reject(new ApplicationFailure('CONNECTION_CLOSED','连接已关闭，请重新连接。'));
+    if(!this.port?.authenticateProvider)return Promise.reject(new ApplicationFailure('PROVIDER_AUTH_UNAVAILABLE','当前应用无法打开此登录方式，请更新应用后重试。'));
+    const request:ProviderAuthRequest={...input,protocol:APPLICATION_PROTOCOL,connectionId:this.connectionId,requestId:crypto.randomUUID()};
+    return new Promise<ProviderAuthSession>((resolve,reject)=>{
+      const timer=setTimeout(()=>{this.pending.delete(request.requestId);reject(new ApplicationFailure('RESPONSE_TIMEOUT','登录步骤尚未确认，请刷新登录状态。'));},this.timeoutMs);
+      this.pending.set(request.requestId,{resolve:value=>resolve(value as ProviderAuthSession),reject,timer});
+      try{this.port!.authenticateProvider!(JSON.stringify(request));}
+      catch{clearTimeout(timer);this.pending.delete(request.requestId);reject(new ApplicationFailure('PROVIDER_AUTH_UNAVAILABLE','登录连接已断开，请重新连接。'));}
     });
   }
   receive(envelope:ApplicationEnvelope) {

@@ -8,10 +8,10 @@ import {PROJECTS_EXTENSION} from '../../../runtime/src/project-protocol';
 import {builtInUiExtensions} from '../extensions';
 import {INPUT_BUDGETS} from '../../../runtime/src/input-protocol';
 import {DraftAttachments,bytes} from './attachments';
-import {SendStates} from './submissions';
+import {SendStates,SubmissionStatus} from './submissions';
 import {ExtensionPage} from '../extension-host';
 import {positionLabels} from '../project-view';
-import {ExecutionPanel} from './execution';
+import TermuxSettings from './termux';
 import {DocumentsPanel} from './documents';
 import {useConversationContext,contextLabel} from './context';
 import {AuxiliaryPanel,useWideLayout} from './auxiliary';
@@ -40,8 +40,8 @@ const PersistedMessageText=memo(function PersistedMessageText({text}:{text:strin
     {long&&<div className="long-message-control"><span>{expanded?'完整消息':'长消息已折叠，仅显示开头。'}{markedControls?' 控制字符以符号标示。':''}</span><button type="button" data-testid="toggle-long-message" aria-expanded={expanded} aria-controls={textId} onClick={()=>setExpanded(value=>!value)}>{expanded?'收起长消息':'展开完整消息'}</button></div>}
   </>;
 });
-function Icon({name}:{name:'menu'|'plus'|'grid'|'send'|'close'|'home'|'chat'|'stop'}) {
-  const paths={menu:<><path d="M5 7h14M5 12h14M5 17h14"/></>,plus:<path d="M12 5v14M5 12h14"/>,grid:<><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></>,send:<path d="M12 19V5m-6 6 6-6 6 6"/>,close:<path d="m6 6 12 12M6 18 18 6"/>,home:<><path d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-7h6v7"/></>,chat:<path d="M20 11a8 8 0 0 1-8 8H5l-3 3V11a9 9 0 0 1 18 0Z"/>,stop:<rect className="stop-icon" x="7" y="7" width="10" height="10" rx="2"/>};
+function Icon({name}:{name:'menu'|'plus'|'grid'|'send'|'close'|'home'|'chat'|'stop'|'back'}) {
+  const paths={menu:<><path d="M5 7h14M5 12h14M5 17h14"/></>,plus:<path d="M12 5v14M5 12h14"/>,grid:<><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></>,send:<path d="M12 19V5m-6 6 6-6 6 6"/>,close:<path d="m6 6 12 12M6 18 18 6"/>,home:<><path d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-7h6v7"/></>,chat:<path d="M20 11a8 8 0 0 1-8 8H5l-3 3V11a9 9 0 0 1 18 0Z"/>,stop:<rect className="stop-icon" x="7" y="7" width="10" height="10" rx="2"/>,back:<path d="m14 6-6 6 6 6"/>};
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
 }
 
@@ -57,7 +57,7 @@ export default function ConversationPage({controller,state}:{controller:Conversa
   const nativeClient=controller.extensionClient;
   useEffect(()=>{let active=true;setCamera(false);if(nativeClient)void nativeClient.request<{camera:boolean}>('input.capabilities').then(value=>{if(active)setCamera(value.camera===true);},()=>{});return()=>{active=false;};},[nativeClient]);
   const [highlighted,setHighlighted]=useState<string>();
-  const scroll=useRef<HTMLDivElement>(null),follow=useRef(true),input=useRef<HTMLTextAreaElement>(null);
+  const main=useRef<HTMLElement>(null),scroll=useRef<HTMLDivElement>(null),follow=useRef(true),input=useRef<HTMLTextAreaElement>(null);
   const conversations=[...state.conversations,...state.inputConversations.filter(item=>!state.conversations.some(existing=>existing.id===item.id)).map(item=>({...item,phase:undefined,workspaceId:undefined}))];
   const active=state.conversation?.conversation??conversations.find(item=>item.id===state.activeId);
   const context=useConversationContext(controller,state);
@@ -73,8 +73,9 @@ export default function ConversationPage({controller,state}:{controller:Conversa
   const stoppable=running||state.pending||state.submissions?.items.some(item=>!item.intent?.cancelled&&item.status?.submission?.status!=='done'&&item.status?.submission?.status!=='unanswered')||!!state.submissions?.control?.pendingAbort;
   const sendContext=state.draft?.submissionContext??active?.submissionContext;
   const modelsPage=state.page==='models';
-  const projectsPage=state.page==='projects',extensionsPage=state.page==='extensions',toolsPage=state.page==='tools',preferencesPage=state.page==='settings',listPage=state.page==='conversations',settingsPage=state.page!=='conversation';
-  const pageTitle={conversation:'聊天',conversations:'会话列表',models:'模型与连接',projects:'项目与工作区',extensions:'扩展与时间线',tools:'工具',settings:'设置'}[state.page];
+  const projectsPage=state.page==='projects',extensionsPage=state.page==='extensions',toolsPage=state.page==='tools',termuxPage=state.page==='termux',preferencesPage=state.page==='settings',listPage=state.page==='conversations',settingsPage=state.page!=='conversation';
+  const providerPage=modelsPage&&!!state.modelProviderId;
+  const pageTitle=providerPage?(state.models?.providers?.find(provider=>provider.id===state.modelProviderId)?.name??'OpenAI 兼容 API'):{conversation:'聊天',conversations:'会话列表',models:'模型',projects:'项目与工作区',extensions:'扩展与时间线',tools:'工具',termux:'Termux',settings:'设置'}[state.page];
   const hasDataSaver=ready&&state.status.extensions.includes(DATA_SAVER_EXTENSION.id);
   useEffect(()=>{
     if(!hasDataSaver)return;let active=true;let timer:ReturnType<typeof setTimeout>;
@@ -84,12 +85,20 @@ export default function ConversationPage({controller,state}:{controller:Conversa
   const hasModels=state.status.extensions.includes(MODELS_EXTENSION.id);
   const hasProjects=state.status.extensions.includes(PROJECTS_EXTENSION.id);
   const startupReason=state.status.reason??(state.status.phase==='opening'?'正在连接运行宿主…':state.status.phase==='configuring'?'正在装载配置，请稍候。':state.status.phase==='closed'?'运行宿主已关闭，请重新连接。':state.status.phase==='failed'?'连接未完成，请重新连接。':!ready?'当前运行宿主未提供会话功能。':undefined);
-  const reason=state.error??startupReason;
+  const reason=settingsPage||!state.activeId?state.error??startupReason:startupReason;
+  useEffect(()=>{
+    const motion=window.matchMedia?.('(prefers-reduced-motion: reduce)');
+    if(motion?.matches)return;
+    const content=main.current?.querySelector<HTMLElement>('.settings-scroll,.home-content,.thread-scroll');
+    const animation=content?.animate?.([{opacity:.35,transform:'translateY(7px)'},{opacity:1,transform:'translateY(0)'}],{duration:220,easing:'cubic-bezier(.2,.7,.2,1)'});
+    const changed=()=>{if(motion?.matches)animation?.cancel();};motion?.addEventListener('change',changed);
+    return()=>{animation?.cancel();motion?.removeEventListener('change',changed);};
+  },[state.page,state.modelProviderId,state.activeId]);
   useEffect(()=>{follow.current=true;setDetails(false);setAttachments(false);setHighlighted(undefined);},[state.activeId]);
   useEffect(()=>{
     const element=scroll.current;
     if(element&&follow.current)element.scrollTop=element.scrollHeight;
-  },[state.activeId,state.history,state.conversation?.progress?.text]);
+  },[state.activeId,state.history,state.conversation?.progress?.text,state.conversation?.activity?.kind,state.submissions]);
   useEffect(()=>{
     const close=(event:KeyboardEvent)=>{if(event.key==='Escape'){setDetails(false);setNavigation(false);setAttachments(false);setAuxiliary(false);}};
     window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close);
@@ -100,7 +109,7 @@ export default function ConversationPage({controller,state}:{controller:Conversa
   const reconnect=()=>{setDetails(false);void controller.reconnect();};
   const models=()=>{if(!wide)setNavigation(false);setDetails(false);void controller.openModels();};
   const projects=()=>{if(!wide)setNavigation(false);setDetails(false);void controller.openProjects();};
-  const navigate=(page:'conversations'|'tools'|'settings')=>{if(!wide)setNavigation(false);setDetails(false);setAttachments(false);controller.showPage(page);};
+  const navigate=(page:'conversations'|'tools'|'termux'|'settings')=>{if(!wide)setNavigation(false);setDetails(false);setAttachments(false);controller.showPage(page);};
   function jump(id:string){
     const target=Array.from(scroll.current?.querySelectorAll<HTMLElement>('[data-message-id]')??[]).find(row=>row.dataset.messageId===id);
     if(!target)return;follow.current=false;setHighlighted(id);setDetails(false);target.scrollIntoView?.({block:'center',behavior:'auto'});target.focus({preventScroll:true});
@@ -120,26 +129,26 @@ export default function ConversationPage({controller,state}:{controller:Conversa
       <button className="brand" onClick={home} aria-label="返回首页"><span className="brand-mark">π</span><span>Durable Agent<small>你的本地会话空间</small></span></button>
       <button className={`nav-item ${!state.activeId&&!settingsPage?'selected':''}`} onClick={home}><Icon name="home"/>首页</button>
       <button className="nav-item" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>新建</button>
-      <button className={`nav-item ${modelsPage?'selected':''}`} data-testid="open-model-settings" onClick={models}><Icon name="grid"/>模型与连接</button>
+      <button className={`nav-item ${modelsPage?'selected':''}`} data-testid="open-model-settings" onClick={models}><Icon name="grid"/>模型</button>
       <button className={`nav-item ${projectsPage?'selected':''}`} data-testid="open-project-settings" onClick={projects}><Icon name="grid"/>项目与工作区</button>
       <button className={`nav-item ${extensionsPage?'selected':''}`} data-testid="open-extensions" onClick={()=>{if(!wide)setNavigation(false);setDetails(false);controller.openExtensions();}}><Icon name="grid"/>扩展与时间线</button>
       <button className={'nav-item'+(listPage?' selected':'')} onClick={()=>navigate('conversations')}><Icon name="chat"/>会话列表</button>
       <button className={'nav-item'+(toolsPage?' selected':'')} onClick={()=>navigate('tools')}><Icon name="grid"/>工具</button>
+      <button className={'nav-item'+(termuxPage?' selected':'')} onClick={()=>navigate('termux')}><span className="nav-terminal" aria-hidden="true">›_</span>Termux</button>
       <button className={'nav-item'+(preferencesPage?' selected':'')} onClick={()=>navigate('settings')}><Icon name="grid"/>设置</button>
       <div className="section-caption">会话</div>
       <div className="conversation-list">
         {conversations.map(conversation=><button className={`nav-item ${state.activeId===conversation.id?'selected':''}`} key={conversation.id} onClick={()=>open(conversation.id)} disabled={!ready&&!state.status.readOnly&&!state.inputReady}><Icon name="chat"/><span>{conversation.title}</span></button>)}
         {!conversations.length&&<p className="nav-empty">还没有会话</p>}
       </div>
-      <div className="nav-foot"><span className={`dot ${ready?'ready':''}`}/>{ready?'运行宿主已连接':'等待运行宿主'}</div>
     </aside>
-    <main className={`main ${settingsPage?'models-page':state.activeId?'chat-page':'home-page'}`}>
+    <main ref={main} className={`main ${settingsPage?'models-page':state.activeId?'chat-page':'home-page'}`}>
       <header className="topbar">
-        <button className="round-button menu-button" aria-label="打开会话列表" aria-expanded={navigationOpen} onClick={()=>setNavigation(!navigationOpen)}><Icon name="menu"/></button>
+        {providerPage?<button className="round-button" aria-label="返回模型列表" onClick={()=>controller.showModelProvider()}><Icon name="back"/></button>:<button className="round-button menu-button" aria-label="打开会话列表" aria-expanded={navigationOpen} onClick={()=>setNavigation(!navigationOpen)}><Icon name="menu"/></button>}
         {settingsPage?<><div className="title-pill"><h1>{pageTitle}</h1></div><button className="round-button" aria-label="返回会话" onClick={()=>controller.showPage('conversation')}><Icon name="close"/></button></>:state.activeId?<><div className="title-pill"><span className={`dot phase-${phase}`}/><h1>{active?.title??'正在打开会话'}</h1></div><button className="round-button" data-testid="create-conversation" aria-label="新建会话" disabled={!ready||state.pending} onClick={create}><Icon name="plus"/></button></>:<span className="topbar-label">本地 · 会话</span>}
       </header>
       {reason&&<div className="connection-notice" role={state.error?'alert':'status'}><span>{reason}</span><button onClick={reconnect}>重新连接</button></div>}
-      {toolsPage?<div className="settings-scroll" data-testid="tools-page"><div className="settings-content"><p className="cloud-disclosure">命令和原文件使用手机上已配置的执行环境与系统授权。</p>{hasDataSaver&&state.dataSaver&&<DataSaverPanel policy={controller.dataSaver} view={state.dataSaver}/>}<ExecutionPanel controller={controller} state={state}/><DocumentsPanel client={controller.extensionClient}/><button className="secondary-button" onClick={()=>controller.openExtensions()}>查看扩展与时间线</button></div></div>:preferencesPage?<div className="settings-scroll" data-testid="preferences-page"><div className="settings-content">{hasDataSaver&&state.dataSaver&&<DataSaverPanel policy={controller.dataSaver} view={state.dataSaver}/>}<section className="settings-section"><h2>运行与连接</h2><p>{ready?'运行宿主已连接。':startupReason}</p><button className="secondary-button" onClick={reconnect}>重新连接</button><button className="text-button" onClick={models}>模型与连接设置</button>{state.activeId&&<button className="text-button" onClick={()=>void controller.enableStopNotification()} disabled={!draftReady}>检查本会话系统停止通知</button>}</section><section className="settings-section"><h2>数据与隐私</h2><p>私有会话与草稿不参与系统备份。卸载或清除应用数据后，无法通过本应用恢复。</p><p>原文件与 Termux 的数据由各自位置和应用管理。隐藏页面不会删除历史。</p><p>模型请求会将本次会话采用的聊天、附件内容与工具结果发送给已配置的模型服务。</p></section></div></div>:listPage?<div className="settings-scroll"><div className="settings-content"><button className="primary-button" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>新建会话</button><section className="recent" aria-label="所有会话">{conversations.map(conversation=><button className="recent-row" key={conversation.id} onClick={()=>open(conversation.id)}><span className="recent-icon"><Icon name="chat"/></span><span className="recent-copy"><strong>{conversation.title}</strong><small>{conversation.model.name} · {conversation.phase?phases[conversation.phase]:'历史待连接'}</small></span><span className="chevron" aria-hidden="true">›</span></button>)}{!conversations.length&&<p className="empty-state">还没有会话。</p>}</section></div></div>:extensionsPage?<ExtensionPage client={controller.extensionClient} conversationId={state.activeId}/>:projectsPage?<Suspense fallback={<p className="empty-state">正在打开项目设置…</p>}><ProjectSettings controller={controller} state={state}/></Suspense>:modelsPage?<Suspense fallback={<p className="empty-state">正在打开模型设置…</p>}><ModelSettings controller={controller} state={state}/></Suspense>:!state.activeId?<div className="home-content">
+      {termuxPage?<TermuxSettings controller={controller} state={state}/>:toolsPage?<div className="settings-scroll" data-testid="tools-page"><div className="settings-content"><p className="cloud-disclosure">命令和原文件使用手机上已配置的执行环境与系统授权。</p>{hasDataSaver&&state.dataSaver&&<DataSaverPanel policy={controller.dataSaver} view={state.dataSaver}/>}<button className="settings-link-row" onClick={()=>navigate('termux')}><span><strong>Termux</strong><small>安装、初始化与连接</small></span><span aria-hidden="true">›</span></button><DocumentsPanel client={controller.extensionClient}/><button className="secondary-button" onClick={()=>controller.openExtensions()}>查看扩展与时间线</button></div></div>:preferencesPage?<div className="settings-scroll" data-testid="preferences-page"><div className="settings-content">{hasDataSaver&&state.dataSaver&&<DataSaverPanel policy={controller.dataSaver} view={state.dataSaver}/>}{state.activeId&&<section className="settings-section"><h2>通知</h2><button className="text-button" onClick={()=>void controller.enableStopNotification()} disabled={!draftReady}>检查本会话系统停止通知</button></section>}<section className="settings-section"><h2>数据与隐私</h2><p>私有会话与草稿不参与系统备份。卸载或清除应用数据后，无法通过本应用恢复。</p><p>原文件与 Termux 的数据由各自位置和应用管理。隐藏页面不会删除历史。</p><p>模型请求会将本次会话采用的聊天、附件内容与工具结果发送给已配置的模型服务。</p></section></div></div>:listPage?<div className="settings-scroll"><div className="settings-content"><button className="primary-button" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>新建会话</button><section className="recent" aria-label="所有会话">{conversations.map(conversation=><button className="recent-row" key={conversation.id} onClick={()=>open(conversation.id)}><span className="recent-icon"><Icon name="chat"/></span><span className="recent-copy"><strong>{conversation.title}</strong><small>{conversation.model.name} · {conversation.phase?phases[conversation.phase]:'历史待连接'}</small></span><span className="chevron" aria-hidden="true">›</span></button>)}{!conversations.length&&<p className="empty-state">还没有会话。</p>}</section></div></div>:extensionsPage?<ExtensionPage client={controller.extensionClient} conversationId={state.activeId}/>:projectsPage?<Suspense fallback={<p className="empty-state">正在打开项目设置…</p>}><ProjectSettings controller={controller} state={state}/></Suspense>:modelsPage?<Suspense fallback={<p className="empty-state">正在打开模型设置…</p>}><ModelSettings controller={controller} state={state}/></Suspense>:!state.activeId?<div className="home-content">
         <div className="home-brand">π</div><p className="eyebrow">DURABLE AGENT</p><h1>从一个问题开始</h1><p className="home-description">独立的会话，同一个工作空间。</p>
         <button className="primary-button" data-testid="create-conversation" onClick={create} disabled={!ready||state.pending}><Icon name="plus"/>{state.pending?'正在创建…':'新建会话'}</button>
         {hasModels&&state.models&&!state.models.defaultModel&&<p className="setup-model-hint">尚未选择默认模型。<button className="text-button" onClick={models}>设置模型与连接</button></p>}
@@ -158,14 +167,16 @@ export default function ConversationPage({controller,state}:{controller:Conversa
               <div className="message-label">{message.role==='user'?'你':message.role==='assistant'?<><span>π</span> Agent</>:message.role==='tool'?'工具':'系统'}<span className="saved-label">已保存</span></div>
               {message.text&&<PersistedMessageText text={message.text}/>}
               {message.attachments?.map((attachment,index)=><div className="history-attachment" data-testid="history-attachment" key={index}><strong>图片附件</strong><span>{attachment.mimeType} · {bytes(attachment.byteLength)}</span><details><summary>内容摘要</summary><code>{attachment.sha256}</code></details></div>)}
+              {state.submissions?.items.filter(item=>item.status?.submission?.entryId===message.id).map(item=><SubmissionStatus key={item.intentId} item={item} controller={controller} state={state}/>)}
             </article>)}
             {state.conversation?.progress&&<article className="message role-assistant progress-message" aria-label="未保存的回复进度"><div className="message-label"><span>π</span> Agent<span className="progress-label">生成中 · 尚未保存</span></div><div className="message-text">{state.conversation.progress.text}<span className="stream-cursor" aria-hidden="true"/></div></article>}
-            <div className={`turn-status phase-${phase}`} data-testid="conversation-status" data-phase={phase} role="status">{phase==='failed'&&state.conversation?.reason?<FailureNotice reason={state.conversation.reason} onModels={models}/>:!state.conversation?'运行状态待连接':state.conversation.reason??(phase==='done'?'回复已保存':phase==='running'&&!state.conversation?.progress?'正在等待回复…':phases[phase])}</div>
+            <article className={`message role-system activity-message phase-${phase}`} data-testid="conversation-status" data-phase={phase} role="status">{state.conversation?.activity?<><span className="activity-indicator" aria-hidden="true"/><span>{state.conversation.activity.kind==='thinking'?'正在思考…':state.conversation.activity.kind==='tool'?`正在执行工具${state.conversation.activity.label?' · '+state.conversation.activity.label:''}`:state.conversation.progress?'正在生成回复…':'正在等待模型回复…'}</span></>:phase==='failed'&&state.conversation?.reason?<FailureNotice reason={state.conversation.reason} onModels={models}/>:!state.conversation?'运行状态待连接':state.conversation.reason??(phase==='done'?'回复已保存':phase==='running'?'正在处理…':phases[phase])}</article>
+            {state.error&&<article className="message role-system activity-message send-error" role="alert">{state.error}</article>}
+            <SendStates controller={controller} state={state}/>
           </div>
         </div>
           {details&&<section className="details-panel" role="dialog" aria-label="会话详情"><div className="panel-heading"><h2>会话详情</h2><button className="plain-icon" aria-label="关闭详情" onClick={()=>setDetails(false)}><Icon name="close"/></button></div><HistoryNavigator controller={controller} state={state} onJump={jump}/><dl><div><dt>上下文</dt><dd>{contextLabel(context)}{context?.modelLimit?' / 模型上限 '+context.modelLimit.toLocaleString()+' token':' / 模型上限不可用'}<p>{context?.note??'正在读取 SDK 当前上下文。'}</p></dd></div><div><dt>YOLO</dt><dd>操作无需应用逐项审批。Android 系统授权、模型凭据与执行环境权限仍须有效。</dd></div><div><dt>模型</dt><dd>{active?.model.name??'正在读取'}</dd></div><div><dt>项目</dt><dd data-testid="detail-project">{project?.name??(location?'未关联项目':'项目待读取')}</dd></div><div><dt>工作区</dt><dd>{workspace}{workspaceRecord&&<code className="workspace-path">{workspaceRecord.path}</code>}{location&&<span className="detail-location" data-testid="detail-position" data-state={location.position.state}>{location.position.reason??positionLabels[location.position.state]}</span>}</dd></div><div><dt>状态</dt><dd>{state.conversation?phases[phase]:'运行状态待连接'}</dd></div><div><dt>历史</dt><dd>标记为“已保存”的消息已提交到存储。</dd></div></dl><div className="detail-actions"><button className="secondary-button" onClick={()=>{setDetails(false);setAuxiliary(true);}}>文件变更与执行</button>{hasProjects&&<button className="secondary-button" data-testid="detail-project-settings" onClick={projects}>选择项目与工作区</button>}<button className="secondary-button" onClick={()=>void controller.enableStopNotification()} disabled={!draftReady}>系统停止通知</button><button className="secondary-button" onClick={reconnect}>重新连接</button><button className="secondary-button" onClick={()=>void controller.stop()} disabled={!draftReady||state.submissions?.stopping}>停止此会话</button></div></section>}
         <div className="composer-area">
-          <SendStates controller={controller} state={state}/>
           <DraftAttachments controller={controller} state={state}/>
           {(state.draft?.error||state.inputError&&['failed','conflict'].includes(state.draft?.status??''))&&<div className="draft-error" role="alert"><span>{state.draft?.error??state.inputError}</span>{state.draft&&<div className="draft-recovery">{state.draft.status==='conflict'?<button type="button" onClick={()=>void controller.recoverDraft(true)}>保留本地内容并重试</button>:<button type="button" onClick={()=>void controller.retryDraft()}>重试保存</button>}<button type="button" onClick={()=>void controller.recoverDraft(false)}>恢复已保存版本</button></div>}</div>}
           {state.inputError&&!state.draft?.error&&!['failed','conflict'].includes(state.draft?.status??'')&&<details className="draft-read-notice"><summary>草稿状态暂未核验</summary><p>{state.inputError}</p><button type="button" className="text-button" onClick={()=>void controller.refreshDraft()}>刷新草稿状态</button></details>}
