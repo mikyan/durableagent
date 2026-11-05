@@ -1,0 +1,21 @@
+android/app/src/main/java/dev/durableagent/probe/ExecutionTermuxGateway.kt
+  s_467dcb949b5b60::t_15a3130a58935d 90-96,99
+docs/specs/console-followup.md
+  s_467dcb949b5b60::t_15a3130a58935d 21,28-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "723f15428e878a13e9156ff4003dbb94212c164e",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
