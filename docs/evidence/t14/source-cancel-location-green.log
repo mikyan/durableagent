@@ -1,0 +1,3 @@
+(node:49904) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"routingError":"SOURCE_STOPPED","accepted":false,"sourceCancelled":true,"targetCancelled":false,"sourceAbortPending":false,"locationEditOk":true}

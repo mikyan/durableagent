@@ -1,0 +1,21 @@
+
+> @durableagent/ui@0.1.0 pretest
+> npm run build --prefix ../runtime
+
+
+> @durableagent/runtime-probe@0.1.0 build
+> tsc
+
+
+> @durableagent/ui@0.1.0 test
+> vitest run --maxWorkers=2 test/console-page.test.tsx
+
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/ui
+
+
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Start at  21:16:52
+   Duration  4.06s (tests 62%, environment 31%, import 6%, transform 1%)
+

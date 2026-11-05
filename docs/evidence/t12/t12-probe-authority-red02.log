@@ -1,0 +1,30 @@
+(node:78584) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ an unavailable native recovery budget keeps an unknown effect pending instead of ending the input (311.5091ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 505.0393
+
+✖ failing tests:
+
+test at test\managed-execution.test.mjs:36:1
+✖ an unavailable native recovery budget keeps an unknown effect pending instead of ending the input (311.5091ms)
+  AssertionError [ERR_ASSERTION]: A missing observation budget is not a terminal model failure
+  
+  'done' !== 'waiting'
+  
+      at TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/managed-execution.test.mjs:44:59)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'done',
+    expected: 'waiting',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

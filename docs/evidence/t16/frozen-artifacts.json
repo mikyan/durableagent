@@ -1,0 +1,158 @@
+[
+  {
+    "candidate": "t16-candidate01",
+    "name": "control-app.apk",
+    "bytes": 2499024,
+    "sha256": "DC09C8B2CC9BD91ADC9A867AE6ABB7EF8AAFFE3312B2FFBD02E5DFD9F6C916D0"
+  },
+  {
+    "candidate": "t16-candidate01",
+    "name": "control-test.apk",
+    "bytes": 2157489,
+    "sha256": "3E266387ED0BA4AD0A90A7D38C32BEE9FF3E92CA1559AEDBD9548CE62FAA056B"
+  },
+  {
+    "candidate": "t16-candidate01",
+    "name": "input-source-allowlisted.apk",
+    "bytes": 18813,
+    "sha256": "237E13C709501B71DF49B47CD290A1177C313F8E8E8A113C5EB2B9200D601DEB"
+  },
+  {
+    "candidate": "t16-candidate01",
+    "name": "retention-app.apk",
+    "bytes": 350772172,
+    "sha256": "918A30EBAB7A3D55DAF8B4E1E07278184509B697F9CE2324EC4F9C23080A0DE2"
+  },
+  {
+    "candidate": "t16-candidate01",
+    "name": "retention-content-red-test.apk",
+    "bytes": 3321332,
+    "sha256": "2D1D6F2035F5BEE868974E06595B31B835E6340CCB969CEDC922C961A56A115E"
+  },
+  {
+    "candidate": "t16-candidate01",
+    "name": "retention-migration-red-test.apk",
+    "bytes": 3319148,
+    "sha256": "B27D4277C7B813C1234907092096C8150488368C9928E6F703AF333FAFDF97DE"
+  },
+  {
+    "candidate": "t16-candidate01",
+    "name": "retention-migration-red02-test.apk",
+    "bytes": 3319236,
+    "sha256": "CCF6472718969B897C18C1BABD125FDE37689B105C7FDAD440164AAADF751050"
+  },
+  {
+    "candidate": "t16-candidate01",
+    "name": "retention-test.apk",
+    "bytes": 2732139,
+    "sha256": "C4678D0EADE043F26652EDBBED1B2AF4A61B0CFC51658C8F052B0717A79A9683"
+  },
+  {
+    "candidate": "t16-candidate01",
+    "name": "rules-app.apk",
+    "bytes": 2499020,
+    "sha256": "E5DE128205DD93ABED93E34E5422227F846762DD36BB706C9242BDFAB7AD99D6"
+  },
+  {
+    "candidate": "t16-candidate01",
+    "name": "rules-test.apk",
+    "bytes": 2157485,
+    "sha256": "FF7547220AEFEC64F1186C6EE972127763DE7B80069B89390FF491680832BA52"
+  },
+  {
+    "candidate": "t16-candidate02",
+    "name": "retention-app.apk",
+    "bytes": 370777799,
+    "sha256": "5B791D347F38D30541064B72D74FD6B91FECA00421A05A232815F2AEB29D9522"
+  },
+  {
+    "candidate": "t16-candidate02",
+    "name": "retention-test.apk",
+    "bytes": 3321332,
+    "sha256": "2D1D6F2035F5BEE868974E06595B31B835E6340CCB969CEDC922C961A56A115E"
+  },
+  {
+    "candidate": "t16-candidate03",
+    "name": "retention-app.apk",
+    "bytes": 370781034,
+    "sha256": "D4C60B4850C1AC504E2AEDDA9708D54720F34B8CBC73B9F7639A5D5896C215F7"
+  },
+  {
+    "candidate": "t16-candidate03",
+    "name": "retention-test.apk",
+    "bytes": 3326364,
+    "sha256": "1A451DA64D69A5C42991630D50EF317A08EB17FC3C7E147619A169D65254DB13"
+  },
+  {
+    "candidate": "t16-candidate04-red",
+    "name": "retention-app.apk",
+    "bytes": 370781477,
+    "sha256": "05CD56EF77118CEC27C1BB8E1849D8A5B633FDDDF992D685B7624F5A9B764108"
+  },
+  {
+    "candidate": "t16-candidate04-red",
+    "name": "retention-readonly-red02-test.apk",
+    "bytes": 3337520,
+    "sha256": "94B4832B467167A40A15135D5B9959BDAAB5CE234C1E2CF0B5CC6605FC4D06F3"
+  },
+  {
+    "candidate": "t16-candidate04-red",
+    "name": "retention-test.apk",
+    "bytes": 3335992,
+    "sha256": "C02C78FDA29E1B4EB760A61B4DF01284E9FE2E3E978FE94E0963C092EC9E89E3"
+  },
+  {
+    "candidate": "t16-candidate04-red",
+    "name": "retention-text-red-test.apk",
+    "bytes": 3337716,
+    "sha256": "9C404157E9FF492FFB517F27B5D87E8808334C70C617E60B5BAFD640905006E6"
+  },
+  {
+    "candidate": "t16-candidate05",
+    "name": "retention-app.apk",
+    "bytes": 370781726,
+    "sha256": "30FF2F040427544DD5FD82009421DF7C864D916E8B89354184A0BCCF37E2011A"
+  },
+  {
+    "candidate": "t16-candidate05",
+    "name": "retention-test.apk",
+    "bytes": 3337476,
+    "sha256": "A89A5356E8CB3CB7B33053CE0C45EB8BAA273151B67E9EA1DEE3CCE1C8A881A5"
+  },
+  {
+    "candidate": "t16-candidate06",
+    "name": "retention-app.apk",
+    "bytes": 370781746,
+    "sha256": "620BAB3638F64A3A09CAEFF63C666829F49AABDF3F90F59F4DF7D4F4ABEDE861"
+  },
+  {
+    "candidate": "t16-candidate06",
+    "name": "retention-test.apk",
+    "bytes": 3337476,
+    "sha256": "A89A5356E8CB3CB7B33053CE0C45EB8BAA273151B67E9EA1DEE3CCE1C8A881A5"
+  },
+  {
+    "candidate": "t16-backup-nonce",
+    "name": "control-app.apk",
+    "bytes": 2499024,
+    "sha256": "DC09C8B2CC9BD91ADC9A867AE6ABB7EF8AAFFE3312B2FFBD02E5DFD9F6C916D0"
+  },
+  {
+    "candidate": "t16-backup-nonce",
+    "name": "control-test.apk",
+    "bytes": 2166962,
+    "sha256": "819E40D78588DB3908CD3D6F2B16A22AA472B5B2ECC437AE08877B8554708E8D"
+  },
+  {
+    "candidate": "t16-backup-nonce",
+    "name": "rules-app.apk",
+    "bytes": 2499020,
+    "sha256": "E5DE128205DD93ABED93E34E5422227F846762DD36BB706C9242BDFAB7AD99D6"
+  },
+  {
+    "candidate": "t16-backup-nonce",
+    "name": "rules-test.apk",
+    "bytes": 2166958,
+    "sha256": "E84C853D9F02AB406563FBBEC2279239D01BDBDD282B48056221EE5034B6E422"
+  }
+]

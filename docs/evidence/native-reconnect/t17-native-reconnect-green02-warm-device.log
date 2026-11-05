@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.HostReconnectApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.HostReconnectApplicationTest:
+INSTRUMENTATION_STATUS: test=renderedReconnectReopensFailedNativeOwnerAfterActualLeaseClearsWithoutResetOrSend
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: hostReconnectEvidence={"run":"5ad08bd2-e754-4307-ad49-13195915ef77","sdkId":5,"failed":{"phase":"failed","reason":"Application storage already owned","instance":"5e54b41d-a6dd-418c-a6eb-1447c350c730","pid":22832,"domainOwned":false,"nativeOwners":0},"reopened":{"phase":"ready","extensions":["data-saver","projects","conversation","input","submission"],"metrics":{},"instance":"84275d1a-36af-47ac-809c-fd1e9b7324d4","pid":22832,"domainOwned":true,"nativeOwners":1},"sameOwnerAfterHealthyReconnect":true,"draftRetained":true,"sends":0,"modelRequests":0}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.HostReconnectApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=renderedReconnectReopensFailedNativeOwnerAfterActualLeaseClearsWithoutResetOrSend
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 11.407
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

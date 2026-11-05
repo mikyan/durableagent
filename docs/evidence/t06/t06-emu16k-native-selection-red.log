@@ -1,0 +1,41 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeInputStoreTest:
+INSTRUMENTATION_STATUS: test=committedSelectionIsReturnedBeforeSlowSourceAndIndependentTextSaveIsPreserved
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeInputStoreTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.util.concurrent.TimeoutException
+	at java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1936)
+	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2071)
+	at dev.durableagent.probe.NativeInputStoreTest.committedSelectionIsReturnedBeforeSlowSourceAndIndependentTextSaveIsPreserved(NativeInputStoreTest.kt:215)
+
+INSTRUMENTATION_STATUS: stream=
+Error in committedSelectionIsReturnedBeforeSlowSourceAndIndependentTextSaveIsPreserved(dev.durableagent.probe.NativeInputStoreTest):
+java.util.concurrent.TimeoutException
+	at java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1936)
+	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2071)
+	at dev.durableagent.probe.NativeInputStoreTest.committedSelectionIsReturnedBeforeSlowSourceAndIndependentTextSaveIsPreserved(NativeInputStoreTest.kt:215)
+
+INSTRUMENTATION_STATUS: test=committedSelectionIsReturnedBeforeSlowSourceAndIndependentTextSaveIsPreserved
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 2.103
+There was 1 failure:
+1) committedSelectionIsReturnedBeforeSlowSourceAndIndependentTextSaveIsPreserved(dev.durableagent.probe.NativeInputStoreTest)
+java.util.concurrent.TimeoutException
+	at java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1936)
+	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2071)
+	at dev.durableagent.probe.NativeInputStoreTest.committedSelectionIsReturnedBeforeSlowSourceAndIndependentTextSaveIsPreserved(NativeInputStoreTest.kt:215)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

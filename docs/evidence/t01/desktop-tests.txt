@@ -1,0 +1,28 @@
+
+> @durableagent/runtime-probe@0.1.0 pretest
+> npm run build
+
+
+> @durableagent/runtime-probe@0.1.0 build
+> tsc
+
+
+> @durableagent/runtime-probe@0.1.0 test
+> node --test test/*.test.mjs
+
+(node:39888) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ a conversation streams Chinese text through the real SDK and reconnects to its state (308.1886ms)
+✔ stop aborts a hanging model read and close allows a fresh single owner (30.1241ms)
+✔ close during initialization never revives the session (4.2077ms)
+✔ tool arguments survive byte-split SSE and real pi-schema coercion (395.2161ms)
+✔ invalid tool arguments are rejected by the SDK before execution (368.9455ms)
+✔ the loaded module exercises required Node primitives and sqlite (1.7061ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1290.6176

@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.backupfixture.BackupChannelTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.backupfixture.BackupChannelTest:
+INSTRUMENTATION_STATUS: test=observeAfterChannel
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: backupEvidence={"stage":"observed","package":"dev.durableagent.backupfixture.rules","build":"google\/sdk_gphone64_x86_64\/emu64xa:16\/BE2A.250530.026.F3\/13894323:userdebug\/dev-keys","backupRun":"d2d-reinstall02-1793769018305630600","present":{"root":true,"file":true,"database":true,"external":true,"device_root":true,"device_file":true,"device_database":true,"no_backup":true,"credential":true,"sharedpref":true,"device_sharedpref":true},"matchesCurrentRun":{"root":true,"file":true,"database":true,"external":true,"device_root":true,"device_file":true,"device_database":true,"no_backup":true,"credential":true,"sharedpref":true,"device_sharedpref":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.backupfixture.BackupChannelTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=observeAfterChannel
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.039
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

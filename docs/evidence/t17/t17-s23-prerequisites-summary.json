@@ -1,0 +1,17 @@
+{
+  "capturedAt": "2026-11-04T16:02:10.124989+00:00",
+  "device": "Galaxy S23 SM-S9110",
+  "serialStored": false,
+  "exitCode": 0,
+  "installedVersions": [
+    "openssl-tool 1:3.6.5",
+    "python 3.14.8",
+    "Python 3.14.8",
+    "OpenSSL 3.6.5 29 Sep 2026"
+  ],
+  "scope": "Only missing pinned Python/OpenSSL prerequisites; no managed helper installation, ledger/bootstrap/pairing setup, Termux replacement or data reset",
+  "sourceSetupSha256": "1bb16dabab6935e208d5774343c6f7935376c59a40d1ca26055d9ac9befb24f9",
+  "rawLogSha256": "1be1a6107349a3fdcd306c5a089df7d5d46611786b2514f8c1bd0f80a76f5c88",
+  "rawLogBytes": 9183,
+  "launchedOnce": true
+}

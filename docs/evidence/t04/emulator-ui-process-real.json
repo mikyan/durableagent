@@ -1,0 +1,56 @@
+{
+  "run": "b3f1b5c0-489c-4655-b628-73ee8b3c1c93",
+  "mode": "real",
+  "started": "2026-11-03T17:45:10.345Z",
+  "observed": [
+    {
+      "id": "d38d2b5d-3a75-49a2-b6c5-bb390eecc433",
+      "messages": [
+        {
+          "id": "10",
+          "text": "请只回复一句中文问候，包含 UI-A。",
+          "role": "message role-user"
+        },
+        {
+          "id": "13",
+          "text": "您好，UI-A",
+          "role": "message role-assistant"
+        }
+      ]
+    },
+    {
+      "id": "b5fcdc50-8a9b-4da1-96b4-3ef1dd4dced9",
+      "messages": [
+        {
+          "id": "20",
+          "text": "请只回复一句中文问候，包含 UI-B。",
+          "role": "message role-user"
+        },
+        {
+          "id": "23",
+          "text": "问候：你好，UI-B，祝你一切顺利！",
+          "role": "message role-assistant"
+        }
+      ]
+    }
+  ],
+  "scope": "Actual UI process SIGKILL/reopen, no observer binding; immutable completed history and same native process. Native request metrics are covered separately by instrumentation.",
+  "beforeViewport": {
+    "width": 412,
+    "height": 915
+  },
+  "afterViewport": {
+    "width": 412,
+    "height": 915
+  },
+  "before": {
+    "uiPid": "13385",
+    "hostPid": "13473"
+  },
+  "after": {
+    "uiPid": "13521",
+    "hostPid": "13473"
+  },
+  "passed": true,
+  "completed": "2026-11-03T17:45:22.500Z"
+}

@@ -1,0 +1,120 @@
+
+ RUN  v5.1.0 C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/ui
+
+x··
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/submissions-page.test.tsx > keeps external uncertainty visible after SDK abort and confirms completion only with native proof
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name `/发送状态：.*外部结果待核验.*状态读取未确认/`
+
+Here are the accessible roles:
+
+  region:
+
+  Name "发送状态":
+  <section
+    aria-label="发送状态"
+    class="send-states"
+  />
+
+  --------------------------------------------------
+  button:
+
+  Name "发送状态：读取暂未确认 · 展开":
+  <button
+    aria-expanded="false"
+    class="send-states-summary"
+    type="button"
+  />
+
+  Name "刷新发送状态":
+  <button
+    class="text-button"
+    data-testid="refresh-submissions"
+  />
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  <p
+    class="stop-status"
+    data-testid="stop-status"
+    role="status"
+  />
+
+  Name "":
+  <p
+    class="send-error"
+    role="status"
+  />
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <section
+      aria-label="发送状态"
+      class="send-states"
+    >
+      <button
+        aria-expanded="false"
+        class="send-states-summary"
+        type="button"
+      >
+        发送状态：读取暂未确认 · 展开
+      </button>
+      <div
+        class="send-states-heading"
+      >
+        <span>
+          发送状态
+        </span>
+        <button
+          class="text-button"
+          data-testid="refresh-submissions"
+        >
+          刷新发送状态
+        </button>
+      </div>
+      <p
+        class="stop-status"
+        data-testid="stop-status"
+        role="status"
+      >
+        停止已请求，外部结果待核验
+      </p>
+      <p
+        class="send-error"
+        role="status"
+      >
+        读取暂未确认
+      </p>
+      <div
+        class="send-state-list"
+      />
+    </section>
+  </div>
+</body>
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ test/submissions-page.test.tsx:20:19
+     18|     const {rerender}=render(<SendStates controller={controller} state=…
+     19|     expect(screen.getByTestId('stop-status').textContent).toContain('外…
+     20|     expect(screen.getByRole('button',{name:/发送状态：.*外部结果待核验.*状态读取未确认/})…
+       |                   ^
+     21|     expect(screen.getByTestId('stop-status').textContent).not.toContai…
+     22|     rerender(<SendStates controller={controller} state={{...state,subm…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  18:56:33
+   Duration  2.55s (environment 58%, tests 27%, import 12%, transform 3%)
+

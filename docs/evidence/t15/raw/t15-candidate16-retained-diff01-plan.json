@@ -1,0 +1,91 @@
+{
+  "name": "retained-file-diff",
+  "launch": {
+    "mode": "execution",
+    "run": "ba1a5cb4-544e-4e3f-8a16-20558aa14ca1"
+  },
+  "steps": [
+    {
+      "wait": "document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+    },
+    {
+      "evaluate": "localStorage.getItem('durableagent.ui.selectedConversation')",
+      "assert": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+    },
+    {
+      "request": {
+        "method": "open",
+        "payload": {
+          "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "input.listSends",
+        "payload": {
+          "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "history",
+        "payload": {
+          "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+          "limit": 200
+        }
+      }
+    },
+    {
+      "click": "button[aria-label=\"会话详情\"]"
+    },
+    {
+      "evaluate": "(()=>{const e=document.querySelector('.detail-actions > button:first-child');if(!e||e.textContent!=='文件变更与执行')throw Error('Visible detail action missing');e.scrollIntoView({block:'center'});return e.textContent})()",
+      "assert": "文件变更与执行"
+    },
+    {
+      "click": ".detail-actions > button:first-child"
+    },
+    {
+      "click": ".file-changes > .execution-actions > button"
+    },
+    {
+      "wait": "[...document.querySelectorAll('.file-diff')].some(e=>e.textContent.includes('+真实修改-after'))"
+    },
+    {
+      "evaluate": "(()=>{const e=[...document.querySelectorAll('.file-diff')].find(e=>e.textContent.includes('+真实修改-after'));e.scrollIntoView({block:'center'});return e.textContent})()"
+    },
+    {
+      "wait": "(()=>{const e=[...document.querySelectorAll('.file-diff')].find(e=>e.textContent.includes('+真实修改-after'));if(!e)return false;const r=e.getBoundingClientRect(),a=document.querySelector('.auxiliary-scroll').getBoundingClientRect();return r.top>=Math.max(a.top,0)&&r.bottom<=Math.min(a.bottom,innerHeight)})()"
+    },
+    {
+      "shot": "retained-original-diff"
+    },
+    {
+      "request": {
+        "method": "open",
+        "payload": {
+          "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "input.listSends",
+        "payload": {
+          "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "history",
+        "payload": {
+          "id": "6c0b2a18-d008-46b7-aea6-3bdfc1d7187d",
+          "limit": 200
+        }
+      }
+    }
+  ]
+}

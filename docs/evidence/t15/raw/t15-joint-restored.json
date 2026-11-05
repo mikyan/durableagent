@@ -1,0 +1,12 @@
+{
+  "observedAt": "2026-11-04T13:29:57.616870+00:00",
+  "device": "leased Android 16 emulator 5584",
+  "size": "Physical size: 1080x2400",
+  "density": "Physical density: 420",
+  "fontScale": "1.0",
+  "autoRotation": "1",
+  "userRotation": "0",
+  "showImeWithHardwareKeyboard": "0",
+  "stayAwake": "7",
+  "applicationService": "ACTIVITY MANAGER SERVICES (dumpsys activity services)\n  (nothing)"
+}

@@ -1,0 +1,3 @@
+(node:34372) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"accepted":true,"nativeCancelled":true,"submission":"placed","targetStoppedThrough":0,"targetPendingAbort":false,"uiClaimsStopRequested":true}

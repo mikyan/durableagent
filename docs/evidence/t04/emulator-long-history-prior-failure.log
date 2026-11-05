@@ -1,0 +1,107 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ApplicationTest:
+INSTRUMENTATION_STATUS: test=realReactTwoConversationsReconnectAndNativeReopen
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: applicationEvidence={"case":"react-two-conversations","result":{"before":{"phase":"ready","extensions":["conversation"],"metrics":{},"instance":"dcbb3844-0b0f-4c66-b1e0-ab9ac2dd6eb3","pid":12892,"domainOwned":true,"nativeOwners":1},"reopened":{"phase":"ready","extensions":["conversation"],"metrics":{},"instance":"dd84c49a-9245-48eb-9c03-5bf4b5cce435","pid":12892,"domainOwned":true,"nativeOwners":1},"first":{"items":[{"id":"10","role":"user","text":"第一段独立输入","persisted":true},{"id":"13","role":"assistant","text":"你好🌍","persisted":true}]},"second":{"items":[{"id":"20","role":"user","text":"第二段独立输入","persisted":true},{"id":"23","role":"assistant","text":"你好🌍","persisted":true}]}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realReactTwoConversationsReconnectAndNativeReopen
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=largeTextCrossesBinderFragmentsAndReactWithoutTruncation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stack=java.util.concurrent.TimeoutException
+	at java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1936)
+	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2071)
+	at dev.durableagent.probe.ApplicationTest.js(ApplicationTest.kt:51)
+	at dev.durableagent.probe.ApplicationTest.largeTextCrossesBinderFragmentsAndReactWithoutTruncation$lambda$6(ApplicationTest.kt:135)
+	at dev.durableagent.probe.ApplicationTest.$r8$lambda$4OS7cwGxdTFDJd2nyrwp-alyQwg(Unknown Source:0)
+	at dev.durableagent.probe.ApplicationTest$$ExternalSyntheticLambda3.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.ApplicationTest.until(ApplicationTest.kt:47)
+	at dev.durableagent.probe.ApplicationTest.until$default(ApplicationTest.kt:47)
+	at dev.durableagent.probe.ApplicationTest.largeTextCrossesBinderFragmentsAndReactWithoutTruncation(ApplicationTest.kt:135)
+
+INSTRUMENTATION_STATUS: stream=
+Error in largeTextCrossesBinderFragmentsAndReactWithoutTruncation(dev.durableagent.probe.ApplicationTest):
+java.util.concurrent.TimeoutException
+	at java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1936)
+	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2071)
+	at dev.durableagent.probe.ApplicationTest.js(ApplicationTest.kt:51)
+	at dev.durableagent.probe.ApplicationTest.largeTextCrossesBinderFragmentsAndReactWithoutTruncation$lambda$6(ApplicationTest.kt:135)
+	at dev.durableagent.probe.ApplicationTest.$r8$lambda$4OS7cwGxdTFDJd2nyrwp-alyQwg(Unknown Source:0)
+	at dev.durableagent.probe.ApplicationTest$$ExternalSyntheticLambda3.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.ApplicationTest.until(ApplicationTest.kt:47)
+	at dev.durableagent.probe.ApplicationTest.until$default(ApplicationTest.kt:47)
+	at dev.durableagent.probe.ApplicationTest.largeTextCrossesBinderFragmentsAndReactWithoutTruncation(ApplicationTest.kt:135)
+
+INSTRUMENTATION_STATUS: test=largeTextCrossesBinderFragmentsAndReactWithoutTruncation
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=explicitStopAndDetachedUiPreserveInput
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: applicationEvidence={"case":"stop-detached-ui","result":{"id":"hang","revision":7,"conversation":{"id":"hang","title":"新会话","model":{"provider":"fixture","modelId":"conversation","name":"验证模型"},"workspaceId":"default","projectId":null,"createdAt":1793727642747,"phase":"stopped"},"entries":[{"id":"10","role":"user","text":"保留输入并停止","persisted":true}],"phase":"stopped","storedSeq":7}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=explicitStopAndDetachedUiPreserveInput
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realMimoProductConversationsPersistWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: applicationEvidence={"case":"real-mimo-two-conversations","result":{"before":{"phase":"ready","extensions":["conversation"],"metrics":{"transportRequests":2,"currentRequest":2,"transportAborted":true,"requestAbortCount":1,"bodyReadPending":false,"bodyReadError":"","bodyReadCancelled":true,"providerFinished":true,"textDeltaEvents":5,"toolDeltaEvents":0},"instance":"4f0ad51a-7ee3-4a18-b3d3-d5d04133c7f2","pid":12892,"domainOwned":true,"nativeOwners":1},"reopened":{"phase":"ready","extensions":["conversation"],"metrics":{},"instance":"823c2688-fb56-42c4-98e0-e1a358d58b94","pid":12892,"domainOwned":true,"nativeOwners":1},"histories":{"real-a":"{\"items\":[{\"id\":\"10\",\"role\":\"user\",\"text\":\"请只回复一句简短中文问候，包含编号 real-a。\",\"persisted\":true},{\"id\":\"13\",\"role\":\"assistant\",\"text\":\"你好 real-a！\",\"persisted\":true}]}","real-b":"{\"items\":[{\"id\":\"20\",\"role\":\"user\",\"text\":\"请只回复一句简短中文问候，包含编号 real-b。\",\"persisted\":true},{\"id\":\"23\",\"role\":\"assistant\",\"text\":\"你好，real-b。\",\"persisted\":true}]}"}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoProductConversationsPersistWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 63.112
+There was 1 failure:
+1) largeTextCrossesBinderFragmentsAndReactWithoutTruncation(dev.durableagent.probe.ApplicationTest)
+java.util.concurrent.TimeoutException
+	at java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1936)
+	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2071)
+	at dev.durableagent.probe.ApplicationTest.js(ApplicationTest.kt:51)
+	at dev.durableagent.probe.ApplicationTest.largeTextCrossesBinderFragmentsAndReactWithoutTruncation$lambda$6(ApplicationTest.kt:135)
+	at dev.durableagent.probe.ApplicationTest.$r8$lambda$4OS7cwGxdTFDJd2nyrwp-alyQwg(Unknown Source:0)
+	at dev.durableagent.probe.ApplicationTest$$ExternalSyntheticLambda3.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.ApplicationTest.until(ApplicationTest.kt:47)
+	at dev.durableagent.probe.ApplicationTest.until$default(ApplicationTest.kt:47)
+	at dev.durableagent.probe.ApplicationTest.largeTextCrossesBinderFragmentsAndReactWithoutTruncation(ApplicationTest.kt:135)
+
+FAILURES!!!
+Tests run: 4,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

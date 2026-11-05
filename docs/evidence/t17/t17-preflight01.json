@@ -1,0 +1,36 @@
+{
+  "capturedAt": "2026-11-04T15:38:25.993217+00:00",
+  "scope": "Android16 API36 x86_64 4KB emulator; no physical/OEM acceptance",
+  "properties": {
+    "ro.build.version.release": "16",
+    "ro.build.version.sdk": "36",
+    "ro.product.cpu.abi": "x86_64",
+    "ro.build.fingerprint": "google/sdk_gphone64_x86_64/emu64xa:16/BE2A.250530.026.F3/13894323:userdebug/dev-keys"
+  },
+  "pageSize": 4096,
+  "installed": {
+    "dev.durableagent.probe": {
+      "installedSha256": "e7cf5a6ddff4bc435f513fc727e2ac1f12b93801aefb6570fb8e4457b650bfc0",
+      "versionName": "0.1.0"
+    },
+    "dev.durableagent.probe.test": {
+      "installedSha256": "3d99bb4cdb82b76cf328919025ab6ab96d4577ba5442b2d90d3f8bb518ecc938",
+      "versionName": "null"
+    }
+  },
+  "termux": {
+    "versionName": "0.118.3",
+    "versionCode": "1002",
+    "stopped": false
+  },
+  "webView": "Current WebView package (name, version): (com.google.android.webview, 133.0.6943.137)",
+  "networkBaseline": {
+    "wifi": "1",
+    "data": "1",
+    "metered": "AndroidWifi;none\nAndroidWifi;none"
+  },
+  "applicationServiceAbsent": true,
+  "physicalDeviceStatesWithoutSerials": [
+    "device"
+  ]
+}

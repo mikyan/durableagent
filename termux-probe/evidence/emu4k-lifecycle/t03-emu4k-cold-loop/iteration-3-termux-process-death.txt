@@ -1,0 +1,30 @@
+Action: iteration-3-termux-process-death
+Observed: 2026-11-04T09:10:14.0088024+08:00
+Starting: Intent { cmp=dev.durableagent.termuxprobe/.MainActivity }
+Warning: Activity not started, its current task has been brought to the front
+Status: ok
+LaunchState: UNKNOWN (0)
+Activity: dev.durableagent.termuxprobe/.MainActivity
+WaitTime: 64
+Complete
+time=1793754613905
+Termux 0.118.3 / 1002; target=28; uid=10216
+APK SHA256=3550e61f4d9eb49b712fd1bd9519dc37085a4d8eb597c57a340f0a64859b7144
+cert=b6da01480eefd5fbf2cd3771b8d1021ec791304bdd6c4bf41d3faabad48ee5e1
+固定发行物校验=true; RUN_COMMAND 系统授权=true
+Inspection(phase=READY, request=null, bootstrap=VERIFIED, externalCalls=VERIFIED, protocol=VERIFIED, evidence=protocol=1
+nonce=b88f8b1f-f82d-46de-a389-3e745037c1bd
+uid=10216
+instance=5855
+prefix=/data/data/com.termux/files/usr
+shell=5.2.37(1)-release
+tools=ok
+workspace=/data/data/com.termux/files/home/.local/share/durableagent-probe/workspace
+writable=yes
+repo_begin=1
+deb https://packages-cf.termux.dev/apt/termux-main/ stable main
+repo_end=1
+, retryAfterMillis=null)
+Termux PID before kill: 5710
+PID immediately after kill: 
+PID after READY: 5833

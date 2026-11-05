@@ -1,0 +1,8 @@
+{
+  "run": "ba284f6d-7fbd-4e2c-ad40-42469e43ac98",
+  "mode": "fixture",
+  "started": "2026-11-03T19:11:38.515Z",
+  "observed": [],
+  "scope": "Actual UI process SIGKILL/reopen of two confirmed text drafts, no observer binding; same native process, empty submitted histories. Exact model request counts are covered by separate instrumentation.",
+  "error": "Error: New conversation settled timeout: false"
+}

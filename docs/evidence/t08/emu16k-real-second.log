@@ -1,0 +1,52 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ProjectApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ProjectApplicationTest:
+INSTRUMENTATION_STATUS: test=realMimoBusyRefusalAndExplicitNewLocation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: projectEvidence={"case":"input-settled-before-run-check","result":{"intentId":"3bb6b1e7-890e-405c-a911-ebe19cbace29","phase":"done","metrics":{"projectWitnessEnabled":true,"projectEnvironments":[{"bindingId":"c99b45e2-3cd8-44b6-a925-0edf341db648","workspaceId":"default","version":1,"path":"\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/24f2aadd-5f6a-4e2d-992b-fbb51164cd9e\/workspace","projectId":null,"actualIdentity":"validation-directory:\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/24f2aadd-5f6a-4e2d-992b-fbb51164cd9e\/workspace","sourceProductId":"fcf32e06-23bf-4f0a-9867-e7c18328418b","controlProductId":"fcf32e06-23bf-4f0a-9867-e7c18328418b"}],"projectToolWitnesses":[],"transportRequests":1,"currentRequest":1,"transportAborted":false,"requestAbortCount":0,"bodyReadPending":false,"bodyReadError":"","bodyReadCancelled":true,"providerFinished":true,"textDeltaEvents":4,"toolDeltaEvents":0},"history":[{"id":"17","role":"user","text":"请仅回复一句简短中文问候，并原样包含 T08-A-99e88bf9。","persisted":true},{"id":"21","role":"assistant","text":"你好，T08-A-99e88bf9。","persisted":true}]}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ProjectApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: expected:<2> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.ProjectApplicationTest.flow(ProjectApplicationTest.kt:110)
+	at dev.durableagent.probe.ProjectApplicationTest.realMimoBusyRefusalAndExplicitNewLocation(ProjectApplicationTest.kt:86)
+
+INSTRUMENTATION_STATUS: stream=
+Error in realMimoBusyRefusalAndExplicitNewLocation(dev.durableagent.probe.ProjectApplicationTest):
+java.lang.AssertionError: expected:<2> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.ProjectApplicationTest.flow(ProjectApplicationTest.kt:110)
+	at dev.durableagent.probe.ProjectApplicationTest.realMimoBusyRefusalAndExplicitNewLocation(ProjectApplicationTest.kt:86)
+
+INSTRUMENTATION_STATUS: test=realMimoBusyRefusalAndExplicitNewLocation
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 16.099
+There was 1 failure:
+1) realMimoBusyRefusalAndExplicitNewLocation(dev.durableagent.probe.ProjectApplicationTest)
+java.lang.AssertionError: expected:<2> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.ProjectApplicationTest.flow(ProjectApplicationTest.kt:110)
+	at dev.durableagent.probe.ProjectApplicationTest.realMimoBusyRefusalAndExplicitNewLocation(ProjectApplicationTest.kt:86)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

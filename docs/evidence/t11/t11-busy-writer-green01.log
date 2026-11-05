@@ -1,0 +1,97 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.StopApplicationTest:
+INSTRUMENTATION_STATUS: test=pendingStopSurvivesTemporaryNativeWriterOccupancy
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalStateException: {"phase":"failed","reason":"草稿存储正在提交，请稍后重试。","instance":"b47b84de-5c92-48ab-a0e9-4b4bfdc05e5f","pid":9606,"domainOwned":false,"nativeOwners":0}
+	at dev.durableagent.probe.StopApplicationTest$Wire.ready$lambda$0(StopApplicationTest.kt:33)
+	at dev.durableagent.probe.StopApplicationTest$Wire.$r8$lambda$bLfWdOQLxg0cE8VIPb2uPhGqYhU(Unknown Source:0)
+	at dev.durableagent.probe.StopApplicationTest$Wire$$ExternalSyntheticLambda7.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.until$default(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest$Wire.ready(StopApplicationTest.kt:33)
+	at dev.durableagent.probe.StopApplicationTest.busyOwner(StopApplicationTest.kt:63)
+	at dev.durableagent.probe.StopApplicationTest.pendingStopSurvivesTemporaryNativeWriterOccupancy(StopApplicationTest.kt:42)
+
+INSTRUMENTATION_STATUS: stream=
+Error in pendingStopSurvivesTemporaryNativeWriterOccupancy(dev.durableagent.probe.StopApplicationTest):
+java.lang.IllegalStateException: {"phase":"failed","reason":"草稿存储正在提交，请稍后重试。","instance":"b47b84de-5c92-48ab-a0e9-4b4bfdc05e5f","pid":9606,"domainOwned":false,"nativeOwners":0}
+	at dev.durableagent.probe.StopApplicationTest$Wire.ready$lambda$0(StopApplicationTest.kt:33)
+	at dev.durableagent.probe.StopApplicationTest$Wire.$r8$lambda$bLfWdOQLxg0cE8VIPb2uPhGqYhU(Unknown Source:0)
+	at dev.durableagent.probe.StopApplicationTest$Wire$$ExternalSyntheticLambda7.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.until$default(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest$Wire.ready(StopApplicationTest.kt:33)
+	at dev.durableagent.probe.StopApplicationTest.busyOwner(StopApplicationTest.kt:63)
+	at dev.durableagent.probe.StopApplicationTest.pendingStopSurvivesTemporaryNativeWriterOccupancy(StopApplicationTest.kt:42)
+
+INSTRUMENTATION_STATUS: test=pendingStopSurvivesTemporaryNativeWriterOccupancy
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: stopObservation={"old":{"intent":{"protocol":1,"intentId":"1875d752-2971-4999-8d9f-bd37fbbbb02d","actionId":"1875d752-2971-4999-8d9f-bd37fbbbb02d","id":"stop-chat","inputToken":"26355c4c-de7d-45ab-94a3-8931ed691137","inputRevision":1,"inputDigest":"f04686e550ef7b3c3479e056867d554ae5a50a941aa85d19c6d14deeed5067a6","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"a680142765710c039f7dc9277f57cee9e8e584a28941ef7f3803f7351556b28d"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"createdAt":1793769201169,"preview":{"text":"old hanging request","attachmentCount":0},"stateVersion":4,"delivery":"acknowledged","cancelled":true,"receipt":{"protocol":1,"intentId":"1875d752-2971-4999-8d9f-bd37fbbbb02d","id":"stop-chat","inputToken":"26355c4c-de7d-45ab-94a3-8931ed691137","inputRevision":1,"inputDigest":"f04686e550ef7b3c3479e056867d554ae5a50a941aa85d19c6d14deeed5067a6","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"a680142765710c039f7dc9277f57cee9e8e584a28941ef7f3803f7351556b28d"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"bindingId":"810c4a65-d9ca-439b-94c9-ff899dce0b42","submissionId":16}},"accepted":true,"receipt":{"protocol":1,"intentId":"1875d752-2971-4999-8d9f-bd37fbbbb02d","id":"stop-chat","inputToken":"26355c4c-de7d-45ab-94a3-8931ed691137","inputRevision":1,"inputDigest":"f04686e550ef7b3c3479e056867d554ae5a50a941aa85d19c6d14deeed5067a6","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"a680142765710c039f7dc9277f57cee9e8e584a28941ef7f3803f7351556b28d"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"bindingId":"810c4a65-d9ca-439b-94c9-ff899dce0b42","submissionId":16},"submission":{"status":"unanswered","entryId":"15","reason":"aborted"}},"fresh":{"intent":{"protocol":1,"intentId":"592f871c-5c76-4e9e-8035-90bdf049037c","actionId":"592f871c-5c76-4e9e-8035-90bdf049037c","id":"stop-chat","inputToken":"9af50ff1-20f2-4600-ac38-b317cb49f450","inputRevision":3,"inputDigest":"1bb0762dae9ce6e5835cc488f3d5960a3cf35487e6ec0c2b1e001d9969f03433","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"a680142765710c039f7dc9277f57cee9e8e584a28941ef7f3803f7351556b28d"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":2,"createdAt":1793769201691,"preview":{"text":"new explicit generation","attachmentCount":0},"stateVersion":2,"delivery":"uncertain","cancelled":false},"accepted":false},"host":{"phase":"ready","extensions":["projects","conversation","input","submission"],"metrics":{},"instance":"82504a51-0a0c-4a21-a97c-2cd2e9c6eaa8","pid":9662,"domainOwned":true,"nativeOwners":1},"history":{"items":[{"id":"15","role":"user","text":"old hanging request","persisted":true}]}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Saved new explicit generation accepted
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.until$default(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.busyOwner(StopApplicationTest.kt:69)
+	at dev.durableagent.probe.StopApplicationTest.nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(StopApplicationTest.kt:41)
+
+INSTRUMENTATION_STATUS: stream=
+Error in nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(dev.durableagent.probe.StopApplicationTest):
+java.lang.AssertionError: Saved new explicit generation accepted
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.until$default(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.busyOwner(StopApplicationTest.kt:69)
+	at dev.durableagent.probe.StopApplicationTest.nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(StopApplicationTest.kt:41)
+
+INSTRUMENTATION_STATUS: test=nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 107.827
+There were 2 failures:
+1) pendingStopSurvivesTemporaryNativeWriterOccupancy(dev.durableagent.probe.StopApplicationTest)
+java.lang.IllegalStateException: {"phase":"failed","reason":"草稿存储正在提交，请稍后重试。","instance":"b47b84de-5c92-48ab-a0e9-4b4bfdc05e5f","pid":9606,"domainOwned":false,"nativeOwners":0}
+	at dev.durableagent.probe.StopApplicationTest$Wire.ready$lambda$0(StopApplicationTest.kt:33)
+	at dev.durableagent.probe.StopApplicationTest$Wire.$r8$lambda$bLfWdOQLxg0cE8VIPb2uPhGqYhU(Unknown Source:0)
+	at dev.durableagent.probe.StopApplicationTest$Wire$$ExternalSyntheticLambda7.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.until$default(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest$Wire.ready(StopApplicationTest.kt:33)
+	at dev.durableagent.probe.StopApplicationTest.busyOwner(StopApplicationTest.kt:63)
+	at dev.durableagent.probe.StopApplicationTest.pendingStopSurvivesTemporaryNativeWriterOccupancy(StopApplicationTest.kt:42)
+2) nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(dev.durableagent.probe.StopApplicationTest)
+java.lang.AssertionError: Saved new explicit generation accepted
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.until$default(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.busyOwner(StopApplicationTest.kt:69)
+	at dev.durableagent.probe.StopApplicationTest.nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(StopApplicationTest.kt:41)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1

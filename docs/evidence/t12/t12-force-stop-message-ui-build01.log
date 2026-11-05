@@ -1,0 +1,26 @@
+
+> @durableagent/ui@0.1.0 build
+> npm run typecheck && vite build
+
+
+> @durableagent/ui@0.1.0 typecheck
+> tsc --noEmit
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 54 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                          0.67 kB │ gzip:  0.39 kB
+dist/assets/projects-DuD0xgm2.css        1.24 kB │ gzip:  0.51 kB
+dist/assets/conversation-rKQ5Kl6s.css    4.13 kB │ gzip:  1.22 kB
+dist/assets/models-Bl7ZLxqt.css          4.32 kB │ gzip:  1.32 kB
+dist/assets/index-B8Agb4ty.css          23.92 kB │ gzip:  5.86 kB
+dist/assets/project-view-CKfHgYnr.js     0.22 kB │ gzip:  0.22 kB
+dist/assets/timeline-CTdZSPkn.js         2.84 kB │ gzip:  1.54 kB
+dist/assets/projects-C06qBOGD.js         8.35 kB │ gzip:  2.62 kB
+dist/assets/models-D1wL0hym.js          10.47 kB │ gzip:  3.89 kB
+dist/assets/conversation-5ZiJc0FA.js    62.16 kB │ gzip: 18.29 kB
+dist/assets/index-BZE9x6U-.js          274.11 kB │ gzip: 83.47 kB
+
+✓ built in 229ms

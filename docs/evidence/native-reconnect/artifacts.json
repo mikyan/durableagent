@@ -1,0 +1,11 @@
+{
+  "head": "2942502b49b881322faf21226533b2c5b00a4394",
+  "purpose": "Candidate explicit native host reconnect; fixed rendered UI lease regression, no MiMo recovery repair claim",
+  "artifacts": {
+    "app.apk": "dd7dd5ca97c130ff4ef95b59ae53c95910999d35c3664f6bee99f7490e6e5e5a",
+    "execution-capabilities.json": "91821135dc2ccc267edaf3fb5789cce0341d3ddd5a11642e7836e82a85b3f7a8",
+    "execution-setup.txt": "1bb16dabab6935e208d5774343c6f7935376c59a40d1ca26055d9ac9befb24f9",
+    "test.apk": "7feb882175f1eed0e25e31370ac5dfd6972bbcddeacc6f2eaf107ed9635ace65"
+  },
+  "sources": 423
+}

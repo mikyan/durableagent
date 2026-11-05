@@ -1,0 +1,10 @@
+
+dev.durableagent.probe.RecoveryJobApplicationTest:INSTRUMENTATION_STATUS: wakeRepublished={"run":"c0c6d0f0-118d-40f9-99e5-0f757e0967ed","product":"wake-c0c6d0f0-118d-40f9-99e5-0f757e0967ed","sameAdmission":true,"ownerReopened":true,"actualJobId":1999245591,"modelRequests":0}
+INSTRUMENTATION_STATUS_CODE: 0
+.
+
+Time: 7.332
+
+OK (1 test)
+
+

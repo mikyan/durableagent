@@ -1,0 +1,54 @@
+{
+  "apk": "C:\\Users\\AI_BA\\AppData\\Local\\Temp\\durableagent-implementation\\t02-second-app.apk",
+  "bytes": 370039305,
+  "sha256": "1bee8a2c9da254f4c97af700cbebab3d6520ab863083fdf03c119116b0b638a9",
+  "native": [
+    {
+      "entry": "lib/arm64-v8a/libjavet-node-android-i18n.v.6.0.3.so",
+      "bytes": 163785752,
+      "sha256": "266e732b71daed5897d430e99d20b46a1f87968f935c89795832d411f17f9414",
+      "zipCompression": 0,
+      "dataOffset": 3293184,
+      "offsetMod16K": 0,
+      "matchesPinnedI18nAar": true
+    },
+    {
+      "entry": "lib/x86_64/libjavet-node-android-i18n.v.6.0.3.so",
+      "bytes": 163119784,
+      "sha256": "2a46d00797e2339353a4146d27df641b1f6679df771d95e1959812097e0e3e69",
+      "zipCompression": 0,
+      "dataOffset": 167084032,
+      "offsetMod16K": 0,
+      "matchesPinnedI18nAar": true
+    }
+  ],
+  "runtimeZipBytes": 22280036,
+  "runtimeZipSha256": "609b6090097bb1724f9bec517b3381f0cbdd9ea2db4704157a2cb3842d253e86",
+  "moduleMatches": {
+    "dist/bridge.js": true,
+    "dist/capabilities.js": true,
+    "dist/live-model.js": true,
+    "dist/probe.js": true,
+    "dist/sqlite-checks.js": true,
+    "dist/storage-bridge.js": true,
+    "dist/storage-checks.js": true,
+    "dist/storage-crash.js": true,
+    "dist/storage.js": true,
+    "dist/transport.js": true,
+    "package.json": true,
+    "package-lock.json": true
+  },
+  "sdkVersions": {
+    "pi-durable": "1.5.0",
+    "pi-ai": "1.5.0",
+    "pi-schema": "1.5.0",
+    "chord": "1.5.0"
+  },
+  "standardNativeModulesInsideRuntimeZip": [
+    "node_modules/quickjs-wasi/extensions/crypto/crypto.so",
+    "node_modules/quickjs-wasi/extensions/encoding/encoding.so",
+    "node_modules/quickjs-wasi/extensions/headers/headers.so",
+    "node_modules/quickjs-wasi/extensions/structured-clone/structured-clone.so",
+    "node_modules/quickjs-wasi/extensions/url/url.so"
+  ]
+}

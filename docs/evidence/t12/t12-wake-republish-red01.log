@@ -1,0 +1,21 @@
+(node:78984) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ a temporarily unavailable native wake record is republished before the same due SDK retry resumes (218.8064ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 405.2756
+
+✖ failing tests:
+
+test at test\recovery.test.mjs:47:1
+✖ a temporarily unavailable native wake record is republished before the same due SDK retry resumes (218.8064ms)
+  Error: Wake authority busy
+      at host.publishWake (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/test/recovery.test.mjs:49:138)
+      at file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/dist/recovery.js:31:95 {
+    code: 'HOST_RECOVERY_UNAVAILABLE'
+  }

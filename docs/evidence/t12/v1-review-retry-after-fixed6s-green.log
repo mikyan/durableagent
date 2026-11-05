@@ -1,0 +1,3 @@
+(node:94032) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"syntheticOnly":true,"firstResponseStatus":429,"retryAfterSeconds":120,"requests":1,"retryGapMs":null,"phase":"waiting","directory":"C:\\Users\\AI_BA\\AppData\\Local\\Temp\\v1-review-retry-0UFHcM"}

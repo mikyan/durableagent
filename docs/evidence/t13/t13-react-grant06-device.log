@@ -1,0 +1,49 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: dataSaverUiFailure={"run":"9ffde643-8677-4769-9c52-69ee1946b45c","productId":"2f9cd1fd-eb89-4755-96e5-051109d8bc22","stage":"first-policy-visibility","lastOperations":[{"executionId":"a1be7171-cea3-4f32-9a17-d8ff552ad590","requestDigest":"95922334413c8cadec6b4a21121b7cda147bf578a3b5668aff67af9eecb002d4","productId":"2f9cd1fd-eb89-4755-96e5-051109d8bc22","controlGeneration":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","classification":"unknown","summary":"{\"kind\":\"shell\",\"script\":\"printf 'Termux SDK 世界\\\\n'; printf 'stderr-marker\\\\n' >&2; printf 'one\\\\n' >> '.durableagent-t09-9ffde643-8677-4769-9c52-69ee1946b45c-success'\"}","grantPeriod":3,"finalDigest":"2522f75376dbf3159a2ebec741a6ed33bf9fdba3258f9274f579095488a8360d","sequence":6,"state":"completed","scopeConfirmed":true,"terminal":true,"grantFinalDigest":"2522f75376dbf3159a2ebec741a6ed33bf9fdba3258f9274f579095488a8360d","dispatched":true,"phase":"terminal","period":3,"reason":"metered"}],"dom":{"alerts":["草稿存储正在提交，请稍后重试。重新连接"],"draft":"草稿已保存","policy":"省流 当前网络按流量计费省流模式受限网络上保留模型通信与已核验的本地能力。其他联网或未知行为等待条件恢复，或仅放行所选执行。刷新省流状态仅放行这一固定执行及本次受限网络期间；本操作未更改全局省流设置。执行已结束{\"kind\":\"shell\",\"script\":\"printf 'Termux SDK 世界\\\\n'; printf 'stderr-marker\\\\n' >&2; printf 'one\\\\n' >> '.durableagent-t09-9ffde643-8677-4769-9c52-69ee1946b45c-success'\"}a1be7171-cea3-4f32-9a17-d8ff552ad590","sendDisabled":false,"sendErrors":[],"sends":"发送状态刷新发送状态输入已结算12:06 PMEXEC_SUCCESS不代表整个会话或外部操作全部结束。","status":"回复已保存"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: A new UI input does not inherit the grant
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.until$default(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(DataSaverExecutionTest.kt:89)
+
+INSTRUMENTATION_STATUS: stream=
+Error in actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(dev.durableagent.probe.DataSaverExecutionTest):
+java.lang.AssertionError: A new UI input does not inherit the grant
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.until$default(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(DataSaverExecutionTest.kt:89)
+
+INSTRUMENTATION_STATUS: test=actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 98.406
+There was 1 failure:
+1) actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(dev.durableagent.probe.DataSaverExecutionTest)
+java.lang.AssertionError: A new UI input does not inherit the grant
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverExecutionTest.until(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.until$default(DataSaverExecutionTest.kt:28)
+	at dev.durableagent.probe.DataSaverExecutionTest.actualReactSingleGrantKeepsGlobalPolicyAndTheNextIdentityWaiting(DataSaverExecutionTest.kt:89)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

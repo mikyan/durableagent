@@ -1,0 +1,19 @@
+{
+  "actualSystemNotificationTap": true,
+  "syntheticIntentSent": false,
+  "reflectionOrPendingIntentInvocation": false,
+  "product": "1ccb7b54-f5eb-4f0d-bae1-bf4f75d7daeb",
+  "completion": {
+    "identity": "answer:87:101",
+    "conversationId": "1ccb7b54-f5eb-4f0d-bae1-bf4f75d7daeb"
+  },
+  "previousSelectedConversation": "a1d19357-41ed-487b-a90c-da77950e8482",
+  "observedText": "会话 1ccb7b54 · 点击查看已保存结果",
+  "bounds": "[179,783][996,837]",
+  "physicalTap": [
+    587,
+    810
+  ],
+  "beforeTapEpochSeconds": 1793800977.717974,
+  "afterTapEpochSeconds": 1793800977.8032002
+}

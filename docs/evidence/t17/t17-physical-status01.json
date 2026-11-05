@@ -1,0 +1,15 @@
+{
+  "physicalReadOnlyStatus": [
+    {
+      "model": "SM-S9110",
+      "android": "16",
+      "abi": "arm64-v8a",
+      "keyguardFacts": [
+        "mKeyguardOccluded=false mKeyguardOccludedChanged=false mPendingKeyguardOccluded=false",
+        "showing=false",
+        "inputRestricted=false"
+      ]
+    }
+  ],
+  "earlierHostObservationFailedBeforeOutput": "Python default GBK decoding of UTF8 policy; re-observed explicitly with UTF8, no device mutation"
+}

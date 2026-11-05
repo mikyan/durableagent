@@ -1,0 +1,127 @@
+(node:93320) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ startup preserves the original explicit send order across 2 pending intents (576.935ms)
+✖ startup preserves the original explicit send order across 52 pending intents (1227.0486ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2019.6745
+
+✖ failing tests:
+
+test at validation\submission-policy.mjs:3:87
+✖ startup preserves the original explicit send order across 2 pending intents (576.935ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'ordered input 1',
+      'ordered input 0',
+  -   'ordered input 1'
+    ]
+  
+      at TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/validation/submission-policy.mjs:99:10)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'ordered input 1', 'ordered input 0' ],
+    expected: [ 'ordered input 0', 'ordered input 1' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at validation\submission-policy.mjs:3:87
+✖ startup preserves the original explicit send order across 52 pending intents (1227.0486ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'ordered input 51',
+  -   'ordered input 0',
+  -   'ordered input 1',
+  -   'ordered input 2',
+  -   'ordered input 3',
+  -   'ordered input 4',
+  -   'ordered input 5',
+  -   'ordered input 6',
+  -   'ordered input 7',
+  -   'ordered input 8',
+  -   'ordered input 9',
+  -   'ordered input 10',
+  -   'ordered input 11',
+  -   'ordered input 12',
+  -   'ordered input 13',
+  -   'ordered input 14',
+  -   'ordered input 15',
+  -   'ordered input 16',
+  -   'ordered input 17',
+  -   'ordered input 18',
+  -   'ordered input 19',
+  -   'ordered input 20',
+  -   'ordered input 21',
+  -   'ordered input 22',
+  -   'ordered input 23',
+  -   'ordered input 24',
+  -   'ordered input 25',
+  -   'ordered input 26',
+  -   'ordered input 27',
+  -   'ordered input 28',
+  -   'ordered input 29',
+  -   'ordered input 30',
+  -   'ordered input 31',
+  -   'ordered input 32',
+  -   'ordered input 33',
+  -   'ordered input 34',
+  -   'ordered input 35',
+  -   'ordered input 36',
+  -   'ordered input 37',
+  -   'ordered input 38',
+  -   'ordered input 39',
+  -   'ordered input 40',
+  -   'ordered input 41',
+  -   'ordered input 42',
+  -   'ordered input 43',
+  -   'ordered input 44',
+  -   'ordered input 45',
+  -   'ordered input 46',
+  -   'ordered input 47',
+  -   'ordered input 48',
+  -   'ordered input 49',
+      'ordered input 50',
+  -   'ordered input 51'
+    ]
+  
+      at TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/validation/submission-policy.mjs:99:10)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'ordered input 51', 'ordered input 50' ],
+    expected: [
+      'ordered input 0',  'ordered input 1',  'ordered input 2',
+      'ordered input 3',  'ordered input 4',  'ordered input 5',
+      'ordered input 6',  'ordered input 7',  'ordered input 8',
+      'ordered input 9',  'ordered input 10', 'ordered input 11',
+      'ordered input 12', 'ordered input 13', 'ordered input 14',
+      'ordered input 15', 'ordered input 16', 'ordered input 17',
+      'ordered input 18', 'ordered input 19', 'ordered input 20',
+      'ordered input 21', 'ordered input 22', 'ordered input 23',
+      'ordered input 24', 'ordered input 25', 'ordered input 26',
+      'ordered input 27', 'ordered input 28', 'ordered input 29',
+      'ordered input 30', 'ordered input 31', 'ordered input 32',
+      'ordered input 33', 'ordered input 34', 'ordered input 35',
+      'ordered input 36', 'ordered input 37', 'ordered input 38',
+      'ordered input 39', 'ordered input 40', 'ordered input 41',
+      'ordered input 42', 'ordered input 43', 'ordered input 44',
+      'ordered input 45', 'ordered input 46', 'ordered input 47',
+      'ordered input 48', 'ordered input 49', 'ordered input 50',
+      'ordered input 51'
+    ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

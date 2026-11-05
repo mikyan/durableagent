@@ -1,0 +1,125 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRecoveryStoreTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeRecoveryStoreTest:
+INSTRUMENTATION_STATUS: test=oneWorkKeepsItsProbeBudgetAndEpochAcrossReopenAndDuplicateWake
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRecoveryStoreTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=android.database.sqlite.SQLiteException: unknown error (code 0 SQLITE_OK): Queries can be performed using SQLiteDatabase query or rawQuery methods only.
+	at android.database.sqlite.SQLiteConnection.nativeExecuteForChangedRowCount(Native Method)
+	at android.database.sqlite.SQLiteConnection.executeForChangedRowCount(SQLiteConnection.java:937)
+	at android.database.sqlite.SQLiteSession.executeForChangedRowCount(SQLiteSession.java:791)
+	at android.database.sqlite.SQLiteStatement.executeUpdateDelete(SQLiteStatement.java:67)
+	at android.database.sqlite.SQLiteDatabase.executeSql(SQLiteDatabase.java:2235)
+	at android.database.sqlite.SQLiteDatabase.execSQL(SQLiteDatabase.java:2154)
+	at dev.durableagent.probe.NativeRecoveryStore$Database.onConfigure(NativeRecoveryStore.kt:69)
+	at android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java:408)
+	at android.database.sqlite.SQLiteOpenHelper.getWritableDatabase(SQLiteOpenHelper.java:336)
+	at dev.durableagent.probe.NativeRecoveryStore.access(NativeRecoveryStore.kt:62)
+	at dev.durableagent.probe.NativeRecoveryStore.wake(NativeRecoveryStore.kt:25)
+	at dev.durableagent.probe.NativeRecoveryStoreTest.oneWorkKeepsItsProbeBudgetAndEpochAcrossReopenAndDuplicateWake(NativeRecoveryStoreTest.kt:17)
+
+INSTRUMENTATION_STATUS: stream=
+Error in oneWorkKeepsItsProbeBudgetAndEpochAcrossReopenAndDuplicateWake(dev.durableagent.probe.NativeRecoveryStoreTest):
+android.database.sqlite.SQLiteException: unknown error (code 0 SQLITE_OK): Queries can be performed using SQLiteDatabase query or rawQuery methods only.
+	at android.database.sqlite.SQLiteConnection.nativeExecuteForChangedRowCount(Native Method)
+	at android.database.sqlite.SQLiteConnection.executeForChangedRowCount(SQLiteConnection.java:937)
+	at android.database.sqlite.SQLiteSession.executeForChangedRowCount(SQLiteSession.java:791)
+	at android.database.sqlite.SQLiteStatement.executeUpdateDelete(SQLiteStatement.java:67)
+	at android.database.sqlite.SQLiteDatabase.executeSql(SQLiteDatabase.java:2235)
+	at android.database.sqlite.SQLiteDatabase.execSQL(SQLiteDatabase.java:2154)
+	at dev.durableagent.probe.NativeRecoveryStore$Database.onConfigure(NativeRecoveryStore.kt:69)
+	at android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java:408)
+	at android.database.sqlite.SQLiteOpenHelper.getWritableDatabase(SQLiteOpenHelper.java:336)
+	at dev.durableagent.probe.NativeRecoveryStore.access(NativeRecoveryStore.kt:62)
+	at dev.durableagent.probe.NativeRecoveryStore.wake(NativeRecoveryStore.kt:25)
+	at dev.durableagent.probe.NativeRecoveryStoreTest.oneWorkKeepsItsProbeBudgetAndEpochAcrossReopenAndDuplicateWake(NativeRecoveryStoreTest.kt:17)
+
+INSTRUMENTATION_STATUS: test=oneWorkKeepsItsProbeBudgetAndEpochAcrossReopenAndDuplicateWake
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRecoveryStoreTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=durableCompletionOutboxRetainsOneIdentityUntilAcknowledged
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeRecoveryStoreTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stack=android.database.sqlite.SQLiteException: unknown error (code 0 SQLITE_OK): Queries can be performed using SQLiteDatabase query or rawQuery methods only.
+	at android.database.sqlite.SQLiteConnection.nativeExecuteForChangedRowCount(Native Method)
+	at android.database.sqlite.SQLiteConnection.executeForChangedRowCount(SQLiteConnection.java:937)
+	at android.database.sqlite.SQLiteSession.executeForChangedRowCount(SQLiteSession.java:791)
+	at android.database.sqlite.SQLiteStatement.executeUpdateDelete(SQLiteStatement.java:67)
+	at android.database.sqlite.SQLiteDatabase.executeSql(SQLiteDatabase.java:2235)
+	at android.database.sqlite.SQLiteDatabase.execSQL(SQLiteDatabase.java:2154)
+	at dev.durableagent.probe.NativeRecoveryStore$Database.onConfigure(NativeRecoveryStore.kt:69)
+	at android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java:408)
+	at android.database.sqlite.SQLiteOpenHelper.getWritableDatabase(SQLiteOpenHelper.java:336)
+	at dev.durableagent.probe.NativeRecoveryStore.access(NativeRecoveryStore.kt:62)
+	at dev.durableagent.probe.NativeRecoveryStore.pendingCompletion(NativeRecoveryStore.kt:44)
+	at dev.durableagent.probe.NativeRecoveryStoreTest.durableCompletionOutboxRetainsOneIdentityUntilAcknowledged(NativeRecoveryStoreTest.kt:35)
+
+INSTRUMENTATION_STATUS: stream=
+Error in durableCompletionOutboxRetainsOneIdentityUntilAcknowledged(dev.durableagent.probe.NativeRecoveryStoreTest):
+android.database.sqlite.SQLiteException: unknown error (code 0 SQLITE_OK): Queries can be performed using SQLiteDatabase query or rawQuery methods only.
+	at android.database.sqlite.SQLiteConnection.nativeExecuteForChangedRowCount(Native Method)
+	at android.database.sqlite.SQLiteConnection.executeForChangedRowCount(SQLiteConnection.java:937)
+	at android.database.sqlite.SQLiteSession.executeForChangedRowCount(SQLiteSession.java:791)
+	at android.database.sqlite.SQLiteStatement.executeUpdateDelete(SQLiteStatement.java:67)
+	at android.database.sqlite.SQLiteDatabase.executeSql(SQLiteDatabase.java:2235)
+	at android.database.sqlite.SQLiteDatabase.execSQL(SQLiteDatabase.java:2154)
+	at dev.durableagent.probe.NativeRecoveryStore$Database.onConfigure(NativeRecoveryStore.kt:69)
+	at android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java:408)
+	at android.database.sqlite.SQLiteOpenHelper.getWritableDatabase(SQLiteOpenHelper.java:336)
+	at dev.durableagent.probe.NativeRecoveryStore.access(NativeRecoveryStore.kt:62)
+	at dev.durableagent.probe.NativeRecoveryStore.pendingCompletion(NativeRecoveryStore.kt:44)
+	at dev.durableagent.probe.NativeRecoveryStoreTest.durableCompletionOutboxRetainsOneIdentityUntilAcknowledged(NativeRecoveryStoreTest.kt:35)
+
+INSTRUMENTATION_STATUS: test=durableCompletionOutboxRetainsOneIdentityUntilAcknowledged
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.567
+There were 2 failures:
+1) oneWorkKeepsItsProbeBudgetAndEpochAcrossReopenAndDuplicateWake(dev.durableagent.probe.NativeRecoveryStoreTest)
+android.database.sqlite.SQLiteException: unknown error (code 0 SQLITE_OK): Queries can be performed using SQLiteDatabase query or rawQuery methods only.
+	at android.database.sqlite.SQLiteConnection.nativeExecuteForChangedRowCount(Native Method)
+	at android.database.sqlite.SQLiteConnection.executeForChangedRowCount(SQLiteConnection.java:937)
+	at android.database.sqlite.SQLiteSession.executeForChangedRowCount(SQLiteSession.java:791)
+	at android.database.sqlite.SQLiteStatement.executeUpdateDelete(SQLiteStatement.java:67)
+	at android.database.sqlite.SQLiteDatabase.executeSql(SQLiteDatabase.java:2235)
+	at android.database.sqlite.SQLiteDatabase.execSQL(SQLiteDatabase.java:2154)
+	at dev.durableagent.probe.NativeRecoveryStore$Database.onConfigure(NativeRecoveryStore.kt:69)
+	at android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java:408)
+	at android.database.sqlite.SQLiteOpenHelper.getWritableDatabase(SQLiteOpenHelper.java:336)
+	at dev.durableagent.probe.NativeRecoveryStore.access(NativeRecoveryStore.kt:62)
+	at dev.durableagent.probe.NativeRecoveryStore.wake(NativeRecoveryStore.kt:25)
+	at dev.durableagent.probe.NativeRecoveryStoreTest.oneWorkKeepsItsProbeBudgetAndEpochAcrossReopenAndDuplicateWake(NativeRecoveryStoreTest.kt:17)
+2) durableCompletionOutboxRetainsOneIdentityUntilAcknowledged(dev.durableagent.probe.NativeRecoveryStoreTest)
+android.database.sqlite.SQLiteException: unknown error (code 0 SQLITE_OK): Queries can be performed using SQLiteDatabase query or rawQuery methods only.
+	at android.database.sqlite.SQLiteConnection.nativeExecuteForChangedRowCount(Native Method)
+	at android.database.sqlite.SQLiteConnection.executeForChangedRowCount(SQLiteConnection.java:937)
+	at android.database.sqlite.SQLiteSession.executeForChangedRowCount(SQLiteSession.java:791)
+	at android.database.sqlite.SQLiteStatement.executeUpdateDelete(SQLiteStatement.java:67)
+	at android.database.sqlite.SQLiteDatabase.executeSql(SQLiteDatabase.java:2235)
+	at android.database.sqlite.SQLiteDatabase.execSQL(SQLiteDatabase.java:2154)
+	at dev.durableagent.probe.NativeRecoveryStore$Database.onConfigure(NativeRecoveryStore.kt:69)
+	at android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java:408)
+	at android.database.sqlite.SQLiteOpenHelper.getWritableDatabase(SQLiteOpenHelper.java:336)
+	at dev.durableagent.probe.NativeRecoveryStore.access(NativeRecoveryStore.kt:62)
+	at dev.durableagent.probe.NativeRecoveryStore.pendingCompletion(NativeRecoveryStore.kt:44)
+	at dev.durableagent.probe.NativeRecoveryStoreTest.durableCompletionOutboxRetainsOneIdentityUntilAcknowledged(NativeRecoveryStoreTest.kt:35)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1

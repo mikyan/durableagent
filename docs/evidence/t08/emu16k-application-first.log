@@ -1,0 +1,82 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ProjectApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ProjectApplicationTest:
+INSTRUMENTATION_STATUS: test=realReactProjectSelectionSharedRenameAndStableReopen
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: projectEvidence={"case":"react-project-flow","result":{"firstReceipt":{"protocol":1,"intentId":"364511a8-aa98-44b3-be33-8464a95e3ded","id":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","inputToken":"138f995a-69e7-4662-8c1d-8573810be457","inputRevision":1,"inputDigest":"3e44b8318541ef911f5c3b2cb7f4a16fcfa199faf917cbb8bf6b7c1e6dfddcc1","context":{"sdkConversationId":5,"associationVersion":1,"location":{"workspaceId":"default","version":1,"identity":"3a7e66cbada9580bd42495886a7e1b3f64c61b3fc48157a5c146dcda8e7eb7eb"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"bindingId":"00a164a1-a81e-475f-9590-df8756ac10ba","submissionId":18},"secondReceipt":{"protocol":1,"intentId":"444a9a5e-228d-4f1d-8da7-4a0efb8b0a2b","id":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","inputToken":"51ecac98-e1e6-47e9-851d-d5648052bdef","inputRevision":3,"inputDigest":"2493e671a2e47b393766d683bfac6c80421a4a25e9385dd5c6cade3ea0881e24","context":{"sdkConversationId":5,"associationVersion":2,"location":{"workspaceId":"5bfa0a3a-1332-4702-9615-6dcc698eca47","version":1,"identity":"57c12f702843e18723149cf17cfb0590e71ec3a70e994bcb3d25f6f777c3b7a7"}},"queue":{"whenBusy":"followUp","whenIdle":"start"},"controlGeneration":1,"bindingId":"2dd52eac-e647-4752-abf9-2af32a9caf39","submissionId":29},"refusedReason":"\"尚有可能投递的发送意图，不能修改位置\"","selected":{"version":3,"projects":[{"id":"3051d3b3-3fc2-42e5-8455-529d11e9ac09","name":"持续工作项目","workspaceId":"5bfa0a3a-1332-4702-9615-6dcc698eca47"}],"workspaces":[{"id":"default","name":"默认工作区","version":1,"path":"\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/3bf5aa67-b01a-437d-9c81-5ca21cd705b1\/workspace","environment":"termux","position":{"state":"available","identity":"validation-directory:\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/3bf5aa67-b01a-437d-9c81-5ca21cd705b1\/workspace"}},{"id":"5bfa0a3a-1332-4702-9615-6dcc698eca47","name":"共享资料目录","path":"\/validation\/project-3bf5aa67-b01a-437d-9c81-5ca21cd705b1","environment":"termux","version":1,"position":{"state":"available","identity":"validation-directory:\/validation\/project-3bf5aa67-b01a-437d-9c81-5ca21cd705b1"}}],"selection":{"id":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","projectId":"3051d3b3-3fc2-42e5-8455-529d11e9ac09","workspaceId":"5bfa0a3a-1332-4702-9615-6dcc698eca47","associationVersion":2,"position":{"state":"available","identity":"validation-directory:\/validation\/project-3bf5aa67-b01a-437d-9c81-5ca21cd705b1"}}},"recovered":{"version":5,"projects":[{"id":"3051d3b3-3fc2-42e5-8455-529d11e9ac09","name":"共享项目当前名称","workspaceId":"5bfa0a3a-1332-4702-9615-6dcc698eca47"}],"workspaces":[{"id":"default","name":"默认工作区","version":1,"path":"\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/3bf5aa67-b01a-437d-9c81-5ca21cd705b1\/workspace","environment":"termux","position":{"state":"unverified","reason":"受控位置验证尚未启用"}},{"id":"5bfa0a3a-1332-4702-9615-6dcc698eca47","name":"共享资料目录","path":"\/validation\/project-3bf5aa67-b01a-437d-9c81-5ca21cd705b1","environment":"termux","version":1,"position":{"state":"unverified","reason":"受控位置验证尚未启用"}}],"selection":{"id":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","projectId":"3051d3b3-3fc2-42e5-8455-529d11e9ac09","workspaceId":"5bfa0a3a-1332-4702-9615-6dcc698eca47","associationVersion":2,"position":{"state":"unverified","reason":"受控位置验证尚未启用"}}},"projectToolWitnesses":[{"bindingId":"00a164a1-a81e-475f-9590-df8756ac10ba","workspaceId":"default","version":1,"path":"\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/3bf5aa67-b01a-437d-9c81-5ca21cd705b1\/workspace","projectId":null,"actualIdentity":"validation-directory:\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/3bf5aa67-b01a-437d-9c81-5ca21cd705b1\/workspace","sourceProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","controlProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","sdkConversationId":5,"toolTaskId":22},{"bindingId":"2dd52eac-e647-4752-abf9-2af32a9caf39","workspaceId":"5bfa0a3a-1332-4702-9615-6dcc698eca47","version":1,"path":"\/validation\/project-3bf5aa67-b01a-437d-9c81-5ca21cd705b1","projectId":"3051d3b3-3fc2-42e5-8455-529d11e9ac09","actualIdentity":"validation-directory:\/validation\/project-3bf5aa67-b01a-437d-9c81-5ca21cd705b1","sourceProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","controlProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","sdkConversationId":5,"toolTaskId":32}],"projectEnvironments":[{"bindingId":"00a164a1-a81e-475f-9590-df8756ac10ba","workspaceId":"default","version":1,"path":"\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/3bf5aa67-b01a-437d-9c81-5ca21cd705b1\/workspace","projectId":null,"actualIdentity":"validation-directory:\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/3bf5aa67-b01a-437d-9c81-5ca21cd705b1\/workspace","sourceProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","controlProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee"},{"bindingId":"00a164a1-a81e-475f-9590-df8756ac10ba","workspaceId":"default","version":1,"path":"\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/3bf5aa67-b01a-437d-9c81-5ca21cd705b1\/workspace","projectId":null,"actualIdentity":"validation-directory:\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/3bf5aa67-b01a-437d-9c81-5ca21cd705b1\/workspace","sourceProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","controlProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee"},{"bindingId":"00a164a1-a81e-475f-9590-df8756ac10ba","workspaceId":"default","version":1,"path":"\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/3bf5aa67-b01a-437d-9c81-5ca21cd705b1\/workspace","projectId":null,"actualIdentity":"validation-directory:\/data\/user\/0\/dev.durableagent.probe\/files\/application-validation\/3bf5aa67-b01a-437d-9c81-5ca21cd705b1\/workspace","sourceProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","controlProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee"},{"bindingId":"2dd52eac-e647-4752-abf9-2af32a9caf39","workspaceId":"5bfa0a3a-1332-4702-9615-6dcc698eca47","version":1,"path":"\/validation\/project-3bf5aa67-b01a-437d-9c81-5ca21cd705b1","projectId":"3051d3b3-3fc2-42e5-8455-529d11e9ac09","actualIdentity":"validation-directory:\/validation\/project-3bf5aa67-b01a-437d-9c81-5ca21cd705b1","sourceProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","controlProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee"},{"bindingId":"2dd52eac-e647-4752-abf9-2af32a9caf39","workspaceId":"5bfa0a3a-1332-4702-9615-6dcc698eca47","version":1,"path":"\/validation\/project-3bf5aa67-b01a-437d-9c81-5ca21cd705b1","projectId":"3051d3b3-3fc2-42e5-8455-529d11e9ac09","actualIdentity":"validation-directory:\/validation\/project-3bf5aa67-b01a-437d-9c81-5ca21cd705b1","sourceProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","controlProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee"},{"bindingId":"2dd52eac-e647-4752-abf9-2af32a9caf39","workspaceId":"5bfa0a3a-1332-4702-9615-6dcc698eca47","version":1,"path":"\/validation\/project-3bf5aa67-b01a-437d-9c81-5ca21cd705b1","projectId":"3051d3b3-3fc2-42e5-8455-529d11e9ac09","actualIdentity":"validation-directory:\/validation\/project-3bf5aa67-b01a-437d-9c81-5ca21cd705b1","sourceProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee","controlProductId":"7f35bd16-34c3-4c3a-9309-3d50117d2fee"}],"activityRecreated":true,"hostReopened":true,"explicitModelRequests":4,"fileAccessVerified":false,"nativeObserverBusyReads":{},"reopenAddedModelRequests":0}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ProjectApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realReactProjectSelectionSharedRenameAndStableReopen
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ProjectApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=actualAndroidSharedProjectPolicy
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: projectEvidence={"case":"shared-project-policy","result":{"phase":"ready","extensions":["projects","conversation","input","submission"],"metrics":{"projectPolicyState":"passed","projectPolicyCases":[{"name":"shared project and workspace metadata survives reopen; renaming does not change position or copy project authority","passed":true},{"name":"pending native intent and real SDK work block location edits; rejection never becomes a delayed edit and rename remains ordinary metadata","passed":true},{"name":"actual SDK environment uses the adopted location through queued followups and a new explicit binding after release","passed":true},{"name":"canonical alias and unknown managed effects hold shared locations until explicit evidence release","passed":true},{"name":"task-owned internal conversations keep their binding after terminal owners, stay hidden, and later internal input still uses it","passed":true},{"name":"project association publication updates an already attached conversation observer and retains newer native expectations","passed":true},{"name":"committed edit with missing native publication is repaired by exact operation replay without leaving a stuck native fence","passed":true},{"name":"actual SDK COMMIT response uncertainty leaves native edit fenced; reopen publishes whichever complete configuration committed without applying an old proposal","passed":true},{"name":"T07 accepted binding migrates its provable location for environment use without changing its receipt or reissuing input","passed":true},{"name":"actual provider parser invokes the bound location witness tool; access revocation remains visible and never invokes a fallback environment","passed":true},{"name":"native intent creation and a location edit have explicit opposite orderings, while independent draft saves and stop stay durable","passed":true},{"name":"a fresh conversation can select another project while another conversation uses the common default; shared relocation still refuses","passed":true},{"name":"a fork keeps the history source location but inherits the actual task owner control domain, without product registration","passed":true}]},"instance":"f5fdd854-ddef-4ff8-9590-da4c6f4342c1","pid":26452,"domainOwned":true,"nativeOwners":1}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ProjectApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualAndroidSharedProjectPolicy
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ProjectApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realMimoBusyRefusalAndExplicitNewLocation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ProjectApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: expected:<2> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.ProjectApplicationTest.flow(ProjectApplicationTest.kt:103)
+	at dev.durableagent.probe.ProjectApplicationTest.realMimoBusyRefusalAndExplicitNewLocation(ProjectApplicationTest.kt:79)
+
+INSTRUMENTATION_STATUS: stream=
+Error in realMimoBusyRefusalAndExplicitNewLocation(dev.durableagent.probe.ProjectApplicationTest):
+java.lang.AssertionError: expected:<2> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.ProjectApplicationTest.flow(ProjectApplicationTest.kt:103)
+	at dev.durableagent.probe.ProjectApplicationTest.realMimoBusyRefusalAndExplicitNewLocation(ProjectApplicationTest.kt:79)
+
+INSTRUMENTATION_STATUS: test=realMimoBusyRefusalAndExplicitNewLocation
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 31.887
+There was 1 failure:
+1) realMimoBusyRefusalAndExplicitNewLocation(dev.durableagent.probe.ProjectApplicationTest)
+java.lang.AssertionError: expected:<2> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at dev.durableagent.probe.ProjectApplicationTest.flow(ProjectApplicationTest.kt:103)
+	at dev.durableagent.probe.ProjectApplicationTest.realMimoBusyRefusalAndExplicitNewLocation(ProjectApplicationTest.kt:79)
+
+FAILURES!!!
+Tests run: 3,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

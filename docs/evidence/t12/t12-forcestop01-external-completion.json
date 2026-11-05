@@ -1,0 +1,133 @@
+{
+  "product": "a1d19357-41ed-487b-a90c-da77950e8482",
+  "run": "5b2b1716-4437-49a7-8134-a9c624c6c99e",
+  "startedAt": "2026-11-04T13:17:14.528449+00:00",
+  "observerStartedTarget": false,
+  "instrumentationUsed": false,
+  "sdkOpened": false,
+  "credentialsResolved": false,
+  "stoppedInterval": false,
+  "observations": [
+    {
+      "at": "2026-11-04T13:17:14.717108+00:00",
+      "agentPid": "5463",
+      "applicationServiceRegistered": true,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": false,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": null
+    },
+    {
+      "at": "2026-11-04T13:17:16.920429+00:00",
+      "agentPid": "5463",
+      "applicationServiceRegistered": false,
+      "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "stopped": false,
+      "userId": 0,
+      "userState": "RUNNING_UNLOCKED",
+      "userUnlocked": true,
+      "lockedDetected": false,
+      "nativeSnapshot": {
+        "sha256": "3fe5ef2062d4998240f86a5904faa30eaae64ff72758e1e0cfa045ea01998e6a",
+        "bytes": 36864,
+        "file": "recovery-2.sqlite",
+        "journalStates": [
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          },
+          {
+            "rollbackJournalBytes": 0,
+            "walBytes": null,
+            "shmBytes": null
+          }
+        ],
+        "rollbackJournalClean": true,
+        "identicalCopies": 2,
+        "integrity": "ok",
+        "readOnly": true,
+        "applicationServiceAbsentBeforeAndAfterCopy": true,
+        "completion": {
+          "identity": "answer:72:86",
+          "conversationId": "a1d19357-41ed-487b-a90c-da77950e8482"
+        },
+        "outbox": [
+          {
+            "identity": "answer:72:86",
+            "delivery": 1
+          }
+        ],
+        "conversation": {
+          "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+          "phase": "done"
+        }
+      },
+      "afterSnapshot": {
+        "at": "2026-11-04T13:17:17.956367+00:00",
+        "agentPid": "5463",
+        "applicationServiceRegistered": false,
+        "packageUserState": "User 0: ceDataInode=549411 deDataInode=393759 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+        "stopped": false,
+        "userId": 0,
+        "userState": "RUNNING_UNLOCKED",
+        "userUnlocked": true,
+        "lockedDetected": false
+      }
+    }
+  ],
+  "completed": true,
+  "observedAt": "2026-11-04T13:17:18.153070+00:00",
+  "nativeSnapshot": {
+    "sha256": "3fe5ef2062d4998240f86a5904faa30eaae64ff72758e1e0cfa045ea01998e6a",
+    "bytes": 36864,
+    "file": "recovery-2.sqlite",
+    "journalStates": [
+      {
+        "rollbackJournalBytes": 0,
+        "walBytes": null,
+        "shmBytes": null
+      },
+      {
+        "rollbackJournalBytes": 0,
+        "walBytes": null,
+        "shmBytes": null
+      },
+      {
+        "rollbackJournalBytes": 0,
+        "walBytes": null,
+        "shmBytes": null
+      }
+    ],
+    "rollbackJournalClean": true,
+    "identicalCopies": 2,
+    "integrity": "ok",
+    "readOnly": true,
+    "applicationServiceAbsentBeforeAndAfterCopy": true,
+    "completion": {
+      "identity": "answer:72:86",
+      "conversationId": "a1d19357-41ed-487b-a90c-da77950e8482"
+    },
+    "outbox": [
+      {
+        "identity": "answer:72:86",
+        "delivery": 1
+      }
+    ],
+    "conversation": {
+      "id": "a1d19357-41ed-487b-a90c-da77950e8482",
+      "phase": "done"
+    }
+  },
+  "applicationServiceAbsentBeforeAndAfterCopy": true,
+  "cachedAgentPid": "5463",
+  "processExitRequired": false
+}

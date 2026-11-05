@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentDeathTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.NativeDocumentDeathTest:
+INSTRUMENTATION_STATUS: test=reopenedUnknownIsNotReleasedByMatchingBytesAndNeverRewrites
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: documentEvidence={"stage":"reopened-unknown-original-matches-no-rewrite","receipt":{"operationId":"death-t10-native-death-20261104-01","resourceId":"3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","productId":"chat","controlGeneration":1,"sdkConversationId":101,"expectedDigest":"5e35cac2eb75e5fc0f7e77c775cd8104e5d2674a619d4c01781ef1c9533c7b14","contentDigest":"06b2bb2117113287b781c1f01e300602de83ba20bec86cbd48245e6639d2cb38","byteLength":26,"protocol":1,"requestDigest":"ccf4a656cebbeb5974edc0dce3290e13638b6f3953de2080016eb16575fedb4d","namespace":"saf:3d7f2d07999b73aa1f654a7c4e635f3c03964ca558a08b5a8422f2f9366f5873","kind":"file","source":"saf","original":true,"uri":"content:\/\/dev.durableagent.documentsfixture.documents\/document\/original","displayName":"original.bin","nativeControlNamespace":"input-document-t10-native-death-20261104-01","state":"unknown","scopeConfirmed":false,"sequence":3,"stagedOffset":26,"sealed":true,"diff":{"state":"unavailable","reason":"not_completed"},"reason":"DOCUMENT_HOST_LOST","verification":{"status":"read","currentDigest":"06b2bb2117113287b781c1f01e300602de83ba20bec86cbd48245e6639d2cb38","byteLength":26,"matchesExpected":false,"matchesContent":true,"observedAt":1793777158487}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.NativeDocumentDeathTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=reopenedUnknownIsNotReleasedByMatchingBytesAndNeverRewrites
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 0.232
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

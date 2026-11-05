@@ -1,0 +1,11 @@
+Warning: Activity not started, intent has been delivered to currently running top-most instance.
+file:///C:/Users/AI_BA/AppData/Local/Temp/durableagent-implementation/console-selection-process.mjs:13
+async function until(fn,label,timeout=60000){const deadline=Date.now()+timeout;let last;while(Date.now()<deadline){try{last=await fn();if(last)return last;}catch(e){last=e.message;}await pause(100);}throw Error(`${label} timeout: ${JSON.stringify(last)}`);}
+                                                                                                                                                                                                             ^
+
+Error: UI process timeout: "Command failed: C:\\Users\\AI_BA\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe -s emulator-5584 shell pidof dev.durableagent.probe"
+    at until (file:///C:/Users/AI_BA/AppData/Local/Temp/durableagent-implementation/console-selection-process.mjs:13:206)
+    at async attach (file:///C:/Users/AI_BA/AppData/Local/Temp/durableagent-implementation/console-selection-process.mjs:15:13)
+    at async file:///C:/Users/AI_BA/AppData/Local/Temp/durableagent-implementation/console-selection-process.mjs:71:8
+
+Node.js v24.14.1

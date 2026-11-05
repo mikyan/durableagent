@@ -1,0 +1,48 @@
+{
+  "stage": "T15 candidate 14; not final acceptance",
+  "sourceCommit": "ce6ac2a983b70f99de51fe6f0fd8eecf42d6493a",
+  "baseCommit": "b06bfc746e46b5ab59a5f4b4960df44f187316bc",
+  "branch": "codex/t15-console",
+  "builtFromCleanExecutableTree": true,
+  "buildLog": "evidence/raw/t15-build14.log",
+  "uiTests": {
+    "full": 90,
+    "focusedAfterFinalSummaryChange": 12
+  },
+  "runtimeTests": 222,
+  "androidConsoleTests": 2,
+  "androidConsoleTestCandidate": 13,
+  "nativeCodeUnchangedSinceConsoleTest": true,
+  "realMimoAndManagedDiffGate": "pending parent execution",
+  "t12t13Integration": "pending accepted integration",
+  "deviceRestored": {
+    "observedAt": "2026-11-04T11:06:08.211379+00:00",
+    "serial": "emulator-5584",
+    "physicalSize": "1080x2400",
+    "sizeOverride": null,
+    "physicalDensity": 420,
+    "densityOverride": null,
+    "fontScale": 1.0,
+    "accelerometerRotation": 1,
+    "userRotation": 0,
+    "showImeWithHardKeyboard": 0,
+    "appDataCleared": false,
+    "providerDataReset": false,
+    "currentFixture": "console/T15console01",
+    "currentFixtureState": "done; UI home"
+  },
+  "artifacts": {
+    "app-debug.apk": {
+      "bytes": 371032339,
+      "sha256": "f5e8f3ca0d560ba885e83f5d98a90444d6758ab77c779367fb1db69a835823b2"
+    },
+    "app-debug-androidTest.apk": {
+      "bytes": 3972172,
+      "sha256": "b953f723cb85b395d65e62490051cec79b2bc69296ba91307652d3a1ada80e44"
+    },
+    "source.zip": {
+      "bytes": 3277402,
+      "sha256": "7423b5b4e6fd5591daa432b0e7175d7d7403e31c66b103dd59aad45bd5bfe4ea"
+    }
+  }
+}

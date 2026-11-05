@@ -1,0 +1,106 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RuntimeProbeTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RuntimeProbeTest:
+INSTRUMENTATION_STATUS: test=optInRealMimoRoundtripAndCancellation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RuntimeProbeTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=org.junit.AssumptionViolatedException: got: <false>, expected: is <true>
+	at org.junit.Assume.assumeThat(Assume.java:106)
+	at org.junit.Assume.assumeTrue(Assume.java:50)
+	at dev.durableagent.probe.RuntimeProbeTest.optInRealMimoRoundtripAndCancellation(RuntimeProbeTest.kt:14)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:299)
+	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:293)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.lang.Thread.run(Thread.java:1119)
+
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.RuntimeProbeTest:
+INSTRUMENTATION_STATUS: test=optInRealMimoRoundtripAndCancellation
+INSTRUMENTATION_STATUS_CODE: -4
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RuntimeProbeTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realSdkStreamsAcrossActivityRecreationAndRuntimeReopens
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"ready","text":"","revision":2,"node":"v26.13.0","memory":187453440,"peakMemory":187453440,"transportRequests":0,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"05c21b51-9333-440e-8071-f771d14605f7"},"startupMs":21.36854200000002,"instance":"cef73ac9-c51c-482f-b7f4-9b357e92f079","pid":31654,"elapsedMs":4540,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"running","text":"你","revision":8,"node":"v26.13.0","memory":203567104,"peakMemory":203567104,"transportRequests":1,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"05c21b51-9333-440e-8071-f771d14605f7"},"startupMs":21.36854200000002,"instance":"cef73ac9-c51c-482f-b7f4-9b357e92f079","pid":31654,"elapsedMs":4806,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"done","text":"你好🌍","revision":12,"node":"v26.13.0","memory":205152256,"peakMemory":205152256,"transportRequests":1,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"05c21b51-9333-440e-8071-f771d14605f7"},"startupMs":21.36854200000002,"instance":"cef73ac9-c51c-482f-b7f4-9b357e92f079","pid":31654,"elapsedMs":5887,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"closed","text":"你好🌍","revision":13,"node":"v26.13.0","memory":200896512,"peakMemory":205152256,"transportRequests":1,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"05c21b51-9333-440e-8071-f771d14605f7"},"startupMs":21.36854200000002,"closeMs":6.546354000000065,"instance":"cef73ac9-c51c-482f-b7f4-9b357e92f079","pid":31654,"elapsedMs":5900,"nativeOwners":0,"nativeCloseMs":6}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"ready","text":"","revision":2,"node":"v26.13.0","memory":201478144,"peakMemory":201478144,"transportRequests":0,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"0489401a-ecac-4960-a2af-76437710c0bc"},"startupMs":19.23078099999998,"instance":"d0457315-0a29-49e8-beac-0d4d591a703b","pid":31654,"elapsedMs":313,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"closed","text":"","revision":3,"node":"v26.13.0","memory":201490432,"peakMemory":201490432,"transportRequests":0,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"0489401a-ecac-4960-a2af-76437710c0bc"},"startupMs":19.23078099999998,"closeMs":5.5223439999999755,"instance":"d0457315-0a29-49e8-beac-0d4d591a703b","pid":31654,"elapsedMs":325,"nativeOwners":0,"nativeCloseMs":3}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RuntimeProbeTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realSdkStreamsAcrossActivityRecreationAndRuntimeReopens
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RuntimeProbeTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=toolSchemaCancellationAndFaultRecreation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"ready","text":"","revision":2,"node":"v26.13.0","memory":200622080,"peakMemory":200622080,"transportRequests":0,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"6f47db41-b2dc-472c-befa-e07e934fbc6b"},"startupMs":19.038696999999956,"instance":"8501effb-d8d5-4ba9-aa34-87b902f19ca6","pid":31654,"elapsedMs":313,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"done","text":"你好🌍","revision":22,"node":"v26.13.0","memory":204410880,"peakMemory":204410880,"transportRequests":2,"transportAborted":false,"toolArguments":[{"city":"北京🌍","count":2}],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"6f47db41-b2dc-472c-befa-e07e934fbc6b"},"startupMs":19.038696999999956,"instance":"8501effb-d8d5-4ba9-aa34-87b902f19ca6","pid":31654,"elapsedMs":852,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"closed","text":"你好🌍","revision":23,"node":"v26.13.0","memory":204410880,"peakMemory":204410880,"transportRequests":2,"transportAborted":false,"toolArguments":[{"city":"北京🌍","count":2}],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"6f47db41-b2dc-472c-befa-e07e934fbc6b"},"startupMs":19.038696999999956,"closeMs":3.560990000000402,"instance":"8501effb-d8d5-4ba9-aa34-87b902f19ca6","pid":31654,"elapsedMs":859,"nativeOwners":0,"nativeCloseMs":3}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"ready","text":"","revision":2,"node":"v26.13.0","memory":202207232,"peakMemory":202207232,"transportRequests":0,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"a2d3c315-76f1-4745-926d-2d6ae1dff8c9"},"startupMs":19.600780999999643,"instance":"39f8503c-a746-4f02-a013-d7dbf47c19a9","pid":31654,"elapsedMs":328,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"done","text":"你好🌍","revision":20,"node":"v26.13.0","memory":186667008,"peakMemory":204816384,"transportRequests":2,"transportAborted":false,"toolArguments":[],"toolRejected":true,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"a2d3c315-76f1-4745-926d-2d6ae1dff8c9"},"startupMs":19.600780999999643,"instance":"39f8503c-a746-4f02-a013-d7dbf47c19a9","pid":31654,"elapsedMs":868,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"closed","text":"你好🌍","revision":21,"node":"v26.13.0","memory":186667008,"peakMemory":204816384,"transportRequests":2,"transportAborted":false,"toolArguments":[],"toolRejected":true,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"a2d3c315-76f1-4745-926d-2d6ae1dff8c9"},"startupMs":19.600780999999643,"closeMs":2.951093000000583,"instance":"39f8503c-a746-4f02-a013-d7dbf47c19a9","pid":31654,"elapsedMs":877,"nativeOwners":0,"nativeCloseMs":8}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"ready","text":"","revision":2,"node":"v26.13.0","memory":184737792,"peakMemory":184737792,"transportRequests":0,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"9fdf78fa-581a-491b-b5df-b3eece3d56d3"},"startupMs":18.933332999999948,"instance":"4a9b59fa-05c1-4b69-858e-1040e659301b","pid":31654,"elapsedMs":335,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"running","text":"","revision":7,"node":"v26.13.0","memory":188223488,"peakMemory":188223488,"transportRequests":1,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"9fdf78fa-581a-491b-b5df-b3eece3d56d3"},"startupMs":18.933332999999948,"instance":"4a9b59fa-05c1-4b69-858e-1040e659301b","pid":31654,"elapsedMs":518,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"stopped","text":"","revision":11,"node":"v26.13.0","memory":188473344,"peakMemory":188473344,"transportRequests":1,"transportAborted":true,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"9fdf78fa-581a-491b-b5df-b3eece3d56d3"},"startupMs":18.933332999999948,"cancelMs":10.515363999999863,"instance":"4a9b59fa-05c1-4b69-858e-1040e659301b","pid":31654,"elapsedMs":538,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"closed","text":"","revision":12,"node":"v26.13.0","memory":188420096,"peakMemory":188473344,"transportRequests":1,"transportAborted":true,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"9fdf78fa-581a-491b-b5df-b3eece3d56d3"},"startupMs":18.933332999999948,"cancelMs":10.515363999999863,"closeMs":6.314217999999528,"instance":"4a9b59fa-05c1-4b69-858e-1040e659301b","pid":31654,"elapsedMs":552,"nativeOwners":0,"nativeCloseMs":4}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"ready","text":"","revision":2,"node":"v26.13.0","memory":185876480,"peakMemory":185876480,"transportRequests":0,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"81b0ada0-3cfd-472b-88c5-0b91813d43e3"},"startupMs":18.872969000000012,"instance":"b368980b-078b-47c0-85e8-8581593f930f","pid":31654,"elapsedMs":327,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"status":"failed","phase":"command","error":"com.caoccao.javet.exceptions.JavetExecutionException: Error: Injected validation runtime fault\n\tat com.caoccao.javet.interop.V8Native.scriptExecute(Native Method)\n\tat com.caoccao.javet.interop.V8Runtime.execute(V8Runtime.java:1271)\n\tat com.caoccao.javet.interop.executors.V8StringExecutor.execute(V8StringExecutor.java:107)\n\tat com.caoccao.javet.interop.IV8Executable.executeVoid(IV8Executable.java:192)\n\tat dev.durableagent.probe.RuntimeService.command(RuntimeService.kt:43)\n\tat dev.durableagent.probe.RuntimeService.messenger$lambda$0$0(RuntimeService.kt:31)\n\tat dev.durableagent.probe.RuntimeService.$r8$lambda$lRAW3t-OoFBsmHZiP2ZMzMXmtio(Unknown Source:0)\n\tat dev.durableagent.probe.RuntimeService$$ExternalSyntheticLambda1.run(D8$$SyntheticClass:0)\n\tat android.os.Handler.handleCallback(Handler.java:995)\n\tat android.os.Handler.dispatchMessage(Handler.java:103)\n\tat android.os.Looper.loopOnce(Looper.java:273)\n\tat android.os.Looper.loop(Looper.java:363)\n\tat android.os.HandlerThread.run(HandlerThread.java:85)\n","instance":"b368980b-078b-47c0-85e8-8581593f930f","nativeCloseMs":4,"nativeOwners":0}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"ready","text":"","revision":2,"node":"v26.13.0","memory":185901056,"peakMemory":185901056,"transportRequests":0,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"723cf27b-c23c-4813-9d0b-63dc1e501f71"},"startupMs":18.770105000000513,"instance":"5a37ee1b-95e2-4f9f-bf58-b51e7b0234b2","pid":31654,"elapsedMs":320,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: probeEvidence={"sdk":"1.5.0","status":"closed","text":"","revision":3,"node":"v26.13.0","memory":185950208,"peakMemory":185950208,"transportRequests":0,"transportAborted":false,"toolArguments":[],"toolRejected":false,"capabilities":{"weakRef":true,"proxy":7,"text":"中文🌍","asyncIteration":"ab","sqlite":42,"moduleUrl":"file:\/\/\/data\/data\/dev.durableagent.probe\/files\/probe-bundles\/d100854530b5723b5e9b4c4a5d00cd5ffcc77d3aced29cb43b4632d4f325c41d\/dist\/capabilities.js","random":"723cf27b-c23c-4813-9d0b-63dc1e501f71"},"startupMs":18.770105000000513,"closeMs":3.6909379999997327,"instance":"5a37ee1b-95e2-4f9f-bf58-b51e7b0234b2","pid":31654,"elapsedMs":326,"nativeOwners":0,"nativeCloseMs":3}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.RuntimeProbeTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=toolSchemaCancellationAndFaultRecreation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 11.199
+
+OK (3 tests)
+
+
+INSTRUMENTATION_CODE: -1

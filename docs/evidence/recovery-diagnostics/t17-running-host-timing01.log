@@ -1,0 +1,14 @@
+(node:98140) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ owner death at native-start resumes the original running tool and collects its later completion (739.5415ms)
+✔ owner death at partial-read resumes the original running tool and collects its later completion (539.8534ms)
+✔ owner death at query-before-output-save resumes the original running tool and collects its later completion (539.5111ms)
+✔ owner death at output-checkpoint resumes the original running tool and collects its later completion (553.1466ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2632.0442

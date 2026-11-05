@@ -1,0 +1,4 @@
+RUNNING_UNLOCKED
+Broadcasting: Intent { flg=0x400020 cmp=dev.durableagent.probe/.CredentialBootProbeReceiver }
+Broadcast completed: result=0, data="{"userUnlocked":true,"metadata":{"connectionId":"boot-probe","state":"absent","generation":0,"configured":false},"ceNamespaceExistedBeforeQuery":false,"resolvedSecret":false}"
+Restored original lock-disabled state: true

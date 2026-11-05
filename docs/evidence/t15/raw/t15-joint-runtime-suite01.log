@@ -1,0 +1,47 @@
+(node:89252) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ two product conversations have independent durable history and stable retried creation (567.8727ms)
+✔ configuration gates every scheduling entry while real SDK open uses valid synchronous bootstrap settings (102.2246ms)
+✔ unsubscribe detaches UI only; full snapshot reconnect restores completed durable history (313.2748ms)
+✔ history paging recovers entries older than the live window without mixing conversations (6594.6695ms)
+✔ explicit stop aborts the active model while retaining accepted input (145.0649ms)
+✔ start during close waits for the prior writable Session to release ownership (94.449ms)
+✔ failed atomic creation closes the application gate and retry after reopen finds no half conversation (122.2865ms)
+✔ SDK conversations without explicit product registration never enter the product list (90.5174ms)
+✔ actual SDK retry and terminal provider error project waiting and failed states (438.684ms)
+✔ disconnect and unsubscribe invalidate a subscription whose attachment is still pending (276.54ms)
+✔ a fatal SQLite error reports unavailable observation and failed host without inventing a terminal conversation (75.0236ms)
+✔ newer persisted configuration refuses startup and preserves its original data (65.0238ms)
+✔ a due persisted retry stays dormant until reopened configuration is ready (753.4763ms)
+✔ context presentation reads current SDK model context, never accumulated usage or another conversation (298.1524ms)
+(node:89900) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ an unknown Provider read waits in its original SDK tool and safe reopen reuses the fixed observation (available snapshot) (767.1539ms)
+✔ an unknown Provider read waits in its original SDK tool and safe reopen reuses the fixed observation (DATA_SAVER_BUSY) (714.4982ms)
+✔ an original write waits before occupying the shared writer and exact grant resumes the same native plan (INPUT_STORAGE_BUSY) (489.9081ms)
+✔ an original write waits before occupying the shared writer and exact grant resumes the same native plan (DATA_SAVER_BUSY) (421.1409ms)
+✔ a native refusal before start admission retries only the same fixed original write (DOCUMENT_CHANNEL_BUSY) (330.0712ms)
+✔ a native refusal before start admission retries only the same fixed original write (DATA_SAVER_BUSY) (329.7259ms)
+✔ policy storage busy after dispatch waits for the same original result without repeating a write (522.8933ms)
+✔ a confirmed original write survives policy receipt loss (start response lost) without another write (307.8529ms)
+✔ a confirmed original write survives policy receipt loss (pending SDK receipt) without another write (277.5105ms)
+✔ public file observation during policy waiting preserves the staged receipt sequence and original SDK tool (437.6262ms)
+(node:39428) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ the policy binds final beforeTool and prepare mutations for direct SDK calls (515.2996ms)
+✔ the policy binds final beforeTool and prepare mutations for nested SDK calls (405.6125ms)
+✔ an actual SDK command waits before start with one prepared identity while its model communication remains usable (334.6713ms)
+✔ the shared application configuration exposes current native network facts without submitting work (90.032ms)
+✔ network-interrupted effects keep the same pending SDK tool instead of prompting another model action; user stop still settles it (430.2151ms)
+✔ temporary native policy unavailability holds the original invocation without starting or asking the model again (444.6026ms)
+✔ a final native network refusal returns the same prepared execution to policy waiting, without a new model turn (424.8418ms)
+✔ real SDK host death after prepared policy restores the same waiting identity and only the explicit grant starts it (716.3897ms)
+✔ the fixed product Bash capability makes exact pwd -P local with a clean environment and no script analyzer (289.5642ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10195.253

@@ -1,0 +1,18 @@
+.execution-panel{margin:0 18px 8px;border:1px solid #dedfd9;border-radius:12px;background:#fafbf8;flex-shrink:0;font-size:12px;color:#39413e}
+.execution-panel summary{padding:10px 12px;cursor:pointer;font-weight:600}
+.execution-panel summary span{font-weight:400;color:#737b76;margin-left:8px}
+.execution-content{padding:0 12px 10px;max-height:240px;overflow:auto}
+.execution-content p{margin:0 0 8px;line-height:1.5}
+.execution-actions{display:flex;flex-wrap:wrap;gap:8px}
+.execution-actions button{font:inherit;color:#354d40;background:white;border:1px solid #cdd7cf;border-radius:8px;padding:7px 10px;cursor:pointer}
+.execution-actions button:disabled{opacity:.5;cursor:default}
+.execution-content .execution-notice,.execution-content .execution-error{margin-top:8px}
+.execution-error,.execution-warning{color:#8c4c2e}
+.execution-list{list-style:none;padding:0;margin:10px 0 0}
+.execution-list li{padding:9px 0;border-top:1px solid #e1e5df}
+.execution-row-title{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.execution-list code{display:block;overflow-wrap:anywhere;font-size:11px;margin-bottom:8px;color:#69756c}
+@media(max-width:600px){.execution-panel{margin-left:10px;margin-right:10px}.execution-content{max-height:200px}}
+.file-changes{border-top:1px solid #d9e1d7;margin-top:16px;padding-top:14px}
+.file-changes details{margin:8px 0;color:#53634f}
+.file-diff{max-height:280px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;padding:12px;border-radius:7px;background:#f3f6f0;color:#233222;font-size:12px;line-height:1.6}

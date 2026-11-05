@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <queries><package android:name="dev.durableagent.probe"/><package android:name="dev.durableagent.retention"/></queries>
+    <application android:label="DurableAgent Test Source" android:allowBackup="false" android:fullBackupContent="false">
+        <activity android:name=".SourceActivity" android:exported="true">
+            <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
+        </activity>
+        <provider android:name=".SourceProvider" android:authorities="dev.durableagent.inputsource.documents" android:exported="true" android:grantUriPermissions="true" android:permission="android.permission.MANAGE_DOCUMENTS">
+            <intent-filter><action android:name="android.content.action.DOCUMENTS_PROVIDER"/></intent-filter>
+        </provider>
+        <receiver android:name=".ControlReceiver" android:exported="true"/>
+    </application>
+</manifest>

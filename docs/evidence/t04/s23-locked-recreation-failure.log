@@ -1,0 +1,92 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ApplicationTest:
+INSTRUMENTATION_STATUS: test=realReactTwoConversationsReconnectAndNativeReopen
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Activity never becomes requested state "[RESUMED]" (last lifecycle transition = "STOPPED")
+	at androidx.test.core.app.ActivityScenario.waitForActivityToBecomeAnyOf(ActivityScenario.java:454)
+	at androidx.test.core.app.ActivityScenario.moveToState(ActivityScenario.java:689)
+	at androidx.test.core.app.ActivityScenario.recreate(ActivityScenario.java:718)
+	at dev.durableagent.probe.ApplicationTest.realReactTwoConversationsReconnectAndNativeReopen(ApplicationTest.kt:76)
+
+INSTRUMENTATION_STATUS: stream=
+Error in realReactTwoConversationsReconnectAndNativeReopen(dev.durableagent.probe.ApplicationTest):
+java.lang.AssertionError: Activity never becomes requested state "[RESUMED]" (last lifecycle transition = "STOPPED")
+	at androidx.test.core.app.ActivityScenario.waitForActivityToBecomeAnyOf(ActivityScenario.java:454)
+	at androidx.test.core.app.ActivityScenario.moveToState(ActivityScenario.java:689)
+	at androidx.test.core.app.ActivityScenario.recreate(ActivityScenario.java:718)
+	at dev.durableagent.probe.ApplicationTest.realReactTwoConversationsReconnectAndNativeReopen(ApplicationTest.kt:76)
+
+INSTRUMENTATION_STATUS: test=realReactTwoConversationsReconnectAndNativeReopen
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=largeTextCrossesBinderFragmentsAndReactWithoutTruncation
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: applicationEvidence={"case":"large-react-ipc","result":{"charactersPerInput":90000,"historyUtf16Bytes":1981410,"historyCount":12,"exactText":true}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=largeTextCrossesBinderFragmentsAndReactWithoutTruncation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=explicitStopAndDetachedUiPreserveInput
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: applicationEvidence={"case":"stop-detached-ui","result":{"id":"hang","revision":7,"conversation":{"id":"hang","title":"新会话","model":{"provider":"fixture","modelId":"conversation","name":"验证模型"},"workspaceId":"default","projectId":null,"createdAt":1793727557323,"phase":"stopped"},"entries":[{"id":"10","role":"user","text":"保留输入并停止","persisted":true}],"phase":"stopped","storedSeq":7}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=explicitStopAndDetachedUiPreserveInput
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realMimoProductConversationsPersistWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: applicationEvidence={"case":"real-mimo-two-conversations","result":{"before":{"phase":"ready","extensions":["conversation"],"metrics":{"transportRequests":2,"currentRequest":2,"transportAborted":true,"requestAbortCount":1,"bodyReadPending":false,"bodyReadError":"","bodyReadCancelled":true,"providerFinished":true,"textDeltaEvents":6,"toolDeltaEvents":0},"instance":"233eafba-6de7-4f9a-8b26-81f36e700dbe","pid":24317,"domainOwned":true,"nativeOwners":1},"reopened":{"phase":"ready","extensions":["conversation"],"metrics":{},"instance":"774af368-cff6-449e-bedd-d2dd011b79de","pid":24317,"domainOwned":true,"nativeOwners":1},"histories":{"real-a":"{\"items\":[{\"id\":\"10\",\"role\":\"user\",\"text\":\"请只回复一句简短中文问候，包含编号 real-a。\",\"persisted\":true},{\"id\":\"13\",\"role\":\"assistant\",\"text\":\"你好 real-a！\",\"persisted\":true}]}","real-b":"{\"items\":[{\"id\":\"20\",\"role\":\"user\",\"text\":\"请只回复一句简短中文问候，包含编号 real-b。\",\"persisted\":true},{\"id\":\"23\",\"role\":\"assistant\",\"text\":\"real-b，你好！\",\"persisted\":true}]}"}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=4
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoProductConversationsPersistWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 83.693
+There was 1 failure:
+1) realReactTwoConversationsReconnectAndNativeReopen(dev.durableagent.probe.ApplicationTest)
+java.lang.AssertionError: Activity never becomes requested state "[RESUMED]" (last lifecycle transition = "STOPPED")
+	at androidx.test.core.app.ActivityScenario.waitForActivityToBecomeAnyOf(ActivityScenario.java:454)
+	at androidx.test.core.app.ActivityScenario.moveToState(ActivityScenario.java:689)
+	at androidx.test.core.app.ActivityScenario.recreate(ActivityScenario.java:718)
+	at dev.durableagent.probe.ApplicationTest.realReactTwoConversationsReconnectAndNativeReopen(ApplicationTest.kt:76)
+
+FAILURES!!!
+Tests run: 4,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

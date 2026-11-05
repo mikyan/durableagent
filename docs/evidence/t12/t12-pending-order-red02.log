@@ -1,0 +1,58 @@
+(node:87960) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ startup preserves the original explicit send order across 2 pending intents (465.3567ms)
+✖ startup preserves the original explicit send order across 52 pending intents (852.7804ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1549.3624
+
+✖ failing tests:
+
+test at validation\submission-policy.mjs:3:87
+✖ startup preserves the original explicit send order across 2 pending intents (465.3567ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'ordered input 1',
+      'ordered input 0',
+  -   'ordered input 1'
+    ]
+  
+      at TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/validation/submission-policy.mjs:105:10)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:358:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'ordered input 1', 'ordered input 0' ],
+    expected: [ 'ordered input 0', 'ordered input 1' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at validation\submission-policy.mjs:3:87
+✖ startup preserves the original explicit send order across 52 pending intents (852.7804ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'ordered input 1',
+      'ordered input 0',
+  -   'ordered input 1'
+    ]
+  
+      at TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t12-resume/durableagent/runtime/validation/submission-policy.mjs:105:10)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'ordered input 1', 'ordered input 0' ],
+    expected: [ 'ordered input 0', 'ordered input 1' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,47 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverApplicationTest:
+INSTRUMENTATION_STATUS: test=publicSettingUsesNativeFactsAndSurvivesFreshSdkOwnerWithoutRequests
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: {"type":"response","protocol":1,"connectionId":"data-saver-test","requestId":"1d0bc9dd-9b42-4c5e-b2f7-57e8bfe4201c","ok":false,"error":{"code":"UNKNOWN_ACTION","message":"未登记的应用操作"}}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverApplicationTest$Wire.call(DataSaverApplicationTest.kt:29)
+	at dev.durableagent.probe.DataSaverApplicationTest$Wire.call$default(DataSaverApplicationTest.kt:26)
+	at dev.durableagent.probe.DataSaverApplicationTest.publicSettingUsesNativeFactsAndSurvivesFreshSdkOwnerWithoutRequests(DataSaverApplicationTest.kt:42)
+
+INSTRUMENTATION_STATUS: stream=
+Error in publicSettingUsesNativeFactsAndSurvivesFreshSdkOwnerWithoutRequests(dev.durableagent.probe.DataSaverApplicationTest):
+java.lang.AssertionError: {"type":"response","protocol":1,"connectionId":"data-saver-test","requestId":"1d0bc9dd-9b42-4c5e-b2f7-57e8bfe4201c","ok":false,"error":{"code":"UNKNOWN_ACTION","message":"未登记的应用操作"}}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverApplicationTest$Wire.call(DataSaverApplicationTest.kt:29)
+	at dev.durableagent.probe.DataSaverApplicationTest$Wire.call$default(DataSaverApplicationTest.kt:26)
+	at dev.durableagent.probe.DataSaverApplicationTest.publicSettingUsesNativeFactsAndSurvivesFreshSdkOwnerWithoutRequests(DataSaverApplicationTest.kt:42)
+
+INSTRUMENTATION_STATUS: test=publicSettingUsesNativeFactsAndSurvivesFreshSdkOwnerWithoutRequests
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 6.487
+There was 1 failure:
+1) publicSettingUsesNativeFactsAndSurvivesFreshSdkOwnerWithoutRequests(dev.durableagent.probe.DataSaverApplicationTest)
+java.lang.AssertionError: {"type":"response","protocol":1,"connectionId":"data-saver-test","requestId":"1d0bc9dd-9b42-4c5e-b2f7-57e8bfe4201c","ok":false,"error":{"code":"UNKNOWN_ACTION","message":"未登记的应用操作"}}
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.DataSaverApplicationTest$Wire.call(DataSaverApplicationTest.kt:29)
+	at dev.durableagent.probe.DataSaverApplicationTest$Wire.call$default(DataSaverApplicationTest.kt:26)
+	at dev.durableagent.probe.DataSaverApplicationTest.publicSettingUsesNativeFactsAndSurvivesFreshSdkOwnerWithoutRequests(DataSaverApplicationTest.kt:42)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

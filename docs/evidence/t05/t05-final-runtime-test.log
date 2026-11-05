@@ -1,0 +1,128 @@
+
+> @durableagent/runtime-probe@0.1.0 pretest
+> npm run build
+
+
+> @durableagent/runtime-probe@0.1.0 build
+> tsc
+
+
+> @durableagent/runtime-probe@0.1.0 test
+> node --test test/*.test.mjs
+
+(node:19016) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ two product conversations have independent durable history and stable retried creation (427.2246ms)
+✔ configuration gates every scheduling entry while real SDK open uses valid synchronous bootstrap settings (54.0439ms)
+✔ unsubscribe detaches UI only; full snapshot reconnect restores completed durable history (255.0462ms)
+✔ history paging recovers entries older than the live window without mixing conversations (6112.601ms)
+✔ explicit stop aborts the active model while retaining accepted input (66.3066ms)
+✔ start during close waits for the prior writable Session to release ownership (46.6142ms)
+✔ failed atomic creation closes the application gate and retry after reopen finds no half conversation (67.559ms)
+✔ SDK conversations without explicit product registration never enter the product list (55.6951ms)
+✔ actual SDK retry and terminal provider error project waiting and failed states (380.2717ms)
+✔ disconnect and unsubscribe invalidate a subscription whose attachment is still pending (229.7547ms)
+✔ a fatal SQLite error tells attached UI the run failed instead of leaving a stale status (36.2023ms)
+✔ newer persisted configuration refuses startup and preserves its original data (42.863ms)
+✔ a due persisted retry stays dormant until reopened configuration is ready (705.6128ms)
+(node:39616) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ ordinary generation retry prepares the current model and request-time credential (1687.4469ms)
+✔ close: held generation resumes its fixed or newly prepared route with one durable input (527.9701ms)
+✔ kill: held generation resumes its fixed or newly prepared route with one durable input (1689.8032ms)
+✔ deferred poll process death: unchanged keeps the original handle or fails without a replacement start (1774.5417ms)
+✔ deferred poll process death: rotated keeps the original handle or fails without a replacement start (3178.0356ms)
+✔ deferred poll process death: disabled keeps the original handle or fails without a replacement start (3183.7521ms)
+✔ selected compaction retries and orderly resumes its selected model after current selection changes (1765.7143ms)
+✔ overdue work remains behind the configuration loading gate on reopen (2160.2191ms)
+✔ secret persistence detector has a positive control before relying on clean DB and WAL scans (3.7136ms)
+(node:14768) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ public configuration is durable; defaults and current models are separate; queries never decrypt (423.7603ms)
+✔ configuration COMMIT failure preserves old durable version and blocks scheduling until reopen (69.4507ms)
+✔ rotation or disable before final admission sends nothing; disabling after send does not cancel it (227.4925ms)
+✔ an old deferred response never becomes a replacement request after credential rotation (191.0153ms)
+✔ actual HTTP redirects cannot forward credentials or prompt body to another destination (32.0187ms)
+✔ credential/options overrides are rejected; revoke never uses ambient environment credentials (0.9052ms)
+✔ a post-commit publication failure gates dispatch and reopen loads the durable generation (79.2218ms)
+✔ an in-flight reflected old credential is sanitized even after rotation, including live WAL and events (88.4662ms)
+✔ serialized SDK stream settings reject credentials and arbitrary nested options before opening storage (1.1101ms)
+✔ JSON escaped credential reflection is removed after decoding, before SDK progress and persistence (169.5865ms)
+✔ a credential rotated after deferred compatibility check is rejected again at final fetch admission (11.895ms)
+✔ escaped credential property names in parsed tool arguments never enter SDK results or SQLite (184.3484ms)
+✔ disable published during final metadata wait blocks dispatch at the final synchronous boundary (19.7843ms)
+(node:38940) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ a conversation streams Chinese text through the real SDK and reconnects to its state (296.9107ms)
+✔ stop aborts a hanging model read and close allows a fresh single owner (29.5719ms)
+✔ close during initialization never revives the session (1.9274ms)
+✔ tool arguments survive byte-split SSE and real pi-schema coercion (367.994ms)
+✔ invalid tool arguments are rejected by the SDK before execution (374.9792ms)
+✔ the loaded module exercises required Node primitives and sqlite (1.2468ms)
+(node:41820) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ reserves ID 1 for the immutable root conversation (55.0886ms)
+✔ receives a durable commit once before resolving, and never a refused one (61.2544ms)
+✔ commits mixed table writes atomically and rolls all of them back on failure (40.3112ms)
+✔ detaches retained writes and every returned record (38.6148ms)
+✔ detaches prototype-like JSON keys without changing object prototypes (34.8642ms)
+✔ indexes entries committed out of ID order (31.9216ms)
+✔ continues an entry cursor below its last item after a newer commit (36.9557ms)
+✔ paginates conversations by opaque cursor in ascending ID order (33.0708ms)
+✔ filters and pages conversations by durable owner edges (33.8581ms)
+✔ scans deep fork history newest-first through every ancestor cap (77.0026ms)
+✔ scans tables in either ID order and continues a cursor in its order (57.8353ms)
+✔ replaces complete task records and pages filtered task scans (38.1532ms)
+✔ stores owners and scans waiting and completing tasks by status (37.7442ms)
+✔ stores and scans sleeping tasks by status (35.0391ms)
+✔ indexes request IDs per conversation and replaces complete submission records (37.7805ms)
+✔ stores passive write submissions without input-only lifecycle states (40.3462ms)
+✔ stores continue submissions, which have no entry and are never queued (60.7426ms)
+✔ reconstructs rewindable documents and preserves half-open incarnations (53.9807ms)
+✔ streams long document tails across root replacement deltas (205.307ms)
+✔ copies stored document bases independently and rejects ambiguous sources (66.6921ms)
+✔ uses bases for version transitions and rejects historical reads of current-only documents (56.5757ms)
+✔ indexes logical addresses and exact-scope scans independently (41.0464ms)
+✔ keeps document lifecycle failures atomic and gives create-plus-retire an empty lifetime (46.4421ms)
+✔ refuses a creation and a change of one document in one commit, in either order (36.5302ms)
+✔ rolls back record tables and secondary indexes when a document command fails (44.1064ms)
+✔ keeps indexed string identities lossless (40.8044ms)
+✔ keeps one global record ID namespace and rejects exhausted ID minting (48.859ms)
+✔ commits batches in order, each with its seq, checked against the earlier ones (46.948ms)
+✔ stores the batches before the first one refused, and none after it (39.0623ms)
+✔ refuses a later batch its own malformed actions fail, keeping the batches before it (34.969ms)
+✔ resolves a batched copy against the state the earlier batches left (33.8544ms)
+✔ rejects every operation after close (36.2875ms)
+storageDiagnostics {"booleanBinding":{"accepted":false,"error":"TypeError: Provided value cannot be bound to SQLite parameter 1."}}
+✔ STRICT, JSON, partial indexes, UPSERT and all parameter types use the real engine (23.4826ms)
+✔ runCounted excludes trigger writes; transaction queue isolates reads, writes and other transactions (44.9875ms)
+✔ transaction callback preserves the actual error and durable outcome (26.1462ms)
+✔ transaction commit-before preserves the actual error and durable outcome (25.3384ms)
+✔ transaction rollback preserves the actual error and durable outcome (38.2808ms)
+✔ transaction commit-after preserves the actual error and durable outcome (39.0828ms)
+✔ SDK batches: apply fault, receipts and reopen agree (35.487ms)
+✔ SDK batches: check fault, receipts and reopen agree (36.7943ms)
+✔ SDK batches: commit-before fault, receipts and reopen agree (31.0206ms)
+✔ SDK batches: commit-after fault, receipts and reopen agree (34.9802ms)
+✔ SDK batches: receive fault, receipts and reopen agree (33.6628ms)
+✔ schema 1 to 2 preserves records, failed migration rolls back, newer schema blocks without reset (59.2857ms)
+✔ application metadata and SDK entry commit atomically; incompatible document version preserves old content (45.0583ms)
+✔ an uncertain commit fails the Session permanently and reopening inspects its stable ID without replay (40.2463ms)
+✔ dependent commit flushes deferred progress and durable entries cannot be deferred (39.2927ms)
+✔ credential audit catches a synthetic marker in live WAL before close checkpoints it (57.1577ms)
+✔ process termination at before inspects the same stable records on reopen (170.7488ms)
+✔ process termination at during inspects the same stable records on reopen (166.8181ms)
+✔ process termination at after inspects the same stable records on reopen (170.748ms)
+✔ process termination at confirmed inspects the same stable records on reopen (170.0683ms)
+✔ process termination at deferred inspects the same stable records on reopen (173.0153ms)
+✔ process termination at migration inspects the same stable records on reopen (188.1142ms)
+✔ real SDK conversation reopens its same persisted transcript without another model request (357.2906ms)
+✔ one canonical domain admits one owner until real storage close, then reopens durable records (39.3072ms)
+ℹ tests 97
+ℹ suites 0
+ℹ pass 97
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16070.4092

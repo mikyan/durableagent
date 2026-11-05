@@ -1,0 +1,58 @@
+{
+  "run": "ea2a4b73-41ea-42fd-b750-e5ce928de217",
+  "mode": "real",
+  "started": "2026-11-03T17:44:39.770Z",
+  "observed": [
+    {
+      "id": "46724642-bd81-4929-80c8-e6c0ebadd422",
+      "messages": [
+        {
+          "id": "10",
+          "text": "请只回复一句中文问候，包含 UI-A。",
+          "role": "message role-user"
+        },
+        {
+          "id": "13",
+          "text": "您好，很高兴为您服务！",
+          "role": "message role-assistant"
+        }
+      ]
+    },
+    {
+      "id": "5cca214c-3a27-44a7-890a-6b732943d25f",
+      "messages": [
+        {
+          "id": "20",
+          "text": "请只回复一句中文问候，包含 UI-B。",
+          "role": "message role-user"
+        },
+        {
+          "id": "23",
+          "text": "你好，UI-B！",
+          "role": "message role-assistant"
+        }
+      ]
+    }
+  ],
+  "scope": "Actual UI process SIGKILL/reopen, no observer binding; immutable completed history and same native process. Native request metrics are covered separately by instrumentation.",
+  "beforeViewport": {
+    "width": 0,
+    "height": 0
+  },
+  "beforeScreenshot": "Not captured: WebView has no visible viewport (system keyguard). DOM assertions only.",
+  "afterViewport": {
+    "width": 360,
+    "height": 780
+  },
+  "afterScreenshot": "Screenshot unavailable: Error: CDP timeout Page.captureScreenshot. Functional DOM/process assertions remain separate; no visual acceptance claimed.",
+  "before": {
+    "uiPid": "28311",
+    "hostPid": "28428"
+  },
+  "after": {
+    "uiPid": "28505",
+    "hostPid": "28428"
+  },
+  "passed": true,
+  "completed": "2026-11-03T17:45:03.309Z"
+}

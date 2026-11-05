@@ -1,0 +1,53 @@
+{
+  "integration": "4914bb88dbd73a8f4c02673a4ae7f71bc34dd739",
+  "scope": "Real SDK, Application and SQLite; controlled model and external document/execution transport. Actual Provider/Termux evidence remains separately attributed.",
+  "red": {
+    "owner": "Live original Provider scope incorrectly reported cleanup complete.",
+    "independent": "Cleanup followed by write started Provider once and changed original."
+  },
+  "green": {
+    "ownerTargeted": {
+      "tests": 4,
+      "pass": 4,
+      "skip": 0
+    },
+    "independent": {
+      "tests": 3,
+      "pass": 3,
+      "cases": [
+        "same owner post-cleanup no start",
+        "held prepare ACK then cleanup fences stale accepted ACK",
+        "same binding other SDK owner remains unaffected"
+      ]
+    },
+    "runtime": {
+      "tests": 221,
+      "pass": 221,
+      "skip": 0,
+      "durationMs": 17939.7756
+    },
+    "ui": {
+      "files": 23,
+      "tests": 81,
+      "pass": 81,
+      "skip": 0
+    }
+  },
+  "files": {
+    "runtime/src/document-writes.ts": "e1e9dae60ea19a25927824a4dea4dc5e6c686578376d52d653b37dc320996111",
+    "runtime/src/managed-execution.ts": "840ef141e47d03cca74e779886edf782d1c6547a2b1bbbee26a9f1412961abe0",
+    "runtime/test/managed-execution.test.mjs": "af873202dd2da45d06d585a5edaa7b8c4a81089a391080864e961c13c974b26a",
+    "runtime/dist/document-writes.js": "ed2d1d840cf58710a398784e2f13588e55a9f8b16c6b5da095682a7e98b2c9da",
+    "runtime/dist/managed-execution.js": "9be4bc502d1b03b1e08d7747dc12bb3c6a7b47e4431800f119331335881825c6"
+  },
+  "externalLogs": {
+    "t10-saf-cleanup-red.log": "cb0e5b2be4e3c254bd9b61277bbbdeae1ead74f80ea024c57106b4ea66a9c25a",
+    "t10-saf-cleanup-green02.log": "98c7e3c867f283fbf8df3f811d224b72ba0465ee2b51389d11a3ee3d71a669c0",
+    "t10-cleanup-afterclose-review-red.log": "1a74132247a14090b3fe475c2cb58b77af2f70c8536d6c72e4dad321b8308768",
+    "t10-cleanup-afterclose-review-green.log": "e5f87f261ab9fad31cd6f49632af6677fd70b44cd51ce53ba3cfe2c07969f748",
+    "t10-cleanup-interleaving-review-green.log": "a15e9a8ae1c2de35f0b355c3e74d390a4db2347bb154d6a20ec7c2f76e0bd2dd",
+    "t10-cleanup-full-runtime.log": "58ca43f2851c05b9893fad983422b802288769dd8160548c8baa2a72a8810e28",
+    "t10-cleanup-full-ui.log": "f7f34057bbb56c9aa98b146edb0e20c27bd56ca4eda0561b10fe41d3aa3ea811"
+  },
+  "remaining": "Independent final APK source mapping and integration acceptance. No new device matrix requested for this focused owner-cleanup correction; T17 OEM limits unchanged."
+}

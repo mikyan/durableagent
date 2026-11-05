@@ -1,0 +1,34 @@
+{
+  "platform": "Android API36 x86_64 16KB emulator",
+  "testsPassed": 17,
+  "testsFailed": 0,
+  "skipped": 0,
+  "seconds": 5.582,
+  "appSha256": "F4FB7E15859B607F89689D2BDA82BF408F7CE03CB172A56422949E60C9759D80",
+  "testSha256": "E5F081EEC1E82BEBA5C6E24A778D19BD7958F5A129D5A701CFFF65497D206A73",
+  "nativeKillStages": [
+    "location.edit.begin.beforeCommit",
+    "location.edit.begin.afterCommit",
+    "location.edit.finish.beforeCommit",
+    "location.edit.finish.afterCommit"
+  ],
+  "methods": [
+    "acknowledgementClearsOnlyOriginalRevisionAndReplayPreservesNewDraft",
+    "editFenceBlocksOnlyNewIntentsAndPersistsWhileDraftStopAndOldAckRemainAvailable",
+    "explicitIntentReopensWithItsFixedIdentityAndNeverAdoptsLaterDraftText",
+    "failedPublicationRollsBackEveryContextAndKeepsTheFenceForCanonicalRecovery",
+    "finishingInstallsEveryAuthoritativeContextAtomicallyAndRefusesPartialOrRegressingSnapshots",
+    "identicalBodyExplicitActionsStayDistinctAndPagingRejectsAChangedScope",
+    "intentsRetainRealObjectPinsAcrossPendingUncertainAcknowledgedAndCancelledStates",
+    "lateAcknowledgementPreservesAuthorAbaAndNewRepresentationAtSameAuthorRevision",
+    "lateOrdinaryPublicationNeverReinstallsAnOlderLocationOrContradictsTheSameVersion",
+    "malformedPersistedControlCannotBeReadAsPermissionToDispatch",
+    "nativeCommitFailuresNeverPublishAnIntentAckOrStopAndPublicBridgeCannotForgeAuthority",
+    "ordinaryPublicationCannotChangeLocationWhileFenceIsHeldEvenWithAHigherVersion",
+    "previousNativeSchemaMigratesWithoutCreatingSendsOrLosingDraftObjectAndOperationReceipts",
+    "previousSendSchemaMigratesWithoutChangingIntentPinsStopOrDraft",
+    "processDeathAcrossFenceAndPublicationCommitsRecoversOnlyCommittedContexts",
+    "stopSurvivesReopenAndNewExplicitIntentRetainsExactOldAbortBarrier",
+    "unknownOrCorruptFenceNeverOpensNewSendingAndGenericUiCannotReleaseIt"
+  ]
+}

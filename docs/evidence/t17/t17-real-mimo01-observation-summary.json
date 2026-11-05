@@ -1,0 +1,210 @@
+{
+  "readOnlySnapshot": true,
+  "harnessOpened": false,
+  "modelTransportInstalled": false,
+  "capturedAfterTestOwnedStopCleanup": true,
+  "originalProduct": {
+    "id": "real-recovery-695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9",
+    "sdkId": 102,
+    "title": "新会话",
+    "workspaceId": "default",
+    "createdAt": 1793806767155
+  },
+  "submissions": [
+    {
+      "conversationId": 102,
+      "requestId": "689fa1e6-7447-40f6-9daa-f23e6c2a5021",
+      "type": "input",
+      "status": "unanswered",
+      "entry": 112,
+      "id": 113,
+      "reason": "aborted"
+    }
+  ],
+  "tasks": [
+    {
+      "id": 114,
+      "conversationId": 102,
+      "kind": "pi.generation",
+      "version": 2,
+      "input": {},
+      "background": false,
+      "abortRequested": true,
+      "state": {
+        "status": "terminal",
+        "outcome": {
+          "status": "aborted"
+        }
+      },
+      "startedAt": 1793806767455,
+      "endedAt": 1793806909822
+    },
+    {
+      "id": 117,
+      "conversationId": 102,
+      "kind": "pi.tool",
+      "version": 3,
+      "input": {
+        "kind": "model",
+        "assistant": 116,
+        "callId": "call_7d98496b745447fab3ff5e16"
+      },
+      "owner": 114,
+      "background": false,
+      "abortRequested": true,
+      "state": {
+        "status": "terminal",
+        "outcome": {
+          "status": "aborted",
+          "result": {
+            "kind": "model",
+            "entryId": 119
+          }
+        }
+      },
+      "startedAt": 1793806775445,
+      "endedAt": 1793806909811
+    }
+  ],
+  "entrySummary": [
+    {
+      "id": 112,
+      "kind": "pi.user"
+    },
+    {
+      "id": 115,
+      "kind": "pi.system"
+    },
+    {
+      "id": 116,
+      "kind": "pi.assistant",
+      "toolCalls": [
+        {
+          "id": "call_7d98496b745447fab3ff5e16",
+          "name": "bash",
+          "timeout": 30
+        }
+      ]
+    },
+    {
+      "id": 119,
+      "kind": "pi.tool-result",
+      "model": [
+        {
+          "role": "toolResult",
+          "toolCallId": "call_7d98496b745447fab3ff5e16",
+          "toolName": "bash",
+          "content": [
+            {
+              "type": "text",
+              "text": "T12_PART_ONE\n"
+            },
+            {
+              "type": "text",
+              "text": "<harness>\n[error] Tool bash was aborted\n</harness>"
+            }
+          ],
+          "isError": true,
+          "timestamp": 1793806909810
+        }
+      ],
+      "diagnostics": {
+        "diagnostics": [
+          {
+            "severity": "error",
+            "code": "aborted",
+            "message": "Tool bash was aborted"
+          }
+        ]
+      }
+    }
+  ],
+  "execution": {
+    "executionId": "c1e28e08-a72b-4fe9-8391-c18764505264",
+    "applicationCursor": 1,
+    "retainedReceipt": {
+      "captureIncomplete": false,
+      "context": {
+        "bindingId": "210a15a1-747f-426d-9373-122884be52a9",
+        "callId": "call_7d98496b745447fab3ff5e16",
+        "controlGeneration": 1,
+        "locationVersion": 1,
+        "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+        "productId": "real-recovery-695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9",
+        "sdkConversationId": 102,
+        "taskId": 117
+      },
+      "createdAt": 1793806776094,
+      "defaultWorkspace": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace",
+      "executionId": "c1e28e08-a72b-4fe9-8391-c18764505264",
+      "executorId": "a0578db8-1bd2-4158-8e78-b27216f25c6a",
+      "exitCode": 0,
+      "finalDigest": "0bcf2e9cc574129aeed49d4b9eb8b7b7ea13a7c3e47ae966fc612c1ad320308a",
+      "finishedAt": 1793806794819,
+      "guardianPid": 17239,
+      "ledgerEpoch": "c156417c-ec2d-4528-99d1-78d257676c18",
+      "localCapabilities": {
+        "helperSha256": "13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1",
+        "runnerSha256": "a65ecba8be5119b414ecfdc4b1d514b02515e95b89daac8a197f37983eb15111",
+        "version": 1
+      },
+      "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+      "outputBytes": 31,
+      "outputCursor": 2,
+      "outputRef": "/data/data/com.termux/files/home/.local/share/durableagent-execution/outputs/c1e28e08-a72b-4fe9-8391-c18764505264.raw",
+      "protocol": 1,
+      "rawSha256": "09386fd546ac3d10eddade7c5ce66410c040d25b32e328fc1bb39c13aa6ba27a",
+      "requestDigest": "79d3010451ffe3e6420b27f3895da808c2f9fb9d09afec84ae0384cf1f740554",
+      "scopeConfirmed": true,
+      "sequence": 6,
+      "startRequestedAt": 1793806776386,
+      "startedAt": 1793806776745,
+      "state": "completed"
+    }
+  },
+  "recoveryProbeRows": [],
+  "completionRowsForProduct": [],
+  "independentTermuxRead": {
+    "readOnly": true,
+    "receipt": {
+      "executionId": "c1e28e08-a72b-4fe9-8391-c18764505264",
+      "state": "completed",
+      "sequence": 6,
+      "exitCode": 0,
+      "scopeConfirmed": true,
+      "createdAt": 1793806776094,
+      "startedAt": 1793806776745,
+      "outputBytes": 31,
+      "executorId": "a0578db8-1bd2-4158-8e78-b27216f25c6a",
+      "ledgerEpoch": "c156417c-ec2d-4528-99d1-78d257676c18",
+      "requestDigest": "79d3010451ffe3e6420b27f3895da808c2f9fb9d09afec84ae0384cf1f740554",
+      "finalDigest": "0bcf2e9cc574129aeed49d4b9eb8b7b7ea13a7c3e47ae966fc612c1ad320308a"
+    },
+    "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t12-695ffb2f-fdb6-42ab-8fb9-d7fede2c83c9.txt",
+    "bytes": 18,
+    "sha256": "c9d69e79af57fe32b6481148132da068c4051bab2eed1484b2d85a263b02558f",
+    "inode": 630070,
+    "content": "part-one\npart-two\n"
+  },
+  "snapshotProof": {
+    "sdk": {
+      "bytes": 229376,
+      "sha256": "f8981bcc4b4e32db8b6beff6fbfe87d058544625aad4b8deca9577c9bacc04fe",
+      "sidecars": {
+        "-wal": "absent",
+        "-shm": "absent",
+        "-journal": "absent"
+      }
+    },
+    "recovery": {
+      "bytes": 36864,
+      "sha256": "0dfdf86d47aeab4e7899c2e6d561eb525114e6b4e2d8dcca5d8edc1c2309bb9d",
+      "sidecars": {
+        "-wal": "absent",
+        "-shm": "absent",
+        "-journal": "0"
+      }
+    }
+  },
+  "snapshotMethod": "No active ApplicationService; sidecars absent or zero checked before/between/after two identical byte copies; immutable read-only host SQLite integrity_check ok; raw databases retained privately, not public evidence."
+}

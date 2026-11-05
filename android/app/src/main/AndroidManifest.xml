@@ -1,0 +1,23 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="com.termux.permission.RUN_COMMAND"/>
+    <queries><package android:name="com.termux"/><intent><action android:name="android.media.action.IMAGE_CAPTURE"/></intent></queries>
+    <application android:label="DurableAgent" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules" android:backupAgent=".PrivateDataBackupAgent" android:fullBackupOnly="true">
+        <provider android:name=".CameraCaptureProvider" android:authorities="${applicationId}.camera" android:exported="false" android:grantUriPermissions="true"/>
+        <activity android:name=".AgentActivity" android:exported="true" android:launchMode="singleTop" android:windowSoftInputMode="adjustResize"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
+        <activity android:name=".ProbeActivity" android:exported="false"/>
+        <service android:name=".ApplicationService" android:process=":agent" android:exported="false" android:stopWithTask="false" android:foregroundServiceType="specialUse">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="User-requested agent conversation processing with visible progress, return-to-conversation and durable stop controls; ends when the requested work settles."/>
+        </service>
+        <service android:name=".NativeRecoveryJobService" android:exported="true" android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <service android:name=".NativeStopService" android:process=":control" android:exported="false" android:stopWithTask="false" android:foregroundServiceType="shortService"/>
+        <service android:name=".RuntimeService" android:process=":runtime" android:exported="false" android:stopWithTask="false"/>
+        <receiver android:name=".ExecutionBootstrapReceiver" android:exported="false"/>
+        <receiver android:name=".NativeRecoveryReceiver" android:exported="false"><intent-filter><action android:name="android.intent.action.BOOT_COMPLETED"/><action android:name="android.intent.action.USER_UNLOCKED"/><action android:name="android.intent.action.MY_PACKAGE_REPLACED"/><action android:name="android.intent.action.TIME_SET"/></intent-filter></receiver>
+    </application>
+</manifest>

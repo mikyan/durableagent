@@ -1,0 +1,175 @@
+{
+  "run": "9efa51f1-918f-4a85-9d5a-7364e011de0e",
+  "mode": "fixture",
+  "started": "2026-11-04T12:24:05.883Z",
+  "scope": "Actual ACTION_OPEN_DOCUMENT cancellation with a concurrent edit delivered to retained React while system picker is foreground; then real UI SIGKILL and native observation. No model input or Termux action.",
+  "conversationId": "5fb07d12-e6aa-43f3-a181-5dc81eb4e4c1",
+  "pickerComponent": "com.google.android.documentsui/com.android.documentsui.picker.PickActivity",
+  "pickerFocus": "  mCurrentFocus=Window{3d557d8 u0 com.google.android.documentsui/com.android.documentsui.picker.PickActivity}\r",
+  "pending": {
+    "text": "选择器打开期间继续编辑的草稿 🌍",
+    "state": "pending",
+    "busy": true,
+    "historyItems": 0
+  },
+  "saved": {
+    "id": "5fb07d12-e6aa-43f3-a181-5dc81eb4e4c1",
+    "revision": 2,
+    "text": "选择器打开期间继续编辑的草稿 🌍",
+    "selections": [],
+    "committed": true,
+    "stateVersion": 2,
+    "capability": {
+      "provider": "fixture",
+      "modelId": "conversation",
+      "input": [
+        "text"
+      ],
+      "source": "validation",
+      "limits": {},
+      "applicationPolicy": {
+        "draftCharacters": 100000,
+        "attachments": 4,
+        "sourceImageBytes": 16777216,
+        "sourcePixels": 25165824,
+        "textBytes": 262144,
+        "imageWidth": 1024,
+        "imageHeight": 1024,
+        "imageBytes": 1572864,
+        "totalBase64Bytes": 8388608,
+        "requestBytes": 10485760
+      },
+      "version": "d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"
+    },
+    "submissionContext": {
+      "sdkConversationId": 5,
+      "associationVersion": 1,
+      "location": {
+        "workspaceId": "default",
+        "version": 1,
+        "identity": "295846e931042498d3ad0e71844c35a2f82cfb6eafa5d275482cc65406238a4a"
+      }
+    }
+  },
+  "before": {
+    "uiPid": "5486",
+    "agentPid": "5603"
+  },
+  "after": {
+    "uiPid": "5703",
+    "agentPid": "5603",
+    "draft": {
+      "text": "选择器打开期间继续编辑的草稿 🌍",
+      "state": "saved",
+      "busy": false,
+      "historyItems": 0
+    },
+    "native": {
+      "id": "5fb07d12-e6aa-43f3-a181-5dc81eb4e4c1",
+      "revision": 2,
+      "text": "选择器打开期间继续编辑的草稿 🌍",
+      "selections": [],
+      "committed": true,
+      "stateVersion": 2,
+      "capability": {
+        "provider": "fixture",
+        "modelId": "conversation",
+        "input": [
+          "text"
+        ],
+        "source": "validation",
+        "limits": {},
+        "applicationPolicy": {
+          "draftCharacters": 100000,
+          "attachments": 4,
+          "sourceImageBytes": 16777216,
+          "sourcePixels": 25165824,
+          "textBytes": 262144,
+          "imageWidth": 1024,
+          "imageHeight": 1024,
+          "imageBytes": 1572864,
+          "totalBase64Bytes": 8388608,
+          "requestBytes": 10485760
+        },
+        "version": "d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"
+      },
+      "submissionContext": {
+        "sdkConversationId": 5,
+        "associationVersion": 1,
+        "location": {
+          "workspaceId": "default",
+          "version": 1,
+          "identity": "295846e931042498d3ad0e71844c35a2f82cfb6eafa5d275482cc65406238a4a"
+        }
+      }
+    }
+  },
+  "nativeObservation": {
+    "run": "9efa51f1-918f-4a85-9d5a-7364e011de0e",
+    "conversationId": "5fb07d12-e6aa-43f3-a181-5dc81eb4e4c1",
+    "draft": {
+      "id": "5fb07d12-e6aa-43f3-a181-5dc81eb4e4c1",
+      "revision": 2,
+      "text": "选择器打开期间继续编辑的草稿 🌍",
+      "selections": [],
+      "committed": true,
+      "stateVersion": 2,
+      "capability": {
+        "provider": "fixture",
+        "modelId": "conversation",
+        "input": [
+          "text"
+        ],
+        "source": "validation",
+        "limits": {},
+        "applicationPolicy": {
+          "draftCharacters": 100000,
+          "attachments": 4,
+          "sourceImageBytes": 16777216,
+          "sourcePixels": 25165824,
+          "textBytes": 262144,
+          "imageWidth": 1024,
+          "imageHeight": 1024,
+          "imageBytes": 1572864,
+          "totalBase64Bytes": 8388608,
+          "requestBytes": 10485760
+        },
+        "version": "d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"
+      },
+      "submissionContext": {
+        "sdkConversationId": 5,
+        "associationVersion": 1,
+        "location": {
+          "workspaceId": "default",
+          "version": 1,
+          "identity": "295846e931042498d3ad0e71844c35a2f82cfb6eafa5d275482cc65406238a4a"
+        }
+      }
+    },
+    "sendIntents": 0,
+    "ownerNotOpened": true
+  },
+  "retained": {
+    "files": [],
+    "tasks": [],
+    "tasksLimited": false,
+    "submissions": [],
+    "submissionsLimited": false,
+    "documentOperationIds": [],
+    "executionIds": [],
+    "run": "9efa51f1-918f-4a85-9d5a-7364e011de0e",
+    "harnessNotOpened": true,
+    "modelTransportNotInstalled": true,
+    "conversations": [
+      {
+        "id": "5fb07d12-e6aa-43f3-a181-5dc81eb4e4c1",
+        "entries": [],
+        "more": false
+      }
+    ],
+    "nativeDocumentQueries": [],
+    "nativeExecutionQueries": []
+  },
+  "passed": true,
+  "completed": "2026-11-04T12:24:20.208Z"
+}

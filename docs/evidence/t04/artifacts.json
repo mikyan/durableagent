@@ -1,0 +1,36 @@
+{
+  "candidate": "fifth",
+  "appSha256": "e385ed92e6a11fc2605c7d1eb3665f18ac1306a77b560afa26a816bea2b09659",
+  "testSha256": "a9781cecefb55703ad924607b7f42b839b36ee90d4ed77639aa81246a19114d6",
+  "nativeLibraries": {
+    "lib/arm64-v8a/libjavet-node-android-i18n.v.6.0.3.so": "266e732b71daed5897d430e99d20b46a1f87968f935c89795832d411f17f9414",
+    "lib/x86_64/libjavet-node-android-i18n.v.6.0.3.so": "2a46d00797e2339353a4146d27df641b1f6679df771d95e1959812097e0e3e69"
+  },
+  "runtimeLockSha256": "9aeb2459a247d32e8cac18f2c26e40fb45c37941b791cdd7483fdee21d31aa9e",
+  "uiLockSha256": "835cf8abd0bbb417ff2680cc088d9e25350478cac54040ede5b1527ebbeba4d5",
+  "desktop": {
+    "node": "24.14.1",
+    "runtimePassed": 75,
+    "applicationSubsetPassed": 13,
+    "uiPassed": 10
+  },
+  "android": {
+    "emulator": {
+      "api": 36,
+      "abi": "x86_64",
+      "pageSize": 16384,
+      "instrumentationPassed": 4,
+      "seconds": 44.409,
+      "realUiProcessPassed": true
+    },
+    "s23": {
+      "api": 36,
+      "abi": "arm64-v8a",
+      "pageSize": 4096,
+      "instrumentationSubsetPassed": 2,
+      "seconds": 5.823,
+      "realUiProcessPassed": true,
+      "unlockedVisualAndActivityScenarioAcceptance": false
+    }
+  }
+}

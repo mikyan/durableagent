@@ -1,0 +1,142 @@
+[
+  {
+    "sha256": "1c668475eec6b5e964b7a6b6dfe9df106583e5744fb906ab315ca21c66b695c3",
+    "file": "t11-bootstrap-red01.log"
+  },
+  {
+    "sha256": "9153f139f0f3f6a2b45bf5c70c6c4cc5612c8cffeef82e5ffbb14e5e3e58d670",
+    "file": "t11-busy-diagnostic01.log"
+  },
+  {
+    "sha256": "258e4dd62d2aa6c5ce3b46391a1b1763df221cf004729ebca4d0ae8a9b87f626",
+    "file": "t11-busy-green01.log"
+  },
+  {
+    "sha256": "12a73e854a47ccd69371c089b87e84b5842303b41661332332108f2f3418fc96",
+    "file": "t11-busy-green02.log"
+  },
+  {
+    "sha256": "06f05fd569aec4ae9861a07226114ae244981b96e90162dc4bd8b2cacead7e68",
+    "file": "t11-busy-identity01.log"
+  },
+  {
+    "sha256": "e78c2a2ce734a551e057c4c08d63ec1de43f1e4b67451a446b787b3282636639",
+    "file": "t11-busy-lease-green01.log"
+  },
+  {
+    "sha256": "5cfbd14676cc4219716a452e1cc172270b18a248114b769f9297760ae97c9f4a",
+    "file": "t11-busy-red01.log"
+  },
+  {
+    "sha256": "c744fdb360ef05335fd17773933b6d2e64bf17a23d3a8a98ae3ba67a863eb427",
+    "file": "t11-busy-red02.log"
+  },
+  {
+    "sha256": "e61e012cf56c499911d771cb715713cd301b8ca671211b82409629c712c40a2b",
+    "file": "t11-busy-writer-green01.log"
+  },
+  {
+    "sha256": "6fd1747250f0e0875820d417f92fc08f9f90635f3c889868b12e110100170927",
+    "file": "t11-busy-writer-red01.log"
+  },
+  {
+    "sha256": "35bec161745935b6cd717296a11f5a1802109faf8b7b5165adcf65f0394665e7",
+    "file": "t11-final-build-lint.log"
+  },
+  {
+    "sha256": "a04f01495fbf19eba97f465d32bdc25b748f5af1a71a9b5c513a5a3d03f52a77",
+    "file": "t11-full01-credential-audit.json"
+  },
+  {
+    "sha256": "11c42be675242781e98eda7c19d500d061d6d0146634f871b09af329da02d22d",
+    "file": "t11-full01-native.log"
+  },
+  {
+    "sha256": "fc8965206d5f609d63eb13179d0c89d53df9b6473b0707b5414d7b55026a41a1",
+    "file": "t11-full01-notification.log"
+  },
+  {
+    "sha256": "09918d1b423dfc4f69010c8e653cec91eb81aca2b6161c91a697f133fc902536",
+    "file": "t11-full01-real-mimo.log"
+  },
+  {
+    "sha256": "ac267a72fe7cbda367a05ca853c6b99a99bbb15a51d5083375500d946d29666d",
+    "file": "t11-full02-credential-audit.json"
+  },
+  {
+    "sha256": "6dfaa756c2788c13aa18e27c4dedd52ad3c85ff9f3735a507314b6a7cb5d0168",
+    "file": "t11-full02-notification.log"
+  },
+  {
+    "sha256": "400612b9cd1759a649b1106a250f6e5f80a04a71c104c233539ef96f556e5270",
+    "file": "t11-full02-real-mimo.log"
+  },
+  {
+    "sha256": "b77f8c177a431a10525e1ff3c534f4bdeff233bd09e192a6be5d985ecd28c54b",
+    "file": "t11-host-runtime-full.log"
+  },
+  {
+    "sha256": "459f3832e523864011711f30651709acd584f255a71b7fd6268ce83280bef1f0",
+    "file": "t11-host-ui-full.log"
+  },
+  {
+    "sha256": "463cfcc9c963ffbea8b92ff6dfa9e5bae9dcd3e32302c535778a4d8e4202de08",
+    "file": "t11-native-green01.log"
+  },
+  {
+    "sha256": "a7483bdb91ab5af5137a61b34fe642a562e2fccf2421387636415e9fe9fa78f3",
+    "file": "t11-native-green02.log"
+  },
+  {
+    "sha256": "05fdf974d638de1db8b5ecb59f5441ec5d272534d7eceb032de5f1b5f4e82210",
+    "file": "t11-native-green03.log"
+  },
+  {
+    "sha256": "54508963d0eede6b5af91859ed4320e5793e2197accb960995fa0f81a919895c",
+    "file": "t11-native-green04.log"
+  },
+  {
+    "sha256": "d404e7a9aab4cf28a9dc77d7aae753e45e0303882cc8b699d61b9a2468d16731",
+    "file": "t11-native-lease-green01.log"
+  },
+  {
+    "sha256": "555db6f81a7b914d31cb168da07d18e21ec547e1e951911ee1140f3676f2a2a0",
+    "file": "t11-native-lease-green02.log"
+  },
+  {
+    "sha256": "b3a2a9b6837b0d6053973bfa8edc1d409f66e691b28fd7841253c981957b9514",
+    "file": "t11-native-red01.log"
+  },
+  {
+    "sha256": "fc9195f0af8cea6cafb7a31b891945d67eb37f7807ed87aea521e2705812fe9a",
+    "file": "t11-native-red02.log"
+  },
+  {
+    "sha256": "49fbbe053ab6d9945667dcbc47427ad9c889a37dd8918fd2c9af8a23e9c86303",
+    "file": "t11-native-red03.log"
+  },
+  {
+    "sha256": "18b43e8124734cc69a93fb6495d711ac59a188df2dcafe19ba66550f144b3b41",
+    "file": "t11-native-red04.log"
+  },
+  {
+    "sha256": "129bb6b05ec8938ab7fc3ddfffdc288cd8c3c34b5acd9e2b7015f373dee91cc6",
+    "file": "t11-native-upgrade-green01.log"
+  },
+  {
+    "sha256": "398ed3238ed35f90d842072082284c4af57be0934f3fdff0ac47e0ccdbddd266",
+    "file": "t11-native-upgrade-red01.log"
+  },
+  {
+    "sha256": "8c7d08558984b09b28bb119bc9c380baf3bea6bbcdbbba585329168942e67d93",
+    "file": "t11-notification-diagnostic01.log"
+  },
+  {
+    "sha256": "d8fe0aa8791d16ec57e069c58376d1008be2e8ca13e5f1c3987b7914cce57eb9",
+    "file": "t11-second-stop-green01-device.log"
+  },
+  {
+    "sha256": "602e5cf36aee687b4a1308ee8ffcfbc99e3b835884e5501c1188a2dc1194c4fc",
+    "file": "t11-second-stop-red02-device.log"
+  }
+]

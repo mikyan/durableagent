@@ -1,0 +1,44 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.StopApplicationTest:
+INSTRUMENTATION_STATUS: test=nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Busy owner was not rebuilt by native stop
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(StopApplicationTest.kt:50)
+
+INSTRUMENTATION_STATUS: stream=
+Error in nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(dev.durableagent.probe.StopApplicationTest):
+java.lang.AssertionError: Busy owner was not rebuilt by native stop
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(StopApplicationTest.kt:50)
+
+INSTRUMENTATION_STATUS: test=nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 19.749
+There was 1 failure:
+1) nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(dev.durableagent.probe.StopApplicationTest)
+java.lang.AssertionError: Busy owner was not rebuilt by native stop
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.nativeStopSurvivesUiDetachAndRebuildsBusyOwnerBeforeNewAdmission(StopApplicationTest.kt:50)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

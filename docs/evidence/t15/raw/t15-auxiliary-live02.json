@@ -1,0 +1,132 @@
+{
+  "plan": {
+    "name": "t15-auxiliary-live02",
+    "launch": {
+      "mode": "hang",
+      "run": "T15extensions02",
+      "restart": true
+    },
+    "steps": [
+      {
+        "wait": "innerWidth>=1100&&document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+      },
+      {
+        "click": "[data-testid=create-conversation]"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      {
+        "fill": "扩展页面关闭不能停止这次执行。"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+      },
+      {
+        "click": "[data-testid=send-message]"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=conversation-status]')?.dataset.phase==='running'"
+      },
+      {
+        "fill": "辅助区域切换后保留的未发送草稿。"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+      },
+      {
+        "click": ".auxiliary-tabs button:nth-child(3)"
+      },
+      {
+        "click": "[data-testid=toggle-timeline]"
+      },
+      {
+        "wait": "!!document.querySelector('[data-testid=extension-timeline]')"
+      },
+      {
+        "shot": "auxiliary-timeline-running"
+      },
+      {
+        "click": "[aria-label=关闭辅助区域]"
+      },
+      {
+        "evaluate": "document.querySelector('[data-testid=conversation-status]').dataset.phase",
+        "assert": "running"
+      },
+      {
+        "evaluate": "document.querySelector('[data-testid=message-input]').value",
+        "assert": "辅助区域切换后保留的未发送草稿。"
+      },
+      {
+        "shot": "auxiliary-closed-still-running"
+      },
+      {
+        "click": "[data-testid=stop-generation]"
+      },
+      {
+        "wait": "document.querySelector('[data-testid=conversation-status]')?.dataset.phase==='stopped'"
+      }
+    ]
+  },
+  "started": "2026-11-04T10:57:18.855Z",
+  "pid": "27242",
+  "steps": [
+    {
+      "step": {
+        "wait": "innerWidth>=1100&&document.querySelector('[data-testid=application]')?.dataset.status==='ready'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "click": "[data-testid=create-conversation]"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=message-input]')?.disabled===false"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "fill": "扩展页面关闭不能停止这次执行。"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "click": "[data-testid=send-message]"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=conversation-status]')?.dataset.phase==='running'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "fill": "辅助区域切换后保留的未发送草稿。"
+      }
+    },
+    {
+      "step": {
+        "wait": "document.querySelector('[data-testid=draft-status]')?.dataset.state==='saved'"
+      },
+      "value": true
+    },
+    {
+      "step": {
+        "click": ".auxiliary-tabs button:nth-child(3)"
+      }
+    }
+  ],
+  "error": "Error: stable visible control [data-testid=toggle-timeline] timed out: null",
+  "completed": "2026-11-04T10:58:37.082Z"
+}

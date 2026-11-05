@@ -1,0 +1,35 @@
+{
+  "followingExplicitNewGeneration": 2,
+  "priorGenerationStoppedThrough": 1,
+  "priorEffect": "completed",
+  "priorScopeConfirmed": true
+}
+{
+  "fixture": "unchanged ManagedExecution.run + Recovery; in-memory harness/private writer fixture, no real SDK scheduler or native SQLite; asynchronous peer output boundary",
+  "modelRequests": 0,
+  "credentialAccess": 0,
+  "androidAccess": 0,
+  "observed": {
+    "reads": 1,
+    "starts": 1,
+    "probes": 1,
+    "status": {
+      "phase": "waiting",
+      "reason": "external-unconfirmed",
+      "message": "外部结果仍未确认，自动核验额度已用完；保留原工作等待人工核验",
+      "used": 5,
+      "limit": 5
+    }
+  },
+  "checks": {
+    "oneInitialRead": true,
+    "oneEffectStart": true,
+    "budgetConsulted": true,
+    "visibleExhaustedWait": true
+  },
+  "elapsedMs": 121.85280000000012,
+  "result": {
+    "ok": false,
+    "error": "执行连接未确认结果，保留原身份等待核验"
+  }
+}

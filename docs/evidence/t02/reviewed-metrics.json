@@ -1,0 +1,252 @@
+{
+  "emulator": {
+    "log": "t02-emu16k-second-live-instrumentation.log",
+    "okTests": 5,
+    "seconds": 44.852,
+    "sharedCases": 47,
+    "sqlite": {
+      "journalMode": "wal",
+      "synchronous": 2,
+      "version": "3.54.0",
+      "sourceId": "2026-10-09 15:46:58 be8d059e9a49089ab2dce5ed26dd87aaf598fdc5fbe0b107c0dd758464bcd5e3",
+      "busyTimeout": 5000,
+      "walAutoCheckpoint": 1000,
+      "compileOptions": [
+        "ATOMIC_INTRINSICS=1",
+        "COMPILER=clang-21.0.0",
+        "DEFAULT_AUTOVACUUM",
+        "DEFAULT_CACHE_SIZE=-2000",
+        "DEFAULT_FILE_FORMAT=4",
+        "DEFAULT_JOURNAL_SIZE_LIMIT=-1",
+        "DEFAULT_MEMSTATUS=0",
+        "DEFAULT_MMAP_SIZE=0",
+        "DEFAULT_PAGE_SIZE=4096",
+        "DEFAULT_PCACHE_INITSZ=20",
+        "DEFAULT_RECURSIVE_TRIGGERS",
+        "DEFAULT_SECTOR_SIZE=4096",
+        "DEFAULT_SYNCHRONOUS=2",
+        "DEFAULT_WAL_AUTOCHECKPOINT=1000",
+        "DEFAULT_WAL_SYNCHRONOUS=2",
+        "DEFAULT_WORKER_THREADS=0",
+        "DIRECT_OVERFLOW_READ",
+        "ENABLE_COLUMN_METADATA",
+        "ENABLE_DBSTAT_VTAB",
+        "ENABLE_FTS3",
+        "ENABLE_FTS3_PARENTHESIS",
+        "ENABLE_FTS5",
+        "ENABLE_GEOPOLY",
+        "ENABLE_MATH_FUNCTIONS",
+        "ENABLE_PERCENTILE",
+        "ENABLE_PREUPDATE_HOOK",
+        "ENABLE_RBU",
+        "ENABLE_RTREE",
+        "ENABLE_SESSION",
+        "MALLOC_SOFT_LIMIT=1024",
+        "MAX_ATTACHED=10",
+        "MAX_COLUMN=2000",
+        "MAX_COMPOUND_SELECT=500",
+        "MAX_DEFAULT_PAGE_SIZE=8192",
+        "MAX_EXPR_DEPTH=1000",
+        "MAX_FUNCTION_ARG=1000",
+        "MAX_LENGTH=1000000000",
+        "MAX_LIKE_PATTERN_LENGTH=50000",
+        "MAX_MMAP_SIZE=0x7fff0000",
+        "MAX_PAGE_COUNT=0xfffffffe",
+        "MAX_PAGE_SIZE=65536",
+        "MAX_SCHEMA=10000000",
+        "MAX_SQL_LENGTH=1000000000",
+        "MAX_TRIGGER_DEPTH=1000",
+        "MAX_VARIABLE_NUMBER=32766",
+        "MAX_VDBE_OP=250000000",
+        "MAX_WORKER_THREADS=8",
+        "MUTEX_PTHREADS",
+        "SYSTEM_MALLOC",
+        "TEMP_STORE=1",
+        "THREADSAFE=1"
+      ]
+    },
+    "diagnostics": {
+      "booleanBinding": {
+        "accepted": true,
+        "value": 1
+      }
+    },
+    "phases": {
+      "before": {
+        "beforePid": 9843,
+        "afterPid": 9927,
+        "candidatePresent": false,
+        "receiptsBeforeKill": 0,
+        "verified": true
+      },
+      "during": {
+        "beforePid": 9927,
+        "afterPid": 10025,
+        "candidatePresent": false,
+        "receiptsBeforeKill": 0,
+        "verified": true
+      },
+      "after": {
+        "beforePid": 10025,
+        "afterPid": 10115,
+        "candidatePresent": true,
+        "receiptsBeforeKill": 0,
+        "verified": true
+      },
+      "confirmed": {
+        "beforePid": 10115,
+        "afterPid": 10202,
+        "candidatePresent": true,
+        "receiptsBeforeKill": 1,
+        "verified": true
+      },
+      "deferred": {
+        "beforePid": 10202,
+        "afterPid": 10289,
+        "candidatePresent": null,
+        "receiptsBeforeKill": 0,
+        "verified": true
+      },
+      "migration": {
+        "beforePid": 10289,
+        "afterPid": 10380,
+        "candidatePresent": null,
+        "receiptsBeforeKill": 0,
+        "verified": true
+      }
+    },
+    "realConversation": {
+      "entries": 5,
+      "requestsOriginal": 2,
+      "requestsReopened": 0,
+      "sameEntryIds": true,
+      "sameText": true
+    },
+    "terminalDomainOwnedFalse": true
+  },
+  "s23": {
+    "log": "t02-s23-awake-second-live-instrumentation.log",
+    "okTests": 5,
+    "seconds": 20.467,
+    "sharedCases": 47,
+    "sqlite": {
+      "journalMode": "wal",
+      "synchronous": 2,
+      "version": "3.54.0",
+      "sourceId": "2026-10-09 15:46:58 be8d059e9a49089ab2dce5ed26dd87aaf598fdc5fbe0b107c0dd758464bcd5e3",
+      "busyTimeout": 5000,
+      "walAutoCheckpoint": 1000,
+      "compileOptions": [
+        "ATOMIC_INTRINSICS=1",
+        "COMPILER=clang-21.0.0",
+        "DEFAULT_AUTOVACUUM",
+        "DEFAULT_CACHE_SIZE=-2000",
+        "DEFAULT_FILE_FORMAT=4",
+        "DEFAULT_JOURNAL_SIZE_LIMIT=-1",
+        "DEFAULT_MEMSTATUS=0",
+        "DEFAULT_MMAP_SIZE=0",
+        "DEFAULT_PAGE_SIZE=4096",
+        "DEFAULT_PCACHE_INITSZ=20",
+        "DEFAULT_RECURSIVE_TRIGGERS",
+        "DEFAULT_SECTOR_SIZE=4096",
+        "DEFAULT_SYNCHRONOUS=2",
+        "DEFAULT_WAL_AUTOCHECKPOINT=1000",
+        "DEFAULT_WAL_SYNCHRONOUS=2",
+        "DEFAULT_WORKER_THREADS=0",
+        "DIRECT_OVERFLOW_READ",
+        "ENABLE_COLUMN_METADATA",
+        "ENABLE_DBSTAT_VTAB",
+        "ENABLE_FTS3",
+        "ENABLE_FTS3_PARENTHESIS",
+        "ENABLE_FTS5",
+        "ENABLE_GEOPOLY",
+        "ENABLE_MATH_FUNCTIONS",
+        "ENABLE_PERCENTILE",
+        "ENABLE_PREUPDATE_HOOK",
+        "ENABLE_RBU",
+        "ENABLE_RTREE",
+        "ENABLE_SESSION",
+        "MALLOC_SOFT_LIMIT=1024",
+        "MAX_ATTACHED=10",
+        "MAX_COLUMN=2000",
+        "MAX_COMPOUND_SELECT=500",
+        "MAX_DEFAULT_PAGE_SIZE=8192",
+        "MAX_EXPR_DEPTH=1000",
+        "MAX_FUNCTION_ARG=1000",
+        "MAX_LENGTH=1000000000",
+        "MAX_LIKE_PATTERN_LENGTH=50000",
+        "MAX_MMAP_SIZE=0x7fff0000",
+        "MAX_PAGE_COUNT=0xfffffffe",
+        "MAX_PAGE_SIZE=65536",
+        "MAX_SCHEMA=10000000",
+        "MAX_SQL_LENGTH=1000000000",
+        "MAX_TRIGGER_DEPTH=1000",
+        "MAX_VARIABLE_NUMBER=32766",
+        "MAX_VDBE_OP=250000000",
+        "MAX_WORKER_THREADS=8",
+        "MUTEX_PTHREADS",
+        "SYSTEM_MALLOC",
+        "TEMP_STORE=1",
+        "THREADSAFE=1"
+      ]
+    },
+    "diagnostics": {
+      "booleanBinding": {
+        "accepted": true,
+        "value": 1
+      }
+    },
+    "phases": {
+      "before": {
+        "beforePid": 13077,
+        "afterPid": 13143,
+        "candidatePresent": false,
+        "receiptsBeforeKill": 0,
+        "verified": true
+      },
+      "during": {
+        "beforePid": 13143,
+        "afterPid": 13216,
+        "candidatePresent": false,
+        "receiptsBeforeKill": 0,
+        "verified": true
+      },
+      "after": {
+        "beforePid": 13216,
+        "afterPid": 13297,
+        "candidatePresent": true,
+        "receiptsBeforeKill": 0,
+        "verified": true
+      },
+      "confirmed": {
+        "beforePid": 13297,
+        "afterPid": 13377,
+        "candidatePresent": true,
+        "receiptsBeforeKill": 1,
+        "verified": true
+      },
+      "deferred": {
+        "beforePid": 13377,
+        "afterPid": 13465,
+        "candidatePresent": null,
+        "receiptsBeforeKill": 0,
+        "verified": true
+      },
+      "migration": {
+        "beforePid": 13465,
+        "afterPid": 13549,
+        "candidatePresent": null,
+        "receiptsBeforeKill": 0,
+        "verified": true
+      }
+    },
+    "realConversation": {
+      "entries": 5,
+      "requestsOriginal": 2,
+      "requestsReopened": 0,
+      "sameEntryIds": true,
+      "sameText": true
+    },
+    "terminalDomainOwnedFalse": true
+  }
+}

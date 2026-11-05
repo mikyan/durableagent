@@ -1,0 +1,37 @@
+{
+  "fixture": "unchanged ManagedExecution.run + Recovery; in-memory harness/private writer fixture, no real SDK scheduler or native SQLite; asynchronous peer output boundary",
+  "modelRequests": 0,
+  "credentialAccess": 0,
+  "androidAccess": 0,
+  "observed": {
+    "reads": 1259,
+    "starts": 1,
+    "probes": 0
+  },
+  "checks": {
+    "oneInitialRead": false,
+    "oneEffectStart": true,
+    "budgetConsulted": false,
+    "visibleExhaustedWait": false
+  },
+  "elapsedMs": 132.31939999999997,
+  "result": {
+    "ok": false,
+    "error": "执行连接未确认结果，保留原身份等待核验"
+  }
+}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Completed effect output failures must consult exhausted budget and remain visibly waiting without another read/start
+    at file:///C:/Users/AI_BA/AppData/Local/Temp/durableagent-implementation/t12-review-output-retry-regression.mjs:40:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.14.1

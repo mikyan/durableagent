@@ -1,0 +1,6 @@
+test_copyable_command_contains_verified_complete_sources_and_pinned_packages (test_execution_asset.AssetTest.test_copyable_command_contains_verified_complete_sources_and_pinned_packages) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.015s
+
+OK

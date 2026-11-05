@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.DataSaverExecutionTest:
+INSTRUMENTATION_STATUS: test=realMimoRemainsUsableWhileUnknownToolAwaitsSingleGrant
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: dataSaverExecutionEvidence={"case":"real-mimo-metered-grant","network":{"identity":"2:450082295821","known":true,"metered":true,"blocked":false},"waiting":{"executionId":"2dec1c1c-9606-4755-92e1-cd77ecab63e6","requestDigest":"647c2c1df58e746c59c268eb4475c71d8fb51141197dbccf2f8259240e813630","productId":"policy-chat","controlGeneration":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","classification":"unknown","summary":"{\"kind\":\"shell\",\"script\":\"printf 'T13-18722955\\\\n' \"}","grantPeriod":null,"finalDigest":"8bdf4515dd4c3277b0992469f7f2b857f2fab4f0a6b8e615f76acd77a5b0fc23","sequence":1,"state":"accepted_not_started","scopeConfirmed":false,"terminal":false,"phase":"waiting","period":3,"reason":"metered"},"completed":{"captureIncomplete":false,"context":{"bindingId":"228e444c-165c-4019-a699-30e94e84ecf3","callId":"call_c145e657f841469a9bc258e5","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"policy-chat","sdkConversationId":5,"taskId":20},"createdAt":1793781028833,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"2dec1c1c-9606-4755-92e1-cd77ecab63e6","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","exitCode":0,"finalDigest":"8bdf4515dd4c3277b0992469f7f2b857f2fab4f0a6b8e615f76acd77a5b0fc23","finishedAt":1793781029702,"guardianPid":10398,"ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":13,"outputCursor":1,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/2dec1c1c-9606-4755-92e1-cd77ecab63e6.raw","protocol":1,"rawSha256":"230278c8961d9c97d866d63a466c450bceed8ea922bf2cb975afc36a67331619","requestDigest":"647c2c1df58e746c59c268eb4475c71d8fb51141197dbccf2f8259240e813630","scopeConfirmed":true,"sequence":5,"startRequestedAt":1793781029379,"startedAt":1793781029630,"state":"completed"},"stoppedNext":{"captureIncomplete":false,"context":{"bindingId":"228e444c-165c-4019-a699-30e94e84ecf3","callId":"call_780669f244ac4365981ff446","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"policy-chat","sdkConversationId":5,"taskId":31},"createdAt":1793781033784,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"a192895b-0eea-4ef8-9b87-26375eacfabc","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","finalDigest":"8bdf4515dd4c3277b0992469f7f2b857f2fab4f0a6b8e615f76acd77a5b0fc23","ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":0,"outputCursor":0,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/a192895b-0eea-4ef8-9b87-26375eacfabc.raw","protocol":1,"requestDigest":"0db471ebea98ca36db9f60e4d84485fe9c651849da87cd6df0bd0c64914c7c20","sequence":2,"state":"stopped","cancelRequested":true,"cancelReason":"user","scopeConfirmed":true,"neverStarted":true,"finishedAt":1793781034247},"requestsBeforeGrant":1,"totalRequests":3,"globalEnabled":true}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.DataSaverExecutionTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoRemainsUsableWhileUnknownToolAwaitsSingleGrant
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 18.325
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

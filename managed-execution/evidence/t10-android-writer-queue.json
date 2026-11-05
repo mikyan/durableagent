@@ -1,0 +1,196 @@
+{
+  "sourceCommit": "1407b6233c439b5ae4e1613dc21260f5dc3caf42",
+  "artifacts": {
+    "app-debug.apk": "2022e82b1b3ffd2589d36614c55bb6b125906862b7a3838bb14bcf74b43b3acf",
+    "app-debug-androidTest.apk": "26ae14ec1f6644ba7934d559d752dd939afe9892a4caca25c426d4bf12f28a7f",
+    "execution-setup.txt": "94db1e48a3d39ff52beafd31243dcab07a41d4a81fc89ea862c82ebadbdb3ff8"
+  },
+  "scenarios": [
+    {
+      "result": "PASS 1/1 in 31.828s",
+      "evidence": {
+        "run": "b016ca18-2093-4c86-8fa8-bbe73e675610",
+        "order": "shell-first",
+        "waiting": {
+          "executionId": "4ddd8b78-5bb0-42a1-9bba-09649dd8e748",
+          "state": "queued",
+          "source": "application",
+          "reason": "WRITER_QUEUED",
+          "context": {
+            "productId": "local",
+            "sdkConversationId": 5,
+            "taskId": 75,
+            "callId": "location-4",
+            "bindingId": "f6253857-6693-4bb5-b95d-704b569918a9",
+            "locationVersion": 1,
+            "controlGeneration": 1,
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a"
+          },
+          "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "sequence": 0
+        },
+        "local": {
+          "captureIncomplete": false,
+          "context": {
+            "bindingId": "f6253857-6693-4bb5-b95d-704b569918a9",
+            "callId": "location-4",
+            "controlGeneration": 1,
+            "locationVersion": 1,
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "productId": "local",
+            "sdkConversationId": 5,
+            "taskId": 75
+          },
+          "createdAt": 1793780676059,
+          "defaultWorkspace": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace",
+          "executionId": "4ddd8b78-5bb0-42a1-9bba-09649dd8e748",
+          "executorId": "a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "exitCode": 0,
+          "finalDigest": "751090720f2e3ba7ab092ae7d5d25ba50eb57a472ee051328c8ec5e536614aca",
+          "finishedAt": 1793780676646,
+          "guardianPid": 8849,
+          "ledgerEpoch": "c156417c-ec2d-4528-99d1-78d257676c18",
+          "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "outputBytes": 0,
+          "outputCursor": 0,
+          "outputRef": "/data/data/com.termux/files/home/.local/share/durableagent-execution/outputs/4ddd8b78-5bb0-42a1-9bba-09649dd8e748.raw",
+          "protocol": 1,
+          "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "requestDigest": "f47201dddc7a2da994eaca8183a8a4e77d5a61d9fd135622e89d9aacf24bbaf0",
+          "scopeConfirmed": true,
+          "sequence": 4,
+          "startRequestedAt": 1793780676341,
+          "startedAt": 1793780676473,
+          "state": "completed"
+        },
+        "shell": {
+          "captureIncomplete": false,
+          "context": {
+            "bindingId": "50c8e610-d5b8-458c-a743-c4e97a08d7e6",
+            "callId": "location-3",
+            "controlGeneration": 1,
+            "locationVersion": 1,
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "productId": "shell",
+            "sdkConversationId": 12,
+            "taskId": 65
+          },
+          "createdAt": 1793780666779,
+          "defaultWorkspace": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace",
+          "executionId": "5567b7e3-4041-4632-b5e6-03b5e216f73a",
+          "executorId": "a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "exitCode": 0,
+          "finalDigest": "9594a92de5024b0e8ed0de10356865d42a12d460f35764a79163b8fe71c4f7f9",
+          "finishedAt": 1793780675474,
+          "guardianPid": 8710,
+          "ledgerEpoch": "c156417c-ec2d-4528-99d1-78d257676c18",
+          "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "outputBytes": 41,
+          "outputCursor": 2,
+          "outputRef": "/data/data/com.termux/files/home/.local/share/durableagent-execution/outputs/5567b7e3-4041-4632-b5e6-03b5e216f73a.raw",
+          "protocol": 1,
+          "rawSha256": "0e931a044f96b989c9d18d21e27544bb57f769ec778a7f6db1f5ffe5c503236b",
+          "requestDigest": "78af0752c12a8d3a1506e4bf56a93b65f5049e6b3ab358357b16c8f1baaf3287",
+          "scopeConfirmed": true,
+          "sequence": 6,
+          "startRequestedAt": 1793780667106,
+          "startedAt": 1793780667298,
+          "state": "completed"
+        },
+        "original": {
+          "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-b016ca18-2093-4c86-8fa8-bbe73e675610/queue.txt",
+          "text": "shell\nlocal\n",
+          "sha256": "948cd0619822c002bb33a67d7b8b59ad39f082257dded975bfdd7e710a2cd0ed"
+        },
+        "pureToolContinued": true,
+        "stableOriginalCreatedBeforeRace": true,
+        "localGateWasBeforeExternalPrepare": false
+      }
+    },
+    {
+      "result": "PASS 1/1 in 22.111s",
+      "evidence": {
+        "run": "35055174-3522-4c27-a4e3-f686bbc6da43",
+        "order": "cancel-local",
+        "waiting": {
+          "executionId": "80b99cbe-e8bc-413c-9bae-88e60f39f536",
+          "state": "queued",
+          "source": "application",
+          "reason": "WRITER_QUEUED",
+          "context": {
+            "productId": "local",
+            "sdkConversationId": 5,
+            "taskId": 75,
+            "callId": "location-4",
+            "bindingId": "663acc94-c1a2-4298-b6b5-88a75c697891",
+            "locationVersion": 1,
+            "controlGeneration": 1,
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a"
+          },
+          "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "sequence": 0
+        },
+        "local": {
+          "executorId": "a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "ledgerEpoch": "c156417c-ec2d-4528-99d1-78d257676c18",
+          "protocol": 1,
+          "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "defaultWorkspace": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace",
+          "executionId": "80b99cbe-e8bc-413c-9bae-88e60f39f536",
+          "state": "not_started",
+          "reason": "CANCELLED_BEFORE_ACCEPTANCE",
+          "neverStarted": true,
+          "scopeConfirmed": true,
+          "cancelRequested": true,
+          "cancelReason": "user",
+          "sequence": 1,
+          "finishedAt": 1793780706863
+        },
+        "shell": {
+          "captureIncomplete": false,
+          "context": {
+            "bindingId": "a8098f86-5937-4862-ab6d-b34786f53ecb",
+            "callId": "location-3",
+            "controlGeneration": 1,
+            "locationVersion": 1,
+            "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+            "productId": "shell",
+            "sdkConversationId": 12,
+            "taskId": 65
+          },
+          "createdAt": 1793780702686,
+          "defaultWorkspace": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace",
+          "executionId": "d3ae3332-bea7-40bc-827d-af9a922acbf8",
+          "executorId": "a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "exitCode": 0,
+          "finalDigest": "19458d5408f4b8eebed4d305a5dd8b7eb19d5fb932ef165c04b8e8bbca095b0a",
+          "finishedAt": 1793780711118,
+          "guardianPid": 9102,
+          "ledgerEpoch": "c156417c-ec2d-4528-99d1-78d257676c18",
+          "namespace": "termux:a0578db8-1bd2-4158-8e78-b27216f25c6a",
+          "outputBytes": 41,
+          "outputCursor": 2,
+          "outputRef": "/data/data/com.termux/files/home/.local/share/durableagent-execution/outputs/d3ae3332-bea7-40bc-827d-af9a922acbf8.raw",
+          "protocol": 1,
+          "rawSha256": "0e931a044f96b989c9d18d21e27544bb57f769ec778a7f6db1f5ffe5c503236b",
+          "requestDigest": "547a92e073519a5f53e65189cfe3d9641540ae4a5065cb96bd2e685e0818b2df",
+          "scopeConfirmed": true,
+          "sequence": 6,
+          "startRequestedAt": 1793780702906,
+          "startedAt": 1793780703043,
+          "state": "completed"
+        },
+        "original": {
+          "path": "/data/data/com.termux/files/home/.local/share/durableagent-execution/workspace/.durableagent-t10-35055174-3522-4c27-a4e3-f686bbc6da43/queue.txt",
+          "text": "shell\n",
+          "sha256": "5c485cdc1a890a816971ba337bbfb6d58cd8edaee7f53fd38fb41f59150aa597"
+        },
+        "pureToolContinued": true,
+        "stableOriginalCreatedBeforeRace": true,
+        "localGateWasBeforeExternalPrepare": false
+      }
+    }
+  ],
+  "earlierOverallQueueBatch": "Production05 FAIL remains; local-reserved-first passed separately in that batch",
+  "noOriginalIntentReplayed": true
+}

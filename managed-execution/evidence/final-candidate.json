@@ -1,0 +1,76 @@
+{
+  "candidate": "production06-final",
+  "sourceCommit": "a2fdca7b1a8ada462a0e56319ca89280062a6c6c",
+  "integrationIncluded": "46fe4e7862dcdf264865ecec174ef8c3a57f1dc7",
+  "artifacts": {
+    "app-debug-androidTest.apk": "d13b688d98e148f8f8cb4895a76c8b39fd050d6c3db58b3931163af57c825865",
+    "app-debug.apk": "5c2d9fc445439e1ce590c0f9e47b2a97a17e95475834e5ef5a9b39f8a9c4ff91",
+    "durable_executor.py": "71689c55df8735939a1e7b2bcb98a0746ff8f91a8241b0bf463f4293f8c5a7d4",
+    "execution-setup.txt": "0a533399f3d1982344de9e544922eb3b1bb43d6dbd8d778d439c8b4ca5c53327",
+    "execution_setup_installer.py": "7c718fa6d8770e449a26090e3c2ce88fc3bca22d6d57d93d95a182ff3de4930e",
+    "execution_transport.py": "c20f4ef5bd53bea4caf01bd00c9276790fa2df1640a2896663eac662ffd691e8"
+  },
+  "independentlyReviewedSourceSha256": {
+    "runtime/src/application.ts": "f3a5d1ab428f883d14baf99c264917d2c43df20efcadcb7b616e692a385dd9b4",
+    "runtime/src/application-bridge.ts": "04a3f72035c747ac7502af7541286f2604585a5194bb7d131af947e446462274",
+    "runtime/src/application-protocol.ts": "7ab4abf9910004852df6f234497c8e83e23d2f38a6d8848be863449cbc33cd5e",
+    "runtime/src/projects.ts": "4b7e510cba78f94de836f2e7c36a1b2a28f25751f2ec8fbfdb717f21081b3952",
+    "runtime/src/transport.ts": "3558a71409d8cbb1a91ae6e8dbb3d9daeb0d2f14b9621f67aeb5793d8353079c",
+    "android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt": "e6bda6ef434245065a585391a97a6b9f849def3c1ea5288e31cdf4e51275d09d",
+    "ui/src/controller.ts": "f57f2eb5fd4baecb833a8f221d9df134249c679d42203118c3af5fae8cbf0ecb",
+    "ui/src/extensions/conversation.tsx": "ec64de9e91b2ce52dcda855821e825ff178d0d53eff18a1df2e4c22eedd73eec",
+    "ui/src/execution.ts": "7975e62f8942341697443f2361ad0a83bf50f47f77b85372219f8020f916d814",
+    "runtime/src/dispatch-gate.ts": "6ce4bd80e03641edecd974b52d741d2bff6de1abf19926a53b869885412f18f4"
+  },
+  "hostChecks": {
+    "runtime": {
+      "passed": 171,
+      "failed": 0,
+      "seconds": 18.027,
+      "logSha256": "cebfa5153c521b129316db9f75c9b73f107d8e1ff2a205b7dd355fa9260dd68d"
+    },
+    "ui": {
+      "passed": 73,
+      "failed": 0,
+      "seconds": 6.48,
+      "logSha256": "ce37bbf4f5363c0d4797da4a6ffece73b488fe30020803a58d9008d8bac0db19"
+    },
+    "androidBuild": {
+      "result": "BUILD SUCCESSFUL",
+      "logSha256": "aa2264289b5ab792b14122c887d66f0c2c92a2e7855b2b6237fa052e2b032a0c",
+      "correctedObservationTestBuildSha256": "d564a8a3fd540c2d691e3adbc734ca709cdd0664f67935282709bb85d0e9ef48"
+    }
+  },
+  "postMergeDeviceChecks": "Complete within documented Android16/4KiB/x86_64 scope. Original production05 dispatch failure retained; cause not retrospectively established; classification fixed without retries.",
+  "testedCombinations": [
+    {
+      "app": "production05",
+      "testSha256": "6d1ea6c091c7d3e356314bd0920b47c8fa6241bb9d2523d98dc806278255f436",
+      "scope": "shared extension policies/bootstrap close and real MiMo passed; six-scenario matrix failed before sixth execution"
+    },
+    {
+      "app": "production06-final",
+      "testSha256": "36a563432820aff14026defd3be1bb31a7f60693f63f25f8d938aecc9296c853",
+      "scope": "six-scenario matrix 1/1 passed48.817s"
+    },
+    {
+      "app": "production06-final",
+      "testSha256": "d13b688d98e148f8f8cb4895a76c8b39fd050d6c3db58b3931163af57c825865",
+      "scope": "read-only observation of original05 failure1/1 passed3.131s/0newmodelrequests; test-only native control route correction"
+    }
+  ],
+  "rootFinalInspection": {
+    "log": "t09-production-06-final-apk-inspection.json",
+    "sha256": "39cb496dc76f6a811f3f9a10cfb3a9b188a47ff3715daadbf8ad5fea1aefc0f8",
+    "runtimeFiles": 51,
+    "uiFiles": 11,
+    "sourceFiles": 143,
+    "nativeAlignment": "both packaged ABIs16KiB compatible",
+    "setupMatchesProduction04": true,
+    "publicScan": {
+      "files": 556,
+      "actualKeyFound": false,
+      "privateDeviceSerialFound": false
+    }
+  }
+}

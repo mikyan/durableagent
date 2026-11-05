@@ -1,0 +1,58 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.StopApplicationTest:
+INSTRUMENTATION_STATUS: test=nativeStopCanRebuildJavaScriptStuckBeforeApplicationReadiness
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: stopBootstrapEvidence={"phase":"opening","instance":"32542b6a-95c4-4ae0-b5bb-b14c9bc5a11c","pid":10723,"domainOwned":true,"nativeOwners":1}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.StopApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Busy owner was not rebuilt by native stop
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.busyOwner(StopApplicationTest.kt:73)
+	at dev.durableagent.probe.StopApplicationTest.nativeStopCanRebuildJavaScriptStuckBeforeApplicationReadiness(StopApplicationTest.kt:50)
+
+INSTRUMENTATION_STATUS: stream=
+Error in nativeStopCanRebuildJavaScriptStuckBeforeApplicationReadiness(dev.durableagent.probe.StopApplicationTest):
+java.lang.AssertionError: Busy owner was not rebuilt by native stop
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.busyOwner(StopApplicationTest.kt:73)
+	at dev.durableagent.probe.StopApplicationTest.nativeStopCanRebuildJavaScriptStuckBeforeApplicationReadiness(StopApplicationTest.kt:50)
+
+INSTRUMENTATION_STATUS: test=nativeStopCanRebuildJavaScriptStuckBeforeApplicationReadiness
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 20.271
+There was 1 failure:
+1) nativeStopCanRebuildJavaScriptStuckBeforeApplicationReadiness(dev.durableagent.probe.StopApplicationTest)
+java.lang.AssertionError: Busy owner was not rebuilt by native stop
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+	at dev.durableagent.probe.StopApplicationTest.busyOwner(StopApplicationTest.kt:73)
+	at dev.durableagent.probe.StopApplicationTest.nativeStopCanRebuildJavaScriptStuckBeforeApplicationReadiness(StopApplicationTest.kt:50)
+	Suppressed: java.lang.IllegalStateException: Native control 12 timed out
+		at dev.durableagent.probe.StopApplicationTest$Wire.control(StopApplicationTest.kt:30)
+		at dev.durableagent.probe.StopApplicationTest$Wire.control$default(StopApplicationTest.kt:30)
+		at dev.durableagent.probe.StopApplicationTest.busyOwner$lambda$14(StopApplicationTest.kt:88)
+		at dev.durableagent.probe.StopApplicationTest.$r8$lambda$hj_XBdfHywWkDZDS3P5xmNG-uDA(Unknown Source:0)
+		at dev.durableagent.probe.StopApplicationTest$$ExternalSyntheticLambda8.invoke(D8$$SyntheticClass:0)
+		at dev.durableagent.probe.StopApplicationTest.until(StopApplicationTest.kt:24)
+		at dev.durableagent.probe.StopApplicationTest.busyOwner(StopApplicationTest.kt:88)
+		... 10 more
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

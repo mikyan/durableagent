@@ -1,0 +1,87 @@
+
+> @durableagent/runtime-probe@0.1.0 pretest
+> npm run build
+
+
+> @durableagent/runtime-probe@0.1.0 build
+> tsc
+
+
+> @durableagent/runtime-probe@0.1.0 test
+> node --test test/*.test.mjs
+
+(node:38940) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ a conversation streams Chinese text through the real SDK and reconnects to its state (297.6251ms)
+✔ stop aborts a hanging model read and close allows a fresh single owner (30.4173ms)
+✔ close during initialization never revives the session (1.8887ms)
+✔ tool arguments survive byte-split SSE and real pi-schema coercion (369.0171ms)
+✔ invalid tool arguments are rejected by the SDK before execution (369.0185ms)
+✔ the loaded module exercises required Node primitives and sqlite (1.4547ms)
+(node:41088) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ reserves ID 1 for the immutable root conversation (41.4162ms)
+✔ receives a durable commit once before resolving, and never a refused one (32.1229ms)
+✔ commits mixed table writes atomically and rolls all of them back on failure (35.1162ms)
+✔ detaches retained writes and every returned record (31.9517ms)
+✔ detaches prototype-like JSON keys without changing object prototypes (34.698ms)
+✔ indexes entries committed out of ID order (33.0206ms)
+✔ continues an entry cursor below its last item after a newer commit (34.9612ms)
+✔ paginates conversations by opaque cursor in ascending ID order (32.0425ms)
+✔ filters and pages conversations by durable owner edges (36.0028ms)
+✔ scans deep fork history newest-first through every ancestor cap (50.0472ms)
+✔ scans tables in either ID order and continues a cursor in its order (39.7084ms)
+✔ replaces complete task records and pages filtered task scans (40.2798ms)
+✔ stores owners and scans waiting and completing tasks by status (33.5878ms)
+✔ stores and scans sleeping tasks by status (34.8806ms)
+✔ indexes request IDs per conversation and replaces complete submission records (39.8825ms)
+✔ stores passive write submissions without input-only lifecycle states (37.1334ms)
+✔ stores continue submissions, which have no entry and are never queued (37.8303ms)
+✔ reconstructs rewindable documents and preserves half-open incarnations (43.3107ms)
+✔ streams long document tails across root replacement deltas (174.9651ms)
+✔ copies stored document bases independently and rejects ambiguous sources (50.9477ms)
+✔ uses bases for version transitions and rejects historical reads of current-only documents (42.8239ms)
+✔ indexes logical addresses and exact-scope scans independently (34.9215ms)
+✔ keeps document lifecycle failures atomic and gives create-plus-retire an empty lifetime (36.2452ms)
+✔ refuses a creation and a change of one document in one commit, in either order (30.5073ms)
+✔ rolls back record tables and secondary indexes when a document command fails (35.1722ms)
+✔ keeps indexed string identities lossless (35.9529ms)
+✔ keeps one global record ID namespace and rejects exhausted ID minting (36.6896ms)
+✔ commits batches in order, each with its seq, checked against the earlier ones (36.2353ms)
+✔ stores the batches before the first one refused, and none after it (35.718ms)
+✔ refuses a later batch its own malformed actions fail, keeping the batches before it (32.1094ms)
+✔ resolves a batched copy against the state the earlier batches left (31.6586ms)
+✔ rejects every operation after close (31.0898ms)
+storageDiagnostics {"booleanBinding":{"accepted":false,"error":"TypeError: Provided value cannot be bound to SQLite parameter 1."}}
+✔ STRICT, JSON, partial indexes, UPSERT and all parameter types use the real engine (29.109ms)
+✔ runCounted excludes trigger writes; transaction queue isolates reads, writes and other transactions (34.6806ms)
+✔ transaction callback preserves the actual error and durable outcome (28.1844ms)
+✔ transaction commit-before preserves the actual error and durable outcome (26.8183ms)
+✔ transaction rollback preserves the actual error and durable outcome (27.9665ms)
+✔ transaction commit-after preserves the actual error and durable outcome (28.4109ms)
+✔ SDK batches: apply fault, receipts and reopen agree (33.6661ms)
+✔ SDK batches: check fault, receipts and reopen agree (31.0235ms)
+✔ SDK batches: commit-before fault, receipts and reopen agree (29.0872ms)
+✔ SDK batches: commit-after fault, receipts and reopen agree (34.645ms)
+✔ SDK batches: receive fault, receipts and reopen agree (34.3879ms)
+✔ schema 1 to 2 preserves records, failed migration rolls back, newer schema blocks without reset (59.7513ms)
+✔ application metadata and SDK entry commit atomically; incompatible document version preserves old content (43.2229ms)
+✔ an uncertain commit fails the Session permanently and reopening inspects its stable ID without replay (35.904ms)
+✔ dependent commit flushes deferred progress and durable entries cannot be deferred (37.5848ms)
+✔ credential audit catches a synthetic marker in live WAL before close checkpoints it (57.2479ms)
+✔ process termination at before inspects the same stable records on reopen (169.414ms)
+✔ process termination at during inspects the same stable records on reopen (160.0792ms)
+✔ process termination at after inspects the same stable records on reopen (164.8042ms)
+✔ process termination at confirmed inspects the same stable records on reopen (169.8754ms)
+✔ process termination at deferred inspects the same stable records on reopen (184.1288ms)
+✔ process termination at migration inspects the same stable records on reopen (180.9695ms)
+✔ real SDK conversation reopens its same persisted transcript without another model request (361.0932ms)
+✔ one canonical domain admits one owner until real storage close, then reopens durable records (37.8079ms)
+ℹ tests 62
+ℹ suites 0
+ℹ pass 62
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3505.3611

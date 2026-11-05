@@ -1,0 +1,41 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.ApplicationTest:
+INSTRUMENTATION_STATUS: test=explicitStopAndDetachedUiPreserveInput
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: applicationEvidence={"case":"stop-detached-ui","result":{"id":"hang","revision":7,"conversation":{"id":"hang","title":"新会话","model":{"provider":"fixture","modelId":"conversation","name":"验证模型"},"workspaceId":"default","projectId":null,"createdAt":1793727856580,"phase":"stopped"},"entries":[{"id":"10","role":"user","text":"保留输入并停止","persisted":true}],"phase":"stopped","storedSeq":7}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=explicitStopAndDetachedUiPreserveInput
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=realMimoProductConversationsPersistWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: applicationEvidence={"case":"real-mimo-two-conversations","result":{"before":{"phase":"ready","extensions":["conversation"],"metrics":{"transportRequests":2,"currentRequest":2,"transportAborted":true,"requestAbortCount":1,"bodyReadPending":false,"bodyReadError":"","bodyReadCancelled":true,"providerFinished":true,"textDeltaEvents":4,"toolDeltaEvents":0},"instance":"122e7985-22a5-4f09-aadf-f2e01c0d07f1","pid":28082,"domainOwned":true,"nativeOwners":1},"reopened":{"phase":"ready","extensions":["conversation"],"metrics":{},"instance":"ac90efd8-150b-41ec-acd7-26ce6ae09f21","pid":28082,"domainOwned":true,"nativeOwners":1},"histories":{"real-a":"{\"items\":[{\"id\":\"10\",\"role\":\"user\",\"text\":\"请只回复一句简短中文问候，包含编号 real-a。\",\"persisted\":true},{\"id\":\"13\",\"role\":\"assistant\",\"text\":\"你好 real-a！\",\"persisted\":true}]}","real-b":"{\"items\":[{\"id\":\"20\",\"role\":\"user\",\"text\":\"请只回复一句简短中文问候，包含编号 real-b。\",\"persisted\":true},{\"id\":\"23\",\"role\":\"assistant\",\"text\":\"你好，real-b！\",\"persisted\":true}]}"}}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.ApplicationTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=2
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=realMimoProductConversationsPersistWithoutReplay
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 5.823
+
+OK (2 tests)
+
+
+INSTRUMENTATION_CODE: -1

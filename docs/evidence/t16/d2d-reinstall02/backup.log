@@ -1,0 +1,11 @@
+Running incremental backup for 2 requested packages.
+Package @pm@ with result: Success
+Package dev.durableagent.backupfixture.control with progress: 2560/10240
+Package dev.durableagent.backupfixture.control with progress: 5120/10240
+Package dev.durableagent.backupfixture.control with progress: 7680/10240
+Package dev.durableagent.backupfixture.control with progress: 8704/10240
+Package dev.durableagent.backupfixture.control with progress: 11776/10240
+Package dev.durableagent.backupfixture.control with progress: 12800/10240
+Package dev.durableagent.backupfixture.control with result: Success
+Package dev.durableagent.backupfixture.rules with result: Transport rejected package because it wasn't able to process it at the time
+Backup finished with result: Success

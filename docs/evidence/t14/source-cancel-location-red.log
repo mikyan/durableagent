@@ -1,0 +1,3 @@
+(node:47324) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"routingError":"SOURCE_STOPPED","accepted":false,"sourceCancelled":true,"targetCancelled":false,"sourceAbortPending":false,"locationEditOk":false,"locationEditError":{"code":"LOCATION_BUSY","message":"尚有可能投递的发送意图，不能修改位置"}}

@@ -1,0 +1,15 @@
+[
+  "public configuration is durable; defaults and current models are separate; queries never decrypt",
+  "configuration COMMIT failure preserves old durable version and blocks scheduling until reopen",
+  "rotation or disable before final admission sends nothing; disabling after send does not cancel it",
+  "an old deferred response never becomes a replacement request after credential rotation",
+  "actual HTTP redirects cannot forward credentials or prompt body to another destination",
+  "credential/options overrides are rejected; revoke never uses ambient environment credentials",
+  "a post-commit publication failure gates dispatch and reopen loads the durable generation",
+  "an in-flight reflected old credential is sanitized even after rotation, including live WAL and events",
+  "serialized SDK stream settings reject credentials and arbitrary nested options before opening storage",
+  "JSON escaped credential reflection is removed after decoding, before SDK progress and persistence",
+  "a credential rotated after deferred compatibility check is rejected again at final fetch admission",
+  "escaped credential property names in parsed tool arguments never enter SDK results or SQLite",
+  "disable published during final metadata wait blocks dispatch at the final synchronous boundary"
+]

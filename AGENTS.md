@@ -1,6 +1,6 @@
 # 项目阶段
 
-当前交付是 spec 与工单。发布 `ready-for-agent` 不代表已授权生产实现、安装 SDK/APK/运行时或设备操作；开始这些工作须有后续用户指令。已有 Termux 的替换、卸载、清空与迁移需单独授权。
+用户已于 2026-11-04 调用 `implement-spec`，授权按工单依赖图实现、构建并验证首版，且已提供 Galaxy S23 进行设备验证。`ready-for-agent` 仍只表示说明就绪；后续票须等待前置验证通过。已有 Termux 的替换、卸载、清空与迁移需单独授权。执行进展与实测范围见 [首版索引](docs/specs/v1/README.md)。
 
 ## Agent skills
 

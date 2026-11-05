@@ -1,0 +1,53 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.HostReconnectApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.HostReconnectApplicationTest:
+INSTRUMENTATION_STATUS: test=renderedReconnectReopensFailedNativeOwnerAfterActualLeaseClearsWithoutResetOrSend
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.HostReconnectApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.IllegalStateException: Native status timeout
+	at dev.durableagent.probe.HostReconnectApplicationTest$Wire.state(HostReconnectApplicationTest.kt:32)
+	at dev.durableagent.probe.HostReconnectApplicationTest.renderedReconnectReopensFailedNativeOwnerAfterActualLeaseClearsWithoutResetOrSend$lambda$0$0(HostReconnectApplicationTest.kt:42)
+	at dev.durableagent.probe.HostReconnectApplicationTest.$r8$lambda$rQOYY6z6UPb_twZDIYkFsNLoLdk(Unknown Source:0)
+	at dev.durableagent.probe.HostReconnectApplicationTest$$ExternalSyntheticLambda2.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.HostReconnectApplicationTest.until(HostReconnectApplicationTest.kt:26)
+	at dev.durableagent.probe.HostReconnectApplicationTest.until$default(HostReconnectApplicationTest.kt:26)
+	at dev.durableagent.probe.HostReconnectApplicationTest.renderedReconnectReopensFailedNativeOwnerAfterActualLeaseClearsWithoutResetOrSend(HostReconnectApplicationTest.kt:42)
+
+INSTRUMENTATION_STATUS: stream=
+Error in renderedReconnectReopensFailedNativeOwnerAfterActualLeaseClearsWithoutResetOrSend(dev.durableagent.probe.HostReconnectApplicationTest):
+java.lang.IllegalStateException: Native status timeout
+	at dev.durableagent.probe.HostReconnectApplicationTest$Wire.state(HostReconnectApplicationTest.kt:32)
+	at dev.durableagent.probe.HostReconnectApplicationTest.renderedReconnectReopensFailedNativeOwnerAfterActualLeaseClearsWithoutResetOrSend$lambda$0$0(HostReconnectApplicationTest.kt:42)
+	at dev.durableagent.probe.HostReconnectApplicationTest.$r8$lambda$rQOYY6z6UPb_twZDIYkFsNLoLdk(Unknown Source:0)
+	at dev.durableagent.probe.HostReconnectApplicationTest$$ExternalSyntheticLambda2.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.HostReconnectApplicationTest.until(HostReconnectApplicationTest.kt:26)
+	at dev.durableagent.probe.HostReconnectApplicationTest.until$default(HostReconnectApplicationTest.kt:26)
+	at dev.durableagent.probe.HostReconnectApplicationTest.renderedReconnectReopensFailedNativeOwnerAfterActualLeaseClearsWithoutResetOrSend(HostReconnectApplicationTest.kt:42)
+
+INSTRUMENTATION_STATUS: test=renderedReconnectReopensFailedNativeOwnerAfterActualLeaseClearsWithoutResetOrSend
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 9.885
+There was 1 failure:
+1) renderedReconnectReopensFailedNativeOwnerAfterActualLeaseClearsWithoutResetOrSend(dev.durableagent.probe.HostReconnectApplicationTest)
+java.lang.IllegalStateException: Native status timeout
+	at dev.durableagent.probe.HostReconnectApplicationTest$Wire.state(HostReconnectApplicationTest.kt:32)
+	at dev.durableagent.probe.HostReconnectApplicationTest.renderedReconnectReopensFailedNativeOwnerAfterActualLeaseClearsWithoutResetOrSend$lambda$0$0(HostReconnectApplicationTest.kt:42)
+	at dev.durableagent.probe.HostReconnectApplicationTest.$r8$lambda$rQOYY6z6UPb_twZDIYkFsNLoLdk(Unknown Source:0)
+	at dev.durableagent.probe.HostReconnectApplicationTest$$ExternalSyntheticLambda2.invoke(D8$$SyntheticClass:0)
+	at dev.durableagent.probe.HostReconnectApplicationTest.until(HostReconnectApplicationTest.kt:26)
+	at dev.durableagent.probe.HostReconnectApplicationTest.until$default(HostReconnectApplicationTest.kt:26)
+	at dev.durableagent.probe.HostReconnectApplicationTest.renderedReconnectReopensFailedNativeOwnerAfterActualLeaseClearsWithoutResetOrSend(HostReconnectApplicationTest.kt:42)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

@@ -1,0 +1,16 @@
+{
+  "source": "unchanged owner runtime/dist",
+  "modelRequests": 0,
+  "credentialAccess": 0,
+  "androidAccess": 0,
+  "readOutputFailures": 20,
+  "executionStarts": 1,
+  "recoveryBudgetCalls": 0,
+  "recoveryBudgetAlreadyExhausted": true,
+  "haltedBy": "repro AbortController at 20; production had no budget boundary",
+  "elapsedMs": 6.425799999999981,
+  "result": {
+    "ok": false,
+    "error": "执行连接未确认结果，保留原身份等待核验"
+  }
+}

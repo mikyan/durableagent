@@ -1,0 +1,25 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.FileNativeObservationTest:
+INSTRUMENTATION_STATUS: test=inspectRetainedSdkHistoryWithoutOpeningHarness
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: retainedFileHistoryObservation={"files":[],"tasks":[{"id":17,"conversationId":5,"kind":"pi.generation","abortRequested":false,"background":false,"startedAt":1793784090203,"status":"waiting","checkpoint":"{\"phase\":\"tools\",\"assistant\":19,\"tools\":[20],\"pending\":[]}","input":"{}"},{"id":20,"conversationId":5,"kind":"pi.tool","owner":17,"abortRequested":false,"background":false,"startedAt":1793784090807,"status":"running","checkpoint":"{\"phase\":\"execute\",\"arguments\":{\"command\":\"python -u -c 'import urllib.request; r=urllib.request.urlopen(\\\"http:\/\/10.0.2.2:18763\/t13\/b54c3476-66ac-4cfb-af7d-b8c11e54b2ef\\\",timeout=60); print(\\\"t13-download-open\\\",flush=True); n=0\\nwhile True:\\n b=r.read(1024)\\n if not b: break\\n n+=len(b)\\nprint(\\\"t13-download-finished\\\",n,flush=True)' & wait\"},\"replay\":\"safe\"}","input":"{\"kind\":\"model\",\"assistant\":19,\"callId\":\"location-1\"}"}],"tasksLimited":false,"submissions":[{"conversationId":5,"requestId":"359a590e-8210-4616-a23d-64af002ef910","type":"input","status":"placed","entry":15,"id":16}],"submissionsLimited":false,"documentOperationIds":[],"executionIds":["c2fc89d6-4555-4a19-ac92-96bde76b5861"],"run":"b54c3476-66ac-4cfb-af7d-b8c11e54b2ef","harnessNotOpened":true,"modelTransportNotInstalled":true,"conversations":[{"id":"policy-chat","entries":[{"id":"15","role":"user","text":"EXEC_NETWORK_DOWNLOAD","truncated":false}],"more":false}],"nativeDocumentQueries":[],"nativeExecutionQueries":[{"executionId":"c2fc89d6-4555-4a19-ac92-96bde76b5861","response":{"ok":true,"value":{"captureIncomplete":false,"context":{"bindingId":"cc205b46-f1d0-46f6-9889-418a785407f7","callId":"location-1","controlGeneration":1,"locationVersion":1,"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","productId":"policy-chat","sdkConversationId":5,"taskId":20},"createdAt":1793784091844,"defaultWorkspace":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace","executionId":"c2fc89d6-4555-4a19-ac92-96bde76b5861","executorId":"a0578db8-1bd2-4158-8e78-b27216f25c6a","exitCode":0,"finalDigest":"9debe6d702652ba2176a7e0c55962aea3ea5de9a0688a215fbbecf65dc210f2a","finishedAt":1793784095684,"guardianPid":13713,"ledgerEpoch":"c156417c-ec2d-4528-99d1-78d257676c18","localCapabilities":{"helperSha256":"13467b5d7f11723063c4d8004ba6d8a96441ad8ac66e25803f17e1156695aed1","runnerSha256":"be8b68ec5e9e204b2995a7546d3c372fea7e08775a9e19b1ff711515bee884ff","version":1},"namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","outputBytes":455,"outputCursor":4,"outputRef":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/outputs\/c2fc89d6-4555-4a19-ac92-96bde76b5861.raw","protocol":1,"rawSha256":"3d2bb862eabd9c7fac3f5aaa398fb9c82a78a0bd3391a9adc308fc03fb19b513","requestDigest":"6583eee22688398bde09fecc09fe754b30183f429386d37afe6abe516975ddb0","scopeConfirmed":true,"sequence":8,"startRequestedAt":1793784092288,"startedAt":1793784092769,"state":"completed"}}}]}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.FileNativeObservationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=inspectRetainedSdkHistoryWithoutOpeningHarness
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 1.337
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

@@ -1,0 +1,27 @@
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+dev.durableagent.probe.InputApplicationTest:
+INSTRUMENTATION_STATUS: test=actualSystemPickerImportsSyntheticText
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: inputEvidence={"case":"picker-waiting","result":{"rootTitle":"DurableAgent 测试资料","filename":"input-test.txt"}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: inputEvidence={"case":"actual-picker-ready","result":{"draft":{"id":"picker-draft","revision":1,"text":"","selections":[{"id":"ae62708f-42fd-44ca-911e-19623f070641","source":{"name":"fixture-note.txt","mimeType":"text\/plain","access":"available","byteLength":38},"preparation":{"state":"ready","representation":{"range":"full","capabilityVersion":"d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f","kind":"text","mimeType":"text\/plain","transformation":"UTF-8 全文，未截断","objectId":"fb60a028-8670-4adc-9860-5324063f57d2","sha256":"ee9a2cd7b411f465b1251a067595cd7fceab25c5b4a78ea5f8394b9935638ff3","byteLength":38}}}],"committed":true,"stateVersion":4,"capability":{"provider":"fixture","modelId":"conversation","input":["text"],"source":"validation","limits":{},"applicationPolicy":{"draftCharacters":100000,"attachments":4,"sourceImageBytes":16777216,"sourcePixels":25165824,"textBytes":262144,"imageWidth":1024,"imageHeight":1024,"imageBytes":1572864,"totalBase64Bytes":8388608,"requestBytes":10485760},"version":"d40d8dfe9e22e22f4443a46c5512386f559416d02baab201f088268c3367064f"}},"persistedReadGrants":1,"modelRequests":0}}
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=dev.durableagent.probe.InputApplicationTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=actualSystemPickerImportsSyntheticText
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 31.365
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

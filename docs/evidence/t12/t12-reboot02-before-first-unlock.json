@@ -1,0 +1,58 @@
+{
+  "scenario": "reboot02",
+  "stage": "before-first-unlock",
+  "networkRestored": true,
+  "instrumentationUsed": false,
+  "priorObserverFailures": [
+    "First assertion assumed empty stdout on failed exec-out run-as; Android returned its CE path error on stdout.",
+    "Second assertion assumed exec-out propagated exit status; exec-out returned 0 with run-as error, while shell returns 1 and stderr. Neither observed SQLite content."
+  ],
+  "observations": [
+    {
+      "atEpochSeconds": 1793798000.796767,
+      "userState": "RUNNING_LOCKED",
+      "locked": true,
+      "agentAbsent": true,
+      "serviceAbsent": true,
+      "recoveryDatabaseReadable": false,
+      "ceReadExitCode": 1,
+      "ceReadError": "run-as: couldn't stat /data/user/0/dev.durableagent.probe: No such file or directory\r\n"
+    },
+    {
+      "atEpochSeconds": 1793798005.9811082,
+      "userState": "RUNNING_LOCKED",
+      "locked": true,
+      "agentAbsent": true,
+      "serviceAbsent": true,
+      "recoveryDatabaseReadable": false,
+      "ceReadExitCode": 1,
+      "ceReadError": "run-as: couldn't stat /data/user/0/dev.durableagent.probe: No such file or directory\r\n"
+    },
+    {
+      "atEpochSeconds": 1793798011.2642713,
+      "userState": "RUNNING_LOCKED",
+      "locked": true,
+      "agentAbsent": true,
+      "serviceAbsent": true,
+      "recoveryDatabaseReadable": false,
+      "ceReadExitCode": 1,
+      "ceReadError": "run-as: couldn't stat /data/user/0/dev.durableagent.probe: No such file or directory\r\n"
+    },
+    {
+      "atEpochSeconds": 1793798016.4496446,
+      "userState": "RUNNING_LOCKED",
+      "locked": true,
+      "agentAbsent": true,
+      "serviceAbsent": true,
+      "recoveryDatabaseReadable": false,
+      "ceReadExitCode": 1,
+      "ceReadError": "run-as: couldn't stat /data/user/0/dev.durableagent.probe: No such file or directory\r\n"
+    }
+  ],
+  "cryptoState": "encrypted",
+  "cryptoType": "file",
+  "mountUnlockState": [
+    "CE unlocked users: []",
+    "System unlocked users: []"
+  ]
+}

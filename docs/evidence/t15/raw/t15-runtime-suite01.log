@@ -1,0 +1,335 @@
+(node:68852) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ two product conversations have independent durable history and stable retried creation (459.0746ms)
+✔ configuration gates every scheduling entry while real SDK open uses valid synchronous bootstrap settings (75.8389ms)
+✔ unsubscribe detaches UI only; full snapshot reconnect restores completed durable history (279.5376ms)
+✔ history paging recovers entries older than the live window without mixing conversations (6596.8877ms)
+✔ explicit stop aborts the active model while retaining accepted input (125.4379ms)
+✔ start during close waits for the prior writable Session to release ownership (101.3882ms)
+✔ failed atomic creation closes the application gate and retry after reopen finds no half conversation (129.9244ms)
+✔ SDK conversations without explicit product registration never enter the product list (92.5113ms)
+✔ actual SDK retry and terminal provider error project waiting and failed states (447.4036ms)
+✔ disconnect and unsubscribe invalidate a subscription whose attachment is still pending (283.2422ms)
+✔ a fatal SQLite error reports unavailable observation and failed host without inventing a terminal conversation (88.6263ms)
+✔ newer persisted configuration refuses startup and preserves its original data (71.2737ms)
+✔ a due persisted retry stays dormant until reopened configuration is ready (747.2896ms)
+✔ context presentation reads current SDK model context, never accumulated usage or another conversation (314.6191ms)
+✔ a pause immediately after stream request fences the actual model invocation (2.4676ms)
+✔ a abort immediately after stream request fences the actual model invocation (0.417ms)
+✔ concurrent dispatches share one control check and cannot repeatedly block one another (0.5432ms)
+✔ readiness check failure preserves its safe category without pretending a user stop or exposing detail (0.9349ms)
+✔ an actually aborted dispatch remains stopped and does not invoke the model (0.183ms)
+✔ native operation is begun once and awaited without blocking the Node owner (25.9423ms)
+✔ malformed nested native envelopes never become execution receipts (0.7137ms)
+✔ ambiguous prepare start and cancel outcomes never trigger a second mutation (0.3869ms)
+✔ non-JSON payload and oversized input do not cross the native boundary (0.2647ms)
+✔ caller deadline reports unknown without resubmitting or issuing remote cancellation (12018.9481ms)
+(node:73388) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ UI-only packages need no Agent placeholder; both identities are validated before SDK installation (1.161ms)
+✔ actual SDK selection order owns intentional tools and sections overrides; duplicate tasks fail in the SDK (493.7794ms)
+✔ SDK uninstall neither cancels an acquired tool call nor disposes its owner resource (371.23ms)
+(node:72760) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ capabilities derive from the fixed SDK catalog, use byte-specific budgets, and never resolve credentials (2.2637ms)
+✔ fixed input verifies ownership, every object and digest before SDK content; changed capabilities never alter a token (1.1853ms)
+✔ explicit fixed-image send reaches real SDK encoding, persists image-only history, and reopening never sends (441.8441ms)
+✔ actual serialized SDK requests enforce escaped JSON, history image counts and selected-model limits before decrypt or transport (19.3422ms)
+✔ oversized accumulated context is refused before entering the real SDK provider encoder (66.7184ms)
+✔ a finite six-request validation budget permits three tool round trips and rejects a seventh HTTP request (1226.8559ms)
+✔ validation request budgets reject missing bounds and preserve the four-request default (744.354ms)
+(node:72172) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ startup registers an unresolved persisted execution with native stop authority before an offline query or abort confirmation (305.1209ms)
+✔ a real SDK tool stores stable execution context and reaches one external command through the application (163.5659ms)
+✔ a fixed shell wrapper gives each exec ordinal its own stable request and preserves argv options (166.0131ms)
+✔ empty argv is a confirmed local spawn error with no external acceptance (130.9589ms)
+✔ a pure application tool remains usable before Termux setup without providing executable file capabilities (132.9803ms)
+✔ a lost start receipt persists uncertainty and blocks a later tool identity from bypassing it (214.7135ms)
+✔ public verification in the same host resolves a lost ACK before a later explicit execution (223.3534ms)
+✔ an initially unverified binding pins its first real directory identity before acceptance (141.2769ms)
+✔ a confirmed pre-acceptance cancellation settles without requesting nonexistent output (129.6783ms)
+✔ aborting the real SDK invocation sends cancellation for only its durable execution identity (154.1134ms)
+✔ environment cleanup stops only commands owned by its bound SDK conversation and confirms their scope (266.8827ms)
+✔ a pending control owner keeps project association occupied even after its live SDK pointers retire (92.8409ms)
+✔ large split UTF-8 output has a complete raw reference readable through the same execution namespace (1220.8704ms)
+✖ hard death at intent-persisted reconnects the same execution without repeating its effect (45.3509ms)
+✖ hard death at accepted reconnects the same execution without repeating its effect (37.4104ms)
+✖ hard death at output-checkpoint reconnects the same execution without repeating its effect (38.4936ms)
+✖ hard death at before-result reconnects the same execution without repeating its effect (37.7552ms)
+✖ startup verifies pending external evidence before publishing ready or allowing recovered progress (43.5522ms)
+✔ the installed SDK read tool reads the adopted Termux namespace without starting a shell (149.4523ms)
+✔ arbitrary shell commands from two conversations share a durable environment writer queue (283.1191ms)
+✔ stopping a queued writer never starts its command and releases only that waiting reservation (369.915ms)
+✔ the real SDK write tool persists one file plan and exposes its verified original-file change (180.4343ms)
+✔ an ended helper with unconfirmed original-file effects still occupies its project and writer domain (186.3638ms)
+✔ large SDK binary writes stage bounded chunks before starting one supervised effect (189.6374ms)
+✔ SDK append preserves the existing binary prefix and its completed identity across reopen (192.1995ms)
+✔ SDK truncate, flush and rename use qualified supervised file operations with exact result evidence (257.9515ms)
+✔ a native file-proof ACK that did not persist the proof cannot release its writer occupation (182.8928ms)
+✔ environment cleanup stops its polling readers without waiting for another owner to close (744.1715ms)
+✔ a fixed document read tool reads an authorized original capability without inventing a Termux path (141.4933ms)
+✔ a fixed document list tool discovers authorized originals and current denied grants without reading contents (139.2191ms)
+✔ a document write persists its original identity and exposes verified native change after SDK reopen (185.3565ms)
+✔ environment cleanup cannot confirm a live original Provider scope and fences later document dispatch for that owner (265.424ms)
+✔ the shell writer prevents the other UID capability from dispatching until confirmed (279.2412ms)
+✔ the document writer prevents the other UID capability from dispatching until confirmed (320.6502ms)
+✔ stopping a queued original document durably prevents its Provider start (289.0881ms)
+✔ environment cleanup cancels only its bound queued original and prevents Provider start (291.4839ms)
+✔ a local writer blocks the other scope while read-only application tools remain usable (389.1987ms)
+✔ a shell writer blocks the other scope while read-only application tools remain usable (393.2485ms)
+✔ a reserved-local writer blocks the other scope while read-only application tools remain usable (369.3705ms)
+✔ a cancel-local writer blocks the other scope while read-only application tools remain usable (344.2531ms)
+✔ lost original-write confirmation survives host reopen and explicit query releases it without writing again (171.926ms)
+✔ an accepted file helper confirmed stopped before spawn proves no original write and releases its claim (194.034ms)
+✔ a malformed native original diff cannot be published as a verified document result (168.6273ms)
+✔ polling watch establishes a snapshot, reports reconnect overflow and stops callbacks before returning (2186.806ms)
+✔ SDK binary reader assembles bounded remote pages and fails on a lost opened handle without reopening its path (1.5529ms)
+✔ SDK line scanning counts decoded UTF-8 bytes while retaining raw file positions and the initial BOM rule (1.0751ms)
+✔ text line readers preserve CR and report final LF termination while decoding split UTF-8 once (1.4636ms)
+✔ whole-file binary and text reads keep source bytes and report their supported memory bound (0.781ms)
+✔ SDK directory pages keep the authenticated handle and combine bounded transport pages without reopening (1.1877ms)
+(node:32476) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ ordinary generation retry prepares the current model and request-time credential (1738.119ms)
+✔ close: held generation resumes its fixed or newly prepared route with one durable input (622.1215ms)
+✔ kill: held generation resumes its fixed or newly prepared route with one durable input (1875.1904ms)
+✔ deferred poll process death: unchanged keeps the original handle or fails without a replacement start (1954.1944ms)
+✔ deferred poll process death: rotated keeps the original handle or fails without a replacement start (3342.2237ms)
+✔ deferred poll process death: disabled keeps the original handle or fails without a replacement start (3323.574ms)
+✔ selected compaction retries and orderly resumes its selected model after current selection changes (1840.4006ms)
+✔ overdue work remains behind the configuration loading gate on reopen (2289.4023ms)
+✔ secret persistence detector has a positive control before relying on clean DB and WAL scans (4.7949ms)
+(node:71320) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ public configuration is durable; defaults and current models are separate; queries never decrypt (466.2051ms)
+✔ configuration COMMIT failure preserves old durable version and blocks scheduling until reopen (82.5464ms)
+✔ rotation or disable before final admission sends nothing; disabling after send does not cancel it (236.6467ms)
+✔ an old deferred response never becomes a replacement request after credential rotation (205.4224ms)
+✔ actual HTTP redirects cannot forward credentials or prompt body to another destination (27.1832ms)
+✔ credential/options overrides are rejected; revoke never uses ambient environment credentials (0.6524ms)
+✔ a post-commit publication failure gates dispatch and reopen loads the durable generation (91.0202ms)
+✔ an in-flight reflected old credential is sanitized even after rotation, including live WAL and events (119.0858ms)
+✔ serialized SDK stream settings reject credentials and arbitrary nested options before opening storage (120.7188ms)
+✔ JSON escaped credential reflection is removed after decoding, before SDK progress and persistence (227.8184ms)
+✔ a credential rotated after deferred compatibility check is rejected again at final fetch admission (12.0648ms)
+✔ escaped credential property names in parsed tool arguments never enter SDK results or SQLite (299.879ms)
+✔ disable published during final metadata wait blocks dispatch at the final synchronous boundary (11.0886ms)
+(node:63468) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ a conversation streams Chinese text through the real SDK and reconnects to its state (302.7677ms)
+✔ stop aborts a hanging model read and close allows a fresh single owner (29.8225ms)
+✔ close during initialization never revives the session (1.7913ms)
+✔ tool arguments survive byte-split SSE and real pi-schema coercion (366.3431ms)
+✔ invalid tool arguments are rejected by the SDK before execution (371.3838ms)
+✔ the loaded module exercises required Node primitives and sqlite (1.489ms)
+(node:72284) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ opt-in live provider forces witness after SDK transcript system/tool declarations and releases choice after its result (528.3705ms)
+✔ an exhausted validation budget settles the exact input as unanswered and publishes a failed conversation (222.8453ms)
+(node:73076) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ shared project and workspace metadata survives reopen; renaming does not change position or copy project authority (133.551ms)
+✔ pending native intent and real SDK work block location edits; rejection never becomes a delayed edit and rename remains ordinary metadata (156.9465ms)
+✔ actual SDK environment uses the adopted location through queued followups and a new explicit binding after release (816.8495ms)
+✔ canonical alias and unknown managed effects hold shared locations until explicit evidence release (158.8701ms)
+✔ task-owned internal conversations keep their binding after terminal owners, stay hidden, and later internal input still uses it (588.5818ms)
+✔ project association publication updates an already attached conversation observer and retains newer native expectations (92.4117ms)
+✔ committed edit with missing native publication is repaired by exact operation replay without leaving a stuck native fence (92.0968ms)
+✔ actual SDK COMMIT response uncertainty leaves native edit fenced; reopen publishes whichever complete configuration committed without applying an old proposal (209.6615ms)
+✔ T07 accepted binding migrates its provable location for environment use without changing its receipt or reissuing input (326.9378ms)
+✔ actual provider parser invokes the bound location witness tool; access revocation remains visible and never invokes a fallback environment (827.9674ms)
+✔ native intent creation and a location edit have explicit opposite orderings, while independent draft saves and stop stay durable (210.6182ms)
+✔ a fresh conversation can select another project while another conversation uses the common default; shared relocation still refuses (171.8868ms)
+✔ a fork keeps the history source location but inherits the actual task owner control domain, without product registration (542.5847ms)
+✔ a late location inspection cannot combine an old actual identity with a newly committed workspace locator (89.6141ms)
+✔ catalog and selection remain from one configuration version when a product read completes after a concurrent selection (92.3102ms)
+✔ operation identities use own receipts, including inherited-object names, and keep exact replay and conflicting payload rules (78.8096ms)
+(node:57348) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual host process death before-commit preserves original history and verifies migration commit independently (189.0011ms)
+✔ actual host process death after-commit preserves original history and verifies migration commit independently (187.3744ms)
+(node:72320) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ a typed old configuration read does not publish migration; a failed migration commit leaves old values and history readable (66.1406ms)
+✔ actual SDK compaction and a fork retain original history through SQLite reopen (362.0021ms)
+✔ an unvisited future admission record blocks startup before dispatch and remains readable by its owner (61.5469ms)
+✔ compatible retained history stays readable while an unrelated future record keeps every execution action closed (304.3745ms)
+✔ a malformed current record is not mistaken for an uninitialized installation (62.8626ms)
+✔ actual SDK SQLite capacity failure leaves a saved intent and existing conversation readable on reopen (129.3117ms)
+✔ a newer application record closes dispatch without resetting its data and exposes an actionable storage status (60.3756ms)
+(node:71736) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ explicit stable-target transfer preserves target drafts and replays one durable submission after reopen (254.2458ms)
+✔ source stop before target commit rolls back, while stop after commit preserves the accepted independent target and original receipt (249.1831ms)
+✔ actual SDK routing tool derives its source, submits explicit content once and leaves ordinary input in its own conversation (452.4985ms)
+✔ catalog distinguishes UI-only, Agent-only and both-sided contributions; initialization failure remains diagnosable (71.9034ms)
+✔ stable target discovery, creation idempotency, missing target, stopped controls and stale location fail through public routing (94.4611ms)
+✔ lost native route ACK reconciles the same SDK input while preserving a newer target draft (127.131ms)
+✔ actual model Agent tools reuse public configuration and current-model selection without decrypting query credentials (428.6891ms)
+✔ never-accepted source-cancelled route releases location only after coherent absence and a verified source fence, including reopen (136.2497ms)
+✔ accepted source-cancelled target retains location protection through lost ACK, reopen, active work and unresolved effects (178.7468ms)
+(node:69500) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ a surviving background owned descendant must finish abort before a new explicit generation is admitted (737.6215ms)
+✔ a surviving background inherited fork must finish abort before a new explicit generation is admitted (604.9995ms)
+(node:67244) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ reserves ID 1 for the immutable root conversation (37.7657ms)
+✔ receives a durable commit once before resolving, and never a refused one (35.8981ms)
+✔ commits mixed table writes atomically and rolls all of them back on failure (35.5398ms)
+✔ detaches retained writes and every returned record (33.0181ms)
+✔ detaches prototype-like JSON keys without changing object prototypes (34.1138ms)
+✔ indexes entries committed out of ID order (32.678ms)
+✔ continues an entry cursor below its last item after a newer commit (37.9234ms)
+✔ paginates conversations by opaque cursor in ascending ID order (30.9084ms)
+✔ filters and pages conversations by durable owner edges (32.2416ms)
+✔ scans deep fork history newest-first through every ancestor cap (50.9367ms)
+✔ scans tables in either ID order and continues a cursor in its order (39.7371ms)
+✔ replaces complete task records and pages filtered task scans (39.1733ms)
+✔ stores owners and scans waiting and completing tasks by status (35.6871ms)
+✔ stores and scans sleeping tasks by status (35.097ms)
+✔ indexes request IDs per conversation and replaces complete submission records (39.8263ms)
+✔ stores passive write submissions without input-only lifecycle states (34.8323ms)
+✔ stores continue submissions, which have no entry and are never queued (35.0394ms)
+✔ reconstructs rewindable documents and preserves half-open incarnations (44.0042ms)
+✔ streams long document tails across root replacement deltas (164.9731ms)
+✔ copies stored document bases independently and rejects ambiguous sources (52.9084ms)
+✔ uses bases for version transitions and rejects historical reads of current-only documents (39.2249ms)
+✔ indexes logical addresses and exact-scope scans independently (32.6852ms)
+✔ keeps document lifecycle failures atomic and gives create-plus-retire an empty lifetime (34.0083ms)
+✔ refuses a creation and a change of one document in one commit, in either order (27.9078ms)
+✔ rolls back record tables and secondary indexes when a document command fails (37.0816ms)
+✔ keeps indexed string identities lossless (31.8913ms)
+✔ keeps one global record ID namespace and rejects exhausted ID minting (36.3806ms)
+✔ commits batches in order, each with its seq, checked against the earlier ones (36.5998ms)
+✔ stores the batches before the first one refused, and none after it (36.9177ms)
+✔ refuses a later batch its own malformed actions fail, keeping the batches before it (36.8519ms)
+✔ resolves a batched copy against the state the earlier batches left (32.0989ms)
+✔ rejects every operation after close (28.0732ms)
+storageDiagnostics {"booleanBinding":{"accepted":false,"error":"TypeError: Provided value cannot be bound to SQLite parameter 1."}}
+✔ STRICT, JSON, partial indexes, UPSERT and all parameter types use the real engine (26.4976ms)
+✔ runCounted excludes trigger writes; transaction queue isolates reads, writes and other transactions (39.1867ms)
+✔ transaction callback preserves the actual error and durable outcome (28.4888ms)
+✔ transaction commit-before preserves the actual error and durable outcome (24.0561ms)
+✔ transaction rollback preserves the actual error and durable outcome (26.5155ms)
+✔ transaction commit-after preserves the actual error and durable outcome (27.1872ms)
+✔ SDK batches: apply fault, receipts and reopen agree (34.2435ms)
+✔ SDK batches: check fault, receipts and reopen agree (30.9034ms)
+✔ SDK batches: commit-before fault, receipts and reopen agree (32.0372ms)
+✔ SDK batches: commit-after fault, receipts and reopen agree (34.8093ms)
+✔ SDK batches: receive fault, receipts and reopen agree (33.8818ms)
+✔ schema 1 to 2 preserves records, failed migration rolls back, newer schema blocks without reset (54.959ms)
+✔ application metadata and SDK entry commit atomically; incompatible document version preserves old content (41.7872ms)
+✔ an uncertain commit fails the Session permanently and reopening inspects its stable ID without replay (34.8452ms)
+✔ dependent commit flushes deferred progress and durable entries cannot be deferred (37.71ms)
+✔ credential audit catches a synthetic marker in live WAL before close checkpoints it (53.2818ms)
+✔ process termination at before inspects the same stable records on reopen (167.7499ms)
+✔ process termination at during inspects the same stable records on reopen (160.7276ms)
+✔ process termination at after inspects the same stable records on reopen (168.0655ms)
+✔ process termination at confirmed inspects the same stable records on reopen (166.6555ms)
+✔ process termination at deferred inspects the same stable records on reopen (168.2611ms)
+✔ process termination at migration inspects the same stable records on reopen (185.2637ms)
+✔ real SDK conversation reopens its same persisted transcript without another model request (424.4304ms)
+✔ one canonical domain admits one owner until real storage close, then reopens durable records (45.4264ms)
+(node:69964) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ explicit native intent alone drives atomic SDK admission; lost ACK reconciles the same identity and preserves later draft (414.0989ms)
+✔ same content is a new user action; accepted identity mismatch cannot reuse its SDK request or binding (507.3887ms)
+✔ failure after submit rolls back submission map and binding; durable commit response loss recovers only original acceptance (281.7943ms)
+✔ a native stop committed during SDK admission prevents dispatch, survives reopen, and only a new explicit generation may proceed (346.6484ms)
+✔ a conflicting native receipt is a visible inconsistency, never a fresh or silently acknowledged submission (282.0838ms)
+✔ missing SDK map or binding is reported without repair or redelivery of a native acknowledged intent (601.5519ms)
+✔ unaccepted changed location refuses; accepted replay keeps original binding after the current location changes (305.3118ms)
+✔ persisted due work and old stop stay behind the native control startup barrier, including abort implicit resume (810.607ms)
+✔ native stops at either ACK edge are checked by actual dispatch, not only by the earlier admission snapshot (243.7002ms)
+✔ two durable conversations dispatch concurrently without control-check starvation or mixed history (319.1549ms)
+✔ actual SQL COMMIT failures retain an uncertain native intent; reopen inspects a whole accepted or absent transaction (695.2376ms)
+✔ real SDK queued, placed and settled input remain distinct while afterRun keeps the conversation active (509.4251ms)
+✔ a missing native authority never opens a writable SDK runtime or dispatches legacy stored work (1.3928ms)
+(node:67532) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ creating missing parents occupies the first new directory so sibling creation cannot overlap (56.431ms)
+✔ a shell writer holds local file writes across host reopen until matching terminal scope evidence arrives (57.3303ms)
+✔ known disjoint files can write together while canonical aliases, hardlinks and directory descendants wait (49.2832ms)
+✔ cancelling a queued write never grants it later and cannot release a granted or uncertain writer (46.9709ms)
+ℹ tests 222
+ℹ suites 0
+ℹ pass 217
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 79649.4555
+
+✖ failing tests:
+
+test at runtime\test\managed-execution.test.mjs:165:88
+✖ hard death at intent-persisted reconnects the same execution without repeating its effect (45.3509ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\AI_BA\AppData\Local\Temp\managed-execution-kill-U3C0gx\cut.txt'
+      at async open (node:internal/fs/promises:640:25)
+      at async readFile (node:internal/fs/promises:1283:14)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/runtime/test/managed-execution.test.mjs:167:383)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\AI_BA\\AppData\\Local\\Temp\\managed-execution-kill-U3C0gx\\cut.txt'
+  }
+
+test at runtime\test\managed-execution.test.mjs:165:88
+✖ hard death at accepted reconnects the same execution without repeating its effect (37.4104ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\AI_BA\AppData\Local\Temp\managed-execution-kill-GUV9vQ\cut.txt'
+      at async open (node:internal/fs/promises:640:25)
+      at async readFile (node:internal/fs/promises:1283:14)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/runtime/test/managed-execution.test.mjs:167:383)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\AI_BA\\AppData\\Local\\Temp\\managed-execution-kill-GUV9vQ\\cut.txt'
+  }
+
+test at runtime\test\managed-execution.test.mjs:165:88
+✖ hard death at output-checkpoint reconnects the same execution without repeating its effect (38.4936ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\AI_BA\AppData\Local\Temp\managed-execution-kill-XVztyH\cut.txt'
+      at async open (node:internal/fs/promises:640:25)
+      at async readFile (node:internal/fs/promises:1283:14)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/runtime/test/managed-execution.test.mjs:167:383)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\AI_BA\\AppData\\Local\\Temp\\managed-execution-kill-XVztyH\\cut.txt'
+  }
+
+test at runtime\test\managed-execution.test.mjs:165:88
+✖ hard death at before-result reconnects the same execution without repeating its effect (37.7552ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\AI_BA\AppData\Local\Temp\managed-execution-kill-jXYO1N\cut.txt'
+      at async open (node:internal/fs/promises:640:25)
+      at async readFile (node:internal/fs/promises:1283:14)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/runtime/test/managed-execution.test.mjs:167:383)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\AI_BA\\AppData\\Local\\Temp\\managed-execution-kill-jXYO1N\\cut.txt'
+  }
+
+test at runtime\test\managed-execution.test.mjs:172:1
+✖ startup verifies pending external evidence before publishing ready or allowing recovered progress (43.5522ms)
+  Error: ENOENT: no such file or directory, open 'C:\Users\AI_BA\AppData\Local\Temp\managed-execution-startup-uVfPEJ\cut.txt'
+      at async open (node:internal/fs/promises:640:25)
+      at async readFile (node:internal/fs/promises:1283:14)
+      at async TestContext.<anonymous> (file:///C:/Users/AI_BA/.codex/worktrees/t15-console/durableagent/runtime/test/managed-execution.test.mjs:174:332)
+      at async Test.run (node:internal/test_runner/test:1125:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: 'C:\\Users\\AI_BA\\AppData\\Local\\Temp\\managed-execution-startup-uVfPEJ\\cut.txt'
+  }

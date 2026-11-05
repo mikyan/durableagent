@@ -1,0 +1,10 @@
+
+dev.durableagent.probe.ExecutionRecoveryTest:INSTRUMENTATION_STATUS: originalRecoveryEvidence={"run":"bb01b7b1-53af-4a0b-854b-ae87ce2a516a","beforePid":16130,"afterPid":16221,"boundary":{"stage":"execution-before-result","pid":16130},"original":{"operationId":"eb7492f2-2415-4eb4-ac35-dbde2e5a7b66","bindingId":"86254e92-ceab-487b-8cc4-61503c7ef459","executionId":"5c6c03ff-13da-4c02-8473-b7280f6e491c","path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-bb01b7b1-53af-4a0b-854b-ae87ce2a516a\/queue.txt","namespace":"termux:a0578db8-1bd2-4158-8e78-b27216f25c6a","original":true,"state":"completed","scopeConfirmed":true,"diff":{"available":true,"text":"--- before\n+++ after\n@@ -0,0 +1 @@\n+local\n"}},"read":{"path":"\/data\/data\/com.termux\/files\/home\/.local\/share\/durableagent-execution\/workspace\/.durableagent-t10-bb01b7b1-53af-4a0b-854b-ae87ce2a516a\/queue.txt","text":"local\n","sha256":"efb83f2a277e9f49b38efd505f5cbb93885e721b6bd16b788937c9396174c006"},"sameIntentAddedExecutions":0}
+INSTRUMENTATION_STATUS_CODE: 0
+.
+
+Time: 10.448
+
+OK (1 test)
+
+

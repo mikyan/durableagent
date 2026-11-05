@@ -1,0 +1,7 @@
+Starting: Intent { cmp=dev.durableagent.termuxprobe/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: dev.durableagent.termuxprobe/.MainActivity
+TotalTime: 2024
+WaitTime: 2033
+Complete

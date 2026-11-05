@@ -1,0 +1,18 @@
+
+  UserInfo{0:null:4c13} serialNo=0 isPrimary=true
+    State: RUNNING_LOCKED
+  Started users state: [0=RUNNING_LOCKED]
+    0: com.android.server.location.injector.SystemUserInfoHelper$$ExternalSyntheticLambda0@364983f
+        mDefaultUserInfoFlags: 0
+        mDefaultUserInfoFlags: 0
+        mDefaultUserInfoFlags: 0
+        mDefaultUserInfoFlags: GUEST
+        mDefaultUserInfoFlags: 0
+        mDefaultUserInfoFlags: MANAGED_PROFILE
+        mDefaultUserInfoFlags: ADMIN|PRIMARY
+        mDefaultUserInfoFlags: ADMIN|MAIN|PRIMARY
+        mDefaultUserInfoFlags: 0
+        mDefaultUserInfoFlags: RESTRICTED
+        mDefaultUserInfoFlags: DEMO
+        mDefaultUserInfoFlags: 0
+
