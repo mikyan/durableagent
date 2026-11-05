@@ -1,0 +1,29 @@
+.github/workflows/ci.yml
+  s_467dcb949b5b60::t_7574585bed5ad7 112,115
+android/app/build.gradle.kts
+  s_467dcb949b5b60::t_eb60d99b3e5632 72
+android/app/src/main/java/dev/durableagent/probe/ExecutionTermuxGateway.kt
+  s_467dcb949b5b60::t_3a3836f953c2cd 22,102-105,109,111,117-121
+android/app/src/main/java/dev/durableagent/probe/NativeExecutionBridge.kt
+  s_467dcb949b5b60::t_398cfe72c9e7fe 6,8,29-30,33-38,96
+android/app/src/main/java/dev/durableagent/probe/TermuxSourceVerifier.kt
+  s_467dcb949b5b60::t_9f7ac74c77918a 1-202
+android/app/src/test/java/dev/durableagent/probe/TermuxSourceVerifierTest.kt
+  s_467dcb949b5b60::t_f58e6b63c8ca3a 1-112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "7eb46c6d4a3d2cd9a11eaa784f81ab26d66e0363",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
