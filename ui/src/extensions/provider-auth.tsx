@@ -41,7 +41,7 @@ export function ProviderLogin({controller,target,authType,onClose}:{controller:C
   },[controller,target,authType]);
   const prompt=session?.prompt;
   useEffect(()=>clear(),[prompt?.id]);
-  function answer(event:FormEvent){event.preventDefault();if(!prompt||busy)return;const value=prompt.type==='select'?select.current?.value:input.current?.value;clear();if(value)void action({operation:'answer',promptId:prompt.id,answer:value});}
+  function answer(event:FormEvent){event.preventDefault();if(!prompt||busy)return;const value=prompt.type==='select'?select.current?.value:input.current?.value;clear();if(value!==undefined)void action({operation:'answer',promptId:prompt.id,answer:value});}
   return <section className="provider-login" aria-label={authType==='oauth'?'账号登录':'配置凭据'}>
     <div className="connection-heading"><h3>{authType==='oauth'?'登录账号':'配置凭据'}</h3><button className="text-button" onClick={onClose}>{session?.state==='completed'?'完成':'取消'}</button></div>
     {error&&<p className="settings-error" role="alert">{error}</p>}
@@ -49,7 +49,7 @@ export function ProviderLogin({controller,target,authType,onClose}:{controller:C
       {event.type==='auth_url'?<><p>{event.instructions??'在浏览器中完成登录，然后返回此处。'}</p><button className="secondary-button" disabled={busy||!unfinished(session)} onClick={()=>void action({operation:'openUrl',eventIndex:index})}>打开登录页面 ↗</button></>:event.type==='device_code'?<><p>在登录页面输入验证码</p><code className="auth-device-code">{event.userCode}</code><button className="secondary-button" disabled={busy||!unfinished(session)} onClick={()=>void action({operation:'openUrl',eventIndex:index})}>打开验证页面 ↗</button></>:<p>{event.message}</p>}
     </div>)}
     {prompt&&unfinished(session!)&&<form key={prompt.id} className="credential-form auth-prompt" onSubmit={answer} autoComplete="off"><label htmlFor={`auth-${prompt.id}`}>{prompt.message}</label>
-      {prompt.type==='select'?<select ref={select} id={`auth-${prompt.id}`} disabled={busy}>{prompt.options.map(option=><option key={option.id} value={option.id}>{option.label}{option.description?` · ${option.description}`:''}</option>)}</select>:<input ref={input} id={`auth-${prompt.id}`} type={prompt.type==='text'?'text':'password'} placeholder={prompt.placeholder} autoComplete="off" autoCapitalize="none" spellCheck={false} disabled={busy} required/>}
+      {prompt.type==='select'?<select ref={select} id={`auth-${prompt.id}`} disabled={busy}>{prompt.options.map(option=><option key={option.id} value={option.id}>{option.label}{option.description?` · ${option.description}`:''}</option>)}</select>:<input ref={input} id={`auth-${prompt.id}`} type={prompt.type==='text'?'text':'password'} placeholder={prompt.placeholder} autoComplete="off" autoCapitalize="none" spellCheck={false} disabled={busy}/>}
       <button className="secondary-button" type="submit" disabled={busy}>继续</button>
     </form>}
     {session?.state==='failed'&&<p className="settings-error" role="alert">{session.error?.message??'登录未完成，请重新开始。'}</p>}

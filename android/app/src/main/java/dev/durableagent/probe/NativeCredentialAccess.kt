@@ -4,7 +4,7 @@ import com.caoccao.javet.annotations.V8Function
 import org.json.JSONObject
 
 /**
- * Only metadataJson/resolveJson are bindable to the trusted Node host. Never bind this object to
+ * This capability is bindable only to the trusted Node host. Never bind this object to
  * WebView or expose resolveJson through the ordinary Application Interface. The native UI write
  * route checks its immutable connection target and readiness before calling saveJson/removeJson.
  */
@@ -24,7 +24,7 @@ class NativeCredentialAccess(private val vault: CredentialVault,private val open
         else { observedFailures.remove(connectionId); metadata.toJson() }
     }
 
-    /** The returned key exists only in authorized request-time memory, never SDK options. */
+    /** The returned key exists only in authorized request-time memory, never durable SDK options. */
     @Synchronized
     @V8Function
     fun resolveJson(connectionId: String): String = result {
