@@ -69,6 +69,7 @@ val generateExecutionSetup by tasks.registering(Exec::class) {
 }
 tasks.named("preBuild").configure { dependsOn(packageRuntime,packageUi,generateExecutionSetup) }
 dependencies {
+    testImplementation("junit:junit:4.13.2")
     implementation("com.caoccao.javet:javet-node-android-i18n:6.0.3")
     androidTestImplementation("androidx.test:runner:1.6.2")
     androidTestImplementation("androidx.test:core:1.6.1")

@@ -3,7 +3,9 @@ package dev.durableagent.probe
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import org.json.JSONObject
@@ -24,8 +26,16 @@ class NativeExecutionBridge(private val activity: Activity, private val deliver:
             val payload=request.optJSONObject("payload")?:throw ExecutionChannelException("INVALID_REQUEST")
             if(method in setOf("execution.query","execution.cancel")) {
                 if(payload.length()!=1 || !payload.optString("executionId").matches(Regex("[A-Za-z0-9_-]{1,128}")))throw ExecutionChannelException("INVALID_EXECUTION_ID")
+            }else if(method=="execution.openDownload") {
+                if(payload.length()!=1 || payload.optString("source") !in setOf("github","fdroid"))throw ExecutionChannelException("INVALID_REQUEST")
             }else if(payload.length()!=0)throw ExecutionChannelException("INVALID_REQUEST")
             when(method) {
+                "execution.openDownload" -> {
+                    val url=if(payload.getString("source")=="github")"https://github.com/termux/termux-app/releases" else "https://f-droid.org/packages/com.termux/"
+                    try { activity.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE)) }
+                    catch(_:android.content.ActivityNotFoundException){throw ExecutionChannelException("TERMUX_DOWNLOAD_UNAVAILABLE")}
+                    reply(request,JSONObject().put("ok",true).put("value",JSONObject().put("opened",true)))
+                }
                 "execution.copySetup"-> {
                     val bytes=activity.assets.open("execution-setup.txt").use { it.readNBytes(600001) }
                     if(bytes.isEmpty() || bytes.size>600000)throw ExecutionChannelException("SETUP_ASSET_UNAVAILABLE")
@@ -83,6 +93,6 @@ class NativeExecutionBridge(private val activity: Activity, private val deliver:
     override fun close(){closed=true;permissionRequest=null;main.removeCallbacksAndMessages(null);access.close()}
     companion object {
         const val PERMISSION_REQUEST=4709
-        private val METHODS=setOf("execution.connect","execution.copySetup","execution.query","execution.cancel")
+        private val METHODS=setOf("execution.connect","execution.copySetup","execution.openDownload","execution.query","execution.cancel")
     }
 }

@@ -19,7 +19,7 @@ import java.util.UUID
 /** Fixed public bootstrap/launcher only. Arbitrary commands never cross RUN_COMMAND. */
 class ExecutionTermuxGateway(private val context: Context) {
     fun connect(): ExecutionPairing {
-        requireReady()
+        requireReady(allowSourceCheck = true)
         val previous = ExecutionPairingStore(context).use { it.read() }
         val identity = ExecutionIdentity(context,"production-v1",allowCreate=previous==null)
         val clientHash = identity.certificateSha256()
@@ -99,19 +99,26 @@ class ExecutionTermuxGateway(private val context: Context) {
             do{remaining();if(reachable())return pairing;Thread.sleep(minOf(100L,remaining()))}while(true)
         }finally{existingStart.unlock()}
     }
-    fun requireReady() {
+    fun requireReady() = requireReady(allowSourceCheck = false)
+
+    /** Only the explicit connect action may fetch source proof for newly installed GitHub bytes. */
+    private fun requireReady(allowSourceCheck: Boolean) {
         val pm=context.packageManager
         val pkg=try { pm.getPackageInfo("com.termux",PackageManager.GET_SIGNING_CERTIFICATES) }
         catch (_: PackageManager.NameNotFoundException) { throw ExecutionChannelException("TERMUX_MISSING") }
-        val info=pkg.applicationInfo ?: throw ExecutionChannelException("TERMUX_UNTRUSTED")
+        val info=pkg.applicationInfo ?: throw ExecutionChannelException("TERMUX_SOURCE_UNSUPPORTED")
         val signers=pkg.signingInfo?.apkContentsSigners.orEmpty().map { ExecutionIdentity.sha256(it.toByteArray()) }
-        if (pkg.versionName!="0.118.3" || pkg.longVersionCode!=1002L || !info.splitSourceDirs.isNullOrEmpty() || signers!=listOf("b6da01480eefd5fbf2cd3771b8d1021ec791304bdd6c4bf41d3faabad48ee5e1")) throw ExecutionChannelException("TERMUX_UNTRUSTED")
+        if (signers.size != 1 || !info.splitSourceDirs.isNullOrEmpty()) throw ExecutionChannelException("TERMUX_SOURCE_UNSUPPORTED")
         val digest=MessageDigest.getInstance("SHA-256")
         File(info.sourceDir).inputStream().use { input -> val buffer=ByteArray(65536); while(true) { val count=input.read(buffer); if(count<0)break; digest.update(buffer,0,count) } }
         val hash=digest.digest().joinToString("") { "%02x".format(it) }
-        if (hash !in setOf("72fdb596045116bf5ba1b5bdf5b26fddb9acc0bd074ad9f2da9eb0ae85e83a4e","3550e61f4d9eb49b712fd1bd9519dc37085a4d8eb597c57a340f0a64859b7144")) throw ExecutionChannelException("TERMUX_UNTRUSTED")
         if (info.flags and ApplicationInfo.FLAG_STOPPED != 0) throw ExecutionChannelException("TERMUX_FORCE_STOPPED")
         if (context.checkSelfPermission(PERMISSION)!=PackageManager.PERMISSION_GRANTED) throw ExecutionChannelException("TERMUX_PERMISSION_REQUIRED")
+        TermuxSourceVerifier(File(context.noBackupFilesDir, "termux-source-proof")).requireTrusted(
+            TermuxArtifact(pkg.versionName.orEmpty(), hash, signers.single()), allowSourceCheck)
+        val service = try { pm.getServiceInfo(ComponentName("com.termux", "com.termux.app.RunCommandService"), 0) }
+        catch (_: PackageManager.NameNotFoundException) { throw ExecutionChannelException("TERMUX_CAPABILITY_UNSUPPORTED") }
+        if (!info.enabled || !service.enabled || !service.exported || service.permission != PERMISSION) throw ExecutionChannelException("TERMUX_CAPABILITY_UNSUPPORTED")
     }
     private fun dispatch(script: String, callback: PendingIntent?): Boolean {
         val intent=Intent("com.termux.RUN_COMMAND").apply {
