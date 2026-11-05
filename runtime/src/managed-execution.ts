@@ -300,7 +300,9 @@ export class ManagedExecution implements EffectAuthority {
    if(this.recovery&&fixedRequest&&!context.abortSignal?.aborted&&!(error instanceof ManagedExecutionError&&['EXECUTION_STOPPED','EXECUTION_LOCATION_CHANGED'].includes(error.code))){
     return await this.run(binding,api,command,options,context,ordinal,fileEffect);
    }
-   return {ok:false,error:new ExecutionError('unknown',error instanceof ManagedExecutionError?error.message:'执行连接未确认结果，保留原身份等待核验')};
+   const sourceCode=error instanceof Error&&'code' in error&&typeof error.code==='string'&&/^[A-Z][A-Z0-9_]{0,63}$/.test(error.code)?error.code:undefined;
+   const failureKind=sourceCode??(error instanceof TypeError?'JS_TYPE_ERROR':error instanceof ReferenceError?'JS_REFERENCE_ERROR':error instanceof RangeError?'JS_RANGE_ERROR':'UNCLASSIFIED');
+   return {ok:false,error:new ExecutionError('unknown',error instanceof ManagedExecutionError?error.message:`执行连接未确认结果，保留原身份等待核验（${failureKind}）`)};
   }finally{if(fixedRequest)this.dispatching.delete(fixedRequest.executionId);if(onAbort)context.abortSignal?.removeEventListener('abort',onAbort);}
  }
  async cleanup(binding:AdoptedBinding,context:Context){return this.serial(async()=>{
