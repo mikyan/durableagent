@@ -70,7 +70,11 @@ class FileApplicationTest {
             evidence("original-roundtrip",JSONObject().put("run",run).put("conversationId",id).put("result",roundtrip).put("changes",changes).put("uiActualDiff",true))
             send(page,"FILE_DEPENDENCY",wire,id);val dependency=marker(wire,id,"FILE-DEPENDENCY-PASS:");evidence("independent-dependency-artifact",dependency)
             }
-            send(page,"EXEC_CONFORMANCE_SETUP",wire,id);until{val value=wire.call("open",target(id));value.optString("phase")=="done"&&texts(value).contains("conformance-directories-ready")}
+            send(page,"EXEC_CONFORMANCE_SETUP",wire,id);until{
+                val value=wire.call("open",target(id));val text=texts(value)
+                assertFalse("EXEC_CONFORMANCE_SETUP reproduced the reported unconfirmed execution connection; run=$run conversation=$id phase=${value.optString("phase")}",text.contains("执行连接未确认结果，保留原身份等待核验"))
+                value.optString("phase")=="done"&&text.contains("conformance-directories-ready")
+            }
             val names=listOf("binary reader reads byte ranges of the opened file","binary reader scans lines like decoding the whole file","binary reader keeps reading the file it opened after a rename","directory reader refuses missing paths and files")
             fun mutate(method:String,payload:JSONObject):JSONObject{val current=wire.call("projects.get",target(id));return wire.call(method,payload.put("operationId",uuid()).put("expectedVersion",current.getLong("version")))}
             val firstCase=(InstrumentationRegistry.getArguments().getString("fileContractStart")?:"0").toInt();require(firstCase in names.indices)
