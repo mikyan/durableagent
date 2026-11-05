@@ -122,13 +122,3 @@ jobs:
           path: android/app/build/reports/lint-results-*
           if-no-files-found: warn
           retention-days: 14
-      - name: Upload debug APKs for device validation
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: android-debug-apks
-          path: |
-            android/app/build/outputs/apk/debug/*.apk
-            android/app/build/outputs/apk/androidTest/debug/*.apk
-          if-no-files-found: error
-          retention-days: 7
-          compression-level: 0

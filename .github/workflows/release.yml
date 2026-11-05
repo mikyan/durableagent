@@ -119,7 +119,7 @@ jobs:
           name: release-package
           path: release-dist/*
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 1
           compression-level: 0
 
   smoke:
