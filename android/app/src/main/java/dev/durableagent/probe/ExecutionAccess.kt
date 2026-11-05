@@ -48,6 +48,9 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
         if (payloadJson.toByteArray(Charsets.UTF_8).size > 60000) throw ExecutionChannelException("FRAME_LIMIT")
         val payload = JSONObject(payloadJson)
         val id = UUID.randomUUID().toString()
+        // Includes queue wait, initial readiness, every sub-request and one later
+        // proven-unsent recovery. Initial readiness may itself need one wake.
+        val budget=if(method=="connect")null else ExecutionOperationBudget({!closed})
         val isControl = method == "cancel"
         synchronized(operations) {
             expire()
@@ -64,26 +67,37 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
                     } else {
                         // Eligibility and listener startup happen before acquiring
                         // the stop/input lease and before transmitting this operation.
-                        val peer = ExecutionTermuxGateway(context).ensureExisting{!closed}
-                        if(closed||Thread.currentThread().isInterrupted)throw ExecutionChannelException("CHANNEL_CLOSED")
+                        val operationBudget=budget!!
+                        val gateway=ExecutionTermuxGateway(context)
+                        val peer=gateway.ensureExisting(operationBudget.remaining()){!closed}
                         val identity = ExecutionIdentity(context,"production-v1",allowCreate=false)
                         val client=ExecutionTlsClient(identity,peer)
-                        if(verifyReceipt) {
-                            verifiedCancel(client,peer,payload,expected)
-                        } else if(inputNamespace!=null) NativeInputStore(context,inputNamespace).withLeaseWait(1000).use{store->
-                            val fence=NativeExecutionFence(store);fence.before(method,payload)
-                            if(method in EXECUTION_FILE_METHODS)dataSaver!!.requireLocalFiles(client.request("list",JSONObject().put("limit",1)))
-                            if(method=="prepare")dataSaver!!.remember(payload)
-                            if(method=="start"){dataSaver!!.requireStart(payload.getString("executionId"),payload.getString("finalDigest"));fence.before(method,payload)}
-                            if(closed||Thread.currentThread().isInterrupted)throw ExecutionChannelException("CHANNEL_CLOSED")
-                            client.request(method,payload).also{result->
-                                fence.observe(method,payload,result)
-                                if(method in setOf("prepare","start","query","cancel")&&result.has("context"))dataSaver!!.observe(result)
+                        fun request(name:String,value:JSONObject,beforeDispatch:()->Unit={}):JSONObject =
+                            client.request(name,value,operationBudget.remaining()){
+                                operationBudget.remaining();beforeDispatch();operationBudget.remaining()
                             }
-                        } else {
-                            if(method in setOf("prepare","start"))throw ExecutionChannelException("CONTROL_UNAVAILABLE")
-                            if(closed||Thread.currentThread().isInterrupted)throw ExecutionChannelException("CHANNEL_CLOSED")
-                            client.request(method,payload)
+                        operationBudget.execute(wake={gateway.wakeExisting(peer,operationBudget.remaining()){!closed}}){
+                            if(verifyReceipt) {
+                                verifiedCancel({name,value->request(name,value)},peer,payload,expected)
+                            } else if(inputNamespace!=null) NativeInputStore(context,inputNamespace).withLeaseWait(1000).use{store->
+                                val fence=NativeExecutionFence(store)
+                                val localProof=if(method in EXECUTION_FILE_METHODS)request("list",JSONObject().put("limit",1))else null
+                                request(method,payload){
+                                    // Re-read controls after authentication, immediately before
+                                    // the operation frame. A retry obtains fresh policy proof too.
+                                    fence.before(method,payload)
+                                    if(localProof!=null)dataSaver!!.requireLocalFiles(localProof)
+                                    if(method=="prepare")dataSaver!!.remember(payload)
+                                    if(method=="start")dataSaver!!.requireStart(payload.getString("executionId"),payload.getString("finalDigest"))
+                                    fence.before(method,payload)
+                                }.also{result->
+                                    fence.observe(method,payload,result)
+                                    if(method in setOf("prepare","start","query","cancel")&&result.has("context"))dataSaver!!.observe(result)
+                                }
+                            } else {
+                                if(method in setOf("prepare","start"))throw ExecutionChannelException("CONTROL_UNAVAILABLE")
+                                request(method,payload)
+                            }
                         }
                     }
                 })
@@ -96,7 +110,7 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
         JSONObject().put("operationId",id)
     }
 
-    private fun verifiedCancel(client:ExecutionTlsClient,peer:ExecutionPairing,payload:JSONObject,expected:JSONObject?):JSONObject {
+    private fun verifiedCancel(request:(String,JSONObject)->JSONObject,peer:ExecutionPairing,payload:JSONObject,expected:JSONObject?):JSONObject {
         val id=payload.getString("executionId")
         val namespace="termux:"+peer.executorId
         fun identity(value:JSONObject):Boolean=value.opt("protocol")==1 && value.optString("executionId")==id &&
@@ -105,7 +119,7 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
             value.optString("requestDigest").matches(Regex("[a-f0-9]{64}")) && value.optJSONObject("context")?.optString("namespace")==namespace
         fun tombstone(value:JSONObject):Boolean=value.optString("state")=="not_started" && value.optString("reason")=="CANCELLED_BEFORE_ACCEPTANCE" &&
             value.opt("neverStarted")==true && value.opt("scopeConfirmed")==true && !value.has("context") && !value.has("finalDigest") && !value.has("requestDigest")
-        val before=client.request("query",JSONObject().put("executionId",id))
+        val before=request("query",JSONObject().put("executionId",id))
         val missing=before.optString("state")=="unknown" && before.optString("reason")=="NO_RECEIPT" &&
             !before.has("context") && !before.has("finalDigest") && !before.has("requestDigest")
         val cancelledBeforeAcceptance=tombstone(before)
@@ -114,7 +128,7 @@ class ExecutionAccess(context: Context,private val inputNamespace:String?=null,r
         // An authenticated missing receipt permits writing a cancellation tombstone.
         // It does not itself prove that no in-flight prepare can subsequently arrive.
         if(closed||Thread.currentThread().isInterrupted)throw ExecutionChannelException("CHANNEL_CLOSED")
-        val result=client.request("cancel",payload)
+        val result=request("cancel",payload)
         if(!identity(result))throw ExecutionChannelException("EXECUTION_CANCEL_UNCONFIRMED")
         if(result.optString("state")=="not_started"&&(result.opt("neverStarted")!=true||result.opt("scopeConfirmed")!=true) ||
             result.optString("state")=="stopped"&&result.opt("scopeConfirmed")!=true)throw ExecutionChannelException("EXECUTION_CANCEL_UNCONFIRMED")

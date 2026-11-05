@@ -74,8 +74,13 @@ class ExecutionTermuxGateway(private val context: Context) {
         throw last
     }
     /** Reopen only an already-paired authority; never initialize trust or replay an operation. */
-    fun ensureExisting(eligible:()->Boolean={true}):ExecutionPairing {
-        val deadline=SystemClock.elapsedRealtime()+10000
+    fun ensureExisting(eligible:()->Boolean={true}):ExecutionPairing=existing(null,10000,eligible)
+    internal fun ensureExisting(timeoutMs:Long,eligible:()->Boolean):ExecutionPairing=existing(null,timeoutMs,eligible)
+    /** Explicit recovery after proven-unsent transport failure, always using the original authority. */
+    internal fun wakeExisting(expected:ExecutionPairing,timeoutMs:Long,eligible:()->Boolean) {existing(expected,timeoutMs,eligible)}
+    private fun existing(wakeExpected:ExecutionPairing?,timeoutMs:Long,eligible:()->Boolean):ExecutionPairing {
+        require(timeoutMs in 1..10000)
+        val deadline=SystemClock.elapsedRealtime()+timeoutMs
         fun remaining():Long {
             if(Thread.currentThread().isInterrupted||!eligible())throw ExecutionChannelException("CHANNEL_CLOSED")
             return (deadline-SystemClock.elapsedRealtime()).also{if(it<=0)throw ExecutionChannelException("EXISTING_EXECUTOR_UNAVAILABLE")}
@@ -83,6 +88,7 @@ class ExecutionTermuxGateway(private val context: Context) {
         remaining();requireReady()
         val identity=ExecutionIdentity(context,"production-v1",allowCreate=false)
         val pairing=ExecutionPairingStore(context).use{it.requireClient(identity.certificateSha256())}
+        if(wakeExpected!=null&&pairing!=wakeExpected)throw ExecutionChannelException("PAIRING_CONFLICT")
         fun reachable():Boolean = try {
             val value=ExecutionTlsClient(identity,pairing).request("ping",JSONObject(),minOf(2000L,remaining()))
             if(value.opt("protocol")!=1||value.optString("executorId")!=pairing.executorId||value.optString("ledgerEpoch")!=pairing.ledgerEpoch)throw ExecutionChannelException("INSTANCE_MISMATCH")
@@ -94,12 +100,12 @@ class ExecutionTermuxGateway(private val context: Context) {
             if(error.code!="CONNECTION_ABSENT"&&error.code!="CONNECTION_UNCONFIRMED")throw error
             false
         }
-        if(reachable())return pairing
+        if(wakeExpected==null&&reachable())return pairing
         // The independent control socket remains separate. Only overlapping
         // unavailable-listener wakeups are coalesced, outside every native input lease.
         if(!existingStart.tryLock(remaining(),java.util.concurrent.TimeUnit.MILLISECONDS))throw ExecutionChannelException("EXISTING_EXECUTOR_UNAVAILABLE")
         try{
-            remaining();if(reachable())return pairing
+            remaining();if(wakeExpected==null&&reachable())return pairing
             requireReady();remaining()
             if(!dispatch("if [ ! -x '$PYTHON' ] || [ ! -f '$SCRIPT' ]; then exit 78; fi; exec '$PYTHON' '$SCRIPT' serve-existing >/dev/null 2>&1",null))throw ExecutionChannelException("TERMUX_START_UNCONFIRMED")
             do{remaining();if(reachable())return pairing;Thread.sleep(minOf(100L,remaining()))}while(true)
