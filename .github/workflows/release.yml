@@ -1,0 +1,208 @@
+name: Release
+
+on:
+  push:
+    tags: ['v[0-9]*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag on main, for example v0.1.0
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  version:
+    name: Verify version and source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      commit: ${{ steps.version.outputs.commit }}
+      tag: ${{ steps.version.outputs.tag }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - name: Require a version tag
+        run: '[[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]'
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          ref: refs/tags/${{ inputs.tag || github.ref_name }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify tag is on main and has committed release notes
+        id: version
+        run: |
+          git merge-base --is-ancestor HEAD origin/main
+          test "$(git rev-parse HEAD)" = "$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")"
+          python tools/release_metadata.py validate --tag "$RELEASE_TAG" --github-output "$GITHUB_OUTPUT"
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  checks:
+    name: Validate the tagged commit
+    needs: version
+    uses: ./.github/workflows/ci.yml
+    with:
+      ref: ${{ needs.version.outputs.commit }}
+
+  package:
+    name: Build and sign release APK
+    needs: [version, checks]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      RELEASE_TAG: ${{ needs.version.outputs.tag }}
+      RELEASE_COMMIT: ${{ needs.version.outputs.commit }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          ref: ${{ needs.version.outputs.commit }}
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: '24.14.1'
+          cache: npm
+          cache-dependency-path: |
+            runtime/package-lock.json
+            ui/package-lock.json
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
+        with:
+          cache-read-only: true
+      - name: Build from locked dependencies
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+          npm ci --ignore-scripts --prefix runtime
+          npm ci --ignore-scripts --prefix ui
+          ./android/gradlew -p android --no-daemon --stacktrace :app:assembleRelease
+      - name: Sign and verify the exact release package
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_RELEASE_KEYSTORE_BASE64 }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.ANDROID_RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
+        run: |
+          test -n "$KEYSTORE_BASE64" && test -n "$RELEASE_STORE_PASSWORD"
+          test -n "$RELEASE_KEY_PASSWORD" && test -n "$RELEASE_KEY_ALIAS"
+          umask 077
+          signing_dir=$(mktemp -d "$RUNNER_TEMP/signing.XXXXXX")
+          trap 'rm -f "$signing_dir/release.jks" "$signing_dir/signed.apk"; rmdir "$signing_dir"' EXIT
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$signing_dir/release.jks"
+          build_tools="$ANDROID_HOME/build-tools/36.0.0"
+          "$build_tools/zipalign" -c -P 16 4 android/app/build/outputs/apk/release/app-release-unsigned.apk
+          "$build_tools/apksigner" sign --ks "$signing_dir/release.jks" \
+            --ks-key-alias "$RELEASE_KEY_ALIAS" --ks-pass env:RELEASE_STORE_PASSWORD \
+            --key-pass env:RELEASE_KEY_PASSWORD --v4-signing-enabled false \
+            --out "$signing_dir/signed.apk" android/app/build/outputs/apk/release/app-release-unsigned.apk
+          python tools/release_metadata.py package --tag "$RELEASE_TAG" \
+            --apk "$signing_dir/signed.apk" --apksigner "$build_tools/apksigner" --aapt "$build_tools/aapt" \
+            --commit "$RELEASE_COMMIT" --output release-dist \
+            --build-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: release-package
+          path: release-dist/*
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+
+  smoke:
+    name: Launch the signed APK on Android 16
+    needs: [version, package]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      RELEASE_TAG: ${{ needs.version.outputs.tag }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          ref: ${{ needs.version.outputs.commit }}
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: release-package
+          path: release-dist
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.14'
+      - name: Prepare an isolated emulator
+        run: |
+          sudo chmod 666 /dev/kvm
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "emulator" "platform-tools" "system-images;android-36;google_apis;x86_64"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd --name release-smoke --package 'system-images;android-36;google_apis;x86_64' --device pixel_7 < /dev/null
+      - name: Install and launch the verified release APK
+        run: |
+          (cd release-dist && sha256sum -c SHA256SUMS.txt)
+          mkdir -p release-smoke
+          "$ANDROID_HOME/emulator/emulator" -avd release-smoke -port 5554 -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -memory 2048 -cores 2 > release-smoke/emulator.log 2>&1 &
+          emulator_pid=$!
+          trap 'kill "$emulator_pid" 2>/dev/null || true' EXIT
+          export PATH="$ANDROID_HOME/platform-tools:$PATH"
+          timeout 240 adb -s emulator-5554 wait-for-device
+          booted=false
+          for attempt in $(seq 1 120); do
+            if [[ "$(adb -s emulator-5554 shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" == 1 ]]; then booted=true; break; fi
+            sleep 2
+          done
+          test "$booted" = true
+          adb -s emulator-5554 shell wm dismiss-keyguard
+          python tools/smoke_release.py --serial emulator-5554 --apk "release-dist/durableagent-$RELEASE_TAG.apk" --output release-smoke
+      - name: Retain startup evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: release-startup-evidence
+          path: release-smoke/
+          if-no-files-found: warn
+          retention-days: 14
+
+  publish:
+    name: Publish verified release assets
+    needs: [version, smoke]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ needs.version.outputs.tag }}
+      PRERELEASE: ${{ needs.version.outputs.prerelease }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          ref: ${{ needs.version.outputs.commit }}
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: release-package
+          path: release-dist
+      - name: Publish only after checks, signature verification and startup pass
+        run: |
+          (cd release-dist && sha256sum -c SHA256SUMS.txt)
+          if gh release view "$RELEASE_TAG" --json isDraft > "$RUNNER_TEMP/existing-release.json" 2>/dev/null; then
+            test "$(python -c 'import json,sys; print(json.load(open(sys.argv[1]))["isDraft"])' "$RUNNER_TEMP/existing-release.json")" = True
+          else
+            gh release create "$RELEASE_TAG" --verify-tag --draft --title "DurableAgent $RELEASE_TAG" --notes-file "docs/releases/$RELEASE_TAG.md"
+          fi
+          gh release upload "$RELEASE_TAG" release-dist/* --clobber
+          gh release edit "$RELEASE_TAG" --draft=false --prerelease="$PRERELEASE" --latest="$([[ "$PRERELEASE" == false ]] && echo true || echo false)" --notes-file "docs/releases/$RELEASE_TAG.md"

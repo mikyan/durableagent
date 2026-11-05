@@ -1,0 +1,126 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        description: Exact commit to validate for a release
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ inputs.ref || '' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  javascript:
+    name: Runtime and UI tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: '24.14.1'
+          cache: npm
+          cache-dependency-path: |
+            runtime/package-lock.json
+            ui/package-lock.json
+      - name: Install locked dependencies
+        run: |
+          npm ci --ignore-scripts --prefix runtime
+          npm ci --ignore-scripts --prefix ui
+      - name: Test runtime with real SDK and host SQLite
+        run: npm test --prefix runtime
+      - name: Test UI
+        run: npm test --prefix ui
+      - name: Typecheck and build bundled UI
+        run: npm run build --prefix ui
+
+  execution:
+    name: Linux execution and installer contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.14'
+      - name: Test actual SQLite, subprocess and TLS contracts
+        run: python -m unittest discover -s managed-execution -p 'test_*.py' -v
+      - name: Test packaged setup and installation contracts
+        run: python -m unittest discover -s tools -p 'test_*.py' -v
+
+  android:
+    name: Android build and lint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: '24.14.1'
+          cache: npm
+          cache-dependency-path: |
+            runtime/package-lock.json
+            ui/package-lock.json
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.14'
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+      - name: Ensure fixed Android SDK packages
+        run: '"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"'
+      - name: Install locked dependencies
+        run: |
+          npm ci --ignore-scripts --prefix runtime
+          npm ci --ignore-scripts --prefix ui
+      - name: Build both variants, compile device tests and run lint
+        run: >-
+          ./android/gradlew -p android --no-daemon --stacktrace
+          :app:assembleDebug :app:assembleDebugAndroidTest :app:assembleRelease
+          :app:lintDebug :app:lintRelease
+      - name: Upload Android lint reports
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: android-lint-reports
+          path: android/app/build/reports/lint-results-*
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Upload debug APKs for device validation
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: android-debug-apks
+          path: |
+            android/app/build/outputs/apk/debug/*.apk
+            android/app/build/outputs/apk/androidTest/debug/*.apk
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
