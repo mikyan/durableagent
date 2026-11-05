@@ -1,0 +1,38 @@
+android/app/src/main/java/dev/durableagent/probe/ExecutionOperationBudget.kt
+  s_467dcb949b5b60::t_41847122388fa3 9,16,20-21
+android/app/src/main/java/dev/durableagent/probe/ExecutionTermuxGateway.kt
+  s_467dcb949b5b60::t_efa5ab5c30fb87 97
+  s_467dcb949b5b60::t_384366bef85696 81-96,98-105,135,141-146,181-182
+docs/specs/console-followup.md
+  s_467dcb949b5b60::t_efa5ab5c30fb87 23-25,36-37
+android/app/src/main/java/dev/durableagent/probe/ExecutionTlsClient.kt
+  s_467dcb949b5b60::t_384366bef85696 30,53,77,95
+android/app/src/main/java/dev/durableagent/probe/PendingExecutionWake.kt
+  s_467dcb949b5b60::t_57d30793fe3767 7,17-18,22,25-30,32,34-36
+  s_467dcb949b5b60::t_384366bef85696 13,31
+  s_467dcb949b5b60::t_41847122388fa3 1-6,8-12,14-16,19-21,23-24,33,37-40
+android/app/src/test/java/dev/durableagent/probe/ExecutionOperationBudgetTest.kt
+  s_467dcb949b5b60::t_41847122388fa3 62-76
+android/app/src/main/java/dev/durableagent/probe/ExecutionAccess.kt
+  s_467dcb949b5b60::t_384366bef85696 76-82
+android/app/src/test/java/dev/durableagent/probe/PendingExecutionWakeTest.kt
+  s_467dcb949b5b60::t_41847122388fa3 1-16,18-23,25-29,31,33-34,36-38,40-41,63-64
+  s_467dcb949b5b60::t_384366bef85696 17,24,32,39,42-47
+  s_467dcb949b5b60::t_57d30793fe3767 30,35,48-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "21e1845e6c2ccb5d693385d005b2c842c17a2139",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
