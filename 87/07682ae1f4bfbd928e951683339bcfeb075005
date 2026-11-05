@@ -1,0 +1,19 @@
+android/app/src/main/java/dev/durableagent/probe/TermuxSourceVerifier.kt
+  s_467dcb949b5b60::t_fd4997ab4a6d0a 152
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "8707682ae1f4bfbd928e951683339bcfeb075005",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
