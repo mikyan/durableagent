@@ -1,0 +1,51 @@
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_442256355e766a 180-182,247-261
+  s_467dcb949b5b60::t_b806208fddad50 359
+  s_467dcb949b5b60::t_6355c188a2239a 78
+runtime/src/provider-auth.ts
+  s_467dcb949b5b60::t_bcb641e3036682 1-128
+runtime/src/model-secrets.ts
+  s_467dcb949b5b60::t_97115286b69a9c 1-19
+runtime/src/application.ts
+  s_467dcb949b5b60::t_47a3747e680b75 214,278,282,284
+  s_467dcb949b5b60::t_e63c585f069e49 281
+  s_467dcb949b5b60::t_66383c8c4c9a78 283
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_57ca31f20b8dc0 63-64,124-128,130,133
+android/app/src/main/java/dev/durableagent/probe/ApplicationClient.kt
+  s_467dcb949b5b60::t_6355c188a2239a 53
+android/app/src/main/java/dev/durableagent/probe/AgentActivity.kt
+  s_467dcb949b5b60::t_442256355e766a 89
+docs/specs/provider-configuration.md
+  s_467dcb949b5b60::t_6e097f14a4cf62 1-13
+android/app/src/main/java/dev/durableagent/probe/NativeCredentialAccess.kt
+  s_467dcb949b5b60::t_4e631049a42a9f 12,51,58,63-78,84
+  s_467dcb949b5b60::t_442256355e766a 11,79-83
+  s_467dcb949b5b60::t_7a21336e9bcd3b 85
+android/app/src/main/java/dev/durableagent/probe/CredentialVault.kt
+  s_467dcb949b5b60::t_4e631049a42a9f 106,170-185,268
+runtime/src/sdk-providers.ts
+  s_467dcb949b5b60::t_b384835f0b9729 4,63
+  s_467dcb949b5b60::t_47a3747e680b75 1-3,5-43,45-60,77,79-115
+  s_467dcb949b5b60::t_bcb641e3036682 61-62,64-76,78
+  s_467dcb949b5b60::t_66383c8c4c9a78 44
+runtime/src/model-connections.ts
+  s_467dcb949b5b60::t_66383c8c4c9a78 16,67
+  s_467dcb949b5b60::t_47a3747e680b75 1-4,15,27,30,37,48-53,61,73-77,79-80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "3eca1232d2d33ede6f54944cfa14cd8c9f1709af",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
