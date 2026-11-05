@@ -1,0 +1,26 @@
+runtime/src/conversation-activity.ts
+  s_467dcb949b5b60::t_00ab90d594f303 1-6,8-17
+  s_467dcb949b5b60::t_5c9b6deb91d375 7
+docs/specs/console-followup.md
+  s_467dcb949b5b60::t_00ab90d594f303 20
+runtime/src/application.ts
+  s_467dcb949b5b60::t_00ab90d594f303 32,336,344
+runtime/src/application-protocol.ts
+  s_467dcb949b5b60::t_00ab90d594f303 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "c96af1a887389d471f85c2380586b26f8932fc41",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
