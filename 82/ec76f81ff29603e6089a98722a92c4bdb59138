@@ -1,0 +1,36 @@
+android/app/src/main/java/dev/durableagent/probe/ExecutionTermuxGateway.kt
+  s_467dcb949b5b60::t_e0b4fed5e73bef 77-83,91,103,108
+android/app/src/main/java/dev/durableagent/probe/ExecutionOperationBudget.kt
+  s_467dcb949b5b60::t_e0b4fed5e73bef 17-20
+  s_467dcb949b5b60::t_94189cb1697458 6
+  s_467dcb949b5b60::t_0d233985b181b5 3
+  s_467dcb949b5b60::t_93959f09964adb 1-2,4-5,7-16,21-22
+android/app/src/main/java/dev/durableagent/probe/ExecutionTlsClient.kt
+  s_467dcb949b5b60::t_93959f09964adb 20-22
+  s_467dcb949b5b60::t_0d233985b181b5 32,47-49,56-57
+  s_467dcb949b5b60::t_e0b4fed5e73bef 30,51-52,71-76,80,85-91,95,101
+android/app/src/test/java/dev/durableagent/probe/ExecutionOperationBudgetTest.kt
+  s_467dcb949b5b60::t_93959f09964adb 1-9,11-15,61-62
+  s_467dcb949b5b60::t_94189cb1697458 10,16-60
+docs/specs/console-followup.md
+  s_467dcb949b5b60::t_0d233985b181b5 22-23,32-33
+android/app/src/main/java/dev/durableagent/probe/ExecutionAccess.kt
+  s_467dcb949b5b60::t_0d233985b181b5 51-52,91-92
+  s_467dcb949b5b60::t_94189cb1697458 53,70-72,75-90,93-99,113,122,131
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "82ec76f81ff29603e6089a98722a92c4bdb59138",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
