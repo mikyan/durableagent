@@ -1,0 +1,20 @@
+.github/workflows/release.yml
+  s_467dcb949b5b60::t_65e9db1116b1c5 150-151
+  s_467dcb949b5b60::t_ba1210c67447ee 154,156-157
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "e99c02972e5b6d5966950bb024a2f88f60eac062",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
