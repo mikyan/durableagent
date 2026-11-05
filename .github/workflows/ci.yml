@@ -65,9 +65,11 @@ jobs:
         with:
           python-version: '3.14'
       - name: Test actual SQLite, subprocess and TLS contracts
-        run: python -m unittest discover -s managed-execution -p 'test_*.py' -v
+        working-directory: managed-execution
+        run: python -m unittest discover -p 'test_*.py' -v
       - name: Test packaged setup and installation contracts
-        run: python -m unittest discover -s tools -p 'test_*.py' -v
+        working-directory: tools
+        run: python -m unittest discover -p 'test_*.py' -v
 
   android:
     name: Android build and lint
