@@ -28,6 +28,7 @@ import {storageFailure} from './storage-failure.js';
 import {verifyApplicationStorage} from './storage-format.js';
 import {RetainedHistory} from './retained-history.js';
 import {Recovery,recoveryPreflight,type RecoveryHost} from './recovery.js';
+import {environmentPrompt,type HostEnvironment} from './environment-prompt.js';
 
 import {Configuration,Products,validateConfiguration,type ProductRecord} from './application-records.js';
 const ModelConfiguration=defineDoc({kind:'app.model-configuration',version:1,scope:'session',initial:():StoredModels=>({version:0,defaultModel:null,connections:[]}),checkpointWhen:()=>false});
@@ -36,7 +37,7 @@ class ActionError extends Error {constructor(readonly code:string,message:string
 const settings:HarnessSettings={progress:{partialIntervalMs:1,outputIntervalMs:1,persistWithinMs:1000},retry:{enabled:false,maxRetries:0,baseDelayMs:1}};
 const recoverySettings:HarnessSettings={...settings,retry:{enabled:true,maxRetries:3,baseDelayMs:1000},restartLimit:5,stream:{maxRetries:0}};
 export type ApplicationInputs=FrozenInputAccess&{rememberConversation(conversation:InputConversation,capability?:InputCapability):void};
-export type ApplicationOptions={recovery?:RecoveryHost;dataSaver?:DataSaverAuthority;storageFormats?:Readonly<Record<string,import('./storage-format.js').ApplicationRecordFormat>>;execution?:ManagedExecution;routes?:RouteAuthority;extensions?:readonly ExtensionDescriptor[];agentFactories?:AgentFactories;path:string;models:Models;connections?:ModelConnections;inputs?:ApplicationInputs;sends?:SendAuthority;submissionBoundary?:(stage:SubmissionBoundary,intent:import('./submission-protocol.js').NativeSendIntent)=>void|Promise<void>;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;projectBoundary?:(stage:ProjectBoundary)=>void|Promise<void>;registry?:ReturnType<typeof createRegistry>;effects?:EffectAuthority;locationEdits?:LocationEditAuthority;locations?:LocationAdapter;storageFactory?:()=>Promise<Storage>};
+export type ApplicationOptions={hostEnvironment?:HostEnvironment;recovery?:RecoveryHost;dataSaver?:DataSaverAuthority;storageFormats?:Readonly<Record<string,import('./storage-format.js').ApplicationRecordFormat>>;execution?:ManagedExecution;routes?:RouteAuthority;extensions?:readonly ExtensionDescriptor[];agentFactories?:AgentFactories;path:string;models:Models;connections?:ModelConnections;inputs?:ApplicationInputs;sends?:SendAuthority;submissionBoundary?:(stage:SubmissionBoundary,intent:import('./submission-protocol.js').NativeSendIntent)=>void|Promise<void>;initialModel?:ModelSelection;workspacePath:string;secret?:string;bootstrapSettings?:()=>HarnessSettings;loadConfiguration?:()=>Promise<void>;projectBoundary?:(stage:ProjectBoundary)=>void|Promise<void>;registry?:ReturnType<typeof createRegistry>;effects?:EffectAuthority;locationEdits?:LocationEditAuthority;locations?:LocationAdapter;storageFactory?:()=>Promise<Storage>};
 export class Application {
   private harness?:Harness;
   private retained?:RetainedHistory;
@@ -85,6 +86,7 @@ export class Application {
     this.options.execution?.setRecovery(this.recovery);
     this.recovery?.install(this.registry,this.options.execution?(id,context)=>this.options.execution!.awaitContinuation(id,context):undefined);
     this.options.execution?.install(this.registry);
+    this.registry.install(environmentPrompt(this.options.hostEnvironment,this.options.execution));
     const getRouting=()=>{this.ready();if(!this.routing)throw new ActionError('ROUTING_UNAVAILABLE','转交能力尚未就绪');return this.routing;};
     this.installedExtensions=assembleAgentExtensions(this.options.extensions??BUNDLED_EXTENSIONS,{routing:()=>routingAgent(getRouting),models:()=>modelsAgent(async(method,payload)=>{const r=await this.request({protocol:1,connectionId:'agent-extensions',requestId:crypto.randomUUID(),method:method as any,payload});if(!r.ok)throw new ActionError(r.error.code,r.error.message);return r.value;},getRouting),...this.options.agentFactories},this.registry);
     if(!this.options.inputs||!this.options.sends)throw new ActionError('INPUT_UNAVAILABLE','原生输入与停止存储尚不可用，运行保持关闭');
