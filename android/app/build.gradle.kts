@@ -1,4 +1,9 @@
+import java.util.Properties
+
 plugins { id("com.android.application"); id("org.jetbrains.kotlin.android") }
+val releaseVersion = Properties().apply {
+    rootProject.file("version.properties").inputStream().use { load(it) }
+}
 android {
     namespace = "dev.durableagent.probe"
     compileSdk = 36
@@ -7,8 +12,8 @@ android {
         applicationId = providers.gradleProperty("validationApplicationId").orElse("dev.durableagent.probe").get().also { require(it in setOf("dev.durableagent.probe","dev.durableagent.retention","dev.durableagent.saf")) {"Unsupported validation applicationId: $it"} }
         minSdk = 36
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = releaseVersion.getProperty("VERSION_CODE").toInt().also { require(it > 0) }
+        versionName = releaseVersion.getProperty("VERSION_NAME").also { require(it.matches(Regex("[0-9]+\\.[0-9]+\\.[0-9]+"))) }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         ndk { abiFilters += listOf("arm64-v8a", "x86_64") }
     }

@@ -6,19 +6,20 @@ import {join} from 'node:path';
 import {Application} from '../validation/application-fixture.mjs';
 import {ModelConnections} from '../dist/model-connections.js';
 import {openOwnedStorage} from '../dist/storage.js';
+import {armRecoveryWake} from './fixtures/recovery-wake-timer.mjs';
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const until=async fn=>{const end=Date.now()+10000;while(!await fn()){assert.ok(Date.now()<end,'Public recovery state timed out');await sleep(10);}};
 const answer=()=>new Response('data: '+JSON.stringify({id:'rate-limit',choices:[{index:0,delta:{content:'same input completed'},finish_reason:null}]})+'\n\ndata: '+JSON.stringify({id:'rate-limit',choices:[{index:0,delta:{},finish_reason:'stop'}]})+'\n\ndata: [DONE]\n\n',{headers:{'content-type':'text/event-stream'}});
 async function fixture(header,hooks={}){
- const directory=await mkdtemp(join(tmpdir(),'retry-after-'));let app,timer,closed=false,deadline=0;const requests=[];
+ const directory=await mkdtemp(join(tmpdir(),'retry-after-'));let app,cancelWake=()=>{},closed=false,deadline=0;const requests=[];
  const call=async(method,payload={})=>{const r=await app.request({protocol:1,connectionId:'test',requestId:crypto.randomUUID(),method,payload});assert.equal(r.ok,true,JSON.stringify(r));return r.value;};
  const open=async()=>{closed=false;const connections=new ModelConnections({credentials:{metadata:async id=>({connectionId:id,state:'configured',configured:true,generation:1}),resolve:async()=>{await hooks.credential?.();return {key:'synthetic-retry-after-secret',generation:1};}},fetch:async request=>{
   const now=Date.now();requests.push({at:now,url:request.url,body:await request.json()});await hooks.beforeResponse?.(requests.length);
   const overridden=hooks.response?.(requests.length);if(overridden)return overridden;
   if(requests.length===(hooks.rateAt??1)||hooks.repeated){const value=header(now);deadline=value.deadline;return new Response(JSON.stringify({error:{message:'Rate limit exceeded',type:'rate_limit_error'}}),{status:429,headers:{'content-type':'application/json','retry-after':value.header}});}return answer();
  }});
- app=new Application({path:join(directory,'sdk.sqlite'),...(hooks.settings?{bootstrapSettings:()=>hooks.settings}:{}),...(hooks.beforeCommit?{storageFactory:async()=>{const {storage}=await openOwnedStorage(join(directory,'sdk.sqlite'));return new Proxy(storage,{get(target,key){if(key==='commit')return async(...args)=>{await hooks.beforeCommit(args[0]);return target.commit(...args);};const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value;}});}}:{}),models:connections.models,connections,workspacePath:'/retry-after',recovery:{conditions:async()=>({network:'available',userUnlocked:true}),subscribe:()=>()=>{},publishWake:async wake=>{clearTimeout(timer);if(wake.at!==undefined&&!closed)timer=setTimeout(()=>{if(!closed)void app.wake();},Math.max(1,Math.min(2147483647,wake.at-Date.now())));}}});await app.start();};
- const close=async()=>{closed=true;clearTimeout(timer);await app.close();};
+ app=new Application({path:join(directory,'sdk.sqlite'),...(hooks.settings?{bootstrapSettings:()=>hooks.settings}:{}),...(hooks.beforeCommit?{storageFactory:async()=>{const {storage}=await openOwnedStorage(join(directory,'sdk.sqlite'));return new Proxy(storage,{get(target,key){if(key==='commit')return async(...args)=>{await hooks.beforeCommit(args[0]);return target.commit(...args);};const value=Reflect.get(target,key,target);return typeof value==='function'?value.bind(target):value;}});}}:{}),models:connections.models,connections,workspacePath:'/retry-after',recovery:{conditions:async()=>({network:'available',userUnlocked:true}),subscribe:()=>()=>{},publishWake:async wake=>{cancelWake();cancelWake=()=>{};if(wake.at!==undefined&&!closed)cancelWake=armRecoveryWake(wake.at,()=>{if(!closed)void app.wake();});}}});await app.start();};
+ const close=async()=>{closed=true;cancelWake();await app.close();};
  await open();await call('models.create',{creationId:'rate-provider',expectedVersion:0,name:'rate',protocol:'openai-compatible',endpoint:'https://synthetic.invalid/v1',modelId:'test'});await call('models.setDefault',{expectedVersion:1,selection:{provider:'rate-provider',modelId:'test'}});await call('create',{creationId:'chat'});
  return {call,requests,get deadline(){return deadline;},async reopen(){await close();await open();},async clean(){await close();await rm(directory,{recursive:true,force:true});}};
 }

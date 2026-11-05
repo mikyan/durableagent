@@ -2,7 +2,11 @@
 
 面向 Android 手机和平板的个人本地 Agent。以会话为中心，在本应用内运行 Pi Durable / Pi AI，由独立官方 Termux 提供完整命令行环境，目标是在可恢复中断后自动续跑。
 
-当前已进入按工单实现与设备验证阶段；实现进度以 GitHub 和工单索引为准，已完成验证的证据保存在 `docs/evidence/`。首版尚未完成全部验收，验证 APK 不是正式发布版本。现有原型 HTML 仍是已确认交互方向的一次性设计参考。
+首个签名预发布包通过 [GitHub Releases](https://github.com/mikyan/durableagent/releases) 分发。首版尚未完成全部设备验收，已知恢复问题和设备缺项见 [v0.1.0 说明](docs/releases/v0.1.0.md)及[验收报告](docs/evidence/t17/README.md)。实现进度以 GitHub 和工单索引为准，已有实测证据保存在 `docs/evidence/`。
+
+[![CI](https://github.com/mikyan/durableagent/actions/workflows/ci.yml/badge.svg)](https://github.com/mikyan/durableagent/actions/workflows/ci.yml)
+
+主分支与 PR 自动运行测试、Android 构建和 lint；版本 tag 通过检查、签名核验及同包模拟器启动后自动发布。维护方法见 [CI 与发布](docs/RELEASING.md)。
 
 - [首版 spec](docs/specs/v1/spec.md)：产品行为、数据所有者、Interface、失败语义与测试。
 - [工单与依赖](docs/specs/v1/README.md)：纵向交付顺序与 GitHub issue 索引。
