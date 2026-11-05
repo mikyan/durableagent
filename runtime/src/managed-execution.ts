@@ -19,6 +19,7 @@ import type {FileEffectAuthority} from './file-effect-protocol.js';
 import {WorkspaceCoordinator,type WriteClaim,type WriteScope} from './workspace-coordination.js';
 import {continuationEligibility} from './execution-continuation.js';
 import type {Recovery} from './recovery.js';
+import type {WorkspaceRecord,PositionState} from './project-protocol.js';
 
 export const EXECUTION_EXTENSION={id:'managed-execution',actions:['execution.list','execution.readOutput','files.list']} as const;
 type Command={kind:'shell';script:string}|{kind:'argv';argv:string[]};
@@ -72,6 +73,8 @@ export class ManagedExecution implements EffectAuthority {
  }
  private harness?:Harness;
  private namespace='unverified:termux';
+ private executorObservation:'unconfirmed'|'previously-confirmed'='unconfirmed';
+ private readonly positionObservations=new Map<string,{location:WorkspaceRecord;position:PositionState;realPath?:string}>();
  private tail:Promise<unknown>=Promise.resolve();
  private closedOwners=new Set<string>();
  // Only this live invocation owns the pre-acceptance handoff. Never persisted as proof or used to release a writer.
@@ -88,9 +91,10 @@ export class ManagedExecution implements EffectAuthority {
   this.fileWrites=new FileWrites(options.channel,options.fileEffects);
   if(options.documents){if(options.dataSaver)this.documentReads=new DocumentReads(options.documents,options.authority,(bindingId,sdkConversationId)=>this.closedOwners.has(bindingId+':'+sdkConversationId));this.documents=new ManagedDocuments(options.documents);this.documentWrites=new DocumentWrites(options.documents,options.authority,(bindingId,sdkConversationId)=>this.closedOwners.has(bindingId+':'+sdkConversationId),Boolean(options.dataSaver));}
   this.locations={deferInspection:true,inspect:async workspace=>{
-   if(workspace.environment!=='termux')return {state:'environment-changed',reason:'此位置不属于当前 Termux 执行环境'};
-   try{const value=await options.channel.request('inspectWorkspace',{path:workspace.path});if(value.state!=='available'||typeof value.identity!=='string'||typeof value.namespace!=='string')return {state:'missing',reason:'Termux 中的位置不可用，保留原位置'};this.namespace=value.namespace;return {state:'available',identity:value.identity};}
-   catch{return {state:'unverified',reason:'执行连接尚不可用，尚未核验原位置'};}
+   const observed=(position:PositionState,realPath?:string)=>{this.positionObservations.set(workspace.id,{location:{...workspace},position:{...position},...(realPath?{realPath}:{})});return position;};
+   if(workspace.environment!=='termux')return observed({state:'environment-changed',reason:'此位置不属于当前 Termux 执行环境'});
+   try{const value=await options.channel.request('inspectWorkspace',{path:workspace.path});if(value.state!=='available'||typeof value.identity!=='string'||typeof value.namespace!=='string')return observed({state:'missing',reason:'Termux 中的位置不可用，保留原位置'});this.namespace=value.namespace;return observed({state:'available',identity:value.identity},typeof value.realPath==='string'&&value.realPath.startsWith('/')&&value.realPath.length<=4096?value.realPath:undefined);}
+   catch{this.executorObservation='unconfirmed';return observed({state:'unverified',reason:'执行连接尚不可用，尚未核验原位置'});}
   },environment:async binding=>new ManagedEnvironment(this,binding)};
  }
  private serial<T>(action:()=>Promise<T>):Promise<T>{const result=this.tail.then(action,action);this.tail=result.catch(()=>{});return result;}
@@ -105,6 +109,15 @@ export class ManagedExecution implements EffectAuthority {
  });}
  private writeClaim(request:Request,scope:WriteScope={domain:'device-files',kind:'environment'}):WriteClaim{return {operationId:request.executionId,requestDigest:hash(request),namespace:request.context.namespace,source:'termux',bindingId:request.context.bindingId,productId:request.context.productId,scope};}
  environmentNamespace(){return this.namespace;}
+ /** Read-only prompt projection. Never sends a channel request or treats history as live readiness. */
+ environmentFacts(environment?:ExecutionEnv){
+  const binding=environment instanceof ManagedEnvironment?environment.adoptedBy(this):undefined;
+  if(!binding)return {binding:'unavailable',workspace:null,executorObservation:'unconfirmed'};
+  const saved=this.positionObservations.get(binding.location.id),observed=saved&&same(saved.location,binding.location)?saved:undefined;
+  const changed=observed?.position.state==='available'&&!!binding.actualIdentity&&observed.position.identity!==binding.actualIdentity;
+  const closed=this.readsClosed||this.closedOwners.has(binding.id+':'+binding.sdkConversationId);
+  return {binding:closed?'closed':'adopted',workspace:{adoptedPath:binding.location.path,version:binding.location.version,...(!changed&&observed?.position.state==='available'&&observed.realPath?{lastVerifiedRealPath:observed.realPath}:{})},workspaceObservation:changed?'identity-changed':observed?.position.state==='available'?'previously-available':observed?.position.state??'unverified',executorObservation:closed||changed?'unconfirmed':this.executorObservation};
+ }
  /** Fixed-core tools whose effects all use this environment. Never an extension-exposed replay switch. */
  wrapTool<T extends ToolRegistration<any,any>>(tool:T):T{
   return {...tool,replay:'safe',execute:async(args:any,api:ToolExecutionApi,context:Context)=>{
@@ -129,7 +142,7 @@ export class ManagedExecution implements EffectAuthority {
  }
  async closeReads(){this.readsClosed=true;for(const readers of [...this.watchers.values()])for(const reader of [...readers])await reader.stop(BACKGROUND_CONTEXT);}
  private owner(){if(!this.harness)return failure('EXECUTION_NOT_READY','执行记录尚未打开');return this.harness;}
- private async identity(){const value=await this.options.channel.request('ping',{});if(value.protocol!==1||typeof value.executorId!=='string'||typeof value.ledgerEpoch!=='string'||value.namespace!=='termux:'+value.executorId)return failure('EXECUTOR_IDENTITY','执行实例身份无法核验');return value as {protocol:1;executorId:string;ledgerEpoch:string;namespace:string};}
+ private async identity(){try{const value=await this.options.channel.request('ping',{});if(value.protocol!==1||typeof value.executorId!=='string'||typeof value.ledgerEpoch!=='string'||value.namespace!=='termux:'+value.executorId)return failure('EXECUTOR_IDENTITY','执行实例身份无法核验');this.executorObservation='previously-confirmed';return value as {protocol:1;executorId:string;ledgerEpoch:string;namespace:string};}catch(error){this.executorObservation='unconfirmed';throw error;}}
  private async policy(request:Request,api?:ToolExecutionApi,context:Context=BACKGROUND_CONTEXT){
   context.abortSignal?.throwIfAborted();
   const control=await this.options.authority.readControl(request.context.productId);
@@ -300,7 +313,9 @@ export class ManagedExecution implements EffectAuthority {
    if(this.recovery&&fixedRequest&&!context.abortSignal?.aborted&&!(error instanceof ManagedExecutionError&&['EXECUTION_STOPPED','EXECUTION_LOCATION_CHANGED'].includes(error.code))){
     return await this.run(binding,api,command,options,context,ordinal,fileEffect);
    }
-   return {ok:false,error:new ExecutionError('unknown',error instanceof ManagedExecutionError?error.message:'执行连接未确认结果，保留原身份等待核验')};
+   const sourceCode=error instanceof Error&&'code' in error&&typeof error.code==='string'&&/^[A-Z][A-Z0-9_]{0,63}$/.test(error.code)?error.code:undefined;
+   const failureKind=sourceCode??(error instanceof TypeError?'JS_TYPE_ERROR':error instanceof ReferenceError?'JS_REFERENCE_ERROR':error instanceof RangeError?'JS_RANGE_ERROR':'UNCLASSIFIED');
+   return {ok:false,error:new ExecutionError('unknown',error instanceof ManagedExecutionError?error.message:`执行连接未确认结果，保留原身份等待核验（${failureKind}）`)};
   }finally{if(fixedRequest)this.dispatching.delete(fixedRequest.executionId);if(onAbort)context.abortSignal?.removeEventListener('abort',onAbort);}
  }
  async cleanup(binding:AdoptedBinding,context:Context){return this.serial(async()=>{
@@ -352,6 +367,7 @@ class ManagedEnvironment implements ExecutionEnv {
  private ordinal=0;
  get id(){return this.owner.environmentNamespace();}cwd:string;
  constructor(private readonly owner:ManagedExecution,private readonly binding:AdoptedBinding,private readonly api?:ToolExecutionApi){this.cwd=binding.location.path;}
+ adoptedBy(owner:ManagedExecution){return this.owner===owner?copy(this.binding):undefined;}
  forCall(api:ToolExecutionApi){return new ManagedEnvironment(this.owner,this.binding,api);}
  readDocument(resourceId:string,context:Context){return this.owner.readDocument(this.binding,this.api,resourceId,context);}
  writeDocument(args:DocumentWriteArguments,context:Context){return this.owner.writeDocument(this.binding,this.api,args,context);}

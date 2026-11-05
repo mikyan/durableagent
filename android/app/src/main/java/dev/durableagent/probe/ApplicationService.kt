@@ -173,6 +173,9 @@ class ApplicationService:Service() {
             val root=RuntimeBundle.unpack(this)
             val runtime=V8Host.getNodeI18nInstance().createV8Runtime<NodeRuntime>();node=runtime
             runtime.globalObject.set("__applicationRoot",domain.absolutePath)
+            runtime.globalObject.set("__hostEnvironmentJson",JSONObject().put("platform","android")
+                .put("androidApi",Build.VERSION.SDK_INT).put("androidRelease",Build.VERSION.RELEASE)
+                .put("supportedAbis",JSONArray(Build.SUPPORTED_ABIS.toList())).put("appProcess64Bit",android.os.Process.is64Bit()).toString())
             if(mode=="product"||mode.startsWith("recovery-")){
                 runtime.createV8ValueObject().use{access->access.bind(recovery!!);runtime.globalObject.set("__nativeRecovery",access)}
             }

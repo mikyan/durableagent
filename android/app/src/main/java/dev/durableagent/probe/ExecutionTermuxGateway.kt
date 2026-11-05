@@ -87,10 +87,16 @@ class ExecutionTermuxGateway(private val context: Context) {
             val value=ExecutionTlsClient(identity,pairing).request("ping",JSONObject(),minOf(2000L,remaining()))
             if(value.opt("protocol")!=1||value.optString("executorId")!=pairing.executorId||value.optString("ledgerEpoch")!=pairing.ledgerEpoch)throw ExecutionChannelException("INSTANCE_MISMATCH")
             remaining();true
-        }catch(error:ExecutionChannelException){if(error.code!="CONNECTION_ABSENT")throw error;false}
+        }catch(error:ExecutionChannelException){
+            // A frozen Termux process can keep its listener while the read-only
+            // readiness ping times out. Wake it once, then authenticate the same
+            // pairing again; this classification never applies to user operations.
+            if(error.code!="CONNECTION_ABSENT"&&error.code!="CONNECTION_UNCONFIRMED")throw error
+            false
+        }
         if(reachable())return pairing
         // The independent control socket remains separate. Only overlapping
-        // absent-listener launches are coalesced, outside every native input lease.
+        // unavailable-listener wakeups are coalesced, outside every native input lease.
         if(!existingStart.tryLock(remaining(),java.util.concurrent.TimeUnit.MILLISECONDS))throw ExecutionChannelException("EXISTING_EXECUTOR_UNAVAILABLE")
         try{
             remaining();if(reachable())return pairing

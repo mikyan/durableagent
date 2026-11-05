@@ -149,7 +149,7 @@ object TermuxChecksumDownload {
         val deadline = System.nanoTime() / 1_000_000 + budgetMs
         fun remaining(): Int {
             if (Thread.currentThread().isInterrupted) throw IOException("Source check interrupted")
-            return (deadline - System.nanoTime() / 1_000_000).coerceAtMost(3000).toInt().also { if (it <= 0) throw IOException("Source check expired") }
+            return (deadline - System.nanoTime() / 1_000_000).toInt().also { if (it <= 0) throw IOException("Source check expired") }
         }
         repeat(5) { hop ->
             if (!deliveryLocation(location)) throw IOException("Unsupported source redirect")
