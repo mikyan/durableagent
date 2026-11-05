@@ -46,7 +46,13 @@ jobs:
           npm ci --ignore-scripts --prefix runtime
           npm ci --ignore-scripts --prefix ui
       - name: Test runtime with real SDK and host SQLite
-        run: npm test --prefix runtime
+        working-directory: runtime
+        # These tests deliberately kill subprocesses and wait on real retry timers.
+        # Keep file-level concurrency bounded on shared hosted runners; each
+        # concurrency/race test still drives its own competing operations.
+        run: |
+          npm run build
+          node --test --test-concurrency=1 test/*.test.mjs
       - name: Test UI
         run: npm test --prefix ui
       - name: Typecheck and build bundled UI
