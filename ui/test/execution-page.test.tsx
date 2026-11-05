@@ -1,9 +1,36 @@
 // @vitest-environment jsdom
 import {expect,it} from 'vitest';
-import {cleanup,render,screen,fireEvent} from '@testing-library/react';
+import {cleanup,render,screen,fireEvent,waitFor} from '@testing-library/react';
+import type {ApplicationRequest} from '../../runtime/src/application-protocol';
 import {ExecutionPanel} from '../src/extensions/execution';
 import {ConversationController,type UiState} from '../src/controller';
 import {ApplicationClient} from '../src/client';
+
+it('offers official installation sources through native browser actions without connecting or navigating the privileged page',async()=>{
+ const requests:ApplicationRequest[]=[];
+ const client=new ApplicationClient({postMessage:json=>{
+  const request:ApplicationRequest=JSON.parse(json);requests.push(request);
+  const value=request.method==='status'?{phase:'ready',extensions:['managed-execution']}:request.method==='execution.openDownload'?{opened:true}:{conversations:[]};
+  queueMicrotask(()=>client.receive({type:'response',protocol:1,connectionId:request.connectionId,requestId:request.requestId,ok:true,value}));
+ }});
+ const controller=new ConversationController(()=>client);
+ try{
+  await controller.connect();render(<ExecutionPanel controller={controller} state={controller.snapshot()}/>);
+  fireEvent.click(screen.getByText('安装来源与兼容说明'));
+  expect(screen.getByText(/不限定单一 Termux 版本/)).toBeTruthy();
+  expect(screen.getByText(/首次连接可能联网/)).toBeTruthy();
+  expect(screen.getByText(/不要为连接而卸载/)).toBeTruthy();
+  fireEvent.click(screen.getByRole('button',{name:'GitHub 官方发布页'}));
+  await waitFor(()=>expect(requests.some(request=>request.method==='execution.openDownload')).toBe(true));
+  await Promise.resolve();
+  fireEvent.click(screen.getByRole('button',{name:'F-Droid 官方页面'}));
+  await waitFor(()=>expect(requests.filter(request=>request.method==='execution.openDownload')).toHaveLength(2));
+  expect(requests.filter(request=>request.method.startsWith('execution.')).map(({method,payload})=>({method,payload}))).toEqual([
+   {method:'execution.openDownload',payload:{source:'github'}},{method:'execution.openDownload',payload:{source:'fdroid'}},
+  ]);
+  expect(screen.queryByRole('link')).toBeNull();
+ }finally{cleanup();controller.dispose();}
+});
 
 it('keeps application uncertainty and a pending cancel distinct from a confirmed stop',()=>{
   const controller=new ConversationController(()=>new ApplicationClient(undefined));

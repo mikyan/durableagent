@@ -3,6 +3,8 @@
 .execution-panel summary span{font-weight:400;color:#737b76;margin-left:8px}
 .execution-content{padding:0 12px 10px;max-height:240px;overflow:auto}
 .execution-content p{margin:0 0 8px;line-height:1.5}
+.termux-install-guide{margin-bottom:10px}
+.termux-install-guide summary{padding:4px 0 8px}
 .execution-actions{display:flex;flex-wrap:wrap;gap:8px}
 .execution-actions button{font:inherit;color:#354d40;background:white;border:1px solid #cdd7cf;border-radius:8px;padding:7px 10px;cursor:pointer}
 .execution-actions button:disabled{opacity:.5;cursor:default}

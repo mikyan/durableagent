@@ -12,6 +12,16 @@ export function ExecutionPanel({controller,state}:{controller:ConversationContro
     <summary>本地执行 <span>{execution.connecting?'连接中…':execution.connected?'已连接':'按需连接'}</span></summary>
     <div className="execution-content">
       <p>首次使用：复制初始化命令，在 Termux 中粘贴并运行，再回来连接执行环境。</p>
+      <details className="termux-install-guide">
+        <summary>安装来源与兼容说明</summary>
+        <p>支持核验官方 GitHub 和 F-Droid 安装来源，不限定单一 Termux 版本；能否运行以连接检查为准。</p>
+        <p>GitHub 新安装包首次连接可能联网核验官方发行记录。已核验的同一安装包可离线使用，后台恢复不会联网核验来源。</p>
+        <p>已有 Termux 请保留现有渠道和数据，不要为连接而卸载或跨渠道覆盖安装。</p>
+        <div className="execution-actions">
+          <button type="button" onClick={()=>void controller.execution.openDownload('github')} disabled={!!execution.openingSource}>GitHub 官方发布页</button>
+          <button type="button" onClick={()=>void controller.execution.openDownload('fdroid')} disabled={!!execution.openingSource}>F-Droid 官方页面</button>
+        </div>
+      </details>
       <div className="execution-actions">
         <button type="button" onClick={()=>void controller.execution.copySetup()} disabled={execution.copying}>复制初始化命令</button>
         <button type="button" onClick={()=>void controller.execution.connect()} disabled={execution.connecting}>{execution.connecting?'正在连接…':'连接执行环境'}</button>
