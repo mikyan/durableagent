@@ -29,6 +29,7 @@ import {verifyApplicationStorage} from './storage-format.js';
 import {RetainedHistory} from './retained-history.js';
 import {Recovery,recoveryPreflight,type RecoveryHost} from './recovery.js';
 import {environmentPrompt,type HostEnvironment} from './environment-prompt.js';
+import {conversationActivity} from './conversation-activity.js';
 
 import {Configuration,Products,validateConfiguration,type ProductRecord} from './application-records.js';
 const ModelConfiguration=defineDoc({kind:'app.model-configuration',version:1,scope:'session',initial:():StoredModels=>({version:0,defaultModel:null,connections:[]}),checkpointWhen:()=>false});
@@ -332,6 +333,7 @@ export class Application {
     const recovery=live?.run?(this.recovery?.status(product.id)??rateWait??(retry?{phase:'waiting' as const,reason:'model-retry' as const,message:retry.error,nextAt:retry.at,used:live.generation.attempt,limit:this.runtimeSettings().retry?.maxRetries??3}:deferred?{phase:'waiting' as const,reason:'deferred-poll' as const,message:'等待原模型响应的下一次查询；不会创建新请求',nextAt:deferred.pollAt}:undefined)):undefined;
     const phase=live?.run?(recovery||live.generation?.retry||live.generation?.deferred?'waiting':'running'):live?.runFailure?(live.runFailure.reason==='aborted'?'stopped':'failed'):entries.some(entry=>entry.role==='assistant')?'done':'idle';
     const text=live?.run?this.content(live.generation?.message?.content):'';
+    const activity=conversationActivity(live,phase);
     const selected={provider:ref.provider??'',modelId:ref.modelId??'',name:model?.name??ref.modelId??'未配置模型'};
     if(this.options.inputs){
       const conversation={id:product.id,title:product.title,model:selected,submissionContext:this.submissionContext(product)};
@@ -339,7 +341,7 @@ export class Application {
       const key=JSON.stringify({conversation,capability});
       if(this.rememberedInputs.get(product.id)!==key){this.options.inputs.rememberConversation(conversation,capability);this.rememberedInputs.set(product.id,key);}
     }
-    return {id:product.id,revision:++this.revision,conversation:{id:product.id,title:product.title,model:selected,workspaceId:product.workspaceId,projectId:product.projectId??null,createdAt:product.createdAt,phase,submissionContext:this.submissionContext(product)},entries,progress:text?{text,persisted:false}:undefined,phase,storedSeq:this.storedSeq,reason:recovery?.message??live?.runFailure?.detail??live?.generation?.retry?.error,...(recovery?{recovery}:{})};
+    return {id:product.id,revision:++this.revision,conversation:{id:product.id,title:product.title,model:selected,workspaceId:product.workspaceId,projectId:product.projectId??null,createdAt:product.createdAt,phase,submissionContext:this.submissionContext(product)},entries,progress:text?{text,persisted:false}:undefined,...(activity?{activity}:{}),phase,storedSeq:this.storedSeq,reason:recovery?.message??live?.runFailure?.detail??live?.generation?.retry?.error,...(recovery?{recovery}:{})};
   }
   private async contextView(id:string):Promise<import('./application-protocol.js').ConversationContext> {
     const product=await this.product(id),conversation=(await this.ready().conversation(product.sdkId as ConversationId,context))!;
