@@ -1,0 +1,25 @@
+ui/src/execution.ts
+  s_467dcb949b5b60::t_e4de219bf09704 28-29
+ui/test/execution-controller.test.ts
+  s_467dcb949b5b60::t_bd4dccbd92f588 70-89
+android/app/src/test/java/dev/durableagent/probe/TermuxSourceVerifierTest.kt
+  s_467dcb949b5b60::t_e4de219bf09704 86-94
+android/app/src/main/java/dev/durableagent/probe/TermuxSourceVerifier.kt
+  s_467dcb949b5b60::t_e4de219bf09704 32-44,59,62-63,95,209-211
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "59c43e701eb2df229cf1017bfc8665cb39435f78",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
