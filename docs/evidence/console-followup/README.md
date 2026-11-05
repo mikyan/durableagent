@@ -48,7 +48,7 @@ S23 的现有 Termux 未被替换、卸载、清空或升级。本轮初始化�
 
 - `sdk-pending-wake-full17.log` 的 **整个 JUnit 结果是失败**：原件往返步骤成功后，`FILE_DEPENDENCY` 读取只存在于旧模拟器的固定 uthash 编译产物，S23 返回 `not_found`。未伪造或复制其他 ABI 的编译产物使其变绿；这项历史依赖检查在 S23 未通过。四项文件契约由既有 `fileContractsOnly=true` 开关单独验证。
 - Provider 入口来自固定 SDK 的 42 个 Provider，使用其真实协议与认证实现；类型检查、静态审查和构建不等于 42 个账号／网络协议逐项实测。按用户要求未增加 Provider 联网测试。
-- 新消息状态、页面层级与动画仅做类型检查、构建及伴随核心流程的界面操作，不冒称完成新的 UI 测试矩阵。
+- 新消息状态、页面层级与动画未新增测试矩阵。既有 CI 的旧页面入口、文案和独立发送框断言随新结构维护，保留原有状态与凭据安全断言；组件检查不代表所有设备的动画与交互均已实测。最终 CI 状态见 [PR #23](https://github.com/mikyan/durableagent/pull/23)。
 - Xiaomi 15、ARM64 16 KB、物理平板、长时间后台／所有 OEM 恢复及历史 MiMo01 问题，未在本记录取得的新证据中被一并验收。
 - 真实凭据审计仅扫描所列范围内的应用存储归档与应用 UID 日志，以实际凭据 UTF-8／UTF-16 字节及正对照检查，未发现原文；不推断堆内存或闪存已被擦除。[首次审计范围](raw/mimo-environment13-secret-audit.json)、[整合包测试后审计](raw/final-mimo20-secret-audit.json)。公开文件在提交前另做实际凭据和设备序列号字节扫描。
 
