@@ -1,0 +1,31 @@
+ui/test/app.test.tsx
+  s_467dcb949b5b60::t_d85122af8dc1e8 30,98
+ui/test/console-page.test.tsx
+  s_467dcb949b5b60::t_094d9d991dd216 61,73-74,189
+ui/test/execution-page.test.tsx
+  s_467dcb949b5b60::t_4bd02d6bf00482 6,19,21-24,27,40,46-48,50
+ui/test/extension-host.test.tsx
+  s_467dcb949b5b60::t_2b01521f0e4a33 24
+ui/test/models-page.test.tsx
+  s_467dcb949b5b60::t_e2b45f483c4482 33-36,40,52-53,55,57-58,62,71,82-83,85
+ui/test/models-real.test.mjs
+  s_467dcb949b5b60::t_6e18172bbb77f0 37-43,48-50,59-60
+ui/test/submissions-page.test.tsx
+  s_467dcb949b5b60::t_98e02b43b1ac43 20,46-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "1b502c5c4d8a35c6c2e65fc6d2b5168c884acbd2",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
