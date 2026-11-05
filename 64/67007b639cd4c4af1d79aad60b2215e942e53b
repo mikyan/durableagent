@@ -1,0 +1,30 @@
+docs/specs/agent-environment-context.md
+  s_467dcb949b5b60::t_4c2243957fea3a 15-19,22
+  s_467dcb949b5b60::t_dacf131d4400d0 20-21
+android/app/src/androidTest/java/dev/durableagent/probe/ExecutionRealProviderTest.kt
+  s_467dcb949b5b60::t_6a860b18ee326e 46,95-96,103-105,209
+  s_467dcb949b5b60::t_51d844a28fc005 90,194
+  s_467dcb949b5b60::t_7c8e4519ce9459 4,10-12,25,30-45,47-89,91-94,97-102,106-178,198-201,203-208,210-213
+  s_467dcb949b5b60::t_dacf131d4400d0 19,179-193,195-197,202
+runtime/src/environment-validation.ts
+  s_467dcb949b5b60::t_51d844a28fc005 33-34,36
+  s_467dcb949b5b60::t_dacf131d4400d0 1-32,35,37-42
+runtime/src/application-bridge.ts
+  s_467dcb949b5b60::t_dacf131d4400d0 7,62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "6467007b639cd4c4af1d79aad60b2215e942e53b",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
