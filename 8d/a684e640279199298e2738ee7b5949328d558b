@@ -1,0 +1,39 @@
+ui/src/extension-host.tsx
+  s_467dcb949b5b60::t_38c15a4e377365 9,16
+android/app/src/main/java/dev/durableagent/probe/ApplicationClient.kt
+  s_467dcb949b5b60::t_38c15a4e377365 37,42,57
+ui/src/controller.ts
+  s_467dcb949b5b60::t_38c15a4e377365 170,311
+ui/src/extensions/projects.tsx
+  s_467dcb949b5b60::t_38c15a4e377365 32
+ui/src/submissions.ts
+  s_467dcb949b5b60::t_38c15a4e377365 122
+ui/src/client.ts
+  s_467dcb949b5b60::t_38c15a4e377365 18,24,29,60
+ui/src/drafts.ts
+  s_467dcb949b5b60::t_38c15a4e377365 21
+ui/src/extensions/conversation.tsx
+  s_467dcb949b5b60::t_38c15a4e377365 87,162
+runtime/src/provider-auth.ts
+  s_467dcb949b5b60::t_38c15a4e377365 48
+android/app/src/main/java/dev/durableagent/probe/ApplicationService.kt
+  s_467dcb949b5b60::t_38c15a4e377365 220,244
+runtime/src/application.ts
+  s_467dcb949b5b60::t_38c15a4e377365 158,181
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "8da684e640279199298e2738ee7b5949328d558b",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
