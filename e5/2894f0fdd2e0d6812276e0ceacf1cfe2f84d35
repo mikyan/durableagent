@@ -1,0 +1,37 @@
+managed-execution/README.md
+  s_467dcb949b5b60::t_6fab56ef914b1e 42
+  s_467dcb949b5b60::t_d23fc89e12c4de 13-15
+tools/test_execution_setup.py
+  s_467dcb949b5b60::t_a71711360d4a38 12,16-40,63
+  s_467dcb949b5b60::t_d7e5a58a19df50 8,41-62
+docs/specs/termux-compatibility.md
+  s_467dcb949b5b60::t_d23fc89e12c4de 14,18-19,24
+  s_467dcb949b5b60::t_81eb5b3a7b3e82 25
+tools/build_execution_setup.py
+  s_467dcb949b5b60::t_b27a9af88d1fb5 11-53,58,68-69,71,77
+docs/TERMUX-COMPATIBILITY.md
+  s_467dcb949b5b60::t_d23fc89e12c4de 11-12,35-36
+tools/execution_setup_installer.py
+  s_467dcb949b5b60::t_4e537d6a492f1c 16,34-125,127-129,132-136,152-153,156-164,305
+  s_467dcb949b5b60::t_d7e5a58a19df50 13,126,130-131,137-151,154-155
+tools/test_execution_asset.py
+  s_467dcb949b5b60::t_84e28c04f8f221 13,24-27
+tools/test_execution_dependencies.py
+  s_467dcb949b5b60::t_a71711360d4a38 1-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "development:1.7.3",
+  "base_commit_sha": "e52894f0fdd2e0d6812276e0ceacf1cfe2f84d35",
+  "prompts": {},
+  "sessions": {
+    "s_467dcb949b5b60": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a218-b4f4-79d1-9670-dfe4ce62539e",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "AI_BA <ai_ball@outlook.com>"
+    }
+  }
+}
