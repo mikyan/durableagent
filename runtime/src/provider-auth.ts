@@ -1,4 +1,5 @@
 import {randomUUID} from 'node:crypto';
+import {AsyncLocalStorage} from 'node:async_hooks';
 import type {AuthEvent,AuthPrompt as SdkPrompt,Credential,CredentialStore,Models} from '@earendil-works/pi-ai';
 import type {CredentialInfo,ProviderAuthRequest,ProviderAuthSession} from './model-protocol.js';
 
@@ -31,11 +32,19 @@ export function credentialSecrets(value:unknown):Set<string> {
   const sensitive=/(?:key|token|secret|password|credential|authorization|access|refresh|accountid)/i;
   const visit=(item:unknown,key='')=>{if(typeof item==='string'&&item&&sensitive.test(key))values.add(item);else if(Array.isArray(item))item.forEach(value=>visit(value,key));else if(item&&typeof item==='object')Object.entries(item).forEach(([key,value])=>visit(value,key));};visit(value);return values;
 }
+// This context follows one explicit SDK login, including its final queued store
+// mutation. Request-time refresh does not enter this context.
+const loginMutation=new AsyncLocalStorage<{target:string}>();
+function checkLoginIdentity(current:Credential|undefined,next:Credential,generation:number){
+  if(next.type!=='oauth')return;
+  if(!current&&generation>0)fail('CONNECTION_ACCOUNT_UNKNOWN','此连接的原账号身份已不可确认，请添加新账号连接；原会话已保留。');
+  if(current?.type==='oauth'&&(typeof current.accountId!=='string'||!current.accountId||typeof next.accountId!=='string'||!next.accountId))fail('CONNECTION_ACCOUNT_UNKNOWN','提供方没有返回可核对的账号身份，请添加新账号连接；原凭据和会话已保留。');
+}
 /** The SDK serializes refresh/login with a native per-connection OS lease. No auth.json is used. */
 export function encryptedCredentialStore(access:PrivateCredentialAccess,guard?:(id:string,current:Credential,next:Credential)=>Promise<void>):CredentialStore {
   const read=async(id:string)=>{const info=await access.metadata(id);return info.configured?decodeCredential((await access.resolve(id)).key):undefined;};
   const tails=new Map<string,Promise<unknown>>();
-  const mutate:CredentialStore['modify']=async(id,modify,options)=>{
+  const mutate=async(id:string,modify:Parameters<CredentialStore['modify']>[1],options:Parameters<CredentialStore['modify']>[2],explicitLogin:boolean)=>{
     if(!access.acquire||!access.release||!access.save)fail('AUTH_STORAGE_UNAVAILABLE','当前运行宿主不支持保存登录凭据');
     options?.signal?.throwIfAborted();
     const {lease}=await access.acquire!(id);
@@ -44,6 +53,9 @@ export function encryptedCredentialStore(access:PrivateCredentialAccess,guard?:(
       const info=await access.metadata(id),current=info.configured?decodeCredential((await access.resolve(id)).key):undefined;
       const next=await modify(current);options?.signal?.throwIfAborted();
       if(next===undefined)return current;
+      // Recheck under the native lease: another login/removal may have completed
+      // while this interactive login was waiting for the user or the network.
+      if(explicitLogin)checkLoginIdentity(current,next,info.generation);
       if(current&&current.type!==next.type)fail('CONNECTION_TARGET_CHANGED','认证方式已改变，请新建连接以保留原请求身份');
       // Provider-scoped destination/environment changes require another immutable connection.
       if(current?.type==='api_key'&&next.type==='api_key'&&JSON.stringify(current.env??{})!==JSON.stringify(next.env??{}))fail('CONNECTION_TARGET_CHANGED','连接环境已改变，请新建连接以保留原请求身份');
@@ -54,11 +66,12 @@ export function encryptedCredentialStore(access:PrivateCredentialAccess,guard?:(
     }finally{await access.release!(id,lease);}
   };
   return {read,list:async()=>[],delete:async()=>fail('NATIVE_WRITE_REQUIRED','请通过原生凭据入口移除登录'),modify:(id,modify,options)=>{
-    const pending=(tails.get(id)??Promise.resolve()).then(()=>mutate(id,modify,options),()=>mutate(id,modify,options));
+    const explicitLogin=loginMutation.getStore()?.target===id;
+    const pending=(tails.get(id)??Promise.resolve()).then(()=>mutate(id,modify,options,explicitLogin),()=>mutate(id,modify,options,explicitLogin));
     tails.set(id,pending);void pending.finally(()=>{if(tails.get(id)===pending)tails.delete(id);}).catch(()=>{});return pending;
   }};
 }
-type ActiveSession={view:ProviderAuthSession;abort:AbortController;secrets:Set<string>;answer?:{id:string;resolve:(answer:string)=>void;reject:(error:Error)=>void};owner:string;timeout:ReturnType<typeof setTimeout>};
+type ActiveSession={view:ProviderAuthSession;abort:AbortController;secrets:Set<string>;answer?:{id:string;secret:boolean;resolve:(answer:string)=>void;reject:(error:Error)=>void};owner:string;timeout:ReturnType<typeof setTimeout>};
 /** Ephemeral UI-only login state. Answers and tokens never enter Application.request or documents. */
 export class ProviderAuthentication {
   private sessions=new Map<string,ActiveSession>();
@@ -80,7 +93,7 @@ export class ProviderAuthentication {
     else if(request.operation==='answer'){
       if(!item!.answer||item!.answer.id!==request.promptId||typeof request.answer!=='string'||request.answer.length>65536)fail('AUTH_PROMPT_CHANGED','登录步骤已改变，请刷新后重试');
       const answer=item!.answer!;item!.answer=undefined;item!.view.prompt=undefined;item!.view.state='running';
-      if(request.answer)item!.secrets.add(request.answer!);answer.resolve(request.answer!);
+      if(answer.secret&&request.answer)item!.secrets.add(request.answer!);answer.resolve(request.answer!);
     }else if(request.operation==='openUrl'){
       const event=item!.view.events[request.eventIndex??-1],url=event?.type==='auth_url'?event.url:event?.type==='device_code'?event.verificationUri:undefined;
       if(!url||!this.access.openUrl)fail('AUTH_URL_UNAVAILABLE','当前登录步骤没有可打开的授权页面');
@@ -92,11 +105,11 @@ export class ProviderAuthentication {
   private async login(item:ActiveSession){
     try{
       const deviceId=await this.access.deviceId?.();
-      await this.models.login(item.view.target,item.view.authType,{signal:item.abort.signal,notify:event=>{
+      await loginMutation.run({target:item.view.target},()=>this.models.login(item.view.target,item.view.authType,{signal:item.abort.signal,notify:event=>{
         if(item.abort.signal.aborted)return;
         if(item.view.events.length>=256)fail('AUTH_EVENT_LIMIT','登录步骤过多，请取消后重新开始');
         item.view.events.push(this.clean(item,event));
-      },prompt:prompt=>this.prompt(item,prompt)},{agentName:'DurableAgent',...(deviceId?{getDeviceId:()=>deviceId}:{})});
+      },prompt:prompt=>this.prompt(item,prompt)},{agentName:'DurableAgent',...(deviceId?{getDeviceId:()=>deviceId}:{})}));
       item.view.state='completed';
     }catch(error){
       item.view.state=item.abort.signal.aborted?'cancelled':'failed';
@@ -110,7 +123,7 @@ export class ProviderAuthentication {
       const abort=()=>{if(item.answer?.id===id){item.answer=undefined;item.view.prompt=undefined;reject(new Error('Authentication cancelled'));}};
       signal?.addEventListener('abort',abort,{once:true});item.abort.signal.addEventListener('abort',abort,{once:true});
       const finish=(callback:()=>void)=>{signal?.removeEventListener('abort',abort);item.abort.signal.removeEventListener('abort',abort);callback();};
-      item.answer={id,resolve:value=>finish(()=>resolve(value)),reject:error=>finish(()=>reject(error))};
+      item.answer={id,secret:prompt.type==='secret'||prompt.type==='manual_code',resolve:value=>finish(()=>resolve(value)),reject:error=>finish(()=>reject(error))};
       if(signal?.aborted||item.abort.signal.aborted)abort();
     });
   }
