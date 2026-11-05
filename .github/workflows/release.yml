@@ -147,9 +147,14 @@ jobs:
           python-version: '3.14'
       - name: Prepare an isolated emulator
         run: |
+          export ANDROID_AVD_HOME="$RUNNER_TEMP/durableagent-release-avd"
+          printf 'ANDROID_AVD_HOME=%s\n' "$ANDROID_AVD_HOME" >> "$GITHUB_ENV"
           sudo chmod 666 /dev/kvm
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "emulator" "platform-tools" "system-images;android-36;google_apis;x86_64"
+          mkdir -p "$ANDROID_AVD_HOME"
           "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd --name release-smoke --package 'system-images;android-36;google_apis;x86_64' --device pixel_7 < /dev/null
+          test -f "$ANDROID_AVD_HOME/release-smoke.ini"
+          test "$("$ANDROID_HOME/emulator/emulator" -list-avds)" = release-smoke
       - name: Install and launch the verified release APK
         run: |
           (cd release-dist && sha256sum -c SHA256SUMS.txt)
